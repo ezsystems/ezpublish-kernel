@@ -1,8 +1,8 @@
 <?php
 
-return array(
-    'ezcontentclass' => array(
-        array(
+return [
+    'ezcontentclass' => [
+        [
             'id' => 1,
             'always_available' => 1,
             'contentobject_name' => '<short_name|name>',
@@ -20,9 +20,9 @@ return array(
             'sort_field' => 1,
             'sort_order' => 1,
             'url_alias_name' => '',
-            'version' => 1
-        ),
-        array(
+            'version' => 1,
+        ],
+        [
             'id' => 2,
             'always_available' => 1,
             'contentobject_name' => '<short_name|name>',
@@ -40,11 +40,11 @@ return array(
             'sort_field' => 1,
             'sort_order' => 1,
             'url_alias_name' => '',
-            'version' => 0
-        ),
-    ),
-    'ezcontentclass_attribute' => array(
-        array(
+            'version' => 0,
+        ],
+    ],
+    'ezcontentclass_attribute' => [
+        [
             'id' => 4,
             'contentclass_id' => 1,
             'can_translate' => 1,
@@ -71,9 +71,9 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
-            'version' => 1
-        ),
-        array(
+            'version' => 1,
+        ],
+        [
             'id' => 119,
             'contentclass_id' => 1,
             'can_translate' => 1,
@@ -100,9 +100,9 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:17:"Short description";}',
-            'version' => 1
-        ),
-        array(
+            'version' => 1,
+        ],
+        [
             'id' => 155,
             'contentclass_id' => 1,
             'can_translate' => 1,
@@ -129,9 +129,9 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"Short name";}',
-            'version' => 1
-        ),
-        array(
+            'version' => 1,
+        ],
+        [
             'id' => 156,
             'contentclass_id' => 1,
             'can_translate' => 1,
@@ -158,9 +158,9 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
-            'version' => 1
-        ),
-        array(
+            'version' => 1,
+        ],
+        [
             'id' => 158,
             'contentclass_id' => 1,
             'can_translate' => 0,
@@ -187,9 +187,9 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Show children";}',
-            'version' => 1
-        ),
-        array(
+            'version' => 1,
+        ],
+        [
             'id' => 160,
             'contentclass_id' => 2,
             'can_translate' => 0,
@@ -216,30 +216,30 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Show children";}',
-            'version' => 0
-        ),
-    ),
-    'ezcontentclass_name' => array(
-         array(
+            'version' => 0,
+        ],
+    ],
+    'ezcontentclass_name' => [
+         [
             'contentclass_id' => 1,
             'contentclass_version' => 1,
             'language_id' => 3,
             'language_locale' => 'eng-US',
-            'name' => 'Folder'
-        )
-    ),
-    'ezcontentclass_classgroup' => array(
-        array(
+            'name' => 'Folder',
+        ],
+    ],
+    'ezcontentclass_classgroup' => [
+        [
             'contentclass_id' => 1,
             'contentclass_version' => 1,
             'group_id' => 1,
-            'group_name' => 'Content'
-        ),
-        array(
+            'group_name' => 'Content',
+        ],
+        [
             'contentclass_id' => 1,
             'contentclass_version' => 1,
             'group_id' => 4,
-            'group_name' => 'Setup'
-        )
-    )
-);
+            'group_name' => 'Setup',
+        ],
+    ],
+];

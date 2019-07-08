@@ -4,16 +4,15 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 $content = new Content();
 
-$content->fields = array();
+$content->fields = [];
 
 $versionInfo = new VersionInfo();
 $versionInfo->id = 676;
-$versionInfo->names = array( 'eng-US' => 'Something', 'eng-GB' => 'Something' );
+$versionInfo->names = ['eng-US' => 'Something', 'eng-GB' => 'Something'];
 $versionInfo->versionNo = 2;
 $versionInfo->modificationDate = 1313061404;
 $versionInfo->creatorId = 14;

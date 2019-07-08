@@ -4,154 +4,154 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-return array(
-  'ezbinaryfile' => array(
-  ),
-  'ezcobj_state' => array(
-    0 => array(
+return [
+  'ezbinaryfile' => [
+  ],
+  'ezcobj_state' => [
+    0 => [
       'default_language_id' => '2',
       'group_id' => '2',
       'id' => '1',
       'identifier' => 'not_locked',
       'language_mask' => '3',
       'priority' => '0',
-    ),
-    1 => array(
+    ],
+    1 => [
       'default_language_id' => '2',
       'group_id' => '2',
       'id' => '2',
       'identifier' => 'locked',
       'language_mask' => '3',
       'priority' => '1',
-    ),
-  ),
-  'ezcobj_state_group' => array(
-    0 => array(
+    ],
+  ],
+  'ezcobj_state_group' => [
+    0 => [
       'default_language_id' => '2',
       'id' => '2',
       'identifier' => 'ez_lock',
       'language_mask' => '3',
-    ),
-  ),
-  'ezcobj_state_group_language' => array(
-    0 => array(
+    ],
+  ],
+  'ezcobj_state_group_language' => [
+    0 => [
       'contentobject_state_group_id' => '2',
       'description' => '',
       'language_id' => '3',
       'name' => 'Lock',
       'real_language_id' => '2',
-    ),
-  ),
-  'ezcobj_state_language' => array(
-    0 => array(
+    ],
+  ],
+  'ezcobj_state_language' => [
+    0 => [
       'contentobject_state_id' => '1',
       'description' => '',
       'language_id' => '3',
       'name' => 'Not locked',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentobject_state_id' => '2',
       'description' => '',
       'language_id' => '3',
       'name' => 'Locked',
-    ),
-  ),
-  'ezcobj_state_link' => array(
-    0 => array(
+    ],
+  ],
+  'ezcobj_state_link' => [
+    0 => [
       'contentobject_id' => '4',
       'contentobject_state_id' => '1',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentobject_id' => '10',
       'contentobject_state_id' => '1',
-    ),
-    2 => array(
+    ],
+    2 => [
       'contentobject_id' => '11',
       'contentobject_state_id' => '1',
-    ),
-    3 => array(
+    ],
+    3 => [
       'contentobject_id' => '12',
       'contentobject_state_id' => '1',
-    ),
-    4 => array(
+    ],
+    4 => [
       'contentobject_id' => '13',
       'contentobject_state_id' => '1',
-    ),
-    5 => array(
+    ],
+    5 => [
       'contentobject_id' => '14',
       'contentobject_state_id' => '1',
-    ),
-    6 => array(
+    ],
+    6 => [
       'contentobject_id' => '41',
       'contentobject_state_id' => '1',
-    ),
-    7 => array(
+    ],
+    7 => [
       'contentobject_id' => '42',
       'contentobject_state_id' => '1',
-    ),
-    8 => array(
+    ],
+    8 => [
       'contentobject_id' => '45',
       'contentobject_state_id' => '1',
-    ),
-    9 => array(
+    ],
+    9 => [
       'contentobject_id' => '49',
       'contentobject_state_id' => '1',
-    ),
-    10 => array(
+    ],
+    10 => [
       'contentobject_id' => '50',
       'contentobject_state_id' => '1',
-    ),
-    11 => array(
+    ],
+    11 => [
       'contentobject_id' => '51',
       'contentobject_state_id' => '1',
-    ),
-    12 => array(
+    ],
+    12 => [
       'contentobject_id' => '52',
       'contentobject_state_id' => '1',
-    ),
-    13 => array(
+    ],
+    13 => [
       'contentobject_id' => '54',
       'contentobject_state_id' => '1',
-    ),
-    14 => array(
+    ],
+    14 => [
       'contentobject_id' => '56',
       'contentobject_state_id' => '1',
-    ),
-    15 => array(
+    ],
+    15 => [
       'contentobject_id' => '57',
       'contentobject_state_id' => '1',
-    ),
-    16 => array(
+    ],
+    16 => [
       'contentobject_id' => '58',
       'contentobject_state_id' => '1',
-    ),
-    17 => array(
+    ],
+    17 => [
       'contentobject_id' => '59',
       'contentobject_state_id' => '1',
-    ),
-  ),
-  'ezcontent_language' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontent_language' => [
+    0 => [
       'disabled' => '0',
       'id' => '2',
       'locale' => 'eng-US',
       'name' => 'English (American)',
-    ),
-    1 => array(
+    ],
+    1 => [
       'disabled' => '0',
       'id' => '4',
       'locale' => 'ger-DE',
       'name' => 'German',
-    ),
-    2 => array(
+    ],
+    2 => [
       'disabled' => '0',
       'id' => '8',
       'locale' => 'eng-GB',
       'name' => 'English (United Kingdom)',
-    ),
-  ),
-  'ezcontentclass' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentclass' => [
+    0 => [
       'always_available' => '1',
       'contentobject_name' => '<short_name|name>',
       'created' => '1024392098',
@@ -170,8 +170,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    1 => array(
+    ],
+    1 => [
       'always_available' => '1',
       'contentobject_name' => '<name>',
       'created' => '1024392098',
@@ -190,8 +190,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    2 => array(
+    ],
+    2 => [
       'always_available' => '1',
       'contentobject_name' => '<first_name> <last_name>',
       'created' => '1024392098',
@@ -210,8 +210,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    3 => array(
+    ],
+    3 => [
       'always_available' => '0',
       'contentobject_name' => '<subject>',
       'created' => '1052385685',
@@ -230,8 +230,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    4 => array(
+    ],
+    4 => [
       'always_available' => '1',
       'contentobject_name' => '<name>',
       'created' => '1081858024',
@@ -250,8 +250,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    5 => array(
+    ],
+    5 => [
       'always_available' => '1',
       'contentobject_name' => '<title>',
       'created' => '1081858045',
@@ -270,8 +270,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    6 => array(
+    ],
+    6 => [
       'always_available' => '0',
       'contentobject_name' => '<short_title|title>',
       'created' => '1343140534',
@@ -290,8 +290,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    7 => array(
+    ],
+    7 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140535',
@@ -310,8 +310,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    8 => array(
+    ],
+    8 => [
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1343140535',
@@ -330,8 +330,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    9 => array(
+    ],
+    9 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140535',
@@ -350,8 +350,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    10 => array(
+    ],
+    10 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140535',
@@ -370,8 +370,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    11 => array(
+    ],
+    11 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140535',
@@ -390,8 +390,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    12 => array(
+    ],
+    12 => [
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1343140535',
@@ -410,8 +410,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    13 => array(
+    ],
+    13 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140535',
@@ -430,8 +430,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    14 => array(
+    ],
+    14 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140535',
@@ -450,8 +450,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    15 => array(
+    ],
+    15 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140536',
@@ -470,8 +470,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    16 => array(
+    ],
+    16 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140536',
@@ -490,8 +490,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    17 => array(
+    ],
+    17 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140536',
@@ -510,8 +510,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    18 => array(
+    ],
+    18 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140536',
@@ -530,8 +530,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    19 => array(
+    ],
+    19 => [
       'always_available' => '0',
       'contentobject_name' => '<subject>',
       'created' => '1343140536',
@@ -550,8 +550,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    20 => array(
+    ],
+    20 => [
       'always_available' => '0',
       'contentobject_name' => '<subject>',
       'created' => '1343140536',
@@ -570,8 +570,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    21 => array(
+    ],
+    21 => [
       'always_available' => '0',
       'contentobject_name' => '<short_title|title>',
       'created' => '1343140536',
@@ -590,8 +590,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    22 => array(
+    ],
+    22 => [
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1343140536',
@@ -610,8 +610,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    23 => array(
+    ],
+    23 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140536',
@@ -630,8 +630,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    24 => array(
+    ],
+    24 => [
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1343140536',
@@ -650,8 +650,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    25 => array(
+    ],
+    25 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140536',
@@ -670,8 +670,8 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-    26 => array(
+    ],
+    26 => [
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1343140536',
@@ -690,10 +690,10 @@ return array(
       'sort_order' => '1',
       'url_alias_name' => '',
       'version' => '0',
-    ),
-  ),
-  'ezcontentclass_attribute' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentclass_attribute' => [
+    0 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -721,8 +721,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
       'version' => '0',
-    ),
-    1 => array(
+    ],
+    1 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '3',
@@ -750,8 +750,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
       'version' => '0',
-    ),
-    2 => array(
+    ],
+    2 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '3',
@@ -779,8 +779,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
       'version' => '0',
-    ),
-    3 => array(
+    ],
+    3 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -808,8 +808,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"First name";}',
       'version' => '0',
-    ),
-    4 => array(
+    ],
+    4 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -837,8 +837,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:9:"Last name";}',
       'version' => '0',
-    ),
-    5 => array(
+    ],
+    5 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '4',
@@ -866,8 +866,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:12:"User account";}',
       'version' => '0',
-    ),
-    6 => array(
+    ],
+    6 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -895,8 +895,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:7:"Summary";}',
       'version' => '0',
-    ),
-    7 => array(
+    ],
+    7 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '13',
@@ -924,8 +924,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:7:"Subject";}',
       'version' => '0',
-    ),
-    8 => array(
+    ],
+    8 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '13',
@@ -953,8 +953,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Author";}',
       'version' => '0',
-    ),
-    9 => array(
+    ],
+    9 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '13',
@@ -982,8 +982,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:7:"Message";}',
       'version' => '0',
-    ),
-    10 => array(
+    ],
+    10 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -1011,8 +1011,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"Short name";}',
       'version' => '0',
-    ),
-    11 => array(
+    ],
+    11 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -1040,8 +1040,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
       'version' => '0',
-    ),
-    12 => array(
+    ],
+    12 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '1',
@@ -1069,8 +1069,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:17:"Display sub items";}',
       'version' => '0',
-    ),
-    13 => array(
+    ],
+    13 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1098,8 +1098,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
       'version' => '0',
-    ),
-    14 => array(
+    ],
+    14 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1127,8 +1127,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"Index Page";}',
       'version' => '0',
-    ),
-    15 => array(
+    ],
+    15 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1156,8 +1156,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:12:"Default Page";}',
       'version' => '0',
-    ),
-    16 => array(
+    ],
+    16 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1185,8 +1185,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:12:"Debug Output";}',
       'version' => '0',
-    ),
-    17 => array(
+    ],
+    17 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1214,8 +1214,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Debug By IP";}',
       'version' => '0',
-    ),
-    18 => array(
+    ],
+    18 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1243,8 +1243,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Debug IP List";}',
       'version' => '0',
-    ),
-    19 => array(
+    ],
+    19 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1272,8 +1272,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:17:"Debug Redirection";}',
       'version' => '0',
-    ),
-    20 => array(
+    ],
+    20 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1301,8 +1301,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:12:"View Caching";}',
       'version' => '0',
-    ),
-    21 => array(
+    ],
+    21 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1330,8 +1330,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:14:"Template Cache";}',
       'version' => '0',
-    ),
-    22 => array(
+    ],
+    22 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1359,8 +1359,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:16:"Template Compile";}',
       'version' => '0',
-    ),
-    23 => array(
+    ],
+    23 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1388,8 +1388,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:16:"Image Small Size";}',
       'version' => '0',
-    ),
-    24 => array(
+    ],
+    24 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1417,8 +1417,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:17:"Image Medium Size";}',
       'version' => '0',
-    ),
-    25 => array(
+    ],
+    25 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '14',
@@ -1446,8 +1446,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:16:"Image Large Size";}',
       'version' => '0',
-    ),
-    26 => array(
+    ],
+    26 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '15',
@@ -1475,8 +1475,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:5:"Title";}',
       'version' => '0',
-    ),
-    27 => array(
+    ],
+    27 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '15',
@@ -1504,8 +1504,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:9:"Meta data";}',
       'version' => '0',
-    ),
-    28 => array(
+    ],
+    28 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -1533,8 +1533,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:5:"Image";}',
       'version' => '0',
-    ),
-    29 => array(
+    ],
+    29 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -1562,8 +1562,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:9:"Sitestyle";}',
       'version' => '0',
-    ),
-    30 => array(
+    ],
+    30 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '15',
@@ -1591,8 +1591,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:5:"Email";}',
       'version' => '0',
-    ),
-    31 => array(
+    ],
+    31 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '15',
@@ -1620,8 +1620,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:8:"Site URL";}',
       'version' => '0',
-    ),
-    32 => array(
+    ],
+    32 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -1649,8 +1649,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:9:"Signature";}',
       'version' => '0',
-    ),
-    33 => array(
+    ],
+    33 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -1678,8 +1678,8 @@ return array(
       'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
       'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:5:"Image";}',
       'version' => '0',
-    ),
-    34 => array(
+    ],
+    34 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1707,8 +1707,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    35 => array(
+    ],
+    35 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1736,8 +1736,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Short title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    36 => array(
+    ],
+    36 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1765,8 +1765,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:6:"Author";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    37 => array(
+    ],
+    37 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1794,8 +1794,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Summary";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    38 => array(
+    ],
+    38 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1823,8 +1823,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Body";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    39 => array(
+    ],
+    39 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1852,8 +1852,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    40 => array(
+    ],
+    40 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1881,8 +1881,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:15:"Caption (Image)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    41 => array(
+    ],
+    41 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1910,8 +1910,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:12:"Publish date";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    42 => array(
+    ],
+    42 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1939,8 +1939,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    43 => array(
+    ],
+    43 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1968,8 +1968,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    44 => array(
+    ],
+    44 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1997,8 +1997,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Location";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    45 => array(
+    ],
+    45 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -2026,8 +2026,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    46 => array(
+    ],
+    46 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '17',
@@ -2055,8 +2055,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    47 => array(
+    ],
+    47 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '17',
@@ -2084,8 +2084,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    48 => array(
+    ],
+    48 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '17',
@@ -2113,8 +2113,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    49 => array(
+    ],
+    49 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2142,8 +2142,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    50 => array(
+    ],
+    50 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2171,8 +2171,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Body";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    51 => array(
+    ],
+    51 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2200,8 +2200,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:16:"Publication date";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    52 => array(
+    ],
+    52 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2229,8 +2229,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    53 => array(
+    ],
+    53 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2258,8 +2258,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    54 => array(
+    ],
+    54 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2287,8 +2287,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    55 => array(
+    ],
+    55 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2316,8 +2316,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:14:"Product number";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    56 => array(
+    ],
+    56 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2345,8 +2345,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Short description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    57 => array(
+    ],
+    57 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2374,8 +2374,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    58 => array(
+    ],
+    58 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2403,8 +2403,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Price";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    59 => array(
+    ],
+    59 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2432,8 +2432,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    60 => array(
+    ],
+    60 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2461,8 +2461,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:15:"Caption (Image)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    61 => array(
+    ],
+    61 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2490,8 +2490,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:18:"Additional options";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    62 => array(
+    ],
+    62 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2519,8 +2519,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    63 => array(
+    ],
+    63 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2548,8 +2548,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    64 => array(
+    ],
+    64 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2577,8 +2577,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    65 => array(
+    ],
+    65 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '20',
@@ -2606,8 +2606,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    66 => array(
+    ],
+    66 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '20',
@@ -2635,8 +2635,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    67 => array(
+    ],
+    67 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '20',
@@ -2664,8 +2664,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Sender name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    68 => array(
+    ],
+    68 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '20',
@@ -2693,8 +2693,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Subject";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    69 => array(
+    ],
+    69 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '20',
@@ -2722,8 +2722,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Message";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    70 => array(
+    ],
+    70 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '20',
@@ -2751,8 +2751,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Email";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    71 => array(
+    ],
+    71 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '20',
@@ -2780,8 +2780,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Recipient";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    72 => array(
+    ],
+    72 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2809,8 +2809,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    74 => array(
+    ],
+    74 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -2838,8 +2838,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    75 => array(
+    ],
+    75 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -2867,8 +2867,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Body";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    76 => array(
+    ],
+    76 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -2896,8 +2896,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    77 => array(
+    ],
+    77 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -2925,8 +2925,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    78 => array(
+    ],
+    78 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -2954,8 +2954,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    79 => array(
+    ],
+    79 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -2983,8 +2983,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Display sub items";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    80 => array(
+    ],
+    80 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '23',
@@ -3012,8 +3012,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    81 => array(
+    ],
+    81 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '23',
@@ -3041,8 +3041,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    82 => array(
+    ],
+    82 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '23',
@@ -3070,8 +3070,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Question";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    83 => array(
+    ],
+    83 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3099,8 +3099,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    84 => array(
+    ],
+    84 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3128,8 +3128,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    85 => array(
+    ],
+    85 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3157,8 +3157,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"File";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    86 => array(
+    ],
+    86 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3186,8 +3186,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    87 => array(
+    ],
+    87 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3215,8 +3215,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    88 => array(
+    ],
+    88 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3244,8 +3244,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    89 => array(
+    ],
+    89 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '25',
@@ -3273,8 +3273,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    90 => array(
+    ],
+    90 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '25',
@@ -3302,8 +3302,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Caption";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    91 => array(
+    ],
+    91 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '25',
@@ -3331,8 +3331,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    92 => array(
+    ],
+    92 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '25',
@@ -3360,8 +3360,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    93 => array(
+    ],
+    93 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '25',
@@ -3389,8 +3389,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    94 => array(
+    ],
+    94 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3418,8 +3418,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    95 => array(
+    ],
+    95 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3447,8 +3447,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    96 => array(
+    ],
+    96 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3476,8 +3476,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Location";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    97 => array(
+    ],
+    97 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3505,8 +3505,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:18:"Open in new window";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    98 => array(
+    ],
+    98 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3534,8 +3534,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    99 => array(
+    ],
+    99 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3563,8 +3563,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Short description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    100 => array(
+    ],
+    100 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3592,8 +3592,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    101 => array(
+    ],
+    101 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3621,8 +3621,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    102 => array(
+    ],
+    102 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3650,8 +3650,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    103 => array(
+    ],
+    103 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '28',
@@ -3679,8 +3679,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    104 => array(
+    ],
+    104 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '28',
@@ -3708,8 +3708,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    105 => array(
+    ],
+    105 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '29',
@@ -3737,8 +3737,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Subject";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    106 => array(
+    ],
+    106 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '29',
@@ -3766,8 +3766,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Message";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    107 => array(
+    ],
+    107 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '29',
@@ -3795,8 +3795,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:6:"Sticky";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    108 => array(
+    ],
+    108 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '29',
@@ -3824,8 +3824,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:23:"Notify me about updates";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    109 => array(
+    ],
+    109 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '30',
@@ -3853,8 +3853,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Subject";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    110 => array(
+    ],
+    110 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '30',
@@ -3882,8 +3882,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Message";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    111 => array(
+    ],
+    111 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '31',
@@ -3911,8 +3911,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:10:"Full title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    112 => array(
+    ],
+    112 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '31',
@@ -3940,8 +3940,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Short title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    113 => array(
+    ],
+    113 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '31',
@@ -3969,8 +3969,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Text";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    114 => array(
+    ],
+    114 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '31',
@@ -3998,8 +3998,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Category";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    115 => array(
+    ],
+    115 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '31',
@@ -4027,8 +4027,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"From Time";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    116 => array(
+    ],
+    116 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '31',
@@ -4056,8 +4056,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"To Time";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    117 => array(
+    ],
+    117 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '31',
@@ -4085,8 +4085,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    118 => array(
+    ],
+    118 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '32',
@@ -4114,8 +4114,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    119 => array(
+    ],
+    119 => [
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '32',
@@ -4145,8 +4145,8 @@ return array(
       'serialized_description_list' => 'a:1:{s:6:"eng-GB";s:0:"";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"View";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    120 => array(
+    ],
+    120 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4174,8 +4174,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    121 => array(
+    ],
+    121 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4203,8 +4203,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:3:"URL";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    122 => array(
+    ],
+    122 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4232,8 +4232,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    123 => array(
+    ],
+    123 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4261,8 +4261,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Image map";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    124 => array(
+    ],
+    124 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4290,8 +4290,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    125 => array(
+    ],
+    125 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '34',
@@ -4319,8 +4319,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    126 => array(
+    ],
+    126 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '34',
@@ -4348,8 +4348,8 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    127 => array(
+    ],
+    127 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4377,8 +4377,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    128 => array(
+    ],
+    128 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4406,8 +4406,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Caption";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    129 => array(
+    ],
+    129 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4435,8 +4435,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"File";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    130 => array(
+    ],
+    130 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4464,8 +4464,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    131 => array(
+    ],
+    131 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4493,8 +4493,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-GB";s:0:"";s:16:"always-available";s:6:"eng-GB";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-    132 => array(
+    ],
+    132 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4522,8 +4522,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:12:"Site map URL";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    133 => array(
+    ],
+    133 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4551,8 +4551,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:13:"Tag Cloud URL";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    134 => array(
+    ],
+    134 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4580,8 +4580,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:13:"Login (label)";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    135 => array(
+    ],
+    135 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4609,8 +4609,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:14:"Logout (label)";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    136 => array(
+    ],
+    136 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4638,8 +4638,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:18:"My profile (label)";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    137 => array(
+    ],
+    137 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4667,8 +4667,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:25:"Register new user (label)";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    138 => array(
+    ],
+    138 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4696,8 +4696,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:8:"RSS feed";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    139 => array(
+    ],
+    139 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4725,8 +4725,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:23:"Shopping basket (label)";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    140 => array(
+    ],
+    140 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4754,8 +4754,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:21:"Site settings (label)";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    141 => array(
+    ],
+    141 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4783,8 +4783,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:11:"Footer text";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    142 => array(
+    ],
+    142 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4812,8 +4812,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:17:"Hide "Powered by"";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    143 => array(
+    ],
+    143 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -4841,8 +4841,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:17:"Footer Javascript";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    145 => array(
+    ],
+    145 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -4870,8 +4870,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:4:"Tags";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    146 => array(
+    ],
+    146 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '36',
@@ -4899,8 +4899,8 @@ return array(
       'serialized_description_list' => 'a:2:{s:6:"eng-US";s:0:"";s:16:"always-available";s:6:"eng-US";}',
       'serialized_name_list' => 'a:2:{s:6:"eng-US";s:4:"Name";s:16:"always-available";s:6:"eng-US";}',
       'version' => '0',
-    ),
-    147 => array(
+    ],
+    147 => [
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '36',
@@ -4928,392 +4928,392 @@ return array(
       'serialized_description_list' => 'a:0:{}',
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:3:"URL";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
-    ),
-  ),
-  'ezcontentclass_classgroup' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentclass_classgroup' => [
+    0 => [
       'contentclass_id' => '1',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentclass_id' => '3',
       'contentclass_version' => '0',
       'group_id' => '2',
       'group_name' => 'Users',
-    ),
-    2 => array(
+    ],
+    2 => [
       'contentclass_id' => '4',
       'contentclass_version' => '0',
       'group_id' => '2',
       'group_name' => 'Users',
-    ),
-    3 => array(
+    ],
+    3 => [
       'contentclass_id' => '13',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    4 => array(
+    ],
+    4 => [
       'contentclass_id' => '14',
       'contentclass_version' => '0',
       'group_id' => '4',
       'group_name' => 'Setup',
-    ),
-    5 => array(
+    ],
+    5 => [
       'contentclass_id' => '15',
       'contentclass_version' => '0',
       'group_id' => '4',
       'group_name' => 'Setup',
-    ),
-    6 => array(
+    ],
+    6 => [
       'contentclass_id' => '16',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    7 => array(
+    ],
+    7 => [
       'contentclass_id' => '17',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    8 => array(
+    ],
+    8 => [
       'contentclass_id' => '18',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    9 => array(
+    ],
+    9 => [
       'contentclass_id' => '19',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    10 => array(
+    ],
+    10 => [
       'contentclass_id' => '20',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    11 => array(
+    ],
+    11 => [
       'contentclass_id' => '21',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    12 => array(
+    ],
+    12 => [
       'contentclass_id' => '22',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    13 => array(
+    ],
+    13 => [
       'contentclass_id' => '23',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    14 => array(
+    ],
+    14 => [
       'contentclass_id' => '24',
       'contentclass_version' => '0',
       'group_id' => '3',
       'group_name' => 'Media',
-    ),
-    15 => array(
+    ],
+    15 => [
       'contentclass_id' => '25',
       'contentclass_version' => '0',
       'group_id' => '3',
       'group_name' => 'Media',
-    ),
-    16 => array(
+    ],
+    16 => [
       'contentclass_id' => '26',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    17 => array(
+    ],
+    17 => [
       'contentclass_id' => '27',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    18 => array(
+    ],
+    18 => [
       'contentclass_id' => '28',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    19 => array(
+    ],
+    19 => [
       'contentclass_id' => '29',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    20 => array(
+    ],
+    20 => [
       'contentclass_id' => '30',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    21 => array(
+    ],
+    21 => [
       'contentclass_id' => '31',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    22 => array(
+    ],
+    22 => [
       'contentclass_id' => '32',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    23 => array(
+    ],
+    23 => [
       'contentclass_id' => '33',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    24 => array(
+    ],
+    24 => [
       'contentclass_id' => '34',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-    25 => array(
+    ],
+    25 => [
       'contentclass_id' => '35',
       'contentclass_version' => '0',
       'group_id' => '3',
       'group_name' => 'Media',
-    ),
-    26 => array(
+    ],
+    26 => [
       'contentclass_id' => '36',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
-    ),
-  ),
-  'ezcontentclass_name' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentclass_name' => [
+    0 => [
       'contentclass_id' => '1',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'Folder',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentclass_id' => '3',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'User group',
-    ),
-    2 => array(
+    ],
+    2 => [
       'contentclass_id' => '4',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'User',
-    ),
-    3 => array(
+    ],
+    3 => [
       'contentclass_id' => '13',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'Comment',
-    ),
-    4 => array(
+    ],
+    4 => [
       'contentclass_id' => '14',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'Common ini settings',
-    ),
-    5 => array(
+    ],
+    5 => [
       'contentclass_id' => '15',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-US',
       'name' => 'Template look',
-    ),
-    6 => array(
+    ],
+    6 => [
       'contentclass_id' => '16',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Article',
-    ),
-    7 => array(
+    ],
+    7 => [
       'contentclass_id' => '17',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Blog',
-    ),
-    8 => array(
+    ],
+    8 => [
       'contentclass_id' => '18',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Blog post',
-    ),
-    9 => array(
+    ],
+    9 => [
       'contentclass_id' => '19',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Product',
-    ),
-    10 => array(
+    ],
+    10 => [
       'contentclass_id' => '20',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Feedback form',
-    ),
-    11 => array(
+    ],
+    11 => [
       'contentclass_id' => '21',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Landing Page',
-    ),
-    12 => array(
+    ],
+    12 => [
       'contentclass_id' => '22',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Wiki Page',
-    ),
-    13 => array(
+    ],
+    13 => [
       'contentclass_id' => '23',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Poll',
-    ),
-    14 => array(
+    ],
+    14 => [
       'contentclass_id' => '24',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'File',
-    ),
-    15 => array(
+    ],
+    15 => [
       'contentclass_id' => '25',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Image',
-    ),
-    16 => array(
+    ],
+    16 => [
       'contentclass_id' => '26',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Link',
-    ),
-    17 => array(
+    ],
+    17 => [
       'contentclass_id' => '27',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Gallery',
-    ),
-    18 => array(
+    ],
+    18 => [
       'contentclass_id' => '28',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Forum',
-    ),
-    19 => array(
+    ],
+    19 => [
       'contentclass_id' => '29',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Forum topic',
-    ),
-    20 => array(
+    ],
+    20 => [
       'contentclass_id' => '30',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Forum reply',
-    ),
-    21 => array(
+    ],
+    21 => [
       'contentclass_id' => '31',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Event',
-    ),
-    22 => array(
+    ],
+    22 => [
       'contentclass_id' => '32',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Event calendar',
-    ),
-    23 => array(
+    ],
+    23 => [
       'contentclass_id' => '33',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Banner',
-    ),
-    24 => array(
+    ],
+    24 => [
       'contentclass_id' => '34',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Forums',
-    ),
-    25 => array(
+    ],
+    25 => [
       'contentclass_id' => '35',
       'contentclass_version' => '0',
       'language_id' => '9',
       'language_locale' => 'eng-GB',
       'name' => 'Video',
-    ),
-  ),
-  'ezcontentclassgroup' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentclassgroup' => [
+    0 => [
       'created' => '1031216928',
       'creator_id' => '14',
       'id' => '1',
       'modified' => '1033922106',
       'modifier_id' => '14',
       'name' => 'Content',
-    ),
-    1 => array(
+    ],
+    1 => [
       'created' => '1031216941',
       'creator_id' => '14',
       'id' => '2',
       'modified' => '1033922113',
       'modifier_id' => '14',
       'name' => 'Users',
-    ),
-    2 => array(
+    ],
+    2 => [
       'created' => '1032009743',
       'creator_id' => '14',
       'id' => '3',
       'modified' => '1033922120',
       'modifier_id' => '14',
       'name' => 'Media',
-    ),
-    3 => array(
+    ],
+    3 => [
       'created' => '1081858024',
       'creator_id' => '14',
       'id' => '4',
       'modified' => '1081858024',
       'modifier_id' => '14',
       'name' => 'Setup',
-    ),
-  ),
-  'ezcontentobject' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentobject' => [
+    0 => [
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '4',
@@ -5326,8 +5326,8 @@ return array(
       'remote_id' => 'f5c88a2209584891056f987fd965b0ba',
       'section_id' => '2',
       'status' => '1',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentclass_id' => '4',
       'current_version' => '2',
       'id' => '10',
@@ -5340,8 +5340,8 @@ return array(
       'remote_id' => 'faaeb9be3bd98ed09f606fc16d144eca',
       'section_id' => '2',
       'status' => '1',
-    ),
-    2 => array(
+    ],
+    2 => [
       'contentclass_id' => '3',
       'current_version' => '2',
       'id' => '11',
@@ -5354,8 +5354,8 @@ return array(
       'remote_id' => '5f7f0bdb3381d6a461d8c29ff53d908f',
       'section_id' => '2',
       'status' => '1',
-    ),
-    3 => array(
+    ],
+    3 => [
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '12',
@@ -5368,8 +5368,8 @@ return array(
       'remote_id' => '9b47a45624b023b1a76c73b74d704acf',
       'section_id' => '2',
       'status' => '1',
-    ),
-    4 => array(
+    ],
+    4 => [
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '13',
@@ -5382,8 +5382,8 @@ return array(
       'remote_id' => '3c160cca19fb135f83bd02d911f04db2',
       'section_id' => '2',
       'status' => '1',
-    ),
-    5 => array(
+    ],
+    5 => [
       'contentclass_id' => '4',
       'current_version' => '4',
       'id' => '14',
@@ -5396,8 +5396,8 @@ return array(
       'remote_id' => '1bb4fe25487f05527efa8bfd394cecc7',
       'section_id' => '2',
       'status' => '1',
-    ),
-    6 => array(
+    ],
+    6 => [
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '41',
@@ -5410,8 +5410,8 @@ return array(
       'remote_id' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
       'section_id' => '3',
       'status' => '1',
-    ),
-    7 => array(
+    ],
+    7 => [
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '42',
@@ -5424,8 +5424,8 @@ return array(
       'remote_id' => '15b256dbea2ae72418ff5facc999e8f9',
       'section_id' => '2',
       'status' => '1',
-    ),
-    8 => array(
+    ],
+    8 => [
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '45',
@@ -5438,8 +5438,8 @@ return array(
       'remote_id' => '241d538ce310074e602f29f49e44e938',
       'section_id' => '4',
       'status' => '1',
-    ),
-    9 => array(
+    ],
+    9 => [
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '49',
@@ -5452,8 +5452,8 @@ return array(
       'remote_id' => 'e7ff633c6b8e0fd3531e74c6e712bead',
       'section_id' => '3',
       'status' => '1',
-    ),
-    10 => array(
+    ],
+    10 => [
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '50',
@@ -5466,8 +5466,8 @@ return array(
       'remote_id' => '732a5acd01b51a6fe6eab448ad4138a9',
       'section_id' => '3',
       'status' => '1',
-    ),
-    11 => array(
+    ],
+    11 => [
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '51',
@@ -5480,8 +5480,8 @@ return array(
       'remote_id' => '09082deb98662a104f325aaa8c4933d3',
       'section_id' => '3',
       'status' => '1',
-    ),
-    12 => array(
+    ],
+    12 => [
       'contentclass_id' => '14',
       'current_version' => '1',
       'id' => '52',
@@ -5494,8 +5494,8 @@ return array(
       'remote_id' => '27437f3547db19cf81a33c92578b2c89',
       'section_id' => '4',
       'status' => '1',
-    ),
-    13 => array(
+    ],
+    13 => [
       'contentclass_id' => '15',
       'current_version' => '2',
       'id' => '54',
@@ -5508,8 +5508,8 @@ return array(
       'remote_id' => '8b8b22fe3c6061ed500fbd2b377b885f',
       'section_id' => '5',
       'status' => '1',
-    ),
-    14 => array(
+    ],
+    14 => [
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '56',
@@ -5522,8 +5522,8 @@ return array(
       'remote_id' => '08799e609893f7aba22f10cb466d9cc8',
       'section_id' => '5',
       'status' => '1',
-    ),
-    15 => array(
+    ],
+    15 => [
       'contentclass_id' => '21',
       'current_version' => '1',
       'id' => '57',
@@ -5536,8 +5536,8 @@ return array(
       'remote_id' => '8a9c9c761004866fb458d89910f52bee',
       'section_id' => '1',
       'status' => '1',
-    ),
-    16 => array(
+    ],
+    16 => [
       'contentclass_id' => '20',
       'current_version' => '1',
       'id' => '58',
@@ -5550,8 +5550,8 @@ return array(
       'remote_id' => 'f8cc7a4cf8a964a1a0ea6666f5da7d0d',
       'section_id' => '1',
       'status' => '1',
-    ),
-    17 => array(
+    ],
+    17 => [
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '59',
@@ -5564,10 +5564,10 @@ return array(
       'remote_id' => '14e4411b264a6194a33847843919451a',
       'section_id' => '2',
       'status' => '1',
-    ),
-  ),
-  'ezcontentobject_attribute' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentobject_attribute' => [
+    0 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '4',
@@ -5581,8 +5581,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    1 => array(
+    ],
+    1 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '4',
@@ -5596,8 +5596,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    2 => array(
+    ],
+    2 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '8',
       'contentobject_id' => '10',
@@ -5611,8 +5611,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'anonymous',
       'version' => '2',
-    ),
-    3 => array(
+    ],
+    3 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '9',
       'contentobject_id' => '10',
@@ -5626,8 +5626,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'user',
       'version' => '2',
-    ),
-    4 => array(
+    ],
+    4 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '12',
       'contentobject_id' => '10',
@@ -5641,8 +5641,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    5 => array(
+    ],
+    5 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '11',
@@ -5656,8 +5656,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    6 => array(
+    ],
+    6 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '11',
@@ -5671,8 +5671,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'members',
       'version' => '2',
-    ),
-    7 => array(
+    ],
+    7 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '11',
@@ -5686,8 +5686,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    8 => array(
+    ],
+    8 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '11',
@@ -5701,8 +5701,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    9 => array(
+    ],
+    9 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '12',
@@ -5716,8 +5716,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    10 => array(
+    ],
+    10 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '12',
@@ -5731,8 +5731,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    11 => array(
+    ],
+    11 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '13',
@@ -5746,8 +5746,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    12 => array(
+    ],
+    12 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '13',
@@ -5761,8 +5761,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    13 => array(
+    ],
+    13 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '8',
       'contentobject_id' => '14',
@@ -5776,8 +5776,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'administrator',
       'version' => '3',
-    ),
-    14 => array(
+    ],
+    14 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '8',
       'contentobject_id' => '14',
@@ -5791,8 +5791,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'administrator',
       'version' => '4',
-    ),
-    15 => array(
+    ],
+    15 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '9',
       'contentobject_id' => '14',
@@ -5806,8 +5806,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'user',
       'version' => '3',
-    ),
-    16 => array(
+    ],
+    16 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '9',
       'contentobject_id' => '14',
@@ -5821,8 +5821,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'user',
       'version' => '4',
-    ),
-    17 => array(
+    ],
+    17 => [
       'attribute_original_id' => '30',
       'contentclassattribute_id' => '12',
       'contentobject_id' => '14',
@@ -5836,8 +5836,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '3',
-    ),
-    18 => array(
+    ],
+    18 => [
       'attribute_original_id' => '30',
       'contentclassattribute_id' => '12',
       'contentobject_id' => '14',
@@ -5851,8 +5851,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '4',
-    ),
-    19 => array(
+    ],
+    19 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '41',
@@ -5866,8 +5866,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'media',
       'version' => '1',
-    ),
-    20 => array(
+    ],
+    20 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '41',
@@ -5883,8 +5883,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    21 => array(
+    ],
+    21 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '42',
@@ -5898,8 +5898,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'anonymous users',
       'version' => '1',
-    ),
-    22 => array(
+    ],
+    22 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '42',
@@ -5913,8 +5913,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'user group for the anonymous user',
       'version' => '1',
-    ),
-    23 => array(
+    ],
+    23 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '41',
@@ -5928,8 +5928,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    24 => array(
+    ],
+    24 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '41',
@@ -5943,8 +5943,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    25 => array(
+    ],
+    25 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '41',
@@ -5958,8 +5958,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    26 => array(
+    ],
+    26 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '45',
@@ -5973,8 +5973,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'setup',
       'version' => '1',
-    ),
-    27 => array(
+    ],
+    27 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '45',
@@ -5988,8 +5988,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    28 => array(
+    ],
+    28 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '45',
@@ -6005,8 +6005,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    29 => array(
+    ],
+    29 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '45',
@@ -6022,8 +6022,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    30 => array(
+    ],
+    30 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '45',
@@ -6037,8 +6037,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    31 => array(
+    ],
+    31 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '49',
@@ -6052,8 +6052,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'images',
       'version' => '1',
-    ),
-    32 => array(
+    ],
+    32 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '49',
@@ -6067,8 +6067,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    33 => array(
+    ],
+    33 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '49',
@@ -6084,8 +6084,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    34 => array(
+    ],
+    34 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '49',
@@ -6101,8 +6101,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    35 => array(
+    ],
+    35 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '49',
@@ -6116,8 +6116,8 @@ return array(
       'sort_key_int' => '1',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    36 => array(
+    ],
+    36 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '50',
@@ -6131,8 +6131,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'files',
       'version' => '1',
-    ),
-    37 => array(
+    ],
+    37 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '50',
@@ -6146,8 +6146,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    38 => array(
+    ],
+    38 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '50',
@@ -6163,8 +6163,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    39 => array(
+    ],
+    39 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '50',
@@ -6180,8 +6180,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    40 => array(
+    ],
+    40 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '50',
@@ -6195,8 +6195,8 @@ return array(
       'sort_key_int' => '1',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    41 => array(
+    ],
+    41 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '51',
@@ -6210,8 +6210,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'multimedia',
       'version' => '1',
-    ),
-    42 => array(
+    ],
+    42 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '51',
@@ -6225,8 +6225,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    43 => array(
+    ],
+    43 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '51',
@@ -6242,8 +6242,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    44 => array(
+    ],
+    44 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '51',
@@ -6259,8 +6259,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    45 => array(
+    ],
+    45 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '51',
@@ -6274,8 +6274,8 @@ return array(
       'sort_key_int' => '1',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    46 => array(
+    ],
+    46 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '159',
       'contentobject_id' => '52',
@@ -6289,8 +6289,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => 'common ini settings',
       'version' => '1',
-    ),
-    47 => array(
+    ],
+    47 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '160',
       'contentobject_id' => '52',
@@ -6304,8 +6304,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    48 => array(
+    ],
+    48 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '161',
       'contentobject_id' => '52',
@@ -6319,8 +6319,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    49 => array(
+    ],
+    49 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '162',
       'contentobject_id' => '52',
@@ -6334,8 +6334,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    50 => array(
+    ],
+    50 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '163',
       'contentobject_id' => '52',
@@ -6349,8 +6349,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    51 => array(
+    ],
+    51 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '164',
       'contentobject_id' => '52',
@@ -6364,8 +6364,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    52 => array(
+    ],
+    52 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '165',
       'contentobject_id' => '52',
@@ -6379,8 +6379,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    53 => array(
+    ],
+    53 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '166',
       'contentobject_id' => '52',
@@ -6394,8 +6394,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    54 => array(
+    ],
+    54 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '167',
       'contentobject_id' => '52',
@@ -6409,8 +6409,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    55 => array(
+    ],
+    55 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '168',
       'contentobject_id' => '52',
@@ -6424,8 +6424,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    56 => array(
+    ],
+    56 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '169',
       'contentobject_id' => '52',
@@ -6439,8 +6439,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    57 => array(
+    ],
+    57 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '170',
       'contentobject_id' => '52',
@@ -6454,8 +6454,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    58 => array(
+    ],
+    58 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '171',
       'contentobject_id' => '52',
@@ -6469,8 +6469,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    59 => array(
+    ],
+    59 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '172',
       'contentobject_id' => '54',
@@ -6484,8 +6484,8 @@ return array(
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    60 => array(
+    ],
+    60 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '173',
       'contentobject_id' => '54',
@@ -6502,8 +6502,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    61 => array(
+    ],
+    61 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '174',
       'contentobject_id' => '54',
@@ -6519,8 +6519,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    62 => array(
+    ],
+    62 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '175',
       'contentobject_id' => '54',
@@ -6534,8 +6534,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '0',
       'version' => '2',
-    ),
-    63 => array(
+    ],
+    63 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '177',
       'contentobject_id' => '54',
@@ -6549,8 +6549,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    64 => array(
+    ],
+    64 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '178',
       'contentobject_id' => '54',
@@ -6564,8 +6564,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    65 => array(
+    ],
+    65 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '10',
@@ -6579,8 +6579,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    66 => array(
+    ],
+    66 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '14',
@@ -6594,8 +6594,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '3',
-    ),
-    67 => array(
+    ],
+    67 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '14',
@@ -6609,8 +6609,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '4',
-    ),
-    68 => array(
+    ],
+    68 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '10',
@@ -6624,8 +6624,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    69 => array(
+    ],
+    69 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '14',
@@ -6641,8 +6641,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '3',
-    ),
-    70 => array(
+    ],
+    70 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '14',
@@ -6658,8 +6658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '4',
-    ),
-    71 => array(
+    ],
+    71 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '56',
@@ -6673,8 +6673,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => 'design',
       'version' => '1',
-    ),
-    72 => array(
+    ],
+    72 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '56',
@@ -6688,8 +6688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    73 => array(
+    ],
+    73 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '56',
@@ -6705,8 +6705,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    74 => array(
+    ],
+    74 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '56',
@@ -6722,8 +6722,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    75 => array(
+    ],
+    75 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '56',
@@ -6737,8 +6737,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '1',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    76 => array(
+    ],
+    76 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '219',
       'contentobject_id' => '57',
@@ -6752,8 +6752,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => 'home',
       'version' => '1',
-    ),
-    78 => array(
+    ],
+    78 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '212',
       'contentobject_id' => '58',
@@ -6767,8 +6767,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_int' => '0',
       'sort_key_string' => 'contact us',
       'version' => '1',
-    ),
-    79 => array(
+    ],
+    79 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '213',
       'contentobject_id' => '58',
@@ -6787,8 +6787,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    80 => array(
+    ],
+    80 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '214',
       'contentobject_id' => '58',
@@ -6802,8 +6802,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'firstname lastname',
       'version' => '1',
-    ),
-    81 => array(
+    ],
+    81 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '215',
       'contentobject_id' => '58',
@@ -6817,8 +6817,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'subject',
       'version' => '1',
-    ),
-    82 => array(
+    ],
+    82 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '216',
       'contentobject_id' => '58',
@@ -6832,8 +6832,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'message text',
       'version' => '1',
-    ),
-    83 => array(
+    ],
+    83 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '217',
       'contentobject_id' => '58',
@@ -6847,8 +6847,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'sender@example.com',
       'version' => '1',
-    ),
-    84 => array(
+    ],
+    84 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '218',
       'contentobject_id' => '58',
@@ -6862,8 +6862,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'recipient@example.com',
       'version' => '1',
-    ),
-    85 => array(
+    ],
+    85 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '279',
       'contentobject_id' => '54',
@@ -6877,8 +6877,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    86 => array(
+    ],
+    86 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '280',
       'contentobject_id' => '54',
@@ -6892,8 +6892,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    87 => array(
+    ],
+    87 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '281',
       'contentobject_id' => '54',
@@ -6907,8 +6907,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'login',
       'version' => '2',
-    ),
-    88 => array(
+    ],
+    88 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '282',
       'contentobject_id' => '54',
@@ -6922,8 +6922,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'logout',
       'version' => '2',
-    ),
-    89 => array(
+    ],
+    89 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '283',
       'contentobject_id' => '54',
@@ -6937,8 +6937,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'my profile',
       'version' => '2',
-    ),
-    90 => array(
+    ],
+    90 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '284',
       'contentobject_id' => '54',
@@ -6952,8 +6952,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'register',
       'version' => '2',
-    ),
-    91 => array(
+    ],
+    91 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '285',
       'contentobject_id' => '54',
@@ -6967,8 +6967,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '/rss/feed/my_feed',
       'version' => '2',
-    ),
-    92 => array(
+    ],
+    92 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '286',
       'contentobject_id' => '54',
@@ -6982,8 +6982,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'shopping basket',
       'version' => '2',
-    ),
-    93 => array(
+    ],
+    93 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '287',
       'contentobject_id' => '54',
@@ -6997,8 +6997,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'site settings',
       'version' => '2',
-    ),
-    94 => array(
+    ],
+    94 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '288',
       'contentobject_id' => '54',
@@ -7012,8 +7012,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    95 => array(
+    ],
+    95 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '289',
       'contentobject_id' => '54',
@@ -7027,8 +7027,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    96 => array(
+    ],
+    96 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '290',
       'contentobject_id' => '54',
@@ -7042,8 +7042,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
-    ),
-    97 => array(
+    ],
+    97 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '59',
@@ -7057,8 +7057,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => 'partners',
       'version' => '1',
-    ),
-    98 => array(
+    ],
+    98 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '59',
@@ -7072,8 +7072,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    105 => array(
+    ],
+    105 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '292',
       'contentobject_id' => '41',
@@ -7087,8 +7087,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    106 => array(
+    ],
+    106 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '292',
       'contentobject_id' => '45',
@@ -7102,8 +7102,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    107 => array(
+    ],
+    107 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '292',
       'contentobject_id' => '49',
@@ -7117,8 +7117,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    108 => array(
+    ],
+    108 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '292',
       'contentobject_id' => '50',
@@ -7132,8 +7132,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    109 => array(
+    ],
+    109 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '292',
       'contentobject_id' => '51',
@@ -7147,8 +7147,8 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-    110 => array(
+    ],
+    110 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '292',
       'contentobject_id' => '56',
@@ -7162,176 +7162,176 @@ Country�</literallayout></para></section>
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '1',
-    ),
-  ),
-  'ezcontentobject_link' => array(
-  ),
-  'ezcontentobject_name' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentobject_link' => [
+  ],
+  'ezcontentobject_name' => [
+    0 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '4',
       'language_id' => '3',
       'name' => 'Users',
       'real_translation' => 'eng-US',
-    ),
-    1 => array(
+    ],
+    1 => [
       'content_translation' => 'eng-US',
       'content_version' => '2',
       'contentobject_id' => '10',
       'language_id' => '3',
       'name' => 'Anonymous User',
       'real_translation' => 'eng-US',
-    ),
-    2 => array(
+    ],
+    2 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '11',
       'language_id' => '3',
       'name' => 'Guest accounts',
       'real_translation' => 'eng-US',
-    ),
-    3 => array(
+    ],
+    3 => [
       'content_translation' => 'eng-US',
       'content_version' => '2',
       'contentobject_id' => '11',
       'language_id' => '3',
       'name' => 'Members',
       'real_translation' => 'eng-US',
-    ),
-    4 => array(
+    ],
+    4 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '12',
       'language_id' => '3',
       'name' => 'Administrator users',
       'real_translation' => 'eng-US',
-    ),
-    5 => array(
+    ],
+    5 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '13',
       'language_id' => '3',
       'name' => 'Editors',
       'real_translation' => 'eng-US',
-    ),
-    6 => array(
+    ],
+    6 => [
       'content_translation' => 'eng-US',
       'content_version' => '3',
       'contentobject_id' => '14',
       'language_id' => '3',
       'name' => 'Administrator User',
       'real_translation' => 'eng-US',
-    ),
-    7 => array(
+    ],
+    7 => [
       'content_translation' => 'eng-US',
       'content_version' => '4',
       'contentobject_id' => '14',
       'language_id' => '3',
       'name' => 'Administrator User',
       'real_translation' => 'eng-US',
-    ),
-    8 => array(
+    ],
+    8 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '41',
       'language_id' => '3',
       'name' => 'Media',
       'real_translation' => 'eng-US',
-    ),
-    9 => array(
+    ],
+    9 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '42',
       'language_id' => '3',
       'name' => 'Anonymous Users',
       'real_translation' => 'eng-US',
-    ),
-    10 => array(
+    ],
+    10 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '45',
       'language_id' => '3',
       'name' => 'Setup',
       'real_translation' => 'eng-US',
-    ),
-    11 => array(
+    ],
+    11 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '49',
       'language_id' => '3',
       'name' => 'Images',
       'real_translation' => 'eng-US',
-    ),
-    12 => array(
+    ],
+    12 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '50',
       'language_id' => '3',
       'name' => 'Files',
       'real_translation' => 'eng-US',
-    ),
-    13 => array(
+    ],
+    13 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '51',
       'language_id' => '3',
       'name' => 'Multimedia',
       'real_translation' => 'eng-US',
-    ),
-    14 => array(
+    ],
+    14 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '52',
       'language_id' => '2',
       'name' => 'Common INI settings',
       'real_translation' => 'eng-US',
-    ),
-    15 => array(
+    ],
+    15 => [
       'content_translation' => 'eng-US',
       'content_version' => '2',
       'contentobject_id' => '54',
       'language_id' => '2',
       'name' => 'eZ Publish Demo Design (without demo content)',
       'real_translation' => 'eng-US',
-    ),
-    16 => array(
+    ],
+    16 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '56',
       'language_id' => '3',
       'name' => 'Design',
       'real_translation' => 'eng-US',
-    ),
-    17 => array(
+    ],
+    17 => [
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '57',
       'language_id' => '9',
       'name' => 'Home',
       'real_translation' => 'eng-GB',
-    ),
-    18 => array(
+    ],
+    18 => [
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '58',
       'language_id' => '8',
       'name' => 'Contact Us',
       'real_translation' => 'eng-GB',
-    ),
-    19 => array(
+    ],
+    19 => [
       'content_translation' => 'eng-US',
       'content_version' => '1',
       'contentobject_id' => '59',
       'language_id' => '3',
       'name' => 'Partners',
       'real_translation' => 'eng-US',
-    ),
-  ),
-  'ezcontentobject_trash' => array(
-  ),
-  'ezcontentobject_tree' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentobject_trash' => [
+  ],
+  'ezcontentobject_tree' => [
+    0 => [
       'contentobject_id' => '0',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7348,8 +7348,8 @@ Country�</literallayout></para></section>
       'remote_id' => '629709ba256fe317c3ddcee35453a96a',
       'sort_field' => '1',
       'sort_order' => '1',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentobject_id' => '57',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7366,8 +7366,8 @@ Country�</literallayout></para></section>
       'remote_id' => 'f3e90596361e31d496d4026eb624c983',
       'sort_field' => '8',
       'sort_order' => '1',
-    ),
-    2 => array(
+    ],
+    2 => [
       'contentobject_id' => '4',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7384,8 +7384,8 @@ Country�</literallayout></para></section>
       'remote_id' => '3f6d92f8044aed134f32153517850f5a',
       'sort_field' => '1',
       'sort_order' => '1',
-    ),
-    3 => array(
+    ],
+    3 => [
       'contentobject_id' => '11',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -7402,8 +7402,8 @@ Country�</literallayout></para></section>
       'remote_id' => '602dcf84765e56b7f999eaafd3821dd3',
       'sort_field' => '1',
       'sort_order' => '1',
-    ),
-    4 => array(
+    ],
+    4 => [
       'contentobject_id' => '12',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7420,8 +7420,8 @@ Country�</literallayout></para></section>
       'remote_id' => '769380b7aa94541679167eab817ca893',
       'sort_field' => '1',
       'sort_order' => '1',
-    ),
-    5 => array(
+    ],
+    5 => [
       'contentobject_id' => '13',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7438,8 +7438,8 @@ Country�</literallayout></para></section>
       'remote_id' => 'f7dda2854fc68f7c8455d9cb14bd04a9',
       'sort_field' => '1',
       'sort_order' => '1',
-    ),
-    6 => array(
+    ],
+    6 => [
       'contentobject_id' => '14',
       'contentobject_is_published' => '1',
       'contentobject_version' => '4',
@@ -7456,8 +7456,8 @@ Country�</literallayout></para></section>
       'remote_id' => 'e5161a99f733200b9ed4e80f9c16187b',
       'sort_field' => '1',
       'sort_order' => '1',
-    ),
-    7 => array(
+    ],
+    7 => [
       'contentobject_id' => '41',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7474,8 +7474,8 @@ Country�</literallayout></para></section>
       'remote_id' => '75c715a51699d2d309a924eca6a95145',
       'sort_field' => '9',
       'sort_order' => '1',
-    ),
-    8 => array(
+    ],
+    8 => [
       'contentobject_id' => '42',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7492,8 +7492,8 @@ Country�</literallayout></para></section>
       'remote_id' => '4fdf0072da953bb276c0c7e0141c5c9b',
       'sort_field' => '9',
       'sort_order' => '1',
-    ),
-    9 => array(
+    ],
+    9 => [
       'contentobject_id' => '10',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -7510,8 +7510,8 @@ Country�</literallayout></para></section>
       'remote_id' => '2cf8343bee7b482bab82b269d8fecd76',
       'sort_field' => '9',
       'sort_order' => '1',
-    ),
-    10 => array(
+    ],
+    10 => [
       'contentobject_id' => '45',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7528,8 +7528,8 @@ Country�</literallayout></para></section>
       'remote_id' => '182ce1b5af0c09fa378557c462ba2617',
       'sort_field' => '9',
       'sort_order' => '1',
-    ),
-    11 => array(
+    ],
+    11 => [
       'contentobject_id' => '49',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7546,8 +7546,8 @@ Country�</literallayout></para></section>
       'remote_id' => '1b26c0454b09bb49dfb1b9190ffd67cb',
       'sort_field' => '9',
       'sort_order' => '1',
-    ),
-    12 => array(
+    ],
+    12 => [
       'contentobject_id' => '50',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7564,8 +7564,8 @@ Country�</literallayout></para></section>
       'remote_id' => '0b113a208f7890f9ad3c24444ff5988c',
       'sort_field' => '9',
       'sort_order' => '1',
-    ),
-    13 => array(
+    ],
+    13 => [
       'contentobject_id' => '51',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7582,8 +7582,8 @@ Country�</literallayout></para></section>
       'remote_id' => '4f18b82c75f10aad476cae5adf98c11f',
       'sort_field' => '9',
       'sort_order' => '1',
-    ),
-    14 => array(
+    ],
+    14 => [
       'contentobject_id' => '52',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7600,8 +7600,8 @@ Country�</literallayout></para></section>
       'remote_id' => 'fa9f3cff9cf90ecfae335718dcbddfe2',
       'sort_field' => '1',
       'sort_order' => '1',
-    ),
-    15 => array(
+    ],
+    15 => [
       'contentobject_id' => '54',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -7618,8 +7618,8 @@ Country�</literallayout></para></section>
       'remote_id' => '772da20ecf88b3035d73cbdfcea0f119',
       'sort_field' => '1',
       'sort_order' => '1',
-    ),
-    16 => array(
+    ],
+    16 => [
       'contentobject_id' => '56',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7636,8 +7636,8 @@ Country�</literallayout></para></section>
       'remote_id' => '79f2d67372ab56f59b5d65bb9e0ca3b9',
       'sort_field' => '2',
       'sort_order' => '0',
-    ),
-    17 => array(
+    ],
+    17 => [
       'contentobject_id' => '58',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7654,8 +7654,8 @@ Country�</literallayout></para></section>
       'remote_id' => '86bf306624668ee9b8b979b0d56f7e0d',
       'sort_field' => '8',
       'sort_order' => '1',
-    ),
-    18 => array(
+    ],
+    18 => [
       'contentobject_id' => '59',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -7672,10 +7672,10 @@ Country�</literallayout></para></section>
       'remote_id' => '66994c2fce0fd2a1c7ecce7115158971',
       'sort_field' => '1',
       'sort_order' => '1',
-    ),
-  ),
-  'ezcontentobject_version' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentobject_version' => [
+    0 => [
       'contentobject_id' => '4',
       'created' => '0',
       'creator_id' => '14',
@@ -7687,8 +7687,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '1',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentobject_id' => '11',
       'created' => '1033920737',
       'creator_id' => '14',
@@ -7700,8 +7700,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    2 => array(
+    ],
+    2 => [
       'contentobject_id' => '12',
       'created' => '1033920760',
       'creator_id' => '14',
@@ -7713,8 +7713,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    3 => array(
+    ],
+    3 => [
       'contentobject_id' => '13',
       'created' => '1033920786',
       'creator_id' => '14',
@@ -7726,8 +7726,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    4 => array(
+    ],
+    4 => [
       'contentobject_id' => '41',
       'created' => '1060695450',
       'creator_id' => '14',
@@ -7739,8 +7739,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    5 => array(
+    ],
+    5 => [
       'contentobject_id' => '42',
       'created' => '1072180278',
       'creator_id' => '14',
@@ -7752,8 +7752,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    6 => array(
+    ],
+    6 => [
       'contentobject_id' => '10',
       'created' => '1072180337',
       'creator_id' => '14',
@@ -7765,8 +7765,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '2',
       'workflow_event_pos' => '0',
-    ),
-    7 => array(
+    ],
+    7 => [
       'contentobject_id' => '45',
       'created' => '1079684084',
       'creator_id' => '14',
@@ -7778,8 +7778,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    8 => array(
+    ],
+    8 => [
       'contentobject_id' => '49',
       'created' => '1080220181',
       'creator_id' => '14',
@@ -7791,8 +7791,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    9 => array(
+    ],
+    9 => [
       'contentobject_id' => '50',
       'created' => '1080220211',
       'creator_id' => '14',
@@ -7804,8 +7804,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    10 => array(
+    ],
+    10 => [
       'contentobject_id' => '51',
       'created' => '1080220225',
       'creator_id' => '14',
@@ -7817,8 +7817,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    11 => array(
+    ],
+    11 => [
       'contentobject_id' => '52',
       'created' => '1082016497',
       'creator_id' => '14',
@@ -7830,8 +7830,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    12 => array(
+    ],
+    12 => [
       'contentobject_id' => '56',
       'created' => '1103023120',
       'creator_id' => '14',
@@ -7843,8 +7843,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    13 => array(
+    ],
+    13 => [
       'contentobject_id' => '14',
       'created' => '1301061783',
       'creator_id' => '14',
@@ -7856,8 +7856,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '3',
       'workflow_event_pos' => '0',
-    ),
-    14 => array(
+    ],
+    14 => [
       'contentobject_id' => '54',
       'created' => '1301062300',
       'creator_id' => '14',
@@ -7869,8 +7869,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '2',
       'workflow_event_pos' => '0',
-    ),
-    15 => array(
+    ],
+    15 => [
       'contentobject_id' => '57',
       'created' => '1196268655',
       'creator_id' => '14',
@@ -7882,8 +7882,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    16 => array(
+    ],
+    16 => [
       'contentobject_id' => '58',
       'created' => '1332927277',
       'creator_id' => '14',
@@ -7895,8 +7895,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    17 => array(
+    ],
+    17 => [
       'contentobject_id' => '14',
       'created' => '1343140540',
       'creator_id' => '14',
@@ -7908,8 +7908,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '4',
       'workflow_event_pos' => '0',
-    ),
-    18 => array(
+    ],
+    18 => [
       'contentobject_id' => '59',
       'created' => '1343140541',
       'creator_id' => '14',
@@ -7921,8 +7921,8 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '1',
       'workflow_event_pos' => '0',
-    ),
-    19 => array(
+    ],
+    19 => [
       'contentobject_id' => '11',
       'created' => '1343140541',
       'creator_id' => '14',
@@ -7934,22 +7934,22 @@ Country�</literallayout></para></section>
       'user_id' => '0',
       'version' => '2',
       'workflow_event_pos' => '0',
-    ),
-  ),
-  'ezimagefile' => array(
-    0 => array(
+    ],
+  ],
+  'ezimagefile' => [
+    0 => [
       'contentobject_attribute_id' => '172',
       'filepath' => 'var/storage/images/setup/ez_publish/172-1-eng-GB/ez_publish.',
       'id' => '1',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentobject_attribute_id' => '172',
       'filepath' => 'var/ezdemo_site/storage/images/design/plain-site/172-2-eng-US/eZ-Publish-Demo-Design-without-demo-content1.png',
       'id' => '2',
-    ),
-  ),
-  'eznode_assignment' => array(
-    0 => array(
+    ],
+  ],
+  'eznode_assignment' => [
+    0 => [
       'contentobject_id' => '8',
       'contentobject_version' => '2',
       'from_node_id' => '0',
@@ -7963,8 +7963,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentobject_id' => '42',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -7978,8 +7978,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    2 => array(
+    ],
+    2 => [
       'contentobject_id' => '10',
       'contentobject_version' => '2',
       'from_node_id' => '-1',
@@ -7993,8 +7993,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    3 => array(
+    ],
+    3 => [
       'contentobject_id' => '4',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8008,8 +8008,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    4 => array(
+    ],
+    4 => [
       'contentobject_id' => '12',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8023,8 +8023,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    5 => array(
+    ],
+    5 => [
       'contentobject_id' => '13',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8038,8 +8038,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    6 => array(
+    ],
+    6 => [
       'contentobject_id' => '41',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8053,8 +8053,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    7 => array(
+    ],
+    7 => [
       'contentobject_id' => '11',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8068,8 +8068,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    8 => array(
+    ],
+    8 => [
       'contentobject_id' => '45',
       'contentobject_version' => '1',
       'from_node_id' => '-1',
@@ -8083,8 +8083,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    9 => array(
+    ],
+    9 => [
       'contentobject_id' => '49',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8098,8 +8098,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    10 => array(
+    ],
+    10 => [
       'contentobject_id' => '50',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8113,8 +8113,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    11 => array(
+    ],
+    11 => [
       'contentobject_id' => '51',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8128,8 +8128,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    12 => array(
+    ],
+    12 => [
       'contentobject_id' => '52',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8143,8 +8143,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    13 => array(
+    ],
+    13 => [
       'contentobject_id' => '56',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8158,8 +8158,8 @@ Country�</literallayout></para></section>
       'sort_order' => '0',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    14 => array(
+    ],
+    14 => [
       'contentobject_id' => '14',
       'contentobject_version' => '3',
       'from_node_id' => '-1',
@@ -8173,8 +8173,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    15 => array(
+    ],
+    15 => [
       'contentobject_id' => '54',
       'contentobject_version' => '2',
       'from_node_id' => '-1',
@@ -8188,8 +8188,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    16 => array(
+    ],
+    16 => [
       'contentobject_id' => '57',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8203,8 +8203,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    17 => array(
+    ],
+    17 => [
       'contentobject_id' => '58',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8218,8 +8218,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    18 => array(
+    ],
+    18 => [
       'contentobject_id' => '14',
       'contentobject_version' => '4',
       'from_node_id' => '-1',
@@ -8233,8 +8233,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    19 => array(
+    ],
+    19 => [
       'contentobject_id' => '59',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -8248,8 +8248,8 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-    20 => array(
+    ],
+    20 => [
       'contentobject_id' => '11',
       'contentobject_version' => '2',
       'from_node_id' => '-1',
@@ -8263,1117 +8263,1117 @@ Country�</literallayout></para></section>
       'sort_order' => '1',
       'priority' => '0',
       'is_hidden' => '0',
-    ),
-  ),
-  'ezpolicy' => array(
-    0 => array(
+    ],
+  ],
+  'ezpolicy' => [
+    0 => [
       'function_name' => '*',
       'id' => '308',
       'module_name' => '*',
       'original_id' => '0',
       'role_id' => '2',
-    ),
-    1 => array(
+    ],
+    1 => [
       'function_name' => 'login',
       'id' => '319',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    2 => array(
+    ],
+    2 => [
       'function_name' => 'read',
       'id' => '328',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '1',
-    ),
-    3 => array(
+    ],
+    3 => [
       'function_name' => 'pdf',
       'id' => '329',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '1',
-    ),
-    4 => array(
+    ],
+    4 => [
       'function_name' => '*',
       'id' => '330',
       'module_name' => 'ezoe',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    5 => array(
+    ],
+    5 => [
       'function_name' => '*',
       'id' => '332',
       'module_name' => 'ezoe',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    6 => array(
+    ],
+    6 => [
       'function_name' => 'feed',
       'id' => '333',
       'module_name' => 'rss',
       'original_id' => '0',
       'role_id' => '1',
-    ),
-    7 => array(
+    ],
+    7 => [
       'function_name' => 'login',
       'id' => '334',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '1',
-    ),
-    8 => array(
+    ],
+    8 => [
       'function_name' => 'login',
       'id' => '335',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '1',
-    ),
-    9 => array(
+    ],
+    9 => [
       'function_name' => 'login',
       'id' => '336',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '1',
-    ),
-    10 => array(
+    ],
+    10 => [
       'function_name' => 'login',
       'id' => '337',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '1',
-    ),
-    11 => array(
+    ],
+    11 => [
       'function_name' => 'read',
       'id' => '338',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '1',
-    ),
-    12 => array(
+    ],
+    12 => [
       'function_name' => 'create',
       'id' => '339',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    13 => array(
+    ],
+    13 => [
       'function_name' => 'create',
       'id' => '340',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    14 => array(
+    ],
+    14 => [
       'function_name' => 'create',
       'id' => '341',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    15 => array(
+    ],
+    15 => [
       'function_name' => 'create',
       'id' => '342',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    16 => array(
+    ],
+    16 => [
       'function_name' => 'create',
       'id' => '343',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    17 => array(
+    ],
+    17 => [
       'function_name' => 'create',
       'id' => '344',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    18 => array(
+    ],
+    18 => [
       'function_name' => 'use',
       'id' => '345',
       'module_name' => 'websitetoolbar',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    19 => array(
+    ],
+    19 => [
       'function_name' => 'edit',
       'id' => '346',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    20 => array(
+    ],
+    20 => [
       'function_name' => 'read',
       'id' => '347',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    21 => array(
+    ],
+    21 => [
       'function_name' => 'use',
       'id' => '348',
       'module_name' => 'notification',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    22 => array(
+    ],
+    22 => [
       'function_name' => 'manage_locations',
       'id' => '349',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    23 => array(
+    ],
+    23 => [
       'function_name' => '*',
       'id' => '350',
       'module_name' => 'ezodf',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    24 => array(
+    ],
+    24 => [
       'function_name' => '*',
       'id' => '351',
       'module_name' => 'ezflow',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    25 => array(
+    ],
+    25 => [
       'function_name' => '*',
       'id' => '352',
       'module_name' => 'ezajax',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    26 => array(
+    ],
+    26 => [
       'function_name' => 'diff',
       'id' => '353',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    27 => array(
+    ],
+    27 => [
       'function_name' => 'versionread',
       'id' => '354',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    28 => array(
+    ],
+    28 => [
       'function_name' => 'versionremove',
       'id' => '355',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    29 => array(
+    ],
+    29 => [
       'function_name' => 'remove',
       'id' => '356',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    30 => array(
+    ],
+    30 => [
       'function_name' => 'translate',
       'id' => '357',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    31 => array(
+    ],
+    31 => [
       'function_name' => 'feed',
       'id' => '358',
       'module_name' => 'rss',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    32 => array(
+    ],
+    32 => [
       'function_name' => 'bookmark',
       'id' => '359',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    33 => array(
+    ],
+    33 => [
       'function_name' => 'pendinglist',
       'id' => '360',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    34 => array(
+    ],
+    34 => [
       'function_name' => 'dashboard',
       'id' => '361',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    35 => array(
+    ],
+    35 => [
       'function_name' => 'view_embed',
       'id' => '362',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-    36 => array(
+    ],
+    36 => [
       'function_name' => 'read',
       'id' => '363',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
-    ),
-    37 => array(
+    ],
+    37 => [
       'function_name' => 'create',
       'id' => '364',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
-    ),
-    38 => array(
+    ],
+    38 => [
       'function_name' => 'create',
       'id' => '365',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
-    ),
-    39 => array(
+    ],
+    39 => [
       'function_name' => 'create',
       'id' => '366',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
-    ),
-    40 => array(
+    ],
+    40 => [
       'function_name' => 'edit',
       'id' => '367',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
-    ),
-    41 => array(
+    ],
+    41 => [
       'function_name' => 'selfedit',
       'id' => '368',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '4',
-    ),
-    42 => array(
+    ],
+    42 => [
       'function_name' => 'use',
       'id' => '369',
       'module_name' => 'notification',
       'original_id' => '0',
       'role_id' => '4',
-    ),
-    43 => array(
+    ],
+    43 => [
       'function_name' => 'create',
       'id' => '370',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '5',
-    ),
-    44 => array(
+    ],
+    44 => [
       'function_name' => 'create',
       'id' => '371',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '5',
-    ),
-    45 => array(
+    ],
+    45 => [
       'function_name' => 'create',
       'id' => '372',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '5',
-    ),
-    46 => array(
+    ],
+    46 => [
       'function_name' => 'edit',
       'id' => '373',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '5',
-    ),
-    47 => array(
+    ],
+    47 => [
       'function_name' => 'selfedit',
       'id' => '374',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '5',
-    ),
-    48 => array(
+    ],
+    48 => [
       'function_name' => 'use',
       'id' => '375',
       'module_name' => 'notification',
       'original_id' => '0',
       'role_id' => '5',
-    ),
-    49 => array(
+    ],
+    49 => [
       'function_name' => 'password',
       'id' => '376',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '5',
-    ),
-    50 => array(
+    ],
+    50 => [
       'function_name' => 'call',
       'id' => '377',
       'module_name' => 'ezjscore',
       'original_id' => '0',
       'role_id' => '5',
-    ),
-    51 => array(
+    ],
+    51 => [
       'function_name' => 'publish',
       'id' => '378',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
-    ),
-  ),
-  'ezpolicy_limitation' => array(
-    0 => array(
+    ],
+  ],
+  'ezpolicy_limitation' => [
+    0 => [
       'id' => '251',
       'identifier' => 'Section',
       'policy_id' => '328',
-    ),
-    1 => array(
+    ],
+    1 => [
       'id' => '252',
       'identifier' => 'Section',
       'policy_id' => '329',
-    ),
-    2 => array(
+    ],
+    2 => [
       'id' => '254',
       'identifier' => 'SiteAccess',
       'policy_id' => '334',
-    ),
-    3 => array(
+    ],
+    3 => [
       'id' => '255',
       'identifier' => 'SiteAccess',
       'policy_id' => '335',
-    ),
-    4 => array(
+    ],
+    4 => [
       'id' => '256',
       'identifier' => 'SiteAccess',
       'policy_id' => '336',
-    ),
-    5 => array(
+    ],
+    5 => [
       'id' => '257',
       'identifier' => 'SiteAccess',
       'policy_id' => '337',
-    ),
-    6 => array(
+    ],
+    6 => [
       'id' => '258',
       'identifier' => 'Class',
       'policy_id' => '338',
-    ),
-    7 => array(
+    ],
+    7 => [
       'id' => '259',
       'identifier' => 'Section',
       'policy_id' => '338',
-    ),
-    8 => array(
+    ],
+    8 => [
       'id' => '260',
       'identifier' => 'Class',
       'policy_id' => '339',
-    ),
-    9 => array(
+    ],
+    9 => [
       'id' => '261',
       'identifier' => 'ParentClass',
       'policy_id' => '339',
-    ),
-    10 => array(
+    ],
+    10 => [
       'id' => '262',
       'identifier' => 'Class',
       'policy_id' => '340',
-    ),
-    11 => array(
+    ],
+    11 => [
       'id' => '263',
       'identifier' => 'ParentClass',
       'policy_id' => '340',
-    ),
-    12 => array(
+    ],
+    12 => [
       'id' => '264',
       'identifier' => 'Class',
       'policy_id' => '341',
-    ),
-    13 => array(
+    ],
+    13 => [
       'id' => '265',
       'identifier' => 'ParentClass',
       'policy_id' => '341',
-    ),
-    14 => array(
+    ],
+    14 => [
       'id' => '266',
       'identifier' => 'Class',
       'policy_id' => '342',
-    ),
-    15 => array(
+    ],
+    15 => [
       'id' => '267',
       'identifier' => 'ParentClass',
       'policy_id' => '342',
-    ),
-    16 => array(
+    ],
+    16 => [
       'id' => '268',
       'identifier' => 'Class',
       'policy_id' => '343',
-    ),
-    17 => array(
+    ],
+    17 => [
       'id' => '269',
       'identifier' => 'ParentClass',
       'policy_id' => '343',
-    ),
-    18 => array(
+    ],
+    18 => [
       'id' => '270',
       'identifier' => 'Class',
       'policy_id' => '344',
-    ),
-    19 => array(
+    ],
+    19 => [
       'id' => '271',
       'identifier' => 'ParentClass',
       'policy_id' => '344',
-    ),
-    20 => array(
+    ],
+    20 => [
       'id' => '272',
       'identifier' => 'Class',
       'policy_id' => '345',
-    ),
-    21 => array(
+    ],
+    21 => [
       'id' => '273',
       'identifier' => 'Section',
       'policy_id' => '347',
-    ),
-    22 => array(
+    ],
+    22 => [
       'id' => '274',
       'identifier' => 'Section',
       'policy_id' => '363',
-    ),
-    23 => array(
+    ],
+    23 => [
       'id' => '275',
       'identifier' => 'Class',
       'policy_id' => '364',
-    ),
-    24 => array(
+    ],
+    24 => [
       'id' => '276',
       'identifier' => 'Section',
       'policy_id' => '364',
-    ),
-    25 => array(
+    ],
+    25 => [
       'id' => '277',
       'identifier' => 'ParentClass',
       'policy_id' => '364',
-    ),
-    26 => array(
+    ],
+    26 => [
       'id' => '278',
       'identifier' => 'Class',
       'policy_id' => '365',
-    ),
-    27 => array(
+    ],
+    27 => [
       'id' => '279',
       'identifier' => 'Section',
       'policy_id' => '365',
-    ),
-    28 => array(
+    ],
+    28 => [
       'id' => '280',
       'identifier' => 'ParentClass',
       'policy_id' => '365',
-    ),
-    29 => array(
+    ],
+    29 => [
       'id' => '281',
       'identifier' => 'Class',
       'policy_id' => '366',
-    ),
-    30 => array(
+    ],
+    30 => [
       'id' => '282',
       'identifier' => 'Section',
       'policy_id' => '366',
-    ),
-    31 => array(
+    ],
+    31 => [
       'id' => '283',
       'identifier' => 'ParentClass',
       'policy_id' => '366',
-    ),
-    32 => array(
+    ],
+    32 => [
       'id' => '284',
       'identifier' => 'Class',
       'policy_id' => '367',
-    ),
-    33 => array(
+    ],
+    33 => [
       'id' => '285',
       'identifier' => 'Section',
       'policy_id' => '367',
-    ),
-    34 => array(
+    ],
+    34 => [
       'id' => '286',
       'identifier' => 'Owner',
       'policy_id' => '367',
-    ),
-    35 => array(
+    ],
+    35 => [
       'id' => '287',
       'identifier' => 'Class',
       'policy_id' => '370',
-    ),
-    36 => array(
+    ],
+    36 => [
       'id' => '288',
       'identifier' => 'Section',
       'policy_id' => '370',
-    ),
-    37 => array(
+    ],
+    37 => [
       'id' => '289',
       'identifier' => 'ParentClass',
       'policy_id' => '370',
-    ),
-    38 => array(
+    ],
+    38 => [
       'id' => '290',
       'identifier' => 'Class',
       'policy_id' => '371',
-    ),
-    39 => array(
+    ],
+    39 => [
       'id' => '291',
       'identifier' => 'Section',
       'policy_id' => '371',
-    ),
-    40 => array(
+    ],
+    40 => [
       'id' => '292',
       'identifier' => 'ParentClass',
       'policy_id' => '371',
-    ),
-    41 => array(
+    ],
+    41 => [
       'id' => '293',
       'identifier' => 'Class',
       'policy_id' => '372',
-    ),
-    42 => array(
+    ],
+    42 => [
       'id' => '294',
       'identifier' => 'Section',
       'policy_id' => '372',
-    ),
-    43 => array(
+    ],
+    43 => [
       'id' => '295',
       'identifier' => 'ParentClass',
       'policy_id' => '372',
-    ),
-    44 => array(
+    ],
+    44 => [
       'id' => '296',
       'identifier' => 'Class',
       'policy_id' => '373',
-    ),
-    45 => array(
+    ],
+    45 => [
       'id' => '297',
       'identifier' => 'Section',
       'policy_id' => '373',
-    ),
-    46 => array(
+    ],
+    46 => [
       'id' => '298',
       'identifier' => 'Owner',
       'policy_id' => '373',
-    ),
-  ),
-  'ezpolicy_limitation_value' => array(
-    0 => array(
+    ],
+  ],
+  'ezpolicy_limitation_value' => [
+    0 => [
       'id' => '477',
       'limitation_id' => '251',
       'value' => '1',
-    ),
-    1 => array(
+    ],
+    1 => [
       'id' => '478',
       'limitation_id' => '252',
       'value' => '1',
-    ),
-    2 => array(
+    ],
+    2 => [
       'id' => '480',
       'limitation_id' => '254',
       'value' => '2339567439',
-    ),
-    3 => array(
+    ],
+    3 => [
       'id' => '481',
       'limitation_id' => '255',
       'value' => '2582995467',
-    ),
-    4 => array(
+    ],
+    4 => [
       'id' => '482',
       'limitation_id' => '256',
       'value' => '341347141',
-    ),
-    5 => array(
+    ],
+    5 => [
       'id' => '483',
       'limitation_id' => '257',
       'value' => '2582995467',
-    ),
-    6 => array(
+    ],
+    6 => [
       'id' => '484',
       'limitation_id' => '258',
       'value' => '25',
-    ),
-    7 => array(
+    ],
+    7 => [
       'id' => '485',
       'limitation_id' => '258',
       'value' => '33',
-    ),
-    8 => array(
+    ],
+    8 => [
       'id' => '486',
       'limitation_id' => '259',
       'value' => '3',
-    ),
-    9 => array(
+    ],
+    9 => [
       'id' => '487',
       'limitation_id' => '260',
       'value' => '1',
-    ),
-    10 => array(
+    ],
+    10 => [
       'id' => '488',
       'limitation_id' => '260',
       'value' => '26',
-    ),
-    11 => array(
+    ],
+    11 => [
       'id' => '489',
       'limitation_id' => '260',
       'value' => '24',
-    ),
-    12 => array(
+    ],
+    12 => [
       'id' => '490',
       'limitation_id' => '260',
       'value' => '19',
-    ),
-    13 => array(
+    ],
+    13 => [
       'id' => '491',
       'limitation_id' => '260',
       'value' => '20',
-    ),
-    14 => array(
+    ],
+    14 => [
       'id' => '492',
       'limitation_id' => '260',
       'value' => '21',
-    ),
-    15 => array(
+    ],
+    15 => [
       'id' => '493',
       'limitation_id' => '260',
       'value' => '16',
-    ),
-    16 => array(
+    ],
+    16 => [
       'id' => '494',
       'limitation_id' => '260',
       'value' => '17',
-    ),
-    17 => array(
+    ],
+    17 => [
       'id' => '495',
       'limitation_id' => '260',
       'value' => '23',
-    ),
-    18 => array(
+    ],
+    18 => [
       'id' => '496',
       'limitation_id' => '260',
       'value' => '22',
-    ),
-    19 => array(
+    ],
+    19 => [
       'id' => '497',
       'limitation_id' => '260',
       'value' => '27',
-    ),
-    20 => array(
+    ],
+    20 => [
       'id' => '498',
       'limitation_id' => '260',
       'value' => '28',
-    ),
-    21 => array(
+    ],
+    21 => [
       'id' => '499',
       'limitation_id' => '260',
       'value' => '34',
-    ),
-    22 => array(
+    ],
+    22 => [
       'id' => '500',
       'limitation_id' => '260',
       'value' => '32',
-    ),
-    23 => array(
+    ],
+    23 => [
       'id' => '501',
       'limitation_id' => '260',
       'value' => '33',
-    ),
-    24 => array(
+    ],
+    24 => [
       'id' => '502',
       'limitation_id' => '260',
       'value' => '25',
-    ),
-    25 => array(
+    ],
+    25 => [
       'id' => '503',
       'limitation_id' => '261',
       'value' => '1',
-    ),
-    26 => array(
+    ],
+    26 => [
       'id' => '504',
       'limitation_id' => '262',
       'value' => '18',
-    ),
-    27 => array(
+    ],
+    27 => [
       'id' => '505',
       'limitation_id' => '263',
       'value' => '17',
-    ),
-    28 => array(
+    ],
+    28 => [
       'id' => '506',
       'limitation_id' => '264',
       'value' => '29',
-    ),
-    29 => array(
+    ],
+    29 => [
       'id' => '507',
       'limitation_id' => '265',
       'value' => '28',
-    ),
-    30 => array(
+    ],
+    30 => [
       'id' => '508',
       'limitation_id' => '266',
       'value' => '31',
-    ),
-    31 => array(
+    ],
+    31 => [
       'id' => '509',
       'limitation_id' => '267',
       'value' => '32',
-    ),
-    32 => array(
+    ],
+    32 => [
       'id' => '510',
       'limitation_id' => '268',
       'value' => '25',
-    ),
-    33 => array(
+    ],
+    33 => [
       'id' => '511',
       'limitation_id' => '269',
       'value' => '27',
-    ),
-    34 => array(
+    ],
+    34 => [
       'id' => '512',
       'limitation_id' => '270',
       'value' => '1',
-    ),
-    35 => array(
+    ],
+    35 => [
       'id' => '513',
       'limitation_id' => '270',
       'value' => '26',
-    ),
-    36 => array(
+    ],
+    36 => [
       'id' => '514',
       'limitation_id' => '270',
       'value' => '20',
-    ),
-    37 => array(
+    ],
+    37 => [
       'id' => '515',
       'limitation_id' => '270',
       'value' => '21',
-    ),
-    38 => array(
+    ],
+    38 => [
       'id' => '516',
       'limitation_id' => '270',
       'value' => '22',
-    ),
-    39 => array(
+    ],
+    39 => [
       'id' => '517',
       'limitation_id' => '270',
       'value' => '27',
-    ),
-    40 => array(
+    ],
+    40 => [
       'id' => '518',
       'limitation_id' => '270',
       'value' => '32',
-    ),
-    41 => array(
+    ],
+    41 => [
       'id' => '519',
       'limitation_id' => '270',
       'value' => '34',
-    ),
-    42 => array(
+    ],
+    42 => [
       'id' => '520',
       'limitation_id' => '271',
       'value' => '21',
-    ),
-    43 => array(
+    ],
+    43 => [
       'id' => '521',
       'limitation_id' => '272',
       'value' => '1',
-    ),
-    44 => array(
+    ],
+    44 => [
       'id' => '522',
       'limitation_id' => '272',
       'value' => '26',
-    ),
-    45 => array(
+    ],
+    45 => [
       'id' => '523',
       'limitation_id' => '272',
       'value' => '16',
-    ),
-    46 => array(
+    ],
+    46 => [
       'id' => '524',
       'limitation_id' => '272',
       'value' => '17',
-    ),
-    47 => array(
+    ],
+    47 => [
       'id' => '525',
       'limitation_id' => '272',
       'value' => '18',
-    ),
-    48 => array(
+    ],
+    48 => [
       'id' => '526',
       'limitation_id' => '272',
       'value' => '19',
-    ),
-    49 => array(
+    ],
+    49 => [
       'id' => '527',
       'limitation_id' => '272',
       'value' => '20',
-    ),
-    50 => array(
+    ],
+    50 => [
       'id' => '528',
       'limitation_id' => '272',
       'value' => '21',
-    ),
-    51 => array(
+    ],
+    51 => [
       'id' => '529',
       'limitation_id' => '272',
       'value' => '22',
-    ),
-    52 => array(
+    ],
+    52 => [
       'id' => '530',
       'limitation_id' => '272',
       'value' => '23',
-    ),
-    53 => array(
+    ],
+    53 => [
       'id' => '531',
       'limitation_id' => '272',
       'value' => '24',
-    ),
-    54 => array(
+    ],
+    54 => [
       'id' => '532',
       'limitation_id' => '272',
       'value' => '25',
-    ),
-    55 => array(
+    ],
+    55 => [
       'id' => '533',
       'limitation_id' => '272',
       'value' => '27',
-    ),
-    56 => array(
+    ],
+    56 => [
       'id' => '534',
       'limitation_id' => '272',
       'value' => '28',
-    ),
-    57 => array(
+    ],
+    57 => [
       'id' => '535',
       'limitation_id' => '272',
       'value' => '31',
-    ),
-    58 => array(
+    ],
+    58 => [
       'id' => '536',
       'limitation_id' => '272',
       'value' => '32',
-    ),
-    59 => array(
+    ],
+    59 => [
       'id' => '537',
       'limitation_id' => '272',
       'value' => '34',
-    ),
-    60 => array(
+    ],
+    60 => [
       'id' => '538',
       'limitation_id' => '273',
       'value' => '1',
-    ),
-    61 => array(
+    ],
+    61 => [
       'id' => '539',
       'limitation_id' => '273',
       'value' => '6',
-    ),
-    62 => array(
+    ],
+    62 => [
       'id' => '540',
       'limitation_id' => '273',
       'value' => '3',
-    ),
-    63 => array(
+    ],
+    63 => [
       'id' => '541',
       'limitation_id' => '274',
       'value' => '6',
-    ),
-    64 => array(
+    ],
+    64 => [
       'id' => '542',
       'limitation_id' => '275',
       'value' => '29',
-    ),
-    65 => array(
+    ],
+    65 => [
       'id' => '543',
       'limitation_id' => '276',
       'value' => '6',
-    ),
-    66 => array(
+    ],
+    66 => [
       'id' => '544',
       'limitation_id' => '277',
       'value' => '28',
-    ),
-    67 => array(
+    ],
+    67 => [
       'id' => '545',
       'limitation_id' => '278',
       'value' => '30',
-    ),
-    68 => array(
+    ],
+    68 => [
       'id' => '546',
       'limitation_id' => '279',
       'value' => '6',
-    ),
-    69 => array(
+    ],
+    69 => [
       'id' => '547',
       'limitation_id' => '280',
       'value' => '29',
-    ),
-    70 => array(
+    ],
+    70 => [
       'id' => '548',
       'limitation_id' => '281',
       'value' => '13',
-    ),
-    71 => array(
+    ],
+    71 => [
       'id' => '549',
       'limitation_id' => '282',
       'value' => '6',
-    ),
-    72 => array(
+    ],
+    72 => [
       'id' => '550',
       'limitation_id' => '283',
       'value' => '16',
-    ),
-    73 => array(
+    ],
+    73 => [
       'id' => '551',
       'limitation_id' => '284',
       'value' => '13',
-    ),
-    74 => array(
+    ],
+    74 => [
       'id' => '552',
       'limitation_id' => '284',
       'value' => '29',
-    ),
-    75 => array(
+    ],
+    75 => [
       'id' => '553',
       'limitation_id' => '284',
       'value' => '30',
-    ),
-    76 => array(
+    ],
+    76 => [
       'id' => '554',
       'limitation_id' => '285',
       'value' => '6',
-    ),
-    77 => array(
+    ],
+    77 => [
       'id' => '555',
       'limitation_id' => '286',
       'value' => '1',
-    ),
-    78 => array(
+    ],
+    78 => [
       'id' => '556',
       'limitation_id' => '287',
       'value' => '29',
-    ),
-    79 => array(
+    ],
+    79 => [
       'id' => '557',
       'limitation_id' => '288',
       'value' => '1',
-    ),
-    80 => array(
+    ],
+    80 => [
       'id' => '558',
       'limitation_id' => '289',
       'value' => '28',
-    ),
-    81 => array(
+    ],
+    81 => [
       'id' => '559',
       'limitation_id' => '290',
       'value' => '30',
-    ),
-    82 => array(
+    ],
+    82 => [
       'id' => '560',
       'limitation_id' => '291',
       'value' => '1',
-    ),
-    83 => array(
+    ],
+    83 => [
       'id' => '561',
       'limitation_id' => '292',
       'value' => '29',
-    ),
-    84 => array(
+    ],
+    84 => [
       'id' => '562',
       'limitation_id' => '293',
       'value' => '13',
-    ),
-    85 => array(
+    ],
+    85 => [
       'id' => '563',
       'limitation_id' => '294',
       'value' => '1',
-    ),
-    86 => array(
+    ],
+    86 => [
       'id' => '564',
       'limitation_id' => '295',
       'value' => '16',
-    ),
-    87 => array(
+    ],
+    87 => [
       'id' => '565',
       'limitation_id' => '295',
       'value' => '18',
-    ),
-    88 => array(
+    ],
+    88 => [
       'id' => '566',
       'limitation_id' => '296',
       'value' => '13',
-    ),
-    89 => array(
+    ],
+    89 => [
       'id' => '567',
       'limitation_id' => '296',
       'value' => '29',
-    ),
-    90 => array(
+    ],
+    90 => [
       'id' => '568',
       'limitation_id' => '296',
       'value' => '30',
-    ),
-    91 => array(
+    ],
+    91 => [
       'id' => '569',
       'limitation_id' => '297',
       'value' => '1',
-    ),
-    92 => array(
+    ],
+    92 => [
       'id' => '570',
       'limitation_id' => '298',
       'value' => '1',
-    ),
-  ),
-  'ezrole' => array(
-    0 => array(
+    ],
+  ],
+  'ezrole' => [
+    0 => [
       'id' => '1',
       'is_new' => '0',
       'name' => 'Anonymous',
       'value' => ' ',
       'version' => '0',
-    ),
-    1 => array(
+    ],
+    1 => [
       'id' => '2',
       'is_new' => '0',
       'name' => 'Administrator',
       'value' => '*',
       'version' => '0',
-    ),
-    2 => array(
+    ],
+    2 => [
       'id' => '3',
       'is_new' => '0',
       'name' => 'Editor',
       'value' => ' ',
       'version' => '0',
-    ),
-    3 => array(
+    ],
+    3 => [
       'id' => '4',
       'is_new' => '0',
       'name' => 'Partner',
       'value' => null,
       'version' => '0',
-    ),
-    4 => array(
+    ],
+    4 => [
       'id' => '5',
       'is_new' => '0',
       'name' => 'Member',
       'value' => null,
       'version' => '0',
-    ),
-  ),
-  'ezsearch_object_word_link' => array(
-    0 => array(
+    ],
+  ],
+  'ezsearch_object_word_link' => [
+    0 => [
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '4',
@@ -9387,8 +9387,8 @@ Country�</literallayout></para></section>
       'published' => '1033917596',
       'section_id' => '2',
       'word_id' => '930',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '4',
@@ -9402,8 +9402,8 @@ Country�</literallayout></para></section>
       'published' => '1033917596',
       'section_id' => '2',
       'word_id' => '951',
-    ),
-    2 => array(
+    ],
+    2 => [
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '4',
@@ -9417,8 +9417,8 @@ Country�</literallayout></para></section>
       'published' => '1033917596',
       'section_id' => '2',
       'word_id' => '952',
-    ),
-    3 => array(
+    ],
+    3 => [
       'contentclass_attribute_id' => '8',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -9432,8 +9432,8 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '953',
-    ),
-    4 => array(
+    ],
+    4 => [
       'contentclass_attribute_id' => '9',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -9447,8 +9447,8 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '954',
-    ),
-    5 => array(
+    ],
+    5 => [
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -9462,8 +9462,8 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '953',
-    ),
-    6 => array(
+    ],
+    6 => [
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -9477,8 +9477,8 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '955',
-    ),
-    7 => array(
+    ],
+    7 => [
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -9492,8 +9492,8 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '927',
-    ),
-    8 => array(
+    ],
+    8 => [
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '12',
@@ -9507,8 +9507,8 @@ Country�</literallayout></para></section>
       'published' => '1033920775',
       'section_id' => '2',
       'word_id' => '958',
-    ),
-    9 => array(
+    ],
+    9 => [
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '12',
@@ -9522,8 +9522,8 @@ Country�</literallayout></para></section>
       'published' => '1033920775',
       'section_id' => '2',
       'word_id' => '930',
-    ),
-    10 => array(
+    ],
+    10 => [
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '13',
@@ -9537,8 +9537,8 @@ Country�</literallayout></para></section>
       'published' => '1033920794',
       'section_id' => '2',
       'word_id' => '959',
-    ),
-    11 => array(
+    ],
+    11 => [
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '41',
@@ -9552,8 +9552,8 @@ Country�</literallayout></para></section>
       'published' => '1060695457',
       'section_id' => '3',
       'word_id' => '961',
-    ),
-    12 => array(
+    ],
+    12 => [
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -9567,8 +9567,8 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '953',
-    ),
-    13 => array(
+    ],
+    13 => [
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -9582,8 +9582,8 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '930',
-    ),
-    14 => array(
+    ],
+    14 => [
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -9597,8 +9597,8 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '954',
-    ),
-    15 => array(
+    ],
+    15 => [
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -9612,8 +9612,8 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '952',
-    ),
-    16 => array(
+    ],
+    16 => [
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -9627,8 +9627,8 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '816',
-    ),
-    17 => array(
+    ],
+    17 => [
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -9642,8 +9642,8 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '814',
-    ),
-    18 => array(
+    ],
+    18 => [
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -9657,8 +9657,8 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '953',
-    ),
-    19 => array(
+    ],
+    19 => [
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -9672,8 +9672,8 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '954',
-    ),
-    20 => array(
+    ],
+    20 => [
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '45',
@@ -9687,8 +9687,8 @@ Country�</literallayout></para></section>
       'published' => '1079684190',
       'section_id' => '4',
       'word_id' => '812',
-    ),
-    21 => array(
+    ],
+    21 => [
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '49',
@@ -9702,8 +9702,8 @@ Country�</literallayout></para></section>
       'published' => '1080220197',
       'section_id' => '3',
       'word_id' => '962',
-    ),
-    22 => array(
+    ],
+    22 => [
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '50',
@@ -9717,8 +9717,8 @@ Country�</literallayout></para></section>
       'published' => '1080220220',
       'section_id' => '3',
       'word_id' => '963',
-    ),
-    23 => array(
+    ],
+    23 => [
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '51',
@@ -9732,8 +9732,8 @@ Country�</literallayout></para></section>
       'published' => '1080220233',
       'section_id' => '3',
       'word_id' => '964',
-    ),
-    24 => array(
+    ],
+    24 => [
       'contentclass_attribute_id' => '159',
       'contentclass_id' => '14',
       'contentobject_id' => '52',
@@ -9747,8 +9747,8 @@ Country�</literallayout></para></section>
       'published' => '1082016591',
       'section_id' => '4',
       'word_id' => '877',
-    ),
-    25 => array(
+    ],
+    25 => [
       'contentclass_attribute_id' => '159',
       'contentclass_id' => '14',
       'contentobject_id' => '52',
@@ -9762,8 +9762,8 @@ Country�</literallayout></para></section>
       'published' => '1082016591',
       'section_id' => '4',
       'word_id' => '965',
-    ),
-    26 => array(
+    ],
+    26 => [
       'contentclass_attribute_id' => '159',
       'contentclass_id' => '14',
       'contentobject_id' => '52',
@@ -9777,8 +9777,8 @@ Country�</literallayout></para></section>
       'published' => '1082016591',
       'section_id' => '4',
       'word_id' => '966',
-    ),
-    27 => array(
+    ],
+    27 => [
       'contentclass_attribute_id' => '176',
       'contentclass_id' => '15',
       'contentobject_id' => '54',
@@ -9792,8 +9792,8 @@ Country�</literallayout></para></section>
       'published' => '1082016652',
       'section_id' => '5',
       'word_id' => '967',
-    ),
-    28 => array(
+    ],
+    28 => [
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '56',
@@ -9807,8 +9807,8 @@ Country�</literallayout></para></section>
       'published' => '1103023132',
       'section_id' => '5',
       'word_id' => '968',
-    ),
-    29 => array(
+    ],
+    29 => [
       'contentclass_attribute_id' => '219',
       'contentclass_id' => '21',
       'contentobject_id' => '57',
@@ -9822,8 +9822,8 @@ Country�</literallayout></para></section>
       'published' => '1343140537',
       'section_id' => '1',
       'word_id' => '969',
-    ),
-    30 => array(
+    ],
+    30 => [
       'contentclass_attribute_id' => '212',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9837,8 +9837,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '970',
-    ),
-    31 => array(
+    ],
+    31 => [
       'contentclass_attribute_id' => '212',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9852,8 +9852,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '971',
-    ),
-    32 => array(
+    ],
+    32 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9867,8 +9867,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '819',
-    ),
-    33 => array(
+    ],
+    33 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9882,8 +9882,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '972',
-    ),
-    34 => array(
+    ],
+    34 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9897,8 +9897,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '863',
-    ),
-    35 => array(
+    ],
+    35 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9912,8 +9912,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '814',
-    ),
-    36 => array(
+    ],
+    36 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9927,8 +9927,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '973',
-    ),
-    37 => array(
+    ],
+    37 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9942,8 +9942,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '974',
-    ),
-    38 => array(
+    ],
+    38 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9957,8 +9957,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '801',
-    ),
-    39 => array(
+    ],
+    39 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9972,8 +9972,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '970',
-    ),
-    40 => array(
+    ],
+    40 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -9987,8 +9987,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '971',
-    ),
-    41 => array(
+    ],
+    41 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10002,8 +10002,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '894',
-    ),
-    42 => array(
+    ],
+    42 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10017,8 +10017,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '843',
-    ),
-    43 => array(
+    ],
+    43 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10032,8 +10032,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '882',
-    ),
-    44 => array(
+    ],
+    44 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10047,8 +10047,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '975',
-    ),
-    45 => array(
+    ],
+    45 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10062,8 +10062,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '971',
-    ),
-    46 => array(
+    ],
+    46 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10077,8 +10077,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '825',
-    ),
-    47 => array(
+    ],
+    47 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10092,8 +10092,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '976',
-    ),
-    48 => array(
+    ],
+    48 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10107,8 +10107,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '977',
-    ),
-    49 => array(
+    ],
+    49 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10122,8 +10122,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '978',
-    ),
-    50 => array(
+    ],
+    50 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10137,8 +10137,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '979',
-    ),
-    51 => array(
+    ],
+    51 => [
       'contentclass_attribute_id' => '213',
       'contentclass_id' => '20',
       'contentobject_id' => '58',
@@ -10152,8 +10152,8 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '980',
-    ),
-    52 => array(
+    ],
+    52 => [
       'contentclass_attribute_id' => '8',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -10167,8 +10167,8 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '958',
-    ),
-    53 => array(
+    ],
+    53 => [
       'contentclass_attribute_id' => '9',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -10182,8 +10182,8 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '954',
-    ),
-    54 => array(
+    ],
+    54 => [
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -10197,8 +10197,8 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '981',
-    ),
-    55 => array(
+    ],
+    55 => [
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -10212,8 +10212,8 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '982',
-    ),
-    56 => array(
+    ],
+    56 => [
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -10227,8 +10227,8 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '927',
-    ),
-    57 => array(
+    ],
+    57 => [
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '59',
@@ -10242,8 +10242,8 @@ Country�</literallayout></para></section>
       'published' => '1343140541',
       'section_id' => '2',
       'word_id' => '983',
-    ),
-    58 => array(
+    ],
+    58 => [
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '11',
@@ -10257,276 +10257,276 @@ Country�</literallayout></para></section>
       'published' => '1033920746',
       'section_id' => '2',
       'word_id' => '984',
-    ),
-  ),
-  'ezsearch_word' => array(
-    0 => array(
+    ],
+  ],
+  'ezsearch_word' => [
+    0 => [
       'id' => '801',
       'object_count' => '1',
       'word' => 'to',
-    ),
-    1 => array(
+    ],
+    1 => [
       'id' => '812',
       'object_count' => '1',
       'word' => 'setup',
-    ),
-    2 => array(
+    ],
+    2 => [
       'id' => '814',
       'object_count' => '2',
       'word' => 'the',
-    ),
-    3 => array(
+    ],
+    3 => [
       'id' => '816',
       'object_count' => '1',
       'word' => 'for',
-    ),
-    4 => array(
+    ],
+    4 => [
       'id' => '819',
       'object_count' => '1',
       'word' => 'please',
-    ),
-    5 => array(
+    ],
+    5 => [
       'id' => '825',
       'object_count' => '1',
       'word' => 'at',
-    ),
-    6 => array(
+    ],
+    6 => [
       'id' => '843',
       'object_count' => '1',
       'word' => 'can',
-    ),
-    7 => array(
+    ],
+    7 => [
       'id' => '863',
       'object_count' => '1',
       'word' => 'in',
-    ),
-    8 => array(
+    ],
+    8 => [
       'id' => '877',
       'object_count' => '1',
       'word' => 'common',
-    ),
-    9 => array(
+    ],
+    9 => [
       'id' => '882',
       'object_count' => '1',
       'word' => 'also',
-    ),
-    10 => array(
+    ],
+    10 => [
       'id' => '894',
       'object_count' => '1',
       'word' => 'you',
-    ),
-    11 => array(
+    ],
+    11 => [
       'id' => '927',
       'object_count' => '2',
       'word' => 'ez.no',
-    ),
-    12 => array(
+    ],
+    12 => [
       'id' => '930',
       'object_count' => '3',
       'word' => 'users',
-    ),
-    13 => array(
+    ],
+    13 => [
       'id' => '951',
       'object_count' => '1',
       'word' => 'main',
-    ),
-    14 => array(
+    ],
+    14 => [
       'id' => '952',
       'object_count' => '2',
       'word' => 'group',
-    ),
-    15 => array(
+    ],
+    15 => [
       'id' => '953',
       'object_count' => '2',
       'word' => 'anonymous',
-    ),
-    16 => array(
+    ],
+    16 => [
       'id' => '954',
       'object_count' => '3',
       'word' => 'user',
-    ),
-    17 => array(
+    ],
+    17 => [
       'id' => '955',
       'object_count' => '1',
       'word' => 'nospam',
-    ),
-    18 => array(
+    ],
+    18 => [
       'id' => '958',
       'object_count' => '2',
       'word' => 'administrator',
-    ),
-    19 => array(
+    ],
+    19 => [
       'id' => '959',
       'object_count' => '1',
       'word' => 'editors',
-    ),
-    20 => array(
+    ],
+    20 => [
       'id' => '961',
       'object_count' => '1',
       'word' => 'media',
-    ),
-    21 => array(
+    ],
+    21 => [
       'id' => '962',
       'object_count' => '1',
       'word' => 'images',
-    ),
-    22 => array(
+    ],
+    22 => [
       'id' => '963',
       'object_count' => '1',
       'word' => 'files',
-    ),
-    23 => array(
+    ],
+    23 => [
       'id' => '964',
       'object_count' => '1',
       'word' => 'multimedia',
-    ),
-    24 => array(
+    ],
+    24 => [
       'id' => '965',
       'object_count' => '1',
       'word' => 'ini',
-    ),
-    25 => array(
+    ],
+    25 => [
       'id' => '966',
       'object_count' => '1',
       'word' => 'settings',
-    ),
-    26 => array(
+    ],
+    26 => [
       'id' => '967',
       'object_count' => '1',
       'word' => 'sitestyle_identifier',
-    ),
-    27 => array(
+    ],
+    27 => [
       'id' => '968',
       'object_count' => '1',
       'word' => 'design',
-    ),
-    28 => array(
+    ],
+    28 => [
       'id' => '969',
       'object_count' => '1',
       'word' => 'home',
-    ),
-    29 => array(
+    ],
+    29 => [
       'id' => '970',
       'object_count' => '1',
       'word' => 'contact',
-    ),
-    30 => array(
+    ],
+    30 => [
       'id' => '971',
       'object_count' => '1',
       'word' => 'us',
-    ),
-    31 => array(
+    ],
+    31 => [
       'id' => '972',
       'object_count' => '1',
       'word' => 'fill',
-    ),
-    32 => array(
+    ],
+    32 => [
       'id' => '973',
       'object_count' => '1',
       'word' => 'form',
-    ),
-    33 => array(
+    ],
+    33 => [
       'id' => '974',
       'object_count' => '1',
       'word' => 'below',
-    ),
-    34 => array(
+    ],
+    34 => [
       'id' => '975',
       'object_count' => '1',
       'word' => 'reach',
-    ),
-    35 => array(
+    ],
+    35 => [
       'id' => '976',
       'object_count' => '1',
       'word' => 'company',
-    ),
-    36 => array(
+    ],
+    36 => [
       'id' => '977',
       'object_count' => '1',
       'word' => 'name',
-    ),
-    37 => array(
+    ],
+    37 => [
       'id' => '978',
       'object_count' => '1',
       'word' => 'address',
-    ),
-    38 => array(
+    ],
+    38 => [
       'id' => '979',
       'object_count' => '1',
       'word' => 'city',
-    ),
-    39 => array(
+    ],
+    39 => [
       'id' => '980',
       'object_count' => '1',
       'word' => 'country',
-    ),
-    40 => array(
+    ],
+    40 => [
       'id' => '981',
       'object_count' => '1',
       'word' => 'admin',
-    ),
-    41 => array(
+    ],
+    41 => [
       'id' => '982',
       'object_count' => '1',
       'word' => 'spam',
-    ),
-    42 => array(
+    ],
+    42 => [
       'id' => '983',
       'object_count' => '1',
       'word' => 'partners',
-    ),
-    43 => array(
+    ],
+    43 => [
       'id' => '984',
       'object_count' => '1',
       'word' => 'members',
-    ),
-  ),
-  'ezsection' => array(
-    0 => array(
+    ],
+  ],
+  'ezsection' => [
+    0 => [
       'id' => '1',
       'identifier' => 'standard',
       'locale' => '',
       'name' => 'Standard',
       'navigation_part_identifier' => 'ezcontentnavigationpart',
-    ),
-    1 => array(
+    ],
+    1 => [
       'id' => '2',
       'identifier' => 'users',
       'locale' => '',
       'name' => 'Users',
       'navigation_part_identifier' => 'ezusernavigationpart',
-    ),
-    2 => array(
+    ],
+    2 => [
       'id' => '3',
       'identifier' => 'media',
       'locale' => '',
       'name' => 'Media',
       'navigation_part_identifier' => 'ezmedianavigationpart',
-    ),
-    3 => array(
+    ],
+    3 => [
       'id' => '4',
       'identifier' => 'setup',
       'locale' => '',
       'name' => 'Setup',
       'navigation_part_identifier' => 'ezsetupnavigationpart',
-    ),
-    4 => array(
+    ],
+    4 => [
       'id' => '5',
       'identifier' => 'design',
       'locale' => '',
       'name' => 'Design',
       'navigation_part_identifier' => 'ezvisualnavigationpart',
-    ),
-    5 => array(
+    ],
+    5 => [
       'id' => '6',
       'identifier' => '',
       'locale' => '',
       'name' => 'Restricted',
       'navigation_part_identifier' => 'ezcontentnavigationpart',
-    ),
-  ),
-  'ezurl' => array(
-    0 => array(
+    ],
+  ],
+  'ezurl' => [
+    0 => [
       'created' => '1343140541',
       'id' => '23',
       'is_valid' => '1',
@@ -10534,8 +10534,8 @@ Country�</literallayout></para></section>
       'modified' => '1343140541',
       'original_url_md5' => '9b492048041e95b32de08bafc86d759b',
       'url' => '/content/view/sitemap/2',
-    ),
-    1 => array(
+    ],
+    1 => [
       'created' => '1343140541',
       'id' => '24',
       'is_valid' => '0',
@@ -10543,22 +10543,22 @@ Country�</literallayout></para></section>
       'modified' => '1343140541',
       'original_url_md5' => 'c86bcb109d8e70f9db65c803baafd550',
       'url' => '/content/view/tagcloud/2',
-    ),
-  ),
-  'ezurl_object_link' => array(
-    0 => array(
+    ],
+  ],
+  'ezurl_object_link' => [
+    0 => [
       'contentobject_attribute_id' => '195',
       'contentobject_attribute_version' => '2',
       'url_id' => '23',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentobject_attribute_id' => '196',
       'contentobject_attribute_version' => '2',
       'url_id' => '24',
-    ),
-  ),
-  'ezurlalias' => array(
-    0 => array(
+    ],
+  ],
+  'ezurlalias' => [
+    0 => [
       'destination_url' => 'content/view/full/2',
       'forward_to_id' => '0',
       'id' => '12',
@@ -10567,8 +10567,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
       'source_url' => '',
-    ),
-    1 => array(
+    ],
+    1 => [
       'destination_url' => 'content/view/full/5',
       'forward_to_id' => '0',
       'id' => '13',
@@ -10577,8 +10577,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '9bc65c2abec141778ffaa729489f3e87',
       'source_url' => 'users',
-    ),
-    2 => array(
+    ],
+    2 => [
       'destination_url' => 'content/view/full/12',
       'forward_to_id' => '0',
       'id' => '15',
@@ -10587,8 +10587,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '02d4e844e3a660857a3f81585995ffe1',
       'source_url' => 'users/guest_accounts',
-    ),
-    3 => array(
+    ],
+    3 => [
       'destination_url' => 'content/view/full/13',
       'forward_to_id' => '0',
       'id' => '16',
@@ -10597,8 +10597,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '1b1d79c16700fd6003ea7be233e754ba',
       'source_url' => 'users/administrator_users',
-    ),
-    4 => array(
+    ],
+    4 => [
       'destination_url' => 'content/view/full/14',
       'forward_to_id' => '0',
       'id' => '17',
@@ -10607,8 +10607,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '0bb9dd665c96bbc1cf36b79180786dea',
       'source_url' => 'users/editors',
-    ),
-    5 => array(
+    ],
+    5 => [
       'destination_url' => 'content/view/full/15',
       'forward_to_id' => '0',
       'id' => '18',
@@ -10617,8 +10617,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => 'f1305ac5f327a19b451d82719e0c3f5d',
       'source_url' => 'users/administrator_users/administrator_user',
-    ),
-    6 => array(
+    ],
+    6 => [
       'destination_url' => 'content/view/full/43',
       'forward_to_id' => '0',
       'id' => '20',
@@ -10627,8 +10627,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '62933a2951ef01f4eafd9bdf4d3cd2f0',
       'source_url' => 'media',
-    ),
-    7 => array(
+    ],
+    7 => [
       'destination_url' => 'content/view/full/44',
       'forward_to_id' => '0',
       'id' => '21',
@@ -10637,8 +10637,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '3ae1aac958e1c82013689d917d34967a',
       'source_url' => 'users/anonymous_users',
-    ),
-    8 => array(
+    ],
+    8 => [
       'destination_url' => 'content/view/full/45',
       'forward_to_id' => '0',
       'id' => '22',
@@ -10647,8 +10647,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => 'aad93975f09371695ba08292fd9698db',
       'source_url' => 'users/anonymous_users/anonymous_user',
-    ),
-    9 => array(
+    ],
+    9 => [
       'destination_url' => 'content/view/full/48',
       'forward_to_id' => '0',
       'id' => '25',
@@ -10657,8 +10657,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => 'a0f848942ce863cf53c0fa6cc684007d',
       'source_url' => 'setup',
-    ),
-    10 => array(
+    ],
+    10 => [
       'destination_url' => 'content/view/full/50',
       'forward_to_id' => '0',
       'id' => '27',
@@ -10667,8 +10667,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => 'c60212835de76414f9bfd21eecb8f221',
       'source_url' => 'foo_bar_folder/images/vbanner',
-    ),
-    11 => array(
+    ],
+    11 => [
       'destination_url' => 'content/view/full/51',
       'forward_to_id' => '0',
       'id' => '28',
@@ -10677,8 +10677,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '38985339d4a5aadfc41ab292b4527046',
       'source_url' => 'media/images',
-    ),
-    12 => array(
+    ],
+    12 => [
       'destination_url' => 'content/view/full/52',
       'forward_to_id' => '0',
       'id' => '29',
@@ -10687,8 +10687,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => 'ad5a8c6f6aac3b1b9df267fe22e7aef6',
       'source_url' => 'media/files',
-    ),
-    13 => array(
+    ],
+    13 => [
       'destination_url' => 'content/view/full/53',
       'forward_to_id' => '0',
       'id' => '30',
@@ -10697,8 +10697,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '562a0ac498571c6c3529173184a2657c',
       'source_url' => 'media/multimedia',
-    ),
-    14 => array(
+    ],
+    14 => [
       'destination_url' => 'content/view/full/54',
       'forward_to_id' => '0',
       'id' => '31',
@@ -10707,8 +10707,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => 'e501fe6c81ed14a5af2b322d248102d8',
       'source_url' => 'setup/common_ini_settings',
-    ),
-    15 => array(
+    ],
+    15 => [
       'destination_url' => 'content/view/full/56',
       'forward_to_id' => '0',
       'id' => '32',
@@ -10717,8 +10717,8 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '2dd3db5dc7122ea5f3ee539bb18fe97d',
       'source_url' => 'design/ez_publish',
-    ),
-    16 => array(
+    ],
+    16 => [
       'destination_url' => 'content/view/full/58',
       'forward_to_id' => '0',
       'id' => '33',
@@ -10727,10 +10727,10 @@ Country�</literallayout></para></section>
       'is_wildcard' => '0',
       'source_md5' => '31c13f47ad87dd7baa2d558a91e0fbb9',
       'source_url' => 'design',
-    ),
-  ),
-  'ezurlalias_ml' => array(
-    0 => array(
+    ],
+  ],
+  'ezurlalias_ml' => [
+    0 => [
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -10742,8 +10742,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'foo_bar_folder',
       'text_md5' => '0288b6883046492fa92e4a84eb67acc9',
-    ),
-    1 => array(
+    ],
+    1 => [
       'action' => 'eznode:60',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10755,8 +10755,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'Contact-Us',
       'text_md5' => '03f2197d47a602c679c5f667e3482855',
-    ),
-    2 => array(
+    ],
+    2 => [
       'action' => 'eznode:59',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10768,8 +10768,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'Home',
       'text_md5' => '106a6c241b8797f52e1e77317b96a201',
-    ),
-    3 => array(
+    ],
+    3 => [
       'action' => 'eznode:59',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10781,8 +10781,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'eZ-Publish',
       'text_md5' => '10e4c3cb527fb9963258469986c16240',
-    ),
-    4 => array(
+    ],
+    4 => [
       'action' => 'eznode:58',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10794,8 +10794,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'Design',
       'text_md5' => '31c13f47ad87dd7baa2d558a91e0fbb9',
-    ),
-    5 => array(
+    ],
+    5 => [
       'action' => 'eznode:48',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10807,8 +10807,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'Setup2',
       'text_md5' => '475e97c0146bfb1c490339546d9e72ee',
-    ),
-    6 => array(
+    ],
+    6 => [
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -10820,8 +10820,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'media2',
       'text_md5' => '50e2736330de124f6edea9b008556fe6',
-    ),
-    7 => array(
+    ],
+    7 => [
       'action' => 'eznode:43',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10833,8 +10833,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'Media',
       'text_md5' => '62933a2951ef01f4eafd9bdf4d3cd2f0',
-    ),
-    8 => array(
+    ],
+    8 => [
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -10846,8 +10846,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'setup3',
       'text_md5' => '732cefcf28bf4547540609fb1a786a30',
-    ),
-    9 => array(
+    ],
+    9 => [
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -10859,8 +10859,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'users2',
       'text_md5' => '86425c35a33507d479f71ade53a669aa',
-    ),
-    10 => array(
+    ],
+    10 => [
       'action' => 'eznode:5',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10872,8 +10872,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => 'Users',
       'text_md5' => '9bc65c2abec141778ffaa729489f3e87',
-    ),
-    11 => array(
+    ],
+    11 => [
       'action' => 'eznode:2',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10885,8 +10885,8 @@ Country�</literallayout></para></section>
       'parent' => '0',
       'text' => '',
       'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
-    ),
-    12 => array(
+    ],
+    12 => [
       'action' => 'eznode:61',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10898,8 +10898,8 @@ Country�</literallayout></para></section>
       'parent' => '2',
       'text' => 'Partners',
       'text_md5' => '7896f8fa69398c56d86a65357615c41f',
-    ),
-    13 => array(
+    ],
+    13 => [
       'action' => 'eznode:14',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10911,8 +10911,8 @@ Country�</literallayout></para></section>
       'parent' => '2',
       'text' => 'Editors',
       'text_md5' => 'a147e136bfa717592f2bd70bd4b53b17',
-    ),
-    14 => array(
+    ],
+    14 => [
       'action' => 'eznode:44',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10924,8 +10924,8 @@ Country�</literallayout></para></section>
       'parent' => '2',
       'text' => 'Anonymous-Users',
       'text_md5' => 'c2803c3fa1b0b5423237b4e018cae755',
-    ),
-    15 => array(
+    ],
+    15 => [
       'action' => 'eznode:12',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10937,8 +10937,8 @@ Country�</literallayout></para></section>
       'parent' => '2',
       'text' => 'Members',
       'text_md5' => 'd2e3083420929d8bfae81f58fa4594cb',
-    ),
-    16 => array(
+    ],
+    16 => [
       'action' => 'eznode:12',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10950,8 +10950,8 @@ Country�</literallayout></para></section>
       'parent' => '2',
       'text' => 'Guest-accounts',
       'text_md5' => 'e57843d836e3af8ab611fde9e2139b3a',
-    ),
-    17 => array(
+    ],
+    17 => [
       'action' => 'eznode:13',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10963,8 +10963,8 @@ Country�</literallayout></para></section>
       'parent' => '2',
       'text' => 'Administrator-users',
       'text_md5' => 'f89fad7f8a3abc8c09e1deb46a420007',
-    ),
-    18 => array(
+    ],
+    18 => [
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -10976,8 +10976,8 @@ Country�</literallayout></para></section>
       'parent' => '3',
       'text' => 'anonymous_users2',
       'text_md5' => '505e93077a6dde9034ad97a14ab022b1',
-    ),
-    19 => array(
+    ],
+    19 => [
       'action' => 'eznode:12',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -10989,8 +10989,8 @@ Country�</literallayout></para></section>
       'parent' => '3',
       'text' => 'guest_accounts',
       'text_md5' => '70bb992820e73638731aa8de79b3329e',
-    ),
-    20 => array(
+    ],
+    20 => [
       'action' => 'eznode:14',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11002,8 +11002,8 @@ Country�</literallayout></para></section>
       'parent' => '3',
       'text' => 'editors',
       'text_md5' => 'a147e136bfa717592f2bd70bd4b53b17',
-    ),
-    21 => array(
+    ],
+    21 => [
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -11015,8 +11015,8 @@ Country�</literallayout></para></section>
       'parent' => '3',
       'text' => 'administrator_users2',
       'text_md5' => 'a7da338c20bf65f9f789c87296379c2a',
-    ),
-    22 => array(
+    ],
+    22 => [
       'action' => 'eznode:13',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11028,8 +11028,8 @@ Country�</literallayout></para></section>
       'parent' => '3',
       'text' => 'administrator_users',
       'text_md5' => 'aeb8609aa933b0899aa012c71139c58c',
-    ),
-    23 => array(
+    ],
+    23 => [
       'action' => 'eznode:44',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11041,8 +11041,8 @@ Country�</literallayout></para></section>
       'parent' => '3',
       'text' => 'anonymous_users',
       'text_md5' => 'e9e5ad0c05ee1a43715572e5cc545926',
-    ),
-    24 => array(
+    ],
+    24 => [
       'action' => 'eznode:15',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11054,8 +11054,8 @@ Country�</literallayout></para></section>
       'parent' => '5',
       'text' => 'Administrator-User',
       'text_md5' => '5a9d7b0ec93173ef4fedee023209cb61',
-    ),
-    25 => array(
+    ],
+    25 => [
       'action' => 'eznode:15',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11067,8 +11067,8 @@ Country�</literallayout></para></section>
       'parent' => '7',
       'text' => 'administrator_user',
       'text_md5' => 'a3cca2de936df1e2f805710399989971',
-    ),
-    26 => array(
+    ],
+    26 => [
       'action' => 'eznode:53',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11080,8 +11080,8 @@ Country�</literallayout></para></section>
       'parent' => '9',
       'text' => 'Multimedia',
       'text_md5' => '2e5bc8831f7ae6a29530e7f1bbf2de9c',
-    ),
-    27 => array(
+    ],
+    27 => [
       'action' => 'eznode:52',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11093,8 +11093,8 @@ Country�</literallayout></para></section>
       'parent' => '9',
       'text' => 'Files',
       'text_md5' => '45b963397aa40d4a0063e0d85e4fe7a1',
-    ),
-    28 => array(
+    ],
+    28 => [
       'action' => 'eznode:51',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11106,8 +11106,8 @@ Country�</literallayout></para></section>
       'parent' => '9',
       'text' => 'Images',
       'text_md5' => '59b514174bffe4ae402b3d63aad79fe0',
-    ),
-    29 => array(
+    ],
+    29 => [
       'action' => 'eznode:45',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11119,8 +11119,8 @@ Country�</literallayout></para></section>
       'parent' => '10',
       'text' => 'Anonymous-User',
       'text_md5' => 'ccb62ebca03a31272430bc414bd5cd5b',
-    ),
-    30 => array(
+    ],
+    30 => [
       'action' => 'eznode:45',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11132,8 +11132,8 @@ Country�</literallayout></para></section>
       'parent' => '11',
       'text' => 'anonymous_user',
       'text_md5' => 'c593ec85293ecb0e02d50d4c5c6c20eb',
-    ),
-    31 => array(
+    ],
+    31 => [
       'action' => 'eznode:54',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11145,8 +11145,8 @@ Country�</literallayout></para></section>
       'parent' => '13',
       'text' => 'Common-INI-settings',
       'text_md5' => '4434993ac013ae4d54bb1f51034d6401',
-    ),
-    32 => array(
+    ],
+    32 => [
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -11158,8 +11158,8 @@ Country�</literallayout></para></section>
       'parent' => '14',
       'text' => 'images',
       'text_md5' => '59b514174bffe4ae402b3d63aad79fe0',
-    ),
-    33 => array(
+    ],
+    33 => [
       'action' => 'eznode:50',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11171,8 +11171,8 @@ Country�</literallayout></para></section>
       'parent' => '15',
       'text' => 'vbanner',
       'text_md5' => 'c54e2d1b93642e280bdc5d99eab2827d',
-    ),
-    34 => array(
+    ],
+    34 => [
       'action' => 'eznode:53',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11184,8 +11184,8 @@ Country�</literallayout></para></section>
       'parent' => '17',
       'text' => 'multimedia',
       'text_md5' => '2e5bc8831f7ae6a29530e7f1bbf2de9c',
-    ),
-    35 => array(
+    ],
+    35 => [
       'action' => 'eznode:52',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11197,8 +11197,8 @@ Country�</literallayout></para></section>
       'parent' => '17',
       'text' => 'files',
       'text_md5' => '45b963397aa40d4a0063e0d85e4fe7a1',
-    ),
-    36 => array(
+    ],
+    36 => [
       'action' => 'eznode:51',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11210,8 +11210,8 @@ Country�</literallayout></para></section>
       'parent' => '17',
       'text' => 'images',
       'text_md5' => '59b514174bffe4ae402b3d63aad79fe0',
-    ),
-    37 => array(
+    ],
+    37 => [
       'action' => 'eznode:54',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11223,8 +11223,8 @@ Country�</literallayout></para></section>
       'parent' => '21',
       'text' => 'common_ini_settings',
       'text_md5' => 'e59d6834e86cee752ed841f9cd8d5baf',
-    ),
-    38 => array(
+    ],
+    38 => [
       'action' => 'eznode:56',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11236,8 +11236,8 @@ Country�</literallayout></para></section>
       'parent' => '25',
       'text' => 'eZ-publish',
       'text_md5' => '10e4c3cb527fb9963258469986c16240',
-    ),
-    39 => array(
+    ],
+    39 => [
       'action' => 'eznode:56',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -11249,359 +11249,359 @@ Country�</literallayout></para></section>
       'parent' => '25',
       'text' => 'Plain-site',
       'text_md5' => '49a39d99a955d95aa5d636275656a07a',
-    ),
-  ),
-  'ezurlalias_ml_incr' => array(
-    0 => array(
+    ],
+  ],
+  'ezurlalias_ml_incr' => [
+    0 => [
       'id' => '1',
-    ),
-    1 => array(
+    ],
+    1 => [
       'id' => '2',
-    ),
-    2 => array(
+    ],
+    2 => [
       'id' => '3',
-    ),
-    3 => array(
+    ],
+    3 => [
       'id' => '4',
-    ),
-    4 => array(
+    ],
+    4 => [
       'id' => '5',
-    ),
-    5 => array(
+    ],
+    5 => [
       'id' => '6',
-    ),
-    6 => array(
+    ],
+    6 => [
       'id' => '7',
-    ),
-    7 => array(
+    ],
+    7 => [
       'id' => '8',
-    ),
-    8 => array(
+    ],
+    8 => [
       'id' => '9',
-    ),
-    9 => array(
+    ],
+    9 => [
       'id' => '10',
-    ),
-    10 => array(
+    ],
+    10 => [
       'id' => '11',
-    ),
-    11 => array(
+    ],
+    11 => [
       'id' => '12',
-    ),
-    12 => array(
+    ],
+    12 => [
       'id' => '13',
-    ),
-    13 => array(
+    ],
+    13 => [
       'id' => '14',
-    ),
-    14 => array(
+    ],
+    14 => [
       'id' => '15',
-    ),
-    15 => array(
+    ],
+    15 => [
       'id' => '16',
-    ),
-    16 => array(
+    ],
+    16 => [
       'id' => '17',
-    ),
-    17 => array(
+    ],
+    17 => [
       'id' => '18',
-    ),
-    18 => array(
+    ],
+    18 => [
       'id' => '19',
-    ),
-    19 => array(
+    ],
+    19 => [
       'id' => '20',
-    ),
-    20 => array(
+    ],
+    20 => [
       'id' => '21',
-    ),
-    21 => array(
+    ],
+    21 => [
       'id' => '22',
-    ),
-    22 => array(
+    ],
+    22 => [
       'id' => '24',
-    ),
-    23 => array(
+    ],
+    23 => [
       'id' => '25',
-    ),
-    24 => array(
+    ],
+    24 => [
       'id' => '26',
-    ),
-    25 => array(
+    ],
+    25 => [
       'id' => '27',
-    ),
-    26 => array(
+    ],
+    26 => [
       'id' => '28',
-    ),
-    27 => array(
+    ],
+    27 => [
       'id' => '29',
-    ),
-    28 => array(
+    ],
+    28 => [
       'id' => '30',
-    ),
-    29 => array(
+    ],
+    29 => [
       'id' => '31',
-    ),
-    30 => array(
+    ],
+    30 => [
       'id' => '32',
-    ),
-    31 => array(
+    ],
+    31 => [
       'id' => '33',
-    ),
-    32 => array(
+    ],
+    32 => [
       'id' => '34',
-    ),
-    33 => array(
+    ],
+    33 => [
       'id' => '35',
-    ),
-    34 => array(
+    ],
+    34 => [
       'id' => '36',
-    ),
-    35 => array(
+    ],
+    35 => [
       'id' => '37',
-    ),
-    36 => array(
+    ],
+    36 => [
       'id' => '38',
-    ),
-    37 => array(
+    ],
+    37 => [
       'id' => '39',
-    ),
-    38 => array(
+    ],
+    38 => [
       'id' => '40',
-    ),
-    39 => array(
+    ],
+    39 => [
       'id' => '41',
-    ),
-  ),
-  'ezurlwildcard' => array(
-  ),
-  'ezuser' => array(
-    0 => array(
+    ],
+  ],
+  'ezurlwildcard' => [
+  ],
+  'ezuser' => [
+    0 => [
       'contentobject_id' => '10',
       'email' => 'nospam@ez.no',
       'login' => 'anonymous',
       'password_hash' => '$2y$10$35gOSQs6JK4u4whyERaeUuVeQBi2TUBIZIfP7HEj7sfz.MxvTuOeC',
       'password_hash_type' => '7',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentobject_id' => '14',
       'email' => 'spam@ez.no',
       'login' => 'admin',
       'password_hash' => '$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',
       'password_hash_type' => '7',
-    ),
-  ),
-  'ezuser_accountkey' => array(
-  ),
-  'ezuser_role' => array(
-    0 => array(
+    ],
+  ],
+  'ezuser_accountkey' => [
+  ],
+  'ezuser_role' => [
+    0 => [
       'contentobject_id' => '12',
       'id' => '25',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '2',
-    ),
-    1 => array(
+    ],
+    1 => [
       'contentobject_id' => '11',
       'id' => '28',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '1',
-    ),
-    2 => array(
+    ],
+    2 => [
       'contentobject_id' => '42',
       'id' => '31',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '1',
-    ),
-    3 => array(
+    ],
+    3 => [
       'contentobject_id' => '13',
       'id' => '32',
       'limit_identifier' => 'Subtree',
       'limit_value' => '/1/2/',
       'role_id' => '3',
-    ),
-    4 => array(
+    ],
+    4 => [
       'contentobject_id' => '13',
       'id' => '33',
       'limit_identifier' => 'Subtree',
       'limit_value' => '/1/43/',
       'role_id' => '3',
-    ),
-    5 => array(
+    ],
+    5 => [
       'contentobject_id' => '11',
       'id' => '34',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '5',
-    ),
-    6 => array(
+    ],
+    6 => [
       'contentobject_id' => '59',
       'id' => '35',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '4',
-    ),
-    7 => array(
+    ],
+    7 => [
       'contentobject_id' => '59',
       'id' => '36',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '5',
-    ),
-    8 => array(
+    ],
+    8 => [
       'contentobject_id' => '59',
       'id' => '37',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '1',
-    ),
-    9 => array(
+    ],
+    9 => [
       'contentobject_id' => '13',
       'id' => '38',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '5',
-    ),
-  ),
-  'ezuser_setting' => array(
-    0 => array(
+    ],
+  ],
+  'ezuser_setting' => [
+    0 => [
       'is_enabled' => '1',
       'max_login' => '1000',
       'user_id' => '10',
-    ),
-    1 => array(
+    ],
+    1 => [
       'is_enabled' => '1',
       'max_login' => '10',
       'user_id' => '14',
-    ),
-  ),
-  'ezuservisit' => array(
-    0 => array(
+    ],
+  ],
+  'ezuservisit' => [
+    0 => [
       'current_visit_timestamp' => '1343140525',
       'failed_login_attempts' => '0',
       'last_visit_timestamp' => '1301057720',
       'login_count' => '0',
       'user_id' => '14',
-    ),
-  ),
-  'ezcontentbrowsebookmark' => array(
-    0 => array(
+    ],
+  ],
+  'ezcontentbrowsebookmark' => [
+    0 => [
       'id' => '1',
       'name' => '',
       'node_id' => '5',
       'user_id' => '14',
-    ),
-    1 => array(
+    ],
+    1 => [
       'id' => '3',
       'name' => '',
       'node_id' => '12',
       'user_id' => '14',
-    ),
-    2 => array(
+    ],
+    2 => [
       'id' => '4',
       'name' => '',
       'node_id' => '13',
       'user_id' => '14',
-    ),
-    3 => array(
+    ],
+    3 => [
       'id' => '5',
       'name' => '',
       'node_id' => '15',
       'user_id' => '14',
-    ),
-    4 => array(
+    ],
+    4 => [
        'id' => '6',
        'name' => '',
        'node_id' => '14',
        'user_id' => '14',
-      ),
-    ),
-  'eznotification' => array(
-    0 => array(
+      ],
+    ],
+  'eznotification' => [
+    0 => [
         'id' => 1,
         'owner_id' => 14,
         'is_pending' => 1,
         'type' => 'Workflow:Review',
         'created' => 1529995052,
-        'data' => null
-    ),
-    1 => array(
+        'data' => null,
+    ],
+    1 => [
         'id' => '2',
         'owner_id' => '14',
         'is_pending' => 0,
         'type' => 'Workflow:Approve',
         'created' => '1529998652',
-        'data' => null
-    ),
-    2 => array(
+        'data' => null,
+    ],
+    2 => [
         'id' => '3',
         'owner_id' => '14',
         'is_pending' => 0,
         'type' => 'Workflow:Reject',
         'created' => '1530002252',
-        'data' => null
-    ),
-    3 => array(
+        'data' => null,
+    ],
+    3 => [
         'id' => '4',
         'owner_id' => '14',
         'is_pending' => 1,
         'type' => 'Workflow:Review',
         'created' => '1530005852',
-        'data' => null
-    ),
-    4 => array(
+        'data' => null,
+    ],
+    4 => [
         'id' => '5',
         'owner_id' => '14',
         'is_pending' => 1,
         'type' => 'Workflow:Review',
         'created' => '1530009452',
-        'data' => null
-    ),
-    5 => array(
+        'data' => null,
+    ],
+    5 => [
         'id' => '6',
         'owner_id' => '10',
         'is_pending' => 0,
         'type' => 'Workflow:Review',
         'created' => '1530009452',
-        'data' => null
-    ),
-  ),
-  'ezpreferences' => array(
-    0 => array(
+        'data' => null,
+    ],
+  ],
+  'ezpreferences' => [
+    0 => [
         'id' => 1,
         'name' => 'setting_1',
         'user_id' => 14,
-        'value' => 'value_1'
-    ),
-    1 => array(
+        'value' => 'value_1',
+    ],
+    1 => [
         'id' => 2,
         'name' => 'setting_2',
         'user_id' => 14,
-        'value' => 'value_2'
-    ),
-    2 => array(
+        'value' => 'value_2',
+    ],
+    2 => [
         'id' => 3,
         'name' => 'setting_3',
         'user_id' => 14,
-        'value' => 'value_3'
-    ),
-    3 => array(
+        'value' => 'value_3',
+    ],
+    3 => [
         'id' => 4,
         'name' => 'setting_4',
         'user_id' => 14,
-        'value' => 'value_4'
-    ),
-    4 => array(
+        'value' => 'value_4',
+    ],
+    4 => [
         'id' => 5,
         'name' => 'setting_5',
         'user_id' => 14,
-        'value' => 'value_5'
-    ),
-  ),
-  'ezurlwildcard' => array(),
-  'ezmedia' => array(),
-  'ezkeyword' => array(),
-  'ezcontentclass_attribute_ml' => array(),
-);
+        'value' => 'value_5',
+    ],
+  ],
+  'ezurlwildcard' => [],
+  'ezmedia' => [],
+  'ezkeyword' => [],
+  'ezcontentclass_attribute_ml' => [],
+];

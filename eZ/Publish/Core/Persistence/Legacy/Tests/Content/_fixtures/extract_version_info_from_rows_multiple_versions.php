@@ -1,8 +1,7 @@
 <?php
 
-return array(
-  0 =>
-  array(
+return [
+  0 => [
     'ezcontentobject_version_id' => '439',
     'ezcontentobject_version_version' => '1',
     'ezcontentobject_version_modified' => '1033920746',
@@ -26,9 +25,8 @@ return array(
     'ezcontentobject_name' => 'Members',
     'ezcontentobject_language_mask' => '3',
     'ezcontentobject_is_hidden' => '0',
-  ),
-  1 =>
-  array(
+  ],
+  1 => [
     'ezcontentobject_version_id' => '674',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1311154215',
@@ -52,5 +50,5 @@ return array(
     'ezcontentobject_name' => 'Members',
     'ezcontentobject_language_mask' => '3',
     'ezcontentobject_is_hidden' => '0',
-  ),
-);
+  ],
+];

@@ -1,8 +1,7 @@
 <?php
 
-return array(
-  0 =>
-  array(
+return [
+  0 => [
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -35,9 +34,8 @@ return array(
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '12',
     'ezcontentobject_is_hidden' => '0',
-  ),
-  1 =>
-  array(
+  ],
+  1 => [
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -70,9 +68,8 @@ return array(
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '12',
     'ezcontentobject_is_hidden' => '0',
-  ),
-  2 =>
-  array(
+  ],
+  2 => [
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -105,9 +102,8 @@ return array(
     'ezcontentobject_attribute_sort_key_string' => 'members',
     'ezcontentobject_tree_main_node_id' => '12',
     'ezcontentobject_is_hidden' => '0',
-  ),
-  3 =>
-  array(
+  ],
+  3 => [
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -140,5 +136,5 @@ return array(
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '12',
     'ezcontentobject_is_hidden' => '0',
-  ),
-);
+  ],
+];

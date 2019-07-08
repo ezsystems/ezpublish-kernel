@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    0 => array(
+return [
+    0 => [
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -47,8 +47,8 @@ return array(
         'ezcontentclass_attribute_serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
         'ezcontentclass_attribute_serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
         'ezcontentclass_classgroup_group_id' => '1',
-    ),
-    1 => array(
+    ],
+    1 => [
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -94,8 +94,8 @@ return array(
         'ezcontentclass_attribute_serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
         'ezcontentclass_attribute_serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:17:"Short description";}',
         'ezcontentclass_classgroup_group_id' => '1',
-    ),
-    2 => array(
+    ],
+    2 => [
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -141,8 +141,8 @@ return array(
         'ezcontentclass_attribute_serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
         'ezcontentclass_attribute_serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"Short name";}',
         'ezcontentclass_classgroup_group_id' => '1',
-    ),
-    3 => array(
+    ],
+    3 => [
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -188,8 +188,8 @@ return array(
         'ezcontentclass_attribute_serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
         'ezcontentclass_attribute_serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
         'ezcontentclass_classgroup_group_id' => '1',
-    ),
-    4 => array(
+    ],
+    4 => [
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -235,8 +235,8 @@ return array(
         'ezcontentclass_attribute_serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
         'ezcontentclass_attribute_serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Show children";}',
         'ezcontentclass_classgroup_group_id' => '1',
-    ),
-    5 => array(
+    ],
+    5 => [
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -282,5 +282,5 @@ return array(
         'ezcontentclass_attribute_serialized_description_list' => '',
         'ezcontentclass_attribute_serialized_name_list' => '',
         'ezcontentclass_classgroup_group_id' => '1',
-    ),
-);
+    ],
+];
