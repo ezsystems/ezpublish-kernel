@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Base\Container\Compiler;
 
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\SerializableConverter;
 use eZ\Publish\SPI\FieldType\Generic\Type as GenericType;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,7 +18,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class GenericFieldTypeConverterPass implements CompilerPassInterface
 {
-    public const GENERIC_CONVERTER_SERVICE_ID = 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\SerializableConverter';
+    public const GENERIC_CONVERTER_SERVICE_ID = SerializableConverter::class;
 
     public function process(ContainerBuilder $container): void
     {
