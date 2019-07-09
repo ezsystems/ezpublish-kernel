@@ -46,9 +46,7 @@ EOT;
     /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider */
     private $repositoryConfigurationProvider;
 
     /** @var \Doctrine\DBAL\Driver\Connection */
@@ -169,13 +167,14 @@ EOT
         $removedVersionsCounter = 0;
 
         $removeAll = $status === self::VERSION_ALL;
-        $removeDrafts = $status === self::VERSION_DRAFT;
-        $removeArchived = $status === self::VERSION_ARCHIVED;
 
         foreach ($contentIds as $contentId) {
             try {
                 $contentInfo = $contentService->loadContentInfo((int) $contentId);
-                $versions = $contentService->loadVersions($contentInfo);
+                $versions = $contentService->loadVersions(
+                    $contentInfo,
+                    $removeAll ? null : $this->mapStatusToVersionInfoStatus($status)
+                );
                 $versionsCount = count($versions);
 
                 $output->writeln(sprintf(
@@ -184,15 +183,13 @@ EOT
                     $versionsCount
                 ), OutputInterface::VERBOSITY_VERBOSE);
 
-                $versions = array_filter($versions, function ($version) use ($removeAll, $removeDrafts, $removeArchived) {
-                    if (
-                        ($removeAll && $version->status !== VersionInfo::STATUS_PUBLISHED) ||
-                        ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
-                        ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
-                    ) {
-                        return true;
-                    }
-                });
+                if ($removeAll) {
+                    $versions = array_filter($versions, static function ($version) {
+                        if ($version->status !== VersionInfo::STATUS_PUBLISHED) {
+                            return $version;
+                        }
+                    });
+                }
 
                 if ($keep > 0) {
                     $versions = array_slice($versions, 0, -$keep);
