@@ -8,10 +8,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Doctrine\DBAL\Connection;
 use Exception;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PDO;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CleanupVersionsCommand extends Command
 {
     const DEFAULT_REPOSITORY_USER = 'admin';
-    const DEFAULT_EXCLUDED_CONTENT_TYPES = [4];
+    const DEFAULT_EXCLUDED_CONTENT_TYPES = ['user'];
 
     const BEFORE_RUNNING_HINTS = <<<EOT
 <error>Before you continue:</error>
@@ -49,9 +49,9 @@ EOT;
     private $repository;
 
     /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
      */
-    private $configResolver;
+    private $repositoryConfigurationProvider;
 
     /**
      * @var \Doctrine\DBAL\Driver\Connection
@@ -60,11 +60,11 @@ EOT;
 
     public function __construct(
         Repository $repository,
-        ConfigResolverInterface $configResolver,
+        RepositoryConfigurationProvider $repositoryConfigurationProvider,
         Connection $connection
     ) {
         $this->repository = $repository;
-        $this->configResolver = $configResolver;
+        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->connection = $connection;
 
         parent::__construct();
@@ -104,8 +104,8 @@ EOT;
             ->addOption(
                 'excluded-content-types',
                 null,
-                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'List of ContentType IDs of which versions should not be removed, for instance users.',
+                InputOption::VALUE_OPTIONAL,
+                'Comma separated list of ContentType identifiers of which versions should not be removed, for instance `article`.',
                 self::DEFAULT_EXCLUDED_CONTENT_TYPES
             )->setHelp(self::BEFORE_RUNNING_HINTS);
     }
@@ -115,7 +115,8 @@ EOT;
         // We don't load repo services or config resolver before execute() to avoid loading before SiteAccess is set.
         $keep = $input->getOption('keep');
         if ($keep === 'config_default') {
-            $keep = $this->configResolver->getParameter('options.default_version_archive_limit');
+            $config = $this->repositoryConfigurationProvider->getRepositoryConfig();
+            $keep = $config['options']['default_version_archive_limit'];
         }
 
         if (($keep = (int) $keep) < 0) {
@@ -135,9 +136,10 @@ EOT;
 
         $status = $input->getOption('status');
 
+        $contentTypeIds = explode(',', $input->getOption('excluded-content-types'));
         $excludedContentTypeIds = array_unique(array_merge(
-                self::DEFAULT_EXCLUDED_CONTENT_TYPES,
-                $input->getOption('excluded-content-types'))
+            self::DEFAULT_EXCLUDED_CONTENT_TYPES,
+            $contentTypeIds)
         );
 
         $contentIds = $this->getObjectsIds($keep, $status, $excludedContentTypeIds);
@@ -234,18 +236,19 @@ EOT;
     /**
      * @param int $keep
      * @param string $status
-     * @param int[] $excludedContentTypeIds
+     * @param string[] $excludedContentTypes
      *
      * @return array
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    protected function getObjectsIds($keep, $status, $excludedContentTypeIds = [])
+    protected function getObjectsIds($keep, $status, $excludedContentTypes = [])
     {
         $query = $this->connection->createQueryBuilder()
                 ->select('c.id')
                 ->from('ezcontentobject', 'c')
                 ->join('c', 'ezcontentobject_version', 'v', 'v.contentobject_id = c.id')
+                ->join('c', 'ezcontentclass', 'cl', 'cl.id = c.contentclass_id')
                 ->groupBy('c.id', 'v.status')
                 ->having('count(c.id) > :keep');
         $query->setParameter('keep', $keep);
@@ -258,15 +261,15 @@ EOT;
             $query->setParameter('status', $this->mapStatusToVersionInfoStatus(self::VERSION_PUBLISHED));
         }
 
-        if ($excludedContentTypeIds) {
+        if ($excludedContentTypes) {
             $expr = $query->expr();
             $query
                 ->andWhere(
                     $expr->notIn(
-                        'c.contentclass_id',
-                        ':contentTypeIds'
+                        'cl.identifier',
+                        ':contentTypes'
                     )
-                )->setParameter(':contentTypeIds', $excludedContentTypeIds, Connection::PARAM_INT_ARRAY);
+                )->setParameter(':contentTypes', $excludedContentTypes, Connection::PARAM_STR_ARRAY);
         }
 
         $stmt = $query->execute();
