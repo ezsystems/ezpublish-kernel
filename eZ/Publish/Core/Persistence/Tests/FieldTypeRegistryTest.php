@@ -49,22 +49,6 @@ class FieldTypeRegistryTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getFieldType
-     */
-    public function testGetFieldTypeCallable()
-    {
-        $instance = $this->getFieldTypeMock();
-        $closure = function () use ($instance) {
-            return $instance;
-        };
-        $registry = new FieldTypeRegistry([self::FIELD_TYPE_IDENTIFIER => $closure]);
-
-        $result = $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER);
-
-        $this->assertInstanceOf(SPIPersistenceFieldType::class, $result);
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getFieldType
      *
      * @since 5.3.2
      */
@@ -92,16 +76,16 @@ class FieldTypeRegistryTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getFieldType
      */
-    public function testGetNotCallableOrInstance()
+    public function testGetNotInstance()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\TypeError::class);
 
         $registry = new FieldTypeRegistry([self::FIELD_TYPE_IDENTIFIER => new \DateTime()]);
         $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER);
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::register
+     * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::registerFieldType
      */
     public function testRegister()
     {

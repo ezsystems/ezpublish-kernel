@@ -8,14 +8,11 @@
  */
 namespace eZ\Publish\Core\Base\Container\Compiler;
 
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use LogicException;
 
-/**
- * This compiler pass will register eZ Publish field types.
- */
-class FieldTypeCollectionPass implements CompilerPassInterface
+abstract class AbstractFieldTypeBasedPass implements CompilerPassInterface
 {
     public const FIELD_TYPE_SERVICE_TAG = 'ezplatform.field_type';
     public const DEPRECATED_FIELD_TYPE_SERVICE_TAG = 'ezpublish.fieldType';
@@ -28,16 +25,12 @@ class FieldTypeCollectionPass implements CompilerPassInterface
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
+     * @return array
+     *
      * @throws \LogicException
      */
-    public function process(ContainerBuilder $container)
+    public function getFieldTypeServiceIds(ContainerBuilder $container): array
     {
-        if (!$container->hasDefinition('ezpublish.field_type_collection.factory')) {
-            return;
-        }
-
-        $fieldTypeCollectionFactoryDef = $container->getDefinition('ezpublish.field_type_collection.factory');
-
         // Field types.
         // Alias attribute is the field type string.
         $deprecatedFieldTypeTags = $container->findTaggedServiceIds(self::DEPRECATED_FIELD_TYPE_SERVICE_TAG);
@@ -64,24 +57,11 @@ class FieldTypeCollectionPass implements CompilerPassInterface
                         )
                     );
                 }
-
-                $fieldTypeCollectionFactoryDef->addMethodCall(
-                    'registerFieldType',
-                    [
-                        // Only pass the service Id since field types will be lazy loaded via the service container
-                        $id,
-                        $attribute['alias'],
-                    ]
-                );
-
-                // Add FieldType to the "concrete" list if it's not a fake.
-                if (!is_a($container->findDefinition($id)->getClass(), '\eZ\Publish\Core\FieldType\Null\Type', true)) {
-                    $fieldTypeCollectionFactoryDef->addMethodCall(
-                        'registerConcreteFieldTypeIdentifier',
-                        [$attribute['alias']]
-                    );
-                }
             }
         }
+
+        return $fieldTypesTags;
     }
+
+    abstract public function process(ContainerBuilder $container);
 }

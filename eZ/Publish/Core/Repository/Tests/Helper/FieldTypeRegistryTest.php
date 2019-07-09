@@ -7,7 +7,8 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Helper;
 
-use eZ\Publish\Core\Repository\Helper\FieldTypeRegistry;
+use eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException;
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\SPI\FieldType\FieldType;
 use PHPUnit\Framework\TestCase;
 
@@ -32,13 +33,6 @@ class FieldTypeRegistryTest extends TestCase
         return $this->createMock(FieldType::class);
     }
 
-    protected function getClosure($returnValue)
-    {
-        return function () use ($returnValue) {
-            return $returnValue;
-        };
-    }
-
     public function testGetFieldType()
     {
         $fieldTypes = [
@@ -55,25 +49,9 @@ class FieldTypeRegistryTest extends TestCase
         );
     }
 
-    public function testGetClosureFieldType()
-    {
-        $fieldTypes = [
-            self::FIELD_TYPE_ID => $this->getClosure($this->getFieldTypeMock()),
-        ];
-
-        $registry = new FieldTypeRegistry($fieldTypes);
-
-        $fieldType = $registry->getFieldType(self::FIELD_TYPE_ID);
-
-        $this->assertInstanceOf(
-            FieldType::class,
-            $fieldType
-        );
-    }
-
     public function testGetFieldTypeThrowsNotFoundException()
     {
-        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException::class);
+        $this->expectException(FieldTypeNotFoundException::class);
 
         $registry = new FieldTypeRegistry([]);
 
@@ -82,8 +60,7 @@ class FieldTypeRegistryTest extends TestCase
 
     public function testGetFieldTypeThrowsRuntimeExceptionIncorrectType()
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('$fieldTypes[none] must be instance of SPI\\FieldType\\FieldType or callable');
+        $this->expectException(\TypeError::class);
 
         $registry = new FieldTypeRegistry(
             [
@@ -94,25 +71,11 @@ class FieldTypeRegistryTest extends TestCase
         $registry->getFieldType('none');
     }
 
-    public function testGetClosureFieldTypeThrowsRuntimeExceptionIncorrectType()
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('$fieldTypes[none] must be instance of SPI\\FieldType\\FieldType or callable');
-
-        $registry = new FieldTypeRegistry(
-            [
-                'none' => $this->getClosure("I'm not a field type"),
-            ]
-        );
-
-        $registry->getFieldType('none');
-    }
-
     public function testGetFieldTypes()
     {
         $fieldTypes = [
             self::FIELD_TYPE_ID => $this->getFieldTypeMock(),
-            'two' => $this->getClosure($this->getFieldTypeMock()),
+            'two' => $this->getFieldTypeMock(),
         ];
 
         $registry = new FieldTypeRegistry($fieldTypes);

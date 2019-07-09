@@ -5,7 +5,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Translation;
 
-use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Model\MessageCatalogue;
 use JMS\TranslationBundle\Translation\ExtractorInterface;
@@ -15,17 +15,18 @@ use JMS\TranslationBundle\Translation\ExtractorInterface;
  */
 class FieldTypesTranslationExtractor implements ExtractorInterface
 {
-    private $fieldTypeCollectionFactory;
+    /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
+    private $fieldTypeRegistry;
 
-    public function __construct(FieldTypeCollectionFactory $fieldTypeCollectionFactory)
+    public function __construct(FieldTypeRegistry $fieldTypeRegistry)
     {
-        $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     public function extract()
     {
         $catalogue = new MessageCatalogue();
-        foreach ($this->fieldTypeCollectionFactory->getConcreteFieldTypesIdentifiers() as $fieldTypeIdentifier) {
+        foreach ($this->fieldTypeRegistry->getConcreteFieldTypesIdentifiers() as $fieldTypeIdentifier) {
             $catalogue->add(
                 new Message(
                     $fieldTypeIdentifier . '.name',

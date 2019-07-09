@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
@@ -71,7 +71,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param array $settings
      */
     public function __construct(
@@ -79,7 +79,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         Handler $contentTypeHandler,
         Helper\DomainMapper $domainMapper,
         Helper\ContentTypeDomainMapper $contentTypeDomainMapper,
-        Helper\FieldTypeRegistry $fieldTypeRegistry,
+        FieldTypeRegistry $fieldTypeRegistry,
         array $settings = []
     ) {
         $this->repository = $repository;

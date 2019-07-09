@@ -27,7 +27,6 @@ services:
         class: "%ezpublish.api.repository.factory.class%"
         arguments:
             - "@ezpublish.config.resolver"
-            - "@ezpublish.field_type_collection.factory"
             - "%ezpublish.api.inner_repository.class%"
             - "%ezpublish.api.role.policy_map%"
             - "@?logger"

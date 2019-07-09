@@ -301,6 +301,7 @@ class HandlerTest extends TestCase
 
             /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
             $loader->load('search_engines/legacy.yml');
+            $loader->load('tests/integration_legacy.yml');
 
             $containerBuilder->setParameter(
                 'languages',

@@ -221,7 +221,7 @@ services:
     ezplatform.core.translation.extractor.fieldtypes:
         class: eZ\Publish\Core\MVC\Symfony\Translation\FieldTypesTranslationExtractor
         arguments:
-            - "@ezpublish.field_type_collection.factory"
+            - '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
         tags:
             - { name: jms_translation.extractor, alias: ez_fieldtypes }
 

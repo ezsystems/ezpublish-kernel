@@ -8,17 +8,19 @@
  */
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler;
 
-use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
+use eZ\Publish\Core\Base\Container\Compiler\FieldTypeRegistryPass;
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
-class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
+class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
-        $this->setDefinition('ezpublish.field_type_collection.factory', new Definition());
+        $this->setDefinition(FieldTypeRegistry::class, new Definition());
     }
 
     /**
@@ -29,7 +31,7 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
      */
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
-        $container->addCompilerPass(new FieldTypeCollectionPass());
+        $container->addCompilerPass(new FieldTypeRegistryPass());
     }
 
     /**
@@ -46,9 +48,9 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.field_type_collection.factory',
+            FieldTypeRegistry::class,
             'registerFieldType',
-            [$serviceId, $fieldTypeIdentifier]
+            [$fieldTypeIdentifier, new Reference($serviceId)]
         );
     }
 
@@ -70,7 +72,7 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.field_type_collection.factory',
+            FieldTypeRegistry::class,
             'registerFieldType',
             [$serviceId, $fieldTypeIdentifier]
         );
@@ -79,8 +81,8 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
     public function tagsProvider(): array
     {
         return [
-            [FieldTypeCollectionPass::DEPRECATED_FIELD_TYPE_SERVICE_TAG],
-            [FieldTypeCollectionPass::FIELD_TYPE_SERVICE_TAG],
+            [FieldTypeRegistryPass::DEPRECATED_FIELD_TYPE_SERVICE_TAG],
+            [FieldTypeRegistryPass::FIELD_TYPE_SERVICE_TAG],
         ];
     }
 }

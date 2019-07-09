@@ -45,7 +45,7 @@ final class GenericFieldTypeConverterPass implements CompilerPassInterface
         $fieldTypesForAutoRegisterConverter = [];
 
         $fieldTypeWithRegisteredConverter = $this->getFieldTypesWithRegisteredConverter($container);
-        $fieldTypeServices = $this->findTaggedServiceIds($container, FieldTypeCollectionPass::FIELD_TYPE_SERVICE_TAGS);
+        $fieldTypeServices = $this->findTaggedServiceIds($container, AbstractFieldTypeBasedPass::FIELD_TYPE_SERVICE_TAGS);
         foreach ($fieldTypeServices as $id => $tags) {
             if (!$this->isGenericFieldType($container, $id)) {
                 continue;
@@ -54,7 +54,7 @@ final class GenericFieldTypeConverterPass implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 $fieldTypeIdentifier = $this->getAliasOrThrowException(
                     $attributes,
-                    FieldTypeCollectionPass::FIELD_TYPE_SERVICE_TAGS
+                    AbstractFieldTypeBasedPass::FIELD_TYPE_SERVICE_TAGS
                 );
 
                 if (!in_array($fieldTypeIdentifier, $fieldTypeWithRegisteredConverter)) {

@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
@@ -27,13 +28,6 @@ class RepositoryFactory implements ContainerAwareInterface
     private $repositoryClass;
 
     /**
-     * Collection of fieldTypes, lazy loaded via a closure.
-     *
-     * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
-     */
-    protected $fieldTypeCollectionFactory;
-
-    /**
      * Collection of limitation types for the RoleService.
      *
      * @var \eZ\Publish\SPI\Limitation\Type[]
@@ -49,11 +43,9 @@ class RepositoryFactory implements ContainerAwareInterface
 
     public function __construct(
         $repositoryClass,
-        FieldTypeCollectionFactory $fieldTypeCollectionFactory,
         array $policyMap
     ) {
         $this->repositoryClass = $repositoryClass;
-        $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
         $this->policyMap = $policyMap;
     }
 
@@ -66,6 +58,8 @@ class RepositoryFactory implements ContainerAwareInterface
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
+     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
+     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
@@ -73,15 +67,16 @@ class RepositoryFactory implements ContainerAwareInterface
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
         BackgroundIndexer $backgroundIndexer,
-        RelationProcessor $relationProcessor
+        RelationProcessor $relationProcessor,
+        FieldTypeRegistry $fieldTypeRegistry
     ) {
         $repository = new $this->repositoryClass(
             $persistenceHandler,
             $searchHandler,
             $backgroundIndexer,
             $relationProcessor,
+            $fieldTypeRegistry,
             [
-                'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
                 'role' => [
                     'limitationTypes' => $this->roleLimitations,
                     'policyMap' => $this->policyMap,

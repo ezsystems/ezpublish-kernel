@@ -6,11 +6,10 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Repository\Helper;
+namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException;
-use RuntimeException;
 
 /**
  * Registry for SPI FieldTypes.
@@ -22,8 +21,11 @@ class FieldTypeRegistry
     /** @var \eZ\Publish\SPI\FieldType\FieldType[] Hash of SPI FieldTypes where key is identifier */
     protected $fieldTypes;
 
+    /** @var string[] */
+    private $concreteFieldTypesIdentifiers;
+
     /**
-     * @param \eZ\Publish\SPI\FieldType\FieldType[]|\Closure $fieldTypes Hash of SPI FieldTypes where key is identifier
+     * @param \eZ\Publish\SPI\FieldType\FieldType[] $fieldTypes Hash of SPI FieldTypes where key is identifier
      */
     public function __construct(array $fieldTypes = [])
     {
@@ -35,15 +37,8 @@ class FieldTypeRegistry
      *
      * @return \eZ\Publish\SPI\FieldType\FieldType[]
      */
-    public function getFieldTypes()
+    public function getFieldTypes(): array
     {
-        // First make sure all items are correct type (call closures)
-        foreach ($this->fieldTypes as $identifier => $value) {
-            if (!$value instanceof SPIFieldType) {
-                $this->getFieldType($identifier);
-            }
-        }
-
         return $this->fieldTypes;
     }
 
@@ -56,25 +51,18 @@ class FieldTypeRegistry
      *
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */
-    public function getFieldType($identifier)
+    public function getFieldType($identifier): SPIFieldType
     {
         if (!isset($this->fieldTypes[$identifier])) {
             throw new FieldTypeNotFoundException($identifier);
         }
 
-        if ($this->fieldTypes[$identifier] instanceof SPIFieldType) {
-            return $this->fieldTypes[$identifier];
-        } elseif (is_callable($this->fieldTypes[$identifier])) {
-            /** @var $closure \Closure */
-            $closure = $this->fieldTypes[$identifier];
-            $this->fieldTypes[$identifier] = $closure();
-        }
-
-        if (!$this->fieldTypes[$identifier] instanceof SPIFieldType) {
-            throw new RuntimeException("\$fieldTypes[$identifier] must be instance of SPI\\FieldType\\FieldType or callable");
-        }
-
         return $this->fieldTypes[$identifier];
+    }
+
+    public function registerFieldType(string $identifier, SPIFieldType $fieldType): void
+    {
+        $this->fieldTypes[$identifier] = $fieldType;
     }
 
     /**
@@ -84,8 +72,24 @@ class FieldTypeRegistry
      *
      * @return bool
      */
-    public function hasFieldType($identifier)
+    public function hasFieldType($identifier): bool
     {
         return isset($this->fieldTypes[$identifier]);
+    }
+
+    /**
+     * Registers $fieldTypeIdentifier as "concrete" FieldType (i.e. not using NullFieldType).
+     */
+    public function registerConcreteFieldTypeIdentifier(string $fieldTypeIdentifier): void
+    {
+        $this->concreteFieldTypesIdentifiers[] = $fieldTypeIdentifier;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getConcreteFieldTypesIdentifiers(): array
+    {
+        return $this->concreteFieldTypesIdentifiers;
     }
 }
