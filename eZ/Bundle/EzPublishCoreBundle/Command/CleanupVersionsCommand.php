@@ -184,10 +184,8 @@ EOT
                 ), OutputInterface::VERBOSITY_VERBOSE);
 
                 if ($removeAll) {
-                    $versions = array_filter($versions, static function ($version) {
-                        if ($version->status !== VersionInfo::STATUS_PUBLISHED) {
-                            return $version;
-                        }
+                    $versions = array_filter($versions, static function (VersionInfo $version) {
+                        return $version->status !== VersionInfo::STATUS_PUBLISHED;
                     });
                 }
 
