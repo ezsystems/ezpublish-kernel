@@ -136,13 +136,8 @@ EOT;
 
         $status = $input->getOption('status');
 
-        $contentTypeIds = explode(',', $input->getOption('excluded-content-types'));
-        $excludedContentTypeIds = array_unique(array_merge(
-            self::DEFAULT_EXCLUDED_CONTENT_TYPES,
-            $contentTypeIds)
-        );
-
-        $contentIds = $this->getObjectsIds($keep, $status, $excludedContentTypeIds);
+        $excludedContentTypeIdentifiers = explode(',', $input->getOption('excluded-content-types'));
+        $contentIds = $this->getObjectsIds($keep, $status, $excludedContentTypeIdentifiers);
         $contentIdsCount = count($contentIds);
 
         if ($contentIdsCount === 0) {
@@ -190,7 +185,7 @@ EOT;
                         ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
                         ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
                     ) {
-                        return $version;
+                        return true;
                     }
                 });
 
