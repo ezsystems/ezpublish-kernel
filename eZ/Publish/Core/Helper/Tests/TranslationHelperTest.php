@@ -337,4 +337,26 @@ class TranslationHelperTest extends TestCase
         $expectedLanguages = ['eng-GB', 'esl-ES', 'fre-FR', 'heb-IL'];
         $this->assertSame($expectedLanguages, $this->translationHelper->getAvailableLanguages());
     }
+
+    public function testGetAvailableLanguagesShouldNotDependOnOrder()
+    {
+        $this->configResolver
+            ->expects($this->any())
+            ->method('getParameter')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['translation_siteaccesses', null, null, []],
+                        ['related_siteaccesses', null, null, ['fre', 'esl', 'heb']],
+                        ['languages', null, null, ['eng-GB']],
+                        ['languages', null, 'fre', ['eng-GB', 'fre-FR']],
+                        ['languages', null, 'esl', ['eng-GB', 'esl-ES', 'fre-FR']],
+                        ['languages', null, 'heb', ['eng-GB', 'heb-IL']],
+                    ]
+                )
+            );
+
+        $expectedLanguages = ['eng-GB', 'esl-ES', 'fre-FR', 'heb-IL'];
+        $this->assertSame($expectedLanguages, $this->translationHelper->getAvailableLanguages());
+    }
 }

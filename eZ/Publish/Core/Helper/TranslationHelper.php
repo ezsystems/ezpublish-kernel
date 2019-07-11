@@ -279,17 +279,36 @@ class TranslationHelper
         $translationSiteAccesses = $this->configResolver->getParameter('translation_siteaccesses');
         $relatedSiteAccesses = $translationSiteAccesses ?: $this->configResolver->getParameter('related_siteaccesses');
         $availableLanguages = [];
+
         $currentLanguages = $this->configResolver->getParameter('languages');
-        $availableLanguages[] = array_shift($currentLanguages);
+        $availableLanguages = $this->addToAvailableLanguages($availableLanguages, $currentLanguages);
 
         foreach ($relatedSiteAccesses as $sa) {
             $languages = $this->configResolver->getParameter('languages', null, $sa);
-            $availableLanguages[] = array_shift($languages);
+            $availableLanguages = $this->addToAvailableLanguages($availableLanguages, $languages);
         }
+
+        $availableLanguages = array_keys($availableLanguages);
 
         sort($availableLanguages);
 
-        return array_unique($availableLanguages);
+        return $availableLanguages;
+    }
+
+    /**
+     * @param array $availableLanguages
+     * @param array|null $languages
+     * @return mixed
+     */
+    private function addToAvailableLanguages($availableLanguages, $languages)
+    {
+        if (is_array($languages)) {
+            foreach ($languages as $language) {
+                $availableLanguages[$language] = 1;
+            }
+        }
+
+        return $availableLanguages;
     }
 
     /**
