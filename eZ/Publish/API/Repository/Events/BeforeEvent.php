@@ -6,10 +6,11 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
-use Symfony\Contracts\EventDispatcher\Event;
-
-abstract class BeforeEvent extends Event
+/**
+ * Event emitted before action execution.
+ */
+interface BeforeEvent extends Event
 {
 }

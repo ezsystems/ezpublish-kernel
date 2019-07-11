@@ -54,7 +54,7 @@ class BookmarkServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(BookmarkServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeCreateBookmarkEvent::class, function (BeforeCreateBookmarkEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeCreateBookmarkEvent::class, function (\eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -111,7 +111,7 @@ class BookmarkServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(BookmarkServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteBookmarkEvent::class, function (BeforeDeleteBookmarkEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteBookmarkEvent::class, function (\eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent $event) {
             $event->stopPropagation();
         }, 10);
 

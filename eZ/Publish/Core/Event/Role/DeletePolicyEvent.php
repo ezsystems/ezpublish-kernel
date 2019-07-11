@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Role;
 
+use eZ\Publish\API\Repository\Events\Role\DeletePolicyEvent as DeletePolicyEventInterface;
 use eZ\Publish\API\Repository\Values\User\Policy;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class DeletePolicyEvent extends AfterEvent
+final class DeletePolicyEvent extends Event implements DeletePolicyEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Policy */
     private $policy;

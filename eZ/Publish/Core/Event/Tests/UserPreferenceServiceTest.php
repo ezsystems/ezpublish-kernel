@@ -51,7 +51,7 @@ class UserPreferenceServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(UserPreferenceServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeSetUserPreferenceEvent::class, function (BeforeSetUserPreferenceEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeSetUserPreferenceEvent::class, function (\eZ\Publish\API\Repository\Events\UserPreference\BeforeSetUserPreferenceEvent $event) {
             $event->stopPropagation();
         }, 10);
 

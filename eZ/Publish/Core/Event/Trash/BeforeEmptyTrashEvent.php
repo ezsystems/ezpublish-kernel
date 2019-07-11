@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Trash;
 
+use eZ\Publish\API\Repository\Events\Trash\BeforeEmptyTrashEvent as BeforeEmptyTrashEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeEmptyTrashEvent extends BeforeEvent
+final class BeforeEmptyTrashEvent extends Event implements BeforeEmptyTrashEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList|null */
     private $resultList;

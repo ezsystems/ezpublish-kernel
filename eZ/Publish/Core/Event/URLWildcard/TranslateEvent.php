@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\URLWildcard;
 
+use eZ\Publish\API\Repository\Events\URLWildcard\TranslateEvent as TranslateEventInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class TranslateEvent extends AfterEvent
+final class TranslateEvent extends Event implements TranslateEventInterface
 {
     private $url;
 

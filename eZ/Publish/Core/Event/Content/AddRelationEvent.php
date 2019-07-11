@@ -8,12 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Content;
 
+use eZ\Publish\API\Repository\Events\Content\AddRelationEvent as AddRelationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class AddRelationEvent extends AfterEvent
+final class AddRelationEvent extends Event implements AddRelationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Relation */
     private $relation;

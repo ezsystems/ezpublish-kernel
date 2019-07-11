@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\URL;
 
+use eZ\Publish\API\Repository\Events\URL\UpdateUrlEvent as UpdateUrlEventInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class UpdateUrlEvent extends AfterEvent
+final class UpdateUrlEvent extends Event implements UpdateUrlEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\URL\URL */
     private $url;

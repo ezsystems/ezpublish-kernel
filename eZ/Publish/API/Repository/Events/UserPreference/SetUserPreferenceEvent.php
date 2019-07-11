@@ -6,10 +6,11 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events\UserPreference;
 
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\API\Repository\Events\AfterEvent;
 
-abstract class AfterEvent extends Event
+interface SetUserPreferenceEvent extends AfterEvent
 {
+    public function getUserPreferenceSetStructs(): array;
 }

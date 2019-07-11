@@ -8,9 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\UserPreference;
 
-use eZ\Publish\Core\Event\BeforeEvent;
+use eZ\Publish\API\Repository\Events\UserPreference\BeforeSetUserPreferenceEvent as BeforeSetUserPreferenceEventInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class BeforeSetUserPreferenceEvent extends BeforeEvent
+final class BeforeSetUserPreferenceEvent extends Event implements BeforeSetUserPreferenceEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceSetStruct[] */
     private $userPreferenceSetStructs;

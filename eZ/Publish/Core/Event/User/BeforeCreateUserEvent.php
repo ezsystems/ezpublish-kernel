@@ -8,12 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\User;
 
+use eZ\Publish\API\Repository\Events\User\BeforeCreateUserEvent as BeforeCreateUserEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeCreateUserEvent extends BeforeEvent
+final class BeforeCreateUserEvent extends Event implements BeforeCreateUserEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\UserCreateStruct */
     private $userCreateStruct;

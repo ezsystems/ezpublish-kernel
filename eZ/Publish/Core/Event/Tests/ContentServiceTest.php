@@ -90,7 +90,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('deleteContent')->willReturn($locations);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteContentEvent::class, function (BeforeDeleteContentEvent $event) use ($eventLocations) {
+        $traceableEventDispatcher->addListener(BeforeDeleteContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeDeleteContentEvent $event) use ($eventLocations) {
             $event->setLocations($eventLocations);
         }, 10);
 
@@ -124,7 +124,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('deleteContent')->willReturn($locations);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteContentEvent::class, function (BeforeDeleteContentEvent $event) use ($eventLocations) {
+        $traceableEventDispatcher->addListener(BeforeDeleteContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeDeleteContentEvent $event) use ($eventLocations) {
             $event->setLocations($eventLocations);
             $event->stopPropagation();
         }, 10);
@@ -193,7 +193,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('copyContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeCopyContentEvent::class, function (BeforeCopyContentEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeCopyContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeCopyContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -229,7 +229,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('copyContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeCopyContentEvent::class, function (BeforeCopyContentEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeCopyContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeCopyContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -296,7 +296,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('updateContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateContentEvent::class, function (BeforeUpdateContentEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeUpdateContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -331,7 +331,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('updateContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateContentEvent::class, function (BeforeUpdateContentEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeUpdateContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -392,7 +392,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteRelationEvent::class, function (BeforeDeleteRelationEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteRelationEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeDeleteRelationEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -457,7 +457,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('createContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeCreateContentEvent::class, function (BeforeCreateContentEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeCreateContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeCreateContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -492,7 +492,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('createContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeCreateContentEvent::class, function (BeforeCreateContentEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeCreateContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeCreateContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -551,7 +551,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeHideContentEvent::class, function (BeforeHideContentEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeHideContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeHideContentEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -608,7 +608,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteVersionEvent::class, function (BeforeDeleteVersionEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteVersionEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeDeleteVersionEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -673,7 +673,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('addRelation')->willReturn($relation);
 
-        $traceableEventDispatcher->addListener(BeforeAddRelationEvent::class, function (BeforeAddRelationEvent $event) use ($eventRelation) {
+        $traceableEventDispatcher->addListener(BeforeAddRelationEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeAddRelationEvent $event) use ($eventRelation) {
             $event->setRelation($eventRelation);
         }, 10);
 
@@ -708,7 +708,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('addRelation')->willReturn($relation);
 
-        $traceableEventDispatcher->addListener(BeforeAddRelationEvent::class, function (BeforeAddRelationEvent $event) use ($eventRelation) {
+        $traceableEventDispatcher->addListener(BeforeAddRelationEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeAddRelationEvent $event) use ($eventRelation) {
             $event->setRelation($eventRelation);
             $event->stopPropagation();
         }, 10);
@@ -775,7 +775,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('updateContentMetadata')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateContentMetadataEvent::class, function (BeforeUpdateContentMetadataEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeUpdateContentMetadataEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentMetadataEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -810,7 +810,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('updateContentMetadata')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateContentMetadataEvent::class, function (BeforeUpdateContentMetadataEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeUpdateContentMetadataEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentMetadataEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -871,7 +871,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteTranslationEvent::class, function (BeforeDeleteTranslationEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteTranslationEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeDeleteTranslationEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -936,7 +936,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('publishVersion')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforePublishVersionEvent::class, function (BeforePublishVersionEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforePublishVersionEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforePublishVersionEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -971,7 +971,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('publishVersion')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforePublishVersionEvent::class, function (BeforePublishVersionEvent $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforePublishVersionEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforePublishVersionEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -1040,7 +1040,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('createContentDraft')->willReturn($contentDraft);
 
-        $traceableEventDispatcher->addListener(BeforeCreateContentDraftEvent::class, function (BeforeCreateContentDraftEvent $event) use ($eventContentDraft) {
+        $traceableEventDispatcher->addListener(BeforeCreateContentDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeCreateContentDraftEvent $event) use ($eventContentDraft) {
             $event->setContentDraft($eventContentDraft);
         }, 10);
 
@@ -1076,7 +1076,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('createContentDraft')->willReturn($contentDraft);
 
-        $traceableEventDispatcher->addListener(BeforeCreateContentDraftEvent::class, function (BeforeCreateContentDraftEvent $event) use ($eventContentDraft) {
+        $traceableEventDispatcher->addListener(BeforeCreateContentDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeCreateContentDraftEvent $event) use ($eventContentDraft) {
             $event->setContentDraft($eventContentDraft);
             $event->stopPropagation();
         }, 10);
@@ -1135,7 +1135,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeRevealContentEvent::class, function (BeforeRevealContentEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeRevealContentEvent::class, function (\eZ\Publish\API\Repository\Events\Content\BeforeRevealContentEvent $event) {
             $event->stopPropagation();
         }, 10);
 

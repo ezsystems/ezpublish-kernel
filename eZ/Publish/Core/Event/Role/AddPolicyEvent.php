@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Role;
 
+use eZ\Publish\API\Repository\Events\Role\AddPolicyEvent as AddPolicyEventInterface;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class AddPolicyEvent extends AfterEvent
+final class AddPolicyEvent extends Event implements AddPolicyEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;

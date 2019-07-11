@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\User;
 
+use eZ\Publish\API\Repository\Events\User\DeleteUserEvent as DeleteUserEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class DeleteUserEvent extends AfterEvent
+final class DeleteUserEvent extends Event implements DeleteUserEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;

@@ -8,12 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Notification;
 
+use eZ\Publish\API\Repository\Events\Notification\BeforeCreateNotificationEvent as BeforeCreateNotificationEventInterface;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeCreateNotificationEvent extends BeforeEvent
+final class BeforeCreateNotificationEvent extends Event implements BeforeCreateNotificationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Notification\CreateStruct */
     private $createStruct;
