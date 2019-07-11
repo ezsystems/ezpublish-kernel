@@ -72,6 +72,7 @@ EOT;
 
     protected function configure()
     {
+        $beforeRunningHints = self::BEFORE_RUNNING_HINTS;
         $this
             ->setName('ezplatform:content:cleanup-versions')
             ->setDescription('Remove unwanted content versions. It keeps published version untouched. By default, it keeps also the last archived/draft version.')
