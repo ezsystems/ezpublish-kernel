@@ -103,11 +103,11 @@ class ViewController extends Controller
                 );
             }
 
-            // Make the response vary against X-User-Hash header ensures that an HTTP
+            // Make the response vary against X-User-Context-Hash header ensures that an HTTP
             // reverse proxy caches the different possible variations of the
             // response as it can depend on user role for instance.
-            if ($request->headers->has('X-User-Hash')) {
-                $response->setVary('X-User-Hash');
+            if ($request->headers->has('X-User-Context-Hash')) {
+                $response->setVary('X-User-Context-Hash');
             }
 
             if ($lastModified != null) {
