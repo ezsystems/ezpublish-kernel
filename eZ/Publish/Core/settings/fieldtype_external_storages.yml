@@ -17,7 +17,7 @@ services:
             - "@ezpublish.fieldType.ezbinaryfile.pathGenerator"
             - "@ezpublish.core.io.mimeTypeDetector"
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
+            - {name: ezplatform.field_type.external_storage_handler, alias: ezbinaryfile}
 
     ezpublish.fieldType.ezimage.externalStorage:
         class: "%ezpublish.fieldType.ezimage.externalStorage.class%"
@@ -30,14 +30,14 @@ services:
             - "@ezpublish.utils.deprecation_warner"
             - "@?ezpublish.image_alias.imagine.alias_cleaner"
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}
+            - {name: ezplatform.field_type.external_storage_handler, alias: ezimage}
 
     ezpublish.fieldType.ezkeyword.externalStorage:
         class: "%ezpublish.fieldType.ezkeyword.externalStorage.class%"
         public: true # @todo should be private
         arguments: ["@ezpublish.fieldType.ezkeyword.storage_gateway"]
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezkeyword}
+            - {name: ezplatform.field_type.external_storage_handler, alias: ezkeyword}
 
     ezpublish.fieldType.ezmedia.externalStorage:
         class: "%ezpublish.fieldType.ezmedia.externalStorage.class%"
@@ -48,7 +48,7 @@ services:
             - "@ezpublish.fieldType.ezbinaryfile.pathGenerator"
             - "@ezpublish.core.io.mimeTypeDetector"
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
+            - {name: ezplatform.field_type.external_storage_handler, alias: ezmedia}
 
     ezpublish.fieldType.ezurl.externalStorage:
         class: "%ezpublish.fieldType.ezurl.externalStorage.class%"
@@ -57,21 +57,21 @@ services:
             - "@ezpublish.fieldType.ezurl.storage_gateway"
             - "@?logger"
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezurl}
+            - {name: ezplatform.field_type.external_storage_handler, alias: ezurl}
 
     ezpublish.fieldType.ezgmaplocation.externalStorage:
         class: "%ezpublish.fieldType.ezgmaplocation.externalStorage.class%"
         public: true # @todo should be private
         arguments: ["@ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway"]
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezgmaplocation}
+            - {name: ezplatform.field_type.external_storage_handler, alias: ezgmaplocation}
 
     ezpublish.fieldType.ezuser.externalStorage:
         class: "%ezpublish.fieldType.ezuser.externalStorage.class%"
         public: true # @todo should be private
         arguments: ["@ezpublish.fieldType.ezuser.storage_gateway"]
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezuser}
+            - {name: ezplatform.field_type.external_storage_handler, alias: ezuser}
 
     ezpublish.fieldType.metadataHandler.imagesize:
         class: "%ezpublish.core.io.metadataHandler.imageSize.class%"

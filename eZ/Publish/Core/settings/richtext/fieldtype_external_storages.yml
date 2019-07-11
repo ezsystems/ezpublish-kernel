@@ -7,5 +7,5 @@ services:
         public: true # @todo should be private
         arguments: ["@ezpublish.fieldType.ezrichtext.storage_gateway"]
         tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezrichtext}
+            - {name: ezplatform.field_type.external_storage_handler, alias: ezrichtext}
 
