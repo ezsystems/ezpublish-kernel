@@ -6,6 +6,24 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
+use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyByRoleDraftEvent as BeforeAddPolicyByRoleDraftEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyEvent as BeforeAddPolicyEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserEvent as BeforeAssignRoleToUserEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserGroupEvent as BeforeAssignRoleToUserGroupEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleDraftEvent as BeforeCreateRoleDraftEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleEvent as BeforeCreateRoleEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeDeletePolicyEvent as BeforeDeletePolicyEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleDraftEvent as BeforeDeleteRoleDraftEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleEvent as BeforeDeleteRoleEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforePublishRoleDraftEvent as BeforePublishRoleDraftEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeRemovePolicyByRoleDraftEvent as BeforeRemovePolicyByRoleDraftEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeRemoveRoleAssignmentEvent as BeforeRemoveRoleAssignmentEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserEvent as BeforeUnassignRoleFromUserEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserGroupEvent as BeforeUnassignRoleFromUserGroupEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent as BeforeUpdatePolicyByRoleDraftEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyEvent as BeforeUpdatePolicyEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleDraftEvent as BeforeUpdateRoleDraftEventInterface;
+use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleEvent as BeforeUpdateRoleEventInterface;
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy;
@@ -97,7 +115,7 @@ class RoleServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeletePolicyEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeDeletePolicyEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeletePolicyEvent::class, function (BeforeDeletePolicyEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -162,7 +180,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('updateRole')->willReturn($updatedRole);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateRoleEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleEvent $event) use ($eventUpdatedRole) {
+        $traceableEventDispatcher->addListener(BeforeUpdateRoleEvent::class, function (BeforeUpdateRoleEventInterface $event) use ($eventUpdatedRole) {
             $event->setUpdatedRole($eventUpdatedRole);
         }, 10);
 
@@ -197,7 +215,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('updateRole')->willReturn($updatedRole);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateRoleEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleEvent $event) use ($eventUpdatedRole) {
+        $traceableEventDispatcher->addListener(BeforeUpdateRoleEvent::class, function (BeforeUpdateRoleEventInterface $event) use ($eventUpdatedRole) {
             $event->setUpdatedRole($eventUpdatedRole);
             $event->stopPropagation();
         }, 10);
@@ -256,7 +274,7 @@ class RoleServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforePublishRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforePublishRoleDraftEvent $event) {
+        $traceableEventDispatcher->addListener(BeforePublishRoleDraftEvent::class, function (BeforePublishRoleDraftEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -317,7 +335,7 @@ class RoleServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeAssignRoleToUserEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeAssignRoleToUserEvent::class, function (BeforeAssignRoleToUserEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -382,7 +400,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('addPolicy')->willReturn($updatedRole);
 
-        $traceableEventDispatcher->addListener(BeforeAddPolicyEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyEvent $event) use ($eventUpdatedRole) {
+        $traceableEventDispatcher->addListener(BeforeAddPolicyEvent::class, function (BeforeAddPolicyEventInterface $event) use ($eventUpdatedRole) {
             $event->setUpdatedRole($eventUpdatedRole);
         }, 10);
 
@@ -417,7 +435,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('addPolicy')->willReturn($updatedRole);
 
-        $traceableEventDispatcher->addListener(BeforeAddPolicyEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyEvent $event) use ($eventUpdatedRole) {
+        $traceableEventDispatcher->addListener(BeforeAddPolicyEvent::class, function (BeforeAddPolicyEventInterface $event) use ($eventUpdatedRole) {
             $event->setUpdatedRole($eventUpdatedRole);
             $event->stopPropagation();
         }, 10);
@@ -484,7 +502,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('updateRoleDraft')->willReturn($updatedRoleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleDraftEvent $event) use ($eventUpdatedRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeUpdateRoleDraftEvent::class, function (BeforeUpdateRoleDraftEventInterface $event) use ($eventUpdatedRoleDraft) {
             $event->setUpdatedRoleDraft($eventUpdatedRoleDraft);
         }, 10);
 
@@ -519,7 +537,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('updateRoleDraft')->willReturn($updatedRoleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleDraftEvent $event) use ($eventUpdatedRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeUpdateRoleDraftEvent::class, function (BeforeUpdateRoleDraftEventInterface $event) use ($eventUpdatedRoleDraft) {
             $event->setUpdatedRoleDraft($eventUpdatedRoleDraft);
             $event->stopPropagation();
         }, 10);
@@ -582,7 +600,7 @@ class RoleServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeAssignRoleToUserGroupEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserGroupEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeAssignRoleToUserGroupEvent::class, function (BeforeAssignRoleToUserGroupEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -641,7 +659,7 @@ class RoleServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeUnassignRoleFromUserEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeUnassignRoleFromUserEvent::class, function (BeforeUnassignRoleFromUserEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -708,7 +726,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('updatePolicyByRoleDraft')->willReturn($updatedPolicyDraft);
 
-        $traceableEventDispatcher->addListener(BeforeUpdatePolicyByRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent $event) use ($eventUpdatedPolicyDraft) {
+        $traceableEventDispatcher->addListener(BeforeUpdatePolicyByRoleDraftEvent::class, function (BeforeUpdatePolicyByRoleDraftEventInterface $event) use ($eventUpdatedPolicyDraft) {
             $event->setUpdatedPolicyDraft($eventUpdatedPolicyDraft);
         }, 10);
 
@@ -744,7 +762,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('updatePolicyByRoleDraft')->willReturn($updatedPolicyDraft);
 
-        $traceableEventDispatcher->addListener(BeforeUpdatePolicyByRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent $event) use ($eventUpdatedPolicyDraft) {
+        $traceableEventDispatcher->addListener(BeforeUpdatePolicyByRoleDraftEvent::class, function (BeforeUpdatePolicyByRoleDraftEventInterface $event) use ($eventUpdatedPolicyDraft) {
             $event->setUpdatedPolicyDraft($eventUpdatedPolicyDraft);
             $event->stopPropagation();
         }, 10);
@@ -809,7 +827,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('createRole')->willReturn($roleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeCreateRoleEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleEvent $event) use ($eventRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeCreateRoleEvent::class, function (BeforeCreateRoleEventInterface $event) use ($eventRoleDraft) {
             $event->setRoleDraft($eventRoleDraft);
         }, 10);
 
@@ -843,7 +861,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('createRole')->willReturn($roleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeCreateRoleEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleEvent $event) use ($eventRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeCreateRoleEvent::class, function (BeforeCreateRoleEventInterface $event) use ($eventRoleDraft) {
             $event->setRoleDraft($eventRoleDraft);
             $event->stopPropagation();
         }, 10);
@@ -910,7 +928,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('removePolicyByRoleDraft')->willReturn($updatedRoleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeRemovePolicyByRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeRemovePolicyByRoleDraftEvent $event) use ($eventUpdatedRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeRemovePolicyByRoleDraftEvent::class, function (BeforeRemovePolicyByRoleDraftEventInterface $event) use ($eventUpdatedRoleDraft) {
             $event->setUpdatedRoleDraft($eventUpdatedRoleDraft);
         }, 10);
 
@@ -945,7 +963,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('removePolicyByRoleDraft')->willReturn($updatedRoleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeRemovePolicyByRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeRemovePolicyByRoleDraftEvent $event) use ($eventUpdatedRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeRemovePolicyByRoleDraftEvent::class, function (BeforeRemovePolicyByRoleDraftEventInterface $event) use ($eventUpdatedRoleDraft) {
             $event->setUpdatedRoleDraft($eventUpdatedRoleDraft);
             $event->stopPropagation();
         }, 10);
@@ -1012,7 +1030,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('addPolicyByRoleDraft')->willReturn($updatedRoleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeAddPolicyByRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyByRoleDraftEvent $event) use ($eventUpdatedRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeAddPolicyByRoleDraftEvent::class, function (BeforeAddPolicyByRoleDraftEventInterface $event) use ($eventUpdatedRoleDraft) {
             $event->setUpdatedRoleDraft($eventUpdatedRoleDraft);
         }, 10);
 
@@ -1047,7 +1065,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('addPolicyByRoleDraft')->willReturn($updatedRoleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeAddPolicyByRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyByRoleDraftEvent $event) use ($eventUpdatedRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeAddPolicyByRoleDraftEvent::class, function (BeforeAddPolicyByRoleDraftEventInterface $event) use ($eventUpdatedRoleDraft) {
             $event->setUpdatedRoleDraft($eventUpdatedRoleDraft);
             $event->stopPropagation();
         }, 10);
@@ -1106,7 +1124,7 @@ class RoleServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteRoleEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteRoleEvent::class, function (BeforeDeleteRoleEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -1163,7 +1181,7 @@ class RoleServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleDraftEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteRoleDraftEvent::class, function (BeforeDeleteRoleDraftEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -1220,7 +1238,7 @@ class RoleServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeRemoveRoleAssignmentEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeRemoveRoleAssignmentEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeRemoveRoleAssignmentEvent::class, function (BeforeRemoveRoleAssignmentEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -1283,7 +1301,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('createRoleDraft')->willReturn($roleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeCreateRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleDraftEvent $event) use ($eventRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeCreateRoleDraftEvent::class, function (BeforeCreateRoleDraftEventInterface $event) use ($eventRoleDraft) {
             $event->setRoleDraft($eventRoleDraft);
         }, 10);
 
@@ -1317,7 +1335,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('createRoleDraft')->willReturn($roleDraft);
 
-        $traceableEventDispatcher->addListener(BeforeCreateRoleDraftEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleDraftEvent $event) use ($eventRoleDraft) {
+        $traceableEventDispatcher->addListener(BeforeCreateRoleDraftEvent::class, function (BeforeCreateRoleDraftEventInterface $event) use ($eventRoleDraft) {
             $event->setRoleDraft($eventRoleDraft);
             $event->stopPropagation();
         }, 10);
@@ -1384,7 +1402,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('updatePolicy')->willReturn($updatedPolicy);
 
-        $traceableEventDispatcher->addListener(BeforeUpdatePolicyEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyEvent $event) use ($eventUpdatedPolicy) {
+        $traceableEventDispatcher->addListener(BeforeUpdatePolicyEvent::class, function (BeforeUpdatePolicyEventInterface $event) use ($eventUpdatedPolicy) {
             $event->setUpdatedPolicy($eventUpdatedPolicy);
         }, 10);
 
@@ -1419,7 +1437,7 @@ class RoleServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
         $innerServiceMock->method('updatePolicy')->willReturn($updatedPolicy);
 
-        $traceableEventDispatcher->addListener(BeforeUpdatePolicyEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyEvent $event) use ($eventUpdatedPolicy) {
+        $traceableEventDispatcher->addListener(BeforeUpdatePolicyEvent::class, function (BeforeUpdatePolicyEventInterface $event) use ($eventUpdatedPolicy) {
             $event->setUpdatedPolicy($eventUpdatedPolicy);
             $event->stopPropagation();
         }, 10);
@@ -1480,7 +1498,7 @@ class RoleServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(RoleServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeUnassignRoleFromUserGroupEvent::class, function (\eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserGroupEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeUnassignRoleFromUserGroupEvent::class, function (BeforeUnassignRoleFromUserGroupEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 

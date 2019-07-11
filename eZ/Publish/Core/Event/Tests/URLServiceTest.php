@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
+use eZ\Publish\API\Repository\Events\URL\BeforeUpdateUrlEvent as BeforeUpdateUrlEventInterface;
 use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
@@ -61,7 +62,7 @@ class URLServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLServiceInterface::class);
         $innerServiceMock->method('updateUrl')->willReturn($updatedUrl);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUrlEvent::class, function (\eZ\Publish\API\Repository\Events\URL\BeforeUpdateUrlEvent $event) use ($eventUpdatedUrl) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUrlEvent::class, function (BeforeUpdateUrlEventInterface $event) use ($eventUpdatedUrl) {
             $event->setUpdatedUrl($eventUpdatedUrl);
         }, 10);
 
@@ -96,7 +97,7 @@ class URLServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLServiceInterface::class);
         $innerServiceMock->method('updateUrl')->willReturn($updatedUrl);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUrlEvent::class, function (\eZ\Publish\API\Repository\Events\URL\BeforeUpdateUrlEvent $event) use ($eventUpdatedUrl) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUrlEvent::class, function (BeforeUpdateUrlEventInterface $event) use ($eventUpdatedUrl) {
             $event->setUpdatedUrl($eventUpdatedUrl);
             $event->stopPropagation();
         }, 10);

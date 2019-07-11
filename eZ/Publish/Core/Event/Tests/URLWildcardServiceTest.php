@@ -6,6 +6,9 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent as BeforeCreateEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent as BeforeRemoveEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeTranslateEvent as BeforeTranslateEventInterface;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
@@ -57,7 +60,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeRemoveEvent::class, function (\eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeRemoveEvent::class, function (BeforeRemoveEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -124,7 +127,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
         $innerServiceMock->method('create')->willReturn($urlWildcard);
 
-        $traceableEventDispatcher->addListener(BeforeCreateEvent::class, function (\eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent $event) use ($eventUrlWildcard) {
+        $traceableEventDispatcher->addListener(BeforeCreateEvent::class, function (BeforeCreateEventInterface $event) use ($eventUrlWildcard) {
             $event->setUrlWildcard($eventUrlWildcard);
         }, 10);
 
@@ -160,7 +163,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
         $innerServiceMock->method('create')->willReturn($urlWildcard);
 
-        $traceableEventDispatcher->addListener(BeforeCreateEvent::class, function (\eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent $event) use ($eventUrlWildcard) {
+        $traceableEventDispatcher->addListener(BeforeCreateEvent::class, function (BeforeCreateEventInterface $event) use ($eventUrlWildcard) {
             $event->setUrlWildcard($eventUrlWildcard);
             $event->stopPropagation();
         }, 10);
@@ -225,7 +228,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
         $innerServiceMock->method('translate')->willReturn($result);
 
-        $traceableEventDispatcher->addListener(BeforeTranslateEvent::class, function (\eZ\Publish\API\Repository\Events\URLWildcard\BeforeTranslateEvent $event) use ($eventResult) {
+        $traceableEventDispatcher->addListener(BeforeTranslateEvent::class, function (BeforeTranslateEventInterface $event) use ($eventResult) {
             $event->setResult($eventResult);
         }, 10);
 
@@ -259,7 +262,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
         $innerServiceMock->method('translate')->willReturn($result);
 
-        $traceableEventDispatcher->addListener(BeforeTranslateEvent::class, function (\eZ\Publish\API\Repository\Events\URLWildcard\BeforeTranslateEvent $event) use ($eventResult) {
+        $traceableEventDispatcher->addListener(BeforeTranslateEvent::class, function (BeforeTranslateEventInterface $event) use ($eventResult) {
             $event->setResult($eventResult);
             $event->stopPropagation();
         }, 10);
