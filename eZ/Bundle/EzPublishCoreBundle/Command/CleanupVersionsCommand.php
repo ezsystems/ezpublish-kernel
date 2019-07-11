@@ -107,7 +107,15 @@ EOT;
                 InputOption::VALUE_OPTIONAL,
                 'Comma separated list of ContentType identifiers of which versions should not be removed, for instance `article`.',
                 self::DEFAULT_EXCLUDED_CONTENT_TYPES
-            )->setHelp(self::BEFORE_RUNNING_HINTS);
+            )->setHelp(
+                <<<EOT
+The command <info>%command.name%</info> reduces content versions to a minimum. 
+It keeps published version untouched, and by default it keeps also the last archived/draft version.
+Note: This script can potentially run for a very long time, and in Symfony dev environment it will consume memory exponentially with size of dataset.
+
+{$beforeRunningHints}
+EOT
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
