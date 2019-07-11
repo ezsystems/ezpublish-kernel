@@ -44,7 +44,7 @@ class PersistenceCacheCollector extends DataCollector
     /**
      * Returns call count.
      *
-     * @deprecaterd since 7.5, use getStats().
+     * @deprecated since 7.5, use getStats().
      *
      * @return int
      */
