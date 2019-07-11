@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Notification;
 
-use eZ\Publish\API\Repository\Events\BeforeEvent;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
 
 interface BeforeMarkNotificationAsReadEvent extends BeforeEvent

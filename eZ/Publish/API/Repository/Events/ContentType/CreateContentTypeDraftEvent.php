@@ -10,7 +10,7 @@ namespace eZ\Publish\API\Repository\Events\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\API\Repository\Events\AfterEvent;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
 interface CreateContentTypeDraftEvent extends AfterEvent
 {

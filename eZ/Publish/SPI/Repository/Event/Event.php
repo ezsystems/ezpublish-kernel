@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\API\Repository\Events;
+namespace eZ\Publish\SPI\Repository\Event;
 
 use Psr\EventDispatcher\StoppableEventInterface;
 

@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\UserPreference;
 
-use eZ\Publish\API\Repository\Events\AfterEvent;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
 interface SetUserPreferenceEvent extends AfterEvent
 {
