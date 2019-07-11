@@ -209,9 +209,13 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             $contextualizer->setContextualParameter('default_page', $currentScope, '/' . ltrim($scopeSettings['default_page'], '/'));
         }
         if (isset($scopeSettings['pagelayout'])) {
+            // note: "pagelayout" is deprecated, deprecation message is set via Semantic Config Node Builder
             $contextualizer->setContextualParameter('pagelayout', $currentScope, $scopeSettings['pagelayout']);
+            $contextualizer->setContextualParameter('page_layout', $currentScope, $scopeSettings['pagelayout']);
         }
         if (isset($scopeSettings['page_layout'])) {
+            // note: "page_layout" as the new setting always takes precedence
+            $contextualizer->setContextualParameter('pagelayout', $currentScope, $scopeSettings['page_layout']);
             $contextualizer->setContextualParameter('page_layout', $currentScope, $scopeSettings['page_layout']);
         }
     }

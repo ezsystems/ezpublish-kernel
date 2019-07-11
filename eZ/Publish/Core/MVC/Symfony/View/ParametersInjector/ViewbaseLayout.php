@@ -33,9 +33,7 @@ class ViewbaseLayout implements EventSubscriberInterface
 
     private function getPageLayout(): string
     {
-        return $this->configResolver->hasParameter('page_layout')
-            ? $this->configResolver->getParameter('page_layout')
-            : $this->configResolver->getParameter('pagelayout');
+        return $this->configResolver->getParameter('page_layout');
     }
 
     public function injectViewbaseLayout(FilterViewParametersEvent $event)
