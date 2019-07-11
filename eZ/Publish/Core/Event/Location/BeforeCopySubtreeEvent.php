@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Location;
 
+use eZ\Publish\API\Repository\Events\Location\BeforeCopySubtreeEvent as BeforeCopySubtreeEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeCopySubtreeEvent extends BeforeEvent
+final class BeforeCopySubtreeEvent extends Event implements BeforeCopySubtreeEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $subtree;

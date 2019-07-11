@@ -8,12 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Role;
 
+use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleDraftEvent as BeforeCreateRoleDraftEventInterface;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeCreateRoleDraftEvent extends BeforeEvent
+final class BeforeCreateRoleDraftEvent extends Event implements BeforeCreateRoleDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;

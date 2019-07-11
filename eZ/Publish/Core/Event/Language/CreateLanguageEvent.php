@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Language;
 
+use eZ\Publish\API\Repository\Events\Language\CreateLanguageEvent as CreateLanguageEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class CreateLanguageEvent extends AfterEvent
+final class CreateLanguageEvent extends Event implements CreateLanguageEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $language;

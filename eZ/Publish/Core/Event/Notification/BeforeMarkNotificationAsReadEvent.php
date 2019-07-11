@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Notification;
 
+use eZ\Publish\API\Repository\Events\Notification\BeforeMarkNotificationAsReadEvent as BeforeMarkNotificationAsReadEventInterface;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class BeforeMarkNotificationAsReadEvent extends BeforeEvent
+final class BeforeMarkNotificationAsReadEvent extends Event implements BeforeMarkNotificationAsReadEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Notification\Notification */
     private $notification;

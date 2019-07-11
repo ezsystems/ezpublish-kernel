@@ -8,12 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Content;
 
+use eZ\Publish\API\Repository\Events\Content\BeforeCreateContentEvent as BeforeCreateContentEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeCreateContentEvent extends BeforeEvent
+final class BeforeCreateContentEvent extends Event implements BeforeCreateContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct */
     private $contentCreateStruct;

@@ -6,6 +6,11 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
+use eZ\Publish\API\Repository\Events\Language\BeforeCreateLanguageEvent as BeforeCreateLanguageEventInterface;
+use eZ\Publish\API\Repository\Events\Language\BeforeDeleteLanguageEvent as BeforeDeleteLanguageEventInterface;
+use eZ\Publish\API\Repository\Events\Language\BeforeDisableLanguageEvent as BeforeDisableLanguageEventInterface;
+use eZ\Publish\API\Repository\Events\Language\BeforeEnableLanguageEvent as BeforeEnableLanguageEventInterface;
+use eZ\Publish\API\Repository\Events\Language\BeforeUpdateLanguageNameEvent as BeforeUpdateLanguageNameEventInterface;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
@@ -61,7 +66,7 @@ class LanguageServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(LanguageServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteLanguageEvent::class, function (BeforeDeleteLanguageEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteLanguageEvent::class, function (BeforeDeleteLanguageEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -124,7 +129,7 @@ class LanguageServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(LanguageServiceInterface::class);
         $innerServiceMock->method('createLanguage')->willReturn($language);
 
-        $traceableEventDispatcher->addListener(BeforeCreateLanguageEvent::class, function (BeforeCreateLanguageEvent $event) use ($eventLanguage) {
+        $traceableEventDispatcher->addListener(BeforeCreateLanguageEvent::class, function (BeforeCreateLanguageEventInterface $event) use ($eventLanguage) {
             $event->setLanguage($eventLanguage);
         }, 10);
 
@@ -158,7 +163,7 @@ class LanguageServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(LanguageServiceInterface::class);
         $innerServiceMock->method('createLanguage')->willReturn($language);
 
-        $traceableEventDispatcher->addListener(BeforeCreateLanguageEvent::class, function (BeforeCreateLanguageEvent $event) use ($eventLanguage) {
+        $traceableEventDispatcher->addListener(BeforeCreateLanguageEvent::class, function (BeforeCreateLanguageEventInterface $event) use ($eventLanguage) {
             $event->setLanguage($eventLanguage);
             $event->stopPropagation();
         }, 10);
@@ -225,7 +230,7 @@ class LanguageServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(LanguageServiceInterface::class);
         $innerServiceMock->method('updateLanguageName')->willReturn($updatedLanguage);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateLanguageNameEvent::class, function (BeforeUpdateLanguageNameEvent $event) use ($eventUpdatedLanguage) {
+        $traceableEventDispatcher->addListener(BeforeUpdateLanguageNameEvent::class, function (BeforeUpdateLanguageNameEventInterface $event) use ($eventUpdatedLanguage) {
             $event->setUpdatedLanguage($eventUpdatedLanguage);
         }, 10);
 
@@ -260,7 +265,7 @@ class LanguageServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(LanguageServiceInterface::class);
         $innerServiceMock->method('updateLanguageName')->willReturn($updatedLanguage);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateLanguageNameEvent::class, function (BeforeUpdateLanguageNameEvent $event) use ($eventUpdatedLanguage) {
+        $traceableEventDispatcher->addListener(BeforeUpdateLanguageNameEvent::class, function (BeforeUpdateLanguageNameEventInterface $event) use ($eventUpdatedLanguage) {
             $event->setUpdatedLanguage($eventUpdatedLanguage);
             $event->stopPropagation();
         }, 10);
@@ -325,7 +330,7 @@ class LanguageServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(LanguageServiceInterface::class);
         $innerServiceMock->method('disableLanguage')->willReturn($disabledLanguage);
 
-        $traceableEventDispatcher->addListener(BeforeDisableLanguageEvent::class, function (BeforeDisableLanguageEvent $event) use ($eventDisabledLanguage) {
+        $traceableEventDispatcher->addListener(BeforeDisableLanguageEvent::class, function (BeforeDisableLanguageEventInterface $event) use ($eventDisabledLanguage) {
             $event->setDisabledLanguage($eventDisabledLanguage);
         }, 10);
 
@@ -359,7 +364,7 @@ class LanguageServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(LanguageServiceInterface::class);
         $innerServiceMock->method('disableLanguage')->willReturn($disabledLanguage);
 
-        $traceableEventDispatcher->addListener(BeforeDisableLanguageEvent::class, function (BeforeDisableLanguageEvent $event) use ($eventDisabledLanguage) {
+        $traceableEventDispatcher->addListener(BeforeDisableLanguageEvent::class, function (BeforeDisableLanguageEventInterface $event) use ($eventDisabledLanguage) {
             $event->setDisabledLanguage($eventDisabledLanguage);
             $event->stopPropagation();
         }, 10);
@@ -424,7 +429,7 @@ class LanguageServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(LanguageServiceInterface::class);
         $innerServiceMock->method('enableLanguage')->willReturn($enabledLanguage);
 
-        $traceableEventDispatcher->addListener(BeforeEnableLanguageEvent::class, function (BeforeEnableLanguageEvent $event) use ($eventEnabledLanguage) {
+        $traceableEventDispatcher->addListener(BeforeEnableLanguageEvent::class, function (BeforeEnableLanguageEventInterface $event) use ($eventEnabledLanguage) {
             $event->setEnabledLanguage($eventEnabledLanguage);
         }, 10);
 
@@ -458,7 +463,7 @@ class LanguageServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(LanguageServiceInterface::class);
         $innerServiceMock->method('enableLanguage')->willReturn($enabledLanguage);
 
-        $traceableEventDispatcher->addListener(BeforeEnableLanguageEvent::class, function (BeforeEnableLanguageEvent $event) use ($eventEnabledLanguage) {
+        $traceableEventDispatcher->addListener(BeforeEnableLanguageEvent::class, function (BeforeEnableLanguageEventInterface $event) use ($eventEnabledLanguage) {
             $event->setEnabledLanguage($eventEnabledLanguage);
             $event->stopPropagation();
         }, 10);

@@ -6,6 +6,16 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
+use eZ\Publish\API\Repository\Events\User\BeforeAssignUserToUserGroupEvent as BeforeAssignUserToUserGroupEventInterface;
+use eZ\Publish\API\Repository\Events\User\BeforeCreateUserEvent as BeforeCreateUserEventInterface;
+use eZ\Publish\API\Repository\Events\User\BeforeCreateUserGroupEvent as BeforeCreateUserGroupEventInterface;
+use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserEvent as BeforeDeleteUserEventInterface;
+use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserGroupEvent as BeforeDeleteUserGroupEventInterface;
+use eZ\Publish\API\Repository\Events\User\BeforeMoveUserGroupEvent as BeforeMoveUserGroupEventInterface;
+use eZ\Publish\API\Repository\Events\User\BeforeUnAssignUserFromUserGroupEvent as BeforeUnAssignUserFromUserGroupEventInterface;
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserEvent as BeforeUpdateUserEventInterface;
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserGroupEvent as BeforeUpdateUserGroupEventInterface;
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserTokenEvent as BeforeUpdateUserTokenEventInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -84,7 +94,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('updateUserGroup')->willReturn($updatedUserGroup);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUserGroupEvent::class, function (BeforeUpdateUserGroupEvent $event) use ($eventUpdatedUserGroup) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUserGroupEvent::class, function (BeforeUpdateUserGroupEventInterface $event) use ($eventUpdatedUserGroup) {
             $event->setUpdatedUserGroup($eventUpdatedUserGroup);
         }, 10);
 
@@ -119,7 +129,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('updateUserGroup')->willReturn($updatedUserGroup);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUserGroupEvent::class, function (BeforeUpdateUserGroupEvent $event) use ($eventUpdatedUserGroup) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUserGroupEvent::class, function (BeforeUpdateUserGroupEventInterface $event) use ($eventUpdatedUserGroup) {
             $event->setUpdatedUserGroup($eventUpdatedUserGroup);
             $event->stopPropagation();
         }, 10);
@@ -186,7 +196,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('updateUser')->willReturn($updatedUser);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUserEvent::class, function (BeforeUpdateUserEvent $event) use ($eventUpdatedUser) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUserEvent::class, function (BeforeUpdateUserEventInterface $event) use ($eventUpdatedUser) {
             $event->setUpdatedUser($eventUpdatedUser);
         }, 10);
 
@@ -221,7 +231,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('updateUser')->willReturn($updatedUser);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUserEvent::class, function (BeforeUpdateUserEvent $event) use ($eventUpdatedUser) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUserEvent::class, function (BeforeUpdateUserEventInterface $event) use ($eventUpdatedUser) {
             $event->setUpdatedUser($eventUpdatedUser);
             $event->stopPropagation();
         }, 10);
@@ -282,7 +292,7 @@ class UserServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeUnAssignUserFromUserGroupEvent::class, function (BeforeUnAssignUserFromUserGroupEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeUnAssignUserFromUserGroupEvent::class, function (BeforeUnAssignUserFromUserGroupEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -345,7 +355,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('deleteUserGroup')->willReturn($locations);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteUserGroupEvent::class, function (BeforeDeleteUserGroupEvent $event) use ($eventLocations) {
+        $traceableEventDispatcher->addListener(BeforeDeleteUserGroupEvent::class, function (BeforeDeleteUserGroupEventInterface $event) use ($eventLocations) {
             $event->setLocations($eventLocations);
         }, 10);
 
@@ -379,7 +389,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('deleteUserGroup')->willReturn($locations);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteUserGroupEvent::class, function (BeforeDeleteUserGroupEvent $event) use ($eventLocations) {
+        $traceableEventDispatcher->addListener(BeforeDeleteUserGroupEvent::class, function (BeforeDeleteUserGroupEventInterface $event) use ($eventLocations) {
             $event->setLocations($eventLocations);
             $event->stopPropagation();
         }, 10);
@@ -440,7 +450,7 @@ class UserServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeAssignUserToUserGroupEvent::class, function (BeforeAssignUserToUserGroupEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeAssignUserToUserGroupEvent::class, function (BeforeAssignUserToUserGroupEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -503,7 +513,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('deleteUser')->willReturn($locations);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteUserEvent::class, function (BeforeDeleteUserEvent $event) use ($eventLocations) {
+        $traceableEventDispatcher->addListener(BeforeDeleteUserEvent::class, function (BeforeDeleteUserEventInterface $event) use ($eventLocations) {
             $event->setLocations($eventLocations);
         }, 10);
 
@@ -537,7 +547,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('deleteUser')->willReturn($locations);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteUserEvent::class, function (BeforeDeleteUserEvent $event) use ($eventLocations) {
+        $traceableEventDispatcher->addListener(BeforeDeleteUserEvent::class, function (BeforeDeleteUserEventInterface $event) use ($eventLocations) {
             $event->setLocations($eventLocations);
             $event->stopPropagation();
         }, 10);
@@ -598,7 +608,7 @@ class UserServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeMoveUserGroupEvent::class, function (BeforeMoveUserGroupEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeMoveUserGroupEvent::class, function (BeforeMoveUserGroupEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -663,7 +673,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('createUser')->willReturn($user);
 
-        $traceableEventDispatcher->addListener(BeforeCreateUserEvent::class, function (BeforeCreateUserEvent $event) use ($eventUser) {
+        $traceableEventDispatcher->addListener(BeforeCreateUserEvent::class, function (BeforeCreateUserEventInterface $event) use ($eventUser) {
             $event->setUser($eventUser);
         }, 10);
 
@@ -698,7 +708,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('createUser')->willReturn($user);
 
-        $traceableEventDispatcher->addListener(BeforeCreateUserEvent::class, function (BeforeCreateUserEvent $event) use ($eventUser) {
+        $traceableEventDispatcher->addListener(BeforeCreateUserEvent::class, function (BeforeCreateUserEventInterface $event) use ($eventUser) {
             $event->setUser($eventUser);
             $event->stopPropagation();
         }, 10);
@@ -765,7 +775,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('createUserGroup')->willReturn($userGroup);
 
-        $traceableEventDispatcher->addListener(BeforeCreateUserGroupEvent::class, function (BeforeCreateUserGroupEvent $event) use ($eventUserGroup) {
+        $traceableEventDispatcher->addListener(BeforeCreateUserGroupEvent::class, function (BeforeCreateUserGroupEventInterface $event) use ($eventUserGroup) {
             $event->setUserGroup($eventUserGroup);
         }, 10);
 
@@ -800,7 +810,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('createUserGroup')->willReturn($userGroup);
 
-        $traceableEventDispatcher->addListener(BeforeCreateUserGroupEvent::class, function (BeforeCreateUserGroupEvent $event) use ($eventUserGroup) {
+        $traceableEventDispatcher->addListener(BeforeCreateUserGroupEvent::class, function (BeforeCreateUserGroupEventInterface $event) use ($eventUserGroup) {
             $event->setUserGroup($eventUserGroup);
             $event->stopPropagation();
         }, 10);
@@ -867,7 +877,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('updateUserToken')->willReturn($updatedUser);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUserTokenEvent::class, function (BeforeUpdateUserTokenEvent $event) use ($eventUpdatedUser) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUserTokenEvent::class, function (BeforeUpdateUserTokenEventInterface $event) use ($eventUpdatedUser) {
             $event->setUpdatedUser($eventUpdatedUser);
         }, 10);
 
@@ -902,7 +912,7 @@ class UserServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(UserServiceInterface::class);
         $innerServiceMock->method('updateUserToken')->willReturn($updatedUser);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUserTokenEvent::class, function (BeforeUpdateUserTokenEvent $event) use ($eventUpdatedUser) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUserTokenEvent::class, function (BeforeUpdateUserTokenEventInterface $event) use ($eventUpdatedUser) {
             $event->setUpdatedUser($eventUpdatedUser);
             $event->stopPropagation();
         }, 10);

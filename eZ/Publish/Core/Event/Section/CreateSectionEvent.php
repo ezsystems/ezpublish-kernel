@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Section;
 
+use eZ\Publish\API\Repository\Events\Section\CreateSectionEvent as CreateSectionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class CreateSectionEvent extends AfterEvent
+final class CreateSectionEvent extends Event implements CreateSectionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct */
     private $sectionCreateStruct;

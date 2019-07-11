@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Content;
 
+use eZ\Publish\API\Repository\Events\Content\PublishVersionEvent as PublishVersionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class PublishVersionEvent extends AfterEvent
+final class PublishVersionEvent extends Event implements PublishVersionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;

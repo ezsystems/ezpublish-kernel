@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\URLWildcard;
 
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent as BeforeCreateEventInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeCreateEvent extends BeforeEvent
+final class BeforeCreateEvent extends Event implements BeforeCreateEventInterface
 {
     private $sourceUrl;
 

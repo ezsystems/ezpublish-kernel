@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Role;
 
+use eZ\Publish\API\Repository\Events\Role\DeleteRoleDraftEvent as DeleteRoleDraftEventInterface;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class DeleteRoleDraftEvent extends AfterEvent
+final class DeleteRoleDraftEvent extends Event implements DeleteRoleDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;

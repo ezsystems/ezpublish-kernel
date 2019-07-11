@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Content;
 
+use eZ\Publish\API\Repository\Events\Content\HideContentEvent as HideContentEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class HideContentEvent extends AfterEvent
+final class HideContentEvent extends Event implements HideContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

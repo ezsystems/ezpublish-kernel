@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Role;
 
+use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent as BeforeUpdatePolicyByRoleDraftEventInterface;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeUpdatePolicyByRoleDraftEvent extends BeforeEvent
+final class BeforeUpdatePolicyByRoleDraftEvent extends Event implements BeforeUpdatePolicyByRoleDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;

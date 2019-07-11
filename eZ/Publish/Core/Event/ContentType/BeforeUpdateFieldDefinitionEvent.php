@@ -8,12 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\ContentType;
 
+use eZ\Publish\API\Repository\Events\ContentType\BeforeUpdateFieldDefinitionEvent as BeforeUpdateFieldDefinitionEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class BeforeUpdateFieldDefinitionEvent extends BeforeEvent
+final class BeforeUpdateFieldDefinitionEvent extends Event implements BeforeUpdateFieldDefinitionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;

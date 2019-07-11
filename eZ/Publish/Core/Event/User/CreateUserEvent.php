@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\User;
 
+use eZ\Publish\API\Repository\Events\User\CreateUserEvent as CreateUserEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class CreateUserEvent extends AfterEvent
+final class CreateUserEvent extends Event implements CreateUserEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\UserCreateStruct */
     private $userCreateStruct;

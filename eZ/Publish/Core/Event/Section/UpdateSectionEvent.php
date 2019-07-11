@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Section;
 
+use eZ\Publish\API\Repository\Events\Section\UpdateSectionEvent as UpdateSectionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class UpdateSectionEvent extends AfterEvent
+final class UpdateSectionEvent extends Event implements UpdateSectionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;

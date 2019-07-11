@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\ObjectState;
 
+use eZ\Publish\API\Repository\Events\ObjectState\SetPriorityOfObjectStateEvent as SetPriorityOfObjectStateEventInterface;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class SetPriorityOfObjectStateEvent extends AfterEvent
+final class SetPriorityOfObjectStateEvent extends Event implements SetPriorityOfObjectStateEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
     private $objectState;

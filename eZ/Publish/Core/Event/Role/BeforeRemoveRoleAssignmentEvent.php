@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Role;
 
+use eZ\Publish\API\Repository\Events\Role\BeforeRemoveRoleAssignmentEvent as BeforeRemoveRoleAssignmentEventInterface;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class BeforeRemoveRoleAssignmentEvent extends BeforeEvent
+final class BeforeRemoveRoleAssignmentEvent extends Event implements BeforeRemoveRoleAssignmentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleAssignment */
     private $roleAssignment;

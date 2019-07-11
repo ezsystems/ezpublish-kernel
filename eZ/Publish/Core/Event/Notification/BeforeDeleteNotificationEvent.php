@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Notification;
 
+use eZ\Publish\API\Repository\Events\Notification\BeforeDeleteNotificationEvent as BeforeDeleteNotificationEventInterface;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class BeforeDeleteNotificationEvent extends BeforeEvent
+final class BeforeDeleteNotificationEvent extends Event implements BeforeDeleteNotificationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Notification\Notification */
     private $notification;

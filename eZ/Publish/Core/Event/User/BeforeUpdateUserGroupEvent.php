@@ -8,12 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\User;
 
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserGroupEvent as BeforeUpdateUserGroupEventInterface;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeUpdateUserGroupEvent extends BeforeEvent
+final class BeforeUpdateUserGroupEvent extends Event implements BeforeUpdateUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     private $userGroup;

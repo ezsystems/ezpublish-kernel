@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\ContentType;
 
+use eZ\Publish\API\Repository\Events\ContentType\RemoveContentTypeTranslationEvent as RemoveContentTypeTranslationEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class RemoveContentTypeTranslationEvent extends AfterEvent
+final class RemoveContentTypeTranslationEvent extends Event implements RemoveContentTypeTranslationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $newContentTypeDraft;

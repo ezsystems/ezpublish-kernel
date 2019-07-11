@@ -6,10 +6,11 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events\URLAlias;
 
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-abstract class BeforeEvent extends Event
+interface BeforeRemoveAliasesEvent extends BeforeEvent
 {
+    public function getAliasList(): array;
 }

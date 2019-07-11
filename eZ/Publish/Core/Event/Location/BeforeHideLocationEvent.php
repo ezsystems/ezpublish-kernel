@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Location;
 
+use eZ\Publish\API\Repository\Events\Location\BeforeHideLocationEvent as BeforeHideLocationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeHideLocationEvent extends BeforeEvent
+final class BeforeHideLocationEvent extends Event implements BeforeHideLocationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

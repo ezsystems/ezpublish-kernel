@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\ObjectState;
 
+use eZ\Publish\API\Repository\Events\ObjectState\DeleteObjectStateEvent as DeleteObjectStateEventInterface;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class DeleteObjectStateEvent extends AfterEvent
+final class DeleteObjectStateEvent extends Event implements DeleteObjectStateEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
     private $objectState;

@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Notification;
 
+use eZ\Publish\API\Repository\Events\Notification\CreateNotificationEvent as CreateNotificationEventInterface;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class CreateNotificationEvent extends AfterEvent
+final class CreateNotificationEvent extends Event implements CreateNotificationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Notification\Notification */
     private $notification;

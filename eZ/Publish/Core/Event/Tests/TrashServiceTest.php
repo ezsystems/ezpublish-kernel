@@ -6,6 +6,10 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
+use eZ\Publish\API\Repository\Events\Trash\BeforeDeleteTrashItemEvent as BeforeDeleteTrashItemEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\BeforeEmptyTrashEvent as BeforeEmptyTrashEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\BeforeRecoverEvent as BeforeRecoverEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\BeforeTrashEvent as BeforeTrashEventInterface;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
@@ -65,7 +69,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('emptyTrash')->willReturn($resultList);
 
-        $traceableEventDispatcher->addListener(BeforeEmptyTrashEvent::class, function (BeforeEmptyTrashEvent $event) use ($eventResultList) {
+        $traceableEventDispatcher->addListener(BeforeEmptyTrashEvent::class, function (BeforeEmptyTrashEventInterface $event) use ($eventResultList) {
             $event->setResultList($eventResultList);
         }, 10);
 
@@ -98,7 +102,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('emptyTrash')->willReturn($resultList);
 
-        $traceableEventDispatcher->addListener(BeforeEmptyTrashEvent::class, function (BeforeEmptyTrashEvent $event) use ($eventResultList) {
+        $traceableEventDispatcher->addListener(BeforeEmptyTrashEvent::class, function (BeforeEmptyTrashEventInterface $event) use ($eventResultList) {
             $event->setResultList($eventResultList);
             $event->stopPropagation();
         }, 10);
@@ -163,7 +167,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('trash')->willReturn($trashItem);
 
-        $traceableEventDispatcher->addListener(BeforeTrashEvent::class, function (BeforeTrashEvent $event) use ($eventTrashItem) {
+        $traceableEventDispatcher->addListener(BeforeTrashEvent::class, function (BeforeTrashEventInterface $event) use ($eventTrashItem) {
             $event->setResult($eventTrashItem);
         }, 10);
 
@@ -197,7 +201,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('trash')->willReturn($trashItem);
 
-        $traceableEventDispatcher->addListener(BeforeTrashEvent::class, function (BeforeTrashEvent $event) use ($eventTrashItem) {
+        $traceableEventDispatcher->addListener(BeforeTrashEvent::class, function (BeforeTrashEventInterface $event) use ($eventTrashItem) {
             $event->setResult($eventTrashItem);
             $event->stopPropagation();
         }, 10);
@@ -264,7 +268,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('recover')->willReturn($location);
 
-        $traceableEventDispatcher->addListener(BeforeRecoverEvent::class, function (BeforeRecoverEvent $event) use ($eventLocation) {
+        $traceableEventDispatcher->addListener(BeforeRecoverEvent::class, function (BeforeRecoverEventInterface $event) use ($eventLocation) {
             $event->setLocation($eventLocation);
         }, 10);
 
@@ -299,7 +303,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('recover')->willReturn($location);
 
-        $traceableEventDispatcher->addListener(BeforeRecoverEvent::class, function (BeforeRecoverEvent $event) use ($eventLocation) {
+        $traceableEventDispatcher->addListener(BeforeRecoverEvent::class, function (BeforeRecoverEventInterface $event) use ($eventLocation) {
             $event->setLocation($eventLocation);
             $event->stopPropagation();
         }, 10);
@@ -364,7 +368,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('deleteTrashItem')->willReturn($result);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteTrashItemEvent::class, function (BeforeDeleteTrashItemEvent $event) use ($eventResult) {
+        $traceableEventDispatcher->addListener(BeforeDeleteTrashItemEvent::class, function (BeforeDeleteTrashItemEventInterface $event) use ($eventResult) {
             $event->setResult($eventResult);
         }, 10);
 
@@ -398,7 +402,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('deleteTrashItem')->willReturn($result);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteTrashItemEvent::class, function (BeforeDeleteTrashItemEvent $event) use ($eventResult) {
+        $traceableEventDispatcher->addListener(BeforeDeleteTrashItemEvent::class, function (BeforeDeleteTrashItemEventInterface $event) use ($eventResult) {
             $event->setResult($eventResult);
             $event->stopPropagation();
         }, 10);

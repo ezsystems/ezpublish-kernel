@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\URLWildcard;
 
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent as BeforeRemoveEventInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class BeforeRemoveEvent extends BeforeEvent
+final class BeforeRemoveEvent extends Event implements BeforeRemoveEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcard */
     private $urlWildcard;

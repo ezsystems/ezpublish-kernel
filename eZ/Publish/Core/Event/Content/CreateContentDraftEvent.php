@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Content;
 
+use eZ\Publish\API\Repository\Events\Content\CreateContentDraftEvent as CreateContentDraftEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class CreateContentDraftEvent extends AfterEvent
+final class CreateContentDraftEvent extends Event implements CreateContentDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $contentDraft;

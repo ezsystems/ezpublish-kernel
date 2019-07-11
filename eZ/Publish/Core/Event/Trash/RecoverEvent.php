@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Trash;
 
+use eZ\Publish\API\Repository\Events\Trash\RecoverEvent as RecoverEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class RecoverEvent extends AfterEvent
+final class RecoverEvent extends Event implements RecoverEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\TrashItem */
     private $trashItem;

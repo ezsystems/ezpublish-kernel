@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\User;
 
+use eZ\Publish\API\Repository\Events\User\DeleteUserGroupEvent as DeleteUserGroupEventInterface;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class DeleteUserGroupEvent extends AfterEvent
+final class DeleteUserGroupEvent extends Event implements DeleteUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     private $userGroup;

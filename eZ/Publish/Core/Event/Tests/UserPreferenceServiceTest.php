@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
+use eZ\Publish\API\Repository\Events\UserPreference\BeforeSetUserPreferenceEvent as BeforeSetUserPreferenceEventInterface;
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
 use eZ\Publish\Core\Event\UserPreference\BeforeSetUserPreferenceEvent;
 use eZ\Publish\Core\Event\UserPreference\SetUserPreferenceEvent;
@@ -51,7 +52,7 @@ class UserPreferenceServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(UserPreferenceServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeSetUserPreferenceEvent::class, function (BeforeSetUserPreferenceEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeSetUserPreferenceEvent::class, function (BeforeSetUserPreferenceEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 

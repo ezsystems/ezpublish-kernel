@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\User;
 
+use eZ\Publish\API\Repository\Events\User\MoveUserGroupEvent as MoveUserGroupEventInterface;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class MoveUserGroupEvent extends AfterEvent
+final class MoveUserGroupEvent extends Event implements MoveUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     private $userGroup;

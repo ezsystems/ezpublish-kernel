@@ -7,6 +7,8 @@
 namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
+use eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent as BeforeCreateBookmarkEventInterface;
+use eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent as BeforeDeleteBookmarkEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Event\Bookmark\BeforeCreateBookmarkEvent;
 use eZ\Publish\Core\Event\Bookmark\BeforeDeleteBookmarkEvent;
@@ -54,7 +56,7 @@ class BookmarkServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(BookmarkServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeCreateBookmarkEvent::class, function (BeforeCreateBookmarkEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeCreateBookmarkEvent::class, function (BeforeCreateBookmarkEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -111,7 +113,7 @@ class BookmarkServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(BookmarkServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteBookmarkEvent::class, function (BeforeDeleteBookmarkEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteBookmarkEvent::class, function (BeforeDeleteBookmarkEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 

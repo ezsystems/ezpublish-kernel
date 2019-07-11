@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Content;
 
+use eZ\Publish\API\Repository\Events\Content\BeforeAddRelationEvent as BeforeAddRelationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeAddRelationEvent extends BeforeEvent
+final class BeforeAddRelationEvent extends Event implements BeforeAddRelationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $sourceVersion;

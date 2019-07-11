@@ -6,6 +6,9 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
+use eZ\Publish\API\Repository\Events\Notification\BeforeCreateNotificationEvent as BeforeCreateNotificationEventInterface;
+use eZ\Publish\API\Repository\Events\Notification\BeforeDeleteNotificationEvent as BeforeDeleteNotificationEventInterface;
+use eZ\Publish\API\Repository\Events\Notification\BeforeMarkNotificationAsReadEvent as BeforeMarkNotificationAsReadEventInterface;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
@@ -63,7 +66,7 @@ class NotificationServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(NotificationServiceInterface::class);
         $innerServiceMock->method('createNotification')->willReturn($notification);
 
-        $traceableEventDispatcher->addListener(BeforeCreateNotificationEvent::class, function (BeforeCreateNotificationEvent $event) use ($eventNotification) {
+        $traceableEventDispatcher->addListener(BeforeCreateNotificationEvent::class, function (BeforeCreateNotificationEventInterface $event) use ($eventNotification) {
             $event->setNotification($eventNotification);
         }, 10);
 
@@ -97,7 +100,7 @@ class NotificationServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(NotificationServiceInterface::class);
         $innerServiceMock->method('createNotification')->willReturn($notification);
 
-        $traceableEventDispatcher->addListener(BeforeCreateNotificationEvent::class, function (BeforeCreateNotificationEvent $event) use ($eventNotification) {
+        $traceableEventDispatcher->addListener(BeforeCreateNotificationEvent::class, function (BeforeCreateNotificationEventInterface $event) use ($eventNotification) {
             $event->setNotification($eventNotification);
             $event->stopPropagation();
         }, 10);
@@ -156,7 +159,7 @@ class NotificationServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(NotificationServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteNotificationEvent::class, function (BeforeDeleteNotificationEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteNotificationEvent::class, function (BeforeDeleteNotificationEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -213,7 +216,7 @@ class NotificationServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(NotificationServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeMarkNotificationAsReadEvent::class, function (BeforeMarkNotificationAsReadEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeMarkNotificationAsReadEvent::class, function (BeforeMarkNotificationAsReadEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 

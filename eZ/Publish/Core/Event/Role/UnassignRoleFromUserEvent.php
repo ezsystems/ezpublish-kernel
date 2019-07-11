@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Role;
 
+use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserEvent as UnassignRoleFromUserEventInterface;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class UnassignRoleFromUserEvent extends AfterEvent
+final class UnassignRoleFromUserEvent extends Event implements UnassignRoleFromUserEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;

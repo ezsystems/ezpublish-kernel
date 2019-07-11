@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Trash;
 
+use eZ\Publish\API\Repository\Events\Trash\EmptyTrashEvent as EmptyTrashEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class EmptyTrashEvent extends AfterEvent
+final class EmptyTrashEvent extends Event implements EmptyTrashEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList */
     private $resultList;

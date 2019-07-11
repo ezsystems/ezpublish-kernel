@@ -6,8 +6,8 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
-use eZ\Publish\Core\Event\AfterEvent;
-use eZ\Publish\Core\Event\BeforeEvent;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcher;

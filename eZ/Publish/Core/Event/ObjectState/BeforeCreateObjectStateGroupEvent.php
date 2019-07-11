@@ -8,12 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\ObjectState;
 
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateGroupEvent as BeforeCreateObjectStateGroupEventInterface;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeCreateObjectStateGroupEvent extends BeforeEvent
+final class BeforeCreateObjectStateGroupEvent extends Event implements BeforeCreateObjectStateGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct */
     private $objectStateGroupCreateStruct;

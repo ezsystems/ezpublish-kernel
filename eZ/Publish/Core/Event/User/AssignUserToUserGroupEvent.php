@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\User;
 
+use eZ\Publish\API\Repository\Events\User\AssignUserToUserGroupEvent as AssignUserToUserGroupEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\Core\Event\AfterEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class AssignUserToUserGroupEvent extends AfterEvent
+final class AssignUserToUserGroupEvent extends Event implements AssignUserToUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;

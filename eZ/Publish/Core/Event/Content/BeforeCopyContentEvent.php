@@ -8,14 +8,15 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\Content;
 
+use eZ\Publish\API\Repository\Events\Content\BeforeCopyContentEvent as BeforeCopyContentEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use UnexpectedValueException;
 
-final class BeforeCopyContentEvent extends BeforeEvent
+final class BeforeCopyContentEvent extends Event implements BeforeCopyContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
@@ -49,7 +50,7 @@ final class BeforeCopyContentEvent extends BeforeEvent
         return $this->destinationLocationCreateStruct;
     }
 
-    public function getVersionInfo(): VersionInfo
+    public function getVersionInfo(): ?VersionInfo
     {
         return $this->versionInfo;
     }

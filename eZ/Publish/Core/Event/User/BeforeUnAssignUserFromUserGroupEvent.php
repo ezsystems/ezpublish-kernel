@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event\User;
 
+use eZ\Publish\API\Repository\Events\User\BeforeUnAssignUserFromUserGroupEvent as BeforeUnAssignUserFromUserGroupEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\Core\Event\BeforeEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-final class BeforeUnAssignUserFromUserGroupEvent extends BeforeEvent
+final class BeforeUnAssignUserFromUserGroupEvent extends Event implements BeforeUnAssignUserFromUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
