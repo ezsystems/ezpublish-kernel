@@ -52,7 +52,7 @@ Base template used is `EzPublishCoreBundle:Security:login.html.twig` and stands 
 {% endblock %}
 ```
 
-The layout used by default is `%ezsettings.default.pagelayout%` but can be configured easily
+The layout used by default is `%ezsettings.default.page_layout%` but can be configured easily
 as well as the login template:
 
 *ezpublish.yml*

@@ -211,7 +211,7 @@ class CommonTest extends AbstractParserTestCase
         $this->load();
         $this->assertConfigResolverParameterValue(
             'security.base_layout',
-            '%ezsettings.default.pagelayout%',
+            '%ezsettings.default.page_layout%',
             'ezdemo_site'
         );
         $this->assertConfigResolverParameterValue(

@@ -35,6 +35,7 @@ parameters:
         parent_location_id: 51
 
     ezsettings.default.pagelayout: '%ezplatform.default_templates.pagelayout%'
+    ezsettings.default.page_layout: '%ezplatform.default_templates.pagelayout%'
 
     # List of content type identifiers to display as image when embedded
     ezplatform.content_view.image_embed_content_types_identifiers: ['image']
@@ -138,7 +139,7 @@ parameters:
 
     # Security settings
     ezsettings.default.security.login_template: "EzPublishCoreBundle:Security:login.html.twig"
-    ezsettings.default.security.base_layout: "%ezsettings.default.pagelayout%"
+    ezsettings.default.security.base_layout: "%ezsettings.default.page_layout%"
 
     # Image settings
     ezsettings.default.image.temporary_dir: imagetmp
