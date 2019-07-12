@@ -18,6 +18,12 @@ use LogicException;
  */
 class ExternalStorageRegistryPass implements CompilerPassInterface
 {
+    public const EXTERNAL_STORAGE_HANDLER_SERVICE_TAG = 'ezplatform.field_type.external_storage_handler';
+    public const EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG = 'ezplatform.field_type.external_storage_handler.gateway';
+
+    public const DEPRECATED_EXTERNAL_STORAGE_HANDLER_SERVICE_TAG = 'ezpublish.fieldType.externalStorageHandler';
+    public const DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG = 'ezpublish.fieldType.externalStorageHandler.gateway';
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
@@ -36,15 +42,50 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
         // Gateways for external storage handlers.
         // Alias attribute is the corresponding field type string.
         $externalStorageGateways = [];
+
+        $deprecatedExternalStorageHandlerGatewayTags = $container->findTaggedServiceIds(
+            self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
+        );
+
+        foreach ($deprecatedExternalStorageHandlerGatewayTags as $deprecatedExternalStorageHandlerGatewayTag) {
+            @trigger_error(
+                sprintf(
+                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
+                    self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG,
+                    self::EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
+                ),
+                E_USER_DEPRECATED
+            );
+        }
+
+        $externalStorageHandlerGatewayTags = array_merge(
+            $deprecatedExternalStorageHandlerGatewayTags,
+            $container->findTaggedServiceIds(
+                self::EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
+            )
+        );
+
         // Referencing the services by alias (field type string)
-        foreach ($container->findTaggedServiceIds('ezpublish.fieldType.externalStorageHandler.gateway') as $id => $attributes) {
+        foreach ($externalStorageHandlerGatewayTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
-                    throw new LogicException('ezpublish.fieldType.externalStorageHandler.gateway service tag needs an "alias" attribute to identify the field type. None given.');
+                    throw new LogicException(
+                        sprintf(
+                            '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                            self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG,
+                            self::EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
+                        )
+                    );
                 }
 
                 if (!isset($attribute['identifier'])) {
-                    throw new LogicException('ezpublish.fieldType.externalStorageHandler.gateway service tag needs an "identifier" attribute to identify the gateway. None given.');
+                    throw new LogicException(
+                        sprintf(
+                            '%s or %s service tag needs an "identifier" attribute to identify the gateway. None given.',
+                            self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG,
+                            self::EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
+                        )
+                    );
                 }
 
                 $externalStorageGateways[$attribute['alias']] = [
@@ -54,12 +95,40 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
             }
         }
 
+        $deprecatedExternalStorageHandlerTags = $container->findTaggedServiceIds(
+            self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_SERVICE_TAG
+        );
+
+        foreach ($deprecatedExternalStorageHandlerTags as $deprecatedExternalStorageHandlerTag) {
+            @trigger_error(
+                sprintf(
+                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
+                    self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_SERVICE_TAG,
+                    self::EXTERNAL_STORAGE_HANDLER_SERVICE_TAG
+                ),
+                E_USER_DEPRECATED
+            );
+        }
+
+        $externalStorageHandlerTags = array_merge(
+            $deprecatedExternalStorageHandlerTags,
+            $container->findTaggedServiceIds(
+                self::EXTERNAL_STORAGE_HANDLER_SERVICE_TAG
+            )
+        );
+
         // External storage handlers for field types that need them.
         // Alias attribute is the field type string.
-        foreach ($container->findTaggedServiceIds('ezpublish.fieldType.externalStorageHandler') as $id => $attributes) {
+        foreach ($externalStorageHandlerTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
-                    throw new LogicException('ezpublish.fieldType.externalStorageHandler service tag needs an "alias" attribute to identify the field type. None given.');
+                    throw new LogicException(
+                        sprintf(
+                            '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                            self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_SERVICE_TAG,
+                            self::EXTERNAL_STORAGE_HANDLER_SERVICE_TAG
+                        )
+                    );
                 }
 
                 // If the storage handler is gateway based, then we need to add a corresponding gateway to it.
@@ -79,7 +148,7 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                     if (!isset($externalStorageGateways[$attribute['alias']])) {
                         throw new LogicException(
                             "External storage handler '$id' for field type {$attribute['alias']} needs a storage gateway but none was given.
-                        Consider defining a storage gateway as a service for this field type and add the 'ezpublish.fieldType.externalStorageHandler.gateway tag'"
+                            Consider defining a storage gateway as a service for this field type and add the 'ezplatform.field_type.external_storage_handler.gateway tag'"
                         );
                     }
 
