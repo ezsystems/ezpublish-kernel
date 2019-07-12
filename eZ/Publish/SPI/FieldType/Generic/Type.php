@@ -236,7 +236,7 @@ abstract class Type extends FieldType
 
     public function isEmptyValue(Value $value): bool
     {
-        return $value === null || $value == $this->getEmptyValue();
+        return $value == $this->getEmptyValue();
     }
 
     final public function acceptValue($inputValue): Value
