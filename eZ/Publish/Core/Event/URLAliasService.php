@@ -8,6 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateGlobalUrlAliasEvent as BeforeCreateGlobalUrlAliasEventInterface;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateUrlAliasEvent as BeforeCreateUrlAliasEventInterface;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeRefreshSystemUrlAliasesForLocationEvent as BeforeRefreshSystemUrlAliasesForLocationEventInterface;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeRemoveAliasesEvent as BeforeRemoveAliasesEventInterface;
+use eZ\Publish\API\Repository\Events\URLAlias\CreateGlobalUrlAliasEvent as CreateGlobalUrlAliasEventInterface;
+use eZ\Publish\API\Repository\Events\URLAlias\CreateUrlAliasEvent as CreateUrlAliasEventInterface;
+use eZ\Publish\API\Repository\Events\URLAlias\RefreshSystemUrlAliasesForLocationEvent as RefreshSystemUrlAliasesForLocationEventInterface;
+use eZ\Publish\API\Repository\Events\URLAlias\RemoveAliasesEvent as RemoveAliasesEventInterface;
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Event\URLAlias\BeforeCreateGlobalUrlAliasEvent;
@@ -51,7 +59,9 @@ class URLAliasService extends URLAliasServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateUrlAliasEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateUrlAliasEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUrlAlias();
         }
 
@@ -59,7 +69,10 @@ class URLAliasService extends URLAliasServiceDecorator
             ? $beforeEvent->getUrlAlias()
             : $this->innerService->createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
 
-        $this->eventDispatcher->dispatch(new CreateUrlAliasEvent($urlAlias, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new CreateUrlAliasEvent($urlAlias, ...$eventData),
+            CreateUrlAliasEventInterface::class
+        );
 
         return $urlAlias;
     }
@@ -80,7 +93,9 @@ class URLAliasService extends URLAliasServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateGlobalUrlAliasEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateGlobalUrlAliasEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUrlAlias();
         }
 
@@ -88,7 +103,10 @@ class URLAliasService extends URLAliasServiceDecorator
             ? $beforeEvent->getUrlAlias()
             : $this->innerService->createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
 
-        $this->eventDispatcher->dispatch(new CreateGlobalUrlAliasEvent($urlAlias, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new CreateGlobalUrlAliasEvent($urlAlias, ...$eventData),
+            CreateGlobalUrlAliasEventInterface::class
+        );
 
         return $urlAlias;
     }
@@ -98,13 +116,18 @@ class URLAliasService extends URLAliasServiceDecorator
         $eventData = [$aliasList];
 
         $beforeEvent = new BeforeRemoveAliasesEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeRemoveAliasesEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->removeAliases($aliasList);
 
-        $this->eventDispatcher->dispatch(new RemoveAliasesEvent(...$eventData));
+        $this->eventDispatcher->dispatch(
+            new RemoveAliasesEvent(...$eventData),
+            RemoveAliasesEventInterface::class
+        );
     }
 
     public function refreshSystemUrlAliasesForLocation(Location $location): void
@@ -112,12 +135,17 @@ class URLAliasService extends URLAliasServiceDecorator
         $eventData = [$location];
 
         $beforeEvent = new BeforeRefreshSystemUrlAliasesForLocationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeRefreshSystemUrlAliasesForLocationEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->refreshSystemUrlAliasesForLocation($location);
 
-        $this->eventDispatcher->dispatch(new RefreshSystemUrlAliasesForLocationEvent(...$eventData));
+        $this->eventDispatcher->dispatch(
+            new RefreshSystemUrlAliasesForLocationEvent(...$eventData),
+            RefreshSystemUrlAliasesForLocationEventInterface::class
+        );
     }
 }

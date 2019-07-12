@@ -2,11 +2,6 @@
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Values\User\UserReference;
-use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
@@ -15,6 +10,8 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
@@ -24,6 +21,9 @@ use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserReference;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 final class Repository implements RepositoryInterface
 {

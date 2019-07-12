@@ -6,27 +6,22 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
+use eZ\Publish\API\Repository\Events\Section\AssignSectionEvent as AssignSectionEventInterface;
+use eZ\Publish\API\Repository\Events\Section\AssignSectionToSubtreeEvent as AssignSectionToSubtreeEventInterface;
 use eZ\Publish\API\Repository\Events\Section\BeforeAssignSectionEvent as BeforeAssignSectionEventInterface;
 use eZ\Publish\API\Repository\Events\Section\BeforeAssignSectionToSubtreeEvent as BeforeAssignSectionToSubtreeEventInterface;
 use eZ\Publish\API\Repository\Events\Section\BeforeCreateSectionEvent as BeforeCreateSectionEventInterface;
 use eZ\Publish\API\Repository\Events\Section\BeforeDeleteSectionEvent as BeforeDeleteSectionEventInterface;
 use eZ\Publish\API\Repository\Events\Section\BeforeUpdateSectionEvent as BeforeUpdateSectionEventInterface;
+use eZ\Publish\API\Repository\Events\Section\CreateSectionEvent as CreateSectionEventInterface;
+use eZ\Publish\API\Repository\Events\Section\DeleteSectionEvent as DeleteSectionEventInterface;
+use eZ\Publish\API\Repository\Events\Section\UpdateSectionEvent as UpdateSectionEventInterface;
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use eZ\Publish\Core\Event\Section\AssignSectionEvent;
-use eZ\Publish\Core\Event\Section\AssignSectionToSubtreeEvent;
-use eZ\Publish\Core\Event\Section\BeforeAssignSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeAssignSectionToSubtreeEvent;
-use eZ\Publish\Core\Event\Section\BeforeCreateSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeDeleteSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeUpdateSectionEvent;
-use eZ\Publish\Core\Event\Section\CreateSectionEvent;
-use eZ\Publish\Core\Event\Section\DeleteSectionEvent;
-use eZ\Publish\Core\Event\Section\UpdateSectionEvent;
 use eZ\Publish\Core\Event\SectionService;
 
 class SectionServiceTest extends AbstractServiceTest
@@ -34,8 +29,8 @@ class SectionServiceTest extends AbstractServiceTest
     public function testAssignSectionEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAssignSectionEvent::class,
-            AssignSectionEvent::class
+            BeforeAssignSectionEventInterface::class,
+            AssignSectionEventInterface::class
         );
 
         $parameters = [
@@ -51,8 +46,8 @@ class SectionServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeAssignSectionEvent::class, 0],
-            [AssignSectionEvent::class, 0],
+            [BeforeAssignSectionEventInterface::class, 0],
+            [AssignSectionEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -60,8 +55,8 @@ class SectionServiceTest extends AbstractServiceTest
     public function testAssignSectionStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAssignSectionEvent::class,
-            AssignSectionEvent::class
+            BeforeAssignSectionEventInterface::class,
+            AssignSectionEventInterface::class
         );
 
         $parameters = [
@@ -71,7 +66,7 @@ class SectionServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(SectionServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeAssignSectionEvent::class, function (BeforeAssignSectionEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeAssignSectionEventInterface::class, function (BeforeAssignSectionEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -82,19 +77,19 @@ class SectionServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeAssignSectionEvent::class, 10],
+            [BeforeAssignSectionEventInterface::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [AssignSectionEvent::class, 0],
-            [BeforeAssignSectionEvent::class, 0],
+            [AssignSectionEventInterface::class, 0],
+            [BeforeAssignSectionEventInterface::class, 0],
         ]);
     }
 
     public function testUpdateSectionEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateSectionEvent::class,
-            UpdateSectionEvent::class
+            BeforeUpdateSectionEventInterface::class,
+            UpdateSectionEventInterface::class
         );
 
         $parameters = [
@@ -113,8 +108,8 @@ class SectionServiceTest extends AbstractServiceTest
 
         $this->assertSame($updatedSection, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateSectionEvent::class, 0],
-            [UpdateSectionEvent::class, 0],
+            [BeforeUpdateSectionEventInterface::class, 0],
+            [UpdateSectionEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -122,8 +117,8 @@ class SectionServiceTest extends AbstractServiceTest
     public function testReturnUpdateSectionResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateSectionEvent::class,
-            UpdateSectionEvent::class
+            BeforeUpdateSectionEventInterface::class,
+            UpdateSectionEventInterface::class
         );
 
         $parameters = [
@@ -136,7 +131,7 @@ class SectionServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(SectionServiceInterface::class);
         $innerServiceMock->method('updateSection')->willReturn($updatedSection);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateSectionEvent::class, function (BeforeUpdateSectionEventInterface $event) use ($eventUpdatedSection) {
+        $traceableEventDispatcher->addListener(BeforeUpdateSectionEventInterface::class, function (BeforeUpdateSectionEventInterface $event) use ($eventUpdatedSection) {
             $event->setUpdatedSection($eventUpdatedSection);
         }, 10);
 
@@ -147,9 +142,9 @@ class SectionServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventUpdatedSection, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateSectionEvent::class, 10],
-            [BeforeUpdateSectionEvent::class, 0],
-            [UpdateSectionEvent::class, 0],
+            [BeforeUpdateSectionEventInterface::class, 10],
+            [BeforeUpdateSectionEventInterface::class, 0],
+            [UpdateSectionEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -157,8 +152,8 @@ class SectionServiceTest extends AbstractServiceTest
     public function testUpdateSectionStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateSectionEvent::class,
-            UpdateSectionEvent::class
+            BeforeUpdateSectionEventInterface::class,
+            UpdateSectionEventInterface::class
         );
 
         $parameters = [
@@ -171,7 +166,7 @@ class SectionServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(SectionServiceInterface::class);
         $innerServiceMock->method('updateSection')->willReturn($updatedSection);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateSectionEvent::class, function (BeforeUpdateSectionEventInterface $event) use ($eventUpdatedSection) {
+        $traceableEventDispatcher->addListener(BeforeUpdateSectionEventInterface::class, function (BeforeUpdateSectionEventInterface $event) use ($eventUpdatedSection) {
             $event->setUpdatedSection($eventUpdatedSection);
             $event->stopPropagation();
         }, 10);
@@ -184,19 +179,19 @@ class SectionServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventUpdatedSection, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateSectionEvent::class, 10],
+            [BeforeUpdateSectionEventInterface::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeUpdateSectionEvent::class, 0],
-            [UpdateSectionEvent::class, 0],
+            [BeforeUpdateSectionEventInterface::class, 0],
+            [UpdateSectionEventInterface::class, 0],
         ]);
     }
 
     public function testAssignSectionToSubtreeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAssignSectionToSubtreeEvent::class,
-            AssignSectionToSubtreeEvent::class
+            BeforeAssignSectionToSubtreeEventInterface::class,
+            AssignSectionToSubtreeEventInterface::class
         );
 
         $parameters = [
@@ -212,8 +207,8 @@ class SectionServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeAssignSectionToSubtreeEvent::class, 0],
-            [AssignSectionToSubtreeEvent::class, 0],
+            [BeforeAssignSectionToSubtreeEventInterface::class, 0],
+            [AssignSectionToSubtreeEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -221,8 +216,8 @@ class SectionServiceTest extends AbstractServiceTest
     public function testAssignSectionToSubtreeStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAssignSectionToSubtreeEvent::class,
-            AssignSectionToSubtreeEvent::class
+            BeforeAssignSectionToSubtreeEventInterface::class,
+            AssignSectionToSubtreeEventInterface::class
         );
 
         $parameters = [
@@ -232,7 +227,7 @@ class SectionServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(SectionServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeAssignSectionToSubtreeEvent::class, function (BeforeAssignSectionToSubtreeEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeAssignSectionToSubtreeEventInterface::class, function (BeforeAssignSectionToSubtreeEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -243,19 +238,19 @@ class SectionServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeAssignSectionToSubtreeEvent::class, 10],
+            [BeforeAssignSectionToSubtreeEventInterface::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [AssignSectionToSubtreeEvent::class, 0],
-            [BeforeAssignSectionToSubtreeEvent::class, 0],
+            [AssignSectionToSubtreeEventInterface::class, 0],
+            [BeforeAssignSectionToSubtreeEventInterface::class, 0],
         ]);
     }
 
     public function testDeleteSectionEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteSectionEvent::class,
-            DeleteSectionEvent::class
+            BeforeDeleteSectionEventInterface::class,
+            DeleteSectionEventInterface::class
         );
 
         $parameters = [
@@ -270,8 +265,8 @@ class SectionServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteSectionEvent::class, 0],
-            [DeleteSectionEvent::class, 0],
+            [BeforeDeleteSectionEventInterface::class, 0],
+            [DeleteSectionEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -279,8 +274,8 @@ class SectionServiceTest extends AbstractServiceTest
     public function testDeleteSectionStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteSectionEvent::class,
-            DeleteSectionEvent::class
+            BeforeDeleteSectionEventInterface::class,
+            DeleteSectionEventInterface::class
         );
 
         $parameters = [
@@ -289,7 +284,7 @@ class SectionServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(SectionServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteSectionEvent::class, function (BeforeDeleteSectionEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteSectionEventInterface::class, function (BeforeDeleteSectionEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -300,19 +295,19 @@ class SectionServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteSectionEvent::class, 10],
+            [BeforeDeleteSectionEventInterface::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeDeleteSectionEvent::class, 0],
-            [DeleteSectionEvent::class, 0],
+            [BeforeDeleteSectionEventInterface::class, 0],
+            [DeleteSectionEventInterface::class, 0],
         ]);
     }
 
     public function testCreateSectionEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateSectionEvent::class,
-            CreateSectionEvent::class
+            BeforeCreateSectionEventInterface::class,
+            CreateSectionEventInterface::class
         );
 
         $parameters = [
@@ -330,8 +325,8 @@ class SectionServiceTest extends AbstractServiceTest
 
         $this->assertSame($section, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateSectionEvent::class, 0],
-            [CreateSectionEvent::class, 0],
+            [BeforeCreateSectionEventInterface::class, 0],
+            [CreateSectionEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -339,8 +334,8 @@ class SectionServiceTest extends AbstractServiceTest
     public function testReturnCreateSectionResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateSectionEvent::class,
-            CreateSectionEvent::class
+            BeforeCreateSectionEventInterface::class,
+            CreateSectionEventInterface::class
         );
 
         $parameters = [
@@ -352,7 +347,7 @@ class SectionServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(SectionServiceInterface::class);
         $innerServiceMock->method('createSection')->willReturn($section);
 
-        $traceableEventDispatcher->addListener(BeforeCreateSectionEvent::class, function (BeforeCreateSectionEventInterface $event) use ($eventSection) {
+        $traceableEventDispatcher->addListener(BeforeCreateSectionEventInterface::class, function (BeforeCreateSectionEventInterface $event) use ($eventSection) {
             $event->setSection($eventSection);
         }, 10);
 
@@ -363,9 +358,9 @@ class SectionServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventSection, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateSectionEvent::class, 10],
-            [BeforeCreateSectionEvent::class, 0],
-            [CreateSectionEvent::class, 0],
+            [BeforeCreateSectionEventInterface::class, 10],
+            [BeforeCreateSectionEventInterface::class, 0],
+            [CreateSectionEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -373,8 +368,8 @@ class SectionServiceTest extends AbstractServiceTest
     public function testCreateSectionStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateSectionEvent::class,
-            CreateSectionEvent::class
+            BeforeCreateSectionEventInterface::class,
+            CreateSectionEventInterface::class
         );
 
         $parameters = [
@@ -386,7 +381,7 @@ class SectionServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(SectionServiceInterface::class);
         $innerServiceMock->method('createSection')->willReturn($section);
 
-        $traceableEventDispatcher->addListener(BeforeCreateSectionEvent::class, function (BeforeCreateSectionEventInterface $event) use ($eventSection) {
+        $traceableEventDispatcher->addListener(BeforeCreateSectionEventInterface::class, function (BeforeCreateSectionEventInterface $event) use ($eventSection) {
             $event->setSection($eventSection);
             $event->stopPropagation();
         }, 10);
@@ -399,11 +394,11 @@ class SectionServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventSection, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateSectionEvent::class, 10],
+            [BeforeCreateSectionEventInterface::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeCreateSectionEvent::class, 0],
-            [CreateSectionEvent::class, 0],
+            [BeforeCreateSectionEventInterface::class, 0],
+            [CreateSectionEventInterface::class, 0],
         ]);
     }
 }

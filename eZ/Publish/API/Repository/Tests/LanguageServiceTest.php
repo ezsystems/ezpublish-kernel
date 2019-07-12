@@ -264,13 +264,13 @@ class LanguageServiceTest extends BaseTest
     public function testUpdateLanguageNameThrowsInvalidArgumentException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'newName\' is invalid: \'1\' is wrong value');
+        $this->expectExceptionMessage('Argument \'newName\' is invalid: \'\' is wrong value');
 
         $repository = $this->getRepository();
         $languageService = $repository->getContentLanguageService();
 
         $language = $languageService->loadLanguage('eng-GB');
-        $languageService->updateLanguageName($language, 1);
+        $languageService->updateLanguageName($language, '');
     }
 
     /**

@@ -8,6 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent as BeforeCreateEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent as BeforeRemoveEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeTranslateEvent as BeforeTranslateEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\CreateEvent as CreateEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\RemoveEvent as RemoveEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\TranslateEvent as TranslateEventInterface;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\Core\Event\URLWildcard\BeforeCreateEvent;
@@ -45,7 +51,9 @@ class URLWildcardService extends URLWildcardServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUrlWildcard();
         }
 
@@ -53,7 +61,10 @@ class URLWildcardService extends URLWildcardServiceDecorator
             ? $beforeEvent->getUrlWildcard()
             : $this->innerService->create($sourceUrl, $destinationUrl, $forward);
 
-        $this->eventDispatcher->dispatch(new CreateEvent($urlWildcard, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new CreateEvent($urlWildcard, ...$eventData),
+            CreateEventInterface::class
+        );
 
         return $urlWildcard;
     }
@@ -63,13 +74,18 @@ class URLWildcardService extends URLWildcardServiceDecorator
         $eventData = [$urlWildcard];
 
         $beforeEvent = new BeforeRemoveEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeRemoveEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->remove($urlWildcard);
 
-        $this->eventDispatcher->dispatch(new RemoveEvent(...$eventData));
+        $this->eventDispatcher->dispatch(
+            new RemoveEvent(...$eventData),
+            RemoveEventInterface::class
+        );
     }
 
     public function translate($url)
@@ -77,7 +93,9 @@ class URLWildcardService extends URLWildcardServiceDecorator
         $eventData = [$url];
 
         $beforeEvent = new BeforeTranslateEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeTranslateEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getResult();
         }
 
@@ -85,7 +103,10 @@ class URLWildcardService extends URLWildcardServiceDecorator
             ? $beforeEvent->getResult()
             : $this->innerService->translate($url);
 
-        $this->eventDispatcher->dispatch(new TranslateEvent($result, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new TranslateEvent($result, ...$eventData),
+            TranslateEventInterface::class
+        );
 
         return $result;
     }
