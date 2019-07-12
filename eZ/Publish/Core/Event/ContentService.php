@@ -9,6 +9,32 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
+use eZ\Publish\API\Repository\Events\Content\AddRelationEvent as AddRelationEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeAddRelationEvent as BeforeAddRelationEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeCopyContentEvent as BeforeCopyContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeCreateContentDraftEvent as BeforeCreateContentDraftEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeCreateContentEvent as BeforeCreateContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeDeleteContentEvent as BeforeDeleteContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeDeleteRelationEvent as BeforeDeleteRelationEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeDeleteTranslationEvent as BeforeDeleteTranslationEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeDeleteVersionEvent as BeforeDeleteVersionEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeHideContentEvent as BeforeHideContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforePublishVersionEvent as BeforePublishVersionEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeRevealContentEvent as BeforeRevealContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentEvent as BeforeUpdateContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentMetadataEvent as BeforeUpdateContentMetadataEventInterface;
+use eZ\Publish\API\Repository\Events\Content\CopyContentEvent as CopyContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\CreateContentDraftEvent as CreateContentDraftEventInterface;
+use eZ\Publish\API\Repository\Events\Content\CreateContentEvent as CreateContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\DeleteContentEvent as DeleteContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\DeleteRelationEvent as DeleteRelationEventInterface;
+use eZ\Publish\API\Repository\Events\Content\DeleteTranslationEvent as DeleteTranslationEventInterface;
+use eZ\Publish\API\Repository\Events\Content\DeleteVersionEvent as DeleteVersionEventInterface;
+use eZ\Publish\API\Repository\Events\Content\HideContentEvent as HideContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\PublishVersionEvent as PublishVersionEventInterface;
+use eZ\Publish\API\Repository\Events\Content\RevealContentEvent as RevealContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\UpdateContentEvent as UpdateContentEventInterface;
+use eZ\Publish\API\Repository\Events\Content\UpdateContentMetadataEvent as UpdateContentMetadataEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -72,7 +98,9 @@ class ContentService extends ContentServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateContentEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateContentEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContent();
         }
 
@@ -80,7 +108,10 @@ class ContentService extends ContentServiceDecorator
             ? $beforeEvent->getContent()
             : $this->innerService->createContent($contentCreateStruct, $locationCreateStructs);
 
-        $this->eventDispatcher->dispatch(new CreateContentEvent($content, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new CreateContentEvent($content, ...$eventData),
+            CreateContentEventInterface::class
+        );
 
         return $content;
     }
@@ -95,7 +126,9 @@ class ContentService extends ContentServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateContentMetadataEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateContentMetadataEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContent();
         }
 
@@ -103,7 +136,10 @@ class ContentService extends ContentServiceDecorator
             ? $beforeEvent->getContent()
             : $this->innerService->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
 
-        $this->eventDispatcher->dispatch(new UpdateContentMetadataEvent($content, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new UpdateContentMetadataEvent($content, ...$eventData),
+            UpdateContentMetadataEventInterface::class
+        );
 
         return $content;
     }
@@ -113,7 +149,9 @@ class ContentService extends ContentServiceDecorator
         $eventData = [$contentInfo];
 
         $beforeEvent = new BeforeDeleteContentEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteContentEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getLocations();
         }
 
@@ -121,7 +159,10 @@ class ContentService extends ContentServiceDecorator
             ? $beforeEvent->getLocations()
             : $this->innerService->deleteContent($contentInfo);
 
-        $this->eventDispatcher->dispatch(new DeleteContentEvent($locations, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new DeleteContentEvent($locations, ...$eventData),
+            DeleteContentEventInterface::class
+        );
 
         return $locations;
     }
@@ -138,7 +179,9 @@ class ContentService extends ContentServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateContentDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateContentDraftEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContentDraft();
         }
 
@@ -146,7 +189,10 @@ class ContentService extends ContentServiceDecorator
             ? $beforeEvent->getContentDraft()
             : $this->innerService->createContentDraft($contentInfo, $versionInfo, $creator);
 
-        $this->eventDispatcher->dispatch(new CreateContentDraftEvent($contentDraft, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new CreateContentDraftEvent($contentDraft, ...$eventData),
+            CreateContentDraftEventInterface::class
+        );
 
         return $contentDraft;
     }
@@ -161,7 +207,9 @@ class ContentService extends ContentServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateContentEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateContentEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContent();
         }
 
@@ -169,7 +217,10 @@ class ContentService extends ContentServiceDecorator
             ? $beforeEvent->getContent()
             : $this->innerService->updateContent($versionInfo, $contentUpdateStruct);
 
-        $this->eventDispatcher->dispatch(new UpdateContentEvent($content, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new UpdateContentEvent($content, ...$eventData),
+            UpdateContentEventInterface::class
+        );
 
         return $content;
     }
@@ -182,7 +233,9 @@ class ContentService extends ContentServiceDecorator
         ];
 
         $beforeEvent = new BeforePublishVersionEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforePublishVersionEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContent();
         }
 
@@ -190,7 +243,10 @@ class ContentService extends ContentServiceDecorator
             ? $beforeEvent->getContent()
             : $this->innerService->publishVersion($versionInfo, $translations);
 
-        $this->eventDispatcher->dispatch(new PublishVersionEvent($content, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new PublishVersionEvent($content, ...$eventData),
+            PublishVersionEventInterface::class
+        );
 
         return $content;
     }
@@ -200,13 +256,18 @@ class ContentService extends ContentServiceDecorator
         $eventData = [$versionInfo];
 
         $beforeEvent = new BeforeDeleteVersionEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteVersionEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->deleteVersion($versionInfo);
 
-        $this->eventDispatcher->dispatch(new DeleteVersionEvent(...$eventData));
+        $this->eventDispatcher->dispatch(
+            new DeleteVersionEvent(...$eventData),
+            DeleteVersionEventInterface::class
+        );
     }
 
     public function copyContent(
@@ -221,7 +282,9 @@ class ContentService extends ContentServiceDecorator
         ];
 
         $beforeEvent = new BeforeCopyContentEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeCopyContentEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContent();
         }
 
@@ -229,7 +292,10 @@ class ContentService extends ContentServiceDecorator
             ? $beforeEvent->getContent()
             : $this->innerService->copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo);
 
-        $this->eventDispatcher->dispatch(new CopyContentEvent($content, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new CopyContentEvent($content, ...$eventData),
+            CopyContentEventInterface::class
+        );
 
         return $content;
     }
@@ -244,7 +310,9 @@ class ContentService extends ContentServiceDecorator
         ];
 
         $beforeEvent = new BeforeAddRelationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeAddRelationEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getRelation();
         }
 
@@ -252,7 +320,10 @@ class ContentService extends ContentServiceDecorator
             ? $beforeEvent->getRelation()
             : $this->innerService->addRelation($sourceVersion, $destinationContent);
 
-        $this->eventDispatcher->dispatch(new AddRelationEvent($relation, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new AddRelationEvent($relation, ...$eventData),
+            AddRelationEventInterface::class
+        );
 
         return $relation;
     }
@@ -267,13 +338,18 @@ class ContentService extends ContentServiceDecorator
         ];
 
         $beforeEvent = new BeforeDeleteRelationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteRelationEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->deleteRelation($sourceVersion, $destinationContent);
 
-        $this->eventDispatcher->dispatch(new DeleteRelationEvent(...$eventData));
+        $this->eventDispatcher->dispatch(
+            new DeleteRelationEvent(...$eventData),
+            DeleteRelationEventInterface::class
+        );
     }
 
     public function deleteTranslation(
@@ -286,13 +362,18 @@ class ContentService extends ContentServiceDecorator
         ];
 
         $beforeEvent = new BeforeDeleteTranslationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteTranslationEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->deleteTranslation($contentInfo, $languageCode);
 
-        $this->eventDispatcher->dispatch(new DeleteTranslationEvent(...$eventData));
+        $this->eventDispatcher->dispatch(
+            new DeleteTranslationEvent(...$eventData),
+            DeleteTranslationEventInterface::class
+        );
     }
 
     public function hideContent(ContentInfo $contentInfo): void
@@ -300,13 +381,18 @@ class ContentService extends ContentServiceDecorator
         $eventData = [$contentInfo];
 
         $beforeEvent = new BeforeHideContentEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeHideContentEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->hideContent($contentInfo);
 
-        $this->eventDispatcher->dispatch(new HideContentEvent(...$eventData));
+        $this->eventDispatcher->dispatch(
+            new HideContentEvent(...$eventData),
+            HideContentEventInterface::class
+        );
     }
 
     public function revealContent(ContentInfo $contentInfo): void
@@ -314,12 +400,17 @@ class ContentService extends ContentServiceDecorator
         $eventData = [$contentInfo];
 
         $beforeEvent = new BeforeRevealContentEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeRevealContentEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->revealContent($contentInfo);
 
-        $this->eventDispatcher->dispatch(new RevealContentEvent(...$eventData));
+        $this->eventDispatcher->dispatch(
+            new RevealContentEvent(...$eventData),
+            RevealContentEventInterface::class
+        );
     }
 }

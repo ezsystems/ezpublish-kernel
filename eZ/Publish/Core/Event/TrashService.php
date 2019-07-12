@@ -8,6 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
+use eZ\Publish\API\Repository\Events\Trash\BeforeDeleteTrashItemEvent as BeforeDeleteTrashItemEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\BeforeEmptyTrashEvent as BeforeEmptyTrashEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\BeforeRecoverEvent as BeforeRecoverEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\BeforeTrashEvent as BeforeTrashEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\DeleteTrashItemEvent as DeleteTrashItemEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\EmptyTrashEvent as EmptyTrashEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\RecoverEvent as RecoverEventInterface;
+use eZ\Publish\API\Repository\Events\Trash\TrashEvent as TrashEventInterface;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
@@ -41,7 +49,9 @@ class TrashService extends TrashServiceDecorator
         $eventData = [$location];
 
         $beforeEvent = new BeforeTrashEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeTrashEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getResult();
         }
 
@@ -49,7 +59,10 @@ class TrashService extends TrashServiceDecorator
             ? $beforeEvent->getResult()
             : $this->innerService->trash($location);
 
-        $this->eventDispatcher->dispatch(new TrashEvent($trashItem, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new TrashEvent($trashItem, ...$eventData),
+            TrashEventInterface::class
+        );
 
         return $trashItem;
     }
@@ -64,7 +77,9 @@ class TrashService extends TrashServiceDecorator
         ];
 
         $beforeEvent = new BeforeRecoverEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeRecoverEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getLocation();
         }
 
@@ -72,7 +87,10 @@ class TrashService extends TrashServiceDecorator
             ? $beforeEvent->getLocation()
             : $this->innerService->recover($trashItem, $newParentLocation);
 
-        $this->eventDispatcher->dispatch(new RecoverEvent($location, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new RecoverEvent($location, ...$eventData),
+            RecoverEventInterface::class
+        );
 
         return $location;
     }
@@ -80,7 +98,9 @@ class TrashService extends TrashServiceDecorator
     public function emptyTrash()
     {
         $beforeEvent = new BeforeEmptyTrashEvent();
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeEmptyTrashEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getResultList();
         }
 
@@ -88,7 +108,10 @@ class TrashService extends TrashServiceDecorator
             ? $beforeEvent->getResultList()
             : $this->innerService->emptyTrash();
 
-        $this->eventDispatcher->dispatch(new EmptyTrashEvent($resultList));
+        $this->eventDispatcher->dispatch(
+            new EmptyTrashEvent($resultList),
+            EmptyTrashEventInterface::class
+        );
 
         return $resultList;
     }
@@ -98,7 +121,9 @@ class TrashService extends TrashServiceDecorator
         $eventData = [$trashItem];
 
         $beforeEvent = new BeforeDeleteTrashItemEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteTrashItemEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getResult();
         }
 
@@ -106,7 +131,10 @@ class TrashService extends TrashServiceDecorator
             ? $beforeEvent->getResult()
             : $this->innerService->deleteTrashItem($trashItem);
 
-        $this->eventDispatcher->dispatch(new DeleteTrashItemEvent($result, ...$eventData));
+        $this->eventDispatcher->dispatch(
+            new DeleteTrashItemEvent($result, ...$eventData),
+            DeleteTrashItemEventInterface::class
+        );
 
         return $result;
     }

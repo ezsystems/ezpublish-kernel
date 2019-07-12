@@ -9,15 +9,12 @@ namespace eZ\Publish\Core\Event\Tests;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent as BeforeCreateEventInterface;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent as BeforeRemoveEventInterface;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeTranslateEvent as BeforeTranslateEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\CreateEvent as CreateEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\RemoveEvent as RemoveEventInterface;
+use eZ\Publish\API\Repository\Events\URLWildcard\TranslateEvent as TranslateEventInterface;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
-use eZ\Publish\Core\Event\URLWildcard\BeforeCreateEvent;
-use eZ\Publish\Core\Event\URLWildcard\BeforeRemoveEvent;
-use eZ\Publish\Core\Event\URLWildcard\BeforeTranslateEvent;
-use eZ\Publish\Core\Event\URLWildcard\CreateEvent;
-use eZ\Publish\Core\Event\URLWildcard\RemoveEvent;
-use eZ\Publish\Core\Event\URLWildcard\TranslateEvent;
 use eZ\Publish\Core\Event\URLWildcardService;
 
 class URLWildcardServiceTest extends AbstractServiceTest
@@ -25,8 +22,8 @@ class URLWildcardServiceTest extends AbstractServiceTest
     public function testRemoveEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeRemoveEvent::class,
-            RemoveEvent::class
+            BeforeRemoveEventInterface::class,
+            RemoveEventInterface::class
         );
 
         $parameters = [
@@ -41,8 +38,8 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeRemoveEvent::class, 0],
-            [RemoveEvent::class, 0],
+            [BeforeRemoveEventInterface::class, 0],
+            [RemoveEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -50,8 +47,8 @@ class URLWildcardServiceTest extends AbstractServiceTest
     public function testRemoveStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeRemoveEvent::class,
-            RemoveEvent::class
+            BeforeRemoveEventInterface::class,
+            RemoveEventInterface::class
         );
 
         $parameters = [
@@ -60,7 +57,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeRemoveEvent::class, function (BeforeRemoveEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeRemoveEventInterface::class, function (BeforeRemoveEventInterface $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -71,19 +68,19 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeRemoveEvent::class, 10],
+            [BeforeRemoveEventInterface::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeRemoveEvent::class, 0],
-            [RemoveEvent::class, 0],
+            [BeforeRemoveEventInterface::class, 0],
+            [RemoveEventInterface::class, 0],
         ]);
     }
 
     public function testCreateEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateEvent::class,
-            CreateEvent::class
+            BeforeCreateEventInterface::class,
+            CreateEventInterface::class
         );
 
         $parameters = [
@@ -103,8 +100,8 @@ class URLWildcardServiceTest extends AbstractServiceTest
 
         $this->assertSame($urlWildcard, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateEvent::class, 0],
-            [CreateEvent::class, 0],
+            [BeforeCreateEventInterface::class, 0],
+            [CreateEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -112,8 +109,8 @@ class URLWildcardServiceTest extends AbstractServiceTest
     public function testReturnCreateResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateEvent::class,
-            CreateEvent::class
+            BeforeCreateEventInterface::class,
+            CreateEventInterface::class
         );
 
         $parameters = [
@@ -127,7 +124,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
         $innerServiceMock->method('create')->willReturn($urlWildcard);
 
-        $traceableEventDispatcher->addListener(BeforeCreateEvent::class, function (BeforeCreateEventInterface $event) use ($eventUrlWildcard) {
+        $traceableEventDispatcher->addListener(BeforeCreateEventInterface::class, function (BeforeCreateEventInterface $event) use ($eventUrlWildcard) {
             $event->setUrlWildcard($eventUrlWildcard);
         }, 10);
 
@@ -138,9 +135,9 @@ class URLWildcardServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventUrlWildcard, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateEvent::class, 10],
-            [BeforeCreateEvent::class, 0],
-            [CreateEvent::class, 0],
+            [BeforeCreateEventInterface::class, 10],
+            [BeforeCreateEventInterface::class, 0],
+            [CreateEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -148,8 +145,8 @@ class URLWildcardServiceTest extends AbstractServiceTest
     public function testCreateStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateEvent::class,
-            CreateEvent::class
+            BeforeCreateEventInterface::class,
+            CreateEventInterface::class
         );
 
         $parameters = [
@@ -163,7 +160,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
         $innerServiceMock->method('create')->willReturn($urlWildcard);
 
-        $traceableEventDispatcher->addListener(BeforeCreateEvent::class, function (BeforeCreateEventInterface $event) use ($eventUrlWildcard) {
+        $traceableEventDispatcher->addListener(BeforeCreateEventInterface::class, function (BeforeCreateEventInterface $event) use ($eventUrlWildcard) {
             $event->setUrlWildcard($eventUrlWildcard);
             $event->stopPropagation();
         }, 10);
@@ -176,19 +173,19 @@ class URLWildcardServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventUrlWildcard, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateEvent::class, 10],
+            [BeforeCreateEventInterface::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeCreateEvent::class, 0],
-            [CreateEvent::class, 0],
+            [BeforeCreateEventInterface::class, 0],
+            [CreateEventInterface::class, 0],
         ]);
     }
 
     public function testTranslateEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeTranslateEvent::class,
-            TranslateEvent::class
+            BeforeTranslateEventInterface::class,
+            TranslateEventInterface::class
         );
 
         $parameters = [
@@ -206,8 +203,8 @@ class URLWildcardServiceTest extends AbstractServiceTest
 
         $this->assertSame($result, $result);
         $this->assertSame($calledListeners, [
-            [BeforeTranslateEvent::class, 0],
-            [TranslateEvent::class, 0],
+            [BeforeTranslateEventInterface::class, 0],
+            [TranslateEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -215,8 +212,8 @@ class URLWildcardServiceTest extends AbstractServiceTest
     public function testReturnTranslateResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeTranslateEvent::class,
-            TranslateEvent::class
+            BeforeTranslateEventInterface::class,
+            TranslateEventInterface::class
         );
 
         $parameters = [
@@ -228,7 +225,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
         $innerServiceMock->method('translate')->willReturn($result);
 
-        $traceableEventDispatcher->addListener(BeforeTranslateEvent::class, function (BeforeTranslateEventInterface $event) use ($eventResult) {
+        $traceableEventDispatcher->addListener(BeforeTranslateEventInterface::class, function (BeforeTranslateEventInterface $event) use ($eventResult) {
             $event->setResult($eventResult);
         }, 10);
 
@@ -239,9 +236,9 @@ class URLWildcardServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventResult, $result);
         $this->assertSame($calledListeners, [
-            [BeforeTranslateEvent::class, 10],
-            [BeforeTranslateEvent::class, 0],
-            [TranslateEvent::class, 0],
+            [BeforeTranslateEventInterface::class, 10],
+            [BeforeTranslateEventInterface::class, 0],
+            [TranslateEventInterface::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -249,8 +246,8 @@ class URLWildcardServiceTest extends AbstractServiceTest
     public function testTranslateStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeTranslateEvent::class,
-            TranslateEvent::class
+            BeforeTranslateEventInterface::class,
+            TranslateEventInterface::class
         );
 
         $parameters = [
@@ -262,7 +259,7 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
         $innerServiceMock->method('translate')->willReturn($result);
 
-        $traceableEventDispatcher->addListener(BeforeTranslateEvent::class, function (BeforeTranslateEventInterface $event) use ($eventResult) {
+        $traceableEventDispatcher->addListener(BeforeTranslateEventInterface::class, function (BeforeTranslateEventInterface $event) use ($eventResult) {
             $event->setResult($eventResult);
             $event->stopPropagation();
         }, 10);
@@ -275,11 +272,11 @@ class URLWildcardServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventResult, $result);
         $this->assertSame($calledListeners, [
-            [BeforeTranslateEvent::class, 10],
+            [BeforeTranslateEventInterface::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeTranslateEvent::class, 0],
-            [TranslateEvent::class, 0],
+            [BeforeTranslateEventInterface::class, 0],
+            [TranslateEventInterface::class, 0],
         ]);
     }
 }

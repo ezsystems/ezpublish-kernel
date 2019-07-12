@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
+use eZ\Publish\API\Repository\Events\UserPreference\BeforeSetUserPreferenceEvent as BeforeSetUserPreferenceEventInterface;
+use eZ\Publish\API\Repository\Events\UserPreference\SetUserPreferenceEvent as SetUserPreferenceEventInterface;
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
 use eZ\Publish\Core\Event\UserPreference\BeforeSetUserPreferenceEvent;
 use eZ\Publish\Core\Event\UserPreference\SetUserPreferenceEvent;
@@ -33,12 +35,17 @@ class UserPreferenceService extends UserPreferenceServiceDecorator
         $eventData = [$userPreferenceSetStructs];
 
         $beforeEvent = new BeforeSetUserPreferenceEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
+
+        $this->eventDispatcher->dispatch($beforeEvent, BeforeSetUserPreferenceEventInterface::class);
+        if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->setUserPreference($userPreferenceSetStructs);
 
-        $this->eventDispatcher->dispatch(new SetUserPreferenceEvent(...$eventData));
+        $this->eventDispatcher->dispatch(
+            new SetUserPreferenceEvent(...$eventData),
+            SetUserPreferenceEventInterface::class
+        );
     }
 }
