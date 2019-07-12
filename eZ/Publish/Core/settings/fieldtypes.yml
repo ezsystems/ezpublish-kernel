@@ -601,3 +601,13 @@ services:
 
     ezpublish.fieldType.ezimageasset:
         alias: eZ\Publish\Core\FieldType\ImageAsset\Type
+
+    eZ\Publish\Core\FieldType\ValueSerializer\SymfonySerializerAdapter:
+        arguments:
+            $normalizer: '@serializer'
+            $denormalizer: '@serializer'
+            $encoder: '@serializer'
+            $decoder: '@serializer'
+
+    eZ\Publish\SPI\FieldType\ValueSerializerInterface:
+        alias: 'eZ\Publish\Core\FieldType\ValueSerializer\SymfonySerializerAdapter'

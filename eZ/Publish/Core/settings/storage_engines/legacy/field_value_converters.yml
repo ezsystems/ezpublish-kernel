@@ -33,6 +33,10 @@ services:
         class: "%ezpublish.persistence.legacy.field_value_converter.registry.class%"
         lazy: true
 
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\SerializableConverter:
+        arguments:
+            $serializer: '@eZ\Publish\SPI\FieldType\ValueSerializerInterface'
+
     ezpublish.fieldType.ezauthor.converter:
         class: "%ezpublish.fieldType.ezauthor.converter.class%"
         tags:

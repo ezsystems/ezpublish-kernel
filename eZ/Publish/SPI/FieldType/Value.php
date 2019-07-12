@@ -13,4 +13,10 @@ namespace eZ\Publish\SPI\FieldType;
  */
 interface Value
 {
+    /**
+     * Returns a string representation of the field value.
+     *
+     * @return string
+     */
+    public function __toString();
 }

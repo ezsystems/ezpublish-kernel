@@ -43,3 +43,19 @@ services:
         arguments:
             - '@ezpublish.api.storage_engine.transformation_processor'
             - []
+
+    # Configure serializer required  Generic Field Type
+    ezpublish.field_type.ezgeneric.value_serializer.symfony.normalizer:
+        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+
+    ezpublish.field_type.ezgeneric.value_serializer.symfony.encoder:
+        class: Symfony\Component\Serializer\Encoder\JsonEncoder
+
+    ezpublish.field_type.ezgeneric.value_serializer.symfony.serializer:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            - [ '@ezpublish.field_type.ezgeneric.value_serializer.symfony.normalizer' ]
+            - [ '@ezpublish.field_type.ezgeneric.value_serializer.symfony.encoder' ]
+
+    serializer:
+        alias: ezpublish.field_type.ezgeneric.value_serializer.symfony.serializer
