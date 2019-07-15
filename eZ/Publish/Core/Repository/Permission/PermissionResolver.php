@@ -305,7 +305,7 @@ class PermissionResolver implements PermissionResolverInterface
                     $possibleLimitations = array_filter($possibleLimitations, $limitationFilter);
                 }
 
-                if ($limitationsPass && !empty($possibleLimitations)) {
+                if ($limitationsPass) {
                     $passedLimitations[] = new LookupPolicyLimitations($policy, $possibleLimitations);
                     if (null !== $permissionSet['limitation']) {
                         $passedRoleLimitations[] = $permissionSet['limitation'];
