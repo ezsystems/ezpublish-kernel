@@ -32,7 +32,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SlugConverterConfigurationPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TranslationCollectorPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ViewProvidersPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
@@ -70,7 +69,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new SignalSlotPass());
         $container->addCompilerPass(new RouterPass());
         $container->addCompilerPass(new SecurityPass());
-        $container->addCompilerPass(new RichTextHtml5ConverterPass());
         $container->addCompilerPass(new FragmentPass());
         $container->addCompilerPass(new StorageConnectionPass());
         $container->addCompilerPass(new ImaginePass());
@@ -94,10 +92,6 @@ class EzPublishCoreBundle extends Bundle
         $securityExtension->addSecurityListenerFactory(new HttpBasicFactory());
         $container->addCompilerPass(new TranslationCollectorPass());
         $container->addCompilerPass(new SlugConverterConfigurationPass());
-
-        if (!$container->hasExtension('ezrichtext')) {
-            $this->getContainerExtension()->addConfigParser(new ConfigParser\FieldType\RichText());
-        }
     }
 
     public function getContainerExtension()

@@ -304,23 +304,6 @@ return [
     ],
     20 => [
       'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '41',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '99',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    21 => [
-      'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '42',
       'data_float' => '0',
@@ -334,7 +317,7 @@ return [
       'sort_key_string' => 'anonymous users',
       'version' => '1',
     ],
-    22 => [
+    21 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '42',
@@ -349,7 +332,7 @@ return [
       'sort_key_string' => 'user group for the anonymous user',
       'version' => '1',
     ],
-    23 => [
+    22 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '41',
@@ -364,24 +347,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    24 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '41',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '105',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    25 => [
+    23 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '41',
@@ -396,7 +362,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    26 => [
+    24 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '45',
@@ -411,7 +377,7 @@ return [
       'sort_key_string' => 'setup',
       'version' => '1',
     ],
-    27 => [
+    25 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '45',
@@ -426,41 +392,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    28 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '45',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '125',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    29 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '45',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '126',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    30 => [
+    26 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '45',
@@ -475,7 +407,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    31 => [
+    27 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '49',
@@ -490,7 +422,7 @@ return [
       'sort_key_string' => 'images',
       'version' => '1',
     ],
-    32 => [
+    28 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '49',
@@ -505,41 +437,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    33 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '49',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '144',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    34 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '49',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '145',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    35 => [
+    29 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '49',
@@ -554,7 +452,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    36 => [
+    30 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '50',
@@ -569,7 +467,7 @@ return [
       'sort_key_string' => 'files',
       'version' => '1',
     ],
-    37 => [
+    31 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '50',
@@ -584,41 +482,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    38 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '50',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '149',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    39 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '50',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '150',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    40 => [
+    32 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '50',
@@ -633,7 +497,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    41 => [
+    33 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '51',
@@ -648,7 +512,7 @@ return [
       'sort_key_string' => 'multimedia',
       'version' => '1',
     ],
-    42 => [
+    34 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '51',
@@ -663,41 +527,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    43 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '51',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '154',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    44 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '51',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '155',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    45 => [
+    35 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '51',
@@ -712,7 +542,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    46 => [
+    36 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '159',
       'contentobject_id' => '52',
@@ -727,7 +557,7 @@ return [
       'sort_key_string' => 'common ini settings',
       'version' => '1',
     ],
-    47 => [
+    37 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '160',
       'contentobject_id' => '52',
@@ -742,7 +572,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    48 => [
+    38 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '161',
       'contentobject_id' => '52',
@@ -757,7 +587,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    49 => [
+    39 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '162',
       'contentobject_id' => '52',
@@ -772,7 +602,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    50 => [
+    40 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '163',
       'contentobject_id' => '52',
@@ -787,7 +617,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    51 => [
+    41 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '164',
       'contentobject_id' => '52',
@@ -802,7 +632,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    52 => [
+    42 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '165',
       'contentobject_id' => '52',
@@ -817,7 +647,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    53 => [
+    43 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '166',
       'contentobject_id' => '52',
@@ -832,7 +662,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    54 => [
+    44 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '167',
       'contentobject_id' => '52',
@@ -847,7 +677,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    55 => [
+    45 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '168',
       'contentobject_id' => '52',
@@ -862,7 +692,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    56 => [
+    46 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '169',
       'contentobject_id' => '52',
@@ -877,7 +707,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    57 => [
+    47 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '170',
       'contentobject_id' => '52',
@@ -892,7 +722,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    58 => [
+    48 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '171',
       'contentobject_id' => '52',
@@ -907,7 +737,7 @@ return [
       'sort_key_string' => '',
       'version' => '1',
     ],
-    59 => [
+    49 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '172',
       'contentobject_id' => '54',
@@ -922,7 +752,7 @@ return [
       'sort_key_string' => '',
       'version' => '2',
     ],
-    60 => [
+    50 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '173',
       'contentobject_id' => '54',
@@ -940,7 +770,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ],
-    61 => [
+    51 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '174',
       'contentobject_id' => '54',
@@ -957,7 +787,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ],
-    62 => [
+    52 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '175',
       'contentobject_id' => '54',
@@ -972,7 +802,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '0',
       'version' => '2',
     ],
-    63 => [
+    53 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '177',
       'contentobject_id' => '54',
@@ -987,7 +817,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ],
-    64 => [
+    54 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '178',
       'contentobject_id' => '54',
@@ -1002,7 +832,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ],
-    65 => [
+    55 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '10',
@@ -1017,7 +847,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ],
-    66 => [
+    56 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '14',
@@ -1032,7 +862,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '3',
     ],
-    67 => [
+    57 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '14',
@@ -1047,7 +877,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '4',
     ],
-    68 => [
+    58 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '10',
@@ -1062,7 +892,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ],
-    69 => [
+    59 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '14',
@@ -1079,7 +909,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '3',
     ],
-    70 => [
+    60 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '14',
@@ -1096,7 +926,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '4',
     ],
-    71 => [
+    61 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '56',
@@ -1111,7 +941,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'design',
       'version' => '1',
     ],
-    72 => [
+    62 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '56',
@@ -1126,41 +956,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    73 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '56',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '183',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    74 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '56',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '184',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    75 => [
+    63 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '56',
@@ -1175,7 +971,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    76 => [
+    64 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '41',
@@ -1190,7 +986,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    77 => [
+    65 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '45',
@@ -1205,7 +1001,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    78 => [
+    66 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '49',
@@ -1220,7 +1016,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    79 => [
+    67 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '50',
@@ -1235,7 +1031,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    80 => [
+    68 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '51',
@@ -1250,7 +1046,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    81 => [
+    69 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '56',
@@ -1265,7 +1061,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    82 => [
+    70 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '41',
@@ -1280,7 +1076,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    83 => [
+    71 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '45',
@@ -1295,7 +1091,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    84 => [
+    72 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '49',
@@ -1310,7 +1106,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    85 => [
+    73 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '50',
@@ -1325,7 +1121,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    86 => [
+    74 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '51',
@@ -1340,7 +1136,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    87 => [
+    75 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '56',
@@ -1355,7 +1151,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    88 => [
+    76 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '57',
@@ -1370,7 +1166,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'banners',
       'version' => '1',
     ],
-    89 => [
+    77 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '57',
@@ -1385,41 +1181,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    90 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '57',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '202',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    91 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '57',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '203',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    92 => [
+    78 => [
       'attribute_original_id' => '204',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '57',
@@ -1434,7 +1196,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    93 => [
+    79 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '57',
@@ -1449,7 +1211,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    94 => [
+    80 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '57',
@@ -1464,7 +1226,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    95 => [
+    81 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '58',
@@ -1479,7 +1241,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (communities)',
       'version' => '1',
     ],
-    96 => [
+    82 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '58',
@@ -1494,7 +1256,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    97 => [
+    83 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '58',
@@ -1511,7 +1273,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    98 => [
+    84 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '58',
@@ -1526,7 +1288,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    99 => [
+    85 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '58',
@@ -1541,7 +1303,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    100 => [
+    86 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '59',
@@ -1556,7 +1318,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (frontpage)',
       'version' => '1',
     ],
-    101 => [
+    87 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '59',
@@ -1571,7 +1333,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    102 => [
+    88 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '59',
@@ -1588,7 +1350,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    103 => [
+    89 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '59',
@@ -1603,7 +1365,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    104 => [
+    90 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '59',
@@ -1618,7 +1380,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    105 => [
+    91 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '60',
@@ -1633,7 +1395,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (products)',
       'version' => '1',
     ],
-    106 => [
+    92 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '60',
@@ -1648,7 +1410,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    107 => [
+    93 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '60',
@@ -1665,7 +1427,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    108 => [
+    94 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '60',
@@ -1680,7 +1442,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    109 => [
+    95 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '60',
@@ -1695,7 +1457,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    110 => [
+    96 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '61',
@@ -1710,7 +1472,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (partners)',
       'version' => '1',
     ],
-    111 => [
+    97 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '61',
@@ -1725,7 +1487,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    112 => [
+    98 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '61',
@@ -1742,7 +1504,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    113 => [
+    99 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '61',
@@ -1757,7 +1519,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    114 => [
+    100 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '61',
@@ -1772,7 +1534,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    115 => [
+    101 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '62',
@@ -1787,7 +1549,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'pencils (support)',
       'version' => '1',
     ],
-    116 => [
+    102 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '62',
@@ -1802,7 +1564,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    117 => [
+    103 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '62',
@@ -1819,7 +1581,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    118 => [
+    104 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '62',
@@ -1834,7 +1596,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    119 => [
+    105 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '62',
@@ -1849,7 +1611,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    120 => [
+    106 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '63',
@@ -1864,7 +1626,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (training)',
       'version' => '1',
     ],
-    121 => [
+    107 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '63',
@@ -1879,7 +1641,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    122 => [
+    108 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '63',
@@ -1896,7 +1658,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    123 => [
+    109 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '63',
@@ -1911,7 +1673,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    124 => [
+    110 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '63',
@@ -1926,7 +1688,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    125 => [
+    111 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '64',
@@ -1941,7 +1703,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (solutions)',
       'version' => '1',
     ],
-    126 => [
+    112 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '64',
@@ -1956,7 +1718,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    127 => [
+    113 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '64',
@@ -1973,7 +1735,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    128 => [
+    114 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '64',
@@ -1988,7 +1750,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    129 => [
+    115 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '64',
@@ -2003,7 +1765,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    130 => [
+    116 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '65',
@@ -2018,7 +1780,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'home',
       'version' => '1',
     ],
-    131 => [
+    117 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '65',
@@ -2033,75 +1795,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    132 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '238',
-      'contentobject_id' => '65',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '244',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    133 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '239',
-      'contentobject_id' => '65',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://106" view="embed" ezxhtml:class="highlighted_object" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><ezembed xlink:href="ezcontent://107" view="embed" ezxhtml:class="highlighted_object" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><ezembed xlink:href="ezcontent://176" view="embed" ezxhtml:class="horizontally_listed_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><informaltable class="default" width="100%"><tbody><tr><td/><td/></tr><tr><td ezxhtml:width="50%"><eztemplate name="factbox" ezxhtml:align="left"><ezcontent><itemizedlist><listitem><para><link xlink:href="ezurl://23" xlink:show="new">Technical manual</link></para></listitem><listitem><para><link xlink:href="ezurl://24" xlink:show="new">User manual</link></para></listitem></itemizedlist></ezcontent><ezconfig><ezvalue key="title">Documentation</ezvalue></ezconfig></eztemplate></td><td><blockquote><para>If you want to create your own custom site on a solid framework, <link xlink:href="ezcontent://151" xlink:show="none">this CMS could be for you</link>".</para></blockquote></td></tr></tbody></informaltable></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '245',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    134 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '240',
-      'contentobject_id' => '65',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://131" view="embed" ezxhtml:class="vertically_listed_sub_items"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">9</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '246',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    135 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '241',
-      'contentobject_id' => '65',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '247',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    136 => [
+    118 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '65',
@@ -2116,7 +1810,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    137 => [
+    119 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '66',
@@ -2131,24 +1825,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'rest_api',
       'version' => '1',
     ],
-    138 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '66',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '250',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    139 => [
+    120 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '66',
@@ -2165,7 +1842,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    140 => [
+    121 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '66',
@@ -2180,7 +1857,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    141 => [
+    122 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '67',
@@ -2195,7 +1872,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'products',
       'version' => '1',
     ],
-    142 => [
+    123 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '67',
@@ -2210,89 +1887,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    143 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '238',
-      'contentobject_id' => '67',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para><eztemplateinline name="factbox"><ezconfig><ezvalue key="title">Next steps</ezvalue></ezconfig></eztemplateinline></para><orderedlist><listitem><para>Donec magna felis
-                            </para></listitem><listitem><para>Mauris sed lectus vel
-                            </para></listitem><listitem><para>Praesent pharetra
-                            </para></listitem></orderedlist><title ezxhtml:level="2">Products sheets</title><itemizedlist><listitem><para>Donec magna felis
-                          </para></listitem><listitem><para>Maecenas quam nisi
-                          </para></listitem></itemizedlist></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '255',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    144 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '239',
-      'contentobject_id' => '67',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><title ezxhtml:level="2">Products by Category</title><informaltable class="default" width="100%"><tbody><tr><td><itemizedlist><listitem><para>Donec magna felis
-                                  </para></listitem><listitem><para>Mauris sed lectus vel
-                                  </para></listitem><listitem><para>Praesent pharetra
-                                  </para></listitem><listitem><para>Maecenas quam nisi
-                                  </para></listitem><listitem><para>Phasellus ut ante eu nunc
-                                  </para></listitem></itemizedlist></td><td><itemizedlist><listitem><para>Donec hendrerit
-                                  </para></listitem><listitem><para>Vivamus turpis
-                                  </para></listitem><listitem><para>Vestibulum laoreet erat id tellus
-                                  </para></listitem><listitem><para>Maecenas quam nisi
-                                  </para></listitem></itemizedlist></td></tr></tbody></informaltable><para><eztemplateinline name="separator"/></para><title ezxhtml:level="2">Featured Products</title><informaltable class="default"><tbody><tr><td><ezembed xlink:href="ezcontent://71" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed></td><td><ezembed xlink:href="ezcontent://72" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed></td><td><ezembed xlink:href="ezcontent://73" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed></td></tr></tbody></informaltable></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '256',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    145 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '240',
-      'contentobject_id' => '67',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '257',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    146 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '241',
-      'contentobject_id' => '67',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '258',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    147 => [
+    124 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '67',
@@ -2307,7 +1902,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    148 => [
+    125 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '68',
@@ -2322,7 +1917,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'software',
       'version' => '1',
     ],
-    149 => [
+    126 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '68',
@@ -2337,41 +1932,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    150 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '68',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '262',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    151 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '68',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '263',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    152 => [
+    127 => [
       'attribute_original_id' => '264',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '68',
@@ -2386,7 +1947,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    153 => [
+    128 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '68',
@@ -2401,7 +1962,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    154 => [
+    129 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '68',
@@ -2416,7 +1977,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    155 => [
+    130 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '220',
       'contentobject_id' => '69',
@@ -2431,7 +1992,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'os type i',
       'version' => '1',
     ],
-    156 => [
+    131 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '221',
       'contentobject_id' => '69',
@@ -2446,41 +2007,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    157 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '222',
-      'contentobject_id' => '69',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam sem felis, lobortis sed, bibendum quis, viverra vestibulum, elit. Sed placerat lectus vel odio. Nunc quis magna. Nam at massa. Vestibulum porta vestibulum metus. Aliquam adipiscing arcu quis magna.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '269',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    158 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '223',
-      'contentobject_id' => '69',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam sem felis, lobortis sed, bibendum quis, viverra vestibulum, elit. Sed placerat lectus vel odio. Nunc quis magna. Nam at massa. Vestibulum porta vestibulum metus. Aliquam adipiscing arcu quis magna. Aliquam nulla tortor, accumsan non, egestas non, feugiat vel, ante. Aenean iaculis facilisis arcu. Curabitur porta sollicitudin turpis. Curabitur sit amet erat. Praesent quis pede egestas tellus porta rhoncus. Curabitur a ligula quis lorem consectetuer varius.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '270',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    159 => [
+    132 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '224',
       'contentobject_id' => '69',
@@ -2495,7 +2022,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    160 => [
+    133 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '225',
       'contentobject_id' => '69',
@@ -2512,24 +2039,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    161 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '226',
-      'contentobject_id' => '69',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>OS Type I</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '273',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    162 => [
+    134 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '227',
       'contentobject_id' => '69',
@@ -2546,7 +2056,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    163 => [
+    135 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '228',
       'contentobject_id' => '69',
@@ -2561,7 +2071,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    164 => [
+    136 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '70',
@@ -2576,7 +2086,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'boxes',
       'version' => '1',
     ],
-    165 => [
+    137 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '70',
@@ -2591,41 +2101,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    166 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '70',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '278',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    167 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '70',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '279',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    168 => [
+    138 => [
       'attribute_original_id' => '280',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '70',
@@ -2640,7 +2116,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    169 => [
+    139 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '70',
@@ -2655,7 +2131,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    170 => [
+    140 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '70',
@@ -2670,7 +2146,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    171 => [
+    141 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '220',
       'contentobject_id' => '71',
@@ -2685,7 +2161,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'cd/dvd box i',
       'version' => '1',
     ],
-    172 => [
+    142 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '221',
       'contentobject_id' => '71',
@@ -2700,41 +2176,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    173 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '222',
-      'contentobject_id' => '71',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam sem felis, lobortis sed, bibendum quis, viverra vestibulum, elit. Sed placerat lectus vel odio. Nunc quis magna. Nam at massa. Vestibulum porta vestibulum metus. Aliquam adipiscing arcu quis magna. Aliquam nulla tortor, accumsan non, egestas non, feugiat vel, ante. Aenean iaculis facilisis arcu. Curabitur porta sollicitudin turpis. Curabitur sit amet erat. Praesent quis pede egestas tellus porta rhoncus. Curabitur a ligula quis lorem consectetuer varius.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '285',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    174 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '223',
-      'contentobject_id' => '71',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam sem felis, lobortis sed, bibendum quis, viverra vestibulum, elit. Sed placerat lectus vel odio. Nunc quis magna. Nam at massa. Vestibulum porta vestibulum metus. Aliquam adipiscing arcu quis magna. Aliquam nulla tortor, accumsan non, egestas non, feugiat vel, ante. Aenean iaculis facilisis arcu. Curabitur porta sollicitudin turpis. Curabitur sit amet erat. Praesent quis pede egestas tellus porta rhoncus. Curabitur a ligula quis lorem consectetuer varius. </para><para>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus venenatis elementum dolor. Praesent velit. Aliquam erat volutpat. Donec auctor. Etiam accumsan libero vel ipsum. Sed ligula turpis, lobortis in, aliquet a, dapibus non, eros. Nunc nulla arcu, pharetra nec, pellentesque at, malesuada quis, diam. Nulla pellentesque volutpat arcu. Vestibulum eros nulla, dignissim id, pulvinar sed, rutrum non, nisl. Quisque id nisi quis dolor suscipit ultrices. Vivamus dapibus tincidunt nunc. Curabitur nec massa nec ipsum tristique accumsan. Praesent tempus. Nunc posuere pretium lectus. Ut magna. </para><orderedlist><listitem><para>Quisque id nisi quis</para></listitem><listitem><para>Vivamus dapibus tincidunt</para></listitem><listitem><para>Curabitur nec</para></listitem></orderedlist></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '286',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    175 => [
+    143 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '224',
       'contentobject_id' => '71',
@@ -2749,7 +2191,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    176 => [
+    144 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '225',
       'contentobject_id' => '71',
@@ -2766,24 +2208,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    177 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '226',
-      'contentobject_id' => '71',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>CD/DVD Box I</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '289',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    178 => [
+    145 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '227',
       'contentobject_id' => '71',
@@ -2800,7 +2225,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    179 => [
+    146 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '228',
       'contentobject_id' => '71',
@@ -2815,7 +2240,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    180 => [
+    147 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '220',
       'contentobject_id' => '72',
@@ -2830,7 +2255,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'cd/dvd box ii',
       'version' => '1',
     ],
-    181 => [
+    148 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '221',
       'contentobject_id' => '72',
@@ -2845,41 +2270,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    182 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '222',
-      'contentobject_id' => '72',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam sem felis, lobortis sed, bibendum quis, viverra vestibulum, elit. Sed placerat lectus vel odio. Nunc quis magna. Nam at massa. Vestibulum porta vestibulum metus. Aliquam adipiscing arcu quis magna. Aliquam nulla tortor, accumsan non, egestas non, feugiat vel, ante. Aenean iaculis facilisis arcu. Curabitur porta sollicitudin turpis. Curabitur sit amet erat. Praesent quis pede egestas tellus porta rhoncus. Curabitur a ligula quis lorem consectetuer varius.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '294',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    183 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '223',
-      'contentobject_id' => '72',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam sem felis, lobortis sed, bibendum quis, viverra vestibulum, elit. Sed placerat lectus vel odio. Nunc quis magna. Nam at massa. Vestibulum porta vestibulum metus. Aliquam adipiscing arcu quis magna. Aliquam nulla tortor, accumsan non, egestas non, feugiat vel, ante. Aenean iaculis facilisis arcu. Curabitur porta sollicitudin turpis. Curabitur sit amet erat. Praesent quis pede egestas tellus porta rhoncus. Curabitur a ligula quis lorem consectetuer varius. </para><para>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus venenatis elementum dolor. Praesent velit. Aliquam erat volutpat. Donec auctor. Etiam accumsan libero vel ipsum. Sed ligula turpis, lobortis in, aliquet a, dapibus non, eros. Nunc nulla arcu, pharetra nec, pellentesque at, malesuada quis, diam. Nulla pellentesque volutpat arcu. Vestibulum eros nulla, dignissim id, pulvinar sed, rutrum non, nisl. Quisque id nisi quis dolor suscipit ultrices. Vivamus dapibus tincidunt nunc. Curabitur nec massa nec ipsum tristique accumsan. Praesent tempus. Nunc posuere pretium lectus. Ut magna. </para><orderedlist><listitem><para>Quisque id nisi quis</para></listitem><listitem><para>Vivamus dapibus tincidunt</para></listitem><listitem><para>Curabitur nec</para></listitem></orderedlist></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '295',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    184 => [
+    149 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '224',
       'contentobject_id' => '72',
@@ -2894,7 +2285,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    185 => [
+    150 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '225',
       'contentobject_id' => '72',
@@ -2911,24 +2302,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    186 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '226',
-      'contentobject_id' => '72',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>CD/DVD Box II</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '298',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    187 => [
+    151 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '227',
       'contentobject_id' => '72',
@@ -2945,7 +2319,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    188 => [
+    152 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '228',
       'contentobject_id' => '72',
@@ -2960,7 +2334,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    189 => [
+    153 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '220',
       'contentobject_id' => '73',
@@ -2975,7 +2349,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'cd/dvd box iii',
       'version' => '1',
     ],
-    190 => [
+    154 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '221',
       'contentobject_id' => '73',
@@ -2990,41 +2364,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    191 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '222',
-      'contentobject_id' => '73',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam sem felis, lobortis sed, bibendum quis, viverra vestibulum, elit. Sed placerat lectus vel odio. Nunc quis magna. Nam at massa. Vestibulum porta vestibulum metus. Aliquam adipiscing arcu quis magna. Aliquam nulla tortor, accumsan non, egestas non, feugiat vel, ante. Aenean iaculis facilisis arcu. Curabitur porta sollicitudin turpis. Curabitur sit amet erat. Praesent quis pede egestas tellus porta rhoncus. Curabitur a ligula quis lorem consectetuer varius.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '303',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    192 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '223',
-      'contentobject_id' => '73',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam sem felis, lobortis sed, bibendum quis, viverra vestibulum, elit. Sed placerat lectus vel odio. Nunc quis magna. Nam at massa. Vestibulum porta vestibulum metus. Aliquam adipiscing arcu quis magna. Aliquam nulla tortor, accumsan non, egestas non, feugiat vel, ante. Aenean iaculis facilisis arcu. Curabitur porta sollicitudin turpis. Curabitur sit amet erat. Praesent quis pede egestas tellus porta rhoncus. Curabitur a ligula quis lorem consectetuer varius. </para><para>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus venenatis elementum dolor. Praesent velit. Aliquam erat volutpat. Donec auctor. Etiam accumsan libero vel ipsum. Sed ligula turpis, lobortis in, aliquet a, dapibus non, eros. Nunc nulla arcu, pharetra nec, pellentesque at, malesuada quis, diam. Nulla pellentesque volutpat arcu. Vestibulum eros nulla, dignissim id, pulvinar sed, rutrum non, nisl. Quisque id nisi quis dolor suscipit ultrices. Vivamus dapibus tincidunt nunc. Curabitur nec massa nec ipsum tristique accumsan. Praesent tempus. Nunc posuere pretium lectus. Ut magna. </para><orderedlist><listitem><para>Quisque id nisi quis</para></listitem><listitem><para>Vivamus dapibus tincidunt</para></listitem><listitem><para>Curabitur nec</para></listitem></orderedlist></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '304',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    193 => [
+    155 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '224',
       'contentobject_id' => '73',
@@ -3039,7 +2379,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    194 => [
+    156 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '225',
       'contentobject_id' => '73',
@@ -3056,24 +2396,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    195 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '226',
-      'contentobject_id' => '73',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>CD/DVD Box III</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '307',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    196 => [
+    157 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '227',
       'contentobject_id' => '73',
@@ -3090,7 +2413,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    197 => [
+    158 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '228',
       'contentobject_id' => '73',
@@ -3105,7 +2428,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    198 => [
+    159 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '74',
@@ -3120,7 +2443,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'products sheets',
       'version' => '1',
     ],
-    199 => [
+    160 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '74',
@@ -3135,41 +2458,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    200 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '74',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '312',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    201 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '74',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '313',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    202 => [
+    161 => [
       'attribute_original_id' => '314',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '74',
@@ -3184,7 +2473,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    203 => [
+    162 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '74',
@@ -3199,7 +2488,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    204 => [
+    163 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '74',
@@ -3214,7 +2503,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    205 => [
+    164 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '75',
@@ -3229,7 +2518,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'solutions',
       'version' => '1',
     ],
-    206 => [
+    165 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '75',
@@ -3244,81 +2533,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    207 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '238',
-      'contentobject_id' => '75',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '319',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    208 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '239',
-      'contentobject_id' => '75',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://77" ezxhtml:class="highlighted_object" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed><informaltable class="default" width="100%"><tbody><tr><td ezxhtml:width="50%"><para>Solutions by industry:</para><itemizedlist><listitem><para>Banking
-                                </para></listitem><listitem><para>Automotive
-                                </para></listitem><listitem><para>Education
-                                </para></listitem><listitem><para>Electronics
-                                </para></listitem></itemizedlist></td><td><para>Solutions by business topics:</para><itemizedlist><listitem><para><link xlink:href="ezcontent://76" xlink:show="none">Web publishing</link></para></listitem><listitem><para><link xlink:href="ezcontent://80" xlink:show="none">Content management</link></para></listitem><listitem><para>Information integration
-                                </para></listitem><listitem><para>Enterprise resource
-                                </para></listitem></itemizedlist></td></tr></tbody></informaltable><para><eztemplateinline name="separator"/></para><ezembed xlink:href="ezcontent://79" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed><ezembed xlink:href="ezcontent://78" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '320',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    209 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '240',
-      'contentobject_id' => '75',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://76" ezxhtml:class="itemized_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed><ezembed xlink:href="ezcontent://80" ezxhtml:class="itemized_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '321',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    210 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '241',
-      'contentobject_id' => '75',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '322',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    211 => [
+    166 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '75',
@@ -3333,7 +2548,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    212 => [
+    167 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '76',
@@ -3348,7 +2563,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'web publishing',
       'version' => '1',
     ],
-    213 => [
+    168 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '76',
@@ -3363,41 +2578,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    214 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '76',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '326',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    215 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '76',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '327',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    216 => [
+    169 => [
       'attribute_original_id' => '328',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '76',
@@ -3412,7 +2593,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    217 => [
+    170 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '76',
@@ -3427,7 +2608,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    218 => [
+    171 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '76',
@@ -3442,7 +2623,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    219 => [
+    172 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '77',
@@ -3457,7 +2638,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'fusce sagittis sagittis',
       'version' => '1',
     ],
-    220 => [
+    173 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '77',
@@ -3472,7 +2653,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    221 => [
+    174 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '77',
@@ -3489,41 +2670,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    222 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '77',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Nulla tortor. Suspendisse ut diam in mauris faucibus rutrum. Fusce sagittis sagittis urna. Pellentesque nec quam. Sed pretium, nisi sit amet ornare gravida, neque orci malesuada lacus, et interdum arcu felis ut tellus.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '334',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    223 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '77',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Cras molestie. Nulla congue convallis justo. Nulla facilisi. Suspendisse potenti. In hac habitasse platea dictumst. Donec commodo orci sit amet ligula. Nunc purus. Suspendisse quis nibh vel felis consectetuer aliquet. Integer dictum risus id mi. Phasellus eu libero eu tortor adipiscing sagittis. Vivamus tincidunt ligula sed sem. Nullam est. </para><para>Pellentesque consequat orci sit amet erat. Nulla rutrum, elit ut ultricies mollis, sapien est cursus est, vitae malesuada metus lorem eget urna. Mauris viverra. Donec tristique. Proin lectus. Mauris ullamcorper est facilisis libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent et elit eget dolor pretium tempus. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus varius. In hac habitasse platea dictumst. Nulla pede purus, fringilla nec, ultrices nec, dignissim sit amet, eros. Cras id est eget mauris dapibus euismod. Nulla ornare. Aenean eu mi. Sed ac purus quis mi sagittis condimentum.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '335',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    224 => [
+    175 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '77',
@@ -3538,7 +2685,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    225 => [
+    176 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '77',
@@ -3555,24 +2702,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    226 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '77',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Fusce sagittis</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '338',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    227 => [
+    177 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '77',
@@ -3587,7 +2717,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    228 => [
+    178 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '77',
@@ -3602,7 +2732,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    229 => [
+    179 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '77',
@@ -3617,7 +2747,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    230 => [
+    180 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '77',
@@ -3632,7 +2762,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    231 => [
+    181 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '78',
@@ -3647,7 +2777,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'etiam posuere sodales arcu',
       'version' => '1',
     ],
-    232 => [
+    182 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '78',
@@ -3662,7 +2792,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    233 => [
+    183 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '78',
@@ -3679,41 +2809,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    234 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '78',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Vivamus sed quam. In hac habitasse platea dictumst. Nam quis magna. Curabitur elit enim, egestas quis, tristique sit amet, pharetra vel, sem. Nullam quam. Quisque in leo. Pellentesque odio nibh, vehicula ut, tristique vel, adipiscing a, sapien.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '346',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    235 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '78',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Curabitur pretium, lacus ut tincidunt cursus, mauris lorem suscipit ante, in molestie nisl est eget ante. Suspendisse laoreet nunc ac enim. Nullam hendrerit, enim id convallis hendrerit, sapien est tristique nisl, sed varius lorem ante sed est. In hac habitasse platea dictumst. Nunc enim orci, venenatis ac, ornare sit amet, nonummy a, nulla. Nullam quam massa, imperdiet ultrices, tristique et, suscipit ac, lectus. Sed convallis vulputate justo. Praesent nulla pede, vestibulum condimentum, facilisis eu, blandit eu, massa. Etiam posuere sodales arcu. Vivamus sed quam. In hac habitasse platea dictumst. Nam quis magna. Curabitur elit enim, egestas quis, tristique sit amet, pharetra vel, sem. Nullam quam. Quisque in leo. Pellentesque odio nibh, vehicula ut, tristique vel, adipiscing a, sapien. Fusce commodo dolor.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '347',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    236 => [
+    184 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '78',
@@ -3728,7 +2824,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    237 => [
+    185 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '78',
@@ -3745,24 +2841,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    238 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '78',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Vivamus sed</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '350',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    239 => [
+    186 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '78',
@@ -3777,7 +2856,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    240 => [
+    187 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '78',
@@ -3792,7 +2871,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    241 => [
+    188 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '78',
@@ -3807,7 +2886,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    242 => [
+    189 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '78',
@@ -3822,7 +2901,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    243 => [
+    190 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '79',
@@ -3837,7 +2916,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'in hac habitasse platea',
       'version' => '1',
     ],
-    244 => [
+    191 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '79',
@@ -3852,7 +2931,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    245 => [
+    192 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '79',
@@ -3869,41 +2948,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    246 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '79',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Cras molestie. Nulla congue convallis justo. Nulla facilisi. Suspendisse potenti. In hac habitasse platea dictumst. Donec commodo orci sit amet ligula. Nunc purus.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '358',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    247 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '79',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Curabitur pretium, lacus ut tincidunt cursus, mauris lorem suscipit ante, in molestie nisl est eget ante. Suspendisse laoreet nunc ac enim. Nullam hendrerit, enim id convallis hendrerit, sapien est tristique nisl, sed varius lorem ante sed est. In hac habitasse platea dictumst. Nunc enim orci, venenatis ac, ornare sit amet, nonummy a, nulla. Nullam quam massa, imperdiet ultrices, tristique et, suscipit ac, lectus. Sed convallis vulputate justo. Praesent nulla pede, vestibulum condimentum, facilisis eu, blandit eu, massa. Etiam posuere sodales arcu. Vivamus sed quam. In hac habitasse platea dictumst. Nam quis magna. Curabitur elit enim, egestas quis, tristique sit amet, pharetra vel, sem. Nullam quam. Quisque in leo. Pellentesque odio nibh, vehicula ut, tristique vel, adipiscing a, sapien. Fusce commodo dolor.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '359',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    248 => [
+    193 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '79',
@@ -3918,7 +2963,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    249 => [
+    194 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '79',
@@ -3935,24 +2980,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    250 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '79',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>In hac habitasse</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '362',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    251 => [
+    195 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '79',
@@ -3967,7 +2995,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    252 => [
+    196 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '79',
@@ -3982,7 +3010,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    253 => [
+    197 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '79',
@@ -3997,7 +3025,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    254 => [
+    198 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '79',
@@ -4012,7 +3040,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    255 => [
+    199 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '80',
@@ -4027,7 +3055,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'content management',
       'version' => '1',
     ],
-    256 => [
+    200 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '80',
@@ -4042,41 +3070,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    257 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '80',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '369',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    258 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '80',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '370',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    259 => [
+    201 => [
       'attribute_original_id' => '371',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '80',
@@ -4091,7 +3085,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    260 => [
+    202 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '80',
@@ -4106,7 +3100,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    261 => [
+    203 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '80',
@@ -4121,7 +3115,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    262 => [
+    204 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '81',
@@ -4136,7 +3130,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'fusce sagittis sagittis urna',
       'version' => '1',
     ],
-    263 => [
+    205 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '81',
@@ -4151,7 +3145,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    264 => [
+    206 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '81',
@@ -4168,41 +3162,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    265 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '81',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Nulla tortor. Suspendisse ut diam in mauris faucibus rutrum. Fusce sagittis sagittis urna. Pellentesque nec quam. Sed pretium, nisi sit amet ornare gravida, neque orci malesuada lacus, et interdum arcu felis ut tellus. Proin ac felis. Duis faucibus, arcu a pretium placerat, ante orci ullamcorper ante, at pharetra tellus justo tincidunt arcu. Sed urna odio, porta sit amet, aliquam a, consectetuer facilisis, leo. Aliquam tempor arcu.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '377',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    266 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '81',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '378',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    267 => [
+    207 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '81',
@@ -4217,7 +3177,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    268 => [
+    208 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '81',
@@ -4234,24 +3194,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    269 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '81',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '381',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    270 => [
+    209 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '81',
@@ -4266,7 +3209,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    271 => [
+    210 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '81',
@@ -4281,7 +3224,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    272 => [
+    211 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '81',
@@ -4296,7 +3239,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    273 => [
+    212 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '81',
@@ -4311,7 +3254,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    274 => [
+    213 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '82',
@@ -4326,7 +3269,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'class aptent taciti sociosqu',
       'version' => '1',
     ],
-    275 => [
+    214 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '82',
@@ -4341,7 +3284,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    276 => [
+    215 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '82',
@@ -4358,41 +3301,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    277 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '82',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Donec tristique. Proin lectus. Mauris ullamcorper est facilisis libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent et elit eget dolor pretium tempus. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus varius. In hac habitasse platea dictumst.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '389',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    278 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '82',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '390',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    279 => [
+    216 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '82',
@@ -4407,7 +3316,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    280 => [
+    217 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '82',
@@ -4424,24 +3333,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    281 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '82',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '393',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    282 => [
+    218 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '82',
@@ -4456,7 +3348,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    283 => [
+    219 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '82',
@@ -4471,7 +3363,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    284 => [
+    220 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '82',
@@ -4486,7 +3378,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    285 => [
+    221 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '82',
@@ -4501,7 +3393,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    286 => [
+    222 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '83',
@@ -4516,7 +3408,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'aenean malesuada ligula',
       'version' => '1',
     ],
-    287 => [
+    223 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '83',
@@ -4531,7 +3423,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    288 => [
+    224 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '83',
@@ -4548,41 +3440,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    289 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '83',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aenean malesuada ligula in magna. Donec pellentesque. Ut vulputate nisl. Praesent et ligula eleifend nibh tempus fermentum. Integer metus. Proin et erat id sem feugiat viverra. Nulla facilisi. Sed accumsan augue sed orci. Phasellus porttitor, ipsum at blandit molestie, libero quam ullamcorper justo, a placerat mi tortor vel arcu.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '401',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    290 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '83',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '402',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    291 => [
+    225 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '83',
@@ -4597,7 +3455,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    292 => [
+    226 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '83',
@@ -4614,24 +3472,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    293 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '83',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '405',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    294 => [
+    227 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '83',
@@ -4646,7 +3487,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    295 => [
+    228 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '83',
@@ -4661,7 +3502,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    296 => [
+    229 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '83',
@@ -4676,7 +3517,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    297 => [
+    230 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '83',
@@ -4691,7 +3532,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    298 => [
+    231 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '84',
@@ -4706,7 +3547,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'training',
       'version' => '1',
     ],
-    299 => [
+    232 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '84',
@@ -4721,82 +3562,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    300 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '238',
-      'contentobject_id' => '84',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '412',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    301 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '239',
-      'contentobject_id' => '84',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><informaltable class="default" width="100%"><tbody><tr><td ezxhtml:width="49%"><ezembed xlink:href="ezcontent://85" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed></td><td/><td ezxhtml:width="49%"><ezembed xlink:href="ezcontent://93" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed></td></tr><tr><td><ezembed xlink:href="ezcontent://91" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed></td><td/><td><ezembed xlink:href="ezcontent://92" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue></ezconfig></ezembed></td></tr><tr><td/><td/><td/></tr><tr><td><para><emphasis role="strong">Training by Type:</emphasis></para><itemizedlist><listitem><para>Technical training
-                                    </para></listitem><listitem><para>Standard exam
-                                    </para></listitem></itemizedlist><para><emphasis role="strong">Training by Delivery Method:</emphasis></para><itemizedlist><listitem><para>Classroom
-                                    </para></listitem><listitem><para>Online
-                                    </para></listitem></itemizedlist></td><td/><td><ezembed xlink:href="ezcontent://86" ezxhtml:class="itemized_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td></tr></tbody></informaltable><para><eztemplateinline name="separator"/></para><ezembed xlink:href="ezcontent://87" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '413',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    302 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '240',
-      'contentobject_id' => '84',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para><eztemplateinline name="factbox"><ezconfig><ezvalue key="title">Next steps</ezvalue></ezconfig></eztemplateinline></para><orderedlist><listitem><para>Donec magna felis
-                                </para></listitem><listitem><para>Mauris sed lectus vel
-                                </para></listitem><listitem><para>Praesent pharetra
-                                </para></listitem></orderedlist></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '414',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    303 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '241',
-      'contentobject_id' => '84',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '415',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    304 => [
+    233 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '84',
@@ -4811,7 +3577,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    305 => [
+    234 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '85',
@@ -4826,7 +3592,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'certification',
       'version' => '1',
     ],
-    306 => [
+    235 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '85',
@@ -4841,41 +3607,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    307 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '85',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Pellentesque iaculis ultrices orci. Ut interdum felis et lacus. Pellentesque eu mi. Vestibulum quis sapien. Donec ut pede.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '419',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    308 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '85',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '420',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    309 => [
+    236 => [
       'attribute_original_id' => '421',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '85',
@@ -4890,7 +3622,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    310 => [
+    237 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '85',
@@ -4905,7 +3637,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    311 => [
+    238 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '85',
@@ -4920,7 +3652,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    312 => [
+    239 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '86',
@@ -4935,7 +3667,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'professional workshops',
       'version' => '1',
     ],
-    313 => [
+    240 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '86',
@@ -4950,41 +3682,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    314 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '86',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Fusce quam erat, pulvinar non, semper sit amet, accumsan ut, magna.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '426',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    315 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '86',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '427',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    316 => [
+    241 => [
       'attribute_original_id' => '428',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '86',
@@ -4999,7 +3697,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    317 => [
+    242 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '86',
@@ -5014,7 +3712,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    318 => [
+    243 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '86',
@@ -5029,7 +3727,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    319 => [
+    244 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '87',
@@ -5044,7 +3742,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'etiam sodales mauris',
       'version' => '1',
     ],
-    320 => [
+    245 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '87',
@@ -5059,7 +3757,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    321 => [
+    246 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '87',
@@ -5076,41 +3774,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    322 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '87',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Sed ultrices. Integer tincidunt purus ac leo. Vestibulum nulla lectus, congue vitae, pellentesque sed, adipiscing id, felis.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '434',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    323 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '87',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Vestibulum fermentum turpis sollicitudin turpis. Proin fringilla malesuada odio. Donec quis dui et nibh ultricies nonummy. Nunc in quam. Integer turpis dui, molestie quis, vestibulum id, tincidunt at, metus. Quisque at ipsum. Fusce lectus massa, suscipit id, volutpat eget, sodales ut, massa. Etiam sodales mauris non nulla gravida gravida</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '435',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    324 => [
+    247 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '87',
@@ -5125,7 +3789,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    325 => [
+    248 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '87',
@@ -5142,24 +3806,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    326 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '87',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Etiam sodales</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '438',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    327 => [
+    249 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '87',
@@ -5174,7 +3821,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    328 => [
+    250 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '87',
@@ -5189,7 +3836,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    329 => [
+    251 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '87',
@@ -5204,7 +3851,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    330 => [
+    252 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '87',
@@ -5219,7 +3866,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    331 => [
+    253 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '88',
@@ -5234,7 +3881,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'class aptent taciti',
       'version' => '1',
     ],
-    332 => [
+    254 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '88',
@@ -5249,7 +3896,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    333 => [
+    255 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '88',
@@ -5266,41 +3913,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    334 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '88',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Vivamus venenatis, turpis sed nonummy posuere, lacus diam laoreet magna, vitae fringilla tortor libero at nisi. Cras sodales dolor sed diam. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '446',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    335 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '88',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Quisque massa sapien, bibendum vitae, imperdiet in, tempor at, lacus. Morbi eu augue. Nunc sagittis sem vitae risus. Nullam eu dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Sed quis est non massa rhoncus lacinia. Fusce lacus tellus, facilisis condimentum, porttitor pulvinar, laoreet at, nulla. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '447',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    336 => [
+    256 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '88',
@@ -5315,7 +3928,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    337 => [
+    257 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '88',
@@ -5332,24 +3945,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    338 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '88',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Class aptent</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '450',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    339 => [
+    258 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '88',
@@ -5364,7 +3960,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    340 => [
+    259 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '88',
@@ -5379,7 +3975,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    341 => [
+    260 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '88',
@@ -5394,7 +3990,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    342 => [
+    261 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '88',
@@ -5409,7 +4005,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    343 => [
+    262 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '89',
@@ -5424,7 +4020,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'duis auctor vehicula erat',
       'version' => '1',
     ],
-    344 => [
+    263 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '89',
@@ -5439,7 +4035,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    345 => [
+    264 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '89',
@@ -5456,41 +4052,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    346 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '89',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Duis tincidunt, massa non rhoncus luctus, nunc metus pellentesque ante, sed tincidunt nisi lorem nec ligula. </para><para>Proin congue rutrum odio. Pellentesque cursus, nisl nec eleifend fermentum, lectus tortor aliquam tortor, nec semper ante nisi at risus. Duis mi lorem, porta quis, congue eget, varius sit amet, mi. Quisque augue. Duis auctor vehicula erat. Vivamus laoreet dictum velit. Cras vitae odio a quam bibendum lobortis. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '458',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    347 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '89',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '459',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    348 => [
+    265 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '89',
@@ -5505,7 +4067,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    349 => [
+    266 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '89',
@@ -5522,24 +4084,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    350 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '89',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Duis auctor</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '462',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    351 => [
+    267 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '89',
@@ -5554,7 +4099,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    352 => [
+    268 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '89',
@@ -5569,7 +4114,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    353 => [
+    269 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '89',
@@ -5584,7 +4129,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    354 => [
+    270 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '89',
@@ -5599,7 +4144,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    355 => [
+    271 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '316',
       'contentobject_id' => '90',
@@ -5614,7 +4159,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'events and seminars',
       'version' => '1',
     ],
-    356 => [
+    272 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '317',
       'contentobject_id' => '90',
@@ -5629,7 +4174,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    357 => [
+    273 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '318',
       'contentobject_id' => '90',
@@ -5644,7 +4189,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '0',
       'version' => '1',
     ],
-    358 => [
+    274 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '91',
@@ -5659,7 +4204,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'self-paced courses',
       'version' => '1',
     ],
-    359 => [
+    275 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '91',
@@ -5674,41 +4219,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    360 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '91',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis sollicitudin neque.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '472',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    361 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '91',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '473',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    362 => [
+    276 => [
       'attribute_original_id' => '474',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '91',
@@ -5723,7 +4234,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    363 => [
+    277 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '91',
@@ -5738,7 +4249,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    364 => [
+    278 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '91',
@@ -5753,7 +4264,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    365 => [
+    279 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '92',
@@ -5768,7 +4279,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'instructor-led courses',
       'version' => '1',
     ],
-    366 => [
+    280 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '92',
@@ -5783,41 +4294,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    367 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '92',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Nunc a purus. Nunc quis urna at diam sodales fermentum. Sed mauris tortor, gravida ac, consequat sed.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '479',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    368 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '92',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '480',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    369 => [
+    281 => [
       'attribute_original_id' => '481',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '92',
@@ -5832,7 +4309,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    370 => [
+    282 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '92',
@@ -5847,7 +4324,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    371 => [
+    283 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '92',
@@ -5862,7 +4339,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    372 => [
+    284 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '93',
@@ -5877,7 +4354,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'additional learning resources',
       'version' => '1',
     ],
-    373 => [
+    285 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '93',
@@ -5892,41 +4369,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    374 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '93',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Fusce bibendum nisi sed mauris. Morbi mi tellus, porta ac, vulputate ac, interdum et, dolor.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '486',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    375 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '93',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '487',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    376 => [
+    286 => [
       'attribute_original_id' => '488',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '93',
@@ -5941,7 +4384,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    377 => [
+    287 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '93',
@@ -5956,7 +4399,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    378 => [
+    288 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '93',
@@ -5971,7 +4414,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    379 => [
+    289 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '94',
@@ -5986,7 +4429,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'support',
       'version' => '1',
     ],
-    380 => [
+    290 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '94',
@@ -6001,75 +4444,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    381 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '238',
-      'contentobject_id' => '94',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para><eztemplateinline name="factbox"><ezconfig><ezvalue key="title">Self Support</ezvalue></ezconfig></eztemplateinline></para><itemizedlist><listitem><para><link xlink:href="ezcontent://98" xlink:show="none">Documentation</link></para></listitem><listitem><para><link xlink:href="ezcontent://95" xlink:show="none">Knowledgebase</link></para></listitem></itemizedlist></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '493',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    382 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '239',
-      'contentobject_id' => '94',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><informaltable class="default" width="100%"><tbody><tr><td><ezembed xlink:href="ezcontent://101" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td><td><ezembed xlink:href="ezcontent://103" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td></tr><tr><td><ezembed xlink:href="ezcontent://104" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td><td/></tr><tr><td/><td/></tr></tbody></informaltable><para><eztemplateinline name="separator"/></para><ezembed xlink:href="ezcontent://102" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '494',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    383 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '240',
-      'contentobject_id' => '94',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '495',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    384 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '241',
-      'contentobject_id' => '94',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '496',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    385 => [
+    291 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '94',
@@ -6084,7 +4459,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    386 => [
+    292 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '95',
@@ -6099,24 +4474,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'knowledgebase',
       'version' => '1',
     ],
-    387 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '95',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Mauris in est. Mauris fringilla egestas nisl. Vestibulum commodo tristique mi. Morbi congue. Aliquam erat volutpat. Donec pharetra. Maecenas at nibh. Proin adipiscing vehicula nisi. Aliquam interdum erat et urna. Integer quis felis gravida est bibendum iaculis. Etiam nec quam quis nisi euismod dictum. Proin ut diam ut metus condimentum posuere. Praesent id ligula vitae felis lacinia feugiat. Ut dictum hendrerit nunc. Cras magna nisl, auctor non, varius non, laoreet ac, orci. In pellentesque aliquam pede. Nam metus magna, porta ut, feugiat eget, consectetuer sit amet, elit. Vivamus ac orci vitae nunc facilisis consequat. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '499',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    388 => [
+    293 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '95',
@@ -6131,7 +4489,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    389 => [
+    294 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '95',
@@ -6146,7 +4504,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    390 => [
+    295 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '96',
@@ -6161,24 +4519,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'sed suscipit',
       'version' => '1',
     ],
-    391 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '96',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Sed suscipit feugiat erat. Vestibulum interdum congue arcu. Ut euismod, arcu a ornare auctor, sapien nisl viverra arcu, in mattis nibh justo ac ipsum. Nunc nibh urna, nonummy id, vestibulum eget, interdum at, erat. Nulla consequat.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '503',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    392 => [
+    296 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '96',
@@ -6193,7 +4534,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    393 => [
+    297 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '96',
@@ -6208,7 +4549,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    394 => [
+    298 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '97',
@@ -6223,24 +4564,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'ut interdum',
       'version' => '1',
     ],
-    395 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '97',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Etiam nec metus. Proin mauris lorem, lobortis dapibus, semper id, nonummy eu, lacus. Aliquam erat volutpat. Vivamus hendrerit aliquam ipsum. Maecenas suscipit ante sit amet risus. Nullam lacus. Praesent varius imperdiet sapien. Nulla sit amet massa nonummy felis aliquam varius. Vivamus sed arcu. Mauris sodales tristique risus. Cras sed sem. Quisque est eros, lacinia id, placerat sit amet, varius ac, odio. Aenean placerat, justo eu laoreet laoreet, purus quam faucibus risus, vel accumsan mauris ligula in magna.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '507',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    396 => [
+    299 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '97',
@@ -6255,7 +4579,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    397 => [
+    300 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '97',
@@ -6270,7 +4594,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    398 => [
+    301 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '98',
@@ -6285,24 +4609,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'documentation',
       'version' => '1',
     ],
-    399 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '98',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Vestibulum ultricies lorem sed pede. Donec massa. Cras imperdiet, lectus mollis rhoncus gravida, enim lacus iaculis libero, consectetuer lobortis sapien purus nec purus. Donec nulla dui, commodo et, porttitor eu, malesuada id, nisi. Cras in mi in dolor ultricies pretium. Curabitur pellentesque auctor ligula. Suspendisse malesuada, nunc a tempor lacinia, lectus turpis commodo urna, eu porta risus nisl nec dui. Sed suscipit feugiat erat. Vestibulum interdum congue arcu. Ut euismod, arcu a ornare auctor, sapien nisl viverra arcu, in mattis nibh justo ac ipsum. Nunc nibh urna, nonummy id, vestibulum eget, interdum at, erat. Nulla consequat.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '511',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    400 => [
+    302 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '98',
@@ -6317,7 +4624,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    401 => [
+    303 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '98',
@@ -6332,7 +4639,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    402 => [
+    304 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '99',
@@ -6347,24 +4654,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'mauris pretium',
       'version' => '1',
     ],
-    403 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '99',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Praesent pretium mi eget odio. Nunc sed lectus eget purus eleifend mattis. Vivamus aliquam, metus quis rutrum venenatis, mi felis tempus ipsum, sed varius metus erat eget leo. Ut fringilla, urna vel consectetuer dignissim, tellus ante mattis quam, semper scelerisque nulla tortor eu enim. Vivamus tortor. Donec eleifend fringilla dui. Nullam semper interdum ipsum. Proin quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In hac habitasse platea dictumst. Mauris pretium posuere justo. Proin vestibulum cursus odio. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '515',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    404 => [
+    305 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '99',
@@ -6379,7 +4669,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    405 => [
+    306 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '99',
@@ -6394,7 +4684,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    406 => [
+    307 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '100',
@@ -6409,24 +4699,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'aliquam posuere',
       'version' => '1',
     ],
-    407 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '100',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Nam at nulla id lectus vehicula sollicitudin. Nullam lobortis facilisis mi. In hac habitasse platea dictumst. Aliquam dignissim iaculis est. Mauris egestas. Phasellus at mi. Mauris pede libero, accumsan vel, tristique eget, tempus sit amet, sapien. Fusce sed arcu. Pellentesque pharetra mattis velit. In nec eros. Praesent viverra metus ut tellus. In tellus elit, imperdiet at, tincidunt egestas, malesuada sed, nisl. Aliquam posuere mattis pede. Curabitur lacinia condimentum nunc. Phasellus mattis. Fusce ac pede. Ut in neque. Fusce adipiscing mi sit amet velit. Cras varius. Vivamus elementum dui id lectus. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '519',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    408 => [
+    308 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '100',
@@ -6441,7 +4714,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    409 => [
+    309 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '100',
@@ -6456,7 +4729,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    410 => [
+    310 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '101',
@@ -6471,7 +4744,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'books',
       'version' => '1',
     ],
-    411 => [
+    311 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '101',
@@ -6486,41 +4759,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    412 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '101',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Quisque fringilla hendrerit turpis. Curabitur suscipit blandit nulla. Sed mauris justo, iaculis vel, dictum ut, molestie et, purus.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '524',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    413 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '101',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Fusce ut risus. Nulla mauris magna, vulputate quis, dignissim vel, lobortis ut, neque. Etiam sed ante. Curabitur in dolor nec tellus consequat gravida. Proin faucibus viverra eros. Suspendisse fringilla. Etiam eget elit eu augue euismod lobortis. Sed urna elit, volutpat vel, ultricies id, molestie a, ligula. In cursus nonummy quam. Sed malesuada iaculis magna. Curabitur mollis vehicula nibh. Curabitur at orci at leo vulputate vestibulum. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '525',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    414 => [
+    312 => [
       'attribute_original_id' => '526',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '101',
@@ -6535,7 +4774,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    415 => [
+    313 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '101',
@@ -6550,7 +4789,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    416 => [
+    314 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '101',
@@ -6565,7 +4804,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    417 => [
+    315 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '102',
@@ -6580,7 +4819,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'aliquam pulvinar suscipit tellus',
       'version' => '1',
     ],
-    418 => [
+    316 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '102',
@@ -6595,7 +4834,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    419 => [
+    317 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '102',
@@ -6612,41 +4851,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    420 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '102',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Cras sollicitudin dolor eget sapien. Etiam sit amet tortor sit amet tortor adipiscing ultricies. Aliquam pulvinar suscipit tellus. Suspendisse sed magna. In vulputate erat. Nulla vel augue. Aenean magna. Phasellus vestibulum auctor nisi. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '532',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    421 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '102',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Nam laoreet, orci vitae tempor porttitor, mauris tellus blandit sapien, ac dignissim massa ipsum dignissim eros. Ut a urna. Aliquam consequat mollis eros.</para><para>In in ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque sodales tortor. Phasellus adipiscing pretium nibh. Pellentesque quam mauris, sodales at, rutrum eu, pulvinar ut, velit. Aliquam consequat tempus dolor. Pellentesque dignissim orci. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Praesent eu quam. Nam sollicitudin congue augue. Nulla facilisi. Nunc in turpis. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '533',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    422 => [
+    318 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '102',
@@ -6661,7 +4866,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    423 => [
+    319 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '102',
@@ -6678,24 +4883,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    424 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '102',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam pulvinar</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '536',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    425 => [
+    320 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '102',
@@ -6710,7 +4898,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    426 => [
+    321 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '102',
@@ -6725,7 +4913,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    427 => [
+    322 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '102',
@@ -6740,7 +4928,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    428 => [
+    323 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '102',
@@ -6755,7 +4943,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    429 => [
+    324 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '103',
@@ -6770,7 +4958,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'customer service',
       'version' => '1',
     ],
-    430 => [
+    325 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '103',
@@ -6785,41 +4973,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    431 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '103',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Duis non nulla non enim tempus tempor. Donec diam diam, consectetuer sit amet, imperdiet ac, consectetuer at, massa. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '543',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    432 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '103',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Phasellus vitae est. Proin tellus leo, accumsan ut, ullamcorper non, sagittis vitae, elit. Suspendisse placerat luctus ligula. Nunc turpis elit, vulputate nec, vehicula ac, tempor et, ipsum. Maecenas dignissim rutrum ante. Sed ultrices, quam et nonummy vulputate, massa dolor mattis risus, at tempus nibh est eu ipsum. Sed lacus dui, luctus at, iaculis vel, scelerisque vel, sem. Vivamus tellus justo, fermentum et, lobortis et, lobortis euismod, augue. Etiam cursus varius ligula. Quisque pharetra. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '544',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    433 => [
+    326 => [
       'attribute_original_id' => '545',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '103',
@@ -6834,7 +4988,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    434 => [
+    327 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '103',
@@ -6849,7 +5003,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    435 => [
+    328 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '103',
@@ -6864,7 +5018,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    436 => [
+    329 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '104',
@@ -6879,7 +5033,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'support programs',
       'version' => '1',
     ],
-    437 => [
+    330 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '104',
@@ -6894,41 +5048,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    438 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '104',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Mauris in est. Mauris fringilla egestas nisl. Vestibulum commodo tristique mi. Morbi congue. Aliquam erat volutpat. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '550',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    439 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '104',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Donec pharetra. Maecenas at nibh. Proin adipiscing vehicula nisi. Aliquam interdum erat et urna. Integer quis felis gravida est bibendum iaculis. Etiam nec quam quis nisi euismod dictum. Proin ut diam ut metus condimentum posuere. Praesent id ligula vitae felis lacinia feugiat. Ut dictum hendrerit nunc. Cras magna nisl, auctor non, varius non, laoreet ac, orci. In pellentesque aliquam pede. Nam metus magna, porta ut, feugiat eget, consectetuer sit amet, elit. Vivamus ac orci vitae nunc facilisis consequat. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '551',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    440 => [
+    331 => [
       'attribute_original_id' => '552',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '104',
@@ -6943,7 +5063,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    441 => [
+    332 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '104',
@@ -6958,7 +5078,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    442 => [
+    333 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '104',
@@ -6973,7 +5093,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    443 => [
+    334 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '105',
@@ -6988,7 +5108,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'getting started',
       'version' => '1',
     ],
-    444 => [
+    335 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '105',
@@ -7003,41 +5123,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    445 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '105',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '557',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    446 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '105',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '558',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    447 => [
+    336 => [
       'attribute_original_id' => '559',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '105',
@@ -7052,7 +5138,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    448 => [
+    337 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '105',
@@ -7067,7 +5153,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    449 => [
+    338 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '105',
@@ -7082,7 +5168,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    450 => [
+    339 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '106',
@@ -7097,7 +5183,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'tutorials for',
       'version' => '1',
     ],
-    451 => [
+    340 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '106',
@@ -7112,7 +5198,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    452 => [
+    341 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '106',
@@ -7129,41 +5215,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    453 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '106',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><informaltable class="default" width="100%" title="tutorials"><tbody><tr><td><para ezxhtml:textalign="left"><emphasis role="strong"><emphasis role="strong">new to eZ Publish users</emphasis></emphasis></para></td><td><para ezxhtml:textalign="left"><emphasis role="strong">experienced users</emphasis></para></td></tr><tr><td ezxhtml:textalign="center"/><td ezxhtml:textalign="center"/></tr><tr><td><ezembed xlink:href="ezcontent://108" view="embed-inline"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td><td><para><link xlink:href="ezurl://16" xlink:show="new">How to develop eZ Publish Extensions</link></para></td></tr><tr><td><ezembed xlink:href="ezcontent://202" view="embed-inline"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td><td><para><link xlink:href="ezurl://17" xlink:show="new" xml:id="internal-source-marker_0.15448186383582652a">How to create custom workflow</link></para></td></tr><tr><td><ezembed xlink:href="ezcontent://127" view="embed-inline"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td><td><para><link xlink:href="ezurl://18" xlink:show="new">How to use REST API interface</link></para></td></tr><tr><td><para><link xlink:href="ezurl://13" xlink:show="new" xml:id="internal-source-marker_0.15448186383582652b">eZ Publish Administration Interface</link></para></td><td><para><link xlink:href="ezurl://19" xlink:show="new">Asynchronous publishing</link></para></td></tr><tr><td><para><link xlink:href="ezurl://14" xlink:show="new">eZ Publish Online Editor Video</link></para></td><td><ezembed xlink:href="ezcontent://130" view="embed-inline"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td></tr><tr><td><para><link xlink:href="ezurl://15" xlink:show="new" xml:id="internal-source-marker_0.15448186383582652c">eZ Flow Video Tutorial</link></para></td><td><para><link xlink:href="ezurl://20" xlink:show="new" xml:id="internal-source-marker_0.15448186383582652d">Upgrading to 4.5</link></para></td></tr><tr><td colspan="2"/></tr><tr><td ezxhtml:textalign="right" colspan="2"><para ezxhtml:textalign="right"><emphasis role="strong">more <link xlink:href="ezurl://21" xlink:show="new">tutorials</link> and <link xlink:href="ezurl://22" xlink:show="new">videos</link></emphasis></para></td></tr></tbody></informaltable></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '565',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    454 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '106',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '566',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    455 => [
+    342 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '106',
@@ -7178,7 +5230,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    456 => [
+    343 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '106',
@@ -7195,24 +5247,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    457 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '106',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '569',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    458 => [
+    344 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '106',
@@ -7227,7 +5262,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    459 => [
+    345 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '106',
@@ -7242,7 +5277,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    460 => [
+    346 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '106',
@@ -7257,7 +5292,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    461 => [
+    347 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '106',
@@ -7272,7 +5307,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    462 => [
+    348 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '107',
@@ -7287,7 +5322,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'get involved',
       'version' => '1',
     ],
-    463 => [
+    349 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '107',
@@ -7302,7 +5337,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    464 => [
+    350 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '107',
@@ -7319,44 +5354,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ],
-    465 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '107',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para><link xlink:href="ezurl://25" xlink:show="new" xml:id="internal-source-marker_0.15448186383582652">Forums</link>,&amp;nbsp;<link xlink:href="ezurl://26" xlink:show="new">Blogs</link>,&amp;nbsp;<link xlink:href="ezurl://27" xlink:show="new">Twitter</link>,&amp;nbsp;<link xlink:href="ezurl://28" xlink:show="new">LinkedIn</link></para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '577',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    466 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '107',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>[<link xlink:href="ezurl://29#contact" xlink:show="none">contact</link>] [<link xlink:href="ezurl://29#share" xlink:show="none">share</link>] [<link xlink:href="ezurl://29#develop" xlink:show="none">develop</link>]</para><para>If you want to get involved in the eZ Community\'s life, help, be helped, share and participate, this page is for you. It gives you a list of hints and tricks on how to actually get involved.</para><para>Make sure you also read the&amp;nbsp;<link xlink:href="ezurl://30" xlink:show="none">Etiquette, blogging and usage guidelines</link></para><para><anchor xml:id="contact"/></para><para><anchor xml:id="eztoc772_1"/></para><para><anchor xml:id="eztoc1010_1_1"/></para><para><anchor xml:id="eztoc1031_0_1_1"/></para><title ezxhtml:level="5">Contact</title><para>Should anything be unclear ( after having read through the following :) ), or if you would like to ask a question, feel free to send an email to community@ez.no.</para><para><anchor xml:id="share"/></para><para><anchor xml:id="eztoc772_2"/></para><para><anchor xml:id="eztoc1010_1_2"/></para><para><anchor xml:id="eztoc1031_0_1_2"/></para><title ezxhtml:level="5">Sharing</title><para><anchor xml:id="eztoc772_2_1"/></para><para><anchor xml:id="eztoc1010_1_2_1"/></para><para><anchor xml:id="eztoc1031_0_1_2_1"/></para><title ezxhtml:level="6">Forums</title><para>From&amp;nbsp;<link xlink:href="ezurl://25" xlink:show="none" xlink:title="eZ Community forums">http://share.ez.no/forums</link>, you can pick one of the existing forums and ask a question, make a remark, answers others\' questions, or simply read through, looking for a bit of information. The following forums are available:</para><itemizedlist><listitem><para><link xlink:href="ezurl://31" xlink:show="none">Install &amp; configuration</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem><listitem><para><link xlink:href="ezurl://32" xlink:show="none">Setup &amp; design</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem><listitem><para><link xlink:href="ezurl://33" xlink:show="none">General</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem><listitem><para><link xlink:href="ezurl://34" xlink:show="none">Developer</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem><listitem><para><link xlink:href="ezurl://35" xlink:show="none">Suggestions</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem><listitem><para><link xlink:href="ezurl://36" xlink:show="none">Extensions</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem></itemizedlist><para>The "Extensions" forum is broken down into extension-specific subforums:</para><itemizedlist><listitem><para><link xlink:href="ezurl://37" xlink:show="none">eZ Newsletter</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem><listitem><para><link xlink:href="ezurl://38" xlink:show="none">Website Interface</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem><listitem><para><link xlink:href="ezurl://39" xlink:show="none">eZ Flow</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem><listitem><para><link xlink:href="ezurl://40" xlink:show="none">eZ Find</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem></itemizedlist><para>One forum is dedicated to translators and linguists translating eZ Publish :</para><itemizedlist><listitem><para><link xlink:href="ezurl://41" xlink:show="none" xlink:title="Forum dedicated to translators">Translations</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem></itemizedlist><para>One forum is dedicated to local eZ Publish communities who do not have a dedicated platform and would like to share in their native language :</para><itemizedlist><listitem><para><link xlink:href="ezurl://42" xlink:show="none" xlink:title="Localized forums">Localized forums</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem></itemizedlist><para>A last forum welcomes suggestions for this portal:</para><itemizedlist><listitem><para><link xlink:href="ezurl://43" xlink:show="none">Feedback and ideas for this portal</link>&amp;nbsp;(<link xlink:href="ezurl://29#RSS" xlink:show="none">rss</link>)</para></listitem></itemizedlist><para>It is often used in conjunction with the&amp;nbsp;<link xlink:href="ezurl://44" xlink:show="new" xlink:title="Issue tracker for the Community Portal">share.ez.no-dedicated issue tracker</link>&amp;nbsp;(not to be confused with the&amp;nbsp;<link xlink:href="ezurl://45" xlink:show="new" xlink:title="General eZ Publish issue tracker">general eZ Publish issue tracker</link>).</para><para>&amp;nbsp;<anchor xml:id="eztoc772_2_2"/></para><para><anchor xml:id="eztoc1010_1_2_2"/></para><para><anchor xml:id="eztoc1031_0_1_2_2"/></para><title ezxhtml:level="6">Your experience through an article or tutorial</title><para>The&amp;nbsp;<link xlink:href="ezurl://46" xlink:show="none" xlink:title="eZ Community Articles">Articles</link>&amp;nbsp;and&amp;nbsp;<link xlink:href="ezurl://47" xlink:show="none" xlink:title="eZ Community Tutorials">Tutorials</link>&amp;nbsp;sections are gold mines of useful, practical information on eZ Publish and eZ Software usage. You may be willing to contribute to growing the amount of common gold by sharing one of your experiences, right here. Read more on this here :<link xlink:href="ezurl://48" xlink:show="none">Share your experience, write a tutorial for the Community</link>.</para><para><anchor xml:id="IRC"/></para><para>&amp;nbsp;<anchor xml:id="eztoc772_2_3"/></para><para><anchor xml:id="eztoc1010_1_2_3"/></para><para><anchor xml:id="eztoc1031_0_1_2_3"/></para><title ezxhtml:level="6">Live chat on IRC</title><para>Two channels are dedicated to live chat (mostly around eZ Publish and eZ Components), here they are :</para><itemizedlist><listitem><para>eZ Publish room:&amp;nbsp;<link xlink:href="ezurl://49#ezpublish" xlink:show="none">irc://irc.freenode.net/#ezpublish</link></para></listitem><listitem><para>eZ Components room:&amp;nbsp;<link xlink:href="ezurl://49#zetacomponents" xlink:show="none">irc://irc.freenode.net/#zetacomponents</link></para></listitem></itemizedlist><para><literallayout class="normal">Feel free and join the chat. Usually there is a number of people willing to help you out with your problem or discuss features.&amp;nbsp;
-You need an&amp;nbsp;<link xlink:href="ezurl://50#Clients" xlink:show="none">IRC Client</link>&amp;nbsp;for joining the channel. Here is an indicative list of popular IRC clients :</literallayout></para><itemizedlist><listitem><para><link xlink:href="ezurl://51" xlink:show="none">XChat</link></para></listitem><listitem><para><link xlink:href="ezurl://52" xlink:show="none">mIRC</link></para></listitem><listitem><para><link xlink:href="ezurl://53" xlink:show="none">Pidgin</link></para></listitem><listitem><para><link xlink:href="ezurl://54" xlink:show="none">Colloquy</link></para></listitem></itemizedlist><para>&amp;nbsp;<anchor xml:id="eztoc772_2_4"/></para><para><anchor xml:id="eztoc1010_1_2_4"/></para><para><anchor xml:id="eztoc1031_0_1_2_4"/></para><title ezxhtml:level="6">Blogging</title><para><literallayout class="normal">A central blog planet is aggregating many community members\' blogs:<link xlink:href="ezurl://55" xlink:show="new" xlink:title="Planet eZ Publish">http://planetezpublish.org/</link>&amp;nbsp;(available through&amp;nbsp;<link xlink:href="ezurl://56" xlink:show="new" xlink:title="planetezpublish RSS feed">RSS</link>&amp;nbsp;).
-Local initiatives exists, among them the french-speaking blog-planet :&amp;nbsp;<link xlink:href="ezurl://57" xlink:show="new" xlink:title="French eZ Publish blog planet">http://www.planet-ezpublish.fr/</link>.</literallayout></para><para>Atop, this platform will soon open to public blogging, stay tuned.</para><para>&amp;nbsp;<anchor xml:id="eztoc772_2_5"/></para><para><anchor xml:id="eztoc1010_1_2_5"/></para><para><anchor xml:id="eztoc1031_0_1_2_5"/></para><title ezxhtml:level="6">Mailing-lists</title><para>Feel free to register on the eZ Community mailing-list. You can do so here :<link xlink:href="ezurl://58" xlink:show="new" xlink:title="eZ Community mailing-list">http://lists.ez.no/mailman/listinfo/sdk-public</link>. It serves as a community support channel, obviously less responsive than IRC or twitter, but more persistent, which can be preferred in some cases.</para><para>Another mailing-list helps you see pass by every commit messages on eZ Publish\'s development trunk. If you are eager to see one specific feature implemented, or simply like to be updated with the bleeding-edge, vip status of eZ Publish, you should subscribe to that one :&amp;nbsp;<link xlink:href="ezurl://59" xlink:show="new">http://lists.ez.no/mailman/listinfo/sdk-svn</link></para><para>&amp;nbsp;<anchor xml:id="eztoc772_2_6"/></para><para><anchor xml:id="eztoc1010_1_2_6"/></para><para><anchor xml:id="eztoc1031_0_1_2_6"/></para><title ezxhtml:level="6">RSS</title><para><anchor xml:id="RSS"/></para><para>Follow the eZ Community activity through RSS. Here are the feeds at your disposal:</para><itemizedlist><listitem><para>All forums (topics &amp; replies):&amp;nbsp;<link xlink:href="ezurl://60" xlink:show="none">http://share.ez.no/rss/feed/all_forums</link></para></listitem><listitem><para>Forum topics ONLY :&amp;nbsp;<link xlink:href="ezurl://61" xlink:show="none" xlink:title="RSS feed for forum topics ONLY">http://share.ez.no/rss/feed/forum_topics_only</link></para></listitem><listitem><para>Articles and Tutorials :&amp;nbsp;<link xlink:href="ezurl://62" xlink:show="none">http://share.ez.no/rss/feed/articles</link></para></listitem><listitem><para>Blogs :&amp;nbsp;<link xlink:href="ezurl://63" xlink:show="none">http://share.ez.no/rss/feed/blogs</link></para></listitem><listitem><para>Forums &gt; Developer :&amp;nbsp;<link xlink:href="ezurl://64" xlink:show="none">http://share.ez.no/rss/feed/forums_developer</link></para></listitem><listitem><para>Forums &gt; Discussions :&amp;nbsp;<link xlink:href="ezurl://65" xlink:show="none">http://share.ez.no/rss/feed/forums_discussions</link></para></listitem><listitem><para>Forums &gt; Extensions :&amp;nbsp;<link xlink:href="ezurl://66" xlink:show="none">http://share.ez.no/rss/feed/forums_extensions</link></para></listitem><listitem><para>Forums &gt; Feedback :&amp;nbsp;<link xlink:href="ezurl://67" xlink:show="none">http://share.ez.no/rss/feed/forums_feedback</link></para></listitem><listitem><para>Forums &gt; General :&amp;nbsp;<link xlink:href="ezurl://68" xlink:show="none">http://share.ez.no/rss/feed/forums_general</link></para></listitem><listitem><para>Forums &gt; Install and Configuration :<link xlink:href="ezurl://69" xlink:show="none">http://share.ez.no/rss/feed/forums_install_and_configuration</link></para></listitem><listitem><para>Forums &gt; Setup and Design :&amp;nbsp;<link xlink:href="ezurl://70" xlink:show="none">http://share.ez.no/rss/feed/forums_setup_and_design</link></para></listitem><listitem><para>Forums &gt; Suggestions :&amp;nbsp;<link xlink:href="ezurl://71" xlink:show="none">http://share.ez.no/rss/feed/forums_suggestions</link></para></listitem><listitem><para>Forums &gt; Translation :&amp;nbsp;<link xlink:href="ezurl://72" xlink:show="none" xlink:title="Translation related forum">http://share.ez.no/rss/feed/forums_translation</link></para></listitem><listitem><para>Projects :&amp;nbsp;<link xlink:href="ezurl://73" xlink:show="none">http://share.ez.no/rss/feed/projects</link></para></listitem></itemizedlist><para>&amp;nbsp;<anchor xml:id="eztoc772_2_7"/></para><para><anchor xml:id="eztoc1010_1_2_7"/></para><para><anchor xml:id="eztoc1031_0_1_2_7"/></para><title ezxhtml:level="6">Social networks</title><para>Stay tuned on the portal\'s activity by following&amp;nbsp;<link xlink:href="ezurl://27" xlink:show="new" xlink:title="eZ Publish Community on twitter">@ezcommunity</link>. Also, cool instant pings happen on Twitter, where many community members are active. Feel free to join this sphere, and the first step could be to follow this Twitter list :&amp;nbsp;<link xlink:href="ezurl://74" xlink:show="new" xlink:title="eZ Community members on Twitter">http://twitter.com/i_robin/cms-ezpublish/members</link>.</para><para>The eZ Publish Community is also gathered on LinkedIn, swing by&amp;nbsp;<link xlink:href="ezurl://28" xlink:show="new" xlink:title="eZ Ecosystem on LinkedIn">there</link>!</para><para>Some&amp;nbsp;<link xlink:href="ezurl://75" xlink:show="new" xlink:title="Google Wave">Waves</link>&amp;nbsp;also got attention from the community members. One way to see them is to search, from Google Wave, the following: "with:public ezpublish". So come by and wave on with us. In case you need an invitation, drop a word here :<link xlink:href="ezurl://76" xlink:show="none">http://share.ez.no/forums/general/ez-publish-on-google-wave</link>.</para><para><anchor xml:id="develop"/>[<link xlink:href="ezurl://29#top" xlink:show="none" xlink:title="Back to top">back to top</link>]</para><para><anchor xml:id="eztoc772_3"/></para><para><anchor xml:id="eztoc1010_1_3"/></para><para><anchor xml:id="eztoc1031_0_1_3"/></para><title ezxhtml:level="5">Developing</title><para><anchor xml:id="eztoc772_3_8"/></para><para><anchor xml:id="eztoc1010_1_3_8"/></para><para><anchor xml:id="eztoc1031_0_1_3_8"/></para><title ezxhtml:level="6">Collaborative development</title><para>You have developed a cool extension for eZ Publish ? You would like to share it, and get other community members to help you push it ahead ? Then you should visit<link xlink:href="ezurl://77" xlink:show="new" xlink:title="eZ Community projects">http://projects.ez.no</link>&amp;nbsp;and open-source it there. You can log in with your ez.no account (the same as your share.ez.no account), and create a new project there. You may want to first check that no similar extension already exists, in which case you would probably prefer joining the existing team and tell about your ideas, suggestions and already crafted code.</para><para>This platform gives every project a simple collaborative development sandbox:</para><itemizedlist><listitem><para>forums</para></listitem><listitem><para>a subversion repository</para></listitem><listitem><para>a news wall</para></listitem><listitem><para>a home page</para></listitem><listitem><para>a rating system for people to praise or blame</para></listitem><listitem><para>galleries for screenshots</para></listitem><listitem><para>a download section</para></listitem></itemizedlist><para><anchor xml:id="doc"/></para><para><anchor xml:id="eztoc772_3_9"/></para><para><anchor xml:id="eztoc1010_1_3_9"/></para><para><anchor xml:id="eztoc1031_0_1_3_9"/></para><title ezxhtml:level="6">Documentation</title><para>Online documentation helps you in your daily development and administration tasks. The official documentation for eZ Publish is available at&amp;nbsp;<link xlink:href="ezurl://9" xlink:show="new" xlink:title="eZ Publish documentation">http://doc.ez.no</link>. A community initiative,<link xlink:href="ezurl://78" xlink:show="new" xlink:title="ez Publish community documentation">http://ezpedia.org</link>, comes as a relevant and handy knowledge base, very complimentary to the online documentation. The eZ Publish API documentation is&amp;nbsp;<link xlink:href="ezurl://79" xlink:show="new" xlink:title="eZ Publish API documentation">here</link>, and the official documentation for the Apache Zeta Components (formerly known as eZ Components) lies<link xlink:href="ezurl://80" xlink:show="new" xlink:title="Apache Zeta Components">here</link>. The Apache Zeta Components serve nowadays, in many places, as base libraries for eZ Publish, and are a generally high-quality set of libraries for web application development.</para><para>&amp;nbsp;<anchor xml:id="eztoc772_3_10"/></para><para><anchor xml:id="eztoc1010_1_3_10"/></para><para><anchor xml:id="eztoc1031_0_1_3_10"/></para><title ezxhtml:level="6">Trunk, testing and sending feedback</title><para><literallayout class="normal">For every eZ Publish release, the usual alpha-beta-rc countdown should happen, and the eZ Community will be in first line to check these pre-release versions of eZ Publish Community Project and push feedback on them.
-On top of these regular fevers, on a daily basis you may want to report issues found on eZ Publish, as well as propose enhancements. And this happens here :<link xlink:href="ezurl://81" xlink:show="new" xlink:title="eZ Publish general issue tracker">http://issues.ez.no/ezpublish</link>.</literallayout></para><para>You can as well follow every step of eZ Publish\'s development by checking out the trunk version of it. It is hosted on a Github server. All you need is to visit&amp;nbsp;<link xlink:href="ezurl://82" xlink:show="new" xlink:title="eZ Publish Community Project\'s github repository">eZ Publish Community Project\'s github repository</link>, and enjoy :)</para><para>&amp;nbsp;<anchor xml:id="eztoc772_3_11"/></para><para><anchor xml:id="eztoc1010_1_3_11"/></para><para><anchor xml:id="eztoc1031_0_1_3_11"/></para><title ezxhtml:level="6">Translation and localisation</title><para>A central community translation initiative is hosted here<link xlink:href="ezurl://83" xlink:show="new" xlink:title="Community Translation Initiative">http://projects.ez.no/ezpublish_translation</link>. The homepage of the project gives you all necessary details to get involved in translating eZ Publish into your preferred language. If you feel you have a linguist soul, or simply are fed up with not being able to use eZ Publish in your native language, this initiative is for you!</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '578',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    467 => [
+    351 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '107',
@@ -7371,7 +5369,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    468 => [
+    352 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '107',
@@ -7388,24 +5386,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    469 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '107',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '581',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    470 => [
+    353 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '107',
@@ -7420,7 +5401,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    471 => [
+    354 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '107',
@@ -7435,7 +5416,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    472 => [
+    355 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '107',
@@ -7450,7 +5431,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    473 => [
+    356 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '107',
@@ -7465,7 +5446,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    474 => [
+    357 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '108',
@@ -7480,7 +5461,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'how to use ez publish',
       'version' => '1',
     ],
-    475 => [
+    358 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '108',
@@ -7495,7 +5476,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    476 => [
+    359 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '108',
@@ -7512,41 +5493,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    477 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '108',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>eZ Publish comes with a multitude of features out of the box, ensuring that you can quickly put your content online.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '589',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    478 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '108',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><itemizedlist><listitem><para>Publish content from your web browser</para></listitem><listitem><para>Publish content from word processors</para></listitem><listitem><para>Translate your content</para></listitem><listitem><para>Upload multiple files at once</para></listitem><listitem><para>Picture galleries</para></listitem><listitem><para>Video publishing</para></listitem><listitem><para>Web 2.0 features</para></listitem><listitem><para>Search</para></listitem></itemizedlist><title ezxhtml:level="3">Publish content from your web browser</title><ezembed xlink:href="ezcontent://109" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>With eZ Publish, you can publish content like articles, pictures and files directly from your web browser, using the Website Toolbar.</para><para>This toolbar appears when you log in and enables you to publish, move, replace or translate any kind of content.</para><para>The Online Editor is a WYSIWYG editor integrated into the website (no HTML coding required), providing formatting functions similar to word processing applications.</para><title ezxhtml:level="3">Publish content from your favourite word processor</title><ezembed xlink:href="ezcontent://110" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Many content managers prefer working directly in Microsoft Word or Open Office. The import / export feature enables you to create or edit site content in your favorite word processor, even when you might not have Internet access.</para><para>Afterwards, you can upload the document through either a WebDAV client or the front-end of your site to generate or update articles, documentation pages and so on.</para><title ezxhtml:level="3">Translate your content</title><ezembed xlink:href="ezcontent://111" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>All content in eZ Publish can be translated to multiple languages. Having only one website to administer is efficient and makes it easier to maintain a consistent brand across languages and countries.</para><para>An international corporation or organization can have one website with content in several languages. When a visitor selects a language, the menus and content are displayed accordingly. If you have not yet translated specific content, it will be shown in the source language or not at all (depending on your configuration).</para><para>When you are editing content, you can choose to switch the language you are currently editing or to translate from one language to another. Content in the source language is shown when you are translating, to aid in the process. When creating or updating content translations, you can also use the built-in content “diff” functionality to see the added or removed text in the source language.</para><para>Multiple, multilingual URLs can be created for each page. By default, you can have an object called "Easy" with a URL "/easy" but also create a French translation with a URL "/facile".</para><title ezxhtml:level="3">&amp;nbsp;Upload multiple files at once</title><ezembed xlink:href="ezcontent://112" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>If you want to upload more than one document, picture or video at a time, eZ Publish has multi-upload functionality.</para><para>You simply select the content you want from your computer or from the server where your content is stored. eZ Publish can detect the type of content uploaded and creates the appropriate web pages.</para><title ezxhtml:level="3">Picture galleries</title><ezembed xlink:href="ezcontent://113" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>eZ Publish makes it easy to create picture galleries. With the multi-upload functionality, you can add many pictures at once, then eZ Publish will scale, format and resize the pictures automatically.</para><para>You can then browse through the galleries and re-use images elsewhere in your website.</para><title ezxhtml:level="3">Video publishing</title><ezembed xlink:href="ezcontent://114" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Basically, a video is another type of content you or users of your website can publish. You can use eZ Publish to store and display any video format for web TV functionality or video publishing similar to Youtube.</para><title ezxhtml:level="3">Web 2.0 features</title><ezembed xlink:href="ezcontent://115" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Tag clouds, blogs, forums and polls are all built-in eZ Publish features. Make your users contribute and build communities.</para><title ezxhtml:level="3">Search</title><ezembed xlink:href="ezcontent://116" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>To find any content on your eZ Publish site, you can use the integrated search engine in eZ Publish. To add more functionality and scale high-loaded websites, <link xlink:href="ezurl://84" xlink:show="none">eZ Find</link> is an enterprise search extension for eZ Publish.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '590',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    479 => [
+    360 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '108',
@@ -7561,7 +5508,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    480 => [
+    361 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '108',
@@ -7578,24 +5525,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    481 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '108',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '593',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    482 => [
+    362 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '108',
@@ -7610,7 +5540,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    483 => [
+    363 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '108',
@@ -7625,7 +5555,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    484 => [
+    364 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '108',
@@ -7640,7 +5570,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    485 => [
+    365 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '108',
@@ -7655,7 +5585,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    486 => [
+    366 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '109',
@@ -7670,24 +5600,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    487 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '109',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '599',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    488 => [
+    367 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '109',
@@ -7704,7 +5617,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    489 => [
+    368 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '109',
@@ -7719,7 +5632,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    490 => [
+    369 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '110',
@@ -7734,24 +5647,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    491 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '110',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '603',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    492 => [
+    370 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '110',
@@ -7768,7 +5664,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    493 => [
+    371 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '110',
@@ -7783,7 +5679,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    494 => [
+    372 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '111',
@@ -7798,24 +5694,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    495 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '111',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '607',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    496 => [
+    373 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '111',
@@ -7832,7 +5711,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    497 => [
+    374 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '111',
@@ -7847,7 +5726,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    498 => [
+    375 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '112',
@@ -7862,24 +5741,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    499 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '112',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '611',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    500 => [
+    376 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '112',
@@ -7896,7 +5758,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    501 => [
+    377 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '112',
@@ -7911,7 +5773,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    502 => [
+    378 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '113',
@@ -7926,24 +5788,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    503 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '113',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '615',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    504 => [
+    379 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '113',
@@ -7960,7 +5805,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    505 => [
+    380 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '113',
@@ -7975,7 +5820,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    506 => [
+    381 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '114',
@@ -7990,24 +5835,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    507 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '114',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '619',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    508 => [
+    382 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '114',
@@ -8024,7 +5852,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    509 => [
+    383 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '114',
@@ -8039,7 +5867,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    510 => [
+    384 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '115',
@@ -8054,24 +5882,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    511 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '115',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '623',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    512 => [
+    385 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '115',
@@ -8088,7 +5899,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    513 => [
+    386 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '115',
@@ -8103,7 +5914,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    514 => [
+    387 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '116',
@@ -8118,24 +5929,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    515 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '116',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '627',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    516 => [
+    388 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '116',
@@ -8152,7 +5946,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    517 => [
+    389 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '116',
@@ -8167,7 +5961,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    518 => [
+    390 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '117',
@@ -8182,24 +5976,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    519 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '117',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '631',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    520 => [
+    391 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '117',
@@ -8216,7 +5993,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    521 => [
+    392 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '117',
@@ -8231,7 +6008,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    522 => [
+    393 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '118',
@@ -8246,7 +6023,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'how to manage ez publish',
       'version' => '1',
     ],
-    523 => [
+    394 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '118',
@@ -8261,7 +6038,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    524 => [
+    395 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '118',
@@ -8278,41 +6055,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    525 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '118',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>To provide you with full control over your website, eZ Publish has many features that make it easy to manage both content and users.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '637',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    526 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '118',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><itemizedlist><listitem><para>Administration Interface</para></listitem><listitem><para>Permission and access control</para></listitem><listitem><para>Workflows</para></listitem><listitem><para>Versioning and modification tracking</para></listitem><listitem><para>A unique content model</para></listitem><listitem><para>Content cross publishing</para></listitem><listitem><para>Multi-site deployment</para></listitem><listitem><para>Search engine optimization</para></listitem></itemizedlist><title ezxhtml:level="3">A rich and powerful Administration Interface</title><ezembed xlink:href="ezcontent://119" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue></ezconfig></ezembed><para>The content of a site can be displayed (and modified) in various ways. The Administration Interface is the advanced back-end interface, providing powerful tools for content management and editing as well as site management, configuration, customization and development.</para><para>In other words, you can change almost everything about a site in the Administration Interface.</para><title ezxhtml:level="3">Permission, rights management and access control</title><ezembed xlink:href="ezcontent://120" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue></ezconfig></ezembed><para>The eZ Publish access system is multi-level and role-based. This means that you can give a user or a group of users access to a combination of functions across the whole site or within a specific area of the site. For example, you restrict a certain part of a site to community or partner members.</para><title ezxhtml:level="3">Workflows</title><ezembed xlink:href="ezcontent://121" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue></ezconfig></ezembed><para>eZ Publish comes with an integrated workflow mechanism. An example of this is the built-in collaboration system, which defines an ordered sequence of actions to be executed after a content editor has published an object.</para><para>Suppose that your site has a restriction that all content has to go through an editor-in-chief before being published. It can be set as “pending” before being approved to be published. On the other hand, if a pending version is rejected by the editor, it can be set as “rejected”.</para><para>&amp;nbsp;Another example is the e-commerce engine, which can be used to manage subscriptions on a media site, automating access for paid subscribers to read premium news content, watch videos, and so on.</para><title ezxhtml:level="3">Versioning and modification tracking</title><ezembed xlink:href="ezcontent://122" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue></ezconfig></ezembed><para>Having access to older versions of content enables supervisors or editors-in-chief to check for inconsistency or errors in the content. eZ Publish automatically keeps track of which content changes were made by which users at what time, and provides the option to revert content to a previous version.</para><title ezxhtml:level="3">A unique content model</title><ezembed xlink:href="ezcontent://123" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue></ezconfig></ezembed><para>Publishing content is no longer only about publishing articles. Depending on your needs you must define specific content structures for cars, recipes, specific products for your webshop and more. eZ Publish has a flexible content engine that enables administrators to create these content definitions directly through graphical user interfaces.</para><title ezxhtml:level="3">Content cross publishing</title><ezembed xlink:href="ezcontent://124" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue></ezconfig></ezembed><para>Using the cross publishing feature, you can re-use content throughout the site while avoiding inconsistent duplicates of content that are hard to maintain. If content appears at multiple locations, you only have to edit the object once – the changes will be reflected at all locations.</para><title ezxhtml:level="3">Multi-site deployment</title><ezembed xlink:href="ezcontent://125" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue></ezconfig></ezembed><para>One installation of eZ Publish can host many different websites with the possibility to re-use content, functionality and design across the different sites. You can have a continuous overview of all your sites and can even industrialize this deployment via the Site Factory management service in <link xlink:href="ezurl://85" xlink:show="none">eZ Publish Premium</link> subscription services.</para><title ezxhtml:level="3">URL management and search engine optimization</title><ezembed xlink:href="ezcontent://126" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue></ezconfig></ezembed><para>eZ Publish makes it easy for you to create content that will be effectively indexed by search engines. Sitemaps, friendly URLs, and easy management of key XHTML tags are all built-in features.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '638',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    527 => [
+    396 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '118',
@@ -8327,7 +6070,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    528 => [
+    397 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '118',
@@ -8344,24 +6087,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    529 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '118',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '641',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    530 => [
+    398 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '118',
@@ -8376,7 +6102,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    531 => [
+    399 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '118',
@@ -8391,7 +6117,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    532 => [
+    400 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '118',
@@ -8406,7 +6132,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    533 => [
+    401 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '118',
@@ -8421,7 +6147,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    534 => [
+    402 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '119',
@@ -8436,24 +6162,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    535 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '119',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '647',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    536 => [
+    403 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '119',
@@ -8470,7 +6179,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    537 => [
+    404 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '119',
@@ -8485,7 +6194,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    538 => [
+    405 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '120',
@@ -8500,24 +6209,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    539 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '120',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '651',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    540 => [
+    406 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '120',
@@ -8534,7 +6226,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    541 => [
+    407 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '120',
@@ -8549,7 +6241,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    542 => [
+    408 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '121',
@@ -8564,24 +6256,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    543 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '121',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '655',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    544 => [
+    409 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '121',
@@ -8598,7 +6273,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    545 => [
+    410 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '121',
@@ -8613,7 +6288,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    546 => [
+    411 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '122',
@@ -8628,24 +6303,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    547 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '122',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '659',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    548 => [
+    412 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '122',
@@ -8662,7 +6320,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    549 => [
+    413 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '122',
@@ -8677,7 +6335,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    550 => [
+    414 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '123',
@@ -8692,24 +6350,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    551 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '123',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '663',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    552 => [
+    415 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '123',
@@ -8726,7 +6367,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    553 => [
+    416 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '123',
@@ -8741,7 +6382,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    554 => [
+    417 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '124',
@@ -8756,24 +6397,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    555 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '124',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '667',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    556 => [
+    418 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '124',
@@ -8790,7 +6414,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    557 => [
+    419 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '124',
@@ -8805,7 +6429,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    558 => [
+    420 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '125',
@@ -8820,24 +6444,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    559 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '125',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '671',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    560 => [
+    421 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '125',
@@ -8854,7 +6461,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    561 => [
+    422 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '125',
@@ -8869,7 +6476,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    562 => [
+    423 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '126',
@@ -8884,24 +6491,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    563 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '126',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '675',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    564 => [
+    424 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '126',
@@ -8918,7 +6508,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    565 => [
+    425 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '126',
@@ -8933,7 +6523,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    566 => [
+    426 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '127',
@@ -8948,7 +6538,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'how to develop with ez publish',
       'version' => '1',
     ],
-    567 => [
+    427 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '127',
@@ -8963,7 +6553,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    568 => [
+    428 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '127',
@@ -8980,41 +6570,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    569 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '127',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>eZ Publish is more than a basic CMS, but a content management platform based on a clear API that allows developers to customize and extend eZ Publish.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '681',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    570 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '127',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><itemizedlist><listitem><para>The content class concept</para></listitem><listitem><para>Custom design: CSS and templates</para></listitem><listitem><para>High-quality library of PHP components</para></listitem><listitem><para>Build eZ Publish extensions</para></listitem><listitem><para>Which development environment?</para></listitem><listitem><para>eZ Publish community and resources</para></listitem></itemizedlist><title ezxhtml:level="3">The content class concept</title><ezembed xlink:href="ezcontent://128" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Any piece of content in eZ Publish is a content object, which is an instance of a specific content class. A content class is a definition of an arbitrary data structure. It does not store any actual data.</para><para>A content class is made up of attributes. The characteristics of an attribute are determined by the datatype that is chosen for that specific attribute. By combining different datatypes, it is possible to represent complex data structures.</para><para>The illustration above shows the anatomy of a content class called "Article", which defines a data structure for storing news articles. It consists of attributes dedicated for storing the title, an introduction text and the actual body of an article.</para><title ezxhtml:level="3">Custom design: CSS and templates</title><ezembed xlink:href="ezcontent://129" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>The first thing you may be willing to do is to change the look of your eZ Publish site. This can be done by modifying the CSS of eZ Publish and <link xlink:href="ezurl://86" xlink:show="none">overriding templates</link>. You can even create reusable <link xlink:href="ezurl://87" xlink:show="none">site packages</link> that include these CSS and template changes.</para><title ezxhtml:level="3">High-quality library of PHP components</title><para>eZ Publish 4.X as well as the next generations of eZ Publish are based on <link xlink:href="ezurl://88" xlink:show="none">eZ Components</link> which are a high quality library of independent components aiming to help developers creating web centric applications like for example customising and extending eZ Publish.</para><para>In the eZ Components you will find components that focus their attention on solving important parts of Web application development. They are written for solving the re-occurring issues that Web application developers have to deal with when building their applications - without any superfluous ballast.</para><para>In order to cater for this goal, quality is also an important factor. The eZ Components development team uses a test-driven development methodology where a large effort is put into making the APIs easily testable. This also results in a better API for developers to use.</para><title ezxhtml:level="3">Build eZ Publish extensions</title><para>There is a clear API to develop your own PHP extensions in order to extend the functionality of eZ Publish. By using extensions it is possible to create new modules, datatypes, template operators, workflow events , or any integration with third party applications. You will find many contributed extensions available at <link xlink:href="ezurl://89" xlink:show="none">Contribution page</link>.</para><title ezxhtml:level="3">Which development environment?</title><para>&amp;nbsp;In an eZ Publish project, a <link xlink:href="ezurl://90" xlink:show="none">Subversion (SVN)</link> repository is usually set up to track all changes during development projects. When it comes to IDE, both <link xlink:href="ezurl://91" xlink:show="none">Eclipse</link> and <link xlink:href="ezurl://92" xlink:show="none">PHPEdit</link> have been optimised for eZ Publish.</para><title ezxhtml:level="3">eZ Publish community and resources</title><para>When you start developing with eZ Publish, the community is definitely an environment to get in touch with. You will find your answers or get help in the forums as well as many contributions that will make save you time in your development projects.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '682',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    571 => [
+    429 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '127',
@@ -9029,7 +6585,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    572 => [
+    430 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '127',
@@ -9046,24 +6602,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    573 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '127',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '685',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    574 => [
+    431 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '127',
@@ -9078,7 +6617,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    575 => [
+    432 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '127',
@@ -9093,7 +6632,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    576 => [
+    433 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '127',
@@ -9108,7 +6647,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    577 => [
+    434 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '127',
@@ -9123,7 +6662,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    578 => [
+    435 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '128',
@@ -9138,24 +6677,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    579 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '128',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '691',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    580 => [
+    436 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '128',
@@ -9172,7 +6694,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    581 => [
+    437 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '128',
@@ -9187,7 +6709,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    582 => [
+    438 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '129',
@@ -9202,24 +6724,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    583 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '129',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '695',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    584 => [
+    439 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '129',
@@ -9236,7 +6741,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    585 => [
+    440 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '129',
@@ -9251,7 +6756,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    586 => [
+    441 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '130',
@@ -9266,7 +6771,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'lots of websites, one ez publish installation',
       'version' => '1',
     ],
-    587 => [
+    442 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '130',
@@ -9281,7 +6786,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'adding siteaccesses in ez publish',
       'version' => '1',
     ],
-    588 => [
+    443 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '130',
@@ -9298,41 +6803,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    589 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '130',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>This tutorial gives developers the power to extend the features and flexibility of eZ Publish beyond a single website, to having an unlimited number in one installation. At the end of this tutorial you will have learned how to best leverage eZ Publish\'s siteaccess concept to create multiple websites. It will let you apply this concept through the concrete case of building two different, multilingual websites on one single eZ Publish instance.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '701',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    590 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '130',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><title ezxhtml:level="2">Introduction</title><para>Users of eZ Publish sometimes wonder if it is possible to make use of a single installation of eZ Publish for multiple websites. The answer is yes - through the power of the siteaccess. In fact, an understanding of siteaccesses gives one the ability to do much more than just host multiple sites in one installation. With this technique you can:</para><itemizedlist><listitem><para>make it easier to share content between databases</para></listitem><listitem><para>copy and add locations to objects</para></listitem><listitem><para>use a single Premium agreement and one eZ Network extension for multiple sites with the same or different content</para></listitem><listitem><para>simplify eZ Publish upgrades by consolidating several sites on one installation</para></listitem></itemizedlist><para>This is demo content, to continue real reading, please visit&amp;nbsp;<link xlink:href="ezurl://93" xlink:show="new">share.ez.no</link></para><title ezxhtml:level="2">About the author : Greg McAvoy-Jensen</title><para>Greg is the executive director of&amp;nbsp;<link xlink:href="ezurl://94" xlink:show="new" xlink:title="Granite Horizon">Granite Horizon</link>, one of the largest eZ Publish development firms in the United States of America. A certified eZ Publish developer, he has served clients and trained developers on four continents since he started working with eZ Publish in 2003. His wife Heather and he are proud parents of three wonderful children.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '702',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    591 => [
+    444 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '130',
@@ -9347,7 +6818,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    592 => [
+    445 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '130',
@@ -9364,24 +6835,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    593 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '130',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '705',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    594 => [
+    446 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '130',
@@ -9396,7 +6850,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    595 => [
+    447 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '130',
@@ -9411,7 +6865,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    596 => [
+    448 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '130',
@@ -9426,7 +6880,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    597 => [
+    449 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '130',
@@ -9441,7 +6895,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    598 => [
+    450 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '131',
@@ -9456,7 +6910,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'new features',
       'version' => '1',
     ],
-    599 => [
+    451 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '131',
@@ -9471,41 +6925,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    600 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '131',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '712',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    601 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '131',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '713',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    602 => [
+    452 => [
       'attribute_original_id' => '714',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '131',
@@ -9520,7 +6940,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    603 => [
+    453 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '131',
@@ -9535,7 +6955,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    604 => [
+    454 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '131',
@@ -9550,7 +6970,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    605 => [
+    455 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '132',
@@ -9565,7 +6985,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'improved user registration workflow',
       'version' => '1',
     ],
-    606 => [
+    456 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '132',
@@ -9580,7 +7000,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    607 => [
+    457 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '132',
@@ -9597,41 +7017,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    608 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '132',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Approval workflow for the front-end user self-registration</para><para>Useful when you wish to control who logs on to your system</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '720',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    609 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '132',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Enable and configure the workflow:</para><itemizedlist><listitem><para>Create workflow</para></listitem><listitem><para>Connect workflow to new triggers</para></listitem><listitem><para>Register user with approval workflow enabled</para></listitem></itemizedlist><para>Enable the approval workflow functionality:</para><itemizedlist><listitem><para>Go to the Administration Interface - “Setup” - “Workflows”</para></listitem><listitem><para>Create a user registration workflow, e.g “UserRegistration1”<itemizedlist><listitem><para>The FinishUserRegistration workflow is used to end the registration and trigger a confirmation notification that the user is successfully registered&amp;nbsp;</para></listitem></itemizedlist></para></listitem><listitem><para>Create a workflow to finish the user registration, e.g “FinishUserRegistration”</para></listitem></itemizedlist><ezembed xlink:href="ezcontent://133" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Connect the two workflows to triggers:</para><itemizedlist><listitem><para>“UserRegistration1” to “content-publish-before”</para></listitem><listitem><para>“FinishUserRegistration” to “content-publish-after”</para></listitem></itemizedlist><ezembed xlink:href="ezcontent://134" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">imagelarge</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Now you have set up a workflow approval process. When a user logs in to register himself as a user he is presented with an approval workflow</para><itemizedlist><listitem><para>At first time login the user clicks "Sign up" to register an account</para></listitem><listitem><para>&amp;nbsp;When finished a mail is sent to to confirm the user email</para></listitem></itemizedlist><ezembed xlink:href="ezcontent://135" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">imagelarge</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><itemizedlist><listitem><para>In the administration interface an event is created in the Dashboard’s&amp;nbsp; “Collaboration” screen of an administrator or another role with the right policies</para></listitem><listitem><para>The administrator can now either comment, approve or deny the request for user registration</para></listitem><listitem><para>The user gets a confirmation mail and can log in to eZ Publish.</para></listitem></itemizedlist></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '721',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    610 => [
+    458 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '132',
@@ -9646,7 +7032,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    611 => [
+    459 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '132',
@@ -9663,24 +7049,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    612 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '132',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '724',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    613 => [
+    460 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '132',
@@ -9695,7 +7064,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    614 => [
+    461 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '132',
@@ -9710,7 +7079,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    615 => [
+    462 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '132',
@@ -9725,7 +7094,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    616 => [
+    463 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '132',
@@ -9740,7 +7109,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    617 => [
+    464 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '133',
@@ -9755,24 +7124,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    618 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '133',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '730',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    619 => [
+    465 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '133',
@@ -9789,7 +7141,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    620 => [
+    466 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '133',
@@ -9804,7 +7156,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    621 => [
+    467 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '134',
@@ -9819,24 +7171,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    622 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '134',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '734',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    623 => [
+    468 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '134',
@@ -9853,7 +7188,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    624 => [
+    469 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '134',
@@ -9868,7 +7203,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    625 => [
+    470 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '135',
@@ -9883,24 +7218,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    626 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '135',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '738',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    627 => [
+    471 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '135',
@@ -9917,7 +7235,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    628 => [
+    472 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '135',
@@ -9932,7 +7250,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    629 => [
+    473 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '136',
@@ -9947,7 +7265,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'improved block editing',
       'version' => '1',
     ],
-    630 => [
+    474 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '136',
@@ -9962,7 +7280,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    631 => [
+    475 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '136',
@@ -9979,41 +7297,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    632 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '136',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Visual and usability changes:</para><itemizedlist><listitem><para>The new screen for adding blocks</para></listitem><listitem><para>Saves space</para></listitem></itemizedlist></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '744',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    633 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '136',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://137" ezxhtml:align="center"><ezconfig><ezvalue key="size">large</ezvalue></ezconfig></ezembed><para>The new screen for setting attributes for blocks</para><ezembed xlink:href="ezcontent://138" ezxhtml:align="center"><ezconfig><ezvalue key="size">large</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '745',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    634 => [
+    476 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '136',
@@ -10028,7 +7312,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    635 => [
+    477 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '136',
@@ -10045,24 +7329,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    636 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '136',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '748',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    637 => [
+    478 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '136',
@@ -10077,7 +7344,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    638 => [
+    479 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '136',
@@ -10092,7 +7359,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    639 => [
+    480 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '136',
@@ -10107,7 +7374,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    640 => [
+    481 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '136',
@@ -10122,7 +7389,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    641 => [
+    482 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '137',
@@ -10137,24 +7404,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    642 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '137',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '754',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    643 => [
+    483 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '137',
@@ -10171,7 +7421,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    644 => [
+    484 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '137',
@@ -10186,7 +7436,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    645 => [
+    485 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '138',
@@ -10201,24 +7451,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    646 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '138',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '758',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    647 => [
+    486 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '138',
@@ -10235,7 +7468,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    648 => [
+    487 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '138',
@@ -10250,7 +7483,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    649 => [
+    488 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '139',
@@ -10265,7 +7498,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'improved front-end editing',
       'version' => '1',
     ],
-    650 => [
+    489 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '139',
@@ -10280,7 +7513,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    651 => [
+    490 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '139',
@@ -10297,43 +7530,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    652 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '139',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://141" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '764',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    653 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '139',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Front-end editing toolbar always in top of browser window</para><para>Aligned with the Admin2 look and feel</para><para>New button to open the administration interface in a new window (12)</para><para>New and higher contrast icons</para><para>Toolbar changes according to use, and also which extensions and program you run</para><itemizedlist><listitem><para>In opening window</para></listitem><listitem><para>In editing mode</para></listitem><listitem><para>When editing folders</para></listitem></itemizedlist><ezembed xlink:href="ezcontent://140" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">large</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para><literallayout class="normal">Front-end toolbar: 
-&amp;nbsp;Timeline is marked.</literallayout></para><ezembed xlink:href="ezcontent://141" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">large</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para><literallayout class="normal">Editing folder toolbar: 
-&amp;nbsp;9-RSS feed, 10-Add to block, 11-Multiupload, 12-Administration interface</literallayout></para><ezembed xlink:href="ezcontent://142" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">large</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Editing mode toolbar:&amp;nbsp;</para><para>6-Preview, 7-Translate + translation button with flags</para><ezembed xlink:href="ezcontent://143" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">large</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '765',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    654 => [
+    491 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '139',
@@ -10348,7 +7545,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    655 => [
+    492 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '139',
@@ -10365,24 +7562,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    656 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '139',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '768',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    657 => [
+    493 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '139',
@@ -10397,7 +7577,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    658 => [
+    494 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '139',
@@ -10412,7 +7592,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    659 => [
+    495 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '139',
@@ -10427,7 +7607,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    660 => [
+    496 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '139',
@@ -10442,7 +7622,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    661 => [
+    497 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '140',
@@ -10457,24 +7637,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    662 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '140',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '774',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    663 => [
+    498 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '140',
@@ -10491,7 +7654,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    664 => [
+    499 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '140',
@@ -10506,7 +7669,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    665 => [
+    500 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '141',
@@ -10521,24 +7684,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    666 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '141',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '778',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    667 => [
+    501 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '141',
@@ -10555,7 +7701,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    668 => [
+    502 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '141',
@@ -10570,7 +7716,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    669 => [
+    503 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '142',
@@ -10585,24 +7731,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    670 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '142',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '782',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    671 => [
+    504 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '142',
@@ -10619,7 +7748,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    672 => [
+    505 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '142',
@@ -10634,7 +7763,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    673 => [
+    506 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '143',
@@ -10649,24 +7778,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    674 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '143',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '786',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    675 => [
+    507 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '143',
@@ -10683,7 +7795,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    676 => [
+    508 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '143',
@@ -10698,7 +7810,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    677 => [
+    509 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '144',
@@ -10713,7 +7825,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'fastcgi',
       'version' => '1',
     ],
-    678 => [
+    510 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '144',
@@ -10728,7 +7840,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    679 => [
+    511 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '144',
@@ -10745,41 +7857,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    680 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '144',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>eZ Publish supports FastCGI</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '792',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    681 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '144',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>What is FastCGI?</para><itemizedlist><listitem><para>Like CGI, FastCGI is also language-independent. For instance, FastCGI provides a way to improve the performance of the thousands of Perl applications that have been written for the Web.</para></listitem><listitem><para>Like CGI, FastCGI runs applications in processes isolated from the core Web server, which provides greater security than APIs. (APIs link application code into the core Web server, which means that a bug in one API-based application can corrupt another application or the core server; a malicious API-based application can, for example, steal key security secrets from another application or the core server.)</para></listitem></itemizedlist><para>Read more&amp;nbsp;http://www.fastcgi.com/</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '793',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    682 => [
+    512 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '144',
@@ -10794,7 +7872,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    683 => [
+    513 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '144',
@@ -10811,24 +7889,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    684 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '144',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '796',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    685 => [
+    514 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '144',
@@ -10843,7 +7904,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    686 => [
+    515 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '144',
@@ -10858,7 +7919,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    687 => [
+    516 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '144',
@@ -10873,7 +7934,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    688 => [
+    517 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '144',
@@ -10888,7 +7949,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    689 => [
+    518 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '145',
@@ -10903,7 +7964,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'support for red hat enterprise',
       'version' => '1',
     ],
-    690 => [
+    519 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '145',
@@ -10918,7 +7979,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    691 => [
+    520 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '145',
@@ -10935,41 +7996,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    692 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '145',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>combined with eZ Publish Enterprise, you can now enjoy a system supported all through the stack!</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '804',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    693 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '145',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://146" view="embed" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '805',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    694 => [
+    521 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '145',
@@ -10984,7 +8011,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    695 => [
+    522 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '145',
@@ -11001,24 +8028,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    696 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '145',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '808',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    697 => [
+    523 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '145',
@@ -11033,7 +8043,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    698 => [
+    524 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '145',
@@ -11048,7 +8058,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    699 => [
+    525 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '145',
@@ -11063,7 +8073,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    700 => [
+    526 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '145',
@@ -11078,7 +8088,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    701 => [
+    527 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '146',
@@ -11093,24 +8103,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    702 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '146',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '814',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    703 => [
+    528 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '146',
@@ -11127,7 +8120,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    704 => [
+    529 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '146',
@@ -11142,7 +8135,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    705 => [
+    530 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '147',
@@ -11157,7 +8150,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'canonical links',
       'version' => '1',
     ],
-    706 => [
+    531 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '147',
@@ -11172,7 +8165,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    707 => [
+    532 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '147',
@@ -11189,41 +8182,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    708 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '147',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>eZ Publish 4.5 supports a canonical link feature that helps search engines to figure out duplicate content issues and allow them to index relevant content.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '820',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    709 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '147',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>For simple siteaccesses, like nor, fre, ger, eng the feature works out of the box &amp;nbsp;</para><itemizedlist><listitem><para>More complex mappings require a manual configuration in the file</para></listitem><listitem><para>You use the canonical link to tell the search engines which url is the preferred one when you have several duplicate urls.</para></listitem></itemizedlist><para>Example of duplicate urls:</para><para>- <link xlink:href="ezurl://95" xlink:show="none">www.example.com</link></para><para>- example.com</para><para>- <link xlink:href="ezurl://96" xlink:show="none">www.example.com/index.html</link></para><para>- example.com/home.asp</para><para>Example of canonical link:</para><para>&lt;link rel="canonical" href="<link xlink:href="ezurl://95" xlink:show="none">http://www.example.com</link>/" /&gt;</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '821',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    710 => [
+    533 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '147',
@@ -11238,7 +8197,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    711 => [
+    534 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '147',
@@ -11255,24 +8214,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    712 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '147',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '824',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    713 => [
+    535 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '147',
@@ -11287,7 +8229,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    714 => [
+    536 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '147',
@@ -11302,7 +8244,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    715 => [
+    537 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '147',
@@ -11317,7 +8259,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    716 => [
+    538 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '147',
@@ -11332,7 +8274,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    717 => [
+    539 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '148',
@@ -11347,7 +8289,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'asynchronous publishing',
       'version' => '1',
     ],
-    718 => [
+    540 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '148',
@@ -11362,7 +8304,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    719 => [
+    541 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '148',
@@ -11379,56 +8321,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    720 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '148',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>The ability to use defer publishing, for improved scalability in high load, multi-editor environments.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '832',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    721 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '148',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>eZ Publish 4.5 supports a new publishing method used in an environment with a large simultaneous load on the database</para><itemizedlist><listitem><para>offers a robust multi-editor environment with parallel publishing</para></listitem><listitem><para>controls the number of objects that can be published concurrently</para></listitem><listitem><para>sends publishing requests to a queue for asynchronous publishing </para></listitem><listitem><para>a daemon handles the publishing requests and the queue in the background </para></listitem><listitem><para>for multiple databases</para></listitem><listitem><para>better database error handling</para></listitem><listitem><para>filtering hooks</para></listitem></itemizedlist><informaltable width="100%"><tbody><tr><td><para>The process:</para><itemizedlist><listitem><para>Press "Send for publishing"</para></listitem><listitem><para>The request to publish is queued</para></listitem><listitem><para>This queue is monitored by the daemon&amp;nbsp;</para></listitem><listitem><para>Follow the status of the publishing</para></listitem></itemizedlist><para>Queue statuses:</para><para><emphasis role="strong">Pending:</emphasis> The publishing request is now in a queue of publishing requests</para><para><emphasis role="strong">Working:</emphasis> The request is processed to find a queue and a place in the queue</para><para><emphasis role="strong">Published:</emphasis> The request has been processed and the object published</para><para>Irregularities prompts error messages</para></td><td/></tr></tbody></informaltable><ezembed xlink:href="ezcontent://149" ezxhtml:align="center"><ezconfig><ezvalue key="size">large</ezvalue></ezconfig></ezembed><para>Enable the service in “content.ini”:</para>[PublishingSettings]
-      # Enable/Disable the asynchronous publishing feature
-      AsynchronousPublishing=enabled
-      <para>Customize the queue size in “content.ini”:</para>[PublishingSettings]
-      # how many parallel publishing operations should be allowed
-      # default: 10
-      PublishingProcessSlots=10
-      <para>Setting up the service with an init script (recommended in a production setting):</para><para>- For Red Hat Enterprise Linux, CentOS, Fedora, SUSE:</para>bin/startup/rhel/ezasynchronouspublisher
-      <para>- For Debian and Ubuntu:</para>bin/startup/debian/ezasynchronouspublisher
-      <para>Example of script for Debian:</para>cd /etc/init.d
-      ln -s /path/to/ezpublish/bin/startup/debian/ezasynchronouspublisher
-      chmod +x ezasynchronouspublisher
-      <para>Start daemon:</para>/etc/init.d/ezasynchronouspublisher start
-      <para>Daemon options:</para>/etc/init.d/ezasynchronouspublisher help
-      <para>Configure daemon to start up on boot:</para>chkconfig ezasynchronouspublisher on
-      </section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '833',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    722 => [
+    542 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '148',
@@ -11443,7 +8336,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    723 => [
+    543 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '148',
@@ -11460,24 +8353,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    724 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '148',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '836',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    725 => [
+    544 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '148',
@@ -11492,7 +8368,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    726 => [
+    545 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '148',
@@ -11507,7 +8383,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    727 => [
+    546 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '148',
@@ -11522,7 +8398,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    728 => [
+    547 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '148',
@@ -11537,7 +8413,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    729 => [
+    548 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '149',
@@ -11552,24 +8428,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    730 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '149',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '842',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    731 => [
+    549 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '149',
@@ -11586,7 +8445,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    732 => [
+    550 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '149',
@@ -11601,7 +8460,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    733 => [
+    551 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '150',
@@ -11616,7 +8475,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'rest api interface',
       'version' => '1',
     ],
-    734 => [
+    552 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '150',
@@ -11631,7 +8490,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    735 => [
+    553 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '150',
@@ -11648,41 +8507,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    736 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '150',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>New RESTful interface, which will allow external client implementations, to access and query content resources inside an eZ Publish installation.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '848',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    737 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '150',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Version 1.0 of eZ Publish REST API contains:</para><itemizedlist><listitem><para>&amp;nbsp;OAUTH authentication</para></listitem><listitem><para>&amp;nbsp;Basic content retrieval</para></listitem><listitem><para>&amp;nbsp;REST API Extension mechanism</para></listitem><listitem><para>&amp;nbsp;REST API versioning</para></listitem></itemizedlist><para><emphasis role="strong">Presentation</emphasis></para><ezembed xlink:href="ezcontent://66" view="embed" ezxhtml:align="left"><ezlink xlink:href="ezurl://18" xlink:show="new"/><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '849',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    738 => [
+    554 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '150',
@@ -11697,7 +8522,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    739 => [
+    555 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '150',
@@ -11714,24 +8539,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    740 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '150',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '852',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    741 => [
+    556 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '150',
@@ -11746,7 +8554,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    742 => [
+    557 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '150',
@@ -11761,7 +8569,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    743 => [
+    558 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '150',
@@ -11776,7 +8584,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    744 => [
+    559 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '150',
@@ -11791,7 +8599,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    745 => [
+    560 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '151',
@@ -11806,7 +8614,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'ez publish enterprise',
       'version' => '1',
     ],
-    746 => [
+    561 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '151',
@@ -11821,7 +8629,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    747 => [
+    562 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '151',
@@ -11838,41 +8646,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    748 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '151',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Enterprise Web Content Management</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '860',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    749 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '151',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><informaltable class="default" width="100%" title="paragraph"><tbody><tr><td><para>A global web content management system leader, eZ Systems was founded in 1999 and has 10 offices worldwide. eZ Systems’ flagship product, eZ Publish, is the leading enterprise Web Content Management (WCM) platform specializing in multichannel content distribution for web, mobile, tablets, print and more.</para><para>Because eZ Publish is a commercial open source product, eZ Systems engineers can leverage the innovation from a global community of over 38 000 developers and certified implementation partners. This innovation drives over 200 000 worldwide installations, proving that eZ Publish is one of the most adaptable, open and reliable WCM platforms in the market.</para></td><td><ezembed xlink:href="ezcontent://152" view="embed-inline" ezxhtml:align="center"><ezconfig><ezvalue key="size">listitem</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td></tr></tbody></informaltable><para>The eZ Publish Enterprise Edition is the perfect blend of reliable vendor support and quality</para><para>assured innovation: enterprise customers pay a cost effective yearly subscription fee for support, maintenance, update training and other services, and eZ Systems releases major software updates every 6 months. All of this comes with no license fee.</para><para>With offices in Europe, the Nordics, the Americas and Asia, eZ Systems is a recognized global WCM leader in the media and publishing industry. This industry demands the most flexible, secure, maintainable and complex solutions to power large web properties and generate revenue from an array of content sources. With a track record spanning more than 10 years in this space, eZ Publish has now become the software of choice for customers in banking and finance, retail, government and non- government organizations. If you have advanced publishing needs, eZ Publish is right for you.</para><title ezxhtml:level="3">Multichannel Content Distribution</title><para>eZ Publish delivers unsurpassed multichannel capabilities that enable customers to reach out and engage your audience. eZ’s out-of-the-box functionality, intrinsic scalability and robust API help you to do this quickly, accelerating your time to market while reducing your implementation costs.&amp;nbsp;</para><para><emphasis role="strong">&amp;nbsp;</emphasis></para><title ezxhtml:level="3">Enabling Editors</title><para>eZ Publish provides a rich tool set that makes authoring and editing content simple and engaging. eZ Publish frees your editorial and creative staff to do what they do best: publish content with enthusiasm and minimal effort.</para><title ezxhtml:level="4">Plan, Review, Automate</title><para>Publishing is one thing, but managing portals and front pages is a different story. eZ Publish Enterprise has a unique portal management solution that enables editors to build complex page layouts and plan, review and automate the publication schedule to ensure a constant flow of rich content through portal pages.</para><para>For example, editors can define multiple “zones” within a single page layout. Within each zone, editors create “blocks” that promote content in a certain way. Next, editors explicitly or implicitly add content objects to these blocks and then schedule</para><para>the promotion, flow and rotation of content. To “look into the future,” editors simply drag a slider across a timeline to preview content before it goes live. This entire process can be managed without the support of a web developer.</para><title ezxhtml:level="4">Collaborate</title><para>We know that editors do not work alone. eZ Publish provides flexible workflow and collaboration tools and dashboards to keep your team in sync. And you can configure the system to adapt to your own workflows, however intricate they may be.</para><title ezxhtml:level="3">Adaptable Content Engine and User Interfaces</title><para>eZ’s unique, flexible content model completely separates content from presentation, so that the delivery of your content can adapt to any current or future distribution channel. Furthermore, you can design the system to fit your needs—your do not have to force your content into a “one size fits all” construct. This structure sets your content free for re-use and re-purposing. This powerful flexibility is the source of eZ’s strength as multichannel content management platform.</para><para>The system also adapts to your editors’ style of work. They can choose to import content from multiple sources, utilize a simple editing toolbar while browsing your site, or use the powerful back office editing suite. The efficient user interfaces and flexibility flattens the learning curve and accelerates internal adoption of eZ Publish.</para><title ezxhtml:level="3">Open Enterprise Technology</title><para>eZ Publish’s open architecture supports Interoperability Open Standards like XML, ODF, SOAP, REST, JSON. When you utilize the powerful API, it’s simple to integrate the eZ Enterprise platform with all of your information management systems. In fact, there are over 1000 extensions available to accelerate your project and reduce development costs.</para><title ezxhtml:level="3">Reliable Vendor Support</title><para>eZ Systems is dedicated to your success. We succeed only if you do. Our customers benefit from our commercial support packages that are customized to meet the nature of your project and service level agreements. Our highly qualified product support engineers thrive on your complete satisfaction, and enjoy enabling our partners and customers with accurate and thorough responses to support requests.</para><para>In addition to this unlimited product support, we provide a variety of expert training and consulting services to certify and assist developers and implementation partners around the globe. We host self-service tools like user and technical documentation, forums, books, tutorials, articles and community sites to distribute and share best practices. Our dedication to supporting our clients and partners is the core service of eZ’s Enterprise Open Source Business model.</para><title ezxhtml:level="3">They trust in eZ</title><ezembed xlink:href="ezcontent://153" view="embed-inline"><ezconfig><ezvalue key="size">large</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '861',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    750 => [
+    563 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '151',
@@ -11887,7 +8661,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    751 => [
+    564 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '151',
@@ -11904,24 +8678,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    752 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '151',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '864',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    753 => [
+    565 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '151',
@@ -11936,7 +8693,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    754 => [
+    566 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '151',
@@ -11951,7 +8708,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    755 => [
+    567 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '151',
@@ -11966,7 +8723,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    756 => [
+    568 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '151',
@@ -11981,7 +8738,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    757 => [
+    569 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '152',
@@ -11996,24 +8753,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    758 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '152',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '870',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    759 => [
+    570 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '152',
@@ -12030,7 +8770,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    760 => [
+    571 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '152',
@@ -12045,7 +8785,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    761 => [
+    572 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '153',
@@ -12060,24 +8800,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ],
-    762 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '153',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>graphics1</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '874',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    763 => [
+    573 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '153',
@@ -12094,7 +8817,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    764 => [
+    574 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '153',
@@ -12109,7 +8832,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    765 => [
+    575 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '154',
@@ -12124,7 +8847,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'partners',
       'version' => '1',
     ],
-    766 => [
+    576 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '154',
@@ -12139,75 +8862,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    767 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '238',
-      'contentobject_id' => '154',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '879',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    768 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '239',
-      'contentobject_id' => '154',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><informaltable class="default" width="100%"><tbody><tr><td><ezembed xlink:href="ezcontent://163" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td><td><ezembed xlink:href="ezcontent://162" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td></tr><tr><td><ezembed xlink:href="ezcontent://158" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td><td><ezembed xlink:href="ezcontent://155" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></td></tr><tr><td/><td/></tr></tbody></informaltable><para><eztemplateinline name="separator"/></para><ezembed xlink:href="ezcontent://164" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '880',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    769 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '240',
-      'contentobject_id' => '154',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://155" ezxhtml:class="vertically_listed_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '881',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    770 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '241',
-      'contentobject_id' => '154',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://158" ezxhtml:class="horizontally_listed_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '882',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    771 => [
+    577 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '154',
@@ -12222,7 +8877,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    772 => [
+    578 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '155',
@@ -12237,7 +8892,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'partner news',
       'version' => '1',
     ],
-    773 => [
+    579 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '155',
@@ -12252,41 +8907,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    774 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '155',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Maecenas vulputate facilisis velit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '886',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    775 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '155',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin felis neque, auctor in, tempor non, ultrices vel, odio. Proin condimentum risus vitae felis. Aliquam imperdiet nisl non quam. Ut euismod. Nullam fringilla euismod diam. Nunc eros metus, suscipit at, egestas nec, condimentum bibendum, quam. Ut congue quam ac lorem. Duis risus. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '887',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    776 => [
+    580 => [
       'attribute_original_id' => '888',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '155',
@@ -12301,7 +8922,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    777 => [
+    581 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '155',
@@ -12316,7 +8937,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    778 => [
+    582 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '155',
@@ -12331,7 +8952,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    779 => [
+    583 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '156',
@@ -12346,7 +8967,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'pellentesque quam mauris',
       'version' => '1',
     ],
-    780 => [
+    584 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '156',
@@ -12361,7 +8982,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    781 => [
+    585 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '156',
@@ -12378,41 +8999,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    782 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '156',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Maecenas vulputate facilisis velit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '894',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    783 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '156',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Cras facilisis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus aliquet, pede vitae facilisis bibendum, neque orci malesuada felis, at bibendum est mi nec ipsum. Sed egestas blandit neque. Curabitur hendrerit dignissim justo. Aliquam erat volutpat. Phasellus sollicitudin, magna dictum placerat consequat, sem enim porttitor odio, vel tempor enim felis et justo.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '895',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    784 => [
+    586 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '156',
@@ -12427,7 +9014,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    785 => [
+    587 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '156',
@@ -12444,24 +9031,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    786 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '156',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Pellentesque quam mauris</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '898',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    787 => [
+    588 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '156',
@@ -12476,7 +9046,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    788 => [
+    589 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '156',
@@ -12491,7 +9061,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    789 => [
+    590 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '156',
@@ -12506,7 +9076,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    790 => [
+    591 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '156',
@@ -12521,7 +9091,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    791 => [
+    592 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '157',
@@ -12536,7 +9106,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'penatibus et magnis dis',
       'version' => '1',
     ],
-    792 => [
+    593 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '157',
@@ -12551,7 +9121,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    793 => [
+    594 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '157',
@@ -12568,41 +9138,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    794 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '157',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Pellentesque quam mauris, sodales at, rutrum eu, pulvinar ut, velit. Aliquam consequat tempus dolor. Pellentesque dignissim.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '906',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    795 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '157',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '907',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    796 => [
+    595 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '157',
@@ -12617,7 +9153,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    797 => [
+    596 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '157',
@@ -12634,24 +9170,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    798 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '157',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '910',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    799 => [
+    597 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '157',
@@ -12666,7 +9185,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    800 => [
+    598 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '157',
@@ -12681,7 +9200,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    801 => [
+    599 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '157',
@@ -12696,7 +9215,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    802 => [
+    600 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '157',
@@ -12711,7 +9230,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    803 => [
+    601 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '158',
@@ -12726,7 +9245,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'news',
       'version' => '1',
     ],
-    804 => [
+    602 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '158',
@@ -12741,41 +9260,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    805 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '158',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Fusce lacus. Mauris eu enim. Integer tincidunt sapien quis.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '917',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    806 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '158',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Duis semper sodales purus. Aenean ullamcorper. Sed tempor est sollicitudin leo. Sed odio orci, commodo placerat, consectetuer eget, tincidunt ac, lorem. Quisque dapibus. Duis turpis odio, mattis eget, tristique at, consequat id, quam. Nullam volutpat, eros quis bibendum sollicitudin, lectus neque accumsan lorem, et faucibus nulla ipsum quis leo. Vestibulum a diam a urna adipiscing ornare. Maecenas consequat ligula id nisi. Etiam euismod sodales purus. Praesent dignissim lobortis dui. Sed nonummy felis in lorem. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '918',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    807 => [
+    603 => [
       'attribute_original_id' => '919',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '158',
@@ -12790,7 +9275,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    808 => [
+    604 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '158',
@@ -12805,7 +9290,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    809 => [
+    605 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '158',
@@ -12820,7 +9305,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    810 => [
+    606 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '159',
@@ -12835,7 +9320,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'curabitur hendrerit dignissim',
       'version' => '1',
     ],
-    811 => [
+    607 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '159',
@@ -12850,7 +9335,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    812 => [
+    608 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '159',
@@ -12867,41 +9352,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    813 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '159',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Curabitur hendrerit dignissim justo. Aliquam erat volutpat. Phasellus sollicitudin, magna dictum placerat consequat. Praesent eu quam. Nam sollicitudin congue augue.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '925',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    814 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '159',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Sem enim porttitor odio, vel tempor enim felis et justo. Duis sollicitudin eros id eros. Nunc convallis tristique est. Nam vel ligula. Sed augue. Aliquam erat volutpat. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '926',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    815 => [
+    609 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '159',
@@ -12916,7 +9367,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    816 => [
+    610 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '159',
@@ -12933,24 +9384,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    817 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '159',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Curabitur hendrerit</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '929',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    818 => [
+    611 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '159',
@@ -12965,7 +9399,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    819 => [
+    612 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '159',
@@ -12980,7 +9414,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    820 => [
+    613 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '159',
@@ -12995,7 +9429,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    821 => [
+    614 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '159',
@@ -13010,7 +9444,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    822 => [
+    615 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '160',
@@ -13025,7 +9459,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'proin condimentum risus',
       'version' => '1',
     ],
-    823 => [
+    616 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '160',
@@ -13040,7 +9474,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    824 => [
+    617 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '160',
@@ -13057,41 +9491,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    825 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '160',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Proin condimentum risus vitae felis. Aliquam imperdiet nisl non quam. Ut euismod. Nullam fringilla euismod diam. Nunc eros metus, suscipit at, egestas nec. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '937',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    826 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '160',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Ut congue quam ac lorem. Duis risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque sodales tortor. Phasellus adipiscing pretium nibh. Pellentesque quam mauris, sodales at, rutrum eu, pulvinar ut, velit. Aliquam consequat tempus dolor. Pellentesque dignissim orci. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Praesent eu quam. Nam sollicitudin congue augue. Nulla facilisi. Nunc in turpis. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '938',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    827 => [
+    618 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '160',
@@ -13106,7 +9506,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    828 => [
+    619 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '160',
@@ -13123,24 +9523,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    829 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '160',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Proin condimentum</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '941',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    830 => [
+    620 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '160',
@@ -13155,7 +9538,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    831 => [
+    621 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '160',
@@ -13170,7 +9553,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    832 => [
+    622 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '160',
@@ -13185,7 +9568,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    833 => [
+    623 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '160',
@@ -13200,7 +9583,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    834 => [
+    624 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '161',
@@ -13215,7 +9598,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'morbi tristique senectus',
       'version' => '1',
     ],
-    835 => [
+    625 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '161',
@@ -13230,7 +9613,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    836 => [
+    626 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '161',
@@ -13247,41 +9630,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    837 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '161',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin felis neque, auctor in, tempor non, ultrices vel, odio. Proin condimentum risus vitae felis.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '949',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    838 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '161',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Aliquam imperdiet nisl non quam. Ut euismod. Nullam fringilla euismod diam. Nunc eros metus, suscipit at, egestas nec, condimentum bibendum, quam. Ut congue quam ac lorem. Duis risus. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '950',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    839 => [
+    627 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '161',
@@ -13296,7 +9645,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    840 => [
+    628 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '161',
@@ -13313,24 +9662,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    841 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '161',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Morbi tristique senectus</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '953',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    842 => [
+    629 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '161',
@@ -13345,7 +9677,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    843 => [
+    630 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '161',
@@ -13360,7 +9692,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    844 => [
+    631 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '161',
@@ -13375,7 +9707,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    845 => [
+    632 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '161',
@@ -13390,7 +9722,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    846 => [
+    633 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '162',
@@ -13405,7 +9737,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'partner products',
       'version' => '1',
     ],
-    847 => [
+    634 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '162',
@@ -13420,41 +9752,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    848 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '162',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Maecenas ac dolor. Nam varius risus nec pede consequat porttitor. Lorem ipsum dolor sit amet, consectetuer adipiscing.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '960',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    849 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '162',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin felis neque, auctor in, tempor non, ultrices vel, odio. Proin condimentum risus vitae felis. Aliquam imperdiet nisl non quam. Ut euismod. Nullam fringilla euismod diam. Nunc eros metus, suscipit at, egestas nec, condimentum bibendum, quam. Ut congue quam ac lorem. Duis risus. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '961',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    850 => [
+    635 => [
       'attribute_original_id' => '962',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '162',
@@ -13469,7 +9767,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    851 => [
+    636 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '162',
@@ -13484,7 +9782,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    852 => [
+    637 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '162',
@@ -13499,7 +9797,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    853 => [
+    638 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '163',
@@ -13514,7 +9812,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'partners',
       'version' => '1',
     ],
-    854 => [
+    639 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '163',
@@ -13529,41 +9827,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    855 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '163',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>In in ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque sodales tortor. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '967',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    856 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '163',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Phasellus adipiscing pretium nibh. Pellentesque quam mauris, sodales at, rutrum eu, pulvinar ut, velit. Aliquam consequat tempus dolor. Pellentesque dignissim orci. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Praesent eu quam. Nam sollicitudin congue augue. Nulla facilisi. Nunc in turpis. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '968',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    857 => [
+    640 => [
       'attribute_original_id' => '969',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '163',
@@ -13578,7 +9842,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    858 => [
+    641 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '163',
@@ -13593,7 +9857,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    859 => [
+    642 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '163',
@@ -13608,7 +9872,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    860 => [
+    643 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '164',
@@ -13623,7 +9887,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'neque orci malesuada felis',
       'version' => '1',
     ],
-    861 => [
+    644 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '164',
@@ -13638,7 +9902,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    862 => [
+    645 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '164',
@@ -13655,41 +9919,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    863 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '164',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Cras facilisis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis sollicitudin eros id eros. Nunc convallis tristique est. Nam vel ligula. Sed augue. Aliquam erat volutpat. Maecenas vulputate facilisis velit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras facilisis.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '975',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    864 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '164',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Vivamus aliquet, pede vitae facilisis bibendum, neque orci malesuada felis, at bibendum est mi nec ipsum. Sed egestas blandit neque. Curabitur hendrerit dignissim justo. Aliquam erat volutpat. Phasellus sollicitudin, magna dictum placerat consequat, sem enim porttitor odio, vel tempor enim felis et justo. Duis sollicitudin eros id eros. Nunc convallis tristique est. Nam vel ligula. Sed augue. Aliquam erat volutpat.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '976',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    865 => [
+    646 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '164',
@@ -13704,7 +9934,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    866 => [
+    647 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '164',
@@ -13721,24 +9951,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    867 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '164',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Neque orci malesuada</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '979',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    868 => [
+    648 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '164',
@@ -13753,7 +9966,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    869 => [
+    649 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '164',
@@ -13768,7 +9981,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    870 => [
+    650 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '164',
@@ -13783,7 +9996,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    871 => [
+    651 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '164',
@@ -13798,7 +10011,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    872 => [
+    652 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '165',
@@ -13813,7 +10026,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'community',
       'version' => '1',
     ],
-    873 => [
+    653 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '165',
@@ -13828,75 +10041,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    874 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '238',
-      'contentobject_id' => '165',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://170" ezxhtml:class="itemized_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '986',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    875 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '239',
-      'contentobject_id' => '165',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://185" ezxhtml:class="itemized_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '987',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    876 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '240',
-      'contentobject_id' => '165',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://166" ezxhtml:class="itemized_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '988',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    877 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '241',
-      'contentobject_id' => '165',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://176" ezxhtml:class="horizontally_listed_sub_items" ezxhtml:align="center"><ezconfig><ezvalue key="size">medium</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '989',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    878 => [
+    654 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '165',
@@ -13911,7 +10056,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    879 => [
+    655 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '302',
       'contentobject_id' => '166',
@@ -13926,24 +10071,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'forum',
       'version' => '1',
     ],
-    880 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '303',
-      'contentobject_id' => '166',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '992',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    881 => [
+    656 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '167',
@@ -13958,7 +10086,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'nulla vitae tellus sit amet',
       'version' => '1',
     ],
-    882 => [
+    657 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '167',
@@ -13973,7 +10101,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    883 => [
+    658 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '306',
       'contentobject_id' => '167',
@@ -13988,7 +10116,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    884 => [
+    659 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '307',
       'contentobject_id' => '167',
@@ -14003,7 +10131,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    885 => [
+    660 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '168',
@@ -14018,7 +10146,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'ut mollis sodales nibh',
       'version' => '1',
     ],
-    886 => [
+    661 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '168',
@@ -14033,7 +10161,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    887 => [
+    662 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '306',
       'contentobject_id' => '168',
@@ -14048,7 +10176,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    888 => [
+    663 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '307',
       'contentobject_id' => '168',
@@ -14063,7 +10191,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    889 => [
+    664 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '169',
@@ -14078,7 +10206,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'nam risus leo',
       'version' => '1',
     ],
-    890 => [
+    665 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '169',
@@ -14093,7 +10221,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    891 => [
+    666 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '306',
       'contentobject_id' => '169',
@@ -14108,7 +10236,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    892 => [
+    667 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '307',
       'contentobject_id' => '169',
@@ -14123,7 +10251,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    893 => [
+    668 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '170',
@@ -14138,24 +10266,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'wiki',
       'version' => '1',
     ],
-    894 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '170',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Vestibulum ultricies lorem sed pede. Donec massa. Cras imperdiet, lectus mollis rhoncus gravida, enim lacus iaculis libero, consectetuer lobortis sapien purus nec purus. Donec nulla dui, commodo et, porttitor eu, malesuada id, nisi. Cras in mi in dolor ultricies pretium. Curabitur pellentesque auctor ligula. Suspendisse malesuada, nunc a tempor lacinia, lectus turpis commodo urna, eu porta risus nisl nec dui. Sed suscipit feugiat erat. Vestibulum interdum congue arcu. Ut euismod, arcu a ornare auctor, sapien nisl viverra arcu, in mattis nibh justo ac ipsum. Nunc nibh urna, nonummy id, vestibulum eget, interdum at, erat. Nulla consequat.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1006',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    895 => [
+    669 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '170',
@@ -14170,7 +10281,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    896 => [
+    670 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '170',
@@ -14185,7 +10296,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    897 => [
+    671 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '171',
@@ -14200,24 +10311,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'sed suscipit',
       'version' => '1',
     ],
-    898 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '171',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Sed suscipit feugiat erat. Vestibulum interdum congue arcu. Ut euismod, arcu a ornare auctor, sapien nisl viverra arcu, in mattis nibh justo ac ipsum. Nunc nibh urna, nonummy id, vestibulum eget, interdum at, erat. Nulla consequat.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1010',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    899 => [
+    672 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '171',
@@ -14232,7 +10326,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    900 => [
+    673 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '171',
@@ -14247,7 +10341,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    901 => [
+    674 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '172',
@@ -14262,24 +10356,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'ut interdum',
       'version' => '1',
     ],
-    902 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '172',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Etiam nec metus. Proin mauris lorem, lobortis dapibus, semper id, nonummy eu, lacus. Aliquam erat volutpat. Vivamus hendrerit aliquam ipsum. Maecenas suscipit ante sit amet risus. Nullam lacus. Praesent varius imperdiet sapien. Nulla sit amet massa nonummy felis aliquam varius. Vivamus sed arcu. Mauris sodales tristique risus. Cras sed sem. Quisque est eros, lacinia id, placerat sit amet, varius ac, odio. Aenean placerat, justo eu laoreet laoreet, purus quam faucibus risus, vel accumsan mauris ligula in magna.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1014',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    903 => [
+    675 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '172',
@@ -14294,7 +10371,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    904 => [
+    676 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '172',
@@ -14309,7 +10386,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    905 => [
+    677 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '173',
@@ -14324,24 +10401,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'fusce pulvinar',
       'version' => '1',
     ],
-    906 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '173',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Donec consectetuer sodales urna. Nam iaculis. Duis cursus nisl ut lorem. Vivamus pharetra pretium nulla. Mauris pharetra augue a dolor. Duis neque lorem, rhoncus nec, mattis id, dapibus vel, nisl. Quisque aliquam pellentesque leo. Ut in ante. Aliquam mollis, dolor eget malesuada euismod, tellus mi hendrerit dui, sit amet vestibulum neque massa ut mauris. Phasellus sed nisi. In eget odio nec tellus semper placerat. Fusce pulvinar malesuada nibh. Aliquam feugiat ligula ut nulla. Phasellus vitae felis in nulla gravida commodo. Cras magna justo, ultricies ut, euismod vitae, congue quis, quam. Mauris est purus, lobortis vitae, rutrum eu, dictum sed, mauris. In vehicula viverra dui. Curabitur id neque. Praesent facilisis. Mauris est. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1018',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    907 => [
+    678 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '173',
@@ -14356,7 +10416,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    908 => [
+    679 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '173',
@@ -14371,7 +10431,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    909 => [
+    680 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '174',
@@ -14386,24 +10446,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'duis id tortor',
       'version' => '1',
     ],
-    910 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '174',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Fusce iaculis. Duis id tortor sit amet quam interdum accumsan. Vestibulum imperdiet odio non nisl. Nulla in odio. Sed sed libero sed risus eleifend bibendum. Cras arcu tellus, congue ac, ornare eget, vulputate non, pede. Vivamus molestie purus ut orci. Integer congue aliquam purus. Fusce eu metus eu mauris imperdiet porta. Nam urna mi, consequat in, iaculis eget, tempor eu, elit. Fusce lorem. Sed nec velit sed augue malesuada blandit. Nullam quis elit id lorem adipiscing condimentum. Nullam aliquam justo nec urna. Integer eget libero. Sed in tellus non lorem iaculis consequat. Aenean at lorem dictum mi imperdiet consequat. Sed euismod sodales magna. Cras consectetuer pede ac massa porta lacinia.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1022',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    911 => [
+    681 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '174',
@@ -14418,7 +10461,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    912 => [
+    682 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '174',
@@ -14433,7 +10476,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    913 => [
+    683 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '175',
@@ -14448,24 +10491,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'curabitur lacinia',
       'version' => '1',
     ],
-    914 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '244',
-      'contentobject_id' => '175',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Mauris pede libero, accumsan vel, tristique eget, tempus sit amet, sapien. Fusce sed arcu. Pellentesque pharetra mattis velit. In nec eros. Praesent viverra metus ut tellus. In tellus elit, imperdiet at, tincidunt egestas, malesuada sed, nisl. Aliquam posuere mattis pede. Curabitur lacinia condimentum nunc. Phasellus mattis. Fusce ac pede. Ut in neque. Fusce adipiscing mi sit amet velit. Cras varius. Vivamus elementum dui id lectus. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1026',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    915 => [
+    684 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '175',
@@ -14480,7 +10506,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    916 => [
+    685 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '175',
@@ -14495,7 +10521,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    917 => [
+    686 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '286',
       'contentobject_id' => '176',
@@ -14510,41 +10536,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'pictures',
       'version' => '1',
     ],
-    918 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '287',
-      'contentobject_id' => '176',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>images&amp;nbsp;by Quoc Huy and Paal Berg</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1030',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    919 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '288',
-      'contentobject_id' => '176',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1031',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    920 => [
+    687 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '289',
       'contentobject_id' => '176',
@@ -14559,7 +10551,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    921 => [
+    688 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '177',
@@ -14574,24 +10566,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'ivo on ez tags',
       'version' => '1',
     ],
-    922 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '177',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1034',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    923 => [
+    689 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '177',
@@ -14608,7 +10583,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    924 => [
+    690 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '177',
@@ -14623,7 +10598,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    925 => [
+    691 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '178',
@@ -14638,24 +10613,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'are you ready for the community day?',
       'version' => '1',
     ],
-    926 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '178',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1038',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    927 => [
+    692 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '178',
@@ -14672,7 +10630,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    928 => [
+    693 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '178',
@@ -14687,7 +10645,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    929 => [
+    694 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '179',
@@ -14702,24 +10660,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'let\'s work together!',
       'version' => '1',
     ],
-    930 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '179',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1042',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    931 => [
+    695 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '179',
@@ -14736,7 +10677,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    932 => [
+    696 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '179',
@@ -14751,7 +10692,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    933 => [
+    697 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '180',
@@ -14766,24 +10707,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'the mediterranean seen from nice!',
       'version' => '1',
     ],
-    934 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '180',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1046',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    935 => [
+    698 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '180',
@@ -14800,7 +10724,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    936 => [
+    699 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '180',
@@ -14815,7 +10739,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    937 => [
+    700 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '181',
@@ -14830,24 +10754,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'hotel lobby at isola2000',
       'version' => '1',
     ],
-    938 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '181',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1050',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    939 => [
+    701 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '181',
@@ -14864,7 +10771,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    940 => [
+    702 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '181',
@@ -14879,7 +10786,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    941 => [
+    703 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '182',
@@ -14894,24 +10801,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'alexander on the past, gaby on today and tomorrow',
       'version' => '1',
     ],
-    942 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '182',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1054',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    943 => [
+    704 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '182',
@@ -14928,7 +10818,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    944 => [
+    705 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '182',
@@ -14943,7 +10833,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    945 => [
+    706 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '183',
@@ -14958,24 +10848,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'isola2000 in white - beautiful skiing!',
       'version' => '1',
     ],
-    946 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '183',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1058',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    947 => [
+    707 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '183',
@@ -14992,7 +10865,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    948 => [
+    708 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '183',
@@ -15007,7 +10880,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    949 => [
+    709 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '184',
@@ -15022,24 +10895,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'ceo future pitch - adaptable, open, reliable!',
       'version' => '1',
     ],
-    950 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '184',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1062',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    951 => [
+    710 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '184',
@@ -15056,7 +10912,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    952 => [
+    711 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '184',
@@ -15071,7 +10927,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    953 => [
+    712 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '211',
       'contentobject_id' => '185',
@@ -15086,24 +10942,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'blog',
       'version' => '1',
     ],
-    954 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '212',
-      'contentobject_id' => '185',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1066',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    955 => [
+    713 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '213',
       'contentobject_id' => '185',
@@ -15118,7 +10957,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    956 => [
+    714 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '214',
       'contentobject_id' => '186',
@@ -15133,24 +10972,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'visit paris',
       'version' => '1',
     ],
-    957 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '215',
-      'contentobject_id' => '186',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Lorem ipsum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. </para><para>Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. </para><para>Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. </para><itemizedlist><listitem><para>Lorem ispum dolor sit amet. </para></listitem><listitem><para>Lorem ispum dolor sit amet. </para></listitem><listitem><para>Lorem ispum dolor sit amet. </para></listitem><listitem><para>Lorem ispum dolor sit amet.</para></listitem></itemizedlist></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1069',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    958 => [
+    715 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '216',
       'contentobject_id' => '186',
@@ -15165,7 +10987,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    959 => [
+    716 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '217',
       'contentobject_id' => '186',
@@ -15180,7 +11002,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    960 => [
+    717 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '218',
       'contentobject_id' => '186',
@@ -15195,7 +11017,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    961 => [
+    718 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '219',
       'contentobject_id' => '186',
@@ -15210,7 +11032,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    962 => [
+    719 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '214',
       'contentobject_id' => '187',
@@ -15225,24 +11047,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'paris in france',
       'version' => '1',
     ],
-    963 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '215',
-      'contentobject_id' => '187',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. </para><para>Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. </para><para>Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. Lorem ispum dolor sit amet. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1075',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    964 => [
+    720 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '216',
       'contentobject_id' => '187',
@@ -15257,7 +11062,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    965 => [
+    721 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '217',
       'contentobject_id' => '187',
@@ -15272,7 +11077,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    966 => [
+    722 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '218',
       'contentobject_id' => '187',
@@ -15287,7 +11092,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    967 => [
+    723 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '219',
       'contentobject_id' => '187',
@@ -15302,7 +11107,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    968 => [
+    724 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '188',
@@ -15317,7 +11122,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'company',
       'version' => '1',
     ],
-    969 => [
+    725 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '188',
@@ -15332,42 +11137,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    970 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '188',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><ezembed xlink:href="ezcontent://224" ezxhtml:align="center"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1082',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    971 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '188',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Vivamus non neque. Proin id augue. Aliquam a tellus.
-                        <emphasis role="strong">Donec cursus rutrum purus.</emphasis> Aliquam tincidunt. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. In suscipit dictum augue. Donec arcu ante, consequat a, feugiat in, posuere hendrerit, dolor. Morbi tempus, sem ac interdum scelerisque, justo nisi egestas nisl, et mattis dui est at velit. Aliquam in libero ac urna molestie eleifend.</para><informaltable class="list" width="100%"><tbody><tr><th ezxhtml:width="50%"><para>Aliquam a tellus</para></th><th><para>Class aptent</para></th></tr><tr><td><para>Donec cursus rutrum purus.</para></td><td><para>Proin id augue.</para></td></tr><tr><td><para>Aliquam in libero ac urna molestie eleifend.</para></td><td><para>Morbi tempus, sem ac interdum.</para></td></tr></tbody></informaltable><para>Quisque fringilla hendrerit turpis. Curabitur suscipit blandit nulla. Sed mauris justo, iaculis vel, dictum ut, molestie et, purus. Fusce ut risus. Nulla mauris magna, vulputate quis, dignissim vel, lobortis ut, neque. Etiam sed ante. </para><para>Curabitur in dolor nec tellus consequat gravida. Proin faucibus viverra eros. Suspendisse fringilla. Etiam eget elit eu augue euismod lobortis. Sed urna elit, volutpat vel, ultricies id, molestie a, ligula. In cursus nonummy quam. Sed malesuada iaculis magna. Curabitur mollis vehicula nibh. Curabitur at orci at leo vulputate vestibulum. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1083',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    972 => [
+    726 => [
       'attribute_original_id' => '1084',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '188',
@@ -15382,7 +11152,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    973 => [
+    727 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '188',
@@ -15397,7 +11167,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    974 => [
+    728 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '188',
@@ -15412,7 +11182,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    975 => [
+    729 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '189',
@@ -15427,7 +11197,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'about company',
       'version' => '1',
     ],
-    976 => [
+    730 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '189',
@@ -15442,41 +11212,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    977 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '189',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1089',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    978 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '189',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1090',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    979 => [
+    731 => [
       'attribute_original_id' => '1091',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '189',
@@ -15491,7 +11227,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    980 => [
+    732 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '189',
@@ -15506,7 +11242,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    981 => [
+    733 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '189',
@@ -15521,7 +11257,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    982 => [
+    734 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '190',
@@ -15536,7 +11272,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'new features',
       'version' => '1',
     ],
-    983 => [
+    735 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '190',
@@ -15551,41 +11287,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    984 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '190',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1096',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    985 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '190',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1097',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    986 => [
+    736 => [
       'attribute_original_id' => '1098',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '190',
@@ -15600,7 +11302,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    987 => [
+    737 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '190',
@@ -15615,7 +11317,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    988 => [
+    738 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '190',
@@ -15630,7 +11332,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    989 => [
+    739 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '191',
@@ -15645,7 +11347,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'separate content & design in ez publish',
       'version' => '1',
     ],
-    990 => [
+    740 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '191',
@@ -15660,7 +11362,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    991 => [
+    741 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '191',
@@ -15677,41 +11379,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    992 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '191',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>While there are many Content Management Systems (CMS) in the market, very few do exactly what a CMS is supposed to do: achieve a clean separation between content and design.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1104',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    993 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '191',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><title ezxhtml:level="3">What is content and design?</title><para>Content is information that is organized and stored in a structured manner by <link xlink:href="ezurl://97" xlink:show="none">eZ Publish</link>. For example, content may be the components of a news article (such as the title, introduction, body, and images) or the properties of a car (such as the model, year, and color). </para><para>All information that is stored for the purpose of later retrieval is referred to as content. The presentation of content is determined by the design of a site. </para><para>While content refers to structured data, design refers to the way the data is visually presented. Design includes the things that make up a web interface: HTML, stylesheets (CSS), images that are not part of the content, typography, fonts, and so on. </para><para>So, while content deals with storing and structuring data, design dictates how the content should be presented. </para><ezembed xlink:href="ezcontent://192" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><title ezxhtml:level="3">Benefits of a Content Management System</title><para>The ability to handle the distinction between structuring and displaying content is one of the <link xlink:href="ezurl://98" xlink:show="none">key features of eZ Publish</link>. The separation of content and design provides the following benefits: </para><itemizedlist><listitem><para>Content editors and designers can work separately without conflicts</para></listitem><listitem><para>Content can be published easily in multiple formats</para></listitem><listitem><para>Content can easily be transferred and re-purposed</para></listitem><listitem><para>Global redesigns and changes can be applied with simple modifications</para></listitem></itemizedlist><title ezxhtml:level="3">Presenting the content: templates</title><para>Templates represent the fundamental unit of site design in eZ Publish. For example, a template might dictate that a page should appear with the site\'s title at the top and with the main content in the middle. When the page is accessed, the Content Management System places the content (the actual title and body text) into the appropriate locations in the template. </para><para>An eZ Publish template is a custom, extended HTML file that describes how particular types of content should be presented. For example, there is a template for viewing a folder and its contents, a news article, the contents of a <link xlink:href="ezurl://99#picturegallery" xlink:show="none">gallery</link> as thumbnails, <link xlink:href="ezurl://100#videoplayer" xlink:show="none">media files</link> as list items, <link xlink:href="ezurl://101#visitorinteraction" xlink:show="none">forum posts</link> and so on. </para><para>In some cases, you can even have different article templates based on different kinds of articles or where they are located in the content hierarchy. In short, templates are the transforming unit that produces the site layout, either for an entire webpage or some part of that page. The following screenshots illustrate how different templates work together to produce a page. </para><para> Learn more in <link xlink:href="ezurl://102" xlink:show="none">Developers section</link>. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1105',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    994 => [
+    742 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '191',
@@ -15726,7 +11394,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    995 => [
+    743 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '191',
@@ -15743,24 +11411,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    996 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '191',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1108',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    997 => [
+    744 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '191',
@@ -15775,7 +11426,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    998 => [
+    745 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '191',
@@ -15790,7 +11441,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    999 => [
+    746 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '191',
@@ -15805,7 +11456,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1000 => [
+    747 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '191',
@@ -15820,7 +11471,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1001 => [
+    748 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '192',
@@ -15835,24 +11486,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'separation_of_content_and_design',
       'version' => '1',
     ],
-    1002 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '192',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1114',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1003 => [
+    749 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '192',
@@ -15869,7 +11503,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1004 => [
+    750 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '192',
@@ -15884,7 +11518,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1005 => [
+    751 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '193',
@@ -15899,7 +11533,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'how to use ez publish',
       'version' => '1',
     ],
-    1006 => [
+    752 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '193',
@@ -15914,7 +11548,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1007 => [
+    753 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '193',
@@ -15931,41 +11565,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1008 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '193',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>eZ Publish comes with a multitude of features out of the box, ensuring that you can quickly put your content online.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1120',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1009 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '193',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><itemizedlist><listitem><para><link xlink:href="ezurl://98#eztoolbar" xlink:show="none">Publish content from your web browser</link></para></listitem><listitem><para><link xlink:href="ezurl://98#openofficeimport" xlink:show="none">Publish content from word processors</link></para></listitem><listitem><para><link xlink:href="ezurl://98#contenttranslation" xlink:show="none">Translate your content</link></para></listitem><listitem><para><link xlink:href="ezurl://98#multiupload" xlink:show="none">Upload multiple files at once</link></para></listitem><listitem><para><link xlink:href="ezurl://98#picturegalleries" xlink:show="none">Picture galleries</link></para></listitem><listitem><para><link xlink:href="ezurl://98#videopublishing" xlink:show="none">Video publishing</link></para></listitem><listitem><para><link xlink:href="ezurl://98#web2.0" xlink:show="none">Web 2.0 features</link></para></listitem><listitem><para><link xlink:href="ezurl://98#defaultsearch" xlink:show="none">Search</link></para></listitem></itemizedlist><title ezxhtml:level="3">Publish content from your web browser</title><ezembed xlink:href="ezcontent://199" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>With eZ Publish, you can publish content like articles, pictures and files directly from your web browser, using the Website Toolbar. </para><para>This toolbar appears when you log in and enables you to publish, move, replace or translate any kind of content. </para><para>The Online Editor is a WYSIWYG editor integrated into the website (no HTML coding required), providing formatting functions similar to word processing applications. </para><title ezxhtml:level="3">Publish content from your favourite word processor</title><ezembed xlink:href="ezcontent://194" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Many content managers prefer working directly in Microsoft Word or Open Office. The import / export feature enables you to create or edit site content in your favorite word processor, even when you might not have Internet access. </para><para>Afterwards, you can upload the document through either a WebDAV client or the front-end of your site to generate or update articles, documentation pages and so on. </para><title ezxhtml:level="3">Translate your content</title><ezembed xlink:href="ezcontent://195" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>All content in eZ Publish can be translated to multiple languages. Having only one website to administer is efficient and makes it easier to maintain a consistent brand across languages and countries. </para><para>An international corporation or organization can have one website with content in several languages. When a visitor selects a language, the menus and content are displayed accordingly. If you have not yet translated specific content, it will be shown in the source language or not at all (depending on your configuration). </para><para>When you are editing content, you can choose to switch the language you are currently editing or to translate from one language to another. Content in the source language is shown when you are translating, to aid in the process. When creating or updating content translations, you can also use the built-in content “diff” functionality to see the added or removed text in the source language. </para><para>Multiple, multilingual URLs can be created for each page. By default, you can have an object called "Easy" with a URL "/easy" but also create a French translation with a URL "/facile". </para><title ezxhtml:level="3"> Upload multiple files at once</title><ezembed xlink:href="ezcontent://196" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>If you want to upload more than one document, picture or video at a time, eZ Publish has multi-upload functionality. </para><para>You simply select the content you want from your computer or from the server where your content is stored. eZ Publish can detect the type of content uploaded and creates the appropriate web pages. </para><title ezxhtml:level="3">Picture galleries</title><ezembed xlink:href="ezcontent://197" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>eZ Publish makes it easy to create picture galleries. With the multi-upload functionality, you can add many pictures at once, then eZ Publish will scale, format and resize the pictures automatically. </para><para>You can then browse through the galleries and re-use images elsewhere in your website. </para><title ezxhtml:level="3">Video publishing</title><ezembed xlink:href="ezcontent://200" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Basically, a video is another type of content you or users of your website can publish. You can use eZ Publish to store and display any video format for web TV functionality or video publishing similar to Youtube. </para><title ezxhtml:level="3">Web 2.0 features</title><ezembed xlink:href="ezcontent://201" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Tag clouds, blogs, forums and polls are all built-in eZ Publish features. Make your users contribute and build communities. </para><title ezxhtml:level="3">Search</title><ezembed xlink:href="ezcontent://198" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>To find any content on your eZ Publish site, you can use the integrated search engine in eZ Publish. To add more functionality and scale high-loaded websites, <link xlink:href="ezurl://84" xlink:show="none">eZ Find</link> is an enterprise search extension for eZ Publish. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1121',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1010 => [
+    754 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '193',
@@ -15980,7 +11580,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1011 => [
+    755 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '193',
@@ -15997,24 +11597,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1012 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '193',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1124',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1013 => [
+    756 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '193',
@@ -16029,7 +11612,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1014 => [
+    757 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '193',
@@ -16044,7 +11627,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1015 => [
+    758 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '193',
@@ -16059,7 +11642,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1016 => [
+    759 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '193',
@@ -16074,7 +11657,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1017 => [
+    760 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '194',
@@ -16089,24 +11672,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'openoffice_import_large',
       'version' => '1',
     ],
-    1018 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '194',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1130',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1019 => [
+    761 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '194',
@@ -16123,7 +11689,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1020 => [
+    762 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '194',
@@ -16138,7 +11704,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1021 => [
+    763 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '195',
@@ -16153,24 +11719,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'translation_large',
       'version' => '1',
     ],
-    1022 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '195',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1134',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1023 => [
+    764 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '195',
@@ -16187,7 +11736,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1024 => [
+    765 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '195',
@@ -16202,7 +11751,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1025 => [
+    766 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '196',
@@ -16217,24 +11766,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'multiupload_large',
       'version' => '1',
     ],
-    1026 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '196',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1138',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1027 => [
+    767 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '196',
@@ -16251,7 +11783,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1028 => [
+    768 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '196',
@@ -16266,7 +11798,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1029 => [
+    769 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '197',
@@ -16281,24 +11813,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'gallery_large',
       'version' => '1',
     ],
-    1030 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '197',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1142',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1031 => [
+    770 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '197',
@@ -16315,7 +11830,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1032 => [
+    771 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '197',
@@ -16330,7 +11845,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1033 => [
+    772 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '198',
@@ -16345,24 +11860,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'search_result_large',
       'version' => '1',
     ],
-    1034 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '198',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1146',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1035 => [
+    773 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '198',
@@ -16379,7 +11877,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1036 => [
+    774 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '198',
@@ -16394,7 +11892,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1037 => [
+    775 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '199',
@@ -16409,24 +11907,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'ez_tool_bar_large',
       'version' => '1',
     ],
-    1038 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '199',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1150',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1039 => [
+    776 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '199',
@@ -16443,7 +11924,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1040 => [
+    777 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '199',
@@ -16458,7 +11939,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1041 => [
+    778 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '200',
@@ -16473,24 +11954,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'quicktime_large',
       'version' => '1',
     ],
-    1042 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '200',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1154',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1043 => [
+    779 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '200',
@@ -16507,7 +11971,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1044 => [
+    780 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '200',
@@ -16522,7 +11986,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1045 => [
+    781 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '201',
@@ -16537,24 +12001,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'web_2_0_large',
       'version' => '1',
     ],
-    1046 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '201',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1158',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1047 => [
+    782 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '201',
@@ -16571,7 +12018,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1048 => [
+    783 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '201',
@@ -16586,7 +12033,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1049 => [
+    784 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '202',
@@ -16601,7 +12048,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'how to manage ez publish',
       'version' => '1',
     ],
-    1050 => [
+    785 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '202',
@@ -16616,7 +12063,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1051 => [
+    786 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '202',
@@ -16633,41 +12080,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1052 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '202',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>To provide you with full control over your website, eZ Publish has many features that make it easy to manage both content and users.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1164',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1053 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '202',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><itemizedlist><listitem><para>Administration Interface</para></listitem><listitem><para>Permission and access control</para></listitem><listitem><para>Workflows</para></listitem><listitem><para>Versioning and modification tracking</para></listitem><listitem><para>A unique content model</para></listitem><listitem><para>Content cross publishing</para></listitem><listitem><para>Multi-site deployment</para></listitem><listitem><para>Search engine optimization</para></listitem></itemizedlist><title ezxhtml:level="3">A rich and powerful Administration Interface</title><ezembed xlink:href="ezcontent://210" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>The content of a site can be displayed (and modified) in various ways. The Administration Interface is the advanced back-end interface, providing powerful tools for content management and editing as well as site management, configuration, customization and development.</para><para>In other words, you can change almost everything about a site in the Administration Interface.</para><title ezxhtml:level="3">Permission, rights management and access control</title><ezembed xlink:href="ezcontent://203" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>The eZ Publish access system is multi-level and role-based. This means that you can give a user or a group of users access to a combination of functions across the whole site or within a specific area of the site. For example, you restrict a certain part of a site to community or partner members.</para><title ezxhtml:level="3">Workflows</title><ezembed xlink:href="ezcontent://204" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>eZ Publish comes with an integrated workflow mechanism. An example of this is the built-in collaboration system, which defines an ordered sequence of actions to be executed after a content editor has published an object.</para><para>Suppose that your site has a restriction that all content has to go through an editor-in-chief before being published. It can be set as “pending” before being approved to be published. On the other hand, if a pending version is rejected by the editor, it can be set as “rejected”.</para><para>&amp;nbsp;Another example is the e-commerce engine, which can be used to manage subscriptions on a media site, automating access for paid subscribers to read premium news content, watch videos, and so on.</para><title ezxhtml:level="3">Versioning and modification tracking</title><ezembed xlink:href="ezcontent://205" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Having access to older versions of content enables supervisors or editors-in-chief to check for inconsistency or errors in the content. eZ Publish automatically keeps track of which content changes were made by which users at what time, and provides the option to revert content to a previous version.</para><title ezxhtml:level="3">A unique content model</title><ezembed xlink:href="ezcontent://206" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Publishing content is no longer only about publishing articles. Depending on your needs you must define specific content structures for cars, recipes, specific products for your webshop and more. eZ Publish has a flexible content engine that enables administrators to create these content definitions directly through graphical user interfaces.</para><title ezxhtml:level="3">Content cross publishing</title><ezembed xlink:href="ezcontent://207" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Using the cross publishing feature, you can re-use content throughout the site while avoiding inconsistent duplicates of content that are hard to maintain. If content appears at multiple locations, you only have to edit the object once – the changes will be reflected at all locations.</para><title ezxhtml:level="3">Multi-site deployment</title><ezembed xlink:href="ezcontent://208" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>One installation of eZ Publish can host many different websites with the possibility to re-use content, functionality and design across the different sites. You can have a continuous overview of all your sites and can even industrialize this deployment via the Site Factory management service in <link xlink:href="ezurl://85" xlink:show="none">eZ Publish Premium</link> subscription services.</para><title ezxhtml:level="3">URL management and search engine optimization</title><ezembed xlink:href="ezcontent://209" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>eZ Publish makes it easy for you to create content that will be effectively indexed by search engines. Sitemaps, friendly URLs, and easy management of key XHTML tags are all built-in features.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1165',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1054 => [
+    787 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '202',
@@ -16682,7 +12095,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1055 => [
+    788 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '202',
@@ -16699,24 +12112,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1056 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '202',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1168',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1057 => [
+    789 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '202',
@@ -16731,7 +12127,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1058 => [
+    790 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '202',
@@ -16746,7 +12142,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1059 => [
+    791 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '202',
@@ -16761,7 +12157,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1060 => [
+    792 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '202',
@@ -16776,7 +12172,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1061 => [
+    793 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '203',
@@ -16791,24 +12187,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'usermanagement_large',
       'version' => '1',
     ],
-    1062 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '203',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1174',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1063 => [
+    794 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '203',
@@ -16825,7 +12204,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1064 => [
+    795 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '203',
@@ -16840,7 +12219,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1065 => [
+    796 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '204',
@@ -16855,24 +12234,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'workflow_large',
       'version' => '1',
     ],
-    1066 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '204',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1178',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1067 => [
+    797 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '204',
@@ -16889,7 +12251,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1068 => [
+    798 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '204',
@@ -16904,7 +12266,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1069 => [
+    799 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '205',
@@ -16919,24 +12281,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'versioning_large',
       'version' => '1',
     ],
-    1070 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '205',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1182',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1071 => [
+    800 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '205',
@@ -16953,7 +12298,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1072 => [
+    801 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '205',
@@ -16968,7 +12313,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1073 => [
+    802 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '206',
@@ -16983,24 +12328,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'datatypes_attributes_content_class_and_objects_large',
       'version' => '1',
     ],
-    1074 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '206',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1186',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1075 => [
+    803 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '206',
@@ -17017,7 +12345,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1076 => [
+    804 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '206',
@@ -17032,7 +12360,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1077 => [
+    805 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '207',
@@ -17047,24 +12375,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'multiple_location_large',
       'version' => '1',
     ],
-    1078 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '207',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1190',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1079 => [
+    806 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '207',
@@ -17081,7 +12392,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1080 => [
+    807 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '207',
@@ -17096,7 +12407,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1081 => [
+    808 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '208',
@@ -17111,24 +12422,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'multisite_deployment_large',
       'version' => '1',
     ],
-    1082 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '208',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1194',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1083 => [
+    809 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '208',
@@ -17145,7 +12439,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1084 => [
+    810 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '208',
@@ -17160,7 +12454,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1085 => [
+    811 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '209',
@@ -17175,24 +12469,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'seo_large',
       'version' => '1',
     ],
-    1086 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '209',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1198',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1087 => [
+    812 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '209',
@@ -17209,7 +12486,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1088 => [
+    813 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '209',
@@ -17224,7 +12501,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1089 => [
+    814 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '210',
@@ -17239,24 +12516,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'admin_site_large',
       'version' => '1',
     ],
-    1090 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '210',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1202',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1091 => [
+    815 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '210',
@@ -17273,7 +12533,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1092 => [
+    816 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '210',
@@ -17288,7 +12548,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1093 => [
+    817 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '211',
@@ -17303,7 +12563,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'how to develop with ez publish',
       'version' => '1',
     ],
-    1094 => [
+    818 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '211',
@@ -17318,7 +12578,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1095 => [
+    819 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '211',
@@ -17335,41 +12595,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1096 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '211',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>eZ Publish is more than a basic CMS, but a content management platform based on a clear API that allows developers to customize and extend eZ Publish.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1208',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1097 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '211',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><itemizedlist><listitem><para><link xlink:href="ezurl://103#contentclass" xlink:show="none">The content class concept</link></para></listitem><listitem><para><link xlink:href="ezurl://103#customdesign" xlink:show="none">Custom design: CSS and templates</link></para></listitem><listitem><para><link xlink:href="ezurl://103#phpcomponents" xlink:show="none">High-quality library of PHP components</link></para></listitem><listitem><para><link xlink:href="ezurl://103#buildextensions" xlink:show="none">Build eZ Publish extensions</link></para></listitem><listitem><para><link xlink:href="ezurl://103#developmentenvironment" xlink:show="none">Which development environment?</link></para></listitem><listitem><para><link xlink:href="ezurl://103#ezcommunity" xlink:show="none">eZ Publish community and resources</link></para></listitem></itemizedlist><title ezxhtml:level="3">The content class concept</title><ezembed xlink:href="ezcontent://212" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>Any piece of content in eZ Publish is a content object, which is an instance of a specific content class. A content class is a definition of an arbitrary data structure. It does not store any actual data. </para><para>A content class is made up of attributes. The characteristics of an attribute are determined by the datatype that is chosen for that specific attribute. By combining different datatypes, it is possible to represent complex data structures. </para><para>The illustration above shows the anatomy of a content class called "Article", which defines a data structure for storing news articles. It consists of attributes dedicated for storing the title, an introduction text and the actual body of an article.</para><title ezxhtml:level="3">Custom design: CSS and templates</title><ezembed xlink:href="ezcontent://213" view="embed"><ezconfig><ezvalue key="size">original</ezvalue><ezvalue key="offset">0</ezvalue><ezvalue key="limit">5</ezvalue></ezconfig></ezembed><para>The first thing you may be willing to do is to change the look of your eZ Publish site. This can be done by modifying the CSS of eZ Publish and <link xlink:href="ezurl://86" xlink:show="none">overriding templates</link>. You can even create reusable <link xlink:href="ezurl://87" xlink:show="none">site packages</link> that include these CSS and template changes. </para><title ezxhtml:level="3">High-quality library of PHP components</title><para>eZ Publish 4.X as well as the next generations of eZ Publish are based on <link xlink:href="ezurl://88" xlink:show="none">eZ Components</link> which are a high quality library of independent components aiming to help developers creating web centric applications like for example customising and extending eZ Publish. </para><para>In the eZ Components you will find components that focus their attention on solving important parts of Web application development. They are written for solving the re-occurring issues that Web application developers have to deal with when building their applications - without any superfluous ballast. </para><para>In order to cater for this goal, quality is also an important factor. The eZ Components development team uses a test-driven development methodology where a large effort is put into making the APIs easily testable. This also results in a better API for developers to use. </para><title ezxhtml:level="3">Build eZ Publish extensions</title><para>There is a clear API to develop your own PHP extensions in order to extend the functionality of eZ Publish. By using extensions it is possible to create new modules, datatypes, template operators, workflow events , or any integration with third party applications. You will find many contributed extensions available at <link xlink:href="ezurl://89" xlink:show="none">Contribution page</link>. </para><title ezxhtml:level="3">Which development environment?</title><para> In an eZ Publish project, a <link xlink:href="ezurl://90" xlink:show="new">Subversion (SVN)</link> repository is usually set up to track all changes during development projects. When it comes to IDE, both <link xlink:href="ezurl://91" xlink:show="new">Eclipse</link> and <link xlink:href="ezurl://92" xlink:show="new">PHPEdit</link> have been optimised for eZ Publish. </para><title ezxhtml:level="3">eZ Publish community and resources</title><para>When you start developing with eZ Publish, the community is definitely an environment to get in touch with. You will find your answers or get help in the forums as well as many contributions that will make save you time in your development projects. </para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1209',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1098 => [
+    820 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '211',
@@ -17384,7 +12610,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1099 => [
+    821 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '211',
@@ -17401,24 +12627,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1100 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '211',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1212',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1101 => [
+    822 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '211',
@@ -17433,7 +12642,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1102 => [
+    823 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '211',
@@ -17448,7 +12657,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1103 => [
+    824 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '211',
@@ -17463,7 +12672,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1104 => [
+    825 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '211',
@@ -17478,7 +12687,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1105 => [
+    826 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '212',
@@ -17493,24 +12702,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'datatypes_attributes_content_class_and_objects_large',
       'version' => '1',
     ],
-    1106 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '212',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1218',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1107 => [
+    827 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '212',
@@ -17527,7 +12719,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1108 => [
+    828 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '212',
@@ -17542,7 +12734,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1109 => [
+    829 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '213',
@@ -17557,24 +12749,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'site_style_large',
       'version' => '1',
     ],
-    1110 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '213',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1222',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1111 => [
+    830 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '213',
@@ -17591,7 +12766,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1112 => [
+    831 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '213',
@@ -17606,7 +12781,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1113 => [
+    832 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '214',
@@ -17621,7 +12796,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'rest api interface',
       'version' => '1',
     ],
-    1114 => [
+    833 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '214',
@@ -17636,7 +12811,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1115 => [
+    834 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '214',
@@ -17653,41 +12828,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1116 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '214',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>New RESTful interface, which will allow external client implementations, to access and query content resources inside an eZ Publish installation</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1228',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1117 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '214',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Different aspects of the content objects can be queried at will, such as metadata or actual values. The REST interface is protected either by OAuth 2.0 or HTTP Basic authentication</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1229',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1118 => [
+    835 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '214',
@@ -17702,7 +12843,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1119 => [
+    836 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '214',
@@ -17719,24 +12860,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1120 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '214',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1232',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1121 => [
+    837 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '214',
@@ -17751,7 +12875,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1122 => [
+    838 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '214',
@@ -17766,7 +12890,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1123 => [
+    839 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '214',
@@ -17781,7 +12905,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1124 => [
+    840 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '214',
@@ -17796,7 +12920,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1125 => [
+    841 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '215',
@@ -17811,7 +12935,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'asynchronous publishing',
       'version' => '1',
     ],
-    1126 => [
+    842 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '215',
@@ -17826,7 +12950,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1127 => [
+    843 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '215',
@@ -17843,41 +12967,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1128 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '215',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>The ability to use defer publishing, for improved scalability in high load, multi-editor environments.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1240',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1129 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '215',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1241',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1130 => [
+    844 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '215',
@@ -17892,7 +12982,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1131 => [
+    845 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '215',
@@ -17909,24 +12999,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1132 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '215',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1244',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1133 => [
+    846 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '215',
@@ -17941,7 +13014,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1134 => [
+    847 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '215',
@@ -17956,7 +13029,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1135 => [
+    848 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '215',
@@ -17971,7 +13044,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1136 => [
+    849 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '215',
@@ -17986,7 +13059,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1137 => [
+    850 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '216',
@@ -18001,7 +13074,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'canonical links',
       'version' => '1',
     ],
-    1138 => [
+    851 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '216',
@@ -18016,7 +13089,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1139 => [
+    852 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '216',
@@ -18033,41 +13106,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1140 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '216',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>eZ Publish 4.5 supports a canonical link feature that helps search engines to figure out duplicate content issues and allow them to index relevant content.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1252',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1141 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '216',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>- For simple siteaccesses, like nor, fre,, ger, eng the feature works out of the box &amp;nbsp;</para><para>- More complex mappings require a manual configuration in the file</para><para>- You use the canonical link to tell the search engines which url is the preferred one when you have several duplicate urls.</para><para>Example of duplicate urls:</para><para>-&amp;nbsp;<link xlink:href="ezurl://104" xlink:show="none">www.example.com</link></para><para>- example.com</para><para>-&amp;nbsp;<link xlink:href="ezurl://96" xlink:show="none">www.example.com/index.html</link></para><para>- example.com/home.asp</para><para>Example of canonical link:</para><para>&lt;link rel="canonical" href="<link xlink:href="ezurl://104" xlink:show="none">http://www.example.com</link>/" /&gt;</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1253',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1142 => [
+    853 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '216',
@@ -18082,7 +13121,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1143 => [
+    854 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '216',
@@ -18099,24 +13138,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1144 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '216',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1256',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1145 => [
+    855 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '216',
@@ -18131,7 +13153,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1146 => [
+    856 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '216',
@@ -18146,7 +13168,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1147 => [
+    857 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '216',
@@ -18161,7 +13183,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1148 => [
+    858 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '216',
@@ -18176,7 +13198,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1149 => [
+    859 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '217',
@@ -18191,7 +13213,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'support for red hat enterprise',
       'version' => '1',
     ],
-    1150 => [
+    860 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '217',
@@ -18206,7 +13228,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1151 => [
+    861 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '217',
@@ -18223,41 +13245,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1152 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '217',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>combined with eZ Publish Enterprise, you can now a system supported all through the stack!</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1264',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1153 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '217',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1265',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1154 => [
+    862 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '217',
@@ -18272,7 +13260,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1155 => [
+    863 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '217',
@@ -18289,24 +13277,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1156 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '217',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1268',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1157 => [
+    864 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '217',
@@ -18321,7 +13292,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1158 => [
+    865 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '217',
@@ -18336,7 +13307,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1159 => [
+    866 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '217',
@@ -18351,7 +13322,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1160 => [
+    867 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '217',
@@ -18366,7 +13337,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1161 => [
+    868 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '218',
@@ -18381,7 +13352,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'fastcgi',
       'version' => '1',
     ],
-    1162 => [
+    869 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '218',
@@ -18396,7 +13367,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1163 => [
+    870 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '218',
@@ -18413,41 +13384,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1164 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '218',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>support</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1276',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1165 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '218',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>What is FastCGI?</para><itemizedlist><listitem><para>Like CGI, FastCGI is also language-independent. For instance, FastCGI provides a way to improve the performance of the thousands of Perl applications that have been written for the Web.</para></listitem><listitem><para>Like CGI, FastCGI runs applications in processes isolated from the core Web server, which provides greater security than APIs. (APIs link application code into the core Web server, which means that a bug in one API-based application can corrupt another application or the core server; a malicious API-based application can, for example, steal key security secrets from another application or the core server.)</para></listitem></itemizedlist><para>Read more&amp;nbsp;http://www.fastcgi.com/</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1277',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1166 => [
+    871 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '218',
@@ -18462,7 +13399,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1167 => [
+    872 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '218',
@@ -18479,24 +13416,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1168 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '218',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1280',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1169 => [
+    873 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '218',
@@ -18511,7 +13431,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1170 => [
+    874 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '218',
@@ -18526,7 +13446,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1171 => [
+    875 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '218',
@@ -18541,7 +13461,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1172 => [
+    876 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '218',
@@ -18556,7 +13476,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1173 => [
+    877 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '252',
       'contentobject_id' => '219',
@@ -18571,24 +13491,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'events',
       'version' => '1',
     ],
-    1174 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '253',
-      'contentobject_id' => '219',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1286',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1175 => [
+    878 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '254',
       'contentobject_id' => '219',
@@ -18605,7 +13508,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1176 => [
+    879 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '220',
@@ -18620,7 +13523,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'career',
       'version' => '1',
     ],
-    1177 => [
+    880 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '220',
@@ -18635,41 +13538,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1178 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '220',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1290',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1179 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '220',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1291',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1180 => [
+    881 => [
       'attribute_original_id' => '1292',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '220',
@@ -18684,7 +13553,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1181 => [
+    882 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '220',
@@ -18699,7 +13568,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1182 => [
+    883 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '220',
@@ -18714,7 +13583,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1183 => [
+    884 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '221',
@@ -18729,7 +13598,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'investors relation',
       'version' => '1',
     ],
-    1184 => [
+    885 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '221',
@@ -18744,41 +13613,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1185 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '119',
-      'contentobject_id' => '221',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1297',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1186 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '156',
-      'contentobject_id' => '221',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1298',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1187 => [
+    886 => [
       'attribute_original_id' => '1299',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '221',
@@ -18793,7 +13628,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1188 => [
+    887 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '221',
@@ -18808,7 +13643,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1189 => [
+    888 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '221',
@@ -18823,7 +13658,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1190 => [
+    889 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '229',
       'contentobject_id' => '222',
@@ -18838,24 +13673,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'contact',
       'version' => '1',
     ],
-    1191 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '230',
-      'contentobject_id' => '222',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1303',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1192 => [
+    890 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '231',
       'contentobject_id' => '222',
@@ -18870,7 +13688,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1193 => [
+    891 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '232',
       'contentobject_id' => '222',
@@ -18885,7 +13703,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1194 => [
+    892 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '233',
       'contentobject_id' => '222',
@@ -18900,7 +13718,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1195 => [
+    893 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '234',
       'contentobject_id' => '222',
@@ -18915,7 +13733,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1196 => [
+    894 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '235',
       'contentobject_id' => '222',
@@ -18930,7 +13748,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1197 => [
+    895 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '247',
       'contentobject_id' => '223',
@@ -18945,7 +13763,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'morbi neque',
       'version' => '1',
     ],
-    1198 => [
+    896 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '248',
       'contentobject_id' => '223',
@@ -18962,7 +13780,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1199 => [
+    897 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '249',
       'contentobject_id' => '223',
@@ -18977,24 +13795,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1200 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '250',
-      'contentobject_id' => '223',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para><emphasis role="strong">Morbi neque. Proin porta dapibus turpis.</emphasis></para><para>Vivamus placerat fringilla purus. Pellentesque at libero. In hac habitasse platea dictumst. Pellentesque ante.</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1312',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1201 => [
+    898 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '251',
       'contentobject_id' => '223',
@@ -19009,7 +13810,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1202 => [
+    899 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '224',
@@ -19024,24 +13825,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'company banner',
       'version' => '1',
     ],
-    1203 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '267',
-      'contentobject_id' => '224',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1315',
-      'language_code' => 'eng-US',
-      'language_id' => '3',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1204 => [
+    900 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '224',
@@ -19058,7 +13842,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1205 => [
+    901 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '224',
@@ -19073,7 +13857,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1206 => [
+    902 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '329',
       'contentobject_id' => '54',
@@ -19088,7 +13872,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1207 => [
+    903 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '330',
       'contentobject_id' => '54',
@@ -19103,7 +13887,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1208 => [
+    904 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '331',
       'contentobject_id' => '54',
@@ -19118,7 +13902,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'login',
       'version' => '2',
     ],
-    1209 => [
+    905 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '332',
       'contentobject_id' => '54',
@@ -19133,7 +13917,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'logout',
       'version' => '2',
     ],
-    1210 => [
+    906 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '333',
       'contentobject_id' => '54',
@@ -19148,7 +13932,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'my profile',
       'version' => '2',
     ],
-    1211 => [
+    907 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '334',
       'contentobject_id' => '54',
@@ -19163,7 +13947,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'register',
       'version' => '2',
     ],
-    1212 => [
+    908 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '335',
       'contentobject_id' => '54',
@@ -19178,7 +13962,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '/rss/feed/my_feed',
       'version' => '2',
     ],
-    1213 => [
+    909 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '336',
       'contentobject_id' => '54',
@@ -19193,7 +13977,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'shopping basket',
       'version' => '2',
     ],
-    1214 => [
+    910 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '337',
       'contentobject_id' => '54',
@@ -19208,7 +13992,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'site settings',
       'version' => '2',
     ],
-    1215 => [
+    911 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '338',
       'contentobject_id' => '54',
@@ -19223,7 +14007,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1216 => [
+    912 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '339',
       'contentobject_id' => '54',
@@ -19238,7 +14022,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1217 => [
+    913 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '340',
       'contentobject_id' => '54',
@@ -19253,7 +14037,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1218 => [
+    914 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '225',
@@ -19268,7 +14052,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'partners',
       'version' => '1',
     ],
-    1219 => [
+    915 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '225',
@@ -19283,7 +14067,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1220 => [
+    916 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '226',
@@ -19298,7 +14082,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'new test article',
       'version' => '1',
     ],
-    1221 => [
+    917 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '226',
@@ -19313,7 +14097,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'new test article (2)',
       'version' => '2',
     ],
-    1222 => [
+    918 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '226',
@@ -19328,7 +14112,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'something',
       'version' => '1',
     ],
-    1223 => [
+    919 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '226',
@@ -19343,7 +14127,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'something',
       'version' => '2',
     ],
-    1224 => [
+    920 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '226',
@@ -19360,7 +14144,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1225 => [
+    921 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '226',
@@ -19377,75 +14161,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1226 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '226',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Something is in here!</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1335',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1227 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '186',
-      'contentobject_id' => '226',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Something is in here!</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1335',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '2',
-    ],
-    1228 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '226',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Something is in here!</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1336',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1229 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '187',
-      'contentobject_id' => '226',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>Something is in here!</para></section>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1336',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '2',
-    ],
-    1230 => [
+    922 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '226',
@@ -19460,7 +14176,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1231 => [
+    923 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '226',
@@ -19475,7 +14191,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1232 => [
+    924 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '226',
@@ -19492,7 +14208,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1233 => [
+    925 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '226',
@@ -19509,41 +14225,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1234 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '226',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1339',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '1',
-    ],
-    1235 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '190',
-      'contentobject_id' => '226',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '1339',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
-      'version' => '2',
-    ],
-    1236 => [
+    926 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '226',
@@ -19558,7 +14240,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1237 => [
+    927 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '226',
@@ -19573,7 +14255,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1238 => [
+    928 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '226',
@@ -19588,7 +14270,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1239 => [
+    929 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '226',
@@ -19603,7 +14285,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1240 => [
+    930 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '226',
@@ -19618,7 +14300,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1241 => [
+    931 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '226',
@@ -19633,7 +14315,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1242 => [
+    932 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '226',
@@ -19648,7 +14330,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '1',
     ],
-    1243 => [
+    933 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '226',
@@ -19663,7 +14345,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1244 => [
+    934 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '226',
@@ -19678,7 +14360,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1245 => [
+    935 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '225',
@@ -19693,7 +14375,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => 'partners',
       'version' => '2',
     ],
-    1246 => [
+    936 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '225',
@@ -19708,7 +14390,7 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'sort_key_string' => '',
       'version' => '2',
     ],
-    1247 => [
+    937 => [
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '302',
       'contentobject_id' => '166',
@@ -19721,23 +14403,6 @@ On top of these regular fevers, on a daily basis you may want to report issues f
       'language_id' => '2',
       'sort_key_int' => '0',
       'sort_key_string' => 'forum',
-      'version' => '2',
-    ],
-    1248 => [
-      'attribute_original_id' => '0',
-      'contentclassattribute_id' => '303',
-      'contentobject_id' => '166',
-      'data_float' => '0',
-      'data_int' => '1045487555',
-      'data_text' => '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"/>
-',
-      'data_type_string' => 'ezrichtext',
-      'id' => '4004',
-      'language_code' => 'eng-US',
-      'language_id' => '2',
-      'sort_key_int' => '0',
-      'sort_key_string' => '',
       'version' => '2',
     ],
   ],

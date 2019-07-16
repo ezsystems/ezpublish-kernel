@@ -91,11 +91,6 @@
         <target>Content relations (multiple)</target>
         <note>key: ezobjectrelationlist.name</note>
       </trans-unit>
-      <trans-unit id="213da4efa5baa8b47c34dc4b645df7115d07d66e" resname="ezrichtext.name">
-        <source>Rich text</source>
-        <target>Rich text</target>
-        <note>key: ezrichtext.name</note>
-      </trans-unit>
       <trans-unit id="3229c3fc41a4af84f0fd1636f0678aac770359bc" resname="ezselection.name">
         <source>Selection</source>
         <target>Selection</target>

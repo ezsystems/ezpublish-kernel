@@ -325,7 +325,7 @@ class MapperTest extends TestCase
         );
 
         $this->assertCount(
-            6,
+            4,
             $types[0]->fieldDefinitions,
             'Incorrect number of field definitions'
         );
@@ -345,7 +345,7 @@ class MapperTest extends TestCase
                 'isSearchable' => true,
                 'position' => 2,
             ],
-            $types[0]->fieldDefinitions[2]
+            $types[0]->fieldDefinitions[1]
         );
 
         $this->assertPropertiesCorrect(
@@ -362,7 +362,7 @@ class MapperTest extends TestCase
                 'isSearchable' => false,
                 'position' => 6,
             ],
-            $types[0]->fieldDefinitions[5]
+            $types[0]->fieldDefinitions[3]
         );
     }
 

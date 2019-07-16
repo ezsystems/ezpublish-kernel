@@ -359,7 +359,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $rows = $gateway->loadTypesDataForGroup(1, 0);
 
         $this->assertCount(
-            6,
+            4,
             $rows
         );
     }
@@ -379,7 +379,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $rows = $gateway->loadTypeData(1, 0);
 
         $this->assertCount(
-            5,
+            3,
             $rows
         );
         $this->assertCount(
@@ -412,7 +412,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $rows = $gateway->loadTypeDataByIdentifier('folder', 0);
 
         $this->assertCount(
-            5,
+            3,
             $rows
         );
         $this->assertCount(
@@ -436,7 +436,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $rows = $gateway->loadTypeDataByRemoteId('a3d405b81be900468eb153d774f4f0d2', 0);
 
         $this->assertCount(
-            5,
+            3,
             $rows
         );
         $this->assertCount(
@@ -600,7 +600,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'identifier' => 'description',
                     'category' => 'meta',
                     'placement' => '4',
-                    'data_type_string' => 'ezrichtext',
+                    'data_type_string' => 'ezstring',
                     'can_translate' => '1',
                     'is_required' => '1',
                     'is_information_collector' => '1',
@@ -678,7 +678,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $field->identifier = 'description';
         $field->fieldGroup = 'meta';
         $field->position = 4;
-        $field->fieldType = 'ezrichtext';
+        $field->fieldType = 'ezstring';
         $field->isTranslatable = true;
         $field->isRequired = true;
         $field->isInfoCollector = true;
@@ -737,7 +737,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->deleteFieldDefinition(1, 0, 119);
 
         $this->assertQueryResult(
-            [[6]],
+            [[5]],
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select('COUNT(*)')
@@ -768,7 +768,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'category' => 'meta',
                     'contentclass_id' => '2',
                     'version' => '0',
-                    'data_type_string' => 'ezrichtext',
+                    'data_type_string' => 'ezstring',
                     'identifier' => 'description',
                     'is_information_collector' => '1',
                     'placement' => '4',
@@ -1112,7 +1112,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ->from('ezcontentclass_attribute');
 
         $this->assertQueryResult(
-            [[7]],
+            [[5]],
             $countNotAffectedAttr
         );
     }
@@ -1242,7 +1242,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $this->assertQueryResult(
-            [[5]],
+            [[3]],
             $this->getDatabaseHandler()->createSelectQuery()
                 ->select('COUNT( * )')
                 ->from('ezcontentclass_attribute')

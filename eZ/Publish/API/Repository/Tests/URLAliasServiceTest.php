@@ -992,15 +992,6 @@ class URLAliasServiceTest extends BaseTest
         $articleContentType = $contentTypeService->loadContentTypeByIdentifier('article');
         $articleCreateStruct = $contentService->newContentCreateStruct($articleContentType, 'eng-GB');
         $articleCreateStruct->setField('title', 'My Article');
-        $articleCreateStruct->setField(
-            'intro',
-            <<< DOCBOOK
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0-variant ezpublish-1.0">
-    <para>Cache invalidation in eZ</para>
-</section>
-DOCBOOK
-        );
         $article = $contentService->publishVersion(
             $contentService->createContent($articleCreateStruct, [
                 $locationService->newLocationCreateStruct($folderLocation->id),

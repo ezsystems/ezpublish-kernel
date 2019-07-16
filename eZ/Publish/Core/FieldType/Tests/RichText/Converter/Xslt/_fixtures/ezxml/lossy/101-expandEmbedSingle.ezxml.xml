@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-  <paragraph class="show some class">
-    <embed node_id="601" view="line" class="embedClass2" align="right"/>
-  </paragraph>
-</section>

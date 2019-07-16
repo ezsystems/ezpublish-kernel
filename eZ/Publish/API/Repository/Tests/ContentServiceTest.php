@@ -22,7 +22,6 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use DOMDocument;
 use Exception;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 
@@ -1311,7 +1310,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $this->assertEquals(
             [
-                'fieldCount' => 2,
+                'fieldCount' => 1,
                 'relationCount' => 0,
             ],
             [
@@ -1604,24 +1603,6 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => true,
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'description',
-                    'fieldTypeIdentifier' => 'ezrichtext',
-                ]
-            ),
-            new Field(
-                [
-                    'id' => 0,
-                    'value' => true,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'description',
-                    'fieldTypeIdentifier' => 'ezrichtext',
-                ]
-            ),
-            new Field(
-                [
-                    'id' => 0,
-                    'value' => true,
-                    'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -1794,9 +1775,9 @@ class ContentServiceTest extends BaseContentServiceTest
         // 2. Update content type definition
         $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
 
-        $fieldDefinition = $contentType->getFieldDefinition('description');
+        $fieldDefinition = $contentType->getFieldDefinition('short_name');
         $fieldDefinitionUpdate = $contentTypeService->newFieldDefinitionUpdateStruct();
-        $fieldDefinitionUpdate->identifier = 'description';
+        $fieldDefinitionUpdate->identifier = 'short_name';
         $fieldDefinitionUpdate->isRequired = true;
 
         $contentTypeService->updateFieldDefinition(
@@ -1807,18 +1788,9 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
         // 3. Update only eng-US translation
-        $description = new DOMDocument();
-        $description->loadXML(<<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
-    <para>Lorem ipsum dolor</para>
-</section>
-XML
-        );
-
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->setField('name', 'An awesome Sidelfingen folder (updated)', 'eng-US');
-        $contentUpdate->setField('description', $description);
+        $contentUpdate->setField('short_name', 'Lorem ipsum dolor');
 
         $contentService->updateContent($contentDraft->getVersionInfo(), $contentUpdate);
         /* END: Use Case */
@@ -1842,10 +1814,6 @@ XML
         // Now create an update struct which does not overwrite mandatory
         // fields
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField(
-            'description',
-            '<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0"/>'
-        );
 
         // Don't set this, then the above call without languageCode will fail
         $contentUpdateStruct->initialLanguageCode = 'eng-US';
@@ -2702,14 +2670,6 @@ XML
                     'id' => 0,
                     'value' => true,
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'description',
-                ]
-            ),
-            new Field(
-                [
-                    'id' => 0,
-                    'value' => true,
-                    'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name',
                 ]
             ),
@@ -2772,15 +2732,6 @@ XML
                     'id' => 0,
                     'value' => true,
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'description',
-                    'fieldTypeIdentifier' => 'ezrichtext',
-                ]
-            ),
-            new Field(
-                [
-                    'id' => 0,
-                    'value' => true,
-                    'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -2807,15 +2758,6 @@ XML
                     'id' => 0,
                     'value' => true,
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'description',
-                    'fieldTypeIdentifier' => 'ezrichtext',
-                ]
-            ),
-            new Field(
-                [
-                    'id' => 0,
-                    'value' => true,
-                    'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -2837,15 +2779,6 @@ XML
         $actual = $this->normalizeFields($reloadedContent->getFields());
 
         $expected = [
-            new Field(
-                [
-                    'id' => 0,
-                    'value' => true,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'description',
-                    'fieldTypeIdentifier' => 'ezrichtext',
-                ]
-            ),
             new Field(
                 [
                     'id' => 0,
@@ -6243,24 +6176,6 @@ XML
     private function createFieldsFixture()
     {
         return [
-            new Field(
-                [
-                    'id' => 0,
-                    'value' => 'Foo',
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'description',
-                    'fieldTypeIdentifier' => 'ezrichtext',
-                ]
-            ),
-            new Field(
-                [
-                    'id' => 0,
-                    'value' => 'Bar',
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'description',
-                    'fieldTypeIdentifier' => 'ezrichtext',
-                ]
-            ),
             new Field(
                 [
                     'id' => 0,

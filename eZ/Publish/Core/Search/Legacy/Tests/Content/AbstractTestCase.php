@@ -102,7 +102,6 @@ class AbstractTestCase extends LanguageAwareTestCase
                     'ezstring' => new Converter\TextLineConverter(),
                     'ezfloat' => new Converter\FloatConverter(),
                     'ezurl' => new Converter\UrlConverter(),
-                    'ezrichtext' => new Converter\RichTextConverter(),
                     'ezboolean' => new Converter\CheckboxConverter(),
                     'ezkeyword' => new Converter\KeywordConverter(),
                     'ezauthor' => new Converter\AuthorConverter(),

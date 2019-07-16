@@ -12,7 +12,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Commo
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Content;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubPolicyProvider;
-use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Yaml\Yaml;
@@ -26,13 +25,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension */
     private $extension;
-
-    /**
-     * Cached RichText default settings.
-     *
-     * @var array
-     */
-    private static $richTextDefaultSettings;
 
     protected function setUp(): void
     {
@@ -139,44 +131,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups', []);
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups_by_siteaccess', []);
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.match_config', null);
-    }
-
-    public function testLoadWithoutRichTextPackage()
-    {
-        $this->load();
-
-        $expectedParameters = $this->loadRichTextDefaultSettings()['parameters'];
-        foreach ($expectedParameters as $parameterName => $parameterValue) {
-            $this->assertContainerBuilderHasParameter($parameterName, $parameterValue);
-        }
-
-        $this->assertContainerBuilderHasServiceDefinitionWithTag(
-            'ezpublish.fieldType.ezrichtext',
-            FieldTypeCollectionPass::FIELD_TYPE_SERVICE_TAG,
-            ['alias' => 'ezrichtext']
-        );
-
-        $this->testRichTextConfiguration();
-    }
-
-    public function testLoadWithRichTextPackage()
-    {
-        // mock existence of RichText package
-        $this->container->setParameter('kernel.bundles', ['EzPlatformRichTextBundle' => null]);
-
-        $this->load();
-
-        $unexpectedParameters = $this->loadRichTextDefaultSettings()['parameters'];
-        foreach ($unexpectedParameters as $parameterName => $parameterValue) {
-            self::assertFalse(
-                $this->container->hasParameter($parameterName),
-                "Container has '{$parameterName}' parameter"
-            );
-        }
-
-        $this->assertContainerBuilderNotHasService('ezpublish.fieldType.ezrichtext');
-
-        $this->testRichTextConfiguration();
     }
 
     public function testImageMagickConfigurationBasic()
@@ -873,65 +827,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         self::assertEquals($expectedPolicies, $this->container->getParameter('ezpublish.api.role.policy_map'));
     }
 
-    /**
-     * Test RichText Semantic Configuration.
-     */
-    public function testRichTextConfiguration()
-    {
-        $config = Yaml::parseFile(__DIR__ . '/Fixtures/FieldType/RichText/ezrichtext.yml');
-        $this->load($config);
-
-        // Validate Custom Tags
-        $this->assertTrue(
-            $this->container->hasParameter($this->extension::RICHTEXT_CUSTOM_TAGS_PARAMETER)
-        );
-        $expectedCustomTagsConfig = [
-            'video' => [
-                'template' => 'MyBundle:FieldType/RichText/tag:video.html.twig',
-                'icon' => '/bundles/mybundle/fieldtype/richtext/video.svg#video',
-                'attributes' => [
-                    'title' => [
-                        'type' => 'string',
-                        'required' => true,
-                        'default_value' => 'abc',
-                    ],
-                    'width' => [
-                        'type' => 'number',
-                        'required' => true,
-                        'default_value' => 360,
-                    ],
-                    'autoplay' => [
-                        'type' => 'boolean',
-                        'required' => false,
-                        'default_value' => null,
-                    ],
-                ],
-            ],
-            'equation' => [
-                'template' => 'MyBundle:FieldType/RichText/tag:equation.html.twig',
-                'icon' => '/bundles/mybundle/fieldtype/richtext/equation.svg#equation',
-                'attributes' => [
-                    'name' => [
-                        'type' => 'string',
-                        'required' => true,
-                        'default_value' => 'Equation',
-                    ],
-                    'processor' => [
-                        'type' => 'choice',
-                        'required' => true,
-                        'default_value' => 'latex',
-                        'choices' => ['latex', 'tex'],
-                    ],
-                ],
-            ],
-        ];
-
-        $this->assertSame(
-            $expectedCustomTagsConfig,
-            $this->container->getParameter($this->extension::RICHTEXT_CUSTOM_TAGS_PARAMETER)
-        );
-    }
-
     public function testUrlAliasConfiguration()
     {
         $configuration = [
@@ -964,21 +859,5 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $configuration,
             $parsedConfig
         );
-    }
-
-    /**
-     * Load & cache RichText default settings.
-     *
-     * @return array
-     */
-    private function loadRichTextDefaultSettings(): array
-    {
-        if (null === static::$richTextDefaultSettings) {
-            static::$richTextDefaultSettings = Yaml::parseFile(
-                __DIR__ . '/../../Resources/config/ezrichtext_default_settings.yml'
-            );
-        }
-
-        return static::$richTextDefaultSettings;
     }
 }
