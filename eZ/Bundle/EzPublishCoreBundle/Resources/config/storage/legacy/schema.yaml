@@ -337,7 +337,7 @@ tables:
             data_int2: { type: integer, nullable: true }
             data_int3: { type: integer, nullable: true }
             data_int4: { type: integer, nullable: true }
-            data_text1: { type: string, nullable: true, length: 50 }
+            data_text1: { type: string, nullable: true, length: 255 }
             data_text2: { type: string, nullable: true, length: 50 }
             data_text3: { type: string, nullable: true, length: 50 }
             data_text4: { type: string, nullable: true, length: 255 }
