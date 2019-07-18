@@ -14,7 +14,7 @@ use Psr\Cache\CacheItemInterface;
 /**
  * Internal proxy adapter invalidating cache items on transaction commits/rollbacks.
  */
-class TransactionalCacheAdapterDecorator implements TagAwareAdapterInterface
+class TransactionalCacheAdapterDecorator implements TransactionAwareAdapterInterface
 {
     /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface */
     protected $innerPool;

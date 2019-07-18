@@ -6,8 +6,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Abstract handler for use in other SPI Handlers.
@@ -20,7 +20,7 @@ abstract class AbstractInMemoryHandler
     /**
      * NOTE: Instance of this must be InMemoryClearingProxyAdapter in order for cache clearing to affect in-memory cache.
      *
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
+     * @var \eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface
      */
     protected $cache;
 
@@ -38,12 +38,12 @@ abstract class AbstractInMemoryHandler
     /**
      * Setups current handler with everything needed.
      *
-     * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
+     * @param \eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface $cache
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $inMemory
      */
     public function __construct(
-        TagAwareAdapterInterface $cache,
+        TransactionAwareAdapterInterface $cache,
         PersistenceLogger $logger,
         InMemoryCache $inMemory
     ) {
