@@ -109,9 +109,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         return $this->service->loadContentTypeByRemoteId($remoteId, $prioritizedLanguages);
     }
 
-    public function loadContentTypeDraft($contentTypeId)
+    public function loadContentTypeDraft($contentTypeId, bool $anyOwner = false)
     {
-        return $this->service->loadContentTypeDraft($contentTypeId);
+        return $this->service->loadContentTypeDraft($contentTypeId, $anyOwner);
     }
 
     public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = []): iterable
