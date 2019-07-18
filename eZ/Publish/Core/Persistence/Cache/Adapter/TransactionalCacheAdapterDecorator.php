@@ -90,7 +90,10 @@ class TransactionalCacheAdapterDecorator implements TagAwareAdapterInterface
     public function deleteItems(array $keys)
     {
         if ($this->transactionDepth > 0) {
-            $this->deferredItemsDeletion[$this->transactionDepth] += $keys;
+            $this->deferredItemsDeletion[$this->transactionDepth] = array_merge(
+                $this->deferredItemsDeletion[$this->transactionDepth],
+                $keys
+            );
 
             return true;
         }
@@ -104,7 +107,10 @@ class TransactionalCacheAdapterDecorator implements TagAwareAdapterInterface
     public function invalidateTags(array $tags)
     {
         if ($this->transactionDepth > 0) {
-            $this->deferredTagsInvalidation[$this->transactionDepth] += $tags;
+            $this->deferredTagsInvalidation[$this->transactionDepth] = array_merge(
+                $this->deferredTagsInvalidation[$this->transactionDepth],
+                $tags
+            );
 
             return true;
         }
