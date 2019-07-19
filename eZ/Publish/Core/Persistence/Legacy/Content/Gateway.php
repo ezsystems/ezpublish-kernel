@@ -428,4 +428,22 @@ abstract class Gateway
      * @param int|null $versionNo If specified only copy for a given version number, otherwise all.
      */
     abstract public function copyRelations($originalContentId, $copiedContentId, $versionNo = null);
+
+    /**
+     * Updates Content's attribute text value.
+     *
+     * @param int $attributeId
+     * @param int $version
+     * @param string $text
+     */
+    abstract public function updateContentObjectAttributeText($attributeId, $version, $text);
+
+    /**
+     * Returns an array containing all content attributes with the specified id.
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    abstract public function getContentObjectAttributesById($id);
 }

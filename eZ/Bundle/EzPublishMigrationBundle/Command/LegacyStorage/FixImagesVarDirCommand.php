@@ -8,7 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage;
 
-use Doctrine\DBAL\Connection;
+use DOMDocument;
 use Exception;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
@@ -24,8 +24,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Process\PhpExecutableFinder;
-use PDO;
-use DOMDocument;
 use Symfony\Component\Console\Exception\RuntimeException;
 
 class FixImagesVarDirCommand extends Command
@@ -37,6 +35,7 @@ class FixImagesVarDirCommand extends Command
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     private $db;
+
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
@@ -51,11 +50,6 @@ class FixImagesVarDirCommand extends Command
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
      */
     private $configResolver;
-
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
@@ -88,19 +82,22 @@ class FixImagesVarDirCommand extends Command
     private $imageAttributes = [];
 
     /**
-     * @param ChainConfigResolver $configResolver
-     * @param DatabaseHandler $db
-     * @param Connection $connection
-     * @param SiteAccess $siteaccess
-     * @param ContentGateway $contentGateway
-     * @param ImageGateway $imageGateway
+     * @param \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver; $configResolver
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteaccess
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway $imageGateway
      */
-    function __construct(ChainConfigResolver $configResolver, DatabaseHandler $db, Connection $connection, SiteAccess $siteaccess, ContentGateway $contentGateway, ImageGateway $imageGateway)
-    {
+    public function __construct(
+        ChainConfigResolver $configResolver,
+        DatabaseHandler $db,
+        SiteAccess $siteaccess,
+        ContentGateway $contentGateway,
+        ImageGateway $imageGateway
+    ) {
         parent::__construct();
         $this->db = $db;
         $this->configResolver = $configResolver;
-        $this->connection = $connection;
         $this->siteaccess = $siteaccess;
         $this->contentGateway = $contentGateway;
         $this->imageGateway = $imageGateway;
@@ -153,7 +150,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $iterationCount = (int) $input->getOption('iteration-count');
+        $iterationCount = (int)$input->getOption('iteration-count');
         $this->dryRun = $input->getOption('dry-run');
         $consoleScript = $_SERVER['argv'][0];
 
@@ -219,7 +216,7 @@ EOT
                     throw new RuntimeException($process->getErrorOutput());
                 }
 
-                $doneInProcess = (int) $process->getOutput();
+                $doneInProcess = (int)$process->getOutput();
                 $this->done += $doneInProcess;
                 $progressBar->advance($doneInProcess);
             }
@@ -269,22 +266,14 @@ EOT
      */
     protected function updateImage($imageId, $contentObjectAttributeId, $oldFilePath, $newFilePath)
     {
-        $query = $this->connection->createQueryBuilder();
-        $query
-            ->update('ezimagefile', 'i')
-            ->set('i.filepath', $query->expr()->literal($newFilePath))
-            ->where('i.id = :id')
-            ->setParameter('id', $imageId);
-
-        $query->execute();
-
+        $this->imageGateway->updateImageFilePath($imageId, $newFilePath);
         $this->imageAttributes[$contentObjectAttributeId][$oldFilePath] = $newFilePath;
     }
 
     protected function updateContentObjectAtributes()
     {
         foreach ($this->imageAttributes as $attributeId => $files) {
-            $attributeObjects = $this->getContentObjectAtrributesById($attributeId);
+            $attributeObjects = $this->contentGateway->getContentObjectAttributesById($attributeId);
 
             foreach ($attributeObjects as $attributeObject) {
                 $dom = new DOMDocument('1.0', 'utf-8');
@@ -312,53 +301,9 @@ EOT
                     }
                 }
 
-                $this->updateContentObjectAtribute($attributeObject['id'], $attributeObject['version'], $dom->saveXML());
+                $this->contentGateway->updateContentObjectAtribute($attributeObject['id'], $attributeObject['version'], $dom->saveXML());
             }
         }
-    }
-
-    /**
-     * @param int $id
-     * @param int $version
-     * @param string $dataText
-     */
-    protected function updateContentObjectAtribute($id, $version, $dataText)
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query
-            ->update('ezcontentobject_attribute', 'oa')
-            ->set('oa.data_text', ':text')
-            ->where('oa.id = :id')
-            ->andWhere('oa.version = :version')
-            ->setParameters([
-                'text' => $dataText,
-                'id' => $id,
-                'version' => $version,
-            ],[
-                'text' => PDO::PARAM_STR,
-                'id' => PDO::PARAM_INT,
-                'version' => PDO::PARAM_INT,
-            ]);
-
-        $query->execute();
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return array
-     */
-    protected function getContentObjectAtrributesById($id)
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query
-            ->select('oa.data_text, oa.id, oa.version')
-            ->from('ezcontentobject_attribute', 'oa')
-            ->where('oa.id = :id')
-            ->setParameter('id', $id, PDO::PARAM_INT);
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

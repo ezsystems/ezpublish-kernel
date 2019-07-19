@@ -68,7 +68,7 @@ abstract class Gateway extends StorageGateway
     abstract public function countImageReferencesOutsidePath($uri);
 
     /**
-     * Return references outside of the given $path
+     * Return references outside of the given $path.
      *
      * @param string $uri File IO uri (not legacy)
      * @param int $limit
@@ -77,6 +77,14 @@ abstract class Gateway extends StorageGateway
      * @return array
      */
     abstract public function getImagesOutsidePath($uri, $limit = null, $offset = 0);
+
+    /**
+     * Updates the filepath of given Image.
+     *
+     * @param $imageId
+     * @param $newFilePath
+     */
+    abstract public function updateImageFilePath($imageId, $newFilePath);
 
     /**
      * Returns the public uris for the images stored in $xml.

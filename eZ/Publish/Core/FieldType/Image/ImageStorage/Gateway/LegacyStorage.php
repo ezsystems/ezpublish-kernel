@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use eZ\Publish\Core\IO\UrlRedecorator;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
-use PDO;
 
 class LegacyStorage extends Gateway
 {
@@ -268,32 +267,41 @@ class LegacyStorage extends Gateway
     {
         $path = $this->redecorator->redecorateFromSource($uri);
 
-        $connection = $this->getConnection();
+        $connection = $this->getConnection()->getConnection();
 
-        $selectQuery = $connection->createSelectQuery();
-        $selectQuery->select(
-            $selectQuery->expr->count(
-                $connection->quoteColumn('id')
-            )
-        )->from(
-            $connection->quoteTable('ezimagefile')
-        )->where(
-            $selectQuery->expr->not(
-                $selectQuery->expr->like(
-                    $connection->quoteColumn('filepath'),
-                    $selectQuery->bindValue($path . '%')
-                )
-            )
-        );
-
-        $statement = $selectQuery->prepare();
-        $statement->execute();
+        $queryBuilder = $connection->createQueryBuilder();
+        $statement = $queryBuilder
+            ->select('count(i.id)')
+            ->from('ezimagefile', 'i')
+            ->where('i.filepath not like :path')
+            ->setParameter('path', $path . '%')
+            ->execute();
 
         return (int)$statement->fetchColumn();
     }
 
     /**
-     * Return references outside of the given $path
+     * Updates the filepath of given Image.
+     *
+     * @param $imageId
+     * @param $newFilePath
+     */
+    public function updateImageFilePath($imageId, $newFilePath)
+    {
+        $connection = $this->getConnection()->getConnection();
+
+        $query = $connection->createQueryBuilder();
+        $query
+            ->update('ezimagefile', 'i')
+            ->set('i.filepath', $query->expr()->literal($newFilePath))
+            ->where('i.id = :id')
+            ->setParameter('id', $imageId);
+
+        $query->execute();
+    }
+
+    /**
+     * Return references outside of the given $path.
      *
      * @param string $uri File IO uri (not legacy)
      * @param int $limit
@@ -324,7 +332,7 @@ class LegacyStorage extends Gateway
         );
 
         if ($limit && $offset) {
-           $selectQuery->limit($limit, $offset);
+            $selectQuery->limit($limit, $offset);
         }
 
         $statement = $selectQuery->prepare();
