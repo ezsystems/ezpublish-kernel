@@ -228,13 +228,13 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
      *
      * @param int $contentTypeId
-     * @param bool $anyOwner if true, method will return draft even if the owner is different than currently logged in user
+     * @param bool $ignoreOwnership if true, method will return draft even if the owner is different than currently logged in user
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function loadContentTypeDraft($contentTypeId, bool $anyOwner = false)
+    public function loadContentTypeDraft($contentTypeId, bool $ignoreOwnership = false)
     {
-        return $this->service->loadContentTypeDraft($contentTypeId, $anyOwner);
+        return $this->service->loadContentTypeDraft($contentTypeId, $ignoreOwnership);
     }
 
     /**

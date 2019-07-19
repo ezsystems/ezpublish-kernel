@@ -361,11 +361,11 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
      *
      * @param int $contentTypeId
-     * @param bool $anyOwner not supported yet
+     * @param bool $ignoreOwnership not supported yet
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function loadContentTypeDraft($contentTypeId, bool $anyOwner=false)
+    public function loadContentTypeDraft($contentTypeId, bool $ignoreOwnership=false)
     {
         $response = $this->client->request(
             'GET',

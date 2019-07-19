@@ -887,20 +887,20 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
      *
      * @param int $contentTypeId
-     * @param bool $anyOwner if true, method will return draft even if the owner is different than currently logged in user
+     * @param bool $ignoreOwnership if true, method will return draft even if the owner is different than currently logged in user
      *
      * @todo Use another exception when user of draft is someone else
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function loadContentTypeDraft($contentTypeId, bool $anyOwner = false)
+    public function loadContentTypeDraft($contentTypeId, bool $ignoreOwnership = false)
     {
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
             SPIContentType::STATUS_DRAFT
         );
 
-        if (!$anyOwner && $spiContentType->modifierId != $this->repository->getCurrentUserReference()->getUserId()) {
+        if (!$ignoreOwnership && $spiContentType->modifierId != $this->repository->getCurrentUserReference()->getUserId()) {
             throw new NotFoundException('ContentType owned by someone else', $contentTypeId);
         }
 
