@@ -21,7 +21,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation as APISubtreeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Limitation\Target\Version;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
@@ -120,6 +120,8 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      */
     public function evaluate(APILimitationValue $value, APIUserReference $currentUser, ValueObject $object, array $targets = null)
     {
+        $targets = $targets ?? [];
+
         if (!$value instanceof APISubtreeLimitation) {
             throw new InvalidArgumentException('$value', 'Must be of type: APISubtreeLimitation');
         }
@@ -135,8 +137,12 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
             return self::ACCESS_ABSTAIN;
         }
 
+        $targets = array_filter($targets, function ($target) {
+            return !$target instanceof Version;
+        });
+
         // Load locations if no specific placement was provided
-        if ($targets === null) {
+        if (empty($targets)) {
             // Skip check if content is in trash and no location is provided to check against
             if ($object->isTrashed()) {
                 return self::ACCESS_ABSTAIN;
@@ -182,7 +188,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      *
      * @return bool
      */
-    protected function evaluateForContentCreateStruct(APILimitationValue $value, array $targets = null)
+    protected function evaluateForContentCreateStruct(APILimitationValue $value, array $targets)
     {
         // If targets is empty/null return false as user does not have access
         // to content w/o location with this limitation
