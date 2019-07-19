@@ -28,6 +28,8 @@ class TransactionHandler extends AbstractInMemoryPersistenceHandler implements T
     {
         $this->logger->logCall(__METHOD__);
         $this->persistenceHandler->transactionHandler()->beginTransaction();
+
+        $this->cache->startTransaction();
     }
 
     /**
@@ -37,6 +39,8 @@ class TransactionHandler extends AbstractInMemoryPersistenceHandler implements T
     {
         $this->logger->logCall(__METHOD__);
         $this->persistenceHandler->transactionHandler()->commit();
+
+        $this->cache->stopTransaction();
     }
 
     /**
@@ -47,5 +51,7 @@ class TransactionHandler extends AbstractInMemoryPersistenceHandler implements T
         $this->logger->logCall(__METHOD__);
         $this->cache->clear(); // TIMBER!! @see beginTransaction()
         $this->persistenceHandler->transactionHandler()->rollback();
+
+        $this->cache->stopTransaction();
     }
 }
