@@ -124,7 +124,7 @@ class SectionServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
      */
-    public function testLoadSectionDidNotThrowAnException()
+    public function testLoadSectionsLoadsEmptyListForAnonymousUser()
     {
         $repository = $this->getRepository();
 
@@ -153,7 +153,6 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sections = $sectionService->loadSections();
         /* END: Use Case */
 
-        // Sections should be filtered to those which user has access
         $this->assertEquals([], $sections);
     }
 
@@ -199,7 +198,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sections = $sectionService->loadSections();
         /* END: Use Case */
 
-        // Sections should be filtered to those which user has access
+        // Only Sections the user has access to should be loaded
         $this->assertEquals([$expectedSection], $sections);
     }
 

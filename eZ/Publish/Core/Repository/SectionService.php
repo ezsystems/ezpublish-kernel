@@ -204,7 +204,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * Loads all sections. If the current user is not allowed to read a section then list are filtered.
+     * Loads all sections, excluding the ones the current user is not allowed to read.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section[]
      */
