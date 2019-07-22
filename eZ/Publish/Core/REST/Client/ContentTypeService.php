@@ -365,7 +365,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function loadContentTypeDraft($contentTypeId, bool $ignoreOwnership=false)
+    public function loadContentTypeDraft($contentTypeId, bool $ignoreOwnership = false)
     {
         $response = $this->client->request(
             'GET',
