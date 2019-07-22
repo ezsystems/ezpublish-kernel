@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use function array_filter;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Limitation;
@@ -1166,12 +1167,16 @@ class PermissionResolverTest extends BaseTest
         $permissionResolver->setCurrentUserReference($user);
         /* END: Use Case */
 
+        $expectedPolicy = array_filter($role->getPolicies(), function ($policy) use ($module, $function) {
+            return $policy->module === $module && $policy->function === $function;
+        })[0] ?? null;
+
         $expected = new LookupLimitationResult(
             true,
             [$roleLimitation],
             [
                 new LookupPolicyLimitations(
-                    $role->getPolicies()[0],
+                    $expectedPolicy,
                     []
                 ),
             ]
