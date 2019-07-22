@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use function array_filter;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Limitation;
@@ -1123,6 +1124,66 @@ class PermissionResolverTest extends BaseTest
                 new LookupPolicyLimitations(
                     $role->getPolicies()[1],
                     [new Limitation\LanguageLimitation(['limitationValues' => ['eng-US']])]
+                ),
+            ]
+        );
+
+        self::assertEquals(
+            $expected,
+            $permissionResolver->lookupLimitations($module, $function, $this->getContentCreateStruct($repository), [])
+        );
+    }
+
+    /**
+     * If the role limitation is set and policy limitation is not set it should be taken into account.
+     * In this case, role limitation will pass and SectionLimitation should be returned as role limitation
+     * and limitations in LookupPolicyLimitations should be an empty array.
+     *
+     * @see https://jira.ez.no/browse/EZP-30728
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLookupLimitationsWithRoleLimitationsWithoutPolicyLimitationsHasAccess(): void
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
+        $roleService = $repository->getRoleService();
+
+        $module = 'content';
+        $function = 'create';
+
+        /* BEGIN: Use Case */
+        $role = $this->createRoleWithPolicies(
+            'role_' . __FUNCTION__,
+            [
+                ['module' => $module, 'function' => $function, 'limitations' => []],
+                ['module' => 'content', 'function' => 'edit', 'limitations' => []],
+            ]
+        );
+        // create user in root user group to avoid overlapping of existing policies and limitations
+        $user = $this->createUser('user', 'John', 'Doe', $userService->loadUserGroup(4));
+        // SectionLimitation as RoleLimitation will pass
+        $roleLimitation = new Limitation\SectionLimitation(['limitationValues' => [2]]);
+        $roleService->assignRoleToUser($role, $user, $roleLimitation);
+        $permissionResolver->setCurrentUserReference($user);
+        /* END: Use Case */
+
+        $expectedPolicy = array_filter($role->getPolicies(), function ($policy) use ($module, $function) {
+            return $policy->module === $module && $policy->function === $function;
+        })[0] ?? null;
+
+        $expected = new LookupLimitationResult(
+            true,
+            [$roleLimitation],
+            [
+                new LookupPolicyLimitations(
+                    $expectedPolicy,
+                    []
                 ),
             ]
         );

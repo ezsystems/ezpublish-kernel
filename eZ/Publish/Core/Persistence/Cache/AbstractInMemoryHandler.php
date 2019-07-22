@@ -6,7 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter;
+use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 
 /**
@@ -20,7 +20,7 @@ abstract class AbstractInMemoryHandler
     /**
      * NOTE: Instance of this must be InMemoryClearingProxyAdapter in order for cache clearing to affect in-memory cache.
      *
-     * @var \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter
+     * @var \eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface
      */
     protected $cache;
 
@@ -38,12 +38,12 @@ abstract class AbstractInMemoryHandler
     /**
      * Setups current handler with everything needed.
      *
-     * @param \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter $cache
+     * @param \eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface $cache
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $inMemory
      */
     public function __construct(
-        InMemoryClearingProxyAdapter $cache,
+        TransactionAwareAdapterInterface $cache,
         PersistenceLogger $logger,
         InMemoryCache $inMemory
     ) {

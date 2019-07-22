@@ -39,6 +39,11 @@ services:
           - !tagged ez.spi.persistence.cache.inmemory
         public: true # @todo should be private
 
+    eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalCacheAdapterDecorator:
+          decorates: ezpublish.cache_pool
+          arguments:
+              $innerPool: '@eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalCacheAdapterDecorator.inner'
+
     ezpublish.cache_pool.inner:
         public: false
         class: Symfony\Component\Cache\Adapter\TagAwareAdapter

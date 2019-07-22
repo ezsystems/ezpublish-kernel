@@ -54,6 +54,10 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
             ->expects($this->once())
             ->method('clear');
 
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('stopTransaction');
+
         $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
@@ -66,5 +70,59 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
 
         $handler = $this->persistenceCacheHandler->transactionHandler();
         $handler->rollback();
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Cache\TransactionHandler::commit
+     */
+    public function testCommitStopsCacheTransaction()
+    {
+        $this->loggerMock
+            ->expects($this->once())
+            ->method('logCall');
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('stopTransaction');
+
+        $innerHandlerMock = $this->createMock(TransactionHandler::class);
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('transactionHandler')
+            ->will($this->returnValue($innerHandlerMock));
+
+        $innerHandlerMock
+            ->expects($this->once())
+            ->method('commit');
+
+        $handler = $this->persistenceCacheHandler->transactionHandler();
+        $handler->commit();
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Cache\TransactionHandler::beginTransaction
+     */
+    public function testBeginTransactionStartsCacheTransaction()
+    {
+        $this->loggerMock
+            ->expects($this->once())
+            ->method('logCall');
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('startTransaction');
+
+        $innerHandlerMock = $this->createMock(TransactionHandler::class);
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('transactionHandler')
+            ->will($this->returnValue($innerHandlerMock));
+
+        $innerHandlerMock
+            ->expects($this->once())
+            ->method('beginTransaction');
+
+        $handler = $this->persistenceCacheHandler->transactionHandler();
+        $handler->beginTransaction();
     }
 }

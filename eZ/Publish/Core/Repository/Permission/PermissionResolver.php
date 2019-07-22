@@ -288,6 +288,7 @@ class PermissionResolver implements PermissionResolverInterface
 
                 $limitationsPass = true;
                 $possibleLimitations = [];
+                $possibleRoleLimitation = $permissionSet['limitation'];
                 foreach ($policyLimitations as $limitation) {
                     $limitationsPass = $this->isGrantedByLimitation($limitation, $currentUserReference, $object, $targets);
                     if (!$limitationsPass) {
@@ -303,12 +304,15 @@ class PermissionResolver implements PermissionResolverInterface
 
                 if (!empty($limitationsIdentifiers)) {
                     $possibleLimitations = array_filter($possibleLimitations, $limitationFilter);
+                    if (!\in_array($possibleRoleLimitation, $limitationsIdentifiers, true)) {
+                        $possibleRoleLimitation = null;
+                    }
                 }
 
-                if ($limitationsPass && !empty($possibleLimitations)) {
+                if ($limitationsPass) {
                     $passedLimitations[] = new LookupPolicyLimitations($policy, $possibleLimitations);
-                    if (null !== $permissionSet['limitation']) {
-                        $passedRoleLimitations[] = $permissionSet['limitation'];
+                    if (null !== $possibleRoleLimitation) {
+                        $passedRoleLimitations[] = $possibleRoleLimitation;
                     }
                 }
             }
