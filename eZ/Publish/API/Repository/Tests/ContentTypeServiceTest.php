@@ -1238,6 +1238,49 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test for the loadContentTypeDraft() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeDraft()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadContentTypeDraftThrowsNotFoundExceptionIfDiffrentOwner()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $draft = $this->createContentTypeDraft();
+
+        $anotherUser = $this->createUserVersion1('anotherUser');
+        $permissionResolver->setCurrentUserReference($anotherUser);
+
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft($draft->id);
+    }
+
+    /**
+     * Test for the loadContentTypeDraft() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeDraft()
+     */
+    public function testCanLoadContentTypeDraftEvenIfDiffrentOwner()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $draft = $this->createContentTypeDraft();
+
+        $anotherUser = $this->createUserVersion1('anotherUser');
+        $permissionResolver->setCurrentUserReference($anotherUser);
+
+        $loadedDraft = $contentTypeService->loadContentTypeDraft($draft->id, true);
+
+        $this->assertSame((int)$loadedDraft->id, (int)$draft->id);
+    }
+
+    /**
      * Test for the updateContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
