@@ -275,11 +275,13 @@
 {% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
-        {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
-        {{ fos_httpcache_tag('relation-' ~ contentId) }}
-        <li>
-            {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'layout': false} ) ) }}
-        </li>
+        {% for contentId in field.value.destinationContentIds %}
+            {% if parameters.available[contentId] %}
+                {{ fos_httpcache_tag('relation-' ~ contentId) }}
+                <li>
+                    {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'layout': false} ) ) }}
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
     {% endif %}
@@ -443,7 +445,7 @@
             {% if parameters.ezlink.target is defined %} target="{{ parameters.ezlink.target|e('html_attr') }}"{% endif %}
         >
     {% endif %}
-            <img src="{{ src }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs if attrvalue %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
+            <img src="{{ src }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs %}{% if attrvalue %}{{ attrname }}="{{ attrvalue }}" {% endif %}{% endfor %}/>
     {% if parameters.ezlink|default({}) is not empty %}
         </a>
     {% endif %}
