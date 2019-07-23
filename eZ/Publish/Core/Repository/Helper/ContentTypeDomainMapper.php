@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct as 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct as APIFieldDefinitionUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
@@ -53,7 +54,7 @@ class ContentTypeDomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
-     * @param FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      */
     public function __construct(
         SPITypeHandler $contentTypeHandler,

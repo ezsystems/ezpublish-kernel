@@ -9,6 +9,7 @@
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 use eZ\Publish\API\Repository\Tests\Container\Compiler\SetAllServicesPublicPass;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
@@ -69,7 +70,8 @@ if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
 
 $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
-$containerBuilder->addCompilerPass(new Compiler\FieldTypeCollectionPass());
+$containerBuilder->addCompilerPass(new Compiler\FieldTypeRegistryPass(), PassConfig::TYPE_OPTIMIZE);
+$containerBuilder->addCompilerPass(new Compiler\Persistence\FieldTypeRegistryPass(), PassConfig::TYPE_OPTIMIZE);
 $containerBuilder->addCompilerPass(new Compiler\RegisterLimitationTypePass());
 
 $containerBuilder->addCompilerPass(new Compiler\Storage\ExternalStorageRegistryPass());

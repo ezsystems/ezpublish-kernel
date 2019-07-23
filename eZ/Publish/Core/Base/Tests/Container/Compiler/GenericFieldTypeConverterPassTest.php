@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler;
 
+use eZ\Publish\Core\Base\Container\Compiler\FieldTypeRegistryPass;
 use eZ\Publish\SPI\FieldType\Generic\Type;
-use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\GenericFieldTypeConverterPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
 use eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GenericFieldType;
@@ -40,7 +40,7 @@ class GenericFieldTypeConverterPassTest extends AbstractCompilerPassTestCase
         $fieldTypeDefinition = new Definition();
         $fieldTypeDefinition->setClass(GenericFieldType::class);
         $fieldTypeDefinition->addTag(
-            FieldTypeCollectionPass::FIELD_TYPE_SERVICE_TAG,
+            FieldTypeRegistryPass::FIELD_TYPE_SERVICE_TAG,
             [
                 'alias' => $fieldTypeIdentifier,
             ]
@@ -66,7 +66,7 @@ class GenericFieldTypeConverterPassTest extends AbstractCompilerPassTestCase
         $fieldTypeDefinition = new Definition();
         $fieldTypeDefinition->setClass(GenericFieldType::class);
         $fieldTypeDefinition->addTag(
-            FieldTypeCollectionPass::FIELD_TYPE_SERVICE_TAG,
+            FieldTypeRegistryPass::FIELD_TYPE_SERVICE_TAG,
             [
                 'alias' => $fieldTypeIdentifier,
             ]
@@ -102,7 +102,7 @@ class GenericFieldTypeConverterPassTest extends AbstractCompilerPassTestCase
         $fieldTypeDefinition = new Definition();
         $fieldTypeDefinition->setClass(Type::class);
         $fieldTypeDefinition->addTag(
-            FieldTypeCollectionPass::FIELD_TYPE_SERVICE_TAG,
+            FieldTypeRegistryPass::FIELD_TYPE_SERVICE_TAG,
             [
                 'alias' => $fieldTypeIdentifier,
             ]

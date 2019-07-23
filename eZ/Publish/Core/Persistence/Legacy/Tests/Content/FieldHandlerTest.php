@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\SPI\FieldType\FieldType;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
@@ -23,6 +22,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use eZ\Publish\SPI\Persistence\FieldType as SPIFieldType;
 
 /**
  * Test case for Content Handler.
@@ -1056,12 +1056,12 @@ class FieldHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return \eZ\Publish\SPI\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject
+     * @return \eZ\Publish\SPI\Persistence\FieldType|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFieldTypeMock()
     {
         if (!isset($this->fieldTypeMock)) {
-            $this->fieldTypeMock = $this->createMock(FieldType::class);
+            $this->fieldTypeMock = $this->createMock(SPIFieldType::class);
         }
 
         return $this->fieldTypeMock;

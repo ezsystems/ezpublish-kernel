@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
-use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -69,7 +69,7 @@ class ContentService implements ContentServiceInterface
     /** @var \eZ\Publish\Core\Repository\Helper\NameSchemaService */
     protected $nameSchemaService;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry */
+    /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
     /**
@@ -80,7 +80,7 @@ class ContentService implements ContentServiceInterface
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
-     * @param \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry $fieldTypeRegistry,
+     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry,
      * @param array $settings
      */
     public function __construct(
@@ -89,7 +89,7 @@ class ContentService implements ContentServiceInterface
         Helper\DomainMapper $domainMapper,
         Helper\RelationProcessor $relationProcessor,
         Helper\NameSchemaService $nameSchemaService,
-        Helper\FieldTypeRegistry $fieldTypeRegistry,
+        FieldTypeRegistry $fieldTypeRegistry,
         array $settings = []
     ) {
         $this->repository = $repository;

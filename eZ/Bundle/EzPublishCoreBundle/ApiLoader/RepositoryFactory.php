@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
@@ -15,7 +16,6 @@ use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
-use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -27,13 +27,6 @@ class RepositoryFactory implements ContainerAwareInterface
 
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
-
-    /**
-     * Collection of fieldTypes, lazy loaded via a closure.
-     *
-     * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
-     */
-    protected $fieldTypeCollectionFactory;
 
     /** @var string */
     private $repositoryClass;
@@ -57,13 +50,11 @@ class RepositoryFactory implements ContainerAwareInterface
 
     public function __construct(
         ConfigResolverInterface $configResolver,
-        FieldTypeCollectionFactory $fieldTypeCollectionFactory,
         $repositoryClass,
         array $policyMap,
         LoggerInterface $logger = null
     ) {
         $this->configResolver = $configResolver;
-        $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
         $this->repositoryClass = $repositoryClass;
         $this->policyMap = $policyMap;
         $this->logger = null !== $logger ? $logger : new NullLogger();
@@ -79,6 +70,7 @@ class RepositoryFactory implements ContainerAwareInterface
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
+     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
@@ -86,7 +78,8 @@ class RepositoryFactory implements ContainerAwareInterface
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
         BackgroundIndexer $backgroundIndexer,
-        RelationProcessor $relationProcessor
+        RelationProcessor $relationProcessor,
+        FieldTypeRegistry $fieldTypeRegistry
     ) {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 
@@ -95,8 +88,8 @@ class RepositoryFactory implements ContainerAwareInterface
             $searchHandler,
             $backgroundIndexer,
             $relationProcessor,
+            $fieldTypeRegistry,
             [
-                'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
                 'role' => [
                     'limitationTypes' => $this->roleLimitations,
                     'policyMap' => $this->policyMap,

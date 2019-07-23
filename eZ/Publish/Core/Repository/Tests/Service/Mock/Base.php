@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +19,6 @@ use eZ\Publish\API\Repository\Repository as APIRepository;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\FieldTypeService;
 use eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper;
-use eZ\Publish\Core\Repository\Helper\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Handler;
 
 /**
@@ -65,6 +65,7 @@ abstract class Base extends TestCase
                 $this->getSPIMockHandler('Search\\Handler'),
                 new NullIndexer(),
                 $this->getRelationProcessorMock(),
+                $this->getFieldTypeRegistryMock(),
                 $serviceSettings,
                 $this->getStubbedUser(14)
             );
@@ -96,7 +97,7 @@ abstract class Base extends TestCase
     protected $fieldTypeRegistryMock;
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\FieldType\FieldTypeRegistry
      */
     protected function getFieldTypeRegistryMock()
     {

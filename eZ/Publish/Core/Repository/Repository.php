@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
@@ -139,11 +140,7 @@ class Repository implements RepositoryInterface
      */
     protected $fieldTypeService;
 
-    /**
-     * Instance of FieldTypeRegistry.
-     *
-     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
-     */
+    /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
     private $fieldTypeRegistry;
 
     /**
@@ -255,6 +252,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
+     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $user
      * @param \Psr\Log\LoggerInterface|null $logger
@@ -264,6 +262,7 @@ class Repository implements RepositoryInterface
         SearchHandler $searchHandler,
         BackgroundIndexer $backgroundIndexer,
         RelationProcessor $relationProcessor,
+        FieldTypeRegistry $fieldTypeRegistry,
         array $serviceSettings = [],
         APIUserReference $user = null,
         LoggerInterface $logger = null
@@ -272,6 +271,7 @@ class Repository implements RepositoryInterface
         $this->searchHandler = $searchHandler;
         $this->backgroundIndexer = $backgroundIndexer;
         $this->relationProcessor = $relationProcessor;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->serviceSettings = $serviceSettings + [
             'content' => [],
             'contentType' => [],
@@ -286,7 +286,6 @@ class Repository implements RepositoryInterface
             'io' => [],
             'objectState' => [],
             'search' => [],
-            'fieldType' => [],
             'urlAlias' => [],
             'urlWildcard' => [],
             'nameSchema' => [],
@@ -449,7 +448,7 @@ class Repository implements RepositoryInterface
             $this->getDomainMapper(),
             $this->getRelationProcessor(),
             $this->getNameSchemaService(),
-            $this->getFieldTypeRegistry(),
+            $this->fieldTypeRegistry,
             $this->serviceSettings['content']
         );
 
@@ -497,7 +496,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->contentTypeHandler(),
             $this->getDomainMapper(),
             $this->getContentTypeDomainMapper(),
-            $this->getFieldTypeRegistry(),
+            $this->fieldTypeRegistry,
             $this->serviceSettings['contentType']
         );
 
@@ -803,7 +802,7 @@ class Repository implements RepositoryInterface
             return $this->fieldTypeService;
         }
 
-        $this->fieldTypeService = new FieldTypeService($this->getFieldTypeRegistry());
+        $this->fieldTypeService = new FieldTypeService($this->fieldTypeRegistry);
 
         return $this->fieldTypeService;
     }
@@ -816,20 +815,6 @@ class Repository implements RepositoryInterface
     public function getPermissionResolver()
     {
         return $this->getCachedPermissionsResolver();
-    }
-
-    /**
-     * @return Helper\FieldTypeRegistry
-     */
-    protected function getFieldTypeRegistry()
-    {
-        if ($this->fieldTypeRegistry !== null) {
-            return $this->fieldTypeRegistry;
-        }
-
-        $this->fieldTypeRegistry = new Helper\FieldTypeRegistry($this->serviceSettings['fieldType']);
-
-        return $this->fieldTypeRegistry;
     }
 
     /**
@@ -852,7 +837,7 @@ class Repository implements RepositoryInterface
         $this->nameSchemaService = new Helper\NameSchemaService(
             $this->persistenceHandler->contentTypeHandler(),
             $this->getContentTypeDomainMapper(),
-            $this->getFieldTypeRegistry(),
+            $this->fieldTypeRegistry,
             $this->serviceSettings['nameSchema']
         );
 
@@ -908,7 +893,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->contentTypeHandler(),
             $this->getContentTypeDomainMapper(),
             $this->persistenceHandler->contentLanguageHandler(),
-            $this->getFieldTypeRegistry()
+            $this->fieldTypeRegistry
         );
 
         return $this->domainMapper;
@@ -930,7 +915,7 @@ class Repository implements RepositoryInterface
         $this->contentTypeDomainMapper = new Helper\ContentTypeDomainMapper(
             $this->persistenceHandler->contentTypeHandler(),
             $this->persistenceHandler->contentLanguageHandler(),
-            $this->getFieldTypeRegistry()
+            $this->fieldTypeRegistry
         );
 
         return $this->contentTypeDomainMapper;
