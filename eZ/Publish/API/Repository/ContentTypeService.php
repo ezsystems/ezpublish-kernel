@@ -389,4 +389,11 @@ interface ContentTypeService
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
     public function removeContentTypeTranslation(ContentTypeDraft $contentTypeDraft, string $languageCode): ContentTypeDraft;
+
+    /**
+     * Delete all content type drafs created or modified by the user.
+     *
+     * @param int $userId
+     */
+    public function deleteUserDrafts(int $userId): void;
 }

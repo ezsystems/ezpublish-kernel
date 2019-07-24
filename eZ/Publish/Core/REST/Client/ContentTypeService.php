@@ -859,4 +859,14 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     ): ContentTypeDraft {
         throw new \Exception('@todo: Implement.');
     }
+
+    /**
+     * @todo Implement
+     */
+    public function deleteUserDrafts(int $userId): void
+    {
+        throw new \RuntimeException('Not implemented yet');
+    }
+
+
 }

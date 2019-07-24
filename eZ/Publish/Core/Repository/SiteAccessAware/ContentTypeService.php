@@ -217,4 +217,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         return $this->service->removeContentTypeTranslation($contentTypeDraft, $languageCode);
     }
+
+    public function deleteUserDrafts(int $userId): void
+    {
+        $this->service->deleteUserDrafts($userId);
+    }
 }

@@ -4410,4 +4410,24 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $loadedFieldDefinition->fieldSettings['multilingualOptions']
         );
     }
+
+    /**
+     * Test for the deleteUserDrafts() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteUserDrafts()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteUserDrafts()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $draft = $this->createContentTypeDraft();
+        $user = $permissionResolver->getCurrentUserReference();
+
+        $contentTypeService->deleteUserDrafts($user->getUserId());
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft($draft->id);
+    }
 }

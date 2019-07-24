@@ -1540,4 +1540,57 @@ class DoctrineDatabase extends Gateway
 
         $deleteQuery->execute();
     }
+
+    /**
+     * Removes types created or modified by the user.
+     */
+    public function removeByUserAndVersion(int $userId, int $version): void
+    {
+        $this->connection->beginTransaction();
+
+        $qb = $this->connection->createQueryBuilder();
+        $qb->delete('ezcontentclass')
+            ->where('creator_id = :user or modifier_id = :user')
+            ->andWhere('version = :version')
+            ->setParameter('user', $userId, ParameterType::INTEGER)
+            ->setParameter('version', $version, ParameterType::INTEGER);
+
+        $qb->execute();
+
+        $this->cleanupAssociations();
+
+        $this->connection->commit();
+    }
+
+    private function cleanupAssociations()
+    {
+        $this->cleanupClassAttributeTabel();
+        $this->cleanupClassAttributeMLTabel();
+        $this->cleanupClassGroupTabel();
+        $this->cleanupClassNameTabel();
+    }
+
+    private function cleanupClassAttributeTabel()
+    {
+        $sql = 'delete from ezcontentclass_attribute where not exists (select 1 from ezcontentclass where id = ezcontentclass_attribute.contentclass_id and version = ezcontentclass_attribute.version)';
+        $this->connection->executeQuery($sql);
+    }
+
+    private function cleanupClassAttributeMLTabel()
+    {
+        $sql = 'delete from ezcontentclass_attribute_ml where not exists (select 1 from ezcontentclass_attribute where id = ezcontentclass_attribute_ml.contentclass_attribute_id and version = ezcontentclass_attribute_ml.version)';
+        $this->connection->executeQuery($sql);
+    }
+
+    private function cleanupClassGroupTabel()
+    {
+        $sql = 'delete from ezcontentclass_classgroup where not exists (select 1 from ezcontentclass where id = ezcontentclass_classgroup.contentclass_id and version = ezcontentclass_classgroup.contentclass_version)';
+        $this->connection->executeQuery($sql);
+    }
+
+    private function cleanupClassNameTabel()
+    {
+        $sql = 'delete from ezcontentclass_name where not exists (select 1 from ezcontentclass where id = ezcontentclass_name.contentclass_id and version = ezcontentclass_name.contentclass_version)';
+        $this->connection->executeQuery($sql);
+    }
 }

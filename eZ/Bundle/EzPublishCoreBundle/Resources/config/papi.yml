@@ -98,3 +98,10 @@ services:
             - '@ezpublish.spi.search'
         tags:
             - { name: kernel.event_subscriber }
+
+    ezplatform.api_event_listner.user.delete_user_signal:
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\User\DeleteUserListener
+        arguments:
+            - "@ezpublish.api.service.content_type"
+        tags:
+            - { name: ezpublish.api.slot, signal: UserService\DeleteUserSignal }

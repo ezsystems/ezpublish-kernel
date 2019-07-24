@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\SPI\Persistence\Content\Type\DeleteByParamsStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
@@ -50,7 +51,13 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             ];
         };
 
-        $this->getTypeTags = static function (Type $type) { return ['type-' . $type->id]; };
+        $this->getTypeTags = static function (Type $type) {
+            return [
+                'type',
+                'type-' . $type->id,
+                'type-modifier-' . $type->modifierId,
+            ];
+        };
         $this->getTypeKeys = static function (Type $type, int $status = Type::STATUS_DEFINED) {
             return [
                 'ez-content-type-' . $type->id . '-' . $status,
@@ -508,5 +515,16 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
         $this->cache->invalidateTags(['type-' . $contentTypeId, 'type-map', 'content-fields-type-' . $contentTypeId]);
 
         return $return;
+    }
+
+    public function deleteByParams(DeleteByParamsStruct $params): void
+    {
+        $this->persistenceHandler->contentTypeHandler()->deleteByParams($params);
+
+        if (!empty($params->modifierId)) {
+            $this->cache->invalidateTags(['type-modifier-' . $params->modifierId]);
+        } else {
+            $this->cache->invalidateTags(['type']);
+        }
     }
 }

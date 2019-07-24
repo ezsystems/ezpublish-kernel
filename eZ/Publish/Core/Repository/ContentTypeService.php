@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
@@ -1639,5 +1640,15 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($contentType);
+    }
+
+    public function deleteUserDrafts(int $userId): void
+    {
+        $params = new SPIContentType\DeleteByParamsStruct([
+            'modifierId' => $userId,
+            'version' => ContentType::STATUS_DRAFT,
+        ]);
+
+        $this->contentTypeHandler->deleteByParams($params);
     }
 }
