@@ -67,3 +67,9 @@ Changes affecting version compatibility with former or future versions.
 * `ez_image_asset_content_field_identifier` twig function  was renamed to `ez_content_field_identifier_image_asset`
 * `richtext_to_html5` twig filter  was renamed to `ez_richtext_to_html5`
 * `richtext_to_html5_edit` twig filter  was renamed to `ez_richtext_to_html5_edit`
+
+## Removed services
+
+* `ezpublish.field_type_collection.factory` has been removed in favor of `eZ\Publish\Core\FieldType\FieldTypeRegistry`
+
+* `ezpublish.persistence.external_storage_registry.factory`
