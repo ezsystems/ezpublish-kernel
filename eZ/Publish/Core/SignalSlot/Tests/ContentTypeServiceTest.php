@@ -163,7 +163,13 @@ class ContentTypeServiceTest extends ServiceTest
             ],
             [
                 'loadContentTypeDraft',
-                [$contentType],
+                [$contentType, false],
+                [$contentTypeDraft],
+                0,
+            ],
+            [
+                'loadContentTypeDraft',
+                [$contentType, true],
                 [$contentTypeDraft],
                 0,
             ],
