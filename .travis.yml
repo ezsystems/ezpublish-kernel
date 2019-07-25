@@ -34,7 +34,6 @@ matrix:
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml" JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre/"
     - php: 7.1
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
-      sudo: required
     - php: 7.1
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
 # Disabled as it currently fails, integration tests are not written for language config awareness in Repo, should probably be opt in by test
@@ -80,10 +79,6 @@ before_install:
   # Detecting timezone issues by testing on random timezone
   - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
   - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
-  # Install openJDK8 as default v11 is too new for SOLR
-  - if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then sudo apt-get install openjdk-8-jdk; fi
-  # Fix for out of memory error for pgsql
-  - if [ "$DB" = "postgresql" ]; then sudo mount -o remount,size=25% /var/ramfs ; fi
 
 install:
   - if [ "$TEST_CONFIG" != "" -o "$CHECK_CS" = "1" ] ; then travis_retry composer install --no-progress --no-interaction --prefer-dist $COMPOSER_FLAGS; fi

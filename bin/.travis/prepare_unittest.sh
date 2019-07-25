@@ -30,13 +30,17 @@ if [ "$DB" = "mysql" ] || [ "$DB" = "mariadb" ] ; then
     # Install test db
     mysql -e "CREATE DATABASE IF NOT EXISTS testdb DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;" -uroot
 fi
-if [ "$DB" = "postgresql" ] ; then psql -c "CREATE DATABASE testdb;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres testdb ; fi
+
+# fix memory issue
+if [ "$DB" = "postgresql" ] ; then sudo mount -o remount,size=25% /var/ramfs; psql -c "CREATE DATABASE testdb;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres testdb ; fi
 
 # Setup GitHub key to avoid api rate limit (pure auth read only key, no rights, for use by ezsystems repos only!)
 composer config -g github-oauth.github.com "d0285ed5c8644f30547572ead2ed897431c1fc09"
 
 # solr package search API integration tests
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
+    # Install openJDK8 as default v11 is too new for SOLR
+    sudo apt-get install openjdk-8-jdk
     echo "> Require ezsystems/ezplatform-solr-search-engine:^1.3.0@dev"
     composer require --no-update ezsystems/ezplatform-solr-search-engine:^1.3.0@dev
 fi
