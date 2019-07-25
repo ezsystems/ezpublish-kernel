@@ -1577,11 +1577,11 @@ class DoctrineDatabase extends Gateway
     private function cleanupClassAttributeTabel()
     {
         $sql = <<<SQL
-          DELETE FROM ezcontentclass_attribute AS ca
+          DELETE FROM ezcontentclass_attribute
             WHERE NOT EXISTS (
-              SELECT 1 FROM ezcontentclass 
-                WHERE id = ca.contentclass_id 
-                AND version = ca.version
+              SELECT 1 FROM ezcontentclass
+                WHERE ezcontentclass.id = ezcontentclass_attribute.contentclass_id 
+                AND ezcontentclass.version = ezcontentclass_attribute.version
             )
 SQL;
         $this->connection->executeUpdate($sql);
@@ -1593,8 +1593,8 @@ SQL;
           DELETE FROM ezcontentclass_attribute_ml 
             WHERE NOT EXISTS (
               SELECT 1 FROM ezcontentclass_attribute 
-                WHERE id = ezcontentclass_attribute_ml.contentclass_attribute_id 
-                AND version = ezcontentclass_attribute_ml.version
+                WHERE ezcontentclass_attribute.id = ezcontentclass_attribute_ml.contentclass_attribute_id 
+                AND ezcontentclass_attribute.version = ezcontentclass_attribute_ml.version
             )
 SQL;
         $this->connection->executeUpdate($sql);
@@ -1606,8 +1606,8 @@ SQL;
           DELETE FROM ezcontentclass_classgroup 
             WHERE NOT EXISTS (
               SELECT 1 FROM ezcontentclass 
-                WHERE id = ezcontentclass_classgroup.contentclass_id 
-                AND version = ezcontentclass_classgroup.contentclass_version
+                WHERE ezcontentclass.id = ezcontentclass_classgroup.contentclass_id 
+                AND ezcontentclass.version = ezcontentclass_classgroup.contentclass_version
             )
 SQL;
         $this->connection->executeUpdate($sql);
@@ -1619,8 +1619,8 @@ SQL;
           DELETE FROM ezcontentclass_name 
             WHERE NOT EXISTS (
               SELECT 1 FROM ezcontentclass 
-                WHERE id = ezcontentclass_name.contentclass_id 
-                AND version = ezcontentclass_name.contentclass_version
+                WHERE ezcontentclass.id = ezcontentclass_name.contentclass_id 
+                AND ezcontentclass.version = ezcontentclass_name.contentclass_version
             )
 SQL;
         $this->connection->executeUpdate($sql);
