@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition;
@@ -1553,16 +1554,19 @@ class DoctrineDatabase extends Gateway
             ->where('creator_id = :user or modifier_id = :user')
             ->andWhere('version = :version')
             ->setParameter('user', $userId, ParameterType::INTEGER)
-            ->setParameter('version', $version, ParameterType::INTEGER);
+            ->setParameter('version', $version, ParameterType::INTEGER)
+        ;
 
-        $qb->execute();
-
-        $this->cleanupAssociations();
-
-        $this->connection->commit();
+        try {
+            $qb->execute();
+            $this->cleanupAssociations();
+            $this->connection->commit();
+        } catch (DBALException | PDOException) {
+            $this->connection->rollBack();
+        }
     }
 
-    private function cleanupAssociations()
+    private function cleanupAssociations(): void
     {
         $this->cleanupClassAttributeTabel();
         $this->cleanupClassAttributeMLTabel();
