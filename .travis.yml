@@ -9,14 +9,6 @@ services:
   - postgresql
   - redis-server
 
-# Mysql isn't installed on trusty (only client is), so we need to specifically install it
-addons:
-  apt:
-    packages:
-    - mysql-server-5.7
-    - mysql-client-core-5.7
-    - mysql-client-5.7
-
 cache:
   directories:
     - $HOME/.composer/cache/files
