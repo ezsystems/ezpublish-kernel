@@ -668,7 +668,7 @@ class Handler implements BaseContentTypeHandler
     {
         $this->contentTypeGateway->removeByUserAndVersion(
             $params->modifierId,
-            $params->version
+            $params->status
         );
     }
 }

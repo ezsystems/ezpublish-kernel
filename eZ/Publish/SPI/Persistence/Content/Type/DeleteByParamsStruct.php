@@ -18,5 +18,5 @@ class DeleteByParamsStruct extends ValueObject
     /**
      * @var int
      */
-    public $version;
+    public $status;
 }

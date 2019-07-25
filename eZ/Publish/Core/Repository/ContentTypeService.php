@@ -1646,7 +1646,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $params = new SPIContentType\DeleteByParamsStruct([
             'modifierId' => $userId,
-            'version' => ContentType::STATUS_DRAFT,
+            'status' => ContentType::STATUS_DRAFT,
         ]);
 
         $this->contentTypeHandler->deleteByParams($params);

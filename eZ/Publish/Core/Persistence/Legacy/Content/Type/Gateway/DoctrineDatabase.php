@@ -1572,25 +1572,25 @@ class DoctrineDatabase extends Gateway
 
     private function cleanupClassAttributeTabel()
     {
-        $sql = 'delete from ezcontentclass_attribute where not exists (select 1 from ezcontentclass where id = ezcontentclass_attribute.contentclass_id and version = ezcontentclass_attribute.version)';
+        $sql = 'DELETE FROM ezcontentclass_attribute WHERE NOT EXISTS (SELECT 1 FROM ezcontentclass WHERE id = ezcontentclass_attribute.contentclass_id AND version = ezcontentclass_attribute.version)';
         $this->connection->executeQuery($sql);
     }
 
     private function cleanupClassAttributeMLTabel()
     {
-        $sql = 'delete from ezcontentclass_attribute_ml where not exists (select 1 from ezcontentclass_attribute where id = ezcontentclass_attribute_ml.contentclass_attribute_id and version = ezcontentclass_attribute_ml.version)';
+        $sql = 'DELETE FROM ezcontentclass_attribute_ml WHERE NOT EXISTS (SELECT 1 FROM ezcontentclass_attribute WHERE id = ezcontentclass_attribute_ml.contentclass_attribute_id AND version = ezcontentclass_attribute_ml.version)';
         $this->connection->executeQuery($sql);
     }
 
     private function cleanupClassGroupTabel()
     {
-        $sql = 'delete from ezcontentclass_classgroup where not exists (select 1 from ezcontentclass where id = ezcontentclass_classgroup.contentclass_id and version = ezcontentclass_classgroup.contentclass_version)';
+        $sql = 'DELETE FROM ezcontentclass_classgroup WHERE NOT EXISTS (SELECT 1 FROM ezcontentclass WHERE id = ezcontentclass_classgroup.contentclass_id AND version = ezcontentclass_classgroup.contentclass_version)';
         $this->connection->executeQuery($sql);
     }
 
     private function cleanupClassNameTabel()
     {
-        $sql = 'delete from ezcontentclass_name where not exists (select 1 from ezcontentclass where id = ezcontentclass_name.contentclass_id and version = ezcontentclass_name.contentclass_version)';
+        $sql = 'DELETE FROM ezcontentclass_name WHERE NOT EXISTS (SELECT 1 FROM ezcontentclass WHERE id = ezcontentclass_name.contentclass_id AND version = ezcontentclass_name.contentclass_version)';
         $this->connection->executeQuery($sql);
     }
 }
