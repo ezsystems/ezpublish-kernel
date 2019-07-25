@@ -57,9 +57,7 @@ interface SectionService
     public function loadSection($sectionId);
 
     /**
-     * Loads all sections.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
+     * Loads all sections, excluding the ones the current user is not allowed to read.
      *
      * @return array of {@link \eZ\Publish\API\Repository\Values\Content\Section}
      */
