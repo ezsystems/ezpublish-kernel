@@ -1561,7 +1561,7 @@ class DoctrineDatabase extends Gateway
             $qb->execute();
             $this->cleanupAssociations();
             $this->connection->commit();
-        } catch (DBALException | PDOException) {
+        } catch (DBALException | PDOException $e) {
             $this->connection->rollBack();
         }
     }
@@ -1576,25 +1576,53 @@ class DoctrineDatabase extends Gateway
 
     private function cleanupClassAttributeTabel()
     {
-        $sql = 'DELETE FROM ezcontentclass_attribute WHERE NOT EXISTS (SELECT 1 FROM ezcontentclass WHERE id = ezcontentclass_attribute.contentclass_id AND version = ezcontentclass_attribute.version)';
-        $this->connection->executeQuery($sql);
+        $sql = <<<SQL
+          DELETE FROM ezcontentclass_attribute AS ca
+            WHERE NOT EXISTS (
+              SELECT 1 FROM ezcontentclass 
+                WHERE id = ca.contentclass_id 
+                AND version = ca.version
+            )
+SQL;
+        $this->connection->executeUpdate($sql);
     }
 
     private function cleanupClassAttributeMLTabel()
     {
-        $sql = 'DELETE FROM ezcontentclass_attribute_ml WHERE NOT EXISTS (SELECT 1 FROM ezcontentclass_attribute WHERE id = ezcontentclass_attribute_ml.contentclass_attribute_id AND version = ezcontentclass_attribute_ml.version)';
-        $this->connection->executeQuery($sql);
+        $sql = <<<SQL
+          DELETE FROM ezcontentclass_attribute_ml 
+            WHERE NOT EXISTS (
+              SELECT 1 FROM ezcontentclass_attribute 
+                WHERE id = ezcontentclass_attribute_ml.contentclass_attribute_id 
+                AND version = ezcontentclass_attribute_ml.version
+            )
+SQL;
+        $this->connection->executeUpdate($sql);
     }
 
     private function cleanupClassGroupTabel()
     {
-        $sql = 'DELETE FROM ezcontentclass_classgroup WHERE NOT EXISTS (SELECT 1 FROM ezcontentclass WHERE id = ezcontentclass_classgroup.contentclass_id AND version = ezcontentclass_classgroup.contentclass_version)';
-        $this->connection->executeQuery($sql);
+        $sql = <<<SQL
+          DELETE FROM ezcontentclass_classgroup 
+            WHERE NOT EXISTS (
+              SELECT 1 FROM ezcontentclass 
+                WHERE id = ezcontentclass_classgroup.contentclass_id 
+                AND version = ezcontentclass_classgroup.contentclass_version
+            )
+SQL;
+        $this->connection->executeUpdate($sql);
     }
 
     private function cleanupClassNameTabel()
     {
-        $sql = 'DELETE FROM ezcontentclass_name WHERE NOT EXISTS (SELECT 1 FROM ezcontentclass WHERE id = ezcontentclass_name.contentclass_id AND version = ezcontentclass_name.contentclass_version)';
-        $this->connection->executeQuery($sql);
+        $sql = <<< SQL
+          DELETE FROM ezcontentclass_name 
+            WHERE NOT EXISTS (
+              SELECT 1 FROM ezcontentclass 
+                WHERE id = ezcontentclass_name.contentclass_id 
+                AND version = ezcontentclass_name.contentclass_version
+            )
+SQL;
+        $this->connection->executeUpdate($sql);
     }
 }
