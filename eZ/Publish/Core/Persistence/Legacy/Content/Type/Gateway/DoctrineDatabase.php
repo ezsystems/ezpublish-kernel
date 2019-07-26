@@ -1547,10 +1547,8 @@ class DoctrineDatabase extends Gateway
      */
     public function removeByUserAndVersion(int $userId, int $version): void
     {
-        $this->connection->beginTransaction();
-
-        $qb = $this->connection->createQueryBuilder();
-        $qb->delete('ezcontentclass')
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->delete('ezcontentclass')
             ->where('creator_id = :user or modifier_id = :user')
             ->andWhere('version = :version')
             ->setParameter('user', $userId, ParameterType::INTEGER)
@@ -1558,11 +1556,15 @@ class DoctrineDatabase extends Gateway
         ;
 
         try {
-            $qb->execute();
+            $this->connection->beginTransaction();
+
+            $queryBuilder->execute();
             $this->cleanupAssociations();
+
             $this->connection->commit();
         } catch (DBALException | PDOException $e) {
             $this->connection->rollBack();
+
             throw $e;
         }
     }
@@ -1575,7 +1577,7 @@ class DoctrineDatabase extends Gateway
         $this->cleanupClassNameTable();
     }
 
-    private function cleanupClassAttributeTable()
+    private function cleanupClassAttributeTable(): void
     {
         $sql = <<<SQL
           DELETE FROM ezcontentclass_attribute
@@ -1588,7 +1590,7 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
-    private function cleanupClassAttributeMLTable()
+    private function cleanupClassAttributeMLTable(): void
     {
         $sql = <<<SQL
           DELETE FROM ezcontentclass_attribute_ml 
@@ -1601,7 +1603,7 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
-    private function cleanupClassGroupTable()
+    private function cleanupClassGroupTable(): void
     {
         $sql = <<<SQL
           DELETE FROM ezcontentclass_classgroup 
@@ -1614,7 +1616,7 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
-    private function cleanupClassNameTable()
+    private function cleanupClassNameTable(): void
     {
         $sql = <<< SQL
           DELETE FROM ezcontentclass_name 

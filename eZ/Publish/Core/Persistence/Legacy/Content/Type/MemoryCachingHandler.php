@@ -10,7 +10,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\SPI\Persistence\Content\Type\DeleteByParamsStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as BaseContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
@@ -452,8 +451,8 @@ class MemoryCachingHandler implements BaseContentTypeHandler
         );
     }
 
-    public function deleteByParams(DeleteByParamsStruct $params): void
+    public function deleteByUserAndStatus(int $userId, int $status): void
     {
-        $this->innerHandler->deleteByParams($params);
+        $this->innerHandler->deleteByUserAndStatus($userId, $status);
     }
 }

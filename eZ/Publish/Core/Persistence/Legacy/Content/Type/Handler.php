@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\SPI\Persistence\Content\Type\DeleteByParamsStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as BaseContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
@@ -664,11 +663,8 @@ class Handler implements BaseContentTypeHandler
         return $this->update($type->id, Type::STATUS_DRAFT, $updateStruct);
     }
 
-    public function deleteByParams(DeleteByParamsStruct $params): void
+    public function deleteByUserAndStatus(int $userId, int $status): void
     {
-        $this->contentTypeGateway->removeByUserAndVersion(
-            $params->modifierId,
-            $params->status
-        );
+        $this->contentTypeGateway->removeByUserAndVersion($userId, $status);
     }
 }

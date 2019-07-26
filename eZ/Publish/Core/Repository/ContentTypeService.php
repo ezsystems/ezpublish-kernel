@@ -1644,11 +1644,10 @@ class ContentTypeService implements ContentTypeServiceInterface
 
     public function deleteUserDrafts(int $userId): void
     {
-        $params = new SPIContentType\DeleteByParamsStruct([
-            'modifierId' => $userId,
-            'status' => ContentType::STATUS_DRAFT,
-        ]);
+        if ($this->repository->getPermissionResolver()->hasAccess('class', 'delete') !== true) {
+            throw new UnauthorizedException('ContentType', 'update');
+        }
 
-        $this->contentTypeHandler->deleteByParams($params);
+        $this->contentTypeHandler->deleteByUserAndStatus($userId, ContentType::STATUS_DRAFT);
     }
 }

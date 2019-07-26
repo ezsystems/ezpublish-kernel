@@ -332,7 +332,8 @@ interface Handler
     public function removeContentTypeTranslation(int $contentTypeId, string $languageCode): Type;
 
     /**
-     * @param DeleteByParamsStruct $params
+     * @param int $userId
+     * @param int $status
      */
-    public function deleteByParams(DeleteByParamsStruct $params): void;
+    public function deleteByUserAndStatus(int $userId, int $status): void;
 }

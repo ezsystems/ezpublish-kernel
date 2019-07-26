@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\SPI\Persistence\Content\Type\DeleteByParamsStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
@@ -55,7 +54,8 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             return [
                 'type',
                 'type-' . $type->id,
-                'type-modifier-' . $type->modifierId,
+                'type-modifierId-' . $type->modifierId,
+                'type-creatorId-' . $type->creatorId,
             ];
         };
         $this->getTypeKeys = static function (Type $type, int $status = Type::STATUS_DEFINED) {
@@ -517,14 +517,9 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
         return $return;
     }
 
-    public function deleteByParams(DeleteByParamsStruct $params): void
+    public function deleteByUserAndStatus(int $userId, int $status): void
     {
-        $this->persistenceHandler->contentTypeHandler()->deleteByParams($params);
-
-        if (!empty($params->modifierId)) {
-            $this->cache->invalidateTags(['type-modifier-' . $params->modifierId]);
-        } else {
-            $this->cache->invalidateTags(['type']);
-        }
+        $this->persistenceHandler->contentTypeHandler()->deleteByUserAndStatus($userId, $status);
+        $this->cache->invalidateTags(['type-modifierId-' . $userId, 'type-creatorId-' . $userId]);
     }
 }
