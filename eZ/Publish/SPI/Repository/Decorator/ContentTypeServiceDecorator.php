@@ -95,9 +95,9 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         return $this->innerService->loadContentTypeByRemoteId($remoteId, $prioritizedLanguages);
     }
 
-    public function loadContentTypeDraft($contentTypeId)
+    public function loadContentTypeDraft($contentTypeId, bool $ignoreOwnership = false)
     {
-        return $this->innerService->loadContentTypeDraft($contentTypeId);
+        return $this->innerService->loadContentTypeDraft($contentTypeId, $ignoreOwnership);
     }
 
     public function loadContentTypeList(
