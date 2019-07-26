@@ -8,27 +8,28 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use Exception;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\PermissionCriterionResolver;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot;
-use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
 use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\BadStateException;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
-use Exception;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
+use function array_filter;
 
 /**
  * Section service, used for section operations.
@@ -203,25 +204,19 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * Loads all sections.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
+     * Loads all sections, excluding the ones the current user is not allowed to read.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section[]
      */
     public function loadSections()
     {
-        $sections = [];
-        foreach ($this->sectionHandler->loadAll() as $spiSection) {
-            $sections[] = $section = $this->buildDomainSectionObject($spiSection);
+        $sections = array_map(function ($spiSection) {
+            return $this->buildDomainSectionObject($spiSection);
+        }, $this->sectionHandler->loadAll());
 
-            // @todo change API to just filter instead of throwing here
-            if (!$this->permissionResolver->canUser('section', 'view', $section)) {
-                throw new UnauthorizedException('section', 'view');
-            }
-        }
-
-        return $sections;
+        return array_values(array_filter($sections, function ($section) {
+            return $this->permissionResolver->canUser('section', 'view', $section);
+        }));
     }
 
     /**

@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\User\Limitation;
+
 /**
  * Test case for operations in the SectionService using in memory storage.
  *
@@ -125,10 +127,8 @@ class SectionServiceAuthorizationTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
      */
-    public function testLoadSectionsThrowsUnauthorizedException()
+    public function testLoadSectionsLoadsEmptyListForAnonymousUser()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -153,9 +153,56 @@ class SectionServiceAuthorizationTest extends BaseTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
-        $sectionService->loadSections();
+        $sections = $sectionService->loadSections();
         /* END: Use Case */
+
+        $this->assertEquals([], $sections);
+    }
+
+    /**
+     * Test for the loadSections() method.
+     *
+     * @see \eZ\Publish\API\Repository\SectionService::loadSections()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
+     */
+    public function testLoadSectionFiltersSections()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        // Publish demo installation.
+        $sectionService = $repository->getSectionService();
+        // Create some sections
+        $sectionCreateOne = $sectionService->newSectionCreateStruct();
+        $sectionCreateOne->name = 'Test section one';
+        $sectionCreateOne->identifier = 'uniqueKeyOne';
+
+        $sectionCreateTwo = $sectionService->newSectionCreateStruct();
+        $sectionCreateTwo->name = 'Test section two';
+        $sectionCreateTwo->identifier = 'uniqueKeyTwo';
+
+        $expectedSection = $sectionService->createSection($sectionCreateOne);
+        $sectionService->createSection($sectionCreateTwo);
+
+        // Set user
+        $this->createRoleWithPolicies('MediaUser', [
+            ['module' => '*', 'function' => '*'],
+        ]);
+        $mediaUser = $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            'MediaUser',
+            'MediaUser',
+            new Limitation\SectionLimitation(['limitationValues' => [$expectedSection->id]])
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($mediaUser);
+
+        $sections = $sectionService->loadSections();
+        /* END: Use Case */
+
+        // Only Sections the user has access to should be loaded
+        $this->assertEquals([$expectedSection], $sections);
     }
 
     /**
