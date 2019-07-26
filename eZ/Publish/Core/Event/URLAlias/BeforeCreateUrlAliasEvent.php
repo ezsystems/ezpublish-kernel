@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\URLAlias;
 use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateUrlAliasEvent as BeforeCreateUrlAliasEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeCreateUrlAliasEvent extends Event implements BeforeCreateUrlAliasEventInterface
+final class BeforeCreateUrlAliasEvent extends BeforeEvent implements BeforeCreateUrlAliasEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 
-interface BeforePublishRoleDraftEvent extends BeforeEvent
+interface BeforePublishRoleDraftEvent
 {
     public function getRoleDraft(): RoleDraft;
 }

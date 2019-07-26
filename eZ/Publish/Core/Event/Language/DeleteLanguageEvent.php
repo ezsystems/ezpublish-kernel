@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Language;
 
 use eZ\Publish\API\Repository\Events\Language\DeleteLanguageEvent as DeleteLanguageEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class DeleteLanguageEvent extends Event implements DeleteLanguageEventInterface
+final class DeleteLanguageEvent extends AfterEvent implements DeleteLanguageEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $language;

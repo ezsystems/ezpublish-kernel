@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\Role\AssignRoleToUserGroupEvent as AssignRo
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class AssignRoleToUserGroupEvent extends Event implements AssignRoleToUserGroupEventInterface
+final class AssignRoleToUserGroupEvent extends AfterEvent implements AssignRoleToUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;

@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Role;
 
 use eZ\Publish\API\Repository\Events\Role\RemoveRoleAssignmentEvent as RemoveRoleAssignmentEventInterface;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class RemoveRoleAssignmentEvent extends Event implements RemoveRoleAssignmentEventInterface
+final class RemoveRoleAssignmentEvent extends AfterEvent implements RemoveRoleAssignmentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleAssignment */
     private $roleAssignment;

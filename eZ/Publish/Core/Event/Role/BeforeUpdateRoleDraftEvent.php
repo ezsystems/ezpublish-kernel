@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleDraftEvent as BeforeUpdateRoleDraftEventInterface;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdateRoleDraftEvent extends Event implements BeforeUpdateRoleDraftEventInterface
+final class BeforeUpdateRoleDraftEvent extends BeforeEvent implements BeforeUpdateRoleDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;

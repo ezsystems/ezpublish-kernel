@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Events\User\CreateUserGroupEvent as CreateUserGroupEventInterface;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateUserGroupEvent extends Event implements CreateUserGroupEventInterface
+final class CreateUserGroupEvent extends AfterEvent implements CreateUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct */
     private $userGroupCreateStruct;

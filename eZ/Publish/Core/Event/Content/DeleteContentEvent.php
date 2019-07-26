@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Content;
 
 use eZ\Publish\API\Repository\Events\Content\DeleteContentEvent as DeleteContentEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class DeleteContentEvent extends Event implements DeleteContentEventInterface
+final class DeleteContentEvent extends AfterEvent implements DeleteContentEventInterface
 {
     /** @var array */
     private $locations;

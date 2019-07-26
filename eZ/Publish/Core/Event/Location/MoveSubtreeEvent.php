@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Location;
 
 use eZ\Publish\API\Repository\Events\Location\MoveSubtreeEvent as MoveSubtreeEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class MoveSubtreeEvent extends Event implements MoveSubtreeEventInterface
+final class MoveSubtreeEvent extends AfterEvent implements MoveSubtreeEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

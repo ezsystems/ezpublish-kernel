@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Location;
 
 use eZ\Publish\API\Repository\Events\Location\BeforeSwapLocationEvent as BeforeSwapLocationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeSwapLocationEvent extends Event implements BeforeSwapLocationEventInterface
+final class BeforeSwapLocationEvent extends BeforeEvent implements BeforeSwapLocationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location1;

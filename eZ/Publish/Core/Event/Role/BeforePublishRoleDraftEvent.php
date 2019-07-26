@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Role;
 
 use eZ\Publish\API\Repository\Events\Role\BeforePublishRoleDraftEvent as BeforePublishRoleDraftEventInterface;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforePublishRoleDraftEvent extends Event implements BeforePublishRoleDraftEventInterface
+final class BeforePublishRoleDraftEvent extends BeforeEvent implements BeforePublishRoleDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;

@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\Event\ContentType;
 
 use eZ\Publish\API\Repository\Events\ContentType\BeforeRemoveContentTypeTranslationEvent as BeforeRemoveContentTypeTranslationEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeRemoveContentTypeTranslationEvent extends Event implements BeforeRemoveContentTypeTranslationEventInterface
+final class BeforeRemoveContentTypeTranslationEvent extends BeforeEvent implements BeforeRemoveContentTypeTranslationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;

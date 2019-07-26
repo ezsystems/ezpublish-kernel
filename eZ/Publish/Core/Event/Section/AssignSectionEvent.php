@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Section;
 use eZ\Publish\API\Repository\Events\Section\AssignSectionEvent as AssignSectionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Section;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class AssignSectionEvent extends Event implements AssignSectionEventInterface
+final class AssignSectionEvent extends AfterEvent implements AssignSectionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

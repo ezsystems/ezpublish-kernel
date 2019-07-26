@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Content;
 
 use eZ\Publish\API\Repository\Events\Content\DeleteTranslationEvent as DeleteTranslationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class DeleteTranslationEvent extends Event implements DeleteTranslationEventInterface
+final class DeleteTranslationEvent extends AfterEvent implements DeleteTranslationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

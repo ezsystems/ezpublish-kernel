@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\URLAlias;
 
 use eZ\Publish\API\Repository\Events\URLAlias\BeforeRefreshSystemUrlAliasesForLocationEvent as BeforeRefreshSystemUrlAliasesForLocationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeRefreshSystemUrlAliasesForLocationEvent extends Event implements BeforeRefreshSystemUrlAliasesForLocationEventInterface
+final class BeforeRefreshSystemUrlAliasesForLocationEvent extends BeforeEvent implements BeforeRefreshSystemUrlAliasesForLocationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

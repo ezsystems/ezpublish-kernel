@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 
-interface CreateContentTypeEvent extends AfterEvent
+interface CreateContentTypeEvent
 {
     public function getContentTypeDraft(): ContentTypeDraft;
 

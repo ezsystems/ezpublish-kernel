@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
-interface BeforeDeleteContentTypeGroupEvent extends BeforeEvent
+interface BeforeDeleteContentTypeGroupEvent
 {
     public function getContentTypeGroup(): ContentTypeGroup;
 }

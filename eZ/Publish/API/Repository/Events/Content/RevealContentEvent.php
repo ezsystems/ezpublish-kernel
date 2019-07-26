@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
-interface RevealContentEvent extends AfterEvent
+interface RevealContentEvent
 {
     public function getContentInfo(): ContentInfo;
 }

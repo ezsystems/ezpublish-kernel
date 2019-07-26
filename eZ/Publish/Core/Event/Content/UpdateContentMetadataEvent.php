@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\Content\UpdateContentMetadataEvent as Updat
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdateContentMetadataEvent extends Event implements UpdateContentMetadataEventInterface
+final class UpdateContentMetadataEvent extends AfterEvent implements UpdateContentMetadataEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;

@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Section;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Section;
 
-interface BeforeDeleteSectionEvent extends BeforeEvent
+interface BeforeDeleteSectionEvent
 {
     public function getSection(): Section;
 }

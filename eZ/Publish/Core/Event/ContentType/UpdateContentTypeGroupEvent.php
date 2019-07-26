@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\ContentType;
 use eZ\Publish\API\Repository\Events\ContentType\UpdateContentTypeGroupEvent as UpdateContentTypeGroupEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdateContentTypeGroupEvent extends Event implements UpdateContentTypeGroupEventInterface
+final class UpdateContentTypeGroupEvent extends AfterEvent implements UpdateContentTypeGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup */
     private $contentTypeGroup;

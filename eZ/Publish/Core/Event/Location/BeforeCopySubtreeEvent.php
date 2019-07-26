@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\Event\Location;
 
 use eZ\Publish\API\Repository\Events\Location\BeforeCopySubtreeEvent as BeforeCopySubtreeEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeCopySubtreeEvent extends Event implements BeforeCopySubtreeEventInterface
+final class BeforeCopySubtreeEvent extends BeforeEvent implements BeforeCopySubtreeEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $subtree;

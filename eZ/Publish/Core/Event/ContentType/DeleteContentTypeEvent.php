@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\ContentType;
 
 use eZ\Publish\API\Repository\Events\ContentType\DeleteContentTypeEvent as DeleteContentTypeEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class DeleteContentTypeEvent extends Event implements DeleteContentTypeEventInterface
+final class DeleteContentTypeEvent extends AfterEvent implements DeleteContentTypeEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     private $contentType;

@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\ContentType;
 use eZ\Publish\API\Repository\Events\ContentType\BeforeUpdateContentTypeGroupEvent as BeforeUpdateContentTypeGroupEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeUpdateContentTypeGroupEvent extends Event implements BeforeUpdateContentTypeGroupEventInterface
+final class BeforeUpdateContentTypeGroupEvent extends BeforeEvent implements BeforeUpdateContentTypeGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup */
     private $contentTypeGroup;

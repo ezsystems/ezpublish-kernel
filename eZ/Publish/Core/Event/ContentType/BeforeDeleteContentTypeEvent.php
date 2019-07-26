@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\ContentType;
 
 use eZ\Publish\API\Repository\Events\ContentType\BeforeDeleteContentTypeEvent as BeforeDeleteContentTypeEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeDeleteContentTypeEvent extends Event implements BeforeDeleteContentTypeEventInterface
+final class BeforeDeleteContentTypeEvent extends BeforeEvent implements BeforeDeleteContentTypeEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     private $contentType;

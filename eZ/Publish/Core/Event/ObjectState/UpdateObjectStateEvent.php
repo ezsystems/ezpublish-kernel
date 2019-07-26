@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\ObjectState;
 use eZ\Publish\API\Repository\Events\ObjectState\UpdateObjectStateEvent as UpdateObjectStateEventInterface;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdateObjectStateEvent extends Event implements UpdateObjectStateEventInterface
+final class UpdateObjectStateEvent extends AfterEvent implements UpdateObjectStateEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
     private $updatedObjectState;

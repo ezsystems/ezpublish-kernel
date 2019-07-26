@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\ObjectState\CreateObjectStateEvent as Creat
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateObjectStateEvent extends Event implements CreateObjectStateEventInterface
+final class CreateObjectStateEvent extends AfterEvent implements CreateObjectStateEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
     private $objectState;

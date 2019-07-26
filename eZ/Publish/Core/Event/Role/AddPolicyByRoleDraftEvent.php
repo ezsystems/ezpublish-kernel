@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Events\Role\AddPolicyByRoleDraftEvent as AddPolicyByRoleDraftEventInterface;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class AddPolicyByRoleDraftEvent extends Event implements AddPolicyByRoleDraftEventInterface
+final class AddPolicyByRoleDraftEvent extends AfterEvent implements AddPolicyByRoleDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;

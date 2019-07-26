@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\URL;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
 
-interface BeforeUpdateUrlEvent extends BeforeEvent
+interface BeforeUpdateUrlEvent
 {
     public function getUrl(): URL;
 

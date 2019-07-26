@@ -12,10 +12,10 @@ use eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentMetadataEvent as
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdateContentMetadataEvent extends Event implements BeforeUpdateContentMetadataEventInterface
+final class BeforeUpdateContentMetadataEvent extends BeforeEvent implements BeforeUpdateContentMetadataEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

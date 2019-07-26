@@ -12,10 +12,10 @@ use eZ\Publish\API\Repository\Events\Location\BeforeCreateLocationEvent as Befor
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeCreateLocationEvent extends Event implements BeforeCreateLocationEventInterface
+final class BeforeCreateLocationEvent extends BeforeEvent implements BeforeCreateLocationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

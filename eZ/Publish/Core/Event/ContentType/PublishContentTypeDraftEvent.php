@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\ContentType;
 
 use eZ\Publish\API\Repository\Events\ContentType\PublishContentTypeDraftEvent as PublishContentTypeDraftEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class PublishContentTypeDraftEvent extends Event implements PublishContentTypeDraftEventInterface
+final class PublishContentTypeDraftEvent extends AfterEvent implements PublishContentTypeDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;

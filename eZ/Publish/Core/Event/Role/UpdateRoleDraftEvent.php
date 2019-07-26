@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Events\Role\UpdateRoleDraftEvent as UpdateRoleDraftEventInterface;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdateRoleDraftEvent extends Event implements UpdateRoleDraftEventInterface
+final class UpdateRoleDraftEvent extends AfterEvent implements UpdateRoleDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;

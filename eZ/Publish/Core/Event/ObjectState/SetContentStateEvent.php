@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\ObjectState\SetContentStateEvent as SetCont
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class SetContentStateEvent extends Event implements SetContentStateEventInterface
+final class SetContentStateEvent extends AfterEvent implements SetContentStateEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

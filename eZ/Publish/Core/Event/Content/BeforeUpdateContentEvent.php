@@ -12,10 +12,10 @@ use eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentEvent as BeforeU
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdateContentEvent extends Event implements BeforeUpdateContentEventInterface
+final class BeforeUpdateContentEvent extends BeforeEvent implements BeforeUpdateContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;

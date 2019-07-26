@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\ContentType\BeforeUpdateFieldDefinitionEven
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeUpdateFieldDefinitionEvent extends Event implements BeforeUpdateFieldDefinitionEventInterface
+final class BeforeUpdateFieldDefinitionEvent extends BeforeEvent implements BeforeUpdateFieldDefinitionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;

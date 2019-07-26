@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Language;
 
 use eZ\Publish\API\Repository\Events\Language\UpdateLanguageNameEvent as UpdateLanguageNameEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdateLanguageNameEvent extends Event implements UpdateLanguageNameEventInterface
+final class UpdateLanguageNameEvent extends AfterEvent implements UpdateLanguageNameEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $updatedLanguage;

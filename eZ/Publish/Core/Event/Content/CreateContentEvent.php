@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Content;
 use eZ\Publish\API\Repository\Events\Content\CreateContentEvent as CreateContentEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateContentEvent extends Event implements CreateContentEventInterface
+final class CreateContentEvent extends AfterEvent implements CreateContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct */
     private $contentCreateStruct;

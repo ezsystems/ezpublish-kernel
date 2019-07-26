@@ -8,12 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
-interface BeforeUpdateContentEvent extends BeforeEvent
+interface BeforeUpdateContentEvent
 {
     public function getVersionInfo(): VersionInfo;
 

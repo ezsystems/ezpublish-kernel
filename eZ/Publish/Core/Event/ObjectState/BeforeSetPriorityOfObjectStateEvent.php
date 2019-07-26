@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\ObjectState;
 
 use eZ\Publish\API\Repository\Events\ObjectState\BeforeSetPriorityOfObjectStateEvent as BeforeSetPriorityOfObjectStateEventInterface;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeSetPriorityOfObjectStateEvent extends Event implements BeforeSetPriorityOfObjectStateEventInterface
+final class BeforeSetPriorityOfObjectStateEvent extends BeforeEvent implements BeforeSetPriorityOfObjectStateEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
     private $objectState;

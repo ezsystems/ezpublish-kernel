@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\URLWildcard;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 
-interface CreateEvent extends AfterEvent
+interface CreateEvent
 {
     public function getSourceUrl();
 

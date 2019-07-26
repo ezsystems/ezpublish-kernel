@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Role;
 
 use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleEvent as BeforeDeleteRoleEventInterface;
 use eZ\Publish\API\Repository\Values\User\Role;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeDeleteRoleEvent extends Event implements BeforeDeleteRoleEventInterface
+final class BeforeDeleteRoleEvent extends BeforeEvent implements BeforeDeleteRoleEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;

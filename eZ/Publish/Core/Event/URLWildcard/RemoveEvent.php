@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\URLWildcard;
 
 use eZ\Publish\API\Repository\Events\URLWildcard\RemoveEvent as RemoveEventInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class RemoveEvent extends Event implements RemoveEventInterface
+final class RemoveEvent extends AfterEvent implements RemoveEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcard */
     private $urlWildcard;

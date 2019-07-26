@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 
-interface AddPolicyEvent extends AfterEvent
+interface AddPolicyEvent
 {
     public function getRole(): Role;
 

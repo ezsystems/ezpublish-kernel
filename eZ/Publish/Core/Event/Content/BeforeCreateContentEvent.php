@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Content;
 use eZ\Publish\API\Repository\Events\Content\BeforeCreateContentEvent as BeforeCreateContentEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeCreateContentEvent extends Event implements BeforeCreateContentEventInterface
+final class BeforeCreateContentEvent extends BeforeEvent implements BeforeCreateContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct */
     private $contentCreateStruct;

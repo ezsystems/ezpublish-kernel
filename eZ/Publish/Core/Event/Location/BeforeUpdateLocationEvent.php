@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Location;
 use eZ\Publish\API\Repository\Events\Location\BeforeUpdateLocationEvent as BeforeUpdateLocationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdateLocationEvent extends Event implements BeforeUpdateLocationEventInterface
+final class BeforeUpdateLocationEvent extends BeforeEvent implements BeforeUpdateLocationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

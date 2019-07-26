@@ -12,10 +12,10 @@ use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent as 
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdatePolicyByRoleDraftEvent extends Event implements BeforeUpdatePolicyByRoleDraftEventInterface
+final class BeforeUpdatePolicyByRoleDraftEvent extends BeforeEvent implements BeforeUpdatePolicyByRoleDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;

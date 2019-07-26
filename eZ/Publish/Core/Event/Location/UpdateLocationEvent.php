@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Location;
 use eZ\Publish\API\Repository\Events\Location\UpdateLocationEvent as UpdateLocationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdateLocationEvent extends Event implements UpdateLocationEventInterface
+final class UpdateLocationEvent extends AfterEvent implements UpdateLocationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $updatedLocation;

@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyEvent as BeforeAddPolicyEventInterface;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeAddPolicyEvent extends Event implements BeforeAddPolicyEventInterface
+final class BeforeAddPolicyEvent extends BeforeEvent implements BeforeAddPolicyEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;

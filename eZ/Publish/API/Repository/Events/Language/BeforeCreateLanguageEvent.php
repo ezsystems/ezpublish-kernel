@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Language;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
-interface BeforeCreateLanguageEvent extends BeforeEvent
+interface BeforeCreateLanguageEvent
 {
     public function getLanguageCreateStruct(): LanguageCreateStruct;
 

@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\Event\URLWildcard;
 
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeTranslateEvent as BeforeTranslateEventInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeTranslateEvent extends Event implements BeforeTranslateEventInterface
+final class BeforeTranslateEvent extends BeforeEvent implements BeforeTranslateEventInterface
 {
     private $url;
 

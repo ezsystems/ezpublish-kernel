@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\ContentType;
 use eZ\Publish\API\Repository\Events\ContentType\CopyContentTypeEvent as CopyContentTypeEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CopyContentTypeEvent extends Event implements CopyContentTypeEventInterface
+final class CopyContentTypeEvent extends AfterEvent implements CopyContentTypeEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     private $contentTypeCopy;

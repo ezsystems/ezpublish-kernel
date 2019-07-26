@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Events\User\UpdateUserEvent as UpdateUserEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdateUserEvent extends Event implements UpdateUserEventInterface
+final class UpdateUserEvent extends AfterEvent implements UpdateUserEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;

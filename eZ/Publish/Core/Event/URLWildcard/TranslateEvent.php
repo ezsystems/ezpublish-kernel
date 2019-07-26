@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\URLWildcard;
 
 use eZ\Publish\API\Repository\Events\URLWildcard\TranslateEvent as TranslateEventInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class TranslateEvent extends Event implements TranslateEventInterface
+final class TranslateEvent extends AfterEvent implements TranslateEventInterface
 {
     private $url;
 

@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Content;
 
 use eZ\Publish\API\Repository\Events\Content\BeforeDeleteTranslationEvent as BeforeDeleteTranslationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeDeleteTranslationEvent extends Event implements BeforeDeleteTranslationEventInterface
+final class BeforeDeleteTranslationEvent extends BeforeEvent implements BeforeDeleteTranslationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

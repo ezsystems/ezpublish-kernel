@@ -8,13 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
-interface CopyContentEvent extends AfterEvent
+interface CopyContentEvent
 {
     public function getContent(): Content;
 

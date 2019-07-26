@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Event;
 
+use Symfony\Contracts\EventDispatcher\Event;
+
 /**
  * Event emitted after action execution.
  */
-interface AfterEvent extends Event
+abstract class AfterEvent extends Event
 {
 }

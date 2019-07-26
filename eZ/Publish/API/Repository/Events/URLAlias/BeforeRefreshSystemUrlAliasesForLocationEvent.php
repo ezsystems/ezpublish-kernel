@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\URLAlias;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
-interface BeforeRefreshSystemUrlAliasesForLocationEvent extends BeforeEvent
+interface BeforeRefreshSystemUrlAliasesForLocationEvent
 {
     public function getLocation(): Location;
 }

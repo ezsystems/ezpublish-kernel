@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\Event\Language;
 
 use eZ\Publish\API\Repository\Events\Language\BeforeDisableLanguageEvent as BeforeDisableLanguageEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeDisableLanguageEvent extends Event implements BeforeDisableLanguageEventInterface
+final class BeforeDisableLanguageEvent extends BeforeEvent implements BeforeDisableLanguageEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $language;

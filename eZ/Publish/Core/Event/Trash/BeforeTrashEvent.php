@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Trash;
 use eZ\Publish\API\Repository\Events\Trash\BeforeTrashEvent as BeforeTrashEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeTrashEvent extends Event implements BeforeTrashEventInterface
+final class BeforeTrashEvent extends BeforeEvent implements BeforeTrashEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

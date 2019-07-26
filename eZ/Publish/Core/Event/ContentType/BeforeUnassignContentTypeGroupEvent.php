@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\ContentType;
 use eZ\Publish\API\Repository\Events\ContentType\BeforeUnassignContentTypeGroupEvent as BeforeUnassignContentTypeGroupEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeUnassignContentTypeGroupEvent extends Event implements BeforeUnassignContentTypeGroupEventInterface
+final class BeforeUnassignContentTypeGroupEvent extends BeforeEvent implements BeforeUnassignContentTypeGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     private $contentType;

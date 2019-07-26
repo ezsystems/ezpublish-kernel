@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\URL;
 use eZ\Publish\API\Repository\Events\URL\BeforeUpdateUrlEvent as BeforeUpdateUrlEventInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdateUrlEvent extends Event implements BeforeUpdateUrlEventInterface
+final class BeforeUpdateUrlEvent extends BeforeEvent implements BeforeUpdateUrlEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\URL\URL */
     private $url;

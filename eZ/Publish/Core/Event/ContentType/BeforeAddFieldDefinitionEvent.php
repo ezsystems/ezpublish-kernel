@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\ContentType;
 use eZ\Publish\API\Repository\Events\ContentType\BeforeAddFieldDefinitionEvent as BeforeAddFieldDefinitionEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeAddFieldDefinitionEvent extends Event implements BeforeAddFieldDefinitionEventInterface
+final class BeforeAddFieldDefinitionEvent extends BeforeEvent implements BeforeAddFieldDefinitionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;

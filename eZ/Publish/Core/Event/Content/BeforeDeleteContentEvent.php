@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\Event\Content;
 
 use eZ\Publish\API\Repository\Events\Content\BeforeDeleteContentEvent as BeforeDeleteContentEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeDeleteContentEvent extends Event implements BeforeDeleteContentEventInterface
+final class BeforeDeleteContentEvent extends BeforeEvent implements BeforeDeleteContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

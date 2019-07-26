@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\ObjectState;
 use eZ\Publish\API\Repository\Events\ObjectState\BeforeUpdateObjectStateGroupEvent as BeforeUpdateObjectStateGroupEventInterface;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdateObjectStateGroupEvent extends Event implements BeforeUpdateObjectStateGroupEventInterface
+final class BeforeUpdateObjectStateGroupEvent extends BeforeEvent implements BeforeUpdateObjectStateGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $objectStateGroup;

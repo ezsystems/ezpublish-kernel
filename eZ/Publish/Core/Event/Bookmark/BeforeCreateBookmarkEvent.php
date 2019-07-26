@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Bookmark;
 
 use eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent as BeforeCreateBookmarkEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeCreateBookmarkEvent extends Event implements BeforeCreateBookmarkEventInterface
+final class BeforeCreateBookmarkEvent extends BeforeEvent implements BeforeCreateBookmarkEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

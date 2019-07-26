@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\ObjectState\BeforeSetContentStateEvent as B
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeSetContentStateEvent extends Event implements BeforeSetContentStateEventInterface
+final class BeforeSetContentStateEvent extends BeforeEvent implements BeforeSetContentStateEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

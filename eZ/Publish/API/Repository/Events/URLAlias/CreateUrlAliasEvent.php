@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\URLAlias;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 
-interface CreateUrlAliasEvent extends AfterEvent
+interface CreateUrlAliasEvent
 {
     public function getLocation(): Location;
 

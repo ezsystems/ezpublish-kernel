@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Language;
 use eZ\Publish\API\Repository\Events\Language\BeforeCreateLanguageEvent as BeforeCreateLanguageEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeCreateLanguageEvent extends Event implements BeforeCreateLanguageEventInterface
+final class BeforeCreateLanguageEvent extends BeforeEvent implements BeforeCreateLanguageEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct */
     private $languageCreateStruct;

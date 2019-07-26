@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Section;
 
 use eZ\Publish\API\Repository\Events\Section\BeforeDeleteSectionEvent as BeforeDeleteSectionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Section;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeDeleteSectionEvent extends Event implements BeforeDeleteSectionEventInterface
+final class BeforeDeleteSectionEvent extends BeforeEvent implements BeforeDeleteSectionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;

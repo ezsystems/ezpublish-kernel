@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Role;
 
 use eZ\Publish\API\Repository\Events\Role\BeforeDeletePolicyEvent as BeforeDeletePolicyEventInterface;
 use eZ\Publish\API\Repository\Values\User\Policy;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeDeletePolicyEvent extends Event implements BeforeDeletePolicyEventInterface
+final class BeforeDeletePolicyEvent extends BeforeEvent implements BeforeDeletePolicyEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Policy */
     private $policy;

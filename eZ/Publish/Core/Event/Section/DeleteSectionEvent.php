@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Section;
 
 use eZ\Publish\API\Repository\Events\Section\DeleteSectionEvent as DeleteSectionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Section;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class DeleteSectionEvent extends Event implements DeleteSectionEventInterface
+final class DeleteSectionEvent extends AfterEvent implements DeleteSectionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;
