@@ -1563,18 +1563,19 @@ class DoctrineDatabase extends Gateway
             $this->connection->commit();
         } catch (DBALException | PDOException $e) {
             $this->connection->rollBack();
+            throw $e;
         }
     }
 
     private function cleanupAssociations(): void
     {
-        $this->cleanupClassAttributeTabel();
-        $this->cleanupClassAttributeMLTabel();
-        $this->cleanupClassGroupTabel();
-        $this->cleanupClassNameTabel();
+        $this->cleanupClassAttributeTable();
+        $this->cleanupClassAttributeMLTable();
+        $this->cleanupClassGroupTable();
+        $this->cleanupClassNameTable();
     }
 
-    private function cleanupClassAttributeTabel()
+    private function cleanupClassAttributeTable()
     {
         $sql = <<<SQL
           DELETE FROM ezcontentclass_attribute
@@ -1587,7 +1588,7 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
-    private function cleanupClassAttributeMLTabel()
+    private function cleanupClassAttributeMLTable()
     {
         $sql = <<<SQL
           DELETE FROM ezcontentclass_attribute_ml 
@@ -1600,7 +1601,7 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
-    private function cleanupClassGroupTabel()
+    private function cleanupClassGroupTable()
     {
         $sql = <<<SQL
           DELETE FROM ezcontentclass_classgroup 
@@ -1613,7 +1614,7 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
-    private function cleanupClassNameTabel()
+    private function cleanupClassNameTable()
     {
         $sql = <<< SQL
           DELETE FROM ezcontentclass_name 
