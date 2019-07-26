@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Events\User\UpdateUserTokenEvent as UpdateUserTokenEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdateUserTokenEvent extends Event implements UpdateUserTokenEventInterface
+final class UpdateUserTokenEvent extends AfterEvent implements UpdateUserTokenEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;

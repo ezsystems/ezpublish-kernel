@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Trash;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
 
-interface BeforeEmptyTrashEvent extends BeforeEvent
+interface BeforeEmptyTrashEvent
 {
     public function getResultList(): TrashItemDeleteResultList;
 

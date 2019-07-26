@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Content;
 
 use eZ\Publish\API\Repository\Events\Content\BeforeDeleteVersionEvent as BeforeDeleteVersionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeDeleteVersionEvent extends Event implements BeforeDeleteVersionEventInterface
+final class BeforeDeleteVersionEvent extends BeforeEvent implements BeforeDeleteVersionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;

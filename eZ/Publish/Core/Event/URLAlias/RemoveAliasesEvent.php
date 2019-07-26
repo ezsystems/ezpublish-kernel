@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event\URLAlias;
 
 use eZ\Publish\API\Repository\Events\URLAlias\RemoveAliasesEvent as RemoveAliasesEventInterface;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class RemoveAliasesEvent extends Event implements RemoveAliasesEventInterface
+final class RemoveAliasesEvent extends AfterEvent implements RemoveAliasesEventInterface
 {
     /** @var array */
     private $aliasList;

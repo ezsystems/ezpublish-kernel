@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\User;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 
-interface DeleteUserGroupEvent extends AfterEvent
+interface DeleteUserGroupEvent
 {
     public function getUserGroup(): UserGroup;
 

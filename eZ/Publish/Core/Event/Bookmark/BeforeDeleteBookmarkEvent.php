@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Bookmark;
 
 use eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent as BeforeDeleteBookmarkEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeDeleteBookmarkEvent extends Event implements BeforeDeleteBookmarkEventInterface
+final class BeforeDeleteBookmarkEvent extends BeforeEvent implements BeforeDeleteBookmarkEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

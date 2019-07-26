@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Events\Role\CreateRoleEvent as CreateRoleEventInterface;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateRoleEvent extends Event implements CreateRoleEventInterface
+final class CreateRoleEvent extends AfterEvent implements CreateRoleEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleCreateStruct */
     private $roleCreateStruct;

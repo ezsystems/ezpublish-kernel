@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Role;
 
 use eZ\Publish\API\Repository\Events\Role\DeletePolicyEvent as DeletePolicyEventInterface;
 use eZ\Publish\API\Repository\Values\User\Policy;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class DeletePolicyEvent extends Event implements DeletePolicyEventInterface
+final class DeletePolicyEvent extends AfterEvent implements DeletePolicyEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Policy */
     private $policy;

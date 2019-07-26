@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Event;
 
+use Symfony\Contracts\EventDispatcher\Event;
+
 /**
  * Event emitted before action execution.
  */
-interface BeforeEvent extends Event
+abstract class BeforeEvent extends Event
 {
 }

@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Language;
 
 use eZ\Publish\API\Repository\Events\Language\EnableLanguageEvent as EnableLanguageEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class EnableLanguageEvent extends Event implements EnableLanguageEventInterface
+final class EnableLanguageEvent extends AfterEvent implements EnableLanguageEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $enabledLanguage;

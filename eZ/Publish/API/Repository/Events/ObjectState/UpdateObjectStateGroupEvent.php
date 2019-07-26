@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 
-interface UpdateObjectStateGroupEvent extends AfterEvent
+interface UpdateObjectStateGroupEvent
 {
     public function getUpdatedObjectStateGroup(): ObjectStateGroup;
 

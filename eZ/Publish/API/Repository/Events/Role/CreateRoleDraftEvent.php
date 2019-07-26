@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 
-interface CreateRoleDraftEvent extends AfterEvent
+interface CreateRoleDraftEvent
 {
     public function getRole(): Role;
 

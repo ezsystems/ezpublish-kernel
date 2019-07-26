@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
-interface BeforeDeleteRelationEvent extends BeforeEvent
+interface BeforeDeleteRelationEvent
 {
     public function getSourceVersion(): VersionInfo;
 

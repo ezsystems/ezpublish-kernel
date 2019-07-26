@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Events\User\UnAssignUserFromUserGroupEvent as UnAssignUserFromUserGroupEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UnAssignUserFromUserGroupEvent extends Event implements UnAssignUserFromUserGroupEventInterface
+final class UnAssignUserFromUserGroupEvent extends AfterEvent implements UnAssignUserFromUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;

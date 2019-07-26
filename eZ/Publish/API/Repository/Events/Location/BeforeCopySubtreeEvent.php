@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Location;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
-interface BeforeCopySubtreeEvent extends BeforeEvent
+interface BeforeCopySubtreeEvent
 {
     public function getSubtree(): Location;
 

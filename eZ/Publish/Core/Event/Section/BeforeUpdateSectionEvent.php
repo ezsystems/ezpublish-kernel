@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Section;
 use eZ\Publish\API\Repository\Events\Section\BeforeUpdateSectionEvent as BeforeUpdateSectionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdateSectionEvent extends Event implements BeforeUpdateSectionEventInterface
+final class BeforeUpdateSectionEvent extends BeforeEvent implements BeforeUpdateSectionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;

@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\Location\CreateLocationEvent as CreateLocat
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateLocationEvent extends Event implements CreateLocationEventInterface
+final class CreateLocationEvent extends AfterEvent implements CreateLocationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

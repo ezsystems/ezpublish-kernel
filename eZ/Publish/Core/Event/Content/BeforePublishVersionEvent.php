@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Content;
 use eZ\Publish\API\Repository\Events\Content\BeforePublishVersionEvent as BeforePublishVersionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforePublishVersionEvent extends Event implements BeforePublishVersionEventInterface
+final class BeforePublishVersionEvent extends BeforeEvent implements BeforePublishVersionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;

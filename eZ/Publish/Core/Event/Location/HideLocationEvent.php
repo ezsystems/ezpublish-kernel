@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Location;
 
 use eZ\Publish\API\Repository\Events\Location\HideLocationEvent as HideLocationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class HideLocationEvent extends Event implements HideLocationEventInterface
+final class HideLocationEvent extends AfterEvent implements HideLocationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $hiddenLocation;

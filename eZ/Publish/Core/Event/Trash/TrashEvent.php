@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Trash;
 use eZ\Publish\API\Repository\Events\Trash\TrashEvent as TrashEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class TrashEvent extends Event implements TrashEventInterface
+final class TrashEvent extends AfterEvent implements TrashEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyEvent as BeforeUpdatePolicyEventInterface;
 use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdatePolicyEvent extends Event implements BeforeUpdatePolicyEventInterface
+final class BeforeUpdatePolicyEvent extends BeforeEvent implements BeforeUpdatePolicyEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Policy */
     private $policy;

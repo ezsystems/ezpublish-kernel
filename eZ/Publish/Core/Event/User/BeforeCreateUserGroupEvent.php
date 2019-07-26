@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Events\User\BeforeCreateUserGroupEvent as BeforeCreateUserGroupEventInterface;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeCreateUserGroupEvent extends Event implements BeforeCreateUserGroupEventInterface
+final class BeforeCreateUserGroupEvent extends BeforeEvent implements BeforeCreateUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct */
     private $userGroupCreateStruct;

@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Content;
 
 use eZ\Publish\API\Repository\Events\Content\BeforeHideContentEvent as BeforeHideContentEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeHideContentEvent extends Event implements BeforeHideContentEventInterface
+final class BeforeHideContentEvent extends BeforeEvent implements BeforeHideContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;

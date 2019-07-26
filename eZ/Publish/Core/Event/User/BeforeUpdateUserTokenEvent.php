@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserTokenEvent as BeforeUpdateUserTokenEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeUpdateUserTokenEvent extends Event implements BeforeUpdateUserTokenEventInterface
+final class BeforeUpdateUserTokenEvent extends BeforeEvent implements BeforeUpdateUserTokenEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;

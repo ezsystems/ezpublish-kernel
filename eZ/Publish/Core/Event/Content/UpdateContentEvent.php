@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\Content\UpdateContentEvent as UpdateContent
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdateContentEvent extends Event implements UpdateContentEventInterface
+final class UpdateContentEvent extends AfterEvent implements UpdateContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;

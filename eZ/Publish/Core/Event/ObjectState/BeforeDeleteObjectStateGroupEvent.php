@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\ObjectState;
 
 use eZ\Publish\API\Repository\Events\ObjectState\BeforeDeleteObjectStateGroupEvent as BeforeDeleteObjectStateGroupEventInterface;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeDeleteObjectStateGroupEvent extends Event implements BeforeDeleteObjectStateGroupEventInterface
+final class BeforeDeleteObjectStateGroupEvent extends BeforeEvent implements BeforeDeleteObjectStateGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $objectStateGroup;

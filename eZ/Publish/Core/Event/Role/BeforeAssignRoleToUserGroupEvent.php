@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserGroupEvent as Be
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeAssignRoleToUserGroupEvent extends Event implements BeforeAssignRoleToUserGroupEventInterface
+final class BeforeAssignRoleToUserGroupEvent extends BeforeEvent implements BeforeAssignRoleToUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;

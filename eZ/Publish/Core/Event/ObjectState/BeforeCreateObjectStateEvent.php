@@ -12,10 +12,10 @@ use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateEvent as
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeCreateObjectStateEvent extends Event implements BeforeCreateObjectStateEventInterface
+final class BeforeCreateObjectStateEvent extends BeforeEvent implements BeforeCreateObjectStateEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $objectStateGroup;

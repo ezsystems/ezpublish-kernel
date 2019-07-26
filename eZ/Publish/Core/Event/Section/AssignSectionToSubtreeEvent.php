@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Section;
 use eZ\Publish\API\Repository\Events\Section\AssignSectionToSubtreeEvent as AssignSectionToSubtreeEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Section;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class AssignSectionToSubtreeEvent extends Event implements AssignSectionToSubtreeEventInterface
+final class AssignSectionToSubtreeEvent extends AfterEvent implements AssignSectionToSubtreeEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

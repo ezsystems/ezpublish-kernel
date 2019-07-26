@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 
-interface BeforeCreateObjectStateGroupEvent extends BeforeEvent
+interface BeforeCreateObjectStateGroupEvent
 {
     public function getObjectStateGroupCreateStruct(): ObjectStateGroupCreateStruct;
 

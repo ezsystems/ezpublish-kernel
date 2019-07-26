@@ -13,9 +13,9 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CopyContentEvent extends Event implements CopyContentEventInterface
+final class CopyContentEvent extends AfterEvent implements CopyContentEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;

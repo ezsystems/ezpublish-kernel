@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Event\Section;
 use eZ\Publish\API\Repository\Events\Section\BeforeCreateSectionEvent as BeforeCreateSectionEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeCreateSectionEvent extends Event implements BeforeCreateSectionEventInterface
+final class BeforeCreateSectionEvent extends BeforeEvent implements BeforeCreateSectionEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct */
     private $sectionCreateStruct;

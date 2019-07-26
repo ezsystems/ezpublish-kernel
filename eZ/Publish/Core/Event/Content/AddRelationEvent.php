@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\Content\AddRelationEvent as AddRelationEven
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class AddRelationEvent extends Event implements AddRelationEventInterface
+final class AddRelationEvent extends AfterEvent implements AddRelationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Relation */
     private $relation;

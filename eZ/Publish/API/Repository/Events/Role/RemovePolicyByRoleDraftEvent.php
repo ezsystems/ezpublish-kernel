@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 
-interface RemovePolicyByRoleDraftEvent extends AfterEvent
+interface RemovePolicyByRoleDraftEvent
 {
     public function getRoleDraft(): RoleDraft;
 

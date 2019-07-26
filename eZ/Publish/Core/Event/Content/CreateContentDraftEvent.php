@@ -13,9 +13,9 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateContentDraftEvent extends Event implements CreateContentDraftEventInterface
+final class CreateContentDraftEvent extends AfterEvent implements CreateContentDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $contentDraft;

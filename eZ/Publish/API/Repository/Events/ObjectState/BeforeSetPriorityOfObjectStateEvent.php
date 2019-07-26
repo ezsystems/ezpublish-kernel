@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 
-interface BeforeSetPriorityOfObjectStateEvent extends BeforeEvent
+interface BeforeSetPriorityOfObjectStateEvent
 {
     public function getObjectState(): ObjectState;
 

@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\URLWildcard;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
-interface BeforeTranslateEvent extends BeforeEvent
+interface BeforeTranslateEvent
 {
     public function getUrl();
 

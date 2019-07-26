@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\Event\User;
 
 use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserGroupEvent as BeforeDeleteUserGroupEventInterface;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeDeleteUserGroupEvent extends Event implements BeforeDeleteUserGroupEventInterface
+final class BeforeDeleteUserGroupEvent extends BeforeEvent implements BeforeDeleteUserGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     private $userGroup;

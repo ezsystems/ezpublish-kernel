@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Bookmark;
 
 use eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent as CreateBookmarkEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateBookmarkEvent extends Event implements CreateBookmarkEventInterface
+final class CreateBookmarkEvent extends AfterEvent implements CreateBookmarkEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;

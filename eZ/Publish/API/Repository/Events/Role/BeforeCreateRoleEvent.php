@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 
-interface BeforeCreateRoleEvent extends BeforeEvent
+interface BeforeCreateRoleEvent
 {
     public function getRoleCreateStruct(): RoleCreateStruct;
 

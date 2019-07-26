@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Section;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Section;
 
-interface AssignSectionToSubtreeEvent extends AfterEvent
+interface AssignSectionToSubtreeEvent
 {
     public function getLocation(): Location;
 

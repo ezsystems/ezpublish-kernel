@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Trash;
 use eZ\Publish\API\Repository\Events\Trash\DeleteTrashItemEvent as DeleteTrashItemEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class DeleteTrashItemEvent extends Event implements DeleteTrashItemEventInterface
+final class DeleteTrashItemEvent extends AfterEvent implements DeleteTrashItemEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\TrashItem */
     private $trashItem;

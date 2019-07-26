@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Notification;
 
 use eZ\Publish\API\Repository\Events\Notification\DeleteNotificationEvent as DeleteNotificationEventInterface;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class DeleteNotificationEvent extends Event implements DeleteNotificationEventInterface
+final class DeleteNotificationEvent extends AfterEvent implements DeleteNotificationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Notification\Notification */
     private $notification;

@@ -8,12 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 
-interface BeforeUpdateContentMetadataEvent extends BeforeEvent
+interface BeforeUpdateContentMetadataEvent
 {
     public function getContentInfo(): ContentInfo;
 

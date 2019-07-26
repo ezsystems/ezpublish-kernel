@@ -12,9 +12,9 @@ use eZ\Publish\API\Repository\Events\Role\UpdatePolicyByRoleDraftEvent as Update
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class UpdatePolicyByRoleDraftEvent extends Event implements UpdatePolicyByRoleDraftEventInterface
+final class UpdatePolicyByRoleDraftEvent extends AfterEvent implements UpdatePolicyByRoleDraftEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;

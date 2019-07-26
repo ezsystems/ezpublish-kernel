@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
-interface RemoveFieldDefinitionEvent extends AfterEvent
+interface RemoveFieldDefinitionEvent
 {
     public function getContentTypeDraft(): ContentTypeDraft;
 

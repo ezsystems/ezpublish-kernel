@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event\UserPreference;
 
 use eZ\Publish\API\Repository\Events\UserPreference\SetUserPreferenceEvent as SetUserPreferenceEventInterface;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class SetUserPreferenceEvent extends Event implements SetUserPreferenceEventInterface
+final class SetUserPreferenceEvent extends AfterEvent implements SetUserPreferenceEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceSetStruct[] */
     private $userPreferenceSetStructs;

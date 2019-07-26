@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\Event\User;
 
 use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserEvent as BeforeDeleteUserEventInterface;
 use eZ\Publish\API\Repository\Values\User\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeDeleteUserEvent extends Event implements BeforeDeleteUserEventInterface
+final class BeforeDeleteUserEvent extends BeforeEvent implements BeforeDeleteUserEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;

@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 
-interface BeforeDeleteObjectStateEvent extends BeforeEvent
+interface BeforeDeleteObjectStateEvent
 {
     public function getObjectState(): ObjectState;
 }

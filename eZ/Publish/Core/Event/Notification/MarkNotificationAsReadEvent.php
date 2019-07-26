@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\Notification;
 
 use eZ\Publish\API\Repository\Events\Notification\MarkNotificationAsReadEvent as MarkNotificationAsReadEventInterface;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class MarkNotificationAsReadEvent extends Event implements MarkNotificationAsReadEventInterface
+final class MarkNotificationAsReadEvent extends AfterEvent implements MarkNotificationAsReadEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Notification\Notification */
     private $notification;

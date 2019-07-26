@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\URLAlias;
 
 use eZ\Publish\API\Repository\Events\URLAlias\CreateGlobalUrlAliasEvent as CreateGlobalUrlAliasEventInterface;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateGlobalUrlAliasEvent extends Event implements CreateGlobalUrlAliasEventInterface
+final class CreateGlobalUrlAliasEvent extends AfterEvent implements CreateGlobalUrlAliasEventInterface
 {
     private $resource;
 

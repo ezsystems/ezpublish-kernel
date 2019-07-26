@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\URLWildcard;
 
 use eZ\Publish\API\Repository\Events\URLWildcard\CreateEvent as CreateEventInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateEvent extends Event implements CreateEventInterface
+final class CreateEvent extends AfterEvent implements CreateEventInterface
 {
     private $sourceUrl;
 

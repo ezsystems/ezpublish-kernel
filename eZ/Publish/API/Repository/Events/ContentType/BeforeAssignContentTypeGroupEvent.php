@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
-interface BeforeAssignContentTypeGroupEvent extends BeforeEvent
+interface BeforeAssignContentTypeGroupEvent
 {
     public function getContentType(): ContentType;
 

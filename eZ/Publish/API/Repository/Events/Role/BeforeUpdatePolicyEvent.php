@@ -8,11 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 
-interface BeforeUpdatePolicyEvent extends BeforeEvent
+interface BeforeUpdatePolicyEvent
 {
     public function getPolicy(): Policy;
 

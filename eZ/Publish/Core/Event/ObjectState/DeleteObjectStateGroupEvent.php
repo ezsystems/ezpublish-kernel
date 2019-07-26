@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\Event\ObjectState;
 
 use eZ\Publish\API\Repository\Events\ObjectState\DeleteObjectStateGroupEvent as DeleteObjectStateGroupEventInterface;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class DeleteObjectStateGroupEvent extends Event implements DeleteObjectStateGroupEventInterface
+final class DeleteObjectStateGroupEvent extends AfterEvent implements DeleteObjectStateGroupEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $objectStateGroup;

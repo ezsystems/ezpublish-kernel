@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\User;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\User\User;
 
-interface BeforeDeleteUserEvent extends BeforeEvent
+interface BeforeDeleteUserEvent
 {
     public function getUser(): User;
 

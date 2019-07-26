@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Content;
 use eZ\Publish\API\Repository\Events\Content\BeforeDeleteRelationEvent as BeforeDeleteRelationEventInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeDeleteRelationEvent extends Event implements BeforeDeleteRelationEventInterface
+final class BeforeDeleteRelationEvent extends BeforeEvent implements BeforeDeleteRelationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $sourceVersion;

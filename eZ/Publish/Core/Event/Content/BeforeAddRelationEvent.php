@@ -12,10 +12,10 @@ use eZ\Publish\API\Repository\Events\Content\BeforeAddRelationEvent as BeforeAdd
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeAddRelationEvent extends Event implements BeforeAddRelationEventInterface
+final class BeforeAddRelationEvent extends BeforeEvent implements BeforeAddRelationEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $sourceVersion;

@@ -10,10 +10,10 @@ namespace eZ\Publish\Core\Event\URLAlias;
 
 use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateGlobalUrlAliasEvent as BeforeCreateGlobalUrlAliasEventInterface;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use UnexpectedValueException;
 
-final class BeforeCreateGlobalUrlAliasEvent extends Event implements BeforeCreateGlobalUrlAliasEventInterface
+final class BeforeCreateGlobalUrlAliasEvent extends BeforeEvent implements BeforeCreateGlobalUrlAliasEventInterface
 {
     private $resource;
 

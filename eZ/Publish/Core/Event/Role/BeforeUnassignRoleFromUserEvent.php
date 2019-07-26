@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserEvent as BeforeUnassignRoleFromUserEventInterface;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-final class BeforeUnassignRoleFromUserEvent extends Event implements BeforeUnassignRoleFromUserEventInterface
+final class BeforeUnassignRoleFromUserEvent extends BeforeEvent implements BeforeUnassignRoleFromUserEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;

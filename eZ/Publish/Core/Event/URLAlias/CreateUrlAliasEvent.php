@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Event\URLAlias;
 use eZ\Publish\API\Repository\Events\URLAlias\CreateUrlAliasEvent as CreateUrlAliasEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
-use Symfony\Contracts\EventDispatcher\Event;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class CreateUrlAliasEvent extends Event implements CreateUrlAliasEventInterface
+final class CreateUrlAliasEvent extends AfterEvent implements CreateUrlAliasEventInterface
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
