@@ -110,15 +110,38 @@ class SearchServiceDecoratorTest extends TestCase
         $decoratedService->findLocations(...$parameters);
     }
 
-    public function testSupportsDecorator()
+    /**
+     * @dataProvider getSearchEngineCapabilities
+     *
+     * @param int $capability
+     */
+    public function testSupportsDecorator(int $capability): void
     {
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce17f6c8.39484505'];
+        $serviceMock->expects($this->once())->method('supports')->with($capability);
 
-        $serviceMock->expects($this->once())->method('supports')->with(...$parameters);
+        $decoratedService->supports($capability);
+    }
 
-        $decoratedService->supports(...$parameters);
+    /**
+     * Data provider for testSupportsDecorator.
+     *
+     * @see testSupportsDecorator
+     *
+     * @return array
+     */
+    public function getSearchEngineCapabilities(): array
+    {
+        return [
+            [SearchService::CAPABILITY_SCORING],
+            [SearchService::CAPABILITY_FACETS],
+            [SearchService::CAPABILITY_CUSTOM_FIELDS],
+            [SearchService::CAPABILITY_SPELLCHECK],
+            [SearchService::CAPABILITY_HIGHLIGHT],
+            [SearchService::CAPABILITY_SUGGEST],
+            [SearchService::CAPABILITY_ADVANCED_FULLTEXT],
+        ];
     }
 }

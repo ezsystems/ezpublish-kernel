@@ -82,6 +82,13 @@ Changes affecting version compatibility with former or future versions.
 * `ezpublish.core.io.metadata_handler.factory` service was renamed to `ezpublish.core.io.metadata_handler.registry`
 * `ezpublish.core.io.binarydata_handler.factory` service was renamed to `ezpublish.core.io.binarydata_handler.registry`
 
+## Changed features
+
+* The signature of the `\eZ\Publish\API\Repository\SearchService::supports` method was changed to:
+  ```php
+  public function supports(int $capabilityFlag): bool;
+  ```
+
 ## Removed services
 
 * `ezpublish.field_type_collection.factory` has been removed in favor of `eZ\Publish\Core\FieldType\FieldTypeRegistry`
