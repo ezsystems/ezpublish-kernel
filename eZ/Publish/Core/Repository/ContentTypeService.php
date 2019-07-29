@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
@@ -53,6 +54,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
 
+    /** @var \eZ\Publish\SPI\Persistence\User\Handler */
+    protected $userHandler;
+
     /** @var array */
     protected $settings;
 
@@ -70,6 +74,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry $fieldTypeRegistry
@@ -78,6 +83,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function __construct(
         RepositoryInterface $repository,
         Handler $contentTypeHandler,
+        UserHandler $userHandler,
         Helper\DomainMapper $domainMapper,
         Helper\ContentTypeDomainMapper $contentTypeDomainMapper,
         Helper\FieldTypeRegistry $fieldTypeRegistry,
@@ -85,6 +91,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     ) {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->userHandler = $userHandler;
         $this->domainMapper = $domainMapper;
         $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
@@ -1645,9 +1652,10 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function deleteUserDrafts(int $userId): void
     {
         try {
-            $this->repository->getUserService()->loadUser($userId);
+            $this->userHandler->load($userId);
         } catch (APINotFoundException $e) {
             $this->contentTypeHandler->deleteByUserAndStatus($userId, ContentType::STATUS_DRAFT);
+
             return;
         }
 
