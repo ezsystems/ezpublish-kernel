@@ -31,12 +31,12 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('ezpublish.persistence.external_storage_registry.factory')) {
+        if (!$container->hasDefinition('ezpublish.persistence.external_storage_registry')) {
             return;
         }
 
-        $externalStorageRegistryFactoryDefinition = $container->getDefinition(
-            'ezpublish.persistence.external_storage_registry.factory'
+        $externalStorageRegistryDefinition = $container->getDefinition(
+            'ezpublish.persistence.external_storage_registry'
         );
 
         // Gateways for external storage handlers.
@@ -161,11 +161,11 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                     );
                 }
 
-                $externalStorageRegistryFactoryDefinition->addMethodCall(
-                    'registerExternalStorageHandler',
+                $externalStorageRegistryDefinition->addMethodCall(
+                    'register',
                     [
-                        $id,
                         $attribute['alias'],
+                        new Reference($id),
                     ]
                 );
             }
