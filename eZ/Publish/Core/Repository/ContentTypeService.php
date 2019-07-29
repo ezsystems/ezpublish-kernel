@@ -1644,6 +1644,13 @@ class ContentTypeService implements ContentTypeServiceInterface
 
     public function deleteUserDrafts(int $userId): void
     {
+        try {
+            $this->repository->getUserService()->loadUser($userId);
+        } catch (APINotFoundException $e) {
+            $this->contentTypeHandler->deleteByUserAndStatus($userId, ContentType::STATUS_DRAFT);
+            return;
+        }
+
         if ($this->repository->getPermissionResolver()->hasAccess('class', 'delete') !== true) {
             throw new UnauthorizedException('ContentType', 'update');
         }
