@@ -88,6 +88,10 @@ Changes affecting version compatibility with former or future versions.
   ```php
   public function supports(int $capabilityFlag): bool;
   ```
+* The signature of the `\eZ\Publish\SPI\Search\Capable::supports` method was changed to:
+  ```php
+  public function supports(int $capabilityFlag): bool;
+  ```
 
 ## Removed services
 

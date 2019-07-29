@@ -22,5 +22,5 @@ interface Capable
      *
      * @return bool
      */
-    public function supports($capabilityFlag);
+    public function supports(int $capabilityFlag): bool;
 }
