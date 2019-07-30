@@ -3,7 +3,7 @@ UPDATE ezsite_data SET value='7.5.3' WHERE name='ezpublish-version';
 ALTER TABLE ezcontentclass_attribute MODIFY data_text1 VARCHAR(255);
 
 --
--- EZP-30725: Removes content type drafts of no existing users
+-- EZP-30725: Removes content type drafts of non existing users
 --
 
 DELETE FROM ezcontentclass
