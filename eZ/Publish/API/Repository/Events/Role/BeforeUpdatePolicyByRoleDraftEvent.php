@@ -11,18 +11,61 @@ namespace eZ\Publish\API\Repository\Events\Role;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeUpdatePolicyByRoleDraftEvent
+final class BeforeUpdatePolicyByRoleDraftEvent extends BeforeEvent
 {
-    public function getRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
+    private $roleDraft;
 
-    public function getPolicy(): PolicyDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft */
+    private $policy;
 
-    public function getPolicyUpdateStruct(): PolicyUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct */
+    private $policyUpdateStruct;
 
-    public function getUpdatedPolicyDraft(): PolicyDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft|null */
+    private $updatedPolicyDraft;
 
-    public function setUpdatedPolicyDraft(?PolicyDraft $updatedPolicyDraft): void;
+    public function __construct(RoleDraft $roleDraft, PolicyDraft $policy, PolicyUpdateStruct $policyUpdateStruct)
+    {
+        $this->roleDraft = $roleDraft;
+        $this->policy = $policy;
+        $this->policyUpdateStruct = $policyUpdateStruct;
+    }
 
-    public function hasUpdatedPolicyDraft(): bool;
+    public function getRoleDraft(): RoleDraft
+    {
+        return $this->roleDraft;
+    }
+
+    public function getPolicy(): PolicyDraft
+    {
+        return $this->policy;
+    }
+
+    public function getPolicyUpdateStruct(): PolicyUpdateStruct
+    {
+        return $this->policyUpdateStruct;
+    }
+
+    public function getUpdatedPolicyDraft(): PolicyDraft
+    {
+        if (!$this->hasUpdatedPolicyDraft()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedPolicyDraft() or set it by setUpdatedPolicyDraft() before you call getter.', PolicyDraft::class));
+        }
+
+        return $this->updatedPolicyDraft;
+    }
+
+    public function setUpdatedPolicyDraft(?PolicyDraft $updatedPolicyDraft): void
+    {
+        $this->updatedPolicyDraft = $updatedPolicyDraft;
+    }
+
+    public function hasUpdatedPolicyDraft(): bool
+    {
+        return $this->updatedPolicyDraft instanceof PolicyDraft;
+    }
 }

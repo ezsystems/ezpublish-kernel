@@ -10,12 +10,41 @@ namespace eZ\Publish\API\Repository\Events\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdateObjectStateGroupEvent
+final class UpdateObjectStateGroupEvent extends AfterEvent
 {
-    public function getUpdatedObjectStateGroup(): ObjectStateGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
+    private $updatedObjectStateGroup;
 
-    public function getObjectStateGroup(): ObjectStateGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
+    private $objectStateGroup;
 
-    public function getObjectStateGroupUpdateStruct(): ObjectStateGroupUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct */
+    private $objectStateGroupUpdateStruct;
+
+    public function __construct(
+        ObjectStateGroup $updatedObjectStateGroup,
+        ObjectStateGroup $objectStateGroup,
+        ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
+    ) {
+        $this->updatedObjectStateGroup = $updatedObjectStateGroup;
+        $this->objectStateGroup = $objectStateGroup;
+        $this->objectStateGroupUpdateStruct = $objectStateGroupUpdateStruct;
+    }
+
+    public function getUpdatedObjectStateGroup(): ObjectStateGroup
+    {
+        return $this->updatedObjectStateGroup;
+    }
+
+    public function getObjectStateGroup(): ObjectStateGroup
+    {
+        return $this->objectStateGroup;
+    }
+
+    public function getObjectStateGroupUpdateStruct(): ObjectStateGroupUpdateStruct
+    {
+        return $this->objectStateGroupUpdateStruct;
+    }
 }

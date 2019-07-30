@@ -10,12 +10,41 @@ namespace eZ\Publish\API\Repository\Events\Section;
 
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdateSectionEvent
+final class UpdateSectionEvent extends AfterEvent
 {
-    public function getSection(): Section;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
+    private $section;
 
-    public function getSectionUpdateStruct(): SectionUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct */
+    private $sectionUpdateStruct;
 
-    public function getUpdatedSection(): Section;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
+    private $updatedSection;
+
+    public function __construct(
+        Section $updatedSection,
+        Section $section,
+        SectionUpdateStruct $sectionUpdateStruct
+    ) {
+        $this->section = $section;
+        $this->sectionUpdateStruct = $sectionUpdateStruct;
+        $this->updatedSection = $updatedSection;
+    }
+
+    public function getSection(): Section
+    {
+        return $this->section;
+    }
+
+    public function getSectionUpdateStruct(): SectionUpdateStruct
+    {
+        return $this->sectionUpdateStruct;
+    }
+
+    public function getUpdatedSection(): Section
+    {
+        return $this->updatedSection;
+    }
 }

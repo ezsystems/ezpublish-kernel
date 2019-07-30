@@ -10,12 +10,41 @@ namespace eZ\Publish\API\Repository\Events\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateContentTypeEvent
+final class CreateContentTypeEvent extends AfterEvent
 {
-    public function getContentTypeDraft(): ContentTypeDraft;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
+    private $contentTypeDraft;
 
-    public function getContentTypeCreateStruct(): ContentTypeCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct */
+    private $contentTypeCreateStruct;
 
-    public function getContentTypeGroups(): array;
+    /** @var array */
+    private $contentTypeGroups;
+
+    public function __construct(
+        ContentTypeDraft $contentTypeDraft,
+        ContentTypeCreateStruct $contentTypeCreateStruct,
+        array $contentTypeGroups
+    ) {
+        $this->contentTypeDraft = $contentTypeDraft;
+        $this->contentTypeCreateStruct = $contentTypeCreateStruct;
+        $this->contentTypeGroups = $contentTypeGroups;
+    }
+
+    public function getContentTypeDraft(): ContentTypeDraft
+    {
+        return $this->contentTypeDraft;
+    }
+
+    public function getContentTypeCreateStruct(): ContentTypeCreateStruct
+    {
+        return $this->contentTypeCreateStruct;
+    }
+
+    public function getContentTypeGroups(): array
+    {
+        return $this->contentTypeGroups;
+    }
 }

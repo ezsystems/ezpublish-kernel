@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\Events\Section\AssignSectionEvent as AssignSectionEventInterface;
 use eZ\Publish\API\Repository\Events\Section\AssignSectionToSubtreeEvent as AssignSectionToSubtreeEventInterface;
@@ -24,16 +24,16 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use eZ\Publish\Core\Event\Section\AssignSectionEvent;
-use eZ\Publish\Core\Event\Section\AssignSectionToSubtreeEvent;
-use eZ\Publish\Core\Event\Section\BeforeAssignSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeAssignSectionToSubtreeEvent;
-use eZ\Publish\Core\Event\Section\BeforeCreateSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeDeleteSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeUpdateSectionEvent;
-use eZ\Publish\Core\Event\Section\CreateSectionEvent;
-use eZ\Publish\Core\Event\Section\DeleteSectionEvent;
-use eZ\Publish\Core\Event\Section\UpdateSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\AssignSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\AssignSectionToSubtreeEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeAssignSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeAssignSectionToSubtreeEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeCreateSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeDeleteSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeUpdateSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\CreateSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\DeleteSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\UpdateSectionEvent;
 use eZ\Publish\SPI\Repository\Decorator\SectionServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

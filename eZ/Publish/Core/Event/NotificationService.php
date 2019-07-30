@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\Events\Notification\BeforeCreateNotificationEvent as BeforeCreateNotificationEventInterface;
 use eZ\Publish\API\Repository\Events\Notification\BeforeDeleteNotificationEvent as BeforeDeleteNotificationEventInterface;
@@ -17,12 +17,12 @@ use eZ\Publish\API\Repository\Events\Notification\MarkNotificationAsReadEvent as
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use eZ\Publish\Core\Event\Notification\BeforeCreateNotificationEvent;
-use eZ\Publish\Core\Event\Notification\BeforeDeleteNotificationEvent;
-use eZ\Publish\Core\Event\Notification\BeforeMarkNotificationAsReadEvent;
-use eZ\Publish\Core\Event\Notification\CreateNotificationEvent;
-use eZ\Publish\Core\Event\Notification\DeleteNotificationEvent;
-use eZ\Publish\Core\Event\Notification\MarkNotificationAsReadEvent;
+use eZ\Publish\API\Repository\Events\Notification\BeforeCreateNotificationEvent;
+use eZ\Publish\API\Repository\Events\Notification\BeforeDeleteNotificationEvent;
+use eZ\Publish\API\Repository\Events\Notification\BeforeMarkNotificationAsReadEvent;
+use eZ\Publish\API\Repository\Events\Notification\CreateNotificationEvent;
+use eZ\Publish\API\Repository\Events\Notification\DeleteNotificationEvent;
+use eZ\Publish\API\Repository\Events\Notification\MarkNotificationAsReadEvent;
 use eZ\Publish\SPI\Repository\Decorator\NotificationServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

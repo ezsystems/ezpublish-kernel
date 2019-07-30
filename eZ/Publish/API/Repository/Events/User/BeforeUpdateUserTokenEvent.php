@@ -10,16 +10,52 @@ namespace eZ\Publish\API\Repository\Events\User;
 
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeUpdateUserTokenEvent
+final class BeforeUpdateUserTokenEvent extends BeforeEvent
 {
-    public function getUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $user;
 
-    public function getUserTokenUpdateStruct(): UserTokenUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct */
+    private $userTokenUpdateStruct;
 
-    public function getUpdatedUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User|null */
+    private $updatedUser;
 
-    public function setUpdatedUser(?User $updatedUser): void;
+    public function __construct(User $user, UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        $this->user = $user;
+        $this->userTokenUpdateStruct = $userTokenUpdateStruct;
+    }
 
-    public function hasUpdatedUser(): bool;
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getUserTokenUpdateStruct(): UserTokenUpdateStruct
+    {
+        return $this->userTokenUpdateStruct;
+    }
+
+    public function getUpdatedUser(): User
+    {
+        if (!$this->hasUpdatedUser()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedUser() or set it by setUpdatedUser() before you call getter.', User::class));
+        }
+
+        return $this->updatedUser;
+    }
+
+    public function setUpdatedUser(?User $updatedUser): void
+    {
+        $this->updatedUser = $updatedUser;
+    }
+
+    public function hasUpdatedUser(): bool
+    {
+        return $this->updatedUser instanceof User;
+    }
 }

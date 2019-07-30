@@ -11,12 +11,41 @@ namespace eZ\Publish\API\Repository\Events\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateObjectStateEvent
+final class CreateObjectStateEvent extends AfterEvent
 {
-    public function getObjectState(): ObjectState;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
+    private $objectState;
 
-    public function getObjectStateGroup(): ObjectStateGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
+    private $objectStateGroup;
 
-    public function getObjectStateCreateStruct(): ObjectStateCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct */
+    private $objectStateCreateStruct;
+
+    public function __construct(
+        ObjectState $objectState,
+        ObjectStateGroup $objectStateGroup,
+        ObjectStateCreateStruct $objectStateCreateStruct
+    ) {
+        $this->objectState = $objectState;
+        $this->objectStateGroup = $objectStateGroup;
+        $this->objectStateCreateStruct = $objectStateCreateStruct;
+    }
+
+    public function getObjectState(): ObjectState
+    {
+        return $this->objectState;
+    }
+
+    public function getObjectStateGroup(): ObjectStateGroup
+    {
+        return $this->objectStateGroup;
+    }
+
+    public function getObjectStateCreateStruct(): ObjectStateCreateStruct
+    {
+        return $this->objectStateCreateStruct;
+    }
 }

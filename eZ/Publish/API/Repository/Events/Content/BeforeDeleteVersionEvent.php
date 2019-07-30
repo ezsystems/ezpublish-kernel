@@ -9,8 +9,20 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\Content;
 
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeDeleteVersionEvent
+final class BeforeDeleteVersionEvent extends BeforeEvent
 {
-    public function getVersionInfo(): VersionInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+    private $versionInfo;
+
+    public function __construct(VersionInfo $versionInfo)
+    {
+        $this->versionInfo = $versionInfo;
+    }
+
+    public function getVersionInfo(): VersionInfo
+    {
+        return $this->versionInfo;
+    }
 }

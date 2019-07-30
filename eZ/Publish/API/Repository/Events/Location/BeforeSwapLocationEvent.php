@@ -9,10 +9,29 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\Location;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeSwapLocationEvent
+final class BeforeSwapLocationEvent extends BeforeEvent
 {
-    public function getLocation1(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $location1;
 
-    public function getLocation2(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $location2;
+
+    public function __construct(Location $location1, Location $location2)
+    {
+        $this->location1 = $location1;
+        $this->location2 = $location2;
+    }
+
+    public function getLocation1(): Location
+    {
+        return $this->location1;
+    }
+
+    public function getLocation2(): Location
+    {
+        return $this->location2;
+    }
 }

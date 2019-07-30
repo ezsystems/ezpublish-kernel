@@ -12,14 +12,51 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateContentDraftEvent
+final class CreateContentDraftEvent extends AfterEvent
 {
-    public function getContentDraft(): Content;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
+    private $contentDraft;
 
-    public function getContentInfo(): ContentInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
+    private $contentInfo;
 
-    public function getVersionInfo(): ?VersionInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+    private $versionInfo;
 
-    public function getCreator(): ?User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $creator;
+
+    public function __construct(
+        Content $contentDraft,
+        ContentInfo $contentInfo,
+        ?VersionInfo $versionInfo = null,
+        ?User $creator = null
+    ) {
+        $this->contentDraft = $contentDraft;
+        $this->contentInfo = $contentInfo;
+        $this->versionInfo = $versionInfo;
+        $this->creator = $creator;
+    }
+
+    public function getContentDraft(): Content
+    {
+        return $this->contentDraft;
+    }
+
+    public function getContentInfo(): ContentInfo
+    {
+        return $this->contentInfo;
+    }
+
+    public function getVersionInfo(): ?VersionInfo
+    {
+        return $this->versionInfo;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
 }

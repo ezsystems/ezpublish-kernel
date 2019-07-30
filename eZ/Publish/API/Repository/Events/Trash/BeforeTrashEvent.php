@@ -10,18 +10,58 @@ namespace eZ\Publish\API\Repository\Events\Trash;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeTrashEvent
+final class BeforeTrashEvent extends BeforeEvent
 {
-    public function getLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $location;
 
-    public function getResult(): TrashItem;
+    /** @var \eZ\Publish\API\Repository\Values\Content\TrashItem|null */
+    private $result;
 
-    public function setResult(?TrashItem $result): void;
+    /** @var bool */
+    private $resultSet = false;
 
-    public function hasTrashItem(): bool;
+    public function __construct(Location $location)
+    {
+        $this->location = $location;
+    }
 
-    public function resetResult(): void;
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
 
-    public function isResultSet(): bool;
+    public function getResult(): TrashItem
+    {
+        if (!$this->isResultSet()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s (or null). Check isResultSet() or set it by setResult() before you call getter.', TrashItem::class));
+        }
+
+        return $this->result;
+    }
+
+    public function setResult(?TrashItem $result): void
+    {
+        $this->result = $result;
+        $this->resultSet = true;
+    }
+
+    public function hasTrashItem(): bool
+    {
+        return $this->result instanceof TrashItem;
+    }
+
+    public function resetResult(): void
+    {
+        $this->result = null;
+        $this->resultSet = false;
+    }
+
+    public function isResultSet(): bool
+    {
+        return $this->resultSet;
+    }
 }

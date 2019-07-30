@@ -11,16 +11,52 @@ namespace eZ\Publish\API\Repository\Events\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateObjectStateEvent
+final class BeforeCreateObjectStateEvent extends BeforeEvent
 {
-    public function getObjectStateGroup(): ObjectStateGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
+    private $objectStateGroup;
 
-    public function getObjectStateCreateStruct(): ObjectStateCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct */
+    private $objectStateCreateStruct;
 
-    public function getObjectState(): ObjectState;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState|null */
+    private $objectState;
 
-    public function setObjectState(?ObjectState $objectState): void;
+    public function __construct(ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct)
+    {
+        $this->objectStateGroup = $objectStateGroup;
+        $this->objectStateCreateStruct = $objectStateCreateStruct;
+    }
 
-    public function hasObjectState(): bool;
+    public function getObjectStateGroup(): ObjectStateGroup
+    {
+        return $this->objectStateGroup;
+    }
+
+    public function getObjectStateCreateStruct(): ObjectStateCreateStruct
+    {
+        return $this->objectStateCreateStruct;
+    }
+
+    public function getObjectState(): ObjectState
+    {
+        if (!$this->hasObjectState()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasObjectState() or set it by setObjectState() before you call getter.', ObjectState::class));
+        }
+
+        return $this->objectState;
+    }
+
+    public function setObjectState(?ObjectState $objectState): void
+    {
+        $this->objectState = $objectState;
+    }
+
+    public function hasObjectState(): bool
+    {
+        return $this->objectState instanceof ObjectState;
+    }
 }

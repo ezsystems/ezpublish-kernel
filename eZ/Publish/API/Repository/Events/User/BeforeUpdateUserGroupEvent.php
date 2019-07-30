@@ -10,16 +10,52 @@ namespace eZ\Publish\API\Repository\Events\User;
 
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeUpdateUserGroupEvent
+final class BeforeUpdateUserGroupEvent extends BeforeEvent
 {
-    public function getUserGroup(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
+    private $userGroup;
 
-    public function getUserGroupUpdateStruct(): UserGroupUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct */
+    private $userGroupUpdateStruct;
 
-    public function getUpdatedUserGroup(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup|null */
+    private $updatedUserGroup;
 
-    public function setUpdatedUserGroup(?UserGroup $updatedUserGroup): void;
+    public function __construct(UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct)
+    {
+        $this->userGroup = $userGroup;
+        $this->userGroupUpdateStruct = $userGroupUpdateStruct;
+    }
 
-    public function hasUpdatedUserGroup(): bool;
+    public function getUserGroup(): UserGroup
+    {
+        return $this->userGroup;
+    }
+
+    public function getUserGroupUpdateStruct(): UserGroupUpdateStruct
+    {
+        return $this->userGroupUpdateStruct;
+    }
+
+    public function getUpdatedUserGroup(): UserGroup
+    {
+        if (!$this->hasUpdatedUserGroup()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedUserGroup() or set it by setUpdatedUserGroup() before you call getter.', UserGroup::class));
+        }
+
+        return $this->updatedUserGroup;
+    }
+
+    public function setUpdatedUserGroup(?UserGroup $updatedUserGroup): void
+    {
+        $this->updatedUserGroup = $updatedUserGroup;
+    }
+
+    public function hasUpdatedUserGroup(): bool
+    {
+        return $this->updatedUserGroup instanceof UserGroup;
+    }
 }

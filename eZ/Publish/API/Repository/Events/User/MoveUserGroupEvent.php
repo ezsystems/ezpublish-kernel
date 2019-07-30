@@ -9,10 +9,31 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\User;
 
 use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface MoveUserGroupEvent
+final class MoveUserGroupEvent extends AfterEvent
 {
-    public function getUserGroup(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
+    private $userGroup;
 
-    public function getNewParent(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
+    private $newParent;
+
+    public function __construct(
+        UserGroup $userGroup,
+        UserGroup $newParent
+    ) {
+        $this->userGroup = $userGroup;
+        $this->newParent = $newParent;
+    }
+
+    public function getUserGroup(): UserGroup
+    {
+        return $this->userGroup;
+    }
+
+    public function getNewParent(): UserGroup
+    {
+        return $this->newParent;
+    }
 }

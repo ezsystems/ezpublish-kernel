@@ -8,7 +8,20 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\UserPreference;
 
-interface BeforeSetUserPreferenceEvent
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+
+final class BeforeSetUserPreferenceEvent extends BeforeEvent
 {
-    public function getUserPreferenceSetStructs(): array;
+    /** @var \eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceSetStruct[] */
+    private $userPreferenceSetStructs;
+
+    public function __construct(array $userPreferenceSetStructs)
+    {
+        $this->userPreferenceSetStructs = $userPreferenceSetStructs;
+    }
+
+    public function getUserPreferenceSetStructs(): array
+    {
+        return $this->userPreferenceSetStructs;
+    }
 }

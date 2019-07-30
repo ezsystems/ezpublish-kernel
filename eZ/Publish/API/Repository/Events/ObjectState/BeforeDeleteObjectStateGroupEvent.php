@@ -9,8 +9,20 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeDeleteObjectStateGroupEvent
+final class BeforeDeleteObjectStateGroupEvent extends BeforeEvent
 {
-    public function getObjectStateGroup(): ObjectStateGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
+    private $objectStateGroup;
+
+    public function __construct(ObjectStateGroup $objectStateGroup)
+    {
+        $this->objectStateGroup = $objectStateGroup;
+    }
+
+    public function getObjectStateGroup(): ObjectStateGroup
+    {
+        return $this->objectStateGroup;
+    }
 }

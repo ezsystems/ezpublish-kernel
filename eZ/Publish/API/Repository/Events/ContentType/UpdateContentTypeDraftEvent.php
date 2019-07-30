@@ -10,10 +10,31 @@ namespace eZ\Publish\API\Repository\Events\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdateContentTypeDraftEvent
+final class UpdateContentTypeDraftEvent extends AfterEvent
 {
-    public function getContentTypeDraft(): ContentTypeDraft;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
+    private $contentTypeDraft;
 
-    public function getContentTypeUpdateStruct(): ContentTypeUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct */
+    private $contentTypeUpdateStruct;
+
+    public function __construct(
+        ContentTypeDraft $contentTypeDraft,
+        ContentTypeUpdateStruct $contentTypeUpdateStruct
+    ) {
+        $this->contentTypeDraft = $contentTypeDraft;
+        $this->contentTypeUpdateStruct = $contentTypeUpdateStruct;
+    }
+
+    public function getContentTypeDraft(): ContentTypeDraft
+    {
+        return $this->contentTypeDraft;
+    }
+
+    public function getContentTypeUpdateStruct(): ContentTypeUpdateStruct
+    {
+        return $this->contentTypeUpdateStruct;
+    }
 }

@@ -10,14 +10,43 @@ namespace eZ\Publish\API\Repository\Events\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateContentTypeGroupEvent
+final class BeforeCreateContentTypeGroupEvent extends BeforeEvent
 {
-    public function getContentTypeGroupCreateStruct(): ContentTypeGroupCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct */
+    private $contentTypeGroupCreateStruct;
 
-    public function getContentTypeGroup(): ContentTypeGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup|null */
+    private $contentTypeGroup;
 
-    public function setContentTypeGroup(?ContentTypeGroup $contentTypeGroup): void;
+    public function __construct(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct)
+    {
+        $this->contentTypeGroupCreateStruct = $contentTypeGroupCreateStruct;
+    }
 
-    public function hasContentTypeGroup(): bool;
+    public function getContentTypeGroupCreateStruct(): ContentTypeGroupCreateStruct
+    {
+        return $this->contentTypeGroupCreateStruct;
+    }
+
+    public function getContentTypeGroup(): ContentTypeGroup
+    {
+        if (!$this->hasContentTypeGroup()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContentTypeGroup() or set it by setContentTypeGroup() before you call getter.', ContentTypeGroup::class));
+        }
+
+        return $this->contentTypeGroup;
+    }
+
+    public function setContentTypeGroup(?ContentTypeGroup $contentTypeGroup): void
+    {
+        $this->contentTypeGroup = $contentTypeGroup;
+    }
+
+    public function hasContentTypeGroup(): bool
+    {
+        return $this->contentTypeGroup instanceof ContentTypeGroup;
+    }
 }

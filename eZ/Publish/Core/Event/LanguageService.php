@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\Events\Language\BeforeCreateLanguageEvent as BeforeCreateLanguageEventInterface;
 use eZ\Publish\API\Repository\Events\Language\BeforeDeleteLanguageEvent as BeforeDeleteLanguageEventInterface;
@@ -21,16 +21,16 @@ use eZ\Publish\API\Repository\Events\Language\UpdateLanguageNameEvent as UpdateL
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
-use eZ\Publish\Core\Event\Language\BeforeCreateLanguageEvent;
-use eZ\Publish\Core\Event\Language\BeforeDeleteLanguageEvent;
-use eZ\Publish\Core\Event\Language\BeforeDisableLanguageEvent;
-use eZ\Publish\Core\Event\Language\BeforeEnableLanguageEvent;
-use eZ\Publish\Core\Event\Language\BeforeUpdateLanguageNameEvent;
-use eZ\Publish\Core\Event\Language\CreateLanguageEvent;
-use eZ\Publish\Core\Event\Language\DeleteLanguageEvent;
-use eZ\Publish\Core\Event\Language\DisableLanguageEvent;
-use eZ\Publish\Core\Event\Language\EnableLanguageEvent;
-use eZ\Publish\Core\Event\Language\UpdateLanguageNameEvent;
+use eZ\Publish\API\Repository\Events\Language\BeforeCreateLanguageEvent;
+use eZ\Publish\API\Repository\Events\Language\BeforeDeleteLanguageEvent;
+use eZ\Publish\API\Repository\Events\Language\BeforeDisableLanguageEvent;
+use eZ\Publish\API\Repository\Events\Language\BeforeEnableLanguageEvent;
+use eZ\Publish\API\Repository\Events\Language\BeforeUpdateLanguageNameEvent;
+use eZ\Publish\API\Repository\Events\Language\CreateLanguageEvent;
+use eZ\Publish\API\Repository\Events\Language\DeleteLanguageEvent;
+use eZ\Publish\API\Repository\Events\Language\DisableLanguageEvent;
+use eZ\Publish\API\Repository\Events\Language\EnableLanguageEvent;
+use eZ\Publish\API\Repository\Events\Language\UpdateLanguageNameEvent;
 use eZ\Publish\SPI\Repository\Decorator\LanguageServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

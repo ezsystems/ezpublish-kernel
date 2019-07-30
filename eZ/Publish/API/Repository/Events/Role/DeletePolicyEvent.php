@@ -9,8 +9,21 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\Role;
 
 use eZ\Publish\API\Repository\Values\User\Policy;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface DeletePolicyEvent
+final class DeletePolicyEvent extends AfterEvent
 {
-    public function getPolicy(): Policy;
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy */
+    private $policy;
+
+    public function __construct(
+        Policy $policy
+    ) {
+        $this->policy = $policy;
+    }
+
+    public function getPolicy(): Policy
+    {
+        return $this->policy;
+    }
 }

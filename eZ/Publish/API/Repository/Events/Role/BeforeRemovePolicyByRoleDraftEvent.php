@@ -10,16 +10,52 @@ namespace eZ\Publish\API\Repository\Events\Role;
 
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeRemovePolicyByRoleDraftEvent
+final class BeforeRemovePolicyByRoleDraftEvent extends BeforeEvent
 {
-    public function getRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
+    private $roleDraft;
 
-    public function getPolicyDraft(): PolicyDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft */
+    private $policyDraft;
 
-    public function getUpdatedRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft|null */
+    private $updatedRoleDraft;
 
-    public function setUpdatedRoleDraft(?RoleDraft $updatedRoleDraft): void;
+    public function __construct(RoleDraft $roleDraft, PolicyDraft $policyDraft)
+    {
+        $this->roleDraft = $roleDraft;
+        $this->policyDraft = $policyDraft;
+    }
 
-    public function hasUpdatedRoleDraft(): bool;
+    public function getRoleDraft(): RoleDraft
+    {
+        return $this->roleDraft;
+    }
+
+    public function getPolicyDraft(): PolicyDraft
+    {
+        return $this->policyDraft;
+    }
+
+    public function getUpdatedRoleDraft(): RoleDraft
+    {
+        if (!$this->hasUpdatedRoleDraft()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedRoleDraft() or set it by setUpdatedRoleDraft() before you call getter.', RoleDraft::class));
+        }
+
+        return $this->updatedRoleDraft;
+    }
+
+    public function setUpdatedRoleDraft(?RoleDraft $updatedRoleDraft): void
+    {
+        $this->updatedRoleDraft = $updatedRoleDraft;
+    }
+
+    public function hasUpdatedRoleDraft(): bool
+    {
+        return $this->updatedRoleDraft instanceof RoleDraft;
+    }
 }

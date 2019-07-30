@@ -10,14 +10,43 @@ namespace eZ\Publish\API\Repository\Events\Role;
 
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateRoleEvent
+final class BeforeCreateRoleEvent extends BeforeEvent
 {
-    public function getRoleCreateStruct(): RoleCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleCreateStruct */
+    private $roleCreateStruct;
 
-    public function getRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft|null */
+    private $roleDraft;
 
-    public function setRoleDraft(?RoleDraft $roleDraft): void;
+    public function __construct(RoleCreateStruct $roleCreateStruct)
+    {
+        $this->roleCreateStruct = $roleCreateStruct;
+    }
 
-    public function hasRoleDraft(): bool;
+    public function getRoleCreateStruct(): RoleCreateStruct
+    {
+        return $this->roleCreateStruct;
+    }
+
+    public function getRoleDraft(): RoleDraft
+    {
+        if (!$this->hasRoleDraft()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasRoleDraft() or set it by setRoleDraft() before you call getter.', RoleDraft::class));
+        }
+
+        return $this->roleDraft;
+    }
+
+    public function setRoleDraft(?RoleDraft $roleDraft): void
+    {
+        $this->roleDraft = $roleDraft;
+    }
+
+    public function hasRoleDraft(): bool
+    {
+        return $this->roleDraft instanceof RoleDraft;
+    }
 }

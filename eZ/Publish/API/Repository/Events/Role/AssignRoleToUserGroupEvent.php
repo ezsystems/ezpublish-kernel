@@ -11,12 +11,41 @@ namespace eZ\Publish\API\Repository\Events\Role;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface AssignRoleToUserGroupEvent
+final class AssignRoleToUserGroupEvent extends AfterEvent
 {
-    public function getRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $role;
 
-    public function getUserGroup(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
+    private $userGroup;
 
-    public function getRoleLimitation(): ?RoleLimitation;
+    /** @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation */
+    private $roleLimitation;
+
+    public function __construct(
+        Role $role,
+        UserGroup $userGroup,
+        ?RoleLimitation $roleLimitation = null
+    ) {
+        $this->role = $role;
+        $this->userGroup = $userGroup;
+        $this->roleLimitation = $roleLimitation;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function getUserGroup(): UserGroup
+    {
+        return $this->userGroup;
+    }
+
+    public function getRoleLimitation(): ?RoleLimitation
+    {
+        return $this->roleLimitation;
+    }
 }

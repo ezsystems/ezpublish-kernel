@@ -9,14 +9,48 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\URLWildcard;
 
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateEvent
+final class CreateEvent extends AfterEvent
 {
-    public function getSourceUrl();
+    private $sourceUrl;
 
-    public function getDestinationUrl();
+    private $destinationUrl;
 
-    public function getForward();
+    private $forward;
 
-    public function getUrlWildcard(): URLWildcard;
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcard */
+    private $urlWildcard;
+
+    public function __construct(
+        URLWildcard $urlWildcard,
+        $sourceUrl,
+        $destinationUrl,
+        $forward
+    ) {
+        $this->sourceUrl = $sourceUrl;
+        $this->destinationUrl = $destinationUrl;
+        $this->forward = $forward;
+        $this->urlWildcard = $urlWildcard;
+    }
+
+    public function getSourceUrl()
+    {
+        return $this->sourceUrl;
+    }
+
+    public function getDestinationUrl()
+    {
+        return $this->destinationUrl;
+    }
+
+    public function getForward()
+    {
+        return $this->forward;
+    }
+
+    public function getUrlWildcard(): URLWildcard
+    {
+        return $this->urlWildcard;
+    }
 }

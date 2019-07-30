@@ -9,10 +9,30 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface SetPriorityOfObjectStateEvent
+final class SetPriorityOfObjectStateEvent extends AfterEvent
 {
-    public function getObjectState(): ObjectState;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
+    private $objectState;
 
-    public function getPriority();
+    private $priority;
+
+    public function __construct(
+        ObjectState $objectState,
+        $priority
+    ) {
+        $this->objectState = $objectState;
+        $this->priority = $priority;
+    }
+
+    public function getObjectState(): ObjectState
+    {
+        return $this->objectState;
+    }
+
+    public function getPriority()
+    {
+        return $this->priority;
+    }
 }

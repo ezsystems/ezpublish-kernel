@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent as BeforeCreateEventInterface;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent as BeforeRemoveEventInterface;
@@ -16,12 +16,12 @@ use eZ\Publish\API\Repository\Events\URLWildcard\RemoveEvent as RemoveEventInter
 use eZ\Publish\API\Repository\Events\URLWildcard\TranslateEvent as TranslateEventInterface;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use eZ\Publish\Core\Event\URLWildcard\BeforeCreateEvent;
-use eZ\Publish\Core\Event\URLWildcard\BeforeRemoveEvent;
-use eZ\Publish\Core\Event\URLWildcard\BeforeTranslateEvent;
-use eZ\Publish\Core\Event\URLWildcard\CreateEvent;
-use eZ\Publish\Core\Event\URLWildcard\RemoveEvent;
-use eZ\Publish\Core\Event\URLWildcard\TranslateEvent;
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent;
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent;
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeTranslateEvent;
+use eZ\Publish\API\Repository\Events\URLWildcard\CreateEvent;
+use eZ\Publish\API\Repository\Events\URLWildcard\RemoveEvent;
+use eZ\Publish\API\Repository\Events\URLWildcard\TranslateEvent;
 use eZ\Publish\SPI\Repository\Decorator\URLWildcardServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

@@ -6,13 +6,13 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\Events\UserPreference\BeforeSetUserPreferenceEvent as BeforeSetUserPreferenceEventInterface;
 use eZ\Publish\API\Repository\Events\UserPreference\SetUserPreferenceEvent as SetUserPreferenceEventInterface;
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
-use eZ\Publish\Core\Event\UserPreference\BeforeSetUserPreferenceEvent;
-use eZ\Publish\Core\Event\UserPreference\SetUserPreferenceEvent;
+use eZ\Publish\API\Repository\Events\UserPreference\BeforeSetUserPreferenceEvent;
+use eZ\Publish\API\Repository\Events\UserPreference\SetUserPreferenceEvent;
 use eZ\Publish\SPI\Repository\Decorator\UserPreferenceServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

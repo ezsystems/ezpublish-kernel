@@ -10,10 +10,29 @@ namespace eZ\Publish\API\Repository\Events\Role;
 
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeUnassignRoleFromUserEvent
+final class BeforeUnassignRoleFromUserEvent extends BeforeEvent
 {
-    public function getRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $role;
 
-    public function getUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $user;
+
+    public function __construct(Role $role, User $user)
+    {
+        $this->role = $role;
+        $this->user = $user;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
 }

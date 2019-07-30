@@ -9,10 +9,31 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\Content;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface DeleteContentEvent
+final class DeleteContentEvent extends AfterEvent
 {
-    public function getLocations(): array;
+    /** @var array */
+    private $locations;
 
-    public function getContentInfo(): ContentInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
+    private $contentInfo;
+
+    public function __construct(
+        array $locations,
+        ContentInfo $contentInfo
+    ) {
+        $this->locations = $locations;
+        $this->contentInfo = $contentInfo;
+    }
+
+    public function getLocations(): array
+    {
+        return $this->locations;
+    }
+
+    public function getContentInfo(): ContentInfo
+    {
+        return $this->contentInfo;
+    }
 }

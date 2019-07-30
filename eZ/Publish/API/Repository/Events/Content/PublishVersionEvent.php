@@ -10,12 +10,41 @@ namespace eZ\Publish\API\Repository\Events\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface PublishVersionEvent
+final class PublishVersionEvent extends AfterEvent
 {
-    public function getContent(): Content;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
+    private $content;
 
-    public function getVersionInfo(): VersionInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+    private $versionInfo;
 
-    public function getTranslations(): array;
+    /** @var string[] */
+    private $translations;
+
+    public function __construct(
+        Content $content,
+        VersionInfo $versionInfo,
+        array $translations
+    ) {
+        $this->content = $content;
+        $this->versionInfo = $versionInfo;
+        $this->translations = $translations;
+    }
+
+    public function getContent(): Content
+    {
+        return $this->content;
+    }
+
+    public function getVersionInfo(): VersionInfo
+    {
+        return $this->versionInfo;
+    }
+
+    public function getTranslations(): array
+    {
+        return $this->translations;
+    }
 }
