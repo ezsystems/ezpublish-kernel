@@ -8,12 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\API\Repository\Events\ContentType\RemoveFieldDefinitionEvent as RemoveFieldDefinitionEventInteraface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-final class RemoveFieldDefinitionEvent extends AfterEvent implements RemoveFieldDefinitionEventInteraface
+final class RemoveFieldDefinitionEvent extends AfterEvent
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;
