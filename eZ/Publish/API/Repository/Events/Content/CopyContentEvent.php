@@ -12,14 +12,51 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CopyContentEvent
+final class CopyContentEvent extends AfterEvent
 {
-    public function getContent(): Content;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
+    private $content;
 
-    public function getContentInfo(): ContentInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
+    private $contentInfo;
 
-    public function getDestinationLocationCreateStruct(): LocationCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct */
+    private $destinationLocationCreateStruct;
 
-    public function getVersionInfo(): ?VersionInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+    private $versionInfo;
+
+    public function __construct(
+        Content $content,
+        ContentInfo $contentInfo,
+        LocationCreateStruct $destinationLocationCreateStruct,
+        ?VersionInfo $versionInfo = null
+    ) {
+        $this->content = $content;
+        $this->contentInfo = $contentInfo;
+        $this->destinationLocationCreateStruct = $destinationLocationCreateStruct;
+        $this->versionInfo = $versionInfo;
+    }
+
+    public function getContent(): Content
+    {
+        return $this->content;
+    }
+
+    public function getContentInfo(): ContentInfo
+    {
+        return $this->contentInfo;
+    }
+
+    public function getDestinationLocationCreateStruct(): LocationCreateStruct
+    {
+        return $this->destinationLocationCreateStruct;
+    }
+
+    public function getVersionInfo(): ?VersionInfo
+    {
+        return $this->versionInfo;
+    }
 }

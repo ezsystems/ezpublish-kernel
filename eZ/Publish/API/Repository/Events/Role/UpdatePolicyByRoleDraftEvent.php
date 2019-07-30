@@ -11,14 +11,51 @@ namespace eZ\Publish\API\Repository\Events\Role;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdatePolicyByRoleDraftEvent
+final class UpdatePolicyByRoleDraftEvent extends AfterEvent
 {
-    public function getRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
+    private $roleDraft;
 
-    public function getPolicy(): PolicyDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft */
+    private $policy;
 
-    public function getPolicyUpdateStruct(): PolicyUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct */
+    private $policyUpdateStruct;
 
-    public function getUpdatedPolicyDraft(): PolicyDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft */
+    private $updatedPolicyDraft;
+
+    public function __construct(
+        PolicyDraft $updatedPolicyDraft,
+        RoleDraft $roleDraft,
+        PolicyDraft $policy,
+        PolicyUpdateStruct $policyUpdateStruct
+    ) {
+        $this->roleDraft = $roleDraft;
+        $this->policy = $policy;
+        $this->policyUpdateStruct = $policyUpdateStruct;
+        $this->updatedPolicyDraft = $updatedPolicyDraft;
+    }
+
+    public function getRoleDraft(): RoleDraft
+    {
+        return $this->roleDraft;
+    }
+
+    public function getPolicy(): PolicyDraft
+    {
+        return $this->policy;
+    }
+
+    public function getPolicyUpdateStruct(): PolicyUpdateStruct
+    {
+        return $this->policyUpdateStruct;
+    }
+
+    public function getUpdatedPolicyDraft(): PolicyDraft
+    {
+        return $this->updatedPolicyDraft;
+    }
 }

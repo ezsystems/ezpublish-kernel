@@ -9,10 +9,31 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\Location;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UnhideLocationEvent
+final class UnhideLocationEvent extends AfterEvent
 {
-    public function getRevealedLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $revealedLocation;
 
-    public function getLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $location;
+
+    public function __construct(
+        Location $revealedLocation,
+        Location $location
+    ) {
+        $this->revealedLocation = $revealedLocation;
+        $this->location = $location;
+    }
+
+    public function getRevealedLocation(): Location
+    {
+        return $this->revealedLocation;
+    }
+
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
 }

@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
 use eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent as BeforeCreateBookmarkEventInterface;
@@ -14,10 +14,10 @@ use eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent as Befor
 use eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent as CreateBookmarkEventInterface;
 use eZ\Publish\API\Repository\Events\Bookmark\DeleteBookmarkEvent as DeleteBookmarkEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Event\Bookmark\BeforeCreateBookmarkEvent;
-use eZ\Publish\Core\Event\Bookmark\BeforeDeleteBookmarkEvent;
-use eZ\Publish\Core\Event\Bookmark\CreateBookmarkEvent;
-use eZ\Publish\Core\Event\Bookmark\DeleteBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\DeleteBookmarkEvent;
 use eZ\Publish\SPI\Repository\Decorator\BookmarkServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

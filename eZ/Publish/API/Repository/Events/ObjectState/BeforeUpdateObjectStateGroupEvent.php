@@ -10,16 +10,52 @@ namespace eZ\Publish\API\Repository\Events\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeUpdateObjectStateGroupEvent
+final class BeforeUpdateObjectStateGroupEvent extends BeforeEvent
 {
-    public function getObjectStateGroup(): ObjectStateGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
+    private $objectStateGroup;
 
-    public function getObjectStateGroupUpdateStruct(): ObjectStateGroupUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct */
+    private $objectStateGroupUpdateStruct;
 
-    public function getUpdatedObjectStateGroup(): ObjectStateGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup|null */
+    private $updatedObjectStateGroup;
 
-    public function setUpdatedObjectStateGroup(?ObjectStateGroup $updatedObjectStateGroup): void;
+    public function __construct(ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct)
+    {
+        $this->objectStateGroup = $objectStateGroup;
+        $this->objectStateGroupUpdateStruct = $objectStateGroupUpdateStruct;
+    }
 
-    public function hasUpdatedObjectStateGroup(): bool;
+    public function getObjectStateGroup(): ObjectStateGroup
+    {
+        return $this->objectStateGroup;
+    }
+
+    public function getObjectStateGroupUpdateStruct(): ObjectStateGroupUpdateStruct
+    {
+        return $this->objectStateGroupUpdateStruct;
+    }
+
+    public function getUpdatedObjectStateGroup(): ObjectStateGroup
+    {
+        if (!$this->hasUpdatedObjectStateGroup()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedObjectStateGroup() or set it by setUpdatedObjectStateGroup() before you call getter.', ObjectStateGroup::class));
+        }
+
+        return $this->updatedObjectStateGroup;
+    }
+
+    public function setUpdatedObjectStateGroup(?ObjectStateGroup $updatedObjectStateGroup): void
+    {
+        $this->updatedObjectStateGroup = $updatedObjectStateGroup;
+    }
+
+    public function hasUpdatedObjectStateGroup(): bool
+    {
+        return $this->updatedObjectStateGroup instanceof ObjectStateGroup;
+    }
 }

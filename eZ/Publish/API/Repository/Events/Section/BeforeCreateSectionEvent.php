@@ -10,14 +10,43 @@ namespace eZ\Publish\API\Repository\Events\Section;
 
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateSectionEvent
+final class BeforeCreateSectionEvent extends BeforeEvent
 {
-    public function getSectionCreateStruct(): SectionCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct */
+    private $sectionCreateStruct;
 
-    public function getSection(): Section;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section|null */
+    private $section;
 
-    public function setSection(?Section $section): void;
+    public function __construct(SectionCreateStruct $sectionCreateStruct)
+    {
+        $this->sectionCreateStruct = $sectionCreateStruct;
+    }
 
-    public function hasSection(): bool;
+    public function getSectionCreateStruct(): SectionCreateStruct
+    {
+        return $this->sectionCreateStruct;
+    }
+
+    public function getSection(): Section
+    {
+        if (!$this->hasSection()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasSection() or set it by setSection() before you call getter.', Section::class));
+        }
+
+        return $this->section;
+    }
+
+    public function setSection(?Section $section): void
+    {
+        $this->section = $section;
+    }
+
+    public function hasSection(): bool
+    {
+        return $this->section instanceof Section;
+    }
 }

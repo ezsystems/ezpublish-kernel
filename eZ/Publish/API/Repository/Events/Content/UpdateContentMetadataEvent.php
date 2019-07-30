@@ -11,12 +11,41 @@ namespace eZ\Publish\API\Repository\Events\Content;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdateContentMetadataEvent
+final class UpdateContentMetadataEvent extends AfterEvent
 {
-    public function getContent(): Content;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
+    private $content;
 
-    public function getContentInfo(): ContentInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
+    private $contentInfo;
 
-    public function getContentMetadataUpdateStruct(): ContentMetadataUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct */
+    private $contentMetadataUpdateStruct;
+
+    public function __construct(
+        Content $content,
+        ContentInfo $contentInfo,
+        ContentMetadataUpdateStruct $contentMetadataUpdateStruct
+    ) {
+        $this->content = $content;
+        $this->contentInfo = $contentInfo;
+        $this->contentMetadataUpdateStruct = $contentMetadataUpdateStruct;
+    }
+
+    public function getContent(): Content
+    {
+        return $this->content;
+    }
+
+    public function getContentInfo(): ContentInfo
+    {
+        return $this->contentInfo;
+    }
+
+    public function getContentMetadataUpdateStruct(): ContentMetadataUpdateStruct
+    {
+        return $this->contentMetadataUpdateStruct;
+    }
 }

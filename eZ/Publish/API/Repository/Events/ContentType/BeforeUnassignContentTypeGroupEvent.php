@@ -10,10 +10,29 @@ namespace eZ\Publish\API\Repository\Events\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeUnassignContentTypeGroupEvent
+final class BeforeUnassignContentTypeGroupEvent extends BeforeEvent
 {
-    public function getContentType(): ContentType;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+    private $contentType;
 
-    public function getContentTypeGroup(): ContentTypeGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup */
+    private $contentTypeGroup;
+
+    public function __construct(ContentType $contentType, ContentTypeGroup $contentTypeGroup)
+    {
+        $this->contentType = $contentType;
+        $this->contentTypeGroup = $contentTypeGroup;
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
+    }
+
+    public function getContentTypeGroup(): ContentTypeGroup
+    {
+        return $this->contentTypeGroup;
+    }
 }

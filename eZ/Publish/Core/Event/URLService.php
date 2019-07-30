@@ -6,15 +6,15 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\Events\URL\BeforeUpdateUrlEvent as BeforeUpdateUrlEventInterface;
 use eZ\Publish\API\Repository\Events\URL\UpdateUrlEvent as UpdateUrlEventInterface;
 use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
-use eZ\Publish\Core\Event\URL\BeforeUpdateUrlEvent;
-use eZ\Publish\Core\Event\URL\UpdateUrlEvent;
+use eZ\Publish\API\Repository\Events\URL\BeforeUpdateUrlEvent;
+use eZ\Publish\API\Repository\Events\URL\UpdateUrlEvent;
 use eZ\Publish\SPI\Repository\Decorator\URLServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

@@ -9,14 +9,43 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\Content;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeDeleteContentEvent
+final class BeforeDeleteContentEvent extends BeforeEvent
 {
-    public function getContentInfo(): ContentInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
+    private $contentInfo;
 
-    public function getLocations(): array;
+    /** @var array|null */
+    private $locations;
 
-    public function setLocations(?array $locations): void;
+    public function __construct(ContentInfo $contentInfo)
+    {
+        $this->contentInfo = $contentInfo;
+    }
 
-    public function hasLocations(): bool;
+    public function getContentInfo(): ContentInfo
+    {
+        return $this->contentInfo;
+    }
+
+    public function getLocations(): array
+    {
+        if (!$this->hasLocations()) {
+            throw new UnexpectedValueException('You must set proper event return value of array type by setLocations() method if you use stopPropagation()');
+        }
+
+        return $this->locations;
+    }
+
+    public function setLocations(?array $locations): void
+    {
+        $this->locations = $locations;
+    }
+
+    public function hasLocations(): bool
+    {
+        return is_array($this->locations);
+    }
 }

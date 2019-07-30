@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\SPI\Repository\Decorator\SearchServiceDecorator;

@@ -10,10 +10,31 @@ namespace eZ\Publish\API\Repository\Events\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateContentTypeGroupEvent
+final class CreateContentTypeGroupEvent extends AfterEvent
 {
-    public function getReturnValue(): ContentTypeGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup */
+    private $contentTypeGroup;
 
-    public function getContentTypeGroupCreateStruct(): ContentTypeGroupCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct */
+    private $contentTypeGroupCreateStruct;
+
+    public function __construct(
+        ContentTypeGroup $contentTypeGroup,
+        ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct
+    ) {
+        $this->contentTypeGroup = $contentTypeGroup;
+        $this->contentTypeGroupCreateStruct = $contentTypeGroupCreateStruct;
+    }
+
+    public function getReturnValue(): ContentTypeGroup
+    {
+        return $this->contentTypeGroup;
+    }
+
+    public function getContentTypeGroupCreateStruct(): ContentTypeGroupCreateStruct
+    {
+        return $this->contentTypeGroupCreateStruct;
+    }
 }

@@ -8,7 +8,21 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\URLAlias;
 
-interface RemoveAliasesEvent
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
+
+final class RemoveAliasesEvent extends AfterEvent
 {
-    public function getAliasList(): array;
+    /** @var array */
+    private $aliasList;
+
+    public function __construct(
+        array $aliasList
+    ) {
+        $this->aliasList = $aliasList;
+    }
+
+    public function getAliasList(): array
+    {
+        return $this->aliasList;
+    }
 }

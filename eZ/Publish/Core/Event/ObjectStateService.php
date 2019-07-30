@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateEvent as BeforeCreateObjectStateEventInterface;
 use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateGroupEvent as BeforeCreateObjectStateGroupEventInterface;
@@ -32,22 +32,22 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
-use eZ\Publish\Core\Event\ObjectState\BeforeCreateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeCreateObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeDeleteObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeDeleteObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeSetContentStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeSetPriorityOfObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeUpdateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeUpdateObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\CreateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\CreateObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\SetContentStateEvent;
-use eZ\Publish\Core\Event\ObjectState\SetPriorityOfObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeDeleteObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeDeleteObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeSetContentStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeSetPriorityOfObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeUpdateObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeUpdateObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\CreateObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\CreateObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\DeleteObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\DeleteObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\SetContentStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\SetPriorityOfObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\UpdateObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\UpdateObjectStateGroupEvent;
 use eZ\Publish\SPI\Repository\Decorator\ObjectStateServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

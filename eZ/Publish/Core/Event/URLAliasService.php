@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateGlobalUrlAliasEvent as BeforeCreateGlobalUrlAliasEventInterface;
 use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateUrlAliasEvent as BeforeCreateUrlAliasEventInterface;
@@ -18,14 +18,14 @@ use eZ\Publish\API\Repository\Events\URLAlias\RefreshSystemUrlAliasesForLocation
 use eZ\Publish\API\Repository\Events\URLAlias\RemoveAliasesEvent as RemoveAliasesEventInterface;
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Event\URLAlias\BeforeCreateGlobalUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\BeforeCreateUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\BeforeRefreshSystemUrlAliasesForLocationEvent;
-use eZ\Publish\Core\Event\URLAlias\BeforeRemoveAliasesEvent;
-use eZ\Publish\Core\Event\URLAlias\CreateGlobalUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\CreateUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\RefreshSystemUrlAliasesForLocationEvent;
-use eZ\Publish\Core\Event\URLAlias\RemoveAliasesEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateGlobalUrlAliasEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateUrlAliasEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeRefreshSystemUrlAliasesForLocationEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeRemoveAliasesEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\CreateGlobalUrlAliasEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\CreateUrlAliasEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\RefreshSystemUrlAliasesForLocationEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\RemoveAliasesEvent;
 use eZ\Publish\SPI\Repository\Decorator\URLAliasServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

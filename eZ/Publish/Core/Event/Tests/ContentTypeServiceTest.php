@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Event\Tests;
+namespace eZ\Publish\API\Repository\Events\Tests;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Events\ContentType\AddFieldDefinitionEvent as AddFieldDefinitionEventInterface;
@@ -48,7 +48,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\Event\ContentTypeService;
+use eZ\Publish\API\Repository\Events\ContentTypeService;
 
 class ContentTypeServiceTest extends AbstractServiceTest
 {

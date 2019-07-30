@@ -9,8 +9,21 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\Role;
 
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface PublishRoleDraftEvent
+final class PublishRoleDraftEvent extends AfterEvent
 {
-    public function getRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
+    private $roleDraft;
+
+    public function __construct(
+        RoleDraft $roleDraft
+    ) {
+        $this->roleDraft = $roleDraft;
+    }
+
+    public function getRoleDraft(): RoleDraft
+    {
+        return $this->roleDraft;
+    }
 }

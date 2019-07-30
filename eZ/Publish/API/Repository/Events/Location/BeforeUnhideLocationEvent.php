@@ -9,14 +9,43 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\Location;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeUnhideLocationEvent
+final class BeforeUnhideLocationEvent extends BeforeEvent
 {
-    public function getLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $location;
 
-    public function getRevealedLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
+    private $revealedLocation;
 
-    public function setRevealedLocation(?Location $revealedLocation): void;
+    public function __construct(Location $location)
+    {
+        $this->location = $location;
+    }
 
-    public function hasRevealedLocation(): bool;
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    public function getRevealedLocation(): Location
+    {
+        if (!$this->hasRevealedLocation()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasRevealedLocation() or set it by setRevealedLocation() before you call getter.', Location::class));
+        }
+
+        return $this->revealedLocation;
+    }
+
+    public function setRevealedLocation(?Location $revealedLocation): void
+    {
+        $this->revealedLocation = $revealedLocation;
+    }
+
+    public function hasRevealedLocation(): bool
+    {
+        return $this->revealedLocation instanceof Location;
+    }
 }

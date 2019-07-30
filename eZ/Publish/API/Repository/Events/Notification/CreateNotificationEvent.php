@@ -10,10 +10,31 @@ namespace eZ\Publish\API\Repository\Events\Notification;
 
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateNotificationEvent
+final class CreateNotificationEvent extends AfterEvent
 {
-    public function getNotification(): Notification;
+    /** @var \eZ\Publish\API\Repository\Values\Notification\Notification */
+    private $notification;
 
-    public function getCreateStruct(): CreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Notification\CreateStruct */
+    private $createStruct;
+
+    public function __construct(
+        Notification $notification,
+        CreateStruct $createStruct
+    ) {
+        $this->notification = $notification;
+        $this->createStruct = $createStruct;
+    }
+
+    public function getNotification(): Notification
+    {
+        return $this->notification;
+    }
+
+    public function getCreateStruct(): CreateStruct
+    {
+        return $this->createStruct;
+    }
 }

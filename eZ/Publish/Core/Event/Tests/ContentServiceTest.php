@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Event\Tests;
+namespace eZ\Publish\API\Repository\Events\Tests;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Events\Content\AddRelationEvent as AddRelationEventInterface;
@@ -42,7 +42,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\Event\ContentService;
+use eZ\Publish\API\Repository\Events\ContentService;
 
 class ContentServiceTest extends AbstractServiceTest
 {

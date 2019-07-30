@@ -10,16 +10,52 @@ namespace eZ\Publish\API\Repository\Events\User;
 
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateUserEvent
+final class BeforeCreateUserEvent extends BeforeEvent
 {
-    public function getUserCreateStruct(): UserCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserCreateStruct */
+    private $userCreateStruct;
 
-    public function getParentGroups(): array;
+    /** @var array */
+    private $parentGroups;
 
-    public function getUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User|null */
+    private $user;
 
-    public function setUser(?User $user): void;
+    public function __construct(UserCreateStruct $userCreateStruct, array $parentGroups)
+    {
+        $this->userCreateStruct = $userCreateStruct;
+        $this->parentGroups = $parentGroups;
+    }
 
-    public function hasUser(): bool;
+    public function getUserCreateStruct(): UserCreateStruct
+    {
+        return $this->userCreateStruct;
+    }
+
+    public function getParentGroups(): array
+    {
+        return $this->parentGroups;
+    }
+
+    public function getUser(): User
+    {
+        if (!$this->hasUser()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUser() or set it by setUser() before you call getter.', User::class));
+        }
+
+        return $this->user;
+    }
+
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
+    }
+
+    public function hasUser(): bool
+    {
+        return $this->user instanceof User;
+    }
 }

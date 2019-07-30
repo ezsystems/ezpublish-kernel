@@ -10,12 +10,41 @@ namespace eZ\Publish\API\Repository\Events\Role;
 
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface RemovePolicyByRoleDraftEvent
+final class RemovePolicyByRoleDraftEvent extends AfterEvent
 {
-    public function getRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
+    private $roleDraft;
 
-    public function getPolicyDraft(): PolicyDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft */
+    private $policyDraft;
 
-    public function getUpdatedRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
+    private $updatedRoleDraft;
+
+    public function __construct(
+        RoleDraft $updatedRoleDraft,
+        RoleDraft $roleDraft,
+        PolicyDraft $policyDraft
+    ) {
+        $this->roleDraft = $roleDraft;
+        $this->policyDraft = $policyDraft;
+        $this->updatedRoleDraft = $updatedRoleDraft;
+    }
+
+    public function getRoleDraft(): RoleDraft
+    {
+        return $this->roleDraft;
+    }
+
+    public function getPolicyDraft(): PolicyDraft
+    {
+        return $this->policyDraft;
+    }
+
+    public function getUpdatedRoleDraft(): RoleDraft
+    {
+        return $this->updatedRoleDraft;
+    }
 }

@@ -11,16 +11,52 @@ namespace eZ\Publish\API\Repository\Events\Content;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeUpdateContentMetadataEvent
+final class BeforeUpdateContentMetadataEvent extends BeforeEvent
 {
-    public function getContentInfo(): ContentInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
+    private $contentInfo;
 
-    public function getContentMetadataUpdateStruct(): ContentMetadataUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct */
+    private $contentMetadataUpdateStruct;
 
-    public function getContent(): Content;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
+    private $content;
 
-    public function setContent(?Content $content): void;
+    public function __construct(ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct)
+    {
+        $this->contentInfo = $contentInfo;
+        $this->contentMetadataUpdateStruct = $contentMetadataUpdateStruct;
+    }
 
-    public function hasContent(): bool;
+    public function getContentInfo(): ContentInfo
+    {
+        return $this->contentInfo;
+    }
+
+    public function getContentMetadataUpdateStruct(): ContentMetadataUpdateStruct
+    {
+        return $this->contentMetadataUpdateStruct;
+    }
+
+    public function getContent(): Content
+    {
+        if (!$this->hasContent()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContent() or set it by setContent() before you call getter.', Content::class));
+        }
+
+        return $this->content;
+    }
+
+    public function setContent(?Content $content): void
+    {
+        $this->content = $content;
+    }
+
+    public function hasContent(): bool
+    {
+        return $this->content instanceof Content;
+    }
 }

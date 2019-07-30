@@ -9,10 +9,30 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\URLWildcard;
 
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface TranslateEvent
+final class TranslateEvent extends AfterEvent
 {
-    public function getUrl();
+    private $url;
 
-    public function getResult(): URLWildcardTranslationResult;
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult */
+    private $result;
+
+    public function __construct(
+        URLWildcardTranslationResult $result,
+        $url
+    ) {
+        $this->url = $url;
+        $this->result = $result;
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    public function getResult(): URLWildcardTranslationResult
+    {
+        return $this->result;
+    }
 }

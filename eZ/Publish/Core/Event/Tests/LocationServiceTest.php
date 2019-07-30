@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Event\Tests;
+namespace eZ\Publish\API\Repository\Events\Tests;
 
 use eZ\Publish\API\Repository\Events\Location\BeforeCopySubtreeEvent as BeforeCopySubtreeEventInterface;
 use eZ\Publish\API\Repository\Events\Location\BeforeCreateLocationEvent as BeforeCreateLocationEventInterface;
@@ -27,7 +27,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use eZ\Publish\Core\Event\LocationService;
+use eZ\Publish\API\Repository\Events\LocationService;
 
 class LocationServiceTest extends AbstractServiceTest
 {

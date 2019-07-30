@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Event;
+namespace eZ\Publish\API\Repository\Events;
 
 use eZ\Publish\API\Repository\Events\User\AssignUserToUserGroupEvent as AssignUserToUserGroupEventInterface;
 use eZ\Publish\API\Repository\Events\User\BeforeAssignUserToUserGroupEvent as BeforeAssignUserToUserGroupEventInterface;
@@ -36,26 +36,26 @@ use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\Core\Event\User\AssignUserToUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeAssignUserToUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeCreateUserEvent;
-use eZ\Publish\Core\Event\User\BeforeCreateUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeDeleteUserEvent;
-use eZ\Publish\Core\Event\User\BeforeDeleteUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeMoveUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeUnAssignUserFromUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeUpdateUserEvent;
-use eZ\Publish\Core\Event\User\BeforeUpdateUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeUpdateUserTokenEvent;
-use eZ\Publish\Core\Event\User\CreateUserEvent;
-use eZ\Publish\Core\Event\User\CreateUserGroupEvent;
-use eZ\Publish\Core\Event\User\DeleteUserEvent;
-use eZ\Publish\Core\Event\User\DeleteUserGroupEvent;
-use eZ\Publish\Core\Event\User\MoveUserGroupEvent;
-use eZ\Publish\Core\Event\User\UnAssignUserFromUserGroupEvent;
-use eZ\Publish\Core\Event\User\UpdateUserEvent;
-use eZ\Publish\Core\Event\User\UpdateUserGroupEvent;
-use eZ\Publish\Core\Event\User\UpdateUserTokenEvent;
+use eZ\Publish\API\Repository\Events\User\AssignUserToUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeAssignUserToUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeCreateUserEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeCreateUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeMoveUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeUnAssignUserFromUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserTokenEvent;
+use eZ\Publish\API\Repository\Events\User\CreateUserEvent;
+use eZ\Publish\API\Repository\Events\User\CreateUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\DeleteUserEvent;
+use eZ\Publish\API\Repository\Events\User\DeleteUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\MoveUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\UnAssignUserFromUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\UpdateUserEvent;
+use eZ\Publish\API\Repository\Events\User\UpdateUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\UpdateUserTokenEvent;
 use eZ\Publish\SPI\Repository\Decorator\UserServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

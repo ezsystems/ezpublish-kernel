@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Event\Tests;
+namespace eZ\Publish\API\Repository\Events\Tests;
 
 use eZ\Publish\API\Repository\Events\Trash\BeforeDeleteTrashItemEvent as BeforeDeleteTrashItemEventInterface;
 use eZ\Publish\API\Repository\Events\Trash\BeforeEmptyTrashEvent as BeforeEmptyTrashEventInterface;
@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use eZ\Publish\Core\Event\TrashService;
+use eZ\Publish\API\Repository\Events\TrashService;
 
 class TrashServiceTest extends AbstractServiceTest
 {

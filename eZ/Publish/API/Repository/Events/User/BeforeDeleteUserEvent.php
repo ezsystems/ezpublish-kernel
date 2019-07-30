@@ -9,14 +9,43 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\User;
 
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeDeleteUserEvent
+final class BeforeDeleteUserEvent extends BeforeEvent
 {
-    public function getUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $user;
 
-    public function getLocations(): array;
+    /** @var array|null */
+    private $locations;
 
-    public function setLocations(?array $locations): void;
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
 
-    public function hasLocations(): bool;
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getLocations(): array
+    {
+        if (!$this->hasLocations()) {
+            throw new UnexpectedValueException('You must set proper event return value of array type by setLocations() method if you use stopPropagation()');
+        }
+
+        return $this->locations;
+    }
+
+    public function setLocations(?array $locations): void
+    {
+        $this->locations = $locations;
+    }
+
+    public function hasLocations(): bool
+    {
+        return is_array($this->locations);
+    }
 }

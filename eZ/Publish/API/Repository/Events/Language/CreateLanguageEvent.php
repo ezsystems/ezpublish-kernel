@@ -10,10 +10,31 @@ namespace eZ\Publish\API\Repository\Events\Language;
 
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateLanguageEvent
+final class CreateLanguageEvent extends AfterEvent
 {
-    public function getLanguage(): Language;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
+    private $language;
 
-    public function getLanguageCreateStruct(): LanguageCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct */
+    private $languageCreateStruct;
+
+    public function __construct(
+        Language $language,
+        LanguageCreateStruct $languageCreateStruct
+    ) {
+        $this->language = $language;
+        $this->languageCreateStruct = $languageCreateStruct;
+    }
+
+    public function getLanguage(): Language
+    {
+        return $this->language;
+    }
+
+    public function getLanguageCreateStruct(): LanguageCreateStruct
+    {
+        return $this->languageCreateStruct;
+    }
 }

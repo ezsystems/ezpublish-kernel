@@ -9,8 +9,20 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface DeleteObjectStateEvent
+final class DeleteObjectStateEvent extends AfterEvent
 {
-    public function getObjectState(): ObjectState;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
+    private $objectState;
+
+    public function __construct(ObjectState $objectState)
+    {
+        $this->objectState = $objectState;
+    }
+
+    public function getObjectState(): ObjectState
+    {
+        return $this->objectState;
+    }
 }

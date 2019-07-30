@@ -11,12 +11,41 @@ namespace eZ\Publish\API\Repository\Events\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeUpdateFieldDefinitionEvent
+final class BeforeUpdateFieldDefinitionEvent extends BeforeEvent
 {
-    public function getContentTypeDraft(): ContentTypeDraft;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
+    private $contentTypeDraft;
 
-    public function getFieldDefinition(): FieldDefinition;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition */
+    private $fieldDefinition;
 
-    public function getFieldDefinitionUpdateStruct(): FieldDefinitionUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct */
+    private $fieldDefinitionUpdateStruct;
+
+    public function __construct(
+        ContentTypeDraft $contentTypeDraft,
+        FieldDefinition $fieldDefinition,
+        FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
+    ) {
+        $this->contentTypeDraft = $contentTypeDraft;
+        $this->fieldDefinition = $fieldDefinition;
+        $this->fieldDefinitionUpdateStruct = $fieldDefinitionUpdateStruct;
+    }
+
+    public function getContentTypeDraft(): ContentTypeDraft
+    {
+        return $this->contentTypeDraft;
+    }
+
+    public function getFieldDefinition(): FieldDefinition
+    {
+        return $this->fieldDefinition;
+    }
+
+    public function getFieldDefinitionUpdateStruct(): FieldDefinitionUpdateStruct
+    {
+        return $this->fieldDefinitionUpdateStruct;
+    }
 }

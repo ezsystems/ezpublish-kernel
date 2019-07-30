@@ -10,12 +10,41 @@ namespace eZ\Publish\API\Repository\Events\URL;
 
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdateUrlEvent
+final class UpdateUrlEvent extends AfterEvent
 {
-    public function getUrl(): URL;
+    /** @var \eZ\Publish\API\Repository\Values\URL\URL */
+    private $url;
 
-    public function getStruct(): URLUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\URL\URLUpdateStruct */
+    private $struct;
 
-    public function getUpdatedUrl(): URL;
+    /** @var \eZ\Publish\API\Repository\Values\URL\URL */
+    private $updatedUrl;
+
+    public function __construct(
+        URL $updatedUrl,
+        URL $url,
+        URLUpdateStruct $struct
+    ) {
+        $this->url = $url;
+        $this->struct = $struct;
+        $this->updatedUrl = $updatedUrl;
+    }
+
+    public function getUrl(): URL
+    {
+        return $this->url;
+    }
+
+    public function getStruct(): URLUpdateStruct
+    {
+        return $this->struct;
+    }
+
+    public function getUpdatedUrl(): URL
+    {
+        return $this->updatedUrl;
+    }
 }

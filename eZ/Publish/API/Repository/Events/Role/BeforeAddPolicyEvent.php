@@ -10,16 +10,52 @@ namespace eZ\Publish\API\Repository\Events\Role;
 
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeAddPolicyEvent
+final class BeforeAddPolicyEvent extends BeforeEvent
 {
-    public function getRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $role;
 
-    public function getPolicyCreateStruct(): PolicyCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct */
+    private $policyCreateStruct;
 
-    public function getUpdatedRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role|null */
+    private $updatedRole;
 
-    public function setUpdatedRole(?Role $updatedRole): void;
+    public function __construct(Role $role, PolicyCreateStruct $policyCreateStruct)
+    {
+        $this->role = $role;
+        $this->policyCreateStruct = $policyCreateStruct;
+    }
 
-    public function hasUpdatedRole(): bool;
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function getPolicyCreateStruct(): PolicyCreateStruct
+    {
+        return $this->policyCreateStruct;
+    }
+
+    public function getUpdatedRole(): Role
+    {
+        if (!$this->hasUpdatedRole()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedRole() or set it by setUpdatedRole() before you call getter.', Role::class));
+        }
+
+        return $this->updatedRole;
+    }
+
+    public function setUpdatedRole(?Role $updatedRole): void
+    {
+        $this->updatedRole = $updatedRole;
+    }
+
+    public function hasUpdatedRole(): bool
+    {
+        return $this->updatedRole instanceof Role;
+    }
 }

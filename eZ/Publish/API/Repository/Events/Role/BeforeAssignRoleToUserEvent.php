@@ -11,12 +11,38 @@ namespace eZ\Publish\API\Repository\Events\Role;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeAssignRoleToUserEvent
+final class BeforeAssignRoleToUserEvent extends BeforeEvent
 {
-    public function getRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $role;
 
-    public function getUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $user;
 
-    public function getRoleLimitation(): ?RoleLimitation;
+    /** @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation */
+    private $roleLimitation;
+
+    public function __construct(Role $role, User $user, ?RoleLimitation $roleLimitation = null)
+    {
+        $this->role = $role;
+        $this->user = $user;
+        $this->roleLimitation = $roleLimitation;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getRoleLimitation(): ?RoleLimitation
+    {
+        return $this->roleLimitation;
+    }
 }

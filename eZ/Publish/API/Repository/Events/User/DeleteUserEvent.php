@@ -9,10 +9,31 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Events\User;
 
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface DeleteUserEvent
+final class DeleteUserEvent extends AfterEvent
 {
-    public function getUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $user;
 
-    public function getLocations(): array;
+    /** @var array */
+    private $locations;
+
+    public function __construct(
+        array $locations,
+        User $user
+    ) {
+        $this->user = $user;
+        $this->locations = $locations;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getLocations(): array
+    {
+        return $this->locations;
+    }
 }
