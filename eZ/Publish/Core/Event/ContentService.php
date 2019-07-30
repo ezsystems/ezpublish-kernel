@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\API\Repository\Events;
+namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Events\Content\AddRelationEvent as AddRelationEventInterface;

@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Events\Tests;
+namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
 use eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent as BeforeCreateBookmarkEventInterface;
@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent as Befor
 use eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent as CreateBookmarkEventInterface;
 use eZ\Publish\API\Repository\Events\Bookmark\DeleteBookmarkEvent as DeleteBookmarkEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Events\BookmarkService;
+use eZ\Publish\Core\Event\BookmarkService;
 
 class BookmarkServiceTest extends AbstractServiceTest
 {

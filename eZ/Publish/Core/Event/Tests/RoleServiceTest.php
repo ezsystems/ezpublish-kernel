@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Events\Tests;
+namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\Events\Role\AddPolicyByRoleDraftEvent as AddPolicyByRoleDraftEventInterface;
 use eZ\Publish\API\Repository\Events\Role\AddPolicyEvent as AddPolicyEventInterface;
@@ -55,7 +55,7 @@ use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\API\Repository\Events\RoleService;
+use eZ\Publish\Core\Event\RoleService;
 
 class RoleServiceTest extends AbstractServiceTest
 {

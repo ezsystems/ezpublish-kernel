@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Events\Tests;
+namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateGlobalUrlAliasEvent as BeforeCreateGlobalUrlAliasEventInterface;
 use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateUrlAliasEvent as BeforeCreateUrlAliasEventInterface;
@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Events\URLAlias\RemoveAliasesEvent as RemoveAliase
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
-use eZ\Publish\API\Repository\Events\URLAliasService;
+use eZ\Publish\Core\Event\URLAliasService;
 
 class URLAliasServiceTest extends AbstractServiceTest
 {

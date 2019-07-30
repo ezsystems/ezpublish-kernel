@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Events\Tests;
+namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent as BeforeCreateEventInterface;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent as BeforeRemoveEventInterface;
@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Events\URLWildcard\TranslateEvent as TranslateEven
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
-use eZ\Publish\API\Repository\Events\URLWildcardService;
+use eZ\Publish\Core\Event\URLWildcardService;
 
 class URLWildcardServiceTest extends AbstractServiceTest
 {

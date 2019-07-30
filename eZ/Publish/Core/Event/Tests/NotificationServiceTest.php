@@ -4,7 +4,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Events\Tests;
+namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\Events\Notification\BeforeCreateNotificationEvent as BeforeCreateNotificationEventInterface;
 use eZ\Publish\API\Repository\Events\Notification\BeforeDeleteNotificationEvent as BeforeDeleteNotificationEventInterface;
@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Events\Notification\MarkNotificationAsReadEvent as
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use eZ\Publish\API\Repository\Events\NotificationService;
+use eZ\Publish\Core\Event\NotificationService;
 
 class NotificationServiceTest extends AbstractServiceTest
 {
