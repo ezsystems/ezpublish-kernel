@@ -59,8 +59,6 @@ interface PolicyProviderInterface
      *     custom_function_1: ~
      *     custom_function_2: [CustomLimitation]
      * ```
-     *
-     * @return array
      */
     public function addPolicies(ConfigBuilderInterface $configBuilder);
 }
