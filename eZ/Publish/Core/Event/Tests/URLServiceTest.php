@@ -6,8 +6,8 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
-use eZ\Publish\API\Repository\Events\URL\BeforeUpdateUrlEvent as BeforeUpdateUrlEventInterface;
-use eZ\Publish\API\Repository\Events\URL\UpdateUrlEvent as UpdateUrlEventInterface;
+use eZ\Publish\API\Repository\Events\URL\BeforeUpdateUrlEvent;
+use eZ\Publish\API\Repository\Events\URL\UpdateUrlEvent;
 use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
@@ -18,8 +18,8 @@ class URLServiceTest extends AbstractServiceTest
     public function testUpdateUrlEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateUrlEventInterface::class,
-            UpdateUrlEventInterface::class
+            BeforeUpdateUrlEvent::class,
+            UpdateUrlEvent::class
         );
 
         $parameters = [
@@ -38,8 +38,8 @@ class URLServiceTest extends AbstractServiceTest
 
         $this->assertSame($updatedUrl, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateUrlEventInterface::class, 0],
-            [UpdateUrlEventInterface::class, 0],
+            [BeforeUpdateUrlEvent::class, 0],
+            [UpdateUrlEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -47,8 +47,8 @@ class URLServiceTest extends AbstractServiceTest
     public function testReturnUpdateUrlResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateUrlEventInterface::class,
-            UpdateUrlEventInterface::class
+            BeforeUpdateUrlEvent::class,
+            UpdateUrlEvent::class
         );
 
         $parameters = [
@@ -61,7 +61,7 @@ class URLServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLServiceInterface::class);
         $innerServiceMock->method('updateUrl')->willReturn($updatedUrl);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUrlEventInterface::class, function (BeforeUpdateUrlEventInterface $event) use ($eventUpdatedUrl) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUrlEvent::class, function (BeforeUpdateUrlEvent $event) use ($eventUpdatedUrl) {
             $event->setUpdatedUrl($eventUpdatedUrl);
         }, 10);
 
@@ -72,9 +72,9 @@ class URLServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventUpdatedUrl, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateUrlEventInterface::class, 10],
-            [BeforeUpdateUrlEventInterface::class, 0],
-            [UpdateUrlEventInterface::class, 0],
+            [BeforeUpdateUrlEvent::class, 10],
+            [BeforeUpdateUrlEvent::class, 0],
+            [UpdateUrlEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -82,8 +82,8 @@ class URLServiceTest extends AbstractServiceTest
     public function testUpdateUrlStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateUrlEventInterface::class,
-            UpdateUrlEventInterface::class
+            BeforeUpdateUrlEvent::class,
+            UpdateUrlEvent::class
         );
 
         $parameters = [
@@ -96,7 +96,7 @@ class URLServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLServiceInterface::class);
         $innerServiceMock->method('updateUrl')->willReturn($updatedUrl);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateUrlEventInterface::class, function (BeforeUpdateUrlEventInterface $event) use ($eventUpdatedUrl) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUrlEvent::class, function (BeforeUpdateUrlEvent $event) use ($eventUpdatedUrl) {
             $event->setUpdatedUrl($eventUpdatedUrl);
             $event->stopPropagation();
         }, 10);
@@ -109,11 +109,11 @@ class URLServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventUpdatedUrl, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateUrlEventInterface::class, 10],
+            [BeforeUpdateUrlEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeUpdateUrlEventInterface::class, 0],
-            [UpdateUrlEventInterface::class, 0],
+            [BeforeUpdateUrlEvent::class, 0],
+            [UpdateUrlEvent::class, 0],
         ]);
     }
 }

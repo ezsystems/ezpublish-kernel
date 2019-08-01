@@ -7,10 +7,10 @@
 namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
-use eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent as BeforeCreateBookmarkEventInterface;
-use eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent as BeforeDeleteBookmarkEventInterface;
-use eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent as CreateBookmarkEventInterface;
-use eZ\Publish\API\Repository\Events\Bookmark\DeleteBookmarkEvent as DeleteBookmarkEventInterface;
+use eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\DeleteBookmarkEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Event\BookmarkService;
 
@@ -19,8 +19,8 @@ class BookmarkServiceTest extends AbstractServiceTest
     public function testCreateBookmarkEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateBookmarkEventInterface::class,
-            CreateBookmarkEventInterface::class
+            BeforeCreateBookmarkEvent::class,
+            CreateBookmarkEvent::class
         );
 
         $parameters = [
@@ -35,8 +35,8 @@ class BookmarkServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeCreateBookmarkEventInterface::class, 0],
-            [CreateBookmarkEventInterface::class, 0],
+            [BeforeCreateBookmarkEvent::class, 0],
+            [CreateBookmarkEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -44,8 +44,8 @@ class BookmarkServiceTest extends AbstractServiceTest
     public function testCreateBookmarkStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateBookmarkEventInterface::class,
-            CreateBookmarkEventInterface::class
+            BeforeCreateBookmarkEvent::class,
+            CreateBookmarkEvent::class
         );
 
         $parameters = [
@@ -54,7 +54,7 @@ class BookmarkServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(BookmarkServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeCreateBookmarkEventInterface::class, function (BeforeCreateBookmarkEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeCreateBookmarkEvent::class, function (BeforeCreateBookmarkEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -65,19 +65,19 @@ class BookmarkServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeCreateBookmarkEventInterface::class, 10],
+            [BeforeCreateBookmarkEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeCreateBookmarkEventInterface::class, 0],
-            [CreateBookmarkEventInterface::class, 0],
+            [BeforeCreateBookmarkEvent::class, 0],
+            [CreateBookmarkEvent::class, 0],
         ]);
     }
 
     public function testDeleteBookmarkEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteBookmarkEventInterface::class,
-            DeleteBookmarkEventInterface::class
+            BeforeDeleteBookmarkEvent::class,
+            DeleteBookmarkEvent::class
         );
 
         $parameters = [
@@ -92,8 +92,8 @@ class BookmarkServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteBookmarkEventInterface::class, 0],
-            [DeleteBookmarkEventInterface::class, 0],
+            [BeforeDeleteBookmarkEvent::class, 0],
+            [DeleteBookmarkEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -101,8 +101,8 @@ class BookmarkServiceTest extends AbstractServiceTest
     public function testDeleteBookmarkStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteBookmarkEventInterface::class,
-            DeleteBookmarkEventInterface::class
+            BeforeDeleteBookmarkEvent::class,
+            DeleteBookmarkEvent::class
         );
 
         $parameters = [
@@ -111,7 +111,7 @@ class BookmarkServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(BookmarkServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteBookmarkEventInterface::class, function (BeforeDeleteBookmarkEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteBookmarkEvent::class, function (BeforeDeleteBookmarkEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -122,11 +122,11 @@ class BookmarkServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteBookmarkEventInterface::class, 10],
+            [BeforeDeleteBookmarkEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeDeleteBookmarkEventInterface::class, 0],
-            [DeleteBookmarkEventInterface::class, 0],
+            [BeforeDeleteBookmarkEvent::class, 0],
+            [DeleteBookmarkEvent::class, 0],
         ]);
     }
 }

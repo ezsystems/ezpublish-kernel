@@ -7,32 +7,32 @@
 namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
-use eZ\Publish\API\Repository\Events\Content\AddRelationEvent as AddRelationEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeAddRelationEvent as BeforeAddRelationEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeCopyContentEvent as BeforeCopyContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeCreateContentDraftEvent as BeforeCreateContentDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeCreateContentEvent as BeforeCreateContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeDeleteContentEvent as BeforeDeleteContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeDeleteRelationEvent as BeforeDeleteRelationEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeDeleteTranslationEvent as BeforeDeleteTranslationEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeDeleteVersionEvent as BeforeDeleteVersionEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeHideContentEvent as BeforeHideContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforePublishVersionEvent as BeforePublishVersionEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeRevealContentEvent as BeforeRevealContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentEvent as BeforeUpdateContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentMetadataEvent as BeforeUpdateContentMetadataEventInterface;
-use eZ\Publish\API\Repository\Events\Content\CopyContentEvent as CopyContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\CreateContentDraftEvent as CreateContentDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Content\CreateContentEvent as CreateContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\DeleteContentEvent as DeleteContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\DeleteRelationEvent as DeleteRelationEventInterface;
-use eZ\Publish\API\Repository\Events\Content\DeleteTranslationEvent as DeleteTranslationEventInterface;
-use eZ\Publish\API\Repository\Events\Content\DeleteVersionEvent as DeleteVersionEventInterface;
-use eZ\Publish\API\Repository\Events\Content\HideContentEvent as HideContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\PublishVersionEvent as PublishVersionEventInterface;
-use eZ\Publish\API\Repository\Events\Content\RevealContentEvent as RevealContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\UpdateContentEvent as UpdateContentEventInterface;
-use eZ\Publish\API\Repository\Events\Content\UpdateContentMetadataEvent as UpdateContentMetadataEventInterface;
+use eZ\Publish\API\Repository\Events\Content\AddRelationEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeAddRelationEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeCopyContentEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeCreateContentDraftEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeCreateContentEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeDeleteContentEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeDeleteRelationEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeDeleteTranslationEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeDeleteVersionEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeHideContentEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforePublishVersionEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeRevealContentEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentEvent;
+use eZ\Publish\API\Repository\Events\Content\BeforeUpdateContentMetadataEvent;
+use eZ\Publish\API\Repository\Events\Content\CopyContentEvent;
+use eZ\Publish\API\Repository\Events\Content\CreateContentDraftEvent;
+use eZ\Publish\API\Repository\Events\Content\CreateContentEvent;
+use eZ\Publish\API\Repository\Events\Content\DeleteContentEvent;
+use eZ\Publish\API\Repository\Events\Content\DeleteRelationEvent;
+use eZ\Publish\API\Repository\Events\Content\DeleteTranslationEvent;
+use eZ\Publish\API\Repository\Events\Content\DeleteVersionEvent;
+use eZ\Publish\API\Repository\Events\Content\HideContentEvent;
+use eZ\Publish\API\Repository\Events\Content\PublishVersionEvent;
+use eZ\Publish\API\Repository\Events\Content\RevealContentEvent;
+use eZ\Publish\API\Repository\Events\Content\UpdateContentEvent;
+use eZ\Publish\API\Repository\Events\Content\UpdateContentMetadataEvent;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -49,8 +49,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testDeleteContentEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteContentEventInterface::class,
-            DeleteContentEventInterface::class
+            BeforeDeleteContentEvent::class,
+            DeleteContentEvent::class
         );
 
         $parameters = [
@@ -68,8 +68,8 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($locations, $result);
         $this->assertSame($calledListeners, [
-            [BeforeDeleteContentEventInterface::class, 0],
-            [DeleteContentEventInterface::class, 0],
+            [BeforeDeleteContentEvent::class, 0],
+            [DeleteContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -77,8 +77,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testReturnDeleteContentResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteContentEventInterface::class,
-            DeleteContentEventInterface::class
+            BeforeDeleteContentEvent::class,
+            DeleteContentEvent::class
         );
 
         $parameters = [
@@ -90,7 +90,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('deleteContent')->willReturn($locations);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteContentEventInterface::class, function (BeforeDeleteContentEventInterface $event) use ($eventLocations) {
+        $traceableEventDispatcher->addListener(BeforeDeleteContentEvent::class, function (BeforeDeleteContentEvent $event) use ($eventLocations) {
             $event->setLocations($eventLocations);
         }, 10);
 
@@ -101,9 +101,9 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventLocations, $result);
         $this->assertSame($calledListeners, [
-            [BeforeDeleteContentEventInterface::class, 10],
-            [BeforeDeleteContentEventInterface::class, 0],
-            [DeleteContentEventInterface::class, 0],
+            [BeforeDeleteContentEvent::class, 10],
+            [BeforeDeleteContentEvent::class, 0],
+            [DeleteContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -111,8 +111,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testDeleteContentStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteContentEventInterface::class,
-            DeleteContentEventInterface::class
+            BeforeDeleteContentEvent::class,
+            DeleteContentEvent::class
         );
 
         $parameters = [
@@ -124,7 +124,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('deleteContent')->willReturn($locations);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteContentEventInterface::class, function (BeforeDeleteContentEventInterface $event) use ($eventLocations) {
+        $traceableEventDispatcher->addListener(BeforeDeleteContentEvent::class, function (BeforeDeleteContentEvent $event) use ($eventLocations) {
             $event->setLocations($eventLocations);
             $event->stopPropagation();
         }, 10);
@@ -137,19 +137,19 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventLocations, $result);
         $this->assertSame($calledListeners, [
-            [BeforeDeleteContentEventInterface::class, 10],
+            [BeforeDeleteContentEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeDeleteContentEventInterface::class, 0],
-            [DeleteContentEventInterface::class, 0],
+            [BeforeDeleteContentEvent::class, 0],
+            [DeleteContentEvent::class, 0],
         ]);
     }
 
     public function testCopyContentEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCopyContentEventInterface::class,
-            CopyContentEventInterface::class
+            BeforeCopyContentEvent::class,
+            CopyContentEvent::class
         );
 
         $parameters = [
@@ -169,8 +169,8 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($content, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCopyContentEventInterface::class, 0],
-            [CopyContentEventInterface::class, 0],
+            [BeforeCopyContentEvent::class, 0],
+            [CopyContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -178,8 +178,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testReturnCopyContentResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCopyContentEventInterface::class,
-            CopyContentEventInterface::class
+            BeforeCopyContentEvent::class,
+            CopyContentEvent::class
         );
 
         $parameters = [
@@ -193,7 +193,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('copyContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeCopyContentEventInterface::class, function (BeforeCopyContentEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeCopyContentEvent::class, function (BeforeCopyContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -204,9 +204,9 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCopyContentEventInterface::class, 10],
-            [BeforeCopyContentEventInterface::class, 0],
-            [CopyContentEventInterface::class, 0],
+            [BeforeCopyContentEvent::class, 10],
+            [BeforeCopyContentEvent::class, 0],
+            [CopyContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -214,8 +214,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testCopyContentStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCopyContentEventInterface::class,
-            CopyContentEventInterface::class
+            BeforeCopyContentEvent::class,
+            CopyContentEvent::class
         );
 
         $parameters = [
@@ -229,7 +229,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('copyContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeCopyContentEventInterface::class, function (BeforeCopyContentEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeCopyContentEvent::class, function (BeforeCopyContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -242,19 +242,19 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCopyContentEventInterface::class, 10],
+            [BeforeCopyContentEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeCopyContentEventInterface::class, 0],
-            [CopyContentEventInterface::class, 0],
+            [BeforeCopyContentEvent::class, 0],
+            [CopyContentEvent::class, 0],
         ]);
     }
 
     public function testUpdateContentEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateContentEventInterface::class,
-            UpdateContentEventInterface::class
+            BeforeUpdateContentEvent::class,
+            UpdateContentEvent::class
         );
 
         $parameters = [
@@ -273,8 +273,8 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($content, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateContentEventInterface::class, 0],
-            [UpdateContentEventInterface::class, 0],
+            [BeforeUpdateContentEvent::class, 0],
+            [UpdateContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -282,8 +282,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testReturnUpdateContentResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateContentEventInterface::class,
-            UpdateContentEventInterface::class
+            BeforeUpdateContentEvent::class,
+            UpdateContentEvent::class
         );
 
         $parameters = [
@@ -296,7 +296,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('updateContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateContentEventInterface::class, function (BeforeUpdateContentEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeUpdateContentEvent::class, function (BeforeUpdateContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -307,9 +307,9 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateContentEventInterface::class, 10],
-            [BeforeUpdateContentEventInterface::class, 0],
-            [UpdateContentEventInterface::class, 0],
+            [BeforeUpdateContentEvent::class, 10],
+            [BeforeUpdateContentEvent::class, 0],
+            [UpdateContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -317,8 +317,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testUpdateContentStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateContentEventInterface::class,
-            UpdateContentEventInterface::class
+            BeforeUpdateContentEvent::class,
+            UpdateContentEvent::class
         );
 
         $parameters = [
@@ -331,7 +331,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('updateContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateContentEventInterface::class, function (BeforeUpdateContentEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeUpdateContentEvent::class, function (BeforeUpdateContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -344,19 +344,19 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateContentEventInterface::class, 10],
+            [BeforeUpdateContentEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeUpdateContentEventInterface::class, 0],
-            [UpdateContentEventInterface::class, 0],
+            [BeforeUpdateContentEvent::class, 0],
+            [UpdateContentEvent::class, 0],
         ]);
     }
 
     public function testDeleteRelationEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteRelationEventInterface::class,
-            DeleteRelationEventInterface::class
+            BeforeDeleteRelationEvent::class,
+            DeleteRelationEvent::class
         );
 
         $parameters = [
@@ -372,8 +372,8 @@ class ContentServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteRelationEventInterface::class, 0],
-            [DeleteRelationEventInterface::class, 0],
+            [BeforeDeleteRelationEvent::class, 0],
+            [DeleteRelationEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -381,8 +381,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testDeleteRelationStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteRelationEventInterface::class,
-            DeleteRelationEventInterface::class
+            BeforeDeleteRelationEvent::class,
+            DeleteRelationEvent::class
         );
 
         $parameters = [
@@ -392,7 +392,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteRelationEventInterface::class, function (BeforeDeleteRelationEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteRelationEvent::class, function (BeforeDeleteRelationEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -403,19 +403,19 @@ class ContentServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteRelationEventInterface::class, 10],
+            [BeforeDeleteRelationEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeDeleteRelationEventInterface::class, 0],
-            [DeleteRelationEventInterface::class, 0],
+            [BeforeDeleteRelationEvent::class, 0],
+            [DeleteRelationEvent::class, 0],
         ]);
     }
 
     public function testCreateContentEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateContentEventInterface::class,
-            CreateContentEventInterface::class
+            BeforeCreateContentEvent::class,
+            CreateContentEvent::class
         );
 
         $parameters = [
@@ -434,8 +434,8 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($content, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateContentEventInterface::class, 0],
-            [CreateContentEventInterface::class, 0],
+            [BeforeCreateContentEvent::class, 0],
+            [CreateContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -443,8 +443,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testReturnCreateContentResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateContentEventInterface::class,
-            CreateContentEventInterface::class
+            BeforeCreateContentEvent::class,
+            CreateContentEvent::class
         );
 
         $parameters = [
@@ -457,7 +457,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('createContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeCreateContentEventInterface::class, function (BeforeCreateContentEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeCreateContentEvent::class, function (BeforeCreateContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -468,9 +468,9 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateContentEventInterface::class, 10],
-            [BeforeCreateContentEventInterface::class, 0],
-            [CreateContentEventInterface::class, 0],
+            [BeforeCreateContentEvent::class, 10],
+            [BeforeCreateContentEvent::class, 0],
+            [CreateContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -478,8 +478,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testCreateContentStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateContentEventInterface::class,
-            CreateContentEventInterface::class
+            BeforeCreateContentEvent::class,
+            CreateContentEvent::class
         );
 
         $parameters = [
@@ -492,7 +492,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('createContent')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeCreateContentEventInterface::class, function (BeforeCreateContentEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeCreateContentEvent::class, function (BeforeCreateContentEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -505,19 +505,19 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateContentEventInterface::class, 10],
+            [BeforeCreateContentEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeCreateContentEventInterface::class, 0],
-            [CreateContentEventInterface::class, 0],
+            [BeforeCreateContentEvent::class, 0],
+            [CreateContentEvent::class, 0],
         ]);
     }
 
     public function testHideContentEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeHideContentEventInterface::class,
-            HideContentEventInterface::class
+            BeforeHideContentEvent::class,
+            HideContentEvent::class
         );
 
         $parameters = [
@@ -532,8 +532,8 @@ class ContentServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeHideContentEventInterface::class, 0],
-            [HideContentEventInterface::class, 0],
+            [BeforeHideContentEvent::class, 0],
+            [HideContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -541,8 +541,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testHideContentStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeHideContentEventInterface::class,
-            HideContentEventInterface::class
+            BeforeHideContentEvent::class,
+            HideContentEvent::class
         );
 
         $parameters = [
@@ -551,7 +551,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeHideContentEventInterface::class, function (BeforeHideContentEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeHideContentEvent::class, function (BeforeHideContentEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -562,19 +562,19 @@ class ContentServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeHideContentEventInterface::class, 10],
+            [BeforeHideContentEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeHideContentEventInterface::class, 0],
-            [HideContentEventInterface::class, 0],
+            [BeforeHideContentEvent::class, 0],
+            [HideContentEvent::class, 0],
         ]);
     }
 
     public function testDeleteVersionEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteVersionEventInterface::class,
-            DeleteVersionEventInterface::class
+            BeforeDeleteVersionEvent::class,
+            DeleteVersionEvent::class
         );
 
         $parameters = [
@@ -589,8 +589,8 @@ class ContentServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteVersionEventInterface::class, 0],
-            [DeleteVersionEventInterface::class, 0],
+            [BeforeDeleteVersionEvent::class, 0],
+            [DeleteVersionEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -598,8 +598,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testDeleteVersionStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteVersionEventInterface::class,
-            DeleteVersionEventInterface::class
+            BeforeDeleteVersionEvent::class,
+            DeleteVersionEvent::class
         );
 
         $parameters = [
@@ -608,7 +608,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteVersionEventInterface::class, function (BeforeDeleteVersionEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteVersionEvent::class, function (BeforeDeleteVersionEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -619,19 +619,19 @@ class ContentServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteVersionEventInterface::class, 10],
+            [BeforeDeleteVersionEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeDeleteVersionEventInterface::class, 0],
-            [DeleteVersionEventInterface::class, 0],
+            [BeforeDeleteVersionEvent::class, 0],
+            [DeleteVersionEvent::class, 0],
         ]);
     }
 
     public function testAddRelationEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAddRelationEventInterface::class,
-            AddRelationEventInterface::class
+            BeforeAddRelationEvent::class,
+            AddRelationEvent::class
         );
 
         $parameters = [
@@ -650,8 +650,8 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($relation, $result);
         $this->assertSame($calledListeners, [
-            [BeforeAddRelationEventInterface::class, 0],
-            [AddRelationEventInterface::class, 0],
+            [BeforeAddRelationEvent::class, 0],
+            [AddRelationEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -659,8 +659,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testReturnAddRelationResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAddRelationEventInterface::class,
-            AddRelationEventInterface::class
+            BeforeAddRelationEvent::class,
+            AddRelationEvent::class
         );
 
         $parameters = [
@@ -673,7 +673,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('addRelation')->willReturn($relation);
 
-        $traceableEventDispatcher->addListener(BeforeAddRelationEventInterface::class, function (BeforeAddRelationEventInterface $event) use ($eventRelation) {
+        $traceableEventDispatcher->addListener(BeforeAddRelationEvent::class, function (BeforeAddRelationEvent $event) use ($eventRelation) {
             $event->setRelation($eventRelation);
         }, 10);
 
@@ -684,9 +684,9 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventRelation, $result);
         $this->assertSame($calledListeners, [
-            [BeforeAddRelationEventInterface::class, 10],
-            [BeforeAddRelationEventInterface::class, 0],
-            [AddRelationEventInterface::class, 0],
+            [BeforeAddRelationEvent::class, 10],
+            [BeforeAddRelationEvent::class, 0],
+            [AddRelationEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -694,8 +694,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testAddRelationStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAddRelationEventInterface::class,
-            AddRelationEventInterface::class
+            BeforeAddRelationEvent::class,
+            AddRelationEvent::class
         );
 
         $parameters = [
@@ -708,7 +708,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('addRelation')->willReturn($relation);
 
-        $traceableEventDispatcher->addListener(BeforeAddRelationEventInterface::class, function (BeforeAddRelationEventInterface $event) use ($eventRelation) {
+        $traceableEventDispatcher->addListener(BeforeAddRelationEvent::class, function (BeforeAddRelationEvent $event) use ($eventRelation) {
             $event->setRelation($eventRelation);
             $event->stopPropagation();
         }, 10);
@@ -721,19 +721,19 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventRelation, $result);
         $this->assertSame($calledListeners, [
-            [BeforeAddRelationEventInterface::class, 10],
+            [BeforeAddRelationEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [AddRelationEventInterface::class, 0],
-            [BeforeAddRelationEventInterface::class, 0],
+            [AddRelationEvent::class, 0],
+            [BeforeAddRelationEvent::class, 0],
         ]);
     }
 
     public function testUpdateContentMetadataEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateContentMetadataEventInterface::class,
-            UpdateContentMetadataEventInterface::class
+            BeforeUpdateContentMetadataEvent::class,
+            UpdateContentMetadataEvent::class
         );
 
         $parameters = [
@@ -752,8 +752,8 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($content, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateContentMetadataEventInterface::class, 0],
-            [UpdateContentMetadataEventInterface::class, 0],
+            [BeforeUpdateContentMetadataEvent::class, 0],
+            [UpdateContentMetadataEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -761,8 +761,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testReturnUpdateContentMetadataResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateContentMetadataEventInterface::class,
-            UpdateContentMetadataEventInterface::class
+            BeforeUpdateContentMetadataEvent::class,
+            UpdateContentMetadataEvent::class
         );
 
         $parameters = [
@@ -775,7 +775,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('updateContentMetadata')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateContentMetadataEventInterface::class, function (BeforeUpdateContentMetadataEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeUpdateContentMetadataEvent::class, function (BeforeUpdateContentMetadataEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -786,9 +786,9 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateContentMetadataEventInterface::class, 10],
-            [BeforeUpdateContentMetadataEventInterface::class, 0],
-            [UpdateContentMetadataEventInterface::class, 0],
+            [BeforeUpdateContentMetadataEvent::class, 10],
+            [BeforeUpdateContentMetadataEvent::class, 0],
+            [UpdateContentMetadataEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -796,8 +796,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testUpdateContentMetadataStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUpdateContentMetadataEventInterface::class,
-            UpdateContentMetadataEventInterface::class
+            BeforeUpdateContentMetadataEvent::class,
+            UpdateContentMetadataEvent::class
         );
 
         $parameters = [
@@ -810,7 +810,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('updateContentMetadata')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforeUpdateContentMetadataEventInterface::class, function (BeforeUpdateContentMetadataEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforeUpdateContentMetadataEvent::class, function (BeforeUpdateContentMetadataEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -823,19 +823,19 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforeUpdateContentMetadataEventInterface::class, 10],
+            [BeforeUpdateContentMetadataEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeUpdateContentMetadataEventInterface::class, 0],
-            [UpdateContentMetadataEventInterface::class, 0],
+            [BeforeUpdateContentMetadataEvent::class, 0],
+            [UpdateContentMetadataEvent::class, 0],
         ]);
     }
 
     public function testDeleteTranslationEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteTranslationEventInterface::class,
-            DeleteTranslationEventInterface::class
+            BeforeDeleteTranslationEvent::class,
+            DeleteTranslationEvent::class
         );
 
         $parameters = [
@@ -851,8 +851,8 @@ class ContentServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteTranslationEventInterface::class, 0],
-            [DeleteTranslationEventInterface::class, 0],
+            [BeforeDeleteTranslationEvent::class, 0],
+            [DeleteTranslationEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -860,8 +860,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testDeleteTranslationStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeleteTranslationEventInterface::class,
-            DeleteTranslationEventInterface::class
+            BeforeDeleteTranslationEvent::class,
+            DeleteTranslationEvent::class
         );
 
         $parameters = [
@@ -871,7 +871,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeDeleteTranslationEventInterface::class, function (BeforeDeleteTranslationEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteTranslationEvent::class, function (BeforeDeleteTranslationEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -882,19 +882,19 @@ class ContentServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeDeleteTranslationEventInterface::class, 10],
+            [BeforeDeleteTranslationEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeDeleteTranslationEventInterface::class, 0],
-            [DeleteTranslationEventInterface::class, 0],
+            [BeforeDeleteTranslationEvent::class, 0],
+            [DeleteTranslationEvent::class, 0],
         ]);
     }
 
     public function testPublishVersionEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforePublishVersionEventInterface::class,
-            PublishVersionEventInterface::class
+            BeforePublishVersionEvent::class,
+            PublishVersionEvent::class
         );
 
         $parameters = [
@@ -913,8 +913,8 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($content, $result);
         $this->assertSame($calledListeners, [
-            [BeforePublishVersionEventInterface::class, 0],
-            [PublishVersionEventInterface::class, 0],
+            [BeforePublishVersionEvent::class, 0],
+            [PublishVersionEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -922,8 +922,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testReturnPublishVersionResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforePublishVersionEventInterface::class,
-            PublishVersionEventInterface::class
+            BeforePublishVersionEvent::class,
+            PublishVersionEvent::class
         );
 
         $parameters = [
@@ -936,7 +936,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('publishVersion')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforePublishVersionEventInterface::class, function (BeforePublishVersionEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforePublishVersionEvent::class, function (BeforePublishVersionEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
         }, 10);
 
@@ -947,9 +947,9 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforePublishVersionEventInterface::class, 10],
-            [BeforePublishVersionEventInterface::class, 0],
-            [PublishVersionEventInterface::class, 0],
+            [BeforePublishVersionEvent::class, 10],
+            [BeforePublishVersionEvent::class, 0],
+            [PublishVersionEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -957,8 +957,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testPublishVersionStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforePublishVersionEventInterface::class,
-            PublishVersionEventInterface::class
+            BeforePublishVersionEvent::class,
+            PublishVersionEvent::class
         );
 
         $parameters = [
@@ -971,7 +971,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('publishVersion')->willReturn($content);
 
-        $traceableEventDispatcher->addListener(BeforePublishVersionEventInterface::class, function (BeforePublishVersionEventInterface $event) use ($eventContent) {
+        $traceableEventDispatcher->addListener(BeforePublishVersionEvent::class, function (BeforePublishVersionEvent $event) use ($eventContent) {
             $event->setContent($eventContent);
             $event->stopPropagation();
         }, 10);
@@ -984,19 +984,19 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContent, $result);
         $this->assertSame($calledListeners, [
-            [BeforePublishVersionEventInterface::class, 10],
+            [BeforePublishVersionEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforePublishVersionEventInterface::class, 0],
-            [PublishVersionEventInterface::class, 0],
+            [BeforePublishVersionEvent::class, 0],
+            [PublishVersionEvent::class, 0],
         ]);
     }
 
     public function testCreateContentDraftEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateContentDraftEventInterface::class,
-            CreateContentDraftEventInterface::class
+            BeforeCreateContentDraftEvent::class,
+            CreateContentDraftEvent::class
         );
 
         $parameters = [
@@ -1016,8 +1016,8 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($contentDraft, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateContentDraftEventInterface::class, 0],
-            [CreateContentDraftEventInterface::class, 0],
+            [BeforeCreateContentDraftEvent::class, 0],
+            [CreateContentDraftEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -1025,8 +1025,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testReturnCreateContentDraftResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateContentDraftEventInterface::class,
-            CreateContentDraftEventInterface::class
+            BeforeCreateContentDraftEvent::class,
+            CreateContentDraftEvent::class
         );
 
         $parameters = [
@@ -1040,7 +1040,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('createContentDraft')->willReturn($contentDraft);
 
-        $traceableEventDispatcher->addListener(BeforeCreateContentDraftEventInterface::class, function (BeforeCreateContentDraftEventInterface $event) use ($eventContentDraft) {
+        $traceableEventDispatcher->addListener(BeforeCreateContentDraftEvent::class, function (BeforeCreateContentDraftEvent $event) use ($eventContentDraft) {
             $event->setContentDraft($eventContentDraft);
         }, 10);
 
@@ -1051,9 +1051,9 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContentDraft, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateContentDraftEventInterface::class, 10],
-            [BeforeCreateContentDraftEventInterface::class, 0],
-            [CreateContentDraftEventInterface::class, 0],
+            [BeforeCreateContentDraftEvent::class, 10],
+            [BeforeCreateContentDraftEvent::class, 0],
+            [CreateContentDraftEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -1061,8 +1061,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testCreateContentDraftStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeCreateContentDraftEventInterface::class,
-            CreateContentDraftEventInterface::class
+            BeforeCreateContentDraftEvent::class,
+            CreateContentDraftEvent::class
         );
 
         $parameters = [
@@ -1076,7 +1076,7 @@ class ContentServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
         $innerServiceMock->method('createContentDraft')->willReturn($contentDraft);
 
-        $traceableEventDispatcher->addListener(BeforeCreateContentDraftEventInterface::class, function (BeforeCreateContentDraftEventInterface $event) use ($eventContentDraft) {
+        $traceableEventDispatcher->addListener(BeforeCreateContentDraftEvent::class, function (BeforeCreateContentDraftEvent $event) use ($eventContentDraft) {
             $event->setContentDraft($eventContentDraft);
             $event->stopPropagation();
         }, 10);
@@ -1089,19 +1089,19 @@ class ContentServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventContentDraft, $result);
         $this->assertSame($calledListeners, [
-            [BeforeCreateContentDraftEventInterface::class, 10],
+            [BeforeCreateContentDraftEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeCreateContentDraftEventInterface::class, 0],
-            [CreateContentDraftEventInterface::class, 0],
+            [BeforeCreateContentDraftEvent::class, 0],
+            [CreateContentDraftEvent::class, 0],
         ]);
     }
 
     public function testRevealContentEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeRevealContentEventInterface::class,
-            RevealContentEventInterface::class
+            BeforeRevealContentEvent::class,
+            RevealContentEvent::class
         );
 
         $parameters = [
@@ -1116,8 +1116,8 @@ class ContentServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeRevealContentEventInterface::class, 0],
-            [RevealContentEventInterface::class, 0],
+            [BeforeRevealContentEvent::class, 0],
+            [RevealContentEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -1125,8 +1125,8 @@ class ContentServiceTest extends AbstractServiceTest
     public function testRevealContentStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeRevealContentEventInterface::class,
-            RevealContentEventInterface::class
+            BeforeRevealContentEvent::class,
+            RevealContentEvent::class
         );
 
         $parameters = [
@@ -1135,7 +1135,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(ContentServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeRevealContentEventInterface::class, function (BeforeRevealContentEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeRevealContentEvent::class, function (BeforeRevealContentEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -1146,11 +1146,11 @@ class ContentServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeRevealContentEventInterface::class, 10],
+            [BeforeRevealContentEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeRevealContentEventInterface::class, 0],
-            [RevealContentEventInterface::class, 0],
+            [BeforeRevealContentEvent::class, 0],
+            [RevealContentEvent::class, 0],
         ]);
     }
 }
