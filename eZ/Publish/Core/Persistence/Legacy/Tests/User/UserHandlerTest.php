@@ -274,7 +274,7 @@ class UserHandlerTest extends TestCase
         $handler->update($user);
 
         $this->assertQueryResult(
-            [[42, 'kore@example.org', 'New_lögin', 1234567890, '2']],
+            [[42, 'kore@example.org', 'New_lögin', 1234567890, '2', null]],
             $this->handler->createSelectQuery()->select('*')->from('ezuser'),
             'Expected user data to be updated.'
         );

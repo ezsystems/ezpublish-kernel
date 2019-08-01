@@ -243,6 +243,7 @@ tables:
             login: { type: string, nullable: false, length: 150, options: { default: '' } }
             password_hash: { type: string, nullable: true, length: 255 }
             password_hash_type: { type: integer, nullable: false, options: { default: '1' } }
+            password_updated_at: { type: integer, nullable: true }
     ezcontentobject_tree:
         indexes:
             ezcontentobject_tree_p_node_id: { fields: [parent_node_id] }

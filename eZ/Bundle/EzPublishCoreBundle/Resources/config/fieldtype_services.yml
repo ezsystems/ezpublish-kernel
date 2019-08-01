@@ -68,6 +68,13 @@ services:
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezimageasset}
 
+    eZ\Publish\Core\MVC\Symfony\FieldType\User\ParameterProvider:
+        lazy: true
+        arguments:
+            - "@ezpublish.api.service.user"
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezuser}
+
     # Page
     ezpublish.fieldType.ezpage.pageService.factory:
         class: "%ezpublish.fieldType.ezpage.pageService.factory.class%"

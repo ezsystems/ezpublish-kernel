@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
@@ -67,6 +69,11 @@ class UserConverter implements Converter
         if (isset($validatorParameters['minLength'])) {
             $storageDef->dataInt2 = $validatorParameters['minLength'];
         }
+
+        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+
+        $storageDef->dataInt3 = $fieldSettings[UserType::PASSWORD_TTL_SETTING];
+        $storageDef->dataInt4 = $fieldSettings[UserType::PASSWORD_TTL_WARNING_SETTING];
     }
 
     /**
@@ -90,6 +97,10 @@ class UserConverter implements Converter
         $validatorParameters['minLength'] = $storageDef->dataInt2;
 
         $fieldDef->fieldTypeConstraints->validators[self::PASSWORD_VALIDATOR_IDENTIFIER] = $validatorParameters;
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings([
+            UserType::PASSWORD_TTL_SETTING => $storageDef->dataInt3,
+            UserType::PASSWORD_TTL_WARNING_SETTING => $storageDef->dataInt4,
+        ]);
     }
 
     /**

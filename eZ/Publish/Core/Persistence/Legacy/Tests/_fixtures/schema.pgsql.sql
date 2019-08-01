@@ -434,7 +434,8 @@ CREATE TABLE ezuser (
     email character varying(150) DEFAULT ''::character varying NOT NULL,
     login character varying(150) DEFAULT ''::character varying NOT NULL,
     password_hash character varying(255),
-    password_hash_type integer DEFAULT 1 NOT NULL
+    password_hash_type integer DEFAULT 1 NOT NULL,
+    password_updated_at integer DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS ezuser_role;

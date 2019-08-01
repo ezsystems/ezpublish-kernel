@@ -58,6 +58,11 @@ class Value extends BaseValue
     public $passwordHashType;
 
     /**
+     * @var \DateTimeImmutable|null
+     */
+    public $passwordUpdatedAt;
+
+    /**
      * Is enabled.
      *
      * @var bool

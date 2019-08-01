@@ -34,6 +34,7 @@ class Mapper
         $user->email = $data['email'];
         $user->passwordHash = $data['password_hash'];
         $user->hashAlgorithm = (int)$data['password_hash_type'];
+        $user->passwordUpdatedAt = $data['password_updated_at'] !== null ? (int)$data['password_updated_at'] : null;
         $user->isEnabled = (bool)$data['is_enabled'];
         $user->maxLogin = $data['max_login'];
 

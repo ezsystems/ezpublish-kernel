@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
@@ -573,5 +574,10 @@ class UserService implements UserServiceInterface
     public function validatePassword(string $password, PasswordValidationContext $context = null): array
     {
         return $this->service->validatePassword($password, $context);
+    }
+
+    public function getPasswordInfo(User $user): PasswordInfo
+    {
+        return $this->service->getPasswordInfo($user);
     }
 }
