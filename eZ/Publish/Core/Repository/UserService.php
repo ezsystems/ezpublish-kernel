@@ -8,41 +8,41 @@
  */
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
-use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
-use eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException;
-use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
-use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
-use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
-use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\Core\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\Core\Repository\Values\User\UserGroup;
-use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
-use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
-use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct;
-use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
-use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
-use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct as SPIUserTokenUpdateStruct;
-use eZ\Publish\SPI\Persistence\User\Handler;
+use Exception;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
-use eZ\Publish\SPI\Persistence\User as SPIUser;
-use eZ\Publish\Core\FieldType\User\Value as UserValue;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId;
-use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
+use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use Exception;
+use eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException;
+use eZ\Publish\Core\FieldType\User\Value as UserValue;
+use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
+use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\Core\Repository\Values\User\UserGroup;
+use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\SPI\Persistence\User as SPIUser;
+use eZ\Publish\SPI\Persistence\User\Handler;
+use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct as SPIUserTokenUpdateStruct;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -1294,18 +1294,21 @@ class UserService implements UserServiceInterface
     protected function buildDomainUserGroupObject(APIContent $content)
     {
         $locationService = $this->repository->getLocationService();
-
+        $parentId = null;
         if ($content->getVersionInfo()->getContentInfo()->mainLocationId !== null) {
             $mainLocation = $locationService->loadLocation(
                 $content->getVersionInfo()->getContentInfo()->mainLocationId
             );
-            $parentLocation = $locationService->loadLocation($mainLocation->parentLocationId);
+            try {
+                $parentId = $locationService->loadLocation($mainLocation->parentLocationId)->contentId;
+            } catch (APIUnauthorizedException $e) {
+            }
         }
 
         return new UserGroup(
             [
                 'content' => $content,
-                'parentId' => isset($parentLocation) ? $parentLocation->contentId : null,
+                'parentId' => $parentId,
             ]
         );
     }

@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
@@ -58,6 +59,43 @@ class UserServiceTest extends BaseTest
         // User group happens to also be a Content; isUserGroup() should be true and isUser() should be false
         $this->assertTrue($userService->isUserGroup($userGroup), 'isUserGroup() => false on a user group');
         $this->assertFalse($userService->isUser($userGroup), 'isUser() => true on a user group');
+        $this->assertSame(0, $userGroup->parentId, 'parentId should be equal `0` because it is top level node');
+    }
+
+    /**
+     * Test for the loadUserGroup() method to ensure that DomainUserGroupObject is created properly even if a user
+     * has no access to parent of UserGroup.
+     *
+     * @see \eZ\Publish\API\Repository\UserService::loadUserGroup()
+     */
+    public function testLoadUserGroupWithNoAccessToParent()
+    {
+        $repository = $this->getRepository();
+
+        $mainGroupId = $this->generateId('group', 4);
+        /* BEGIN: Use Case */
+        // $mainGroupId is the ID of the main "Users" group
+
+        $userService = $repository->getUserService();
+
+        $user = $this->createUserWithPolicies(
+            'user',
+            [
+                ['module' => 'content', 'function' => 'read'],
+            ],
+            new SubtreeLimitation(['limitationValues' => ['/1/5']])
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        $userGroup = $userService->loadUserGroup($mainGroupId);
+        /* END: Use Case */
+
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $userGroup);
+
+        // User group happens to also be a Content; isUserGroup() should be true and isUser() should be false
+        $this->assertTrue($userService->isUserGroup($userGroup), 'isUserGroup() => false on a user group');
+        $this->assertFalse($userService->isUser($userGroup), 'isUser() => true on a user group');
+        $this->assertNull($userGroup->parentId, 'parentId should be null a when user has no access to it');
     }
 
     /**
