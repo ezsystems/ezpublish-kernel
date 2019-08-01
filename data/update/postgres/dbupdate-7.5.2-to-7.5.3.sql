@@ -9,8 +9,7 @@ ALTER TABLE ezcontentclass_attribute ALTER COLUMN data_text1 TYPE varchar(255);
 DELETE FROM ezcontentclass
   WHERE NOT EXISTS (
     SELECT 1 FROM ezuser
-      WHERE ezuser.contentobject_id = ezcontentclass.creator_id
-      OR ezuser.contentobject_id = ezcontentclass.modifier_id
+      WHERE ezuser.contentobject_id = ezcontentclass.modifier_id
   ) AND ezcontentclass.version = 1;
 
 DELETE FROM ezcontentclass_attribute
