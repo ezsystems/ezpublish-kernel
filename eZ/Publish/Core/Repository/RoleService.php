@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use Exception;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
-use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
@@ -28,19 +28,15 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\LimitationValidationException;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Repository\Values\User\Policy;
 use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\Role;
 use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
-use eZ\Publish\Core\Repository\Values\User\RoleDraft;
 use eZ\Publish\SPI\Persistence\User\Handler;
 use eZ\Publish\SPI\Persistence\User\Role as SPIRole;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct;
-use Exception;
 
 /**
  * This service provides methods for managing Roles and Policies.
@@ -61,6 +57,9 @@ class RoleService implements RoleServiceInterface
 
     /** @var array */
     protected $settings;
+
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
@@ -83,6 +82,7 @@ class RoleService implements RoleServiceInterface
         $this->limitationService = $limitationService;
         $this->roleDomainMapper = $roleDomainMapper;
         $this->settings = $settings;
+        $this->permissionResolver = $repository->getPermissionResolver();
     }
 
     /**
@@ -106,7 +106,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue('identifier', $roleCreateStruct->identifier, 'RoleCreateStruct');
         }
 
-        if (!$this->repository->canUser('role', 'create', $roleCreateStruct)) {
+        if (!$this->permissionResolver->canUser('role', 'create', $roleCreateStruct)) {
             throw new UnauthorizedException('role', 'create');
         }
 
@@ -155,7 +155,7 @@ class RoleService implements RoleServiceInterface
      */
     public function createRoleDraft(APIRole $role)
     {
-        if (!$this->repository->canUser('role', 'create', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'create', $role)) {
             throw new UnauthorizedException('role', 'create');
         }
 
@@ -199,7 +199,7 @@ class RoleService implements RoleServiceInterface
 
         $role = $this->roleDomainMapper->buildDomainRoleDraftObject($spiRole);
 
-        if (!$this->repository->canUser('role', 'read', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'read', $role)) {
             throw new UnauthorizedException('role', 'read');
         }
 
@@ -222,7 +222,7 @@ class RoleService implements RoleServiceInterface
 
         $role = $this->roleDomainMapper->buildDomainRoleDraftObject($spiRole);
 
-        if (!$this->repository->canUser('role', 'read', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'read', $role)) {
             throw new UnauthorizedException('role', 'read');
         }
 
@@ -250,7 +250,7 @@ class RoleService implements RoleServiceInterface
 
         $loadedRoleDraft = $this->loadRoleDraft($roleDraft->id);
 
-        if (!$this->repository->canUser('role', 'update', $loadedRoleDraft)) {
+        if (!$this->permissionResolver->canUser('role', 'update', $loadedRoleDraft)) {
             throw new UnauthorizedException('role', 'update');
         }
 
@@ -322,7 +322,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue('module', $policyCreateStruct->module, 'PolicyCreateStruct');
         }
 
-        if (!$this->repository->canUser('role', 'update', $roleDraft)) {
+        if (!$this->permissionResolver->canUser('role', 'update', $roleDraft)) {
             throw new UnauthorizedException('role', 'update');
         }
 
@@ -371,7 +371,7 @@ class RoleService implements RoleServiceInterface
      */
     public function removePolicyByRoleDraft(APIRoleDraft $roleDraft, PolicyDraft $policyDraft)
     {
-        if (!$this->repository->canUser('role', 'update', $roleDraft)) {
+        if (!$this->permissionResolver->canUser('role', 'update', $roleDraft)) {
             throw new UnauthorizedException('role', 'update');
         }
 
@@ -411,7 +411,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue('function', $policy->function, 'Policy');
         }
 
-        if (!$this->repository->canUser('role', 'update', $roleDraft)) {
+        if (!$this->permissionResolver->canUser('role', 'update', $roleDraft)) {
             throw new UnauthorizedException('role', 'update');
         }
 
@@ -485,7 +485,7 @@ class RoleService implements RoleServiceInterface
      */
     public function publishRoleDraft(APIRoleDraft $roleDraft)
     {
-        if (!$this->repository->canUser('role', 'update', $roleDraft)) {
+        if (!$this->permissionResolver->canUser('role', 'update', $roleDraft)) {
             throw new UnauthorizedException('role', 'update');
         }
 
@@ -530,7 +530,7 @@ class RoleService implements RoleServiceInterface
 
         $loadedRole = $this->loadRole($role->id);
 
-        if (!$this->repository->canUser('role', 'update', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'update', $role)) {
             throw new UnauthorizedException('role', 'update');
         }
 
@@ -597,7 +597,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue('module', $policyCreateStruct->module, 'PolicyCreateStruct');
         }
 
-        if (!$this->repository->canUser('role', 'update', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'update', $role)) {
             throw new UnauthorizedException('role', 'update');
         }
 
@@ -645,7 +645,7 @@ class RoleService implements RoleServiceInterface
         $spiRole = $this->userHandler->loadRole($policy->roleId);
         $role = $this->roleDomainMapper->buildDomainRoleObject($spiRole);
 
-        if (!$this->repository->canUser('role', 'update', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'update', $role)) {
             throw new UnauthorizedException('role', 'update');
         }
 
@@ -697,10 +697,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue('function', $policy->function, 'Policy');
         }
 
-        $spiRole = $this->userHandler->loadRole($policy->roleId);
-        $role = $this->roleDomainMapper->buildDomainRoleObject($spiRole);
-
-        if (!$this->repository->canUser('role', 'update', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'update', $policy)) {
             throw new UnauthorizedException('role', 'update');
         }
 
@@ -750,7 +747,7 @@ class RoleService implements RoleServiceInterface
 
         $role = $this->roleDomainMapper->buildDomainRoleObject($spiRole);
 
-        if (!$this->repository->canUser('role', 'read', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'read', $role)) {
             throw new UnauthorizedException('role', 'read');
         }
 
@@ -777,7 +774,7 @@ class RoleService implements RoleServiceInterface
 
         $role = $this->roleDomainMapper->buildDomainRoleObject($spiRole);
 
-        if (!$this->repository->canUser('role', 'read', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'read', $role)) {
             throw new UnauthorizedException('role', 'read');
         }
 
@@ -791,13 +788,21 @@ class RoleService implements RoleServiceInterface
      */
     public function loadRoles()
     {
-        $roles = array_map(function ($spiRole) {
-            return $this->roleDomainMapper->buildDomainRoleObject($spiRole);
-        }, $this->userHandler->loadRoles());
+        $roles = array_map(
+            function ($spiRole) {
+                return $this->roleDomainMapper->buildDomainRoleObject($spiRole);
+            },
+            $this->userHandler->loadRoles()
+        );
 
-        return array_values(array_filter($roles, function ($role) {
-            return $this->repository->canUser('role', 'read', $role);
-        }));
+        return array_values(
+            array_filter(
+                $roles,
+                function ($role) {
+                    return $this->permissionResolver->canUser('role', 'read', $role);
+                }
+            )
+        );
     }
 
     /**
@@ -809,7 +814,7 @@ class RoleService implements RoleServiceInterface
      */
     public function deleteRole(APIRole $role)
     {
-        if (!$this->repository->canUser('role', 'delete', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'delete', $role)) {
             throw new UnauthorizedException('role', 'delete');
         }
 
@@ -863,7 +868,7 @@ class RoleService implements RoleServiceInterface
      */
     public function assignRoleToUserGroup(APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null)
     {
-        if ($this->repository->canUser('role', 'assign', $userGroup, $role) !== true) {
+        if ($this->permissionResolver->canUser('role', 'assign', $userGroup, [$role]) !== true) {
             throw new UnauthorizedException('role', 'assign');
         }
 
@@ -909,7 +914,7 @@ class RoleService implements RoleServiceInterface
      */
     public function unassignRoleFromUserGroup(APIRole $role, UserGroup $userGroup)
     {
-        if ($this->repository->canUser('role', 'assign', $userGroup, $role) !== true) {
+        if ($this->permissionResolver->canUser('role', 'assign', $userGroup, [$role]) !== true) {
             throw new UnauthorizedException('role', 'assign');
         }
 
@@ -952,7 +957,7 @@ class RoleService implements RoleServiceInterface
      */
     public function assignRoleToUser(APIRole $role, User $user, RoleLimitation $roleLimitation = null)
     {
-        if ($this->repository->canUser('role', 'assign', $user, $role) !== true) {
+        if ($this->permissionResolver->canUser('role', 'assign', $user, [$role]) !== true) {
             throw new UnauthorizedException('role', 'assign');
         }
 
@@ -998,7 +1003,7 @@ class RoleService implements RoleServiceInterface
      */
     public function unassignRoleFromUser(APIRole $role, User $user)
     {
-        if ($this->repository->canUser('role', 'assign', $user, $role) !== true) {
+        if ($this->permissionResolver->canUser('role', 'assign', $user, [$role]) !== true) {
             throw new UnauthorizedException('role', 'assign');
         }
 
@@ -1037,7 +1042,7 @@ class RoleService implements RoleServiceInterface
      */
     public function removeRoleAssignment(RoleAssignment $roleAssignment)
     {
-        if ($this->repository->canUser('role', 'assign', $roleAssignment) !== true) {
+        if ($this->permissionResolver->canUser('role', 'assign', $roleAssignment) !== true) {
             throw new UnauthorizedException('role', 'assign');
         }
 
@@ -1069,7 +1074,7 @@ class RoleService implements RoleServiceInterface
         $userService = $this->repository->getUserService();
         $role = $this->loadRole($spiRoleAssignment->roleId);
 
-        if (!$this->repository->canUser('role', 'read', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'read', $role)) {
             throw new UnauthorizedException('role', 'read');
         }
 
@@ -1111,7 +1116,7 @@ class RoleService implements RoleServiceInterface
      */
     public function getRoleAssignments(APIRole $role)
     {
-        if (!$this->repository->canUser('role', 'read', $role)) {
+        if (!$this->permissionResolver->canUser('role', 'read', $role)) {
             throw new UnauthorizedException('role', 'read');
         }
 
@@ -1156,21 +1161,23 @@ class RoleService implements RoleServiceInterface
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
             $role = $this->loadRole($spiRoleAssignment->roleId);
 
-            if ($this->repository->canUser('role', 'read', $role)) {
-                if (!$inherited || $spiRoleAssignment->contentId == $user->id) {
-                    $roleAssignments[] = $this->roleDomainMapper->buildDomainUserRoleAssignmentObject(
-                        $spiRoleAssignment,
-                        $user,
-                        $role
-                    );
-                } else {
-                    $userGroup = $this->repository->getUserService()->loadUserGroup($spiRoleAssignment->contentId);
-                    $roleAssignments[] = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
-                        $spiRoleAssignment,
-                        $userGroup,
-                        $role
-                    );
-                }
+            if (!$this->permissionResolver->canUser('role', 'read', $role)) {
+                continue;
+            }
+
+            if (!$inherited || $spiRoleAssignment->contentId == $user->id) {
+                $roleAssignments[] = $this->roleDomainMapper->buildDomainUserRoleAssignmentObject(
+                    $spiRoleAssignment,
+                    $user,
+                    $role
+                );
+            } else {
+                $userGroup = $this->repository->getUserService()->loadUserGroup($spiRoleAssignment->contentId);
+                $roleAssignments[] = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
+                    $spiRoleAssignment,
+                    $userGroup,
+                    $role
+                );
             }
         }
 
@@ -1191,7 +1198,7 @@ class RoleService implements RoleServiceInterface
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
             $role = $this->loadRole($spiRoleAssignment->roleId);
 
-            if ($this->repository->canUser('role', 'read', $role)) {
+            if ($this->permissionResolver->canUser('role', 'read', $role)) {
                 $roleAssignments[] = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
                     $spiRoleAssignment,
                     $userGroup,
