@@ -48,6 +48,7 @@ $loader->load('utils.yml');
 $loader->load('tests/common.yml');
 $loader->load('policies.yml');
 $loader->load('richtext.yml');
+$loader->load('slot.yml');
 
 // Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
 if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {

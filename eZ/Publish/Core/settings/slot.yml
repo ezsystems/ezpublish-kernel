@@ -1,0 +1,7 @@
+services:
+    ezpublish.api.slot.user.delete_user_signal:
+        class: eZ\Publish\Core\Repository\Slot\User\DeleteUser
+        arguments:
+            - '@ezpublish.api.service.content_type'
+        tags:
+            - { name: ezpublish.api.slot, signal: UserService\DeleteUserSignal }

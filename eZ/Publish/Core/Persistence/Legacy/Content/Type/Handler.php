@@ -662,4 +662,9 @@ class Handler implements BaseContentTypeHandler
 
         return $this->update($type->id, Type::STATUS_DRAFT, $updateStruct);
     }
+
+    public function deleteByUserAndStatus(int $userId, int $status): void
+    {
+        $this->contentTypeGateway->removeByUserAndVersion($userId, $status);
+    }
 }

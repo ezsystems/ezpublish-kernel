@@ -450,4 +450,9 @@ class MemoryCachingHandler implements BaseContentTypeHandler
             $listIndex
         );
     }
+
+    public function deleteByUserAndStatus(int $userId, int $status): void
+    {
+        $this->innerHandler->deleteByUserAndStatus($userId, $status);
+    }
 }

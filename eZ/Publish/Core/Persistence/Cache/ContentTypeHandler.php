@@ -50,7 +50,14 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             ];
         };
 
-        $this->getTypeTags = static function (Type $type) { return ['type-' . $type->id]; };
+        $this->getTypeTags = static function (Type $type) {
+            return [
+                'type',
+                'type-' . $type->id,
+                'type-modifierId-' . $type->modifierId,
+                'type-creatorId-' . $type->creatorId,
+            ];
+        };
         $this->getTypeKeys = static function (Type $type, int $status = Type::STATUS_DEFINED) {
             return [
                 'ez-content-type-' . $type->id . '-' . $status,
@@ -508,5 +515,11 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
         $this->cache->invalidateTags(['type-' . $contentTypeId, 'type-map', 'content-fields-type-' . $contentTypeId]);
 
         return $return;
+    }
+
+    public function deleteByUserAndStatus(int $userId, int $status): void
+    {
+        $this->persistenceHandler->contentTypeHandler()->deleteByUserAndStatus($userId, $status);
+        $this->cache->invalidateTags(['type-modifierId-' . $userId, 'type-creatorId-' . $userId]);
     }
 }
