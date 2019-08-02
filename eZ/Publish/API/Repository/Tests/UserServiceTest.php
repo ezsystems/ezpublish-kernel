@@ -54,7 +54,7 @@ class UserServiceTest extends BaseTest
         $userGroup = $userService->loadUserGroup($mainGroupId);
         /* END: Use Case */
 
-        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $userGroup);
+        $this->assertInstanceOf(UserGroup::class, $userGroup);
 
         // User group happens to also be a Content; isUserGroup() should be true and isUser() should be false
         $this->assertTrue($userService->isUserGroup($userGroup), 'isUserGroup() => false on a user group');
@@ -90,12 +90,12 @@ class UserServiceTest extends BaseTest
         $userGroup = $userService->loadUserGroup($mainGroupId);
         /* END: Use Case */
 
-        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $userGroup);
+        $this->assertInstanceOf(UserGroup::class, $userGroup);
 
         // User group happens to also be a Content; isUserGroup() should be true and isUser() should be false
         $this->assertTrue($userService->isUserGroup($userGroup), 'isUserGroup() => false on a user group');
         $this->assertFalse($userService->isUser($userGroup), 'isUser() => true on a user group');
-        $this->assertNull($userGroup->parentId, 'parentId should be null a when user has no access to it');
+        $this->assertSame(0, $userGroup->parentId, 'parentId should be equal `0` because it is top level node');
     }
 
     /**
@@ -139,7 +139,7 @@ class UserServiceTest extends BaseTest
         $subUserGroups = $userService->loadSubUserGroups($userGroup);
         foreach ($subUserGroups as $subUserGroup) {
             // Do something with the $subUserGroup
-            $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $subUserGroup);
+            $this->assertInstanceOf(UserGroup::class, $subUserGroup);
         }
         /* END: Use Case */
     }
@@ -278,7 +278,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup',
+            UserGroup::class,
             $userGroup
         );
 
@@ -644,7 +644,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup',
+            UserGroup::class,
             $userGroup
         );
 

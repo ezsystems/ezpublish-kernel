@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\Repository;
 
 use Exception;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
@@ -42,6 +41,7 @@ use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\SPI\Persistence\User as SPIUser;
 use eZ\Publish\SPI\Persistence\User\Handler;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct as SPIUserTokenUpdateStruct;
 use Psr\Log\LoggerInterface;
 
@@ -57,6 +57,9 @@ class UserService implements UserServiceInterface
 
     /** @var \eZ\Publish\SPI\Persistence\User\Handler */
     protected $userHandler;
+
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
+    private $locationHandler;
 
     /** @var array */
     protected $settings;
@@ -77,13 +80,19 @@ class UserService implements UserServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $userHandler, array $settings = [])
-    {
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $userHandler,
+        LocationHandler $locationHandler,
+        array $settings = []
+    ) {
         $this->repository = $repository;
         $this->permissionResolver = $repository->getPermissionResolver();
         $this->userHandler = $userHandler;
+        $this->locationHandler = $locationHandler;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + [
             'defaultUserPlacement' => 12,
@@ -1294,21 +1303,18 @@ class UserService implements UserServiceInterface
     protected function buildDomainUserGroupObject(APIContent $content)
     {
         $locationService = $this->repository->getLocationService();
-        $parentId = null;
+
         if ($content->getVersionInfo()->getContentInfo()->mainLocationId !== null) {
             $mainLocation = $locationService->loadLocation(
                 $content->getVersionInfo()->getContentInfo()->mainLocationId
             );
-            try {
-                $parentId = $locationService->loadLocation($mainLocation->parentLocationId)->contentId;
-            } catch (APIUnauthorizedException $e) {
-            }
+            $parentLocation = $this->locationHandler->load($mainLocation->parentLocationId);
         }
 
         return new UserGroup(
             [
                 'content' => $content,
-                'parentId' => $parentId,
+                'parentId' => $parentLocation->contentId ?? null,
             ]
         );
     }

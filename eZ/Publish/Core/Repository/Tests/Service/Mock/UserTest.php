@@ -150,6 +150,7 @@ class UserTest extends BaseServiceMockTest
                 [
                     $this->getRepositoryMock(),
                     $this->getPersistenceMock()->userHandler(),
+                    $this->getPersistenceMock()->locationHandler(),
                 ]
             )
             ->getMock();
