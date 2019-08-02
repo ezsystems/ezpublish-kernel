@@ -43,8 +43,8 @@ class TemplateRendererTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with(
-                MVCEvents::PRE_CONTENT_VIEW,
-                $this->isInstanceOf(PreContentViewEvent::class)
+                $this->isInstanceOf(PreContentViewEvent::class),
+                MVCEvents::PRE_CONTENT_VIEW
             );
 
         $this->templateEngineMock

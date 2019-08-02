@@ -67,7 +67,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::SITEACCESS, $this->equalTo($postSAMatchEvent));
+            ->with($this->equalTo($postSAMatchEvent), MVCEvents::SITEACCESS);
 
         $this->listener->onKernelRequest($event);
         $this->assertEquals($siteAccess, $request->attributes->get('siteaccess'));
@@ -93,7 +93,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::SITEACCESS, $this->equalTo($postSAMatchEvent));
+            ->with($this->equalTo($postSAMatchEvent), MVCEvents::SITEACCESS);
 
         $this->listener->onKernelRequest($event);
         $this->assertSame($siteAccess, $request->attributes->get('siteaccess'));
@@ -135,7 +135,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::SITEACCESS, $this->equalTo($postSAMatchEvent));
+            ->with($this->equalTo($postSAMatchEvent), MVCEvents::SITEACCESS);
 
         $this->listener->onKernelRequest($event);
         $this->assertSame($siteAccess, $request->attributes->get('siteaccess'));
@@ -179,7 +179,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::SITEACCESS, $this->equalTo($postSAMatchEvent));
+            ->with($this->equalTo($postSAMatchEvent), MVCEvents::SITEACCESS);
 
         $this->listener->onKernelRequest($event);
         $this->assertSame($siteAccess, $request->attributes->get('siteaccess'));

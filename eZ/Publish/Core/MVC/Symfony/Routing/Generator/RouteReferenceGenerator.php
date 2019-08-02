@@ -45,7 +45,7 @@ class RouteReferenceGenerator implements RouteReferenceGeneratorInterface
         }
 
         $event = new RouteReferenceGenerationEvent(new RouteReference($resource, $params), $request);
-        $this->dispatcher->dispatch(MVCEvents::ROUTE_REFERENCE_GENERATION, $event);
+        $this->dispatcher->dispatch($event, MVCEvents::ROUTE_REFERENCE_GENERATION);
 
         return $event->getRouteReference();
     }

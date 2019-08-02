@@ -66,7 +66,7 @@ class ViewControllerListener implements EventSubscriberInterface
         }
 
         $parameterEvent = new FilterViewBuilderParametersEvent(clone $request);
-        $this->eventDispatcher->dispatch(ViewEvents::FILTER_BUILDER_PARAMETERS, $parameterEvent);
+        $this->eventDispatcher->dispatch($parameterEvent, ViewEvents::FILTER_BUILDER_PARAMETERS);
         $view = $viewBuilder->buildView($parameterEvent->getParameters()->all());
         $request->attributes->set('view', $view);
 

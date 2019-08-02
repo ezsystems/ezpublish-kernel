@@ -52,7 +52,7 @@ class ContentPreviewHelperTest extends TestCase
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::CONFIG_SCOPE_CHANGE, $this->equalTo($event));
+            ->with($this->equalTo($event), MVCEvents::CONFIG_SCOPE_CHANGE);
 
         $originalSiteAccess = new SiteAccess('foo', 'bar');
         $this->previewHelper->setSiteAccess($originalSiteAccess);
@@ -69,7 +69,7 @@ class ContentPreviewHelperTest extends TestCase
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::CONFIG_SCOPE_RESTORE, $this->equalTo($event));
+            ->with($this->equalTo($event), MVCEvents::CONFIG_SCOPE_RESTORE);
 
         $this->previewHelper->setSiteAccess($originalSiteAccess);
         $this->assertEquals(

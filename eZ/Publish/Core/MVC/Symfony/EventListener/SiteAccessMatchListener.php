@@ -73,7 +73,7 @@ class SiteAccessMatchListener implements EventSubscriberInterface
         $siteaccess = $request->attributes->get('siteaccess');
         if ($siteaccess instanceof SiteAccess) {
             $siteAccessEvent = new PostSiteAccessMatchEvent($siteaccess, $request, $event->getRequestType());
-            $this->eventDispatcher->dispatch(MVCEvents::SITEACCESS, $siteAccessEvent);
+            $this->eventDispatcher->dispatch($siteAccessEvent, MVCEvents::SITEACCESS);
         }
     }
 

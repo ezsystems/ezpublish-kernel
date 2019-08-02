@@ -68,7 +68,7 @@ class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAwar
             throw new InvalidSiteAccessException($this->siteAccess->name, $this->siteAccessList, $this->siteAccess->matchingType, $this->debug);
         }
 
-        $this->eventDispatcher->dispatch(MVCEvents::CONFIG_SCOPE_CHANGE, new ScopeChangeEvent($this->siteAccess));
+        $this->eventDispatcher->dispatch(new ScopeChangeEvent($this->siteAccess), MVCEvents::CONFIG_SCOPE_CHANGE);
     }
 
     public function setSiteAccess(SiteAccess $siteAccess = null)

@@ -26,7 +26,7 @@ class EventDispatcherInjector implements ParametersInjector
     public function injectViewParameters(View $view, array $parameters)
     {
         $event = new FilterViewParametersEvent($view, $parameters);
-        $this->eventDispatcher->dispatch(ViewEvents::FILTER_VIEW_PARAMETERS, $event);
+        $this->eventDispatcher->dispatch($event, ViewEvents::FILTER_VIEW_PARAMETERS);
         $view->addParameters($event->getViewParameters());
     }
 }

@@ -44,7 +44,7 @@ class RouteReferenceGeneratorTest extends TestCase
         $this->dispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::ROUTE_REFERENCE_GENERATION, $this->equalTo($event));
+            ->with($this->equalTo($event), MVCEvents::ROUTE_REFERENCE_GENERATION);
 
         $generator = new RouteReferenceGenerator($this->dispatcher);
         $generator->setRequestStack($requestStack);
@@ -71,7 +71,7 @@ class RouteReferenceGeneratorTest extends TestCase
         $this->dispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::ROUTE_REFERENCE_GENERATION, $this->equalTo($event));
+            ->with($this->equalTo($event), MVCEvents::ROUTE_REFERENCE_GENERATION);
 
         $generator = new RouteReferenceGenerator($this->dispatcher);
         $generator->setRequestStack($requestStack);
@@ -99,7 +99,7 @@ class RouteReferenceGeneratorTest extends TestCase
         $this->dispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::ROUTE_REFERENCE_GENERATION, $this->equalTo($event));
+            ->with($this->equalTo($event), MVCEvents::ROUTE_REFERENCE_GENERATION);
 
         $generator = new RouteReferenceGenerator($this->dispatcher);
         $generator->setRequestStack($requestStack);
@@ -122,7 +122,7 @@ class RouteReferenceGeneratorTest extends TestCase
         $this->dispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(MVCEvents::ROUTE_REFERENCE_GENERATION, $this->equalTo($event));
+            ->with($this->equalTo($event), MVCEvents::ROUTE_REFERENCE_GENERATION);
 
         $generator = new RouteReferenceGenerator($this->dispatcher);
         $generator->setRequestStack($requestStack);
