@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition;
@@ -1539,5 +1540,92 @@ class DoctrineDatabase extends Gateway
             ->setParameter('languageId', $languageId, ParameterType::INTEGER);
 
         $deleteQuery->execute();
+    }
+
+    /**
+     * Removes types created or modified by the user.
+     */
+    public function removeByUserAndVersion(int $userId, int $version): void
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->delete('ezcontentclass')
+            ->where('creator_id = :user or modifier_id = :user')
+            ->andWhere('version = :version')
+            ->setParameter('user', $userId, ParameterType::INTEGER)
+            ->setParameter('version', $version, ParameterType::INTEGER)
+        ;
+
+        try {
+            $this->connection->beginTransaction();
+
+            $queryBuilder->execute();
+            $this->cleanupAssociations();
+
+            $this->connection->commit();
+        } catch (DBALException | PDOException $e) {
+            $this->connection->rollBack();
+
+            throw $e;
+        }
+    }
+
+    private function cleanupAssociations(): void
+    {
+        $this->cleanupClassAttributeTable();
+        $this->cleanupClassAttributeMLTable();
+        $this->cleanupClassGroupTable();
+        $this->cleanupClassNameTable();
+    }
+
+    private function cleanupClassAttributeTable(): void
+    {
+        $sql = <<<SQL
+          DELETE FROM ezcontentclass_attribute
+            WHERE NOT EXISTS (
+              SELECT 1 FROM ezcontentclass
+                WHERE ezcontentclass.id = ezcontentclass_attribute.contentclass_id 
+                AND ezcontentclass.version = ezcontentclass_attribute.version
+            )
+SQL;
+        $this->connection->executeUpdate($sql);
+    }
+
+    private function cleanupClassAttributeMLTable(): void
+    {
+        $sql = <<<SQL
+          DELETE FROM ezcontentclass_attribute_ml 
+            WHERE NOT EXISTS (
+              SELECT 1 FROM ezcontentclass_attribute 
+                WHERE ezcontentclass_attribute.id = ezcontentclass_attribute_ml.contentclass_attribute_id 
+                AND ezcontentclass_attribute.version = ezcontentclass_attribute_ml.version
+            )
+SQL;
+        $this->connection->executeUpdate($sql);
+    }
+
+    private function cleanupClassGroupTable(): void
+    {
+        $sql = <<<SQL
+          DELETE FROM ezcontentclass_classgroup 
+            WHERE NOT EXISTS (
+              SELECT 1 FROM ezcontentclass 
+                WHERE ezcontentclass.id = ezcontentclass_classgroup.contentclass_id 
+                AND ezcontentclass.version = ezcontentclass_classgroup.contentclass_version
+            )
+SQL;
+        $this->connection->executeUpdate($sql);
+    }
+
+    private function cleanupClassNameTable(): void
+    {
+        $sql = <<< SQL
+          DELETE FROM ezcontentclass_name 
+            WHERE NOT EXISTS (
+              SELECT 1 FROM ezcontentclass 
+                WHERE ezcontentclass.id = ezcontentclass_name.contentclass_id 
+                AND ezcontentclass.version = ezcontentclass_name.contentclass_version
+            )
+SQL;
+        $this->connection->executeUpdate($sql);
     }
 }

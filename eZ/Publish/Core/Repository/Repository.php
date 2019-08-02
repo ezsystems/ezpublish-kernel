@@ -494,6 +494,7 @@ class Repository implements RepositoryInterface
         $this->contentTypeService = new ContentTypeService(
             $this,
             $this->persistenceHandler->contentTypeHandler(),
+            $this->persistenceHandler->userHandler(),
             $this->getDomainMapper(),
             $this->getContentTypeDomainMapper(),
             $this->fieldTypeRegistry,

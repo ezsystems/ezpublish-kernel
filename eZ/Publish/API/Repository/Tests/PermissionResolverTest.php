@@ -1173,9 +1173,9 @@ class PermissionResolverTest extends BaseTest
         $permissionResolver->setCurrentUserReference($user);
         /* END: Use Case */
 
-        $expectedPolicy = array_filter($role->getPolicies(), function ($policy) use ($module, $function) {
+        $expectedPolicy = current(array_filter($role->getPolicies(), function ($policy) use ($module, $function) {
             return $policy->module === $module && $policy->function === $function;
-        })[0] ?? null;
+        }));
 
         $expected = new LookupLimitationResult(
             true,

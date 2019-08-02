@@ -222,4 +222,9 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
     ): ContentTypeDraft {
         return $this->innerService->removeContentTypeTranslation($contentTypeDraft, $languageCode);
     }
+
+    public function deleteUserDrafts(int $userId): void
+    {
+        $this->innerService->deleteUserDrafts($userId);
+    }
 }

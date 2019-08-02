@@ -564,4 +564,13 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException('Database error', 0, $e);
         }
     }
+
+    public function removeByUserAndVersion(int $userId, int $version): void
+    {
+        try {
+            $this->innerGateway->removeByUserAndVersion($userId, $version);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error: ' . $e->getMessage(), 0, $e);
+        }
+    }
 }

@@ -613,4 +613,9 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         return $contentTypeDraft;
     }
+
+    public function deleteUserDrafts(int $userId): void
+    {
+        $this->service->deleteUserDrafts($userId);
+    }
 }

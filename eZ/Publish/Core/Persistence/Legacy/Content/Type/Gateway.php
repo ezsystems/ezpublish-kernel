@@ -297,4 +297,12 @@ abstract class Gateway
         string $languageCode,
         int $status
     ): void;
+
+    /**
+     * Removes items created or modified by the user.
+     *
+     * @param int $userId
+     * @param int $version
+     */
+    abstract public function removeByUserAndVersion(int $userId, int $version): void;
 }
