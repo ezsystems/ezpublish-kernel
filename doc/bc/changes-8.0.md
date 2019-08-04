@@ -52,6 +52,9 @@ Changes affecting version compatibility with former or future versions.
   * the namespace `\eZ\Publish\Core\FieldType\RichText` has been dropped (all classes are available
   in the mentioned package).
 
+  * Deprecated `eZ\Publish\SPI\FieldType\EventListener` interface, `eZ\Publish\SPI\FieldType\Event` class and  
+  `eZ\Publish\SPI\FieldType\Events` namespace has been dropped
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
