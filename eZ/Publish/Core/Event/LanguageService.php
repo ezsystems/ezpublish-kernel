@@ -8,16 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\Events\Language\BeforeCreateLanguageEvent as BeforeCreateLanguageEventInterface;
-use eZ\Publish\API\Repository\Events\Language\BeforeDeleteLanguageEvent as BeforeDeleteLanguageEventInterface;
-use eZ\Publish\API\Repository\Events\Language\BeforeDisableLanguageEvent as BeforeDisableLanguageEventInterface;
-use eZ\Publish\API\Repository\Events\Language\BeforeEnableLanguageEvent as BeforeEnableLanguageEventInterface;
-use eZ\Publish\API\Repository\Events\Language\BeforeUpdateLanguageNameEvent as BeforeUpdateLanguageNameEventInterface;
-use eZ\Publish\API\Repository\Events\Language\CreateLanguageEvent as CreateLanguageEventInterface;
-use eZ\Publish\API\Repository\Events\Language\DeleteLanguageEvent as DeleteLanguageEventInterface;
-use eZ\Publish\API\Repository\Events\Language\DisableLanguageEvent as DisableLanguageEventInterface;
-use eZ\Publish\API\Repository\Events\Language\EnableLanguageEvent as EnableLanguageEventInterface;
-use eZ\Publish\API\Repository\Events\Language\UpdateLanguageNameEvent as UpdateLanguageNameEventInterface;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
@@ -54,7 +44,7 @@ class LanguageService extends LanguageServiceDecorator
 
         $beforeEvent = new BeforeCreateLanguageEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateLanguageEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getLanguage();
         }
@@ -64,8 +54,7 @@ class LanguageService extends LanguageServiceDecorator
             : $this->innerService->createLanguage($languageCreateStruct);
 
         $this->eventDispatcher->dispatch(
-            new CreateLanguageEvent($language, ...$eventData),
-            CreateLanguageEventInterface::class
+            new CreateLanguageEvent($language, ...$eventData)
         );
 
         return $language;
@@ -82,7 +71,7 @@ class LanguageService extends LanguageServiceDecorator
 
         $beforeEvent = new BeforeUpdateLanguageNameEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateLanguageNameEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedLanguage();
         }
@@ -92,8 +81,7 @@ class LanguageService extends LanguageServiceDecorator
             : $this->innerService->updateLanguageName($language, $newName);
 
         $this->eventDispatcher->dispatch(
-            new UpdateLanguageNameEvent($updatedLanguage, ...$eventData),
-            UpdateLanguageNameEventInterface::class
+            new UpdateLanguageNameEvent($updatedLanguage, ...$eventData)
         );
 
         return $updatedLanguage;
@@ -105,7 +93,7 @@ class LanguageService extends LanguageServiceDecorator
 
         $beforeEvent = new BeforeEnableLanguageEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeEnableLanguageEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getEnabledLanguage();
         }
@@ -115,8 +103,7 @@ class LanguageService extends LanguageServiceDecorator
             : $this->innerService->enableLanguage($language);
 
         $this->eventDispatcher->dispatch(
-            new EnableLanguageEvent($enabledLanguage, ...$eventData),
-            EnableLanguageEventInterface::class
+            new EnableLanguageEvent($enabledLanguage, ...$eventData)
         );
 
         return $enabledLanguage;
@@ -128,7 +115,7 @@ class LanguageService extends LanguageServiceDecorator
 
         $beforeEvent = new BeforeDisableLanguageEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDisableLanguageEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getDisabledLanguage();
         }
@@ -138,8 +125,7 @@ class LanguageService extends LanguageServiceDecorator
             : $this->innerService->disableLanguage($language);
 
         $this->eventDispatcher->dispatch(
-            new DisableLanguageEvent($disabledLanguage, ...$eventData),
-            DisableLanguageEventInterface::class
+            new DisableLanguageEvent($disabledLanguage, ...$eventData)
         );
 
         return $disabledLanguage;
@@ -151,7 +137,7 @@ class LanguageService extends LanguageServiceDecorator
 
         $beforeEvent = new BeforeDeleteLanguageEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteLanguageEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -159,8 +145,7 @@ class LanguageService extends LanguageServiceDecorator
         $this->innerService->deleteLanguage($language);
 
         $this->eventDispatcher->dispatch(
-            new DeleteLanguageEvent(...$eventData),
-            DeleteLanguageEventInterface::class
+            new DeleteLanguageEvent(...$eventData)
         );
     }
 }

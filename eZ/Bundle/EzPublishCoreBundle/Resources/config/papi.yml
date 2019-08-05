@@ -7,9 +7,6 @@ parameters:
     ezpublish.api.search_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineFactory
     ezpublish.api.search_engine.indexer.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineIndexerFactory
 
-    # Symfony event converter Slot
-    ezpublish.signalslot.event_converter_slot.class: eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot
-
     # Using legacy storage engine for data compatibility with 4.x
     ezpublish.api.storage_engine.default: legacy
     ezpublish.api.search_engine.default: legacy
@@ -17,9 +14,6 @@ parameters:
     ezpublish.api.content.class: eZ\Publish\Core\Repository\Values\Content\Content
     ezpublish.api.location.class: eZ\Publish\Core\Repository\Values\Content\Location
     ezpublish.api.version.class: eZ\Publish\Core\Repository\Values\Content\VersionInfo
-
-    # SignalDispatcher factory
-    ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SignalSlot\SignalDispatcherFactory
 
 services:
     # API
@@ -72,21 +66,6 @@ services:
         class: "%ezpublish.search.common.indexer.class%"
         factory: ["@ezpublish.api.search_engine.indexer.factory", buildSearchEngineIndexer]
         public: false
-
-    # Signal Slot API wrapper
-    ezpublish.signalslot.event_converter_slot:
-        class: "%ezpublish.signalslot.event_converter_slot.class%"
-        arguments: ["@event_dispatcher"]
-        tags:
-            - { name: ezpublish.api.slot, signal: '*' }
-
-    # SignalDispatcher Factory
-    ezpublish.signalslot.signal_dispatcher.factory:
-        class: "%ezpublish.signalslot.signal_dispatcher.factory.class%"
-        arguments:
-            - "%ezpublish.signalslot.signal_dispatcher.class%"
-            - "$repository$"
-            - "%ezpublish.repositories%"
 
     # Redefine background indexer to the one provided here which works on kernel/console.terminate.
     ezpublish.search.background_indexer:

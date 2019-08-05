@@ -3654,7 +3654,7 @@ class SearchServiceTest extends BaseTest
 
         // Create a Content to be found through Editors UserGroup id.
         // This ensures data is indexed, it could also be done by updating metadata of
-        // an existing Content, but slot would need to reindex Content and that should
+        // an existing Content, but listener would need to reindex Content and that should
         // be tested elsewhere (dedicated indexing integration tests, missing ATM).
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
@@ -3719,7 +3719,7 @@ class SearchServiceTest extends BaseTest
             // Administrator User is owned by itself, when additional Locations are added
             // it should be reindexed and its UserGroups will updated, which means it should
             // also be found as a Content of Editors UserGroup. However we do not handle this
-            // in slots yet, and also miss SPI methods to do it without using Search (also
+            // in listeners yet, and also miss SPI methods to do it without using Search (also
             // needed to decouple services), because as indexing is asynchronous Search
             // should not eat its own dog food for reindexing.
             $this->assertEquals(1, $result->totalCount);
@@ -3730,7 +3730,7 @@ class SearchServiceTest extends BaseTest
             );
         } else {
             // This is how it should eventually work for all search engines,
-            // with required reindexing slots properly implemented.
+            // with required reindexing listeners properly implemented.
 
             $result = $searchService->findContent($query);
 
@@ -3808,7 +3808,7 @@ class SearchServiceTest extends BaseTest
             // Administrator User is owned by itself, when additional Locations are added
             // it should be reindexed and its UserGroups will updated, which means it should
             // also be found as a Content of Editors UserGroup. However we do not handle this
-            // in slots yet, and also miss SPI methods to do it without using Search (also
+            // in listeners yet, and also miss SPI methods to do it without using Search (also
             // needed to decouple services), because as indexing is asynchronous Search
             // should not eat its own dog food for reindexing.
             $this->assertEquals(1, $result->totalCount);
@@ -3819,7 +3819,7 @@ class SearchServiceTest extends BaseTest
             );
         } else {
             // This is how it should eventually work for all search engines,
-            // with required reindexing slots properly implemented.
+            // with required reindexing listeners properly implemented.
 
             $result = $searchService->findLocations($query);
 

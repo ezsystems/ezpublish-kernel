@@ -258,7 +258,7 @@ services:
     ezplatform.core.command.cleanup_versions:
         class: eZ\Bundle\EzPublishCoreBundle\Command\CleanupVersionsCommand
         arguments:
-            - "@ezpublish.signalslot.repository"
+            - '@eZ\Publish\Core\Event\Repository'
             - "@ezpublish.config.resolver"
             - "@ezpublish.persistence.connection"
         tags:

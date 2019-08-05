@@ -8,12 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\Events\Notification\BeforeCreateNotificationEvent as BeforeCreateNotificationEventInterface;
-use eZ\Publish\API\Repository\Events\Notification\BeforeDeleteNotificationEvent as BeforeDeleteNotificationEventInterface;
-use eZ\Publish\API\Repository\Events\Notification\BeforeMarkNotificationAsReadEvent as BeforeMarkNotificationAsReadEventInterface;
-use eZ\Publish\API\Repository\Events\Notification\CreateNotificationEvent as CreateNotificationEventInterface;
-use eZ\Publish\API\Repository\Events\Notification\DeleteNotificationEvent as DeleteNotificationEventInterface;
-use eZ\Publish\API\Repository\Events\Notification\MarkNotificationAsReadEvent as MarkNotificationAsReadEventInterface;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
@@ -46,7 +40,7 @@ class NotificationService extends NotificationServiceDecorator
 
         $beforeEvent = new BeforeMarkNotificationAsReadEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeMarkNotificationAsReadEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -54,8 +48,7 @@ class NotificationService extends NotificationServiceDecorator
         $this->innerService->markNotificationAsRead($notification);
 
         $this->eventDispatcher->dispatch(
-            new MarkNotificationAsReadEvent(...$eventData),
-            MarkNotificationAsReadEventInterface::class
+            new MarkNotificationAsReadEvent(...$eventData)
         );
     }
 
@@ -65,7 +58,7 @@ class NotificationService extends NotificationServiceDecorator
 
         $beforeEvent = new BeforeCreateNotificationEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateNotificationEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getNotification();
         }
@@ -75,8 +68,7 @@ class NotificationService extends NotificationServiceDecorator
             : $this->innerService->createNotification($createStruct);
 
         $this->eventDispatcher->dispatch(
-            new CreateNotificationEvent($notification, ...$eventData),
-            CreateNotificationEventInterface::class
+            new CreateNotificationEvent($notification, ...$eventData)
         );
 
         return $notification;
@@ -88,7 +80,7 @@ class NotificationService extends NotificationServiceDecorator
 
         $beforeEvent = new BeforeDeleteNotificationEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteNotificationEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -96,8 +88,7 @@ class NotificationService extends NotificationServiceDecorator
         $this->innerService->deleteNotification($notification);
 
         $this->eventDispatcher->dispatch(
-            new DeleteNotificationEvent(...$eventData),
-            DeleteNotificationEventInterface::class
+            new DeleteNotificationEvent(...$eventData)
         );
     }
 }

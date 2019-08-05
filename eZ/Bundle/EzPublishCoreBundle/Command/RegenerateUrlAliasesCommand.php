@@ -83,7 +83,7 @@ Existing aliases are archived (will redirect to the new ones).
 
 Note: This script can potentially run for a very long time.
 
-Due to performance issues the command does not send any Signals.
+Due to performance issues the command does not send any Events.
 
 <comment>HTTP cache needs to be cleared manually after executing this command.</comment>
 

@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\Events\URL\BeforeUpdateUrlEvent as BeforeUpdateUrlEventInterface;
-use eZ\Publish\API\Repository\Events\URL\UpdateUrlEvent as UpdateUrlEventInterface;
 use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
@@ -43,7 +41,7 @@ class URLService extends URLServiceDecorator
 
         $beforeEvent = new BeforeUpdateUrlEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateUrlEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedUrl();
         }
@@ -53,8 +51,7 @@ class URLService extends URLServiceDecorator
             : $this->innerService->updateUrl($url, $struct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateUrlEvent($updatedUrl, ...$eventData),
-            UpdateUrlEventInterface::class
+            new UpdateUrlEvent($updatedUrl, ...$eventData)
         );
 
         return $updatedUrl;

@@ -53,8 +53,8 @@
     <testsuite name="eZ Publish SPI test suite">
         <directory>eZ/Publish/SPI</directory>
     </testsuite>
-    <testsuite name="eZ Publish SignalSlot test suite">
-        <directory>eZ/Publish/Core/SignalSlot</directory>
+    <testsuite name="eZ Publish Event Repository test suite">
+        <directory>eZ/Publish/Core/Event</directory>
     </testsuite>
     <testsuite name="eZ\Publish\Core\Repository\SiteAccessAware">
         <directory>eZ/Publish/Core/Repository/SiteAccessAware</directory>

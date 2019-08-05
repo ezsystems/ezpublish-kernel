@@ -26,6 +26,15 @@ services:
         EzSystems\DoctrineSchema\Database\DbPlatform\DbPlatform:
             tags: ['doctrine.dbplatform']
 
+    Symfony\Component\EventDispatcher\EventDispatcher:
+        calls:
+            - ['addSubscriber', ['@eZ\Publish\Core\Search\Common\EventSubscriber\ContentEventSubscriber']]
+            - ['addSubscriber', ['@eZ\Publish\Core\Search\Common\EventSubscriber\LocationEventSubscriber']]
+            - ['addSubscriber', ['@eZ\Publish\Core\Search\Common\EventSubscriber\ObjectStateEventSubscriber']]
+            - ['addSubscriber', ['@eZ\Publish\Core\Search\Common\EventSubscriber\SectionEventSubscriber']]
+            - ['addSubscriber', ['@eZ\Publish\Core\Search\Common\EventSubscriber\TrashEventSubscriber']]
+            - ['addSubscriber', ['@eZ\Publish\Core\Search\Common\EventSubscriber\UserEventSubscriber']]
+
     Doctrine\Common\EventManager: ~
 
     EzSystems\DoctrineSchema\Database\DbPlatform\SqliteDbPlatform:

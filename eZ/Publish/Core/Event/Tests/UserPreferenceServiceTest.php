@@ -6,8 +6,8 @@
  */
 namespace eZ\Publish\Core\Event\Tests;
 
-use eZ\Publish\API\Repository\Events\UserPreference\BeforeSetUserPreferenceEvent as BeforeSetUserPreferenceEventInterface;
-use eZ\Publish\API\Repository\Events\UserPreference\SetUserPreferenceEvent as SetUserPreferenceEventInterface;
+use eZ\Publish\API\Repository\Events\UserPreference\BeforeSetUserPreferenceEvent;
+use eZ\Publish\API\Repository\Events\UserPreference\SetUserPreferenceEvent;
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
 use eZ\Publish\Core\Event\UserPreferenceService;
 
@@ -16,8 +16,8 @@ class UserPreferenceServiceTest extends AbstractServiceTest
     public function testSetUserPreferenceEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeSetUserPreferenceEventInterface::class,
-            SetUserPreferenceEventInterface::class
+            BeforeSetUserPreferenceEvent::class,
+            SetUserPreferenceEvent::class
         );
 
         $parameters = [
@@ -32,8 +32,8 @@ class UserPreferenceServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeSetUserPreferenceEventInterface::class, 0],
-            [SetUserPreferenceEventInterface::class, 0],
+            [BeforeSetUserPreferenceEvent::class, 0],
+            [SetUserPreferenceEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -41,8 +41,8 @@ class UserPreferenceServiceTest extends AbstractServiceTest
     public function testSetUserPreferenceStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeSetUserPreferenceEventInterface::class,
-            SetUserPreferenceEventInterface::class
+            BeforeSetUserPreferenceEvent::class,
+            SetUserPreferenceEvent::class
         );
 
         $parameters = [
@@ -51,7 +51,7 @@ class UserPreferenceServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(UserPreferenceServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(BeforeSetUserPreferenceEventInterface::class, function (BeforeSetUserPreferenceEventInterface $event) {
+        $traceableEventDispatcher->addListener(BeforeSetUserPreferenceEvent::class, function (BeforeSetUserPreferenceEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -62,11 +62,11 @@ class UserPreferenceServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [BeforeSetUserPreferenceEventInterface::class, 10],
+            [BeforeSetUserPreferenceEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [BeforeSetUserPreferenceEventInterface::class, 0],
-            [SetUserPreferenceEventInterface::class, 0],
+            [BeforeSetUserPreferenceEvent::class, 0],
+            [SetUserPreferenceEvent::class, 0],
         ]);
     }
 }

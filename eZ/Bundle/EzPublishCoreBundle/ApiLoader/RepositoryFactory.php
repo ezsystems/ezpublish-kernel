@@ -64,7 +64,7 @@ class RepositoryFactory implements ContainerAwareInterface
      * Builds the main repository, heart of eZ Publish API.
      *
      * This always returns the true inner Repository, please depend on ezpublish.api.repository and not this method
-     * directly to make sure you get an instance wrapped inside Signal / Cache / * functionality.
+     * directly to make sure you get an instance wrapped inside Event / Cache / * functionality.
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler

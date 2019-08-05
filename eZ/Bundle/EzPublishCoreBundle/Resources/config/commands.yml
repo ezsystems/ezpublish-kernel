@@ -2,7 +2,7 @@ services:
     ezpublish.console.command.regenerate_url_aliases:
         class: eZ\Bundle\EzPublishCoreBundle\Command\RegenerateUrlAliasesCommand
         arguments:
-            # intentionally passing inner repository to avoid sending Signals due to performance issues
+            # intentionally passing inner repository to avoid sending Events due to performance issues
             - '@ezpublish.api.inner_repository'
             - '@?logger'
         tags:
