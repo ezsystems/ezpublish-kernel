@@ -8,10 +8,22 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\URLWildcard;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface RemoveEvent extends AfterEvent
+final class RemoveEvent extends AfterEvent
 {
-    public function getUrlWildcard(): URLWildcard;
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcard */
+    private $urlWildcard;
+
+    public function __construct(
+        URLWildcard $urlWildcard
+    ) {
+        $this->urlWildcard = $urlWildcard;
+    }
+
+    public function getUrlWildcard(): URLWildcard
+    {
+        return $this->urlWildcard;
+    }
 }

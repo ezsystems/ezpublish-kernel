@@ -8,15 +8,43 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateContentEvent extends AfterEvent
+final class CreateContentEvent extends AfterEvent
 {
-    public function getContentCreateStruct(): ContentCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct */
+    private $contentCreateStruct;
 
-    public function getLocationCreateStructs(): array;
+    /** @var array */
+    private $locationCreateStructs;
 
-    public function getContent(): Content;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
+    private $content;
+
+    public function __construct(
+        Content $content,
+        ContentCreateStruct $contentCreateStruct,
+        array $locationCreateStructs
+    ) {
+        $this->content = $content;
+        $this->contentCreateStruct = $contentCreateStruct;
+        $this->locationCreateStructs = $locationCreateStructs;
+    }
+
+    public function getContentCreateStruct(): ContentCreateStruct
+    {
+        return $this->contentCreateStruct;
+    }
+
+    public function getLocationCreateStructs(): array
+    {
+        return $this->locationCreateStructs;
+    }
+
+    public function getContent(): Content
+    {
+        return $this->content;
+    }
 }

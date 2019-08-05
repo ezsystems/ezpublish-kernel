@@ -9,15 +9,11 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
-use eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent as BeforeCreateBookmarkEventInterface;
-use eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent as BeforeDeleteBookmarkEventInterface;
-use eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent as CreateBookmarkEventInterface;
-use eZ\Publish\API\Repository\Events\Bookmark\DeleteBookmarkEvent as DeleteBookmarkEventInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Event\Bookmark\BeforeCreateBookmarkEvent;
-use eZ\Publish\Core\Event\Bookmark\BeforeDeleteBookmarkEvent;
-use eZ\Publish\Core\Event\Bookmark\CreateBookmarkEvent;
-use eZ\Publish\Core\Event\Bookmark\DeleteBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\BeforeCreateBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\BeforeDeleteBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\CreateBookmarkEvent;
+use eZ\Publish\API\Repository\Events\Bookmark\DeleteBookmarkEvent;
 use eZ\Publish\SPI\Repository\Decorator\BookmarkServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -41,14 +37,14 @@ class BookmarkService extends BookmarkServiceDecorator
 
         $beforeEvent = new BeforeCreateBookmarkEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateBookmarkEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->createBookmark($location);
 
-        $this->eventDispatcher->dispatch(new CreateBookmarkEvent(...$eventData), CreateBookmarkEventInterface::class);
+        $this->eventDispatcher->dispatch(new CreateBookmarkEvent(...$eventData));
     }
 
     public function deleteBookmark(Location $location): void
@@ -57,13 +53,13 @@ class BookmarkService extends BookmarkServiceDecorator
 
         $beforeEvent = new BeforeDeleteBookmarkEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteBookmarkEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
 
         $this->innerService->deleteBookmark($location);
 
-        $this->eventDispatcher->dispatch(new DeleteBookmarkEvent(...$eventData), DeleteBookmarkEventInterface::class);
+        $this->eventDispatcher->dispatch(new DeleteBookmarkEvent(...$eventData));
     }
 }

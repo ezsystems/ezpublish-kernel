@@ -8,22 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateEvent as BeforeCreateObjectStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateGroupEvent as BeforeCreateObjectStateGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\BeforeDeleteObjectStateEvent as BeforeDeleteObjectStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\BeforeDeleteObjectStateGroupEvent as BeforeDeleteObjectStateGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\BeforeSetContentStateEvent as BeforeSetContentStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\BeforeSetPriorityOfObjectStateEvent as BeforeSetPriorityOfObjectStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\BeforeUpdateObjectStateEvent as BeforeUpdateObjectStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\BeforeUpdateObjectStateGroupEvent as BeforeUpdateObjectStateGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\CreateObjectStateEvent as CreateObjectStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\CreateObjectStateGroupEvent as CreateObjectStateGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\DeleteObjectStateEvent as DeleteObjectStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\DeleteObjectStateGroupEvent as DeleteObjectStateGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\SetContentStateEvent as SetContentStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\SetPriorityOfObjectStateEvent as SetPriorityOfObjectStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\UpdateObjectStateEvent as UpdateObjectStateEventInterface;
-use eZ\Publish\API\Repository\Events\ObjectState\UpdateObjectStateGroupEvent as UpdateObjectStateGroupEventInterface;
 use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
@@ -32,22 +16,22 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
-use eZ\Publish\Core\Event\ObjectState\BeforeCreateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeCreateObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeDeleteObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeDeleteObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeSetContentStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeSetPriorityOfObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeUpdateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\BeforeUpdateObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\CreateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\CreateObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\SetContentStateEvent;
-use eZ\Publish\Core\Event\ObjectState\SetPriorityOfObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeCreateObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeDeleteObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeDeleteObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeSetContentStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeSetPriorityOfObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeUpdateObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\BeforeUpdateObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\CreateObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\CreateObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\DeleteObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\DeleteObjectStateGroupEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\SetContentStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\SetPriorityOfObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\UpdateObjectStateEvent;
+use eZ\Publish\API\Repository\Events\ObjectState\UpdateObjectStateGroupEvent;
 use eZ\Publish\SPI\Repository\Decorator\ObjectStateServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -71,7 +55,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $beforeEvent = new BeforeCreateObjectStateGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateObjectStateGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getObjectStateGroup();
         }
@@ -81,8 +65,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             : $this->innerService->createObjectStateGroup($objectStateGroupCreateStruct);
 
         $this->eventDispatcher->dispatch(
-            new CreateObjectStateGroupEvent($objectStateGroup, ...$eventData),
-            CreateObjectStateGroupEventInterface::class
+            new CreateObjectStateGroupEvent($objectStateGroup, ...$eventData)
         );
 
         return $objectStateGroup;
@@ -99,7 +82,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $beforeEvent = new BeforeUpdateObjectStateGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateObjectStateGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedObjectStateGroup();
         }
@@ -109,8 +92,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             : $this->innerService->updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateObjectStateGroupEvent($updatedObjectStateGroup, ...$eventData),
-            UpdateObjectStateGroupEventInterface::class
+            new UpdateObjectStateGroupEvent($updatedObjectStateGroup, ...$eventData)
         );
 
         return $updatedObjectStateGroup;
@@ -122,7 +104,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $beforeEvent = new BeforeDeleteObjectStateGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteObjectStateGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -130,8 +112,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
         $this->innerService->deleteObjectStateGroup($objectStateGroup);
 
         $this->eventDispatcher->dispatch(
-            new DeleteObjectStateGroupEvent(...$eventData),
-            DeleteObjectStateGroupEventInterface::class
+            new DeleteObjectStateGroupEvent(...$eventData)
         );
     }
 
@@ -146,7 +127,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $beforeEvent = new BeforeCreateObjectStateEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateObjectStateEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getObjectState();
         }
@@ -156,8 +137,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             : $this->innerService->createObjectState($objectStateGroup, $objectStateCreateStruct);
 
         $this->eventDispatcher->dispatch(
-            new CreateObjectStateEvent($objectState, ...$eventData),
-            CreateObjectStateEventInterface::class
+            new CreateObjectStateEvent($objectState, ...$eventData)
         );
 
         return $objectState;
@@ -174,7 +154,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $beforeEvent = new BeforeUpdateObjectStateEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateObjectStateEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedObjectState();
         }
@@ -184,8 +164,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             : $this->innerService->updateObjectState($objectState, $objectStateUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateObjectStateEvent($updatedObjectState, ...$eventData),
-            UpdateObjectStateEventInterface::class
+            new UpdateObjectStateEvent($updatedObjectState, ...$eventData)
         );
 
         return $updatedObjectState;
@@ -202,7 +181,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $beforeEvent = new BeforeSetPriorityOfObjectStateEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeSetPriorityOfObjectStateEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -210,8 +189,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
         $this->innerService->setPriorityOfObjectState($objectState, $priority);
 
         $this->eventDispatcher->dispatch(
-            new SetPriorityOfObjectStateEvent(...$eventData),
-            SetPriorityOfObjectStateEventInterface::class
+            new SetPriorityOfObjectStateEvent(...$eventData)
         );
     }
 
@@ -221,7 +199,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $beforeEvent = new BeforeDeleteObjectStateEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteObjectStateEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -229,8 +207,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
         $this->innerService->deleteObjectState($objectState);
 
         $this->eventDispatcher->dispatch(
-            new DeleteObjectStateEvent(...$eventData),
-            DeleteObjectStateEventInterface::class
+            new DeleteObjectStateEvent(...$eventData)
         );
     }
 
@@ -247,7 +224,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $beforeEvent = new BeforeSetContentStateEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeSetContentStateEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -255,8 +232,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
         $this->innerService->setContentState($contentInfo, $objectStateGroup, $objectState);
 
         $this->eventDispatcher->dispatch(
-            new SetContentStateEvent(...$eventData),
-            SetContentStateEventInterface::class
+            new SetContentStateEvent(...$eventData)
         );
     }
 }

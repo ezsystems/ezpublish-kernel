@@ -9,36 +9,6 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
-use eZ\Publish\API\Repository\Events\ContentType\AddFieldDefinitionEvent as AddFieldDefinitionEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\AssignContentTypeGroupEvent as AssignContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeAddFieldDefinitionEvent as BeforeAddFieldDefinitionEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeAssignContentTypeGroupEvent as BeforeAssignContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeCopyContentTypeEvent as BeforeCopyContentTypeEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeCreateContentTypeDraftEvent as BeforeCreateContentTypeDraftEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeCreateContentTypeEvent as BeforeCreateContentTypeEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeCreateContentTypeGroupEvent as BeforeCreateContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeDeleteContentTypeEvent as BeforeDeleteContentTypeEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeDeleteContentTypeGroupEvent as BeforeDeleteContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforePublishContentTypeDraftEvent as BeforePublishContentTypeDraftEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeRemoveContentTypeTranslationEvent as BeforeRemoveContentTypeTranslationEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeRemoveFieldDefinitionEvent as BeforeRemoveFieldDefinitionEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeUnassignContentTypeGroupEvent as BeforeUnassignContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeUpdateContentTypeDraftEvent as BeforeUpdateContentTypeDraftEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeUpdateContentTypeGroupEvent as BeforeUpdateContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\BeforeUpdateFieldDefinitionEvent as BeforeUpdateFieldDefinitionEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\CopyContentTypeEvent as CopyContentTypeEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\CreateContentTypeDraftEvent as CreateContentTypeDraftEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\CreateContentTypeEvent as CreateContentTypeEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\CreateContentTypeGroupEvent as CreateContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\DeleteContentTypeEvent as DeleteContentTypeEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\DeleteContentTypeGroupEvent as DeleteContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\PublishContentTypeDraftEvent as PublishContentTypeDraftEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\RemoveContentTypeTranslationEvent as RemoveContentTypeTranslationEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\RemoveFieldDefinitionEvent as RemoveFieldDefinitionEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\UnassignContentTypeGroupEvent as UnassignContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\UpdateContentTypeDraftEvent as UpdateContentTypeDraftEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\UpdateContentTypeGroupEvent as UpdateContentTypeGroupEventInterface;
-use eZ\Publish\API\Repository\Events\ContentType\UpdateFieldDefinitionEvent as UpdateFieldDefinitionEventInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
@@ -50,36 +20,36 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\Event\ContentType\AddFieldDefinitionEvent;
-use eZ\Publish\Core\Event\ContentType\AssignContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeAddFieldDefinitionEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeAssignContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeCopyContentTypeEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeCreateContentTypeDraftEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeCreateContentTypeEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeCreateContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeDeleteContentTypeEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeDeleteContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\BeforePublishContentTypeDraftEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeRemoveContentTypeTranslationEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeRemoveFieldDefinitionEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeUnassignContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeUpdateContentTypeDraftEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeUpdateContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\BeforeUpdateFieldDefinitionEvent;
-use eZ\Publish\Core\Event\ContentType\CopyContentTypeEvent;
-use eZ\Publish\Core\Event\ContentType\CreateContentTypeDraftEvent;
-use eZ\Publish\Core\Event\ContentType\CreateContentTypeEvent;
-use eZ\Publish\Core\Event\ContentType\CreateContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\DeleteContentTypeEvent;
-use eZ\Publish\Core\Event\ContentType\DeleteContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\PublishContentTypeDraftEvent;
-use eZ\Publish\Core\Event\ContentType\RemoveContentTypeTranslationEvent;
-use eZ\Publish\Core\Event\ContentType\RemoveFieldDefinitionEvent;
-use eZ\Publish\Core\Event\ContentType\UnassignContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\UpdateContentTypeDraftEvent;
-use eZ\Publish\Core\Event\ContentType\UpdateContentTypeGroupEvent;
-use eZ\Publish\Core\Event\ContentType\UpdateFieldDefinitionEvent;
+use eZ\Publish\API\Repository\Events\ContentType\AddFieldDefinitionEvent;
+use eZ\Publish\API\Repository\Events\ContentType\AssignContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeAddFieldDefinitionEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeAssignContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeCopyContentTypeEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeCreateContentTypeDraftEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeCreateContentTypeEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeCreateContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeDeleteContentTypeEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeDeleteContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforePublishContentTypeDraftEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeRemoveContentTypeTranslationEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeRemoveFieldDefinitionEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeUnassignContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeUpdateContentTypeDraftEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeUpdateContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\BeforeUpdateFieldDefinitionEvent;
+use eZ\Publish\API\Repository\Events\ContentType\CopyContentTypeEvent;
+use eZ\Publish\API\Repository\Events\ContentType\CreateContentTypeDraftEvent;
+use eZ\Publish\API\Repository\Events\ContentType\CreateContentTypeEvent;
+use eZ\Publish\API\Repository\Events\ContentType\CreateContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\DeleteContentTypeEvent;
+use eZ\Publish\API\Repository\Events\ContentType\DeleteContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\PublishContentTypeDraftEvent;
+use eZ\Publish\API\Repository\Events\ContentType\RemoveContentTypeTranslationEvent;
+use eZ\Publish\API\Repository\Events\ContentType\RemoveFieldDefinitionEvent;
+use eZ\Publish\API\Repository\Events\ContentType\UnassignContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\UpdateContentTypeDraftEvent;
+use eZ\Publish\API\Repository\Events\ContentType\UpdateContentTypeGroupEvent;
+use eZ\Publish\API\Repository\Events\ContentType\UpdateFieldDefinitionEvent;
 use eZ\Publish\SPI\Repository\Decorator\ContentTypeServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -103,7 +73,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeCreateContentTypeGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateContentTypeGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContentTypeGroup();
         }
@@ -113,8 +83,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             : $this->innerService->createContentTypeGroup($contentTypeGroupCreateStruct);
 
         $this->eventDispatcher->dispatch(
-            new CreateContentTypeGroupEvent($contentTypeGroup, ...$eventData),
-            CreateContentTypeGroupEventInterface::class
+            new CreateContentTypeGroupEvent($contentTypeGroup, ...$eventData)
         );
 
         return $contentTypeGroup;
@@ -131,7 +100,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeUpdateContentTypeGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateContentTypeGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -139,8 +108,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->updateContentTypeGroup($contentTypeGroup, $contentTypeGroupUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateContentTypeGroupEvent(...$eventData),
-            UpdateContentTypeGroupEventInterface::class
+            new UpdateContentTypeGroupEvent(...$eventData)
         );
     }
 
@@ -150,7 +118,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeDeleteContentTypeGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteContentTypeGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -158,8 +126,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->deleteContentTypeGroup($contentTypeGroup);
 
         $this->eventDispatcher->dispatch(
-            new DeleteContentTypeGroupEvent(...$eventData),
-            DeleteContentTypeGroupEventInterface::class
+            new DeleteContentTypeGroupEvent(...$eventData)
         );
     }
 
@@ -174,7 +141,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeCreateContentTypeEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateContentTypeEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContentTypeDraft();
         }
@@ -184,8 +151,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             : $this->innerService->createContentType($contentTypeCreateStruct, $contentTypeGroups);
 
         $this->eventDispatcher->dispatch(
-            new CreateContentTypeEvent($contentTypeDraft, ...$eventData),
-            CreateContentTypeEventInterface::class
+            new CreateContentTypeEvent($contentTypeDraft, ...$eventData)
         );
 
         return $contentTypeDraft;
@@ -197,7 +163,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeCreateContentTypeDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateContentTypeDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContentTypeDraft();
         }
@@ -207,8 +173,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             : $this->innerService->createContentTypeDraft($contentType);
 
         $this->eventDispatcher->dispatch(
-            new CreateContentTypeDraftEvent($contentTypeDraft, ...$eventData),
-            CreateContentTypeDraftEventInterface::class
+            new CreateContentTypeDraftEvent($contentTypeDraft, ...$eventData)
         );
 
         return $contentTypeDraft;
@@ -225,7 +190,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeUpdateContentTypeDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateContentTypeDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -233,8 +198,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateContentTypeDraftEvent(...$eventData),
-            UpdateContentTypeDraftEventInterface::class
+            new UpdateContentTypeDraftEvent(...$eventData)
         );
     }
 
@@ -244,7 +208,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeDeleteContentTypeEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteContentTypeEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -252,8 +216,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->deleteContentType($contentType);
 
         $this->eventDispatcher->dispatch(
-            new DeleteContentTypeEvent(...$eventData),
-            DeleteContentTypeEventInterface::class
+            new DeleteContentTypeEvent(...$eventData)
         );
     }
 
@@ -268,7 +231,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeCopyContentTypeEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCopyContentTypeEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getContentTypeCopy();
         }
@@ -278,8 +241,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             : $this->innerService->copyContentType($contentType, $creator);
 
         $this->eventDispatcher->dispatch(
-            new CopyContentTypeEvent($contentTypeCopy, ...$eventData),
-            CopyContentTypeEventInterface::class
+            new CopyContentTypeEvent($contentTypeCopy, ...$eventData)
         );
 
         return $contentTypeCopy;
@@ -296,7 +258,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeAssignContentTypeGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeAssignContentTypeGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -304,8 +266,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->assignContentTypeGroup($contentType, $contentTypeGroup);
 
         $this->eventDispatcher->dispatch(
-            new AssignContentTypeGroupEvent(...$eventData),
-            AssignContentTypeGroupEventInterface::class
+            new AssignContentTypeGroupEvent(...$eventData)
         );
     }
 
@@ -320,7 +281,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeUnassignContentTypeGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUnassignContentTypeGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -328,8 +289,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->unassignContentTypeGroup($contentType, $contentTypeGroup);
 
         $this->eventDispatcher->dispatch(
-            new UnassignContentTypeGroupEvent(...$eventData),
-            UnassignContentTypeGroupEventInterface::class
+            new UnassignContentTypeGroupEvent(...$eventData)
         );
     }
 
@@ -344,7 +304,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeAddFieldDefinitionEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeAddFieldDefinitionEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -352,8 +312,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->addFieldDefinition($contentTypeDraft, $fieldDefinitionCreateStruct);
 
         $this->eventDispatcher->dispatch(
-            new AddFieldDefinitionEvent(...$eventData),
-            AddFieldDefinitionEventInterface::class
+            new AddFieldDefinitionEvent(...$eventData)
         );
     }
 
@@ -368,7 +327,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeRemoveFieldDefinitionEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeRemoveFieldDefinitionEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -376,8 +335,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->removeFieldDefinition($contentTypeDraft, $fieldDefinition);
 
         $this->eventDispatcher->dispatch(
-            new RemoveFieldDefinitionEvent(...$eventData),
-            RemoveFieldDefinitionEventInterface::class
+            new RemoveFieldDefinitionEvent(...$eventData)
         );
     }
 
@@ -394,7 +352,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeUpdateFieldDefinitionEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateFieldDefinitionEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -402,8 +360,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->updateFieldDefinition($contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateFieldDefinitionEvent(...$eventData),
-            UpdateFieldDefinitionEventInterface::class
+            new UpdateFieldDefinitionEvent(...$eventData)
         );
     }
 
@@ -413,7 +370,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforePublishContentTypeDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforePublishContentTypeDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -421,8 +378,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->innerService->publishContentTypeDraft($contentTypeDraft);
 
         $this->eventDispatcher->dispatch(
-            new PublishContentTypeDraftEvent(...$eventData),
-            PublishContentTypeDraftEventInterface::class
+            new PublishContentTypeDraftEvent(...$eventData)
         );
     }
 
@@ -437,7 +393,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $beforeEvent = new BeforeRemoveContentTypeTranslationEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeRemoveContentTypeTranslationEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getNewContentTypeDraft();
         }
@@ -447,8 +403,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             : $this->innerService->removeContentTypeTranslation($contentTypeDraft, $languageCode);
 
         $this->eventDispatcher->dispatch(
-            new RemoveContentTypeTranslationEvent($newContentTypeDraft, ...$eventData),
-            RemoveContentTypeTranslationEventInterface::class
+            new RemoveContentTypeTranslationEvent($newContentTypeDraft, ...$eventData)
         );
 
         return $newContentTypeDraft;

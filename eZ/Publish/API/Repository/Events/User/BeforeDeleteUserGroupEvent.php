@@ -8,16 +8,44 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\User;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeDeleteUserGroupEvent extends BeforeEvent
+final class BeforeDeleteUserGroupEvent extends BeforeEvent
 {
-    public function getUserGroup(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
+    private $userGroup;
 
-    public function getLocations(): array;
+    /** @var array|null */
+    private $locations;
 
-    public function setLocations(?array $locations): void;
+    public function __construct(UserGroup $userGroup)
+    {
+        $this->userGroup = $userGroup;
+    }
 
-    public function hasLocations(): bool;
+    public function getUserGroup(): UserGroup
+    {
+        return $this->userGroup;
+    }
+
+    public function getLocations(): array
+    {
+        if (!$this->hasLocations()) {
+            throw new UnexpectedValueException('Return value is not set or not a type of %s. Check hasLocations() or set it by setLocations() before you call getter.');
+        }
+
+        return $this->locations;
+    }
+
+    public function setLocations(?array $locations): void
+    {
+        $this->locations = $locations;
+    }
+
+    public function hasLocations(): bool
+    {
+        return is_array($this->locations);
+    }
 }

@@ -8,15 +8,42 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface AddPolicyByRoleDraftEvent extends AfterEvent
+final class AddPolicyByRoleDraftEvent extends AfterEvent
 {
-    public function getRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
+    private $roleDraft;
 
-    public function getPolicyCreateStruct(): PolicyCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct */
+    private $policyCreateStruct;
 
-    public function getUpdatedRoleDraft(): RoleDraft;
+    private $updatedRoleDraft;
+
+    public function __construct(
+        RoleDraft $updatedRoleDraft,
+        RoleDraft $roleDraft,
+        PolicyCreateStruct $policyCreateStruct
+    ) {
+        $this->roleDraft = $roleDraft;
+        $this->policyCreateStruct = $policyCreateStruct;
+        $this->updatedRoleDraft = $updatedRoleDraft;
+    }
+
+    public function getRoleDraft(): RoleDraft
+    {
+        return $this->roleDraft;
+    }
+
+    public function getPolicyCreateStruct(): PolicyCreateStruct
+    {
+        return $this->policyCreateStruct;
+    }
+
+    public function getUpdatedRoleDraft(): RoleDraft
+    {
+        return $this->updatedRoleDraft;
+    }
 }

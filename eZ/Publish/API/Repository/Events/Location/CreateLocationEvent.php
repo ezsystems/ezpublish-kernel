@@ -8,16 +8,44 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Location;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateLocationEvent extends AfterEvent
+final class CreateLocationEvent extends AfterEvent
 {
-    public function getLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $location;
 
-    public function getContentInfo(): ContentInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
+    private $contentInfo;
 
-    public function getLocationCreateStruct(): LocationCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct */
+    private $locationCreateStruct;
+
+    public function __construct(
+        Location $location,
+        ContentInfo $contentInfo,
+        LocationCreateStruct $locationCreateStruct
+    ) {
+        $this->location = $location;
+        $this->contentInfo = $contentInfo;
+        $this->locationCreateStruct = $locationCreateStruct;
+    }
+
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    public function getContentInfo(): ContentInfo
+    {
+        return $this->contentInfo;
+    }
+
+    public function getLocationCreateStruct(): LocationCreateStruct
+    {
+        return $this->locationCreateStruct;
+    }
 }

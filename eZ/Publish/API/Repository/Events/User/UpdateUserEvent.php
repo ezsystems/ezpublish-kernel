@@ -8,15 +8,43 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\User;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdateUserEvent extends AfterEvent
+final class UpdateUserEvent extends AfterEvent
 {
-    public function getUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $user;
 
-    public function getUserUpdateStruct(): UserUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserUpdateStruct */
+    private $userUpdateStruct;
 
-    public function getUpdatedUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $updatedUser;
+
+    public function __construct(
+        User $updatedUser,
+        User $user,
+        UserUpdateStruct $userUpdateStruct
+    ) {
+        $this->user = $user;
+        $this->userUpdateStruct = $userUpdateStruct;
+        $this->updatedUser = $updatedUser;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getUserUpdateStruct(): UserUpdateStruct
+    {
+        return $this->userUpdateStruct;
+    }
+
+    public function getUpdatedUser(): User
+    {
+        return $this->updatedUser;
+    }
 }

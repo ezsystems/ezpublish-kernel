@@ -8,13 +8,33 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateRoleEvent extends AfterEvent
+final class CreateRoleEvent extends AfterEvent
 {
-    public function getRoleCreateStruct(): RoleCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleCreateStruct */
+    private $roleCreateStruct;
 
-    public function getRoleDraft(): RoleDraft;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
+    private $roleDraft;
+
+    public function __construct(
+        RoleDraft $roleDraft,
+        RoleCreateStruct $roleCreateStruct
+    ) {
+        $this->roleCreateStruct = $roleCreateStruct;
+        $this->roleDraft = $roleDraft;
+    }
+
+    public function getRoleCreateStruct(): RoleCreateStruct
+    {
+        return $this->roleCreateStruct;
+    }
+
+    public function getRoleDraft(): RoleDraft
+    {
+        return $this->roleDraft;
+    }
 }

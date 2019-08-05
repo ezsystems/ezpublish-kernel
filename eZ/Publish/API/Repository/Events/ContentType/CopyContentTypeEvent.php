@@ -8,15 +8,43 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CopyContentTypeEvent extends AfterEvent
+final class CopyContentTypeEvent extends AfterEvent
 {
-    public function getContentTypeCopy(): ContentType;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+    private $contentTypeCopy;
 
-    public function getContentType(): ContentType;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+    private $contentType;
 
-    public function getCreator(): ?User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $creator;
+
+    public function __construct(
+        ContentType $contentTypeCopy,
+        ContentType $contentType,
+        ?User $creator = null
+    ) {
+        $this->contentTypeCopy = $contentTypeCopy;
+        $this->contentType = $contentType;
+        $this->creator = $creator;
+    }
+
+    public function getContentTypeCopy(): ContentType
+    {
+        return $this->contentTypeCopy;
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
 }

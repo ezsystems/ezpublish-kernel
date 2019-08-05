@@ -8,19 +8,54 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateContentEvent extends BeforeEvent
+final class BeforeCreateContentEvent extends BeforeEvent
 {
-    public function getContentCreateStruct(): ContentCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct */
+    private $contentCreateStruct;
 
-    public function getLocationCreateStructs(): array;
+    /** @var array */
+    private $locationCreateStructs;
 
-    public function getContent(): Content;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
+    private $content;
 
-    public function setContent(?Content $content): void;
+    public function __construct(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs)
+    {
+        $this->contentCreateStruct = $contentCreateStruct;
+        $this->locationCreateStructs = $locationCreateStructs;
+    }
 
-    public function hasContent(): bool;
+    public function getContentCreateStruct(): ContentCreateStruct
+    {
+        return $this->contentCreateStruct;
+    }
+
+    public function getLocationCreateStructs(): array
+    {
+        return $this->locationCreateStructs;
+    }
+
+    public function getContent(): Content
+    {
+        if (!$this->hasContent()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContent() or set it by setContent() before you call getter.', Content::class));
+        }
+
+        return $this->content;
+    }
+
+    public function setContent(?Content $content): void
+    {
+        $this->content = $content;
+    }
+
+    public function hasContent(): bool
+    {
+        return $this->content instanceof Content;
+    }
 }

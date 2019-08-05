@@ -10,7 +10,19 @@ namespace eZ\Publish\API\Repository\Events\URLAlias;
 
 use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface RemoveAliasesEvent extends AfterEvent
+final class RemoveAliasesEvent extends AfterEvent
 {
-    public function getAliasList(): array;
+    /** @var array */
+    private $aliasList;
+
+    public function __construct(
+        array $aliasList
+    ) {
+        $this->aliasList = $aliasList;
+    }
+
+    public function getAliasList(): array
+    {
+        return $this->aliasList;
+    }
 }

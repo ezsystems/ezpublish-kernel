@@ -8,13 +8,31 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeUnassignRoleFromUserGroupEvent extends BeforeEvent
+final class BeforeUnassignRoleFromUserGroupEvent extends BeforeEvent
 {
-    public function getRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $role;
 
-    public function getUserGroup(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
+    private $userGroup;
+
+    public function __construct(Role $role, UserGroup $userGroup)
+    {
+        $this->role = $role;
+        $this->userGroup = $userGroup;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function getUserGroup(): UserGroup
+    {
+        return $this->userGroup;
+    }
 }

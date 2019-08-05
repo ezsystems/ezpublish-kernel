@@ -8,19 +8,54 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeUpdatePolicyEvent extends BeforeEvent
+final class BeforeUpdatePolicyEvent extends BeforeEvent
 {
-    public function getPolicy(): Policy;
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy */
+    private $policy;
 
-    public function getPolicyUpdateStruct(): PolicyUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct */
+    private $policyUpdateStruct;
 
-    public function getUpdatedPolicy(): Policy;
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy|null */
+    private $updatedPolicy;
 
-    public function setUpdatedPolicy(?Policy $updatedPolicy): void;
+    public function __construct(Policy $policy, PolicyUpdateStruct $policyUpdateStruct)
+    {
+        $this->policy = $policy;
+        $this->policyUpdateStruct = $policyUpdateStruct;
+    }
 
-    public function hasUpdatedPolicy(): bool;
+    public function getPolicy(): Policy
+    {
+        return $this->policy;
+    }
+
+    public function getPolicyUpdateStruct(): PolicyUpdateStruct
+    {
+        return $this->policyUpdateStruct;
+    }
+
+    public function getUpdatedPolicy(): Policy
+    {
+        if (!$this->hasUpdatedPolicy()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedPolicy() or set it by setUpdatedPolicy() before you call getter.', Policy::class));
+        }
+
+        return $this->updatedPolicy;
+    }
+
+    public function setUpdatedPolicy(?Policy $updatedPolicy): void
+    {
+        $this->updatedPolicy = $updatedPolicy;
+    }
+
+    public function hasUpdatedPolicy(): bool
+    {
+        return $this->updatedPolicy instanceof Policy;
+    }
 }

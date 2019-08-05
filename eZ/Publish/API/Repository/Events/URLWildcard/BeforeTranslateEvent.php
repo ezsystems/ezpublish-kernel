@@ -8,16 +8,43 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\URLWildcard;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeTranslateEvent extends BeforeEvent
+final class BeforeTranslateEvent extends BeforeEvent
 {
-    public function getUrl();
+    private $url;
 
-    public function getResult(): URLWildcardTranslationResult;
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult|null */
+    private $result;
 
-    public function setResult(?URLWildcardTranslationResult $result): void;
+    public function __construct($url)
+    {
+        $this->url = $url;
+    }
 
-    public function hasResult(): bool;
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    public function getResult(): URLWildcardTranslationResult
+    {
+        if (!$this->hasResult()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasResult() or set it by setResult() before you call getter.', URLWildcardTranslationResult::class));
+        }
+
+        return $this->result;
+    }
+
+    public function setResult(?URLWildcardTranslationResult $result): void
+    {
+        $this->result = $result;
+    }
+
+    public function hasResult(): bool
+    {
+        return $this->result instanceof URLWildcardTranslationResult;
+    }
 }

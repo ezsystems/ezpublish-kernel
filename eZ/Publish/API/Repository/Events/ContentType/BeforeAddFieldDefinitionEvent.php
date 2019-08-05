@@ -8,13 +8,31 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeAddFieldDefinitionEvent extends BeforeEvent
+final class BeforeAddFieldDefinitionEvent extends BeforeEvent
 {
-    public function getContentTypeDraft(): ContentTypeDraft;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
+    private $contentTypeDraft;
 
-    public function getFieldDefinitionCreateStruct(): FieldDefinitionCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct */
+    private $fieldDefinitionCreateStruct;
+
+    public function __construct(ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct)
+    {
+        $this->contentTypeDraft = $contentTypeDraft;
+        $this->fieldDefinitionCreateStruct = $fieldDefinitionCreateStruct;
+    }
+
+    public function getContentTypeDraft(): ContentTypeDraft
+    {
+        return $this->contentTypeDraft;
+    }
+
+    public function getFieldDefinitionCreateStruct(): FieldDefinitionCreateStruct
+    {
+        return $this->fieldDefinitionCreateStruct;
+    }
 }

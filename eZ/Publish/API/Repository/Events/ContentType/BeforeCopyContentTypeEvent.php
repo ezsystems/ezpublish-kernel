@@ -8,19 +8,54 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCopyContentTypeEvent extends BeforeEvent
+final class BeforeCopyContentTypeEvent extends BeforeEvent
 {
-    public function getContentType(): ContentType;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+    private $contentType;
 
-    public function getCreator(): ?User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $creator;
 
-    public function getContentTypeCopy(): ContentType;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType|null */
+    private $contentTypeCopy;
 
-    public function setContentTypeCopy(?ContentType $contentTypeCopy): void;
+    public function __construct(ContentType $contentType, ?User $creator = null)
+    {
+        $this->contentType = $contentType;
+        $this->creator = $creator;
+    }
 
-    public function hasContentTypeCopy(): bool;
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function getContentTypeCopy(): ContentType
+    {
+        if (!$this->hasContentTypeCopy()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContentTypeCopy() or set it by setContentTypeCopy() before you call getter.', ContentType::class));
+        }
+
+        return $this->contentTypeCopy;
+    }
+
+    public function setContentTypeCopy(?ContentType $contentTypeCopy): void
+    {
+        $this->contentTypeCopy = $contentTypeCopy;
+    }
+
+    public function hasContentTypeCopy(): bool
+    {
+        return $this->contentTypeCopy instanceof ContentType;
+    }
 }

@@ -8,42 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\Events\Role\AddPolicyByRoleDraftEvent as AddPolicyByRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\AddPolicyEvent as AddPolicyEventInterface;
-use eZ\Publish\API\Repository\Events\Role\AssignRoleToUserEvent as AssignRoleToUserEventInterface;
-use eZ\Publish\API\Repository\Events\Role\AssignRoleToUserGroupEvent as AssignRoleToUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyByRoleDraftEvent as BeforeAddPolicyByRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyEvent as BeforeAddPolicyEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserEvent as BeforeAssignRoleToUserEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserGroupEvent as BeforeAssignRoleToUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleDraftEvent as BeforeCreateRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleEvent as BeforeCreateRoleEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeDeletePolicyEvent as BeforeDeletePolicyEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleDraftEvent as BeforeDeleteRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleEvent as BeforeDeleteRoleEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforePublishRoleDraftEvent as BeforePublishRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeRemovePolicyByRoleDraftEvent as BeforeRemovePolicyByRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeRemoveRoleAssignmentEvent as BeforeRemoveRoleAssignmentEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserEvent as BeforeUnassignRoleFromUserEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserGroupEvent as BeforeUnassignRoleFromUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent as BeforeUpdatePolicyByRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyEvent as BeforeUpdatePolicyEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleDraftEvent as BeforeUpdateRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleEvent as BeforeUpdateRoleEventInterface;
-use eZ\Publish\API\Repository\Events\Role\CreateRoleDraftEvent as CreateRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\CreateRoleEvent as CreateRoleEventInterface;
-use eZ\Publish\API\Repository\Events\Role\DeletePolicyEvent as DeletePolicyEventInterface;
-use eZ\Publish\API\Repository\Events\Role\DeleteRoleDraftEvent as DeleteRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\DeleteRoleEvent as DeleteRoleEventInterface;
-use eZ\Publish\API\Repository\Events\Role\PublishRoleDraftEvent as PublishRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\RemovePolicyByRoleDraftEvent as RemovePolicyByRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\RemoveRoleAssignmentEvent as RemoveRoleAssignmentEventInterface;
-use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserEvent as UnassignRoleFromUserEventInterface;
-use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserGroupEvent as UnassignRoleFromUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\Role\UpdatePolicyByRoleDraftEvent as UpdatePolicyByRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\UpdatePolicyEvent as UpdatePolicyEventInterface;
-use eZ\Publish\API\Repository\Events\Role\UpdateRoleDraftEvent as UpdateRoleDraftEventInterface;
-use eZ\Publish\API\Repository\Events\Role\UpdateRoleEvent as UpdateRoleEventInterface;
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy;
@@ -57,42 +21,42 @@ use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\Core\Event\Role\AddPolicyByRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\AddPolicyEvent;
-use eZ\Publish\Core\Event\Role\AssignRoleToUserEvent;
-use eZ\Publish\Core\Event\Role\AssignRoleToUserGroupEvent;
-use eZ\Publish\Core\Event\Role\BeforeAddPolicyByRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\BeforeAddPolicyEvent;
-use eZ\Publish\Core\Event\Role\BeforeAssignRoleToUserEvent;
-use eZ\Publish\Core\Event\Role\BeforeAssignRoleToUserGroupEvent;
-use eZ\Publish\Core\Event\Role\BeforeCreateRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\BeforeCreateRoleEvent;
-use eZ\Publish\Core\Event\Role\BeforeDeletePolicyEvent;
-use eZ\Publish\Core\Event\Role\BeforeDeleteRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\BeforeDeleteRoleEvent;
-use eZ\Publish\Core\Event\Role\BeforePublishRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\BeforeRemovePolicyByRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\BeforeRemoveRoleAssignmentEvent;
-use eZ\Publish\Core\Event\Role\BeforeUnassignRoleFromUserEvent;
-use eZ\Publish\Core\Event\Role\BeforeUnassignRoleFromUserGroupEvent;
-use eZ\Publish\Core\Event\Role\BeforeUpdatePolicyByRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\BeforeUpdatePolicyEvent;
-use eZ\Publish\Core\Event\Role\BeforeUpdateRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\BeforeUpdateRoleEvent;
-use eZ\Publish\Core\Event\Role\CreateRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\CreateRoleEvent;
-use eZ\Publish\Core\Event\Role\DeletePolicyEvent;
-use eZ\Publish\Core\Event\Role\DeleteRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\DeleteRoleEvent;
-use eZ\Publish\Core\Event\Role\PublishRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\RemovePolicyByRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\RemoveRoleAssignmentEvent;
-use eZ\Publish\Core\Event\Role\UnassignRoleFromUserEvent;
-use eZ\Publish\Core\Event\Role\UnassignRoleFromUserGroupEvent;
-use eZ\Publish\Core\Event\Role\UpdatePolicyByRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\UpdatePolicyEvent;
-use eZ\Publish\Core\Event\Role\UpdateRoleDraftEvent;
-use eZ\Publish\Core\Event\Role\UpdateRoleEvent;
+use eZ\Publish\API\Repository\Events\Role\AddPolicyByRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\AddPolicyEvent;
+use eZ\Publish\API\Repository\Events\Role\AssignRoleToUserEvent;
+use eZ\Publish\API\Repository\Events\Role\AssignRoleToUserGroupEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyByRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserGroupEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeDeletePolicyEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforePublishRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeRemovePolicyByRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeRemoveRoleAssignmentEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserGroupEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleEvent;
+use eZ\Publish\API\Repository\Events\Role\CreateRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\CreateRoleEvent;
+use eZ\Publish\API\Repository\Events\Role\DeletePolicyEvent;
+use eZ\Publish\API\Repository\Events\Role\DeleteRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\DeleteRoleEvent;
+use eZ\Publish\API\Repository\Events\Role\PublishRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\RemovePolicyByRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\RemoveRoleAssignmentEvent;
+use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserEvent;
+use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserGroupEvent;
+use eZ\Publish\API\Repository\Events\Role\UpdatePolicyByRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\UpdatePolicyEvent;
+use eZ\Publish\API\Repository\Events\Role\UpdateRoleDraftEvent;
+use eZ\Publish\API\Repository\Events\Role\UpdateRoleEvent;
 use eZ\Publish\SPI\Repository\Decorator\RoleServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -116,7 +80,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeCreateRoleEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateRoleEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getRoleDraft();
         }
@@ -126,8 +90,7 @@ class RoleService extends RoleServiceDecorator
             : $this->innerService->createRole($roleCreateStruct);
 
         $this->eventDispatcher->dispatch(
-            new CreateRoleEvent($roleDraft, ...$eventData),
-            CreateRoleEventInterface::class
+            new CreateRoleEvent($roleDraft, ...$eventData)
         );
 
         return $roleDraft;
@@ -139,7 +102,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeCreateRoleDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateRoleDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getRoleDraft();
         }
@@ -149,8 +112,7 @@ class RoleService extends RoleServiceDecorator
             : $this->innerService->createRoleDraft($role);
 
         $this->eventDispatcher->dispatch(
-            new CreateRoleDraftEvent($roleDraft, ...$eventData),
-            CreateRoleDraftEventInterface::class
+            new CreateRoleDraftEvent($roleDraft, ...$eventData)
         );
 
         return $roleDraft;
@@ -167,7 +129,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeUpdateRoleDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateRoleDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRoleDraft();
         }
@@ -177,8 +139,7 @@ class RoleService extends RoleServiceDecorator
             : $this->innerService->updateRoleDraft($roleDraft, $roleUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateRoleDraftEvent($updatedRoleDraft, ...$eventData),
-            UpdateRoleDraftEventInterface::class
+            new UpdateRoleDraftEvent($updatedRoleDraft, ...$eventData)
         );
 
         return $updatedRoleDraft;
@@ -195,7 +156,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeAddPolicyByRoleDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeAddPolicyByRoleDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRoleDraft();
         }
@@ -205,8 +166,7 @@ class RoleService extends RoleServiceDecorator
             : $this->innerService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
 
         $this->eventDispatcher->dispatch(
-            new AddPolicyByRoleDraftEvent($updatedRoleDraft, ...$eventData),
-            AddPolicyByRoleDraftEventInterface::class
+            new AddPolicyByRoleDraftEvent($updatedRoleDraft, ...$eventData)
         );
 
         return $updatedRoleDraft;
@@ -223,7 +183,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeRemovePolicyByRoleDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeRemovePolicyByRoleDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRoleDraft();
         }
@@ -233,8 +193,7 @@ class RoleService extends RoleServiceDecorator
             : $this->innerService->removePolicyByRoleDraft($roleDraft, $policyDraft);
 
         $this->eventDispatcher->dispatch(
-            new RemovePolicyByRoleDraftEvent($updatedRoleDraft, ...$eventData),
-            RemovePolicyByRoleDraftEventInterface::class
+            new RemovePolicyByRoleDraftEvent($updatedRoleDraft, ...$eventData)
         );
 
         return $updatedRoleDraft;
@@ -253,7 +212,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeUpdatePolicyByRoleDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdatePolicyByRoleDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedPolicyDraft();
         }
@@ -263,8 +222,7 @@ class RoleService extends RoleServiceDecorator
             : $this->innerService->updatePolicyByRoleDraft($roleDraft, $policy, $policyUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdatePolicyByRoleDraftEvent($updatedPolicyDraft, ...$eventData),
-            UpdatePolicyByRoleDraftEventInterface::class
+            new UpdatePolicyByRoleDraftEvent($updatedPolicyDraft, ...$eventData)
         );
 
         return $updatedPolicyDraft;
@@ -276,7 +234,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeDeleteRoleDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteRoleDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -284,8 +242,7 @@ class RoleService extends RoleServiceDecorator
         $this->innerService->deleteRoleDraft($roleDraft);
 
         $this->eventDispatcher->dispatch(
-            new DeleteRoleDraftEvent(...$eventData),
-            DeleteRoleDraftEventInterface::class
+            new DeleteRoleDraftEvent(...$eventData)
         );
     }
 
@@ -295,7 +252,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforePublishRoleDraftEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforePublishRoleDraftEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -303,8 +260,7 @@ class RoleService extends RoleServiceDecorator
         $this->innerService->publishRoleDraft($roleDraft);
 
         $this->eventDispatcher->dispatch(
-            new PublishRoleDraftEvent(...$eventData),
-            PublishRoleDraftEventInterface::class
+            new PublishRoleDraftEvent(...$eventData)
         );
     }
 
@@ -319,7 +275,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeUpdateRoleEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateRoleEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRole();
         }
@@ -329,8 +285,7 @@ class RoleService extends RoleServiceDecorator
             : $this->innerService->updateRole($role, $roleUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateRoleEvent($updatedRole, ...$eventData),
-            UpdateRoleEventInterface::class
+            new UpdateRoleEvent($updatedRole, ...$eventData)
         );
 
         return $updatedRole;
@@ -347,7 +302,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeAddPolicyEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeAddPolicyEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRole();
         }
@@ -357,8 +312,7 @@ class RoleService extends RoleServiceDecorator
             : $this->innerService->addPolicy($role, $policyCreateStruct);
 
         $this->eventDispatcher->dispatch(
-            new AddPolicyEvent($updatedRole, ...$eventData),
-            AddPolicyEventInterface::class
+            new AddPolicyEvent($updatedRole, ...$eventData)
         );
 
         return $updatedRole;
@@ -370,7 +324,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeDeletePolicyEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeletePolicyEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -378,8 +332,7 @@ class RoleService extends RoleServiceDecorator
         $this->innerService->deletePolicy($policy);
 
         $this->eventDispatcher->dispatch(
-            new DeletePolicyEvent(...$eventData),
-            DeletePolicyEventInterface::class
+            new DeletePolicyEvent(...$eventData)
         );
     }
 
@@ -394,7 +347,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeUpdatePolicyEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdatePolicyEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedPolicy();
         }
@@ -404,8 +357,7 @@ class RoleService extends RoleServiceDecorator
             : $this->innerService->updatePolicy($policy, $policyUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdatePolicyEvent($updatedPolicy, ...$eventData),
-            UpdatePolicyEventInterface::class
+            new UpdatePolicyEvent($updatedPolicy, ...$eventData)
         );
 
         return $updatedPolicy;
@@ -417,7 +369,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeDeleteRoleEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteRoleEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -425,8 +377,7 @@ class RoleService extends RoleServiceDecorator
         $this->innerService->deleteRole($role);
 
         $this->eventDispatcher->dispatch(
-            new DeleteRoleEvent(...$eventData),
-            DeleteRoleEventInterface::class
+            new DeleteRoleEvent(...$eventData)
         );
     }
 
@@ -443,7 +394,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeAssignRoleToUserGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeAssignRoleToUserGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -451,8 +402,7 @@ class RoleService extends RoleServiceDecorator
         $this->innerService->assignRoleToUserGroup($role, $userGroup, $roleLimitation);
 
         $this->eventDispatcher->dispatch(
-            new AssignRoleToUserGroupEvent(...$eventData),
-            AssignRoleToUserGroupEventInterface::class
+            new AssignRoleToUserGroupEvent(...$eventData)
         );
     }
 
@@ -467,7 +417,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeUnassignRoleFromUserGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUnassignRoleFromUserGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -475,8 +425,7 @@ class RoleService extends RoleServiceDecorator
         $this->innerService->unassignRoleFromUserGroup($role, $userGroup);
 
         $this->eventDispatcher->dispatch(
-            new UnassignRoleFromUserGroupEvent(...$eventData),
-            UnassignRoleFromUserGroupEventInterface::class
+            new UnassignRoleFromUserGroupEvent(...$eventData)
         );
     }
 
@@ -493,7 +442,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeAssignRoleToUserEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeAssignRoleToUserEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -501,8 +450,7 @@ class RoleService extends RoleServiceDecorator
         $this->innerService->assignRoleToUser($role, $user, $roleLimitation);
 
         $this->eventDispatcher->dispatch(
-            new AssignRoleToUserEvent(...$eventData),
-            AssignRoleToUserEventInterface::class
+            new AssignRoleToUserEvent(...$eventData)
         );
     }
 
@@ -517,7 +465,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeUnassignRoleFromUserEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUnassignRoleFromUserEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -525,8 +473,7 @@ class RoleService extends RoleServiceDecorator
         $this->innerService->unassignRoleFromUser($role, $user);
 
         $this->eventDispatcher->dispatch(
-            new UnassignRoleFromUserEvent(...$eventData),
-            UnassignRoleFromUserEventInterface::class
+            new UnassignRoleFromUserEvent(...$eventData)
         );
     }
 
@@ -536,7 +483,7 @@ class RoleService extends RoleServiceDecorator
 
         $beforeEvent = new BeforeRemoveRoleAssignmentEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeRemoveRoleAssignmentEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -544,8 +491,7 @@ class RoleService extends RoleServiceDecorator
         $this->innerService->removeRoleAssignment($roleAssignment);
 
         $this->eventDispatcher->dispatch(
-            new RemoveRoleAssignmentEvent(...$eventData),
-            RemoveRoleAssignmentEventInterface::class
+            new RemoveRoleAssignmentEvent(...$eventData)
         );
     }
 }

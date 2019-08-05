@@ -8,24 +8,16 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateGlobalUrlAliasEvent as BeforeCreateGlobalUrlAliasEventInterface;
-use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateUrlAliasEvent as BeforeCreateUrlAliasEventInterface;
-use eZ\Publish\API\Repository\Events\URLAlias\BeforeRefreshSystemUrlAliasesForLocationEvent as BeforeRefreshSystemUrlAliasesForLocationEventInterface;
-use eZ\Publish\API\Repository\Events\URLAlias\BeforeRemoveAliasesEvent as BeforeRemoveAliasesEventInterface;
-use eZ\Publish\API\Repository\Events\URLAlias\CreateGlobalUrlAliasEvent as CreateGlobalUrlAliasEventInterface;
-use eZ\Publish\API\Repository\Events\URLAlias\CreateUrlAliasEvent as CreateUrlAliasEventInterface;
-use eZ\Publish\API\Repository\Events\URLAlias\RefreshSystemUrlAliasesForLocationEvent as RefreshSystemUrlAliasesForLocationEventInterface;
-use eZ\Publish\API\Repository\Events\URLAlias\RemoveAliasesEvent as RemoveAliasesEventInterface;
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Event\URLAlias\BeforeCreateGlobalUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\BeforeCreateUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\BeforeRefreshSystemUrlAliasesForLocationEvent;
-use eZ\Publish\Core\Event\URLAlias\BeforeRemoveAliasesEvent;
-use eZ\Publish\Core\Event\URLAlias\CreateGlobalUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\CreateUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\RefreshSystemUrlAliasesForLocationEvent;
-use eZ\Publish\Core\Event\URLAlias\RemoveAliasesEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateGlobalUrlAliasEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeCreateUrlAliasEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeRefreshSystemUrlAliasesForLocationEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\BeforeRemoveAliasesEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\CreateGlobalUrlAliasEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\CreateUrlAliasEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\RefreshSystemUrlAliasesForLocationEvent;
+use eZ\Publish\API\Repository\Events\URLAlias\RemoveAliasesEvent;
 use eZ\Publish\SPI\Repository\Decorator\URLAliasServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -60,7 +52,7 @@ class URLAliasService extends URLAliasServiceDecorator
 
         $beforeEvent = new BeforeCreateUrlAliasEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateUrlAliasEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUrlAlias();
         }
@@ -70,8 +62,7 @@ class URLAliasService extends URLAliasServiceDecorator
             : $this->innerService->createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
 
         $this->eventDispatcher->dispatch(
-            new CreateUrlAliasEvent($urlAlias, ...$eventData),
-            CreateUrlAliasEventInterface::class
+            new CreateUrlAliasEvent($urlAlias, ...$eventData)
         );
 
         return $urlAlias;
@@ -94,7 +85,7 @@ class URLAliasService extends URLAliasServiceDecorator
 
         $beforeEvent = new BeforeCreateGlobalUrlAliasEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateGlobalUrlAliasEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUrlAlias();
         }
@@ -104,8 +95,7 @@ class URLAliasService extends URLAliasServiceDecorator
             : $this->innerService->createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
 
         $this->eventDispatcher->dispatch(
-            new CreateGlobalUrlAliasEvent($urlAlias, ...$eventData),
-            CreateGlobalUrlAliasEventInterface::class
+            new CreateGlobalUrlAliasEvent($urlAlias, ...$eventData)
         );
 
         return $urlAlias;
@@ -117,7 +107,7 @@ class URLAliasService extends URLAliasServiceDecorator
 
         $beforeEvent = new BeforeRemoveAliasesEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeRemoveAliasesEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -125,8 +115,7 @@ class URLAliasService extends URLAliasServiceDecorator
         $this->innerService->removeAliases($aliasList);
 
         $this->eventDispatcher->dispatch(
-            new RemoveAliasesEvent(...$eventData),
-            RemoveAliasesEventInterface::class
+            new RemoveAliasesEvent(...$eventData)
         );
     }
 
@@ -136,7 +125,7 @@ class URLAliasService extends URLAliasServiceDecorator
 
         $beforeEvent = new BeforeRefreshSystemUrlAliasesForLocationEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeRefreshSystemUrlAliasesForLocationEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -144,8 +133,7 @@ class URLAliasService extends URLAliasServiceDecorator
         $this->innerService->refreshSystemUrlAliasesForLocation($location);
 
         $this->eventDispatcher->dispatch(
-            new RefreshSystemUrlAliasesForLocationEvent(...$eventData),
-            RefreshSystemUrlAliasesForLocationEventInterface::class
+            new RefreshSystemUrlAliasesForLocationEvent(...$eventData)
         );
     }
 }

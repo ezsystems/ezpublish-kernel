@@ -8,13 +8,33 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Trash;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface TrashEvent extends AfterEvent
+final class TrashEvent extends AfterEvent
 {
-    public function getLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $location;
 
-    public function getTrashItem(): ?TrashItem;
+    /** @var \eZ\Publish\API\Repository\Values\Content\TrashItem|null */
+    private $trashItem;
+
+    public function __construct(
+        ?TrashItem $trashItem,
+        Location $location
+    ) {
+        $this->location = $location;
+        $this->trashItem = $trashItem;
+    }
+
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    public function getTrashItem(): ?TrashItem
+    {
+        return $this->trashItem;
+    }
 }

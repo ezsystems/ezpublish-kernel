@@ -8,10 +8,21 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeDeleteRoleEvent extends BeforeEvent
+final class BeforeDeleteRoleEvent extends BeforeEvent
 {
-    public function getRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $role;
+
+    public function __construct(Role $role)
+    {
+        $this->role = $role;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
 }

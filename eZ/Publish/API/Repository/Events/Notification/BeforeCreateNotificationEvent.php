@@ -8,17 +8,45 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Notification;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateNotificationEvent extends BeforeEvent
+final class BeforeCreateNotificationEvent extends BeforeEvent
 {
-    public function getCreateStruct(): CreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Notification\CreateStruct */
+    private $createStruct;
 
-    public function getNotification(): Notification;
+    /** @var \eZ\Publish\API\Repository\Values\Notification\Notification|null */
+    private $notification;
 
-    public function setNotification(?Notification $notification): void;
+    public function __construct(CreateStruct $createStruct)
+    {
+        $this->createStruct = $createStruct;
+    }
 
-    public function hasNotification(): bool;
+    public function getCreateStruct(): CreateStruct
+    {
+        return $this->createStruct;
+    }
+
+    public function getNotification(): Notification
+    {
+        if (!$this->hasNotification()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasNotification() or set it by setNotification() before you call getter.', Notification::class));
+        }
+
+        return $this->notification;
+    }
+
+    public function setNotification(?Notification $notification): void
+    {
+        $this->notification = $notification;
+    }
+
+    public function hasNotification(): bool
+    {
+        return $this->notification instanceof Notification;
+    }
 }

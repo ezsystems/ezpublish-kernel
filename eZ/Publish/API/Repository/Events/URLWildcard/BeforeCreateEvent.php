@@ -8,20 +8,59 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\URLWildcard;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateEvent extends BeforeEvent
+final class BeforeCreateEvent extends BeforeEvent
 {
-    public function getSourceUrl();
+    private $sourceUrl;
 
-    public function getDestinationUrl();
+    private $destinationUrl;
 
-    public function getForward();
+    private $forward;
 
-    public function getUrlWildcard(): URLWildcard;
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcard|null */
+    private $urlWildcard;
 
-    public function setUrlWildcard(?URLWildcard $urlWildcard): void;
+    public function __construct($sourceUrl, $destinationUrl, $forward)
+    {
+        $this->sourceUrl = $sourceUrl;
+        $this->destinationUrl = $destinationUrl;
+        $this->forward = $forward;
+    }
 
-    public function hasUrlWildcard(): bool;
+    public function getSourceUrl()
+    {
+        return $this->sourceUrl;
+    }
+
+    public function getDestinationUrl()
+    {
+        return $this->destinationUrl;
+    }
+
+    public function getForward()
+    {
+        return $this->forward;
+    }
+
+    public function getUrlWildcard(): URLWildcard
+    {
+        if (!$this->hasUrlWildcard()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUrlWildcard() or set it by setUrlWildcard() before you call getter.', URLWildcard::class));
+        }
+
+        return $this->urlWildcard;
+    }
+
+    public function setUrlWildcard(?URLWildcard $urlWildcard): void
+    {
+        $this->urlWildcard = $urlWildcard;
+    }
+
+    public function hasUrlWildcard(): bool
+    {
+        return $this->urlWildcard instanceof URLWildcard;
+    }
 }

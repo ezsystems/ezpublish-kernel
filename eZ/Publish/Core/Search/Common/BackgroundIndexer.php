@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Location;
  *
  * Example of background: After console command or request has finished execution.
  *
- * NOTE: This is not for use by regular indexing needs reacting to Repository signals, but rather for use inside the
+ * NOTE: This is not for use by regular indexing needs reacting to Repository events, but rather for use inside the
  * Search service when inconsistencies are discovered which should be re-indexed, hence operate as a self healing system.
  */
 interface BackgroundIndexer

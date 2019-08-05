@@ -8,19 +8,54 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Section;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeUpdateSectionEvent extends BeforeEvent
+final class BeforeUpdateSectionEvent extends BeforeEvent
 {
-    public function getSection(): Section;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
+    private $section;
 
-    public function getSectionUpdateStruct(): SectionUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct */
+    private $sectionUpdateStruct;
 
-    public function getUpdatedSection(): Section;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section|null */
+    private $updatedSection;
 
-    public function setUpdatedSection(?Section $updatedSection): void;
+    public function __construct(Section $section, SectionUpdateStruct $sectionUpdateStruct)
+    {
+        $this->section = $section;
+        $this->sectionUpdateStruct = $sectionUpdateStruct;
+    }
 
-    public function hasUpdatedSection(): bool;
+    public function getSection(): Section
+    {
+        return $this->section;
+    }
+
+    public function getSectionUpdateStruct(): SectionUpdateStruct
+    {
+        return $this->sectionUpdateStruct;
+    }
+
+    public function getUpdatedSection(): Section
+    {
+        if (!$this->hasUpdatedSection()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedSection() or set it by setUpdatedSection() before you call getter.', Section::class));
+        }
+
+        return $this->updatedSection;
+    }
+
+    public function setUpdatedSection(?Section $updatedSection): void
+    {
+        $this->updatedSection = $updatedSection;
+    }
+
+    public function hasUpdatedSection(): bool
+    {
+        return $this->updatedSection instanceof Section;
+    }
 }

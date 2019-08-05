@@ -8,13 +8,33 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UnassignContentTypeGroupEvent extends AfterEvent
+final class UnassignContentTypeGroupEvent extends AfterEvent
 {
-    public function getContentType(): ContentType;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+    private $contentType;
 
-    public function getContentTypeGroup(): ContentTypeGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup */
+    private $contentTypeGroup;
+
+    public function __construct(
+        ContentType $contentType,
+        ContentTypeGroup $contentTypeGroup
+    ) {
+        $this->contentType = $contentType;
+        $this->contentTypeGroup = $contentTypeGroup;
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
+    }
+
+    public function getContentTypeGroup(): ContentTypeGroup
+    {
+        return $this->contentTypeGroup;
+    }
 }

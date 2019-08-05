@@ -8,19 +8,54 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeUpdateObjectStateEvent extends BeforeEvent
+final class BeforeUpdateObjectStateEvent extends BeforeEvent
 {
-    public function getObjectState(): ObjectState;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
+    private $objectState;
 
-    public function getObjectStateUpdateStruct(): ObjectStateUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct */
+    private $objectStateUpdateStruct;
 
-    public function getUpdatedObjectState(): ObjectState;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState|null */
+    private $updatedObjectState;
 
-    public function setUpdatedObjectState(?ObjectState $updatedObjectState): void;
+    public function __construct(ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct)
+    {
+        $this->objectState = $objectState;
+        $this->objectStateUpdateStruct = $objectStateUpdateStruct;
+    }
 
-    public function hasUpdatedObjectState(): bool;
+    public function getObjectState(): ObjectState
+    {
+        return $this->objectState;
+    }
+
+    public function getObjectStateUpdateStruct(): ObjectStateUpdateStruct
+    {
+        return $this->objectStateUpdateStruct;
+    }
+
+    public function getUpdatedObjectState(): ObjectState
+    {
+        if (!$this->hasUpdatedObjectState()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedObjectState() or set it by setUpdatedObjectState() before you call getter.', ObjectState::class));
+        }
+
+        return $this->updatedObjectState;
+    }
+
+    public function setUpdatedObjectState(?ObjectState $updatedObjectState): void
+    {
+        $this->updatedObjectState = $updatedObjectState;
+    }
+
+    public function hasUpdatedObjectState(): bool
+    {
+        return $this->updatedObjectState instanceof ObjectState;
+    }
 }

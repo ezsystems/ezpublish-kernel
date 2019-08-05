@@ -8,15 +8,43 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface AddPolicyEvent extends AfterEvent
+final class AddPolicyEvent extends AfterEvent
 {
-    public function getRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $role;
 
-    public function getPolicyCreateStruct(): PolicyCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct */
+    private $policyCreateStruct;
 
-    public function getUpdatedRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $updatedRole;
+
+    public function __construct(
+        Role $updatedRole,
+        Role $role,
+        PolicyCreateStruct $policyCreateStruct
+    ) {
+        $this->role = $role;
+        $this->policyCreateStruct = $policyCreateStruct;
+        $this->updatedRole = $updatedRole;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function getPolicyCreateStruct(): PolicyCreateStruct
+    {
+        return $this->policyCreateStruct;
+    }
+
+    public function getUpdatedRole(): Role
+    {
+        return $this->updatedRole;
+    }
 }

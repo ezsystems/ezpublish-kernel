@@ -8,15 +8,43 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdateRoleEvent extends AfterEvent
+final class UpdateRoleEvent extends AfterEvent
 {
-    public function getRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $role;
 
-    public function getRoleUpdateStruct(): RoleUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct */
+    private $roleUpdateStruct;
 
-    public function getUpdatedRole(): Role;
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
+    private $updatedRole;
+
+    public function __construct(
+        Role $updatedRole,
+        Role $role,
+        RoleUpdateStruct $roleUpdateStruct
+    ) {
+        $this->role = $role;
+        $this->roleUpdateStruct = $roleUpdateStruct;
+        $this->updatedRole = $updatedRole;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function getRoleUpdateStruct(): RoleUpdateStruct
+    {
+        return $this->roleUpdateStruct;
+    }
+
+    public function getUpdatedRole(): Role
+    {
+        return $this->updatedRole;
+    }
 }

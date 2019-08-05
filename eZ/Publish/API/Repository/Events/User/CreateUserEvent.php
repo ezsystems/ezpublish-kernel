@@ -8,15 +8,43 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\User;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateUserEvent extends AfterEvent
+final class CreateUserEvent extends AfterEvent
 {
-    public function getUserCreateStruct(): UserCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserCreateStruct */
+    private $userCreateStruct;
 
-    public function getParentGroups(): array;
+    /** @var array */
+    private $parentGroups;
 
-    public function getUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $user;
+
+    public function __construct(
+        User $user,
+        UserCreateStruct $userCreateStruct,
+        array $parentGroups
+    ) {
+        $this->userCreateStruct = $userCreateStruct;
+        $this->parentGroups = $parentGroups;
+        $this->user = $user;
+    }
+
+    public function getUserCreateStruct(): UserCreateStruct
+    {
+        return $this->userCreateStruct;
+    }
+
+    public function getParentGroups(): array
+    {
+        return $this->parentGroups;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
 }

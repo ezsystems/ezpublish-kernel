@@ -8,13 +8,33 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Section;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateSectionEvent extends AfterEvent
+final class CreateSectionEvent extends AfterEvent
 {
-    public function getSectionCreateStruct(): SectionCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct */
+    private $sectionCreateStruct;
 
-    public function getSection(): Section;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
+    private $section;
+
+    public function __construct(
+        Section $section,
+        SectionCreateStruct $sectionCreateStruct
+    ) {
+        $this->sectionCreateStruct = $sectionCreateStruct;
+        $this->section = $section;
+    }
+
+    public function getSectionCreateStruct(): SectionCreateStruct
+    {
+        return $this->sectionCreateStruct;
+    }
+
+    public function getSection(): Section
+    {
+        return $this->section;
+    }
 }

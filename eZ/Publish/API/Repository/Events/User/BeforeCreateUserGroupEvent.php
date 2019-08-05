@@ -8,19 +8,54 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\User;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateUserGroupEvent extends BeforeEvent
+final class BeforeCreateUserGroupEvent extends BeforeEvent
 {
-    public function getUserGroupCreateStruct(): UserGroupCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct */
+    private $userGroupCreateStruct;
 
-    public function getParentGroup(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
+    private $parentGroup;
 
-    public function getUserGroup(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup|null */
+    private $userGroup;
 
-    public function setUserGroup(?UserGroup $userGroup): void;
+    public function __construct(UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup)
+    {
+        $this->userGroupCreateStruct = $userGroupCreateStruct;
+        $this->parentGroup = $parentGroup;
+    }
 
-    public function hasUserGroup(): bool;
+    public function getUserGroupCreateStruct(): UserGroupCreateStruct
+    {
+        return $this->userGroupCreateStruct;
+    }
+
+    public function getParentGroup(): UserGroup
+    {
+        return $this->parentGroup;
+    }
+
+    public function getUserGroup(): UserGroup
+    {
+        if (!$this->hasUserGroup()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUserGroup() or set it by setUserGroup() before you call getter.', UserGroup::class));
+        }
+
+        return $this->userGroup;
+    }
+
+    public function setUserGroup(?UserGroup $userGroup): void
+    {
+        $this->userGroup = $userGroup;
+    }
+
+    public function hasUserGroup(): bool
+    {
+        return $this->userGroup instanceof UserGroup;
+    }
 }

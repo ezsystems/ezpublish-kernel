@@ -8,14 +8,42 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface RemoveContentTypeTranslationEvent extends AfterEvent
+final class RemoveContentTypeTranslationEvent extends AfterEvent
 {
-    public function getNewContentTypeDraft(): ContentTypeDraft;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
+    private $newContentTypeDraft;
 
-    public function getContentTypeDraft(): ContentTypeDraft;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
+    private $contentTypeDraft;
 
-    public function getLanguageCode(): string;
+    /** @var string */
+    private $languageCode;
+
+    public function __construct(
+        ContentTypeDraft $newContentTypeDraft,
+        ContentTypeDraft $contentTypeDraft,
+        string $languageCode
+    ) {
+        $this->newContentTypeDraft = $newContentTypeDraft;
+        $this->contentTypeDraft = $contentTypeDraft;
+        $this->languageCode = $languageCode;
+    }
+
+    public function getNewContentTypeDraft(): ContentTypeDraft
+    {
+        return $this->newContentTypeDraft;
+    }
+
+    public function getContentTypeDraft(): ContentTypeDraft
+    {
+        return $this->contentTypeDraft;
+    }
+
+    public function getLanguageCode(): string
+    {
+        return $this->languageCode;
+    }
 }

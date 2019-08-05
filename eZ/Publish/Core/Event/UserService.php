@@ -8,26 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\Events\User\AssignUserToUserGroupEvent as AssignUserToUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeAssignUserToUserGroupEvent as BeforeAssignUserToUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeCreateUserEvent as BeforeCreateUserEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeCreateUserGroupEvent as BeforeCreateUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserEvent as BeforeDeleteUserEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserGroupEvent as BeforeDeleteUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeMoveUserGroupEvent as BeforeMoveUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeUnAssignUserFromUserGroupEvent as BeforeUnAssignUserFromUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserEvent as BeforeUpdateUserEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserGroupEvent as BeforeUpdateUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserTokenEvent as BeforeUpdateUserTokenEventInterface;
-use eZ\Publish\API\Repository\Events\User\CreateUserEvent as CreateUserEventInterface;
-use eZ\Publish\API\Repository\Events\User\CreateUserGroupEvent as CreateUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\DeleteUserEvent as DeleteUserEventInterface;
-use eZ\Publish\API\Repository\Events\User\DeleteUserGroupEvent as DeleteUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\MoveUserGroupEvent as MoveUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\UnAssignUserFromUserGroupEvent as UnAssignUserFromUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\UpdateUserEvent as UpdateUserEventInterface;
-use eZ\Publish\API\Repository\Events\User\UpdateUserGroupEvent as UpdateUserGroupEventInterface;
-use eZ\Publish\API\Repository\Events\User\UpdateUserTokenEvent as UpdateUserTokenEventInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -36,26 +16,26 @@ use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\Core\Event\User\AssignUserToUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeAssignUserToUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeCreateUserEvent;
-use eZ\Publish\Core\Event\User\BeforeCreateUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeDeleteUserEvent;
-use eZ\Publish\Core\Event\User\BeforeDeleteUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeMoveUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeUnAssignUserFromUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeUpdateUserEvent;
-use eZ\Publish\Core\Event\User\BeforeUpdateUserGroupEvent;
-use eZ\Publish\Core\Event\User\BeforeUpdateUserTokenEvent;
-use eZ\Publish\Core\Event\User\CreateUserEvent;
-use eZ\Publish\Core\Event\User\CreateUserGroupEvent;
-use eZ\Publish\Core\Event\User\DeleteUserEvent;
-use eZ\Publish\Core\Event\User\DeleteUserGroupEvent;
-use eZ\Publish\Core\Event\User\MoveUserGroupEvent;
-use eZ\Publish\Core\Event\User\UnAssignUserFromUserGroupEvent;
-use eZ\Publish\Core\Event\User\UpdateUserEvent;
-use eZ\Publish\Core\Event\User\UpdateUserGroupEvent;
-use eZ\Publish\Core\Event\User\UpdateUserTokenEvent;
+use eZ\Publish\API\Repository\Events\User\AssignUserToUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeAssignUserToUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeCreateUserEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeCreateUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeDeleteUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeMoveUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeUnAssignUserFromUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserTokenEvent;
+use eZ\Publish\API\Repository\Events\User\CreateUserEvent;
+use eZ\Publish\API\Repository\Events\User\CreateUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\DeleteUserEvent;
+use eZ\Publish\API\Repository\Events\User\DeleteUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\MoveUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\UnAssignUserFromUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\UpdateUserEvent;
+use eZ\Publish\API\Repository\Events\User\UpdateUserGroupEvent;
+use eZ\Publish\API\Repository\Events\User\UpdateUserTokenEvent;
 use eZ\Publish\SPI\Repository\Decorator\UserServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -84,7 +64,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeCreateUserGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateUserGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUserGroup();
         }
@@ -94,8 +74,7 @@ class UserService extends UserServiceDecorator
             : $this->innerService->createUserGroup($userGroupCreateStruct, $parentGroup);
 
         $this->eventDispatcher->dispatch(
-            new CreateUserGroupEvent($userGroup, ...$eventData),
-            CreateUserGroupEventInterface::class
+            new CreateUserGroupEvent($userGroup, ...$eventData)
         );
 
         return $userGroup;
@@ -107,7 +86,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeDeleteUserGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteUserGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getLocations();
         }
@@ -117,8 +96,7 @@ class UserService extends UserServiceDecorator
             : $this->innerService->deleteUserGroup($userGroup);
 
         $this->eventDispatcher->dispatch(
-            new DeleteUserGroupEvent($locations, ...$eventData),
-            DeleteUserGroupEventInterface::class
+            new DeleteUserGroupEvent($locations, ...$eventData)
         );
 
         return $locations;
@@ -135,7 +113,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeMoveUserGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeMoveUserGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -143,8 +121,7 @@ class UserService extends UserServiceDecorator
         $this->innerService->moveUserGroup($userGroup, $newParent);
 
         $this->eventDispatcher->dispatch(
-            new MoveUserGroupEvent(...$eventData),
-            MoveUserGroupEventInterface::class
+            new MoveUserGroupEvent(...$eventData)
         );
     }
 
@@ -159,7 +136,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeUpdateUserGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateUserGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedUserGroup();
         }
@@ -169,8 +146,7 @@ class UserService extends UserServiceDecorator
             : $this->innerService->updateUserGroup($userGroup, $userGroupUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateUserGroupEvent($updatedUserGroup, ...$eventData),
-            UpdateUserGroupEventInterface::class
+            new UpdateUserGroupEvent($updatedUserGroup, ...$eventData)
         );
 
         return $updatedUserGroup;
@@ -187,7 +163,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeCreateUserEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateUserEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUser();
         }
@@ -197,8 +173,7 @@ class UserService extends UserServiceDecorator
             : $this->innerService->createUser($userCreateStruct, $parentGroups);
 
         $this->eventDispatcher->dispatch(
-            new CreateUserEvent($user, ...$eventData),
-            CreateUserEventInterface::class
+            new CreateUserEvent($user, ...$eventData)
         );
 
         return $user;
@@ -210,7 +185,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeDeleteUserEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteUserEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getLocations();
         }
@@ -220,8 +195,7 @@ class UserService extends UserServiceDecorator
             : $this->innerService->deleteUser($user);
 
         $this->eventDispatcher->dispatch(
-            new DeleteUserEvent($locations, ...$eventData),
-            DeleteUserEventInterface::class
+            new DeleteUserEvent($locations, ...$eventData)
         );
 
         return $locations;
@@ -238,7 +212,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeUpdateUserEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateUserEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedUser();
         }
@@ -248,8 +222,7 @@ class UserService extends UserServiceDecorator
             : $this->innerService->updateUser($user, $userUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateUserEvent($updatedUser, ...$eventData),
-            UpdateUserEventInterface::class
+            new UpdateUserEvent($updatedUser, ...$eventData)
         );
 
         return $updatedUser;
@@ -266,7 +239,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeUpdateUserTokenEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateUserTokenEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedUser();
         }
@@ -276,8 +249,7 @@ class UserService extends UserServiceDecorator
             : $this->innerService->updateUserToken($user, $userTokenUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateUserTokenEvent($updatedUser, ...$eventData),
-            UpdateUserTokenEventInterface::class
+            new UpdateUserTokenEvent($updatedUser, ...$eventData)
         );
 
         return $updatedUser;
@@ -294,7 +266,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeAssignUserToUserGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeAssignUserToUserGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -302,8 +274,7 @@ class UserService extends UserServiceDecorator
         $this->innerService->assignUserToUserGroup($user, $userGroup);
 
         $this->eventDispatcher->dispatch(
-            new AssignUserToUserGroupEvent(...$eventData),
-            AssignUserToUserGroupEventInterface::class
+            new AssignUserToUserGroupEvent(...$eventData)
         );
     }
 
@@ -318,7 +289,7 @@ class UserService extends UserServiceDecorator
 
         $beforeEvent = new BeforeUnAssignUserFromUserGroupEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUnAssignUserFromUserGroupEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -326,8 +297,7 @@ class UserService extends UserServiceDecorator
         $this->innerService->unAssignUserFromUserGroup($user, $userGroup);
 
         $this->eventDispatcher->dispatch(
-            new UnAssignUserFromUserGroupEvent(...$eventData),
-            UnAssignUserFromUserGroupEventInterface::class
+            new UnAssignUserFromUserGroupEvent(...$eventData)
         );
     }
 }

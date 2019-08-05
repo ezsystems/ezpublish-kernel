@@ -8,15 +8,43 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdateObjectStateEvent extends AfterEvent
+final class UpdateObjectStateEvent extends AfterEvent
 {
-    public function getUpdatedObjectState(): ObjectState;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
+    private $updatedObjectState;
 
-    public function getObjectState(): ObjectState;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
+    private $objectState;
 
-    public function getObjectStateUpdateStruct(): ObjectStateUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct */
+    private $objectStateUpdateStruct;
+
+    public function __construct(
+        ObjectState $updatedObjectState,
+        ObjectState $objectState,
+        ObjectStateUpdateStruct $objectStateUpdateStruct
+    ) {
+        $this->updatedObjectState = $updatedObjectState;
+        $this->objectState = $objectState;
+        $this->objectStateUpdateStruct = $objectStateUpdateStruct;
+    }
+
+    public function getUpdatedObjectState(): ObjectState
+    {
+        return $this->updatedObjectState;
+    }
+
+    public function getObjectState(): ObjectState
+    {
+        return $this->objectState;
+    }
+
+    public function getObjectStateUpdateStruct(): ObjectStateUpdateStruct
+    {
+        return $this->objectStateUpdateStruct;
+    }
 }

@@ -6,7 +6,6 @@ imports:
     - {resource: search_engines/legacy/sort_clause_handlers_common.yml}
     - {resource: search_engines/legacy/sort_clause_handlers_content.yml}
     - {resource: search_engines/legacy/sort_clause_handlers_location.yml}
-    - {resource: search_engines/legacy/slots.yml}
     - {resource: search_engines/common.yml}
 
 parameters:

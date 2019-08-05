@@ -8,12 +8,31 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface DeleteTranslationEvent extends AfterEvent
+final class DeleteTranslationEvent extends AfterEvent
 {
-    public function getContentInfo(): ContentInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
+    private $contentInfo;
 
-    public function getLanguageCode();
+    private $languageCode;
+
+    public function __construct(
+        ContentInfo $contentInfo,
+        $languageCode
+    ) {
+        $this->contentInfo = $contentInfo;
+        $this->languageCode = $languageCode;
+    }
+
+    public function getContentInfo(): ContentInfo
+    {
+        return $this->contentInfo;
+    }
+
+    public function getLanguageCode()
+    {
+        return $this->languageCode;
+    }
 }

@@ -8,13 +8,33 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ObjectState;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateObjectStateGroupEvent extends AfterEvent
+final class CreateObjectStateGroupEvent extends AfterEvent
 {
-    public function getObjectStateGroup(): ObjectStateGroup;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
+    private $objectStateGroup;
 
-    public function getObjectStateGroupCreateStruct(): ObjectStateGroupCreateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct */
+    private $objectStateGroupCreateStruct;
+
+    public function __construct(
+        ObjectStateGroup $objectStateGroup,
+        ObjectStateGroupCreateStruct $objectStateGroupCreateStruct
+    ) {
+        $this->objectStateGroup = $objectStateGroup;
+        $this->objectStateGroupCreateStruct = $objectStateGroupCreateStruct;
+    }
+
+    public function getObjectStateGroup(): ObjectStateGroup
+    {
+        return $this->objectStateGroup;
+    }
+
+    public function getObjectStateGroupCreateStruct(): ObjectStateGroupCreateStruct
+    {
+        return $this->objectStateGroupCreateStruct;
+    }
 }

@@ -8,13 +8,31 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Section;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 
-interface BeforeAssignSectionToSubtreeEvent extends BeforeEvent
+final class BeforeAssignSectionToSubtreeEvent extends BeforeEvent
 {
-    public function getLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $location;
 
-    public function getSection(): Section;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
+    private $section;
+
+    public function __construct(Location $location, Section $section)
+    {
+        $this->location = $location;
+        $this->section = $section;
+    }
+
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    public function getSection(): Section
+    {
+        return $this->section;
+    }
 }

@@ -8,10 +8,22 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface RemoveRoleAssignmentEvent extends AfterEvent
+final class RemoveRoleAssignmentEvent extends AfterEvent
 {
-    public function getRoleAssignment(): RoleAssignment;
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleAssignment */
+    private $roleAssignment;
+
+    public function __construct(
+        RoleAssignment $roleAssignment
+    ) {
+        $this->roleAssignment = $roleAssignment;
+    }
+
+    public function getRoleAssignment(): RoleAssignment
+    {
+        return $this->roleAssignment;
+    }
 }

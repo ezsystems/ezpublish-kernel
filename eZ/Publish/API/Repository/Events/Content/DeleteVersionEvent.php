@@ -8,10 +8,21 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface DeleteVersionEvent extends AfterEvent
+final class DeleteVersionEvent extends AfterEvent
 {
-    public function getVersionInfo(): VersionInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+    private $versionInfo;
+
+    public function __construct(VersionInfo $versionInfo)
+    {
+        $this->versionInfo = $versionInfo;
+    }
+
+    public function getVersionInfo(): VersionInfo
+    {
+        return $this->versionInfo;
+    }
 }

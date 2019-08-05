@@ -8,17 +8,45 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\BeforeEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\SPI\Repository\Event\BeforeEvent;
+use UnexpectedValueException;
 
-interface BeforeCreateContentTypeDraftEvent extends BeforeEvent
+final class BeforeCreateContentTypeDraftEvent extends BeforeEvent
 {
-    public function getContentType(): ContentType;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+    private $contentType;
 
-    public function getContentTypeDraft(): ContentTypeDraft;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft|null */
+    private $contentTypeDraft;
 
-    public function setContentTypeDraft(?ContentTypeDraft $contentTypeDraft): void;
+    public function __construct(ContentType $contentType)
+    {
+        $this->contentType = $contentType;
+    }
 
-    public function hasContentTypeDraft(): bool;
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
+    }
+
+    public function getContentTypeDraft(): ContentTypeDraft
+    {
+        if (!$this->hasContentTypeDraft()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContentTypeDraft() or set it by setContentTypeDraft() before you call getter.', ContentTypeDraft::class));
+        }
+
+        return $this->contentTypeDraft;
+    }
+
+    public function setContentTypeDraft(?ContentTypeDraft $contentTypeDraft): void
+    {
+        $this->contentTypeDraft = $contentTypeDraft;
+    }
+
+    public function hasContentTypeDraft(): bool
+    {
+        return $this->contentTypeDraft instanceof ContentTypeDraft;
+    }
 }

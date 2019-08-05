@@ -8,32 +8,22 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\Events\Section\AssignSectionEvent as AssignSectionEventInterface;
-use eZ\Publish\API\Repository\Events\Section\AssignSectionToSubtreeEvent as AssignSectionToSubtreeEventInterface;
-use eZ\Publish\API\Repository\Events\Section\BeforeAssignSectionEvent as BeforeAssignSectionEventInterface;
-use eZ\Publish\API\Repository\Events\Section\BeforeAssignSectionToSubtreeEvent as BeforeAssignSectionToSubtreeEventInterface;
-use eZ\Publish\API\Repository\Events\Section\BeforeCreateSectionEvent as BeforeCreateSectionEventInterface;
-use eZ\Publish\API\Repository\Events\Section\BeforeDeleteSectionEvent as BeforeDeleteSectionEventInterface;
-use eZ\Publish\API\Repository\Events\Section\BeforeUpdateSectionEvent as BeforeUpdateSectionEventInterface;
-use eZ\Publish\API\Repository\Events\Section\CreateSectionEvent as CreateSectionEventInterface;
-use eZ\Publish\API\Repository\Events\Section\DeleteSectionEvent as DeleteSectionEventInterface;
-use eZ\Publish\API\Repository\Events\Section\UpdateSectionEvent as UpdateSectionEventInterface;
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use eZ\Publish\Core\Event\Section\AssignSectionEvent;
-use eZ\Publish\Core\Event\Section\AssignSectionToSubtreeEvent;
-use eZ\Publish\Core\Event\Section\BeforeAssignSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeAssignSectionToSubtreeEvent;
-use eZ\Publish\Core\Event\Section\BeforeCreateSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeDeleteSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeUpdateSectionEvent;
-use eZ\Publish\Core\Event\Section\CreateSectionEvent;
-use eZ\Publish\Core\Event\Section\DeleteSectionEvent;
-use eZ\Publish\Core\Event\Section\UpdateSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\AssignSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\AssignSectionToSubtreeEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeAssignSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeAssignSectionToSubtreeEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeCreateSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeDeleteSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\BeforeUpdateSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\CreateSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\DeleteSectionEvent;
+use eZ\Publish\API\Repository\Events\Section\UpdateSectionEvent;
 use eZ\Publish\SPI\Repository\Decorator\SectionServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -57,7 +47,7 @@ class SectionService extends SectionServiceDecorator
 
         $beforeEvent = new BeforeCreateSectionEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeCreateSectionEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getSection();
         }
@@ -67,8 +57,7 @@ class SectionService extends SectionServiceDecorator
             : $this->innerService->createSection($sectionCreateStruct);
 
         $this->eventDispatcher->dispatch(
-            new CreateSectionEvent($section, ...$eventData),
-            CreateSectionEventInterface::class
+            new CreateSectionEvent($section, ...$eventData)
         );
 
         return $section;
@@ -85,7 +74,7 @@ class SectionService extends SectionServiceDecorator
 
         $beforeEvent = new BeforeUpdateSectionEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeUpdateSectionEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return $beforeEvent->getUpdatedSection();
         }
@@ -95,8 +84,7 @@ class SectionService extends SectionServiceDecorator
             : $this->innerService->updateSection($section, $sectionUpdateStruct);
 
         $this->eventDispatcher->dispatch(
-            new UpdateSectionEvent($updatedSection, ...$eventData),
-            UpdateSectionEventInterface::class
+            new UpdateSectionEvent($updatedSection, ...$eventData)
         );
 
         return $updatedSection;
@@ -113,7 +101,7 @@ class SectionService extends SectionServiceDecorator
 
         $beforeEvent = new BeforeAssignSectionEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeAssignSectionEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -121,8 +109,7 @@ class SectionService extends SectionServiceDecorator
         $this->innerService->assignSection($contentInfo, $section);
 
         $this->eventDispatcher->dispatch(
-            new AssignSectionEvent(...$eventData),
-            AssignSectionEventInterface::class
+            new AssignSectionEvent(...$eventData)
         );
     }
 
@@ -137,7 +124,7 @@ class SectionService extends SectionServiceDecorator
 
         $beforeEvent = new BeforeAssignSectionToSubtreeEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeAssignSectionToSubtreeEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -145,8 +132,7 @@ class SectionService extends SectionServiceDecorator
         $this->innerService->assignSectionToSubtree($location, $section);
 
         $this->eventDispatcher->dispatch(
-            new AssignSectionToSubtreeEvent(...$eventData),
-            AssignSectionToSubtreeEventInterface::class
+            new AssignSectionToSubtreeEvent(...$eventData)
         );
     }
 
@@ -156,7 +142,7 @@ class SectionService extends SectionServiceDecorator
 
         $beforeEvent = new BeforeDeleteSectionEvent(...$eventData);
 
-        $this->eventDispatcher->dispatch($beforeEvent, BeforeDeleteSectionEventInterface::class);
+        $this->eventDispatcher->dispatch($beforeEvent);
         if ($beforeEvent->isPropagationStopped()) {
             return;
         }
@@ -164,8 +150,7 @@ class SectionService extends SectionServiceDecorator
         $this->innerService->deleteSection($section);
 
         $this->eventDispatcher->dispatch(
-            new DeleteSectionEvent(...$eventData),
-            DeleteSectionEventInterface::class
+            new DeleteSectionEvent(...$eventData)
         );
     }
 }

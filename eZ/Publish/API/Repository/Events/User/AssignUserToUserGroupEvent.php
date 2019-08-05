@@ -8,13 +8,33 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\User;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface AssignUserToUserGroupEvent extends AfterEvent
+final class AssignUserToUserGroupEvent extends AfterEvent
 {
-    public function getUser(): User;
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    private $user;
 
-    public function getUserGroup(): UserGroup;
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
+    private $userGroup;
+
+    public function __construct(
+        User $user,
+        UserGroup $userGroup
+    ) {
+        $this->user = $user;
+        $this->userGroup = $userGroup;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function getUserGroup(): UserGroup
+    {
+        return $this->userGroup;
+    }
 }

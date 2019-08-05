@@ -8,16 +8,44 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Content;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface AddRelationEvent extends AfterEvent
+final class AddRelationEvent extends AfterEvent
 {
-    public function getRelation(): Relation;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Relation */
+    private $relation;
 
-    public function getSourceVersion(): VersionInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+    private $sourceVersion;
 
-    public function getDestinationContent(): ContentInfo;
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
+    private $destinationContent;
+
+    public function __construct(
+        Relation $relation,
+        VersionInfo $sourceVersion,
+        ContentInfo $destinationContent
+    ) {
+        $this->relation = $relation;
+        $this->sourceVersion = $sourceVersion;
+        $this->destinationContent = $destinationContent;
+    }
+
+    public function getRelation(): Relation
+    {
+        return $this->relation;
+    }
+
+    public function getSourceVersion(): VersionInfo
+    {
+        return $this->sourceVersion;
+    }
+
+    public function getDestinationContent(): ContentInfo
+    {
+        return $this->destinationContent;
+    }
 }

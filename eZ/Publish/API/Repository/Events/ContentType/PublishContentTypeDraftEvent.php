@@ -8,10 +8,21 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\ContentType;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface PublishContentTypeDraftEvent extends AfterEvent
+final class PublishContentTypeDraftEvent extends AfterEvent
 {
-    public function getContentTypeDraft(): ContentTypeDraft;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
+    private $contentTypeDraft;
+
+    public function __construct(ContentTypeDraft $contentTypeDraft)
+    {
+        $this->contentTypeDraft = $contentTypeDraft;
+    }
+
+    public function getContentTypeDraft(): ContentTypeDraft
+    {
+        return $this->contentTypeDraft;
+    }
 }

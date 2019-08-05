@@ -12,9 +12,29 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CreateContentTypeDraftEvent extends AfterEvent
+final class CreateContentTypeDraftEvent extends AfterEvent
 {
-    public function getContentTypeDraft(): ContentTypeDraft;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
+    private $contentTypeDraft;
 
-    public function getContentType(): ContentType;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+    private $contentType;
+
+    public function __construct(
+        ContentTypeDraft $contentTypeDraft,
+        ContentType $contentType
+    ) {
+        $this->contentTypeDraft = $contentTypeDraft;
+        $this->contentType = $contentType;
+    }
+
+    public function getContentTypeDraft(): ContentTypeDraft
+    {
+        return $this->contentTypeDraft;
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
+    }
 }

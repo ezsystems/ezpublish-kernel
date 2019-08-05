@@ -467,7 +467,6 @@ class Legacy extends SetupFactory
                 self::$ioRootDir . '/' . $containerBuilder->getParameter('storage_dir')
             );
 
-            $containerBuilder->addCompilerPass(new Compiler\Search\SearchEngineSignalSlotPass('legacy'));
             $containerBuilder->addCompilerPass(new Compiler\Search\FieldRegistryPass());
 
             // load overrides just before creating test Container

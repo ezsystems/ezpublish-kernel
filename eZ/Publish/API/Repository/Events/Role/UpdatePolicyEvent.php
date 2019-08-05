@@ -8,15 +8,43 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Role;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface UpdatePolicyEvent extends AfterEvent
+final class UpdatePolicyEvent extends AfterEvent
 {
-    public function getPolicy(): Policy;
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy */
+    private $policy;
 
-    public function getPolicyUpdateStruct(): PolicyUpdateStruct;
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct */
+    private $policyUpdateStruct;
 
-    public function getUpdatedPolicy(): Policy;
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy */
+    private $updatedPolicy;
+
+    public function __construct(
+        Policy $updatedPolicy,
+        Policy $policy,
+        PolicyUpdateStruct $policyUpdateStruct
+    ) {
+        $this->policy = $policy;
+        $this->policyUpdateStruct = $policyUpdateStruct;
+        $this->updatedPolicy = $updatedPolicy;
+    }
+
+    public function getPolicy(): Policy
+    {
+        return $this->policy;
+    }
+
+    public function getPolicyUpdateStruct(): PolicyUpdateStruct
+    {
+        return $this->policyUpdateStruct;
+    }
+
+    public function getUpdatedPolicy(): Policy
+    {
+        return $this->updatedPolicy;
+    }
 }

@@ -8,14 +8,42 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Events\Location;
 
-use eZ\Publish\SPI\Repository\Event\AfterEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\SPI\Repository\Event\AfterEvent;
 
-interface CopySubtreeEvent extends AfterEvent
+final class CopySubtreeEvent extends AfterEvent
 {
-    public function getLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $location;
 
-    public function getSubtree(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $subtree;
 
-    public function getTargetParentLocation(): Location;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    private $targetParentLocation;
+
+    public function __construct(
+        Location $location,
+        Location $subtree,
+        Location $targetParentLocation
+    ) {
+        $this->location = $location;
+        $this->subtree = $subtree;
+        $this->targetParentLocation = $targetParentLocation;
+    }
+
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    public function getSubtree(): Location
+    {
+        return $this->subtree;
+    }
+
+    public function getTargetParentLocation(): Location
+    {
+        return $this->targetParentLocation;
+    }
 }
