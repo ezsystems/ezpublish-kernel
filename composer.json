@@ -45,7 +45,7 @@
         "friendsofsymfony/http-cache-bundle": "^1.3.13 | ^2.5.1",
         "sensio/framework-extra-bundle": "^5.2",
         "jms/translation-bundle": "^1.4",
-        "twig/twig": "^2.5",
+        "twig/twig": "^2.10",
         "twig/extensions": "^1.5.4",
         "friendsofsymfony/jsrouting-bundle": "^2.3.0",
         "psr/event-dispatcher": "^1.0"
