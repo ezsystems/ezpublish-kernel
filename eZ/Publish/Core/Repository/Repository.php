@@ -663,7 +663,8 @@ class Repository implements RepositoryInterface
 
         $this->urlService = new URLService(
             $this,
-            $this->persistenceHandler->urlHandler()
+            $this->persistenceHandler->urlHandler(),
+            $this->getPermissionResolver()
         );
 
         return $this->urlService;
