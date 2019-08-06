@@ -13,17 +13,17 @@
 {% trans_default_domain "content_fields" %}
 
 {% block ezstring_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% set field_value = field.value.text %}
     {{ block( 'simple_inline_field' ) }}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block eztext_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% set field_value = field.value|nl2br %}
     {{ block( 'simple_block_field' ) }}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezrichtext_field %}
@@ -32,7 +32,7 @@
 {% endblock %}
 
 {% block ezauthor_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if field.value.authors|length() > 0 %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for author in field.value.authors %}
@@ -40,11 +40,11 @@
         {% endfor %}
         </ul>
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezcountry_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if fieldSettings.isMultiple and field.value.countries|length > 0 %}
         <ul {{ block( 'field_attributes' ) }}>
             {% for country in field.value.countries %}
@@ -58,19 +58,19 @@
         {% endfor %}
         </p>
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {# @todo: add translate filter #}
 {% block ezboolean_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% set field_value = field.value.bool ? 'Yes' : 'No' %}
     {{ block( 'simple_inline_field' ) }}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezdatetime_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
             {% set field_value = field.value.value|localizeddate( 'short', 'medium', parameters.locale ) %}
@@ -79,20 +79,20 @@
         {% endif %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezdate_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         {% set field_value = field.value.date|localizeddate( 'short', 'none', parameters.locale, false ) %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block eztime_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
             {% set field_value = field.value.time|localizeddate( 'none', 'medium', parameters.locale, 'UTC' ) %}
@@ -101,55 +101,55 @@
         {% endif %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezemail_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         {% set field_value = field.value.email %}
         <a href="mailto:{{ field.value.email|escape( 'url' ) }}" {{ block( 'field_attributes' ) }}>{{ field.value.email }}</a>
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezinteger_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         {% set field_value = field.value.value %}
         {{ block( 'simple_inline_field' ) }}
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {# @todo: handle localization #}
 {% block ezfloat_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         {% set field_value = field.value.value %}
         {{ block( 'simple_inline_field' ) }}
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezurl_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         <a href="{{ field.value.link }}"
             {{ block( 'field_attributes' ) }}>{{ field.value.text ? field.value.text : field.value.link }}</a>
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezisbn_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% set field_value = field.value.isbn %}
     {{ block( 'simple_inline_field' ) }}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezkeyword_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for keyword in field.value.values %}
@@ -157,11 +157,11 @@
         {% endfor %}
         </ul>
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezselection_field %}
-{% spaceless %}
+{% apply spaceless %}
 
     {% set options = fieldSettings.options %}
 
@@ -182,7 +182,7 @@
         {% set field_value = options[field.value.selection.0] %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {# @todo:
@@ -190,7 +190,7 @@
  # - legacy used to dump is_locked attribute
  #}
 {% block ezuser_field %}
-{% spaceless %}
+{% apply spaceless %}
 <dl {{ block( 'field_attributes' ) }}>
     <dt>User ID</dt>
     <dd>{{ field.value.contentId }}</dd>
@@ -201,22 +201,22 @@
     <dt>Account status</dt>
     <dd>{{ field.value.enabled ? 'enabled' : 'disabled' }}</dd>
 </dl>
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezbinaryfile_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         {% set route_reference = ez_route( 'ez_content_download', { 'content': content, 'fieldIdentifier': field.fieldDefIdentifier } ) %}
         <a href="{{ path( route_reference ) }}"
             {{ block( 'field_attributes' ) }}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize|ez_file_size( 1 ) }})
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezmedia_field %}
 {% if not ez_is_field_empty( content, field ) %}
-{% spaceless %}
+{% apply spaceless %}
     {% set type = fieldSettings.mediaType %}
     {% set value = field.value %}
     {% set route_reference = ez_route( 'ez_content_download', {'content': content, 'fieldIdentifier': field.fieldDefIdentifier} ) %}
@@ -267,23 +267,25 @@
     {% endif %}
     {% endautoescape %}
     </div>
-{% endspaceless %}
+{% endapply %}
 {% endif %}
 {% endblock %}
 
 {% block ezobjectrelationlist_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
-        {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
-        {{ fos_httpcache_tag('relation-' ~ contentId) }}
-        <li>
-            {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'layout': false} ) ) }}
-        </li>
+        {% for contentId in field.value.destinationContentIds %}
+            {% if parameters.available[contentId] %}
+                {{ fos_httpcache_tag('relation-' ~ contentId) }}
+                <li>
+                    {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'layout': false} ) ) }}
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {# @todo:
@@ -306,7 +308,7 @@
  # - https://wiki.openstreetmap.org
  # - http://leafletjs.com/reference-1.3.0.html
  #}
-{% spaceless %}
+{% apply spaceless %}
 <div {{ block( 'field_attributes' ) }}>
     {% set defaultWidth = '500px' %}
     {% set defaultHeight = '200px' %}
@@ -416,7 +418,7 @@
         <div class="maplocation-map" id="{{ mapId }}" style="{{ mapStyle }}"></div>
     {% endif %}
 </div>
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {# This field accepts the following parameters:
@@ -426,7 +428,7 @@
  #   - parameters.class. Allows setting CSS custom class name for the image
  #}
 {% block ezimage_field %}
-{% spaceless %}
+{% apply spaceless %}
 {% if not ez_is_field_empty( content, field ) %}
 <figure {{ block( 'field_attributes' ) }}>
     {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
@@ -443,17 +445,17 @@
             {% if parameters.ezlink.target is defined %} target="{{ parameters.ezlink.target|e('html_attr') }}"{% endif %}
         >
     {% endif %}
-            <img src="{{ src }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs if attrvalue %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
+            <img src="{{ src }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs %}{% if attrvalue %}{{ attrname }}="{{ attrvalue }}" {% endif %}{% endfor %}/>
     {% if parameters.ezlink|default({}) is not empty %}
         </a>
     {% endif %}
 </figure>
 {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezimageasset_field %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% if not ez_is_field_empty(content, field) and parameters.available %}
             {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
             <div {{ block('field_attributes') }}>
@@ -467,18 +469,18 @@
                 }))}}
             </div>
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}
 
 {% block ezobjectrelation_field %}
-{% spaceless %}
+{% apply spaceless %}
 {% if not ez_is_field_empty( content, field ) and parameters.available %}
     {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
     <div {{ block( 'field_attributes' ) }}>
         {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'layout': false} ) ) }}
     </div>
 {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {# pageService is exposed under parameters.pageService thanks to Page\ParameterProvider #}
@@ -494,29 +496,29 @@
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezrichtext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
 {% block simple_block_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if field_value is not defined %}
         {% set field_value = field.value %}
     {% endif %}
     <div {{ block( 'field_attributes' ) }}>
-        {% endspaceless %}{{ field_value|raw }}{% spaceless %}
+        {% endapply %}{{ field_value|raw }}{% apply spaceless %}
     </div>
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block simple_inline_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if field_value is not defined %}
         {% set field_value = field.value %}
     {% endif %}
     <span {{ block( 'field_attributes' ) }}>{{ field_value }}</span>
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {# Block for field attributes rendering. Useful to add a custom class, id or whatever HTML attribute to the field markup #}
 {% block field_attributes %}
-{% spaceless %}
+{% apply spaceless %}
     {% set attr = attr|default( {} ) %}
     {% for attrname, attrvalue in attr %}{{ attrname }}="{{ attrvalue }}" {% endfor %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
