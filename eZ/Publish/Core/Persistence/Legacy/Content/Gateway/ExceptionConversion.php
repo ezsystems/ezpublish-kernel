@@ -366,11 +366,11 @@ class ExceptionConversion extends Gateway
      *  - initial_language_code => Language code for initial language in this version.
      *
      * @param int $contentId
-     * @param int $versionNo
+     * @param int|null $versionNo
      *
      * @return array
      */
-    public function loadVersionInfo($contentId, $versionNo)
+    public function loadVersionInfo($contentId, $versionNo = null)
     {
         try {
             return $this->innerGateway->loadVersionInfo($contentId, $versionNo);

@@ -305,7 +305,7 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
-            ->with('content', 'info', 2, 'versioninfo', 1)
+            ->with('content', 'info', 2, 'versioninfo', 0)
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -327,7 +327,7 @@ class ContentHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('loadVersionInfo')
-            ->with(2, 1)
+            ->with(2, 0)
             ->will(
                 $this->returnValue(
                     new VersionInfo(['contentInfo' => new ContentInfo(['id' => 2]), 'versionNo' => 1])
@@ -346,7 +346,7 @@ class ContentHandlerTest extends HandlerTest
             ->with();
 
         $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->loadVersionInfo(2, 1);
+        $handler->loadVersionInfo(2, null);
     }
 
     /**

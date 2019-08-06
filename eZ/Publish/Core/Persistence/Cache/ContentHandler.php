@@ -120,11 +120,11 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadVersionInfo
+     * {@inheritdoc}
      */
-    public function loadVersionInfo($contentId, $versionNo)
+    public function loadVersionInfo($contentId, $versionNo = null)
     {
-        $cache = $this->cache->getItem('content', 'info', $contentId, 'versioninfo', $versionNo);
+        $cache = $this->cache->getItem('content', 'info', $contentId, 'versioninfo', $versionNo ?: self::PUBLISHED_VERSION);
         $versionInfo = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, ['content' => $contentId, 'version' => $versionNo]);
@@ -159,6 +159,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             $this->cache->clear('content', 'info', 'remoteId');
         } else {
             $this->cache->clear('content', 'info', $contentId, 'versioninfo', $version);
+            $this->cache->clear('content', 'info', $contentId, 'versioninfo', self::PUBLISHED_VERSION);
         }
 
         return $return;
@@ -197,6 +198,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->cache->clear('content', $contentId, $versionNo);
         $this->cache->clear('content', $contentId, self::PUBLISHED_VERSION);
         $this->cache->clear('content', 'info', $contentId, 'versioninfo', $versionNo);
+        $this->cache->clear('content', 'info', $contentId, 'versioninfo', self::PUBLISHED_VERSION);
 
         return $content;
     }

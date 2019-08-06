@@ -137,20 +137,14 @@ class ContentTest extends BaseServiceMockTest
             ->with('status')
             ->will($this->returnValue(APIVersionInfo::STATUS_PUBLISHED));
 
-        $contentServiceMock->expects($this->once())
-            ->method('loadContentInfo')
-            ->with($this->equalTo(42))
-            ->will(
-                $this->returnValue(
-                    new ContentInfo(['currentVersionNo' => 24])
-                )
-            );
+        $contentServiceMock->expects($this->never())
+            ->method('loadContentInfo');
 
         $contentHandler->expects($this->once())
             ->method('loadVersionInfo')
             ->with(
                 $this->equalTo(42),
-                $this->equalTo(24)
+                $this->equalTo(null)
             )->will(
                 $this->returnValue(new SPIVersionInfo())
             );
