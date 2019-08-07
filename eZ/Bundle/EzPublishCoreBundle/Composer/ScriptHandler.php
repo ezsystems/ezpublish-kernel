@@ -142,7 +142,7 @@ Note:
   - Use PHP's single process, local, HTTP/1 only built-in web server, mainly suitable for testing.
   - Give you the URL to the front end of the installation. TIP: Add "/admin" to reach back end.
 
-For full install instructions with Nginx/Apache for production, remote use, or better performing dev setup:
+See main installation instructions with Nginx/Apache for production, remote, or better performing dev setup in:
 ${installUrl}
 
 EOT
