@@ -604,6 +604,7 @@ class Repository implements RepositoryInterface
         $this->userService = new UserService(
             $this,
             $this->persistenceHandler->userHandler(),
+            $this->persistenceHandler->locationHandler(),
             $this->serviceSettings['user']
         );
 
