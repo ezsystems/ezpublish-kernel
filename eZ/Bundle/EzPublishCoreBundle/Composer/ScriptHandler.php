@@ -137,7 +137,7 @@ ${installCommandText}
 <comment>    $  php ${consoleDir}/console server:run</comment>
 
 Note:
-- Instructions assume CLI user you execute commands with is the same one that extracted/installed the software.
+- The instructions assume you execute commands with the CLI user that extracted/installed the software.
 - The "server:run" command will:
   - Start PHP's built in web server. A single process, local, HTTP/1.x only, mainly suitable for quick demo.
   - Give you the URL to the front end of the installation. TIP: Add "/admin" to reach back end.
