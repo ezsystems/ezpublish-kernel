@@ -139,7 +139,7 @@ ${installCommandText}
 Note:
 - The instructions assume you execute commands with the CLI user that extracted/installed the software.
 - The "server:run" command will:
-  - Start PHP's built in web server. A single process, local, HTTP/1.x only, mainly suitable for quick demo.
+  - Use PHP's single process, local, HTTP/1 only built-in web server, mainly suitable for testing.
   - Give you the URL to the front end of the installation. TIP: Add "/admin" to reach back end.
 
 For full install instructions with Nginx/Apache for production, remote use, or better performing dev setup:
