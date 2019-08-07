@@ -569,6 +569,7 @@ abstract class BaseTest extends TestCase
      *
      * @param string $login
      * @param array $policiesData list of policies in the form of <code>[ [ 'module' => 'name', 'function' => 'name'] ]</code>
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null $roleLimitation
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -576,7 +577,7 @@ abstract class BaseTest extends TestCase
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function createUserWithPolicies($login, array $policiesData)
+    public function createUserWithPolicies($login, array $policiesData, RoleLimitation $roleLimitation = null)
     {
         $repository = $this->getRepository(false);
         $roleService = $repository->getRoleService();
@@ -595,7 +596,7 @@ abstract class BaseTest extends TestCase
             $user = $userService->createUser($userCreateStruct, [$userService->loadUserGroup(4)]);
 
             $role = $this->createRoleWithPolicies(uniqid('role_for_' . $login . '_', true), $policiesData);
-            $roleService->assignRoleToUser($role, $user);
+            $roleService->assignRoleToUser($role, $user, $roleLimitation);
 
             $repository->commit();
 
