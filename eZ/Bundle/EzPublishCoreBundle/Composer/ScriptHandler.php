@@ -131,16 +131,18 @@ class ScriptHandler extends DistributionBundleScriptHandler
 
 <fg=cyan>Welcome to ${installName}!</fg=cyan>
 
-<options=bold>Quick dev/test install:</>
+<options=bold>Quick install to test in local dev environment:</>
 <comment>    $  export SYMFONY_ENV="dev"</comment>
 ${installCommandText}
 <comment>    $  php ${consoleDir}/console server:run</comment>
 
 Note:
-- Instructions above assume the CLI user you execute these commands with is the same one that extracted/installed the software.
-- The last command will give you the url to the frontend of the installation, add "/admin" to reach backend.
+- Instructions assume CLI user you execute commands with is the same one that extracted/installed the software.
+- "server:run" command will:
+  - Start PHP's built in web server. A single process, local, HTTP/1.x only, mainly suitable for quick demo.
+  - Give you the url to the frontend of the installation. TIP: Add "/admin" to reach backend.
 
-For full install instructions, both for production and better performing dev setup, see:
+For full install instructions with Nginx/Apache for production, remote use, or better performing dev setup:
 ${installUrl}
 
 EOT
