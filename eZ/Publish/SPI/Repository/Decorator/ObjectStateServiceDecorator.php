@@ -27,114 +27,114 @@ abstract class ObjectStateServiceDecorator implements ObjectStateService
         $this->innerService = $innerService;
     }
 
-    public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct)
+    public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct): ObjectStateGroup
     {
         return $this->innerService->createObjectStateGroup($objectStateGroupCreateStruct);
     }
 
     public function loadObjectStateGroup(
-        $objectStateGroupId,
+        int $objectStateGroupId,
         array $prioritizedLanguages = []
-    ) {
+    ): ObjectStateGroup {
         return $this->innerService->loadObjectStateGroup($objectStateGroupId, $prioritizedLanguages);
     }
 
     public function loadObjectStateGroups(
-        $offset = 0,
-        $limit = -1,
+        int $offset = 0,
+        int $limit = -1,
         array $prioritizedLanguages = []
-    ) {
+    ): iterable {
         return $this->innerService->loadObjectStateGroups($offset, $limit, $prioritizedLanguages);
     }
 
     public function loadObjectStates(
         ObjectStateGroup $objectStateGroup,
         array $prioritizedLanguages = []
-    ) {
+    ): iterable {
         return $this->innerService->loadObjectStates($objectStateGroup, $prioritizedLanguages);
     }
 
     public function updateObjectStateGroup(
         ObjectStateGroup $objectStateGroup,
         ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
-    ) {
+    ): ObjectStateGroup {
         return $this->innerService->updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
     }
 
-    public function deleteObjectStateGroup(ObjectStateGroup $objectStateGroup)
+    public function deleteObjectStateGroup(ObjectStateGroup $objectStateGroup): void
     {
-        return $this->innerService->deleteObjectStateGroup($objectStateGroup);
+        $this->innerService->deleteObjectStateGroup($objectStateGroup);
     }
 
     public function createObjectState(
         ObjectStateGroup $objectStateGroup,
         ObjectStateCreateStruct $objectStateCreateStruct
-    ) {
+    ): ObjectState {
         return $this->innerService->createObjectState($objectStateGroup, $objectStateCreateStruct);
     }
 
     public function loadObjectState(
-        $stateId,
+        int $stateId,
         array $prioritizedLanguages = []
-    ) {
+    ): ObjectState {
         return $this->innerService->loadObjectState($stateId, $prioritizedLanguages);
     }
 
     public function updateObjectState(
         ObjectState $objectState,
         ObjectStateUpdateStruct $objectStateUpdateStruct
-    ) {
+    ): ObjectState {
         return $this->innerService->updateObjectState($objectState, $objectStateUpdateStruct);
     }
 
     public function setPriorityOfObjectState(
         ObjectState $objectState,
-        $priority
-    ) {
-        return $this->innerService->setPriorityOfObjectState($objectState, $priority);
+        int $priority
+    ): void {
+        $this->innerService->setPriorityOfObjectState($objectState, $priority);
     }
 
-    public function deleteObjectState(ObjectState $objectState)
+    public function deleteObjectState(ObjectState $objectState): void
     {
-        return $this->innerService->deleteObjectState($objectState);
+        $this->innerService->deleteObjectState($objectState);
     }
 
     public function setContentState(
         ContentInfo $contentInfo,
         ObjectStateGroup $objectStateGroup,
         ObjectState $objectState
-    ) {
-        return $this->innerService->setContentState($contentInfo, $objectStateGroup, $objectState);
+    ): void {
+        $this->innerService->setContentState($contentInfo, $objectStateGroup, $objectState);
     }
 
     public function getContentState(
         ContentInfo $contentInfo,
         ObjectStateGroup $objectStateGroup
-    ) {
+    ): ObjectState {
         return $this->innerService->getContentState($contentInfo, $objectStateGroup);
     }
 
-    public function getContentCount(ObjectState $objectState)
+    public function getContentCount(ObjectState $objectState): int
     {
         return $this->innerService->getContentCount($objectState);
     }
 
-    public function newObjectStateGroupCreateStruct($identifier)
+    public function newObjectStateGroupCreateStruct(string $identifier): ObjectStateGroupCreateStruct
     {
         return $this->innerService->newObjectStateGroupCreateStruct($identifier);
     }
 
-    public function newObjectStateGroupUpdateStruct()
+    public function newObjectStateGroupUpdateStruct(): ObjectStateGroupUpdateStruct
     {
         return $this->innerService->newObjectStateGroupUpdateStruct();
     }
 
-    public function newObjectStateCreateStruct($identifier)
+    public function newObjectStateCreateStruct(string $identifier): ObjectStateCreateStruct
     {
         return $this->innerService->newObjectStateCreateStruct($identifier);
     }
 
-    public function newObjectStateUpdateStruct()
+    public function newObjectStateUpdateStruct(): ObjectStateUpdateStruct
     {
         return $this->innerService->newObjectStateUpdateStruct();
     }

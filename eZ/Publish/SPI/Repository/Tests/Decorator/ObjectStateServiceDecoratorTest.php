@@ -51,8 +51,8 @@ class ObjectStateServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce167ab2.05518074',
-            ['random_value_5ced05ce167af8.71775936'],
+            5518074,
+            ['eng-GB'],
         ];
 
         $serviceMock->expects($this->once())->method('loadObjectStateGroup')->with(...$parameters);
@@ -66,9 +66,9 @@ class ObjectStateServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce167b48.34907853',
-            'random_value_5ced05ce167b50.97498952',
-            ['random_value_5ced05ce167b61.83719864'],
+            50,
+            100,
+            ['eng-GB'],
         ];
 
         $serviceMock->expects($this->once())->method('loadObjectStateGroups')->with(...$parameters);
@@ -139,8 +139,8 @@ class ObjectStateServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce168f03.95274945',
-            ['random_value_5ced05ce168f26.15342671'],
+            95274945,
+            ['eng-GB'],
         ];
 
         $serviceMock->expects($this->once())->method('loadObjectState')->with(...$parameters);
@@ -170,7 +170,7 @@ class ObjectStateServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(ObjectState::class),
-            'random_value_5ced05ce169b57.05322524',
+            100,
         ];
 
         $serviceMock->expects($this->once())->method('setPriorityOfObjectState')->with(...$parameters);

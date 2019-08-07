@@ -74,19 +74,28 @@ abstract class AbstractServiceTest extends TestCase
      *
      * @param string $method
      * @param array $arguments
-     * @param bool $return
+     * @param mixed $return
      */
     final public function testForPassTrough($method, array $arguments, $return = true)
     {
-        $this->innerApiServiceMock
-            ->expects($this->once())
-            ->method($method)
-            ->with(...$arguments)
-            ->willReturn($return);
+        if ($return) {
+            $this->innerApiServiceMock
+                ->expects($this->once())
+                ->method($method)
+                ->with(...$arguments)
+                ->willReturn($return);
+        } else {
+            $this->innerApiServiceMock
+                ->expects($this->once())
+                ->method($method)
+                ->with(...$arguments);
+        }
 
         $actualReturn = $this->service->$method(...$arguments);
 
-        $this->assertEquals($return, $actualReturn);
+        if ($return) {
+            $this->assertEquals($return, $actualReturn);
+        }
     }
 
     /**

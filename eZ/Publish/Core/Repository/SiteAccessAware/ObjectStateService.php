@@ -43,100 +43,100 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->languageResolver = $languageResolver;
     }
 
-    public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct)
+    public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct): ObjectStateGroup
     {
         return $this->service->createObjectStateGroup($objectStateGroupCreateStruct);
     }
 
-    public function loadObjectStateGroup($objectStateGroupId, array $prioritizedLanguages = null)
+    public function loadObjectStateGroup(int $objectStateGroupId, array $prioritizedLanguages = null): ObjectStateGroup
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadObjectStateGroup($objectStateGroupId, $prioritizedLanguages);
     }
 
-    public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = null)
+    public function loadObjectStateGroups(int $offset = 0, int $limit = -1, array $prioritizedLanguages = null): iterable
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadObjectStateGroups($offset, $limit, $prioritizedLanguages);
     }
 
-    public function loadObjectStates(ObjectStateGroup $objectStateGroup, array $prioritizedLanguages = null)
+    public function loadObjectStates(ObjectStateGroup $objectStateGroup, array $prioritizedLanguages = null): iterable
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadObjectStates($objectStateGroup, $prioritizedLanguages);
     }
 
-    public function updateObjectStateGroup(ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct)
+    public function updateObjectStateGroup(ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct): ObjectStateGroup
     {
         return $this->service->updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
     }
 
-    public function deleteObjectStateGroup(ObjectStateGroup $objectStateGroup)
+    public function deleteObjectStateGroup(ObjectStateGroup $objectStateGroup): void
     {
-        return $this->service->deleteObjectStateGroup($objectStateGroup);
+        $this->service->deleteObjectStateGroup($objectStateGroup);
     }
 
-    public function createObjectState(ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct)
+    public function createObjectState(ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct): ObjectState
     {
         return $this->service->createObjectState($objectStateGroup, $objectStateCreateStruct);
     }
 
-    public function loadObjectState($stateId, array $prioritizedLanguages = null)
+    public function loadObjectState(int $stateId, array $prioritizedLanguages = null): ObjectState
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadObjectState($stateId, $prioritizedLanguages);
     }
 
-    public function updateObjectState(ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct)
+    public function updateObjectState(ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct): ObjectState
     {
         return $this->service->updateObjectState($objectState, $objectStateUpdateStruct);
     }
 
-    public function setPriorityOfObjectState(ObjectState $objectState, $priority)
+    public function setPriorityOfObjectState(ObjectState $objectState, int $priority): void
     {
-        return $this->service->setPriorityOfObjectState($objectState, $priority);
+        $this->service->setPriorityOfObjectState($objectState, $priority);
     }
 
-    public function deleteObjectState(ObjectState $objectState)
+    public function deleteObjectState(ObjectState $objectState): void
     {
-        return $this->service->deleteObjectState($objectState);
+        $this->service->deleteObjectState($objectState);
     }
 
-    public function setContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState)
+    public function setContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState): void
     {
-        return $this->service->setContentState($contentInfo, $objectStateGroup, $objectState);
+        $this->service->setContentState($contentInfo, $objectStateGroup, $objectState);
     }
 
-    public function getContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup)
+    public function getContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup): ObjectState
     {
         return $this->service->getContentState($contentInfo, $objectStateGroup);
     }
 
-    public function getContentCount(ObjectState $objectState)
+    public function getContentCount(ObjectState $objectState): int
     {
         return $this->service->getContentCount($objectState);
     }
 
-    public function newObjectStateGroupCreateStruct($identifier)
+    public function newObjectStateGroupCreateStruct(string $identifier): ObjectStateGroupCreateStruct
     {
         return $this->service->newObjectStateGroupCreateStruct($identifier);
     }
 
-    public function newObjectStateGroupUpdateStruct()
+    public function newObjectStateGroupUpdateStruct(): ObjectStateGroupUpdateStruct
     {
         return $this->service->newObjectStateGroupUpdateStruct();
     }
 
-    public function newObjectStateCreateStruct($identifier)
+    public function newObjectStateCreateStruct(string $identifier): ObjectStateCreateStruct
     {
         return $this->service->newObjectStateCreateStruct($identifier);
     }
 
-    public function newObjectStateUpdateStruct()
+    public function newObjectStateUpdateStruct(): ObjectStateUpdateStruct
     {
         return $this->service->newObjectStateUpdateStruct();
     }

@@ -172,7 +172,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
     public function setPriorityOfObjectState(
         ObjectState $objectState,
-        $priority
+        int $priority
     ): void {
         $eventData = [
             $objectState,
