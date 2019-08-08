@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler;
@@ -39,18 +40,23 @@ class URLAliasService implements URLAliasServiceInterface
     /** @var \eZ\Publish\Core\Repository\Helper\NameSchemaService */
     protected $nameSchemaService;
 
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler $urlAliasHandler
      * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $urlAliasHandler,
         Helper\NameSchemaService $nameSchemaService,
+        PermissionResolver $permissionResolver,
         array $settings = []
     ) {
         $this->repository = $repository;
@@ -62,6 +68,7 @@ class URLAliasService implements URLAliasServiceInterface
         // Get prioritized languages from language service to not have to call it several times
         $this->settings['prioritizedLanguageList'] = $repository->getContentLanguageService()->getPrioritizedLanguageCodeList();
         $this->nameSchemaService = $nameSchemaService;
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -84,7 +91,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function createUrlAlias(Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
     {
-        if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') !== true) {
+        if (!$this->permissionResolver->canUser('content', 'urltranslator', $location)) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
@@ -140,7 +147,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function createGlobalUrlAlias($resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
     {
-        if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') !== true) {
+        if ($this->permissionResolver->hasAccess('content', 'urltranslator') === false) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
@@ -158,8 +165,14 @@ class URLAliasService implements URLAliasServiceInterface
                 $locationId = end($resourcePath);
             }
 
+            $location = $this->repository->getLocationService()->loadLocation($locationId);
+
+            if (!$this->permissionResolver->canUser('content', 'urltranslator', $location)) {
+                throw new UnauthorizedException('content', 'urltranslator');
+            }
+
             return $this->createUrlAlias(
-                $this->repository->getLocationService()->loadLocation($locationId),
+                $location,
                 $path,
                 $languageCode,
                 $forwarding,
@@ -468,6 +481,8 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content\URLAlias $spiUrlAlias
      * @param string|null $languageCode
+     * @param bool $showAllTranslations
+     * @param string[] $prioritizedLanguageList
      *
      * @return bool
      */
@@ -580,7 +595,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function removeAliases(array $aliasList)
     {
-        if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') !== true) {
+        if ($this->permissionResolver->hasAccess('content', 'urltranslator') === false) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
@@ -784,7 +799,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function deleteCorruptedUrlAliases(): int
     {
-        if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') !== true) {
+        if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') === false) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 

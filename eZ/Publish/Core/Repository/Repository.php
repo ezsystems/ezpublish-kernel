@@ -626,6 +626,7 @@ class Repository implements RepositoryInterface
             $this,
             $this->persistenceHandler->urlAliasHandler(),
             $this->getNameSchemaService(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['urlAlias']
         );
 
