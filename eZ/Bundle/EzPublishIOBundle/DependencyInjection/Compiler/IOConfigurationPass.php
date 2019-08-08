@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This compiler pass will create the metadata and binarydata IO handlers depending on container configuration.
@@ -85,7 +86,7 @@ class IOConfigurationPass implements CompilerPassInterface
         ArrayObject $factories,
         $defaultHandler
     ) {
-        $handlers = ['default' => $defaultHandler];
+        $handlers = ['default' => new Reference($defaultHandler)];
 
         foreach ($configuredHandlers as $name => $config) {
             $configurationFactory = $this->getFactory($factories, $config['type'], $container);
@@ -93,12 +94,11 @@ class IOConfigurationPass implements CompilerPassInterface
             $parentHandlerId = $configurationFactory->getParentServiceId();
             $handlerId = sprintf('%s.%s', $parentHandlerId, $name);
             $handlerServiceDefinition = new ChildDefinition($parentHandlerId);
-            $handlerServiceDefinition->setPublic(true); // @todo It should be private once HandlerFactory is refactored
             $definition = $container->setDefinition($handlerId, $handlerServiceDefinition);
 
             $configurationFactory->configureHandler($definition, $config);
 
-            $handlers[$name] = $handlerId;
+            $handlers[$name] = new Reference($handlerId);
         }
 
         $factory->addMethodCall('setHandlersMap', [$handlers]);

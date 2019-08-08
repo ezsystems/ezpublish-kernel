@@ -14,13 +14,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Factory of IO handlers, given an alias.
- *
- * @todo This should not rely on $container->get('...') in SF4.
  */
-class HandlerFactory implements ContainerAwareInterface
+class HandlerFactory
 {
-    use ContainerAwareTrait;
-
     /**
      * Map of handler id to handler service id.
      *
@@ -46,6 +42,6 @@ class HandlerFactory implements ContainerAwareInterface
             throw new InvalidConfigurationException("Unknown handler $handlerName");
         }
 
-        return $this->container->get($this->handlersMap[$handlerName]);
+        return $this->handlersMap[$handlerName];
     }
 }
