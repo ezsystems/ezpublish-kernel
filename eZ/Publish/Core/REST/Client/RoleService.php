@@ -542,9 +542,7 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
-     * Loads all roles.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
+     * Loads all roles, excluding the ones the current user is not allowed to read.
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role[]
      */
@@ -813,9 +811,7 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
-     * Returns the roles assigned to the given user group.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
+     * Returns the roles assigned to the given user group, excluding the ones the current user is not allowed to read.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
