@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler;
@@ -32,6 +33,9 @@ class URLWildcardService implements URLWildcardServiceInterface
     /** @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler */
     protected $urlWildcardHandler;
 
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     /** @var array */
     protected $settings;
 
@@ -40,12 +44,18 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler $urlWildcardHandler
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $urlWildcardHandler, array $settings = [])
-    {
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $urlWildcardHandler,
+        PermissionResolver $permissionResolver,
+        array $settings = []
+    ) {
         $this->repository = $repository;
         $this->urlWildcardHandler = $urlWildcardHandler;
+        $this->permissionResolver = $permissionResolver;
         $this->settings = $settings;
     }
 
@@ -65,7 +75,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function create($sourceUrl, $destinationUrl, $forward = false): URLWildcard
     {
-        if ($this->repository->hasAccess('content', 'urltranslator') !== true) {
+        if ($this->permissionResolver->hasAccess('content', 'urltranslator') === false) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
@@ -114,7 +124,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function remove(URLWildcard $urlWildcard): void
     {
-        if (!$this->repository->canUser('content', 'urltranslator', $urlWildcard)) {
+        if (!$this->permissionResolver->canUser('content', 'urltranslator', $urlWildcard)) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
