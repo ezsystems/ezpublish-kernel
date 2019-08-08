@@ -37,10 +37,7 @@ class TemplateRenderer implements Renderer
      */
     public function render(View $view)
     {
-        $this->eventDispatcher->dispatch(
-            MVCEvents::PRE_CONTENT_VIEW,
-            new PreContentViewEvent($view)
-        );
+        $this->eventDispatcher->dispatch(new PreContentViewEvent($view), MVCEvents::PRE_CONTENT_VIEW);
 
         $templateIdentifier = $view->getTemplateIdentifier();
         if ($templateIdentifier instanceof Closure) {

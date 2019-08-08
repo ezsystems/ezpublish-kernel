@@ -245,10 +245,7 @@ class Manager implements ViewManagerInterface
     {
         $defaultParams['view_base_layout'] = $this->viewBaseLayout;
         $view->addParameters($defaultParams);
-        $this->eventDispatcher->dispatch(
-            MVCEvents::PRE_CONTENT_VIEW,
-            new PreContentViewEvent($view)
-        );
+        $this->eventDispatcher->dispatch(new PreContentViewEvent($view), MVCEvents::PRE_CONTENT_VIEW);
 
         $templateIdentifier = $view->getTemplateIdentifier();
         $params = $view->getParameters();

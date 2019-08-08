@@ -68,7 +68,7 @@ class ContentPreviewHelper implements SiteAccessAware
     public function changeConfigScope($siteAccessName)
     {
         $event = new ScopeChangeEvent($this->siteAccessRouter->matchByName($siteAccessName));
-        $this->eventDispatcher->dispatch(MVCEvents::CONFIG_SCOPE_CHANGE, $event);
+        $this->eventDispatcher->dispatch($event, MVCEvents::CONFIG_SCOPE_CHANGE);
 
         return $event->getSiteAccess();
     }
@@ -81,7 +81,7 @@ class ContentPreviewHelper implements SiteAccessAware
     public function restoreConfigScope()
     {
         $event = new ScopeChangeEvent($this->originalSiteAccess);
-        $this->eventDispatcher->dispatch(MVCEvents::CONFIG_SCOPE_RESTORE, $event);
+        $this->eventDispatcher->dispatch($event, MVCEvents::CONFIG_SCOPE_RESTORE);
 
         return $event->getSiteAccess();
     }

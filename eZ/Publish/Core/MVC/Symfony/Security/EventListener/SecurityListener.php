@@ -115,7 +115,7 @@ class SecurityListener implements EventSubscriberInterface
          * 6. Inject the new token in security context
          */
         $subLoginEvent = new InteractiveLoginEvent($event->getRequest(), $token);
-        $this->eventDispatcher->dispatch(MVCEvents::INTERACTIVE_LOGIN, $subLoginEvent);
+        $this->eventDispatcher->dispatch($subLoginEvent, MVCEvents::INTERACTIVE_LOGIN);
 
         if ($subLoginEvent->hasAPIUser()) {
             $apiUser = $subLoginEvent->getAPIUser();
