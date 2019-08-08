@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Event;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
