@@ -8,14 +8,17 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
+use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionItem;
 use Stash\Interfaces\PoolInterface;
+use Tedivm\StashBundle\Service\CacheItem;
 
 /**
  * Class CacheServiceDecorator.
  *
  * Wraps the Cache Service for Spi cache to apply key prefix for the cache
  */
-class CacheServiceDecorator
+class CacheServiceDecorator implements TransactionAwareAdapterInterface
 {
     const SPI_CACHE_KEY_PREFIX = 'ez_spi';
 
@@ -23,6 +26,12 @@ class CacheServiceDecorator
      * @var \Stash\Interfaces\PoolInterface
      */
     protected $cachePool;
+
+    /** @var int */
+    protected $transactionDepth = 0;
+
+    /** @var array */
+    protected $deferredClear = [];
 
     /**
      * Constructs the cache service decorator.
@@ -48,7 +57,9 @@ class CacheServiceDecorator
         $args = func_get_args();
 
         if (empty($args)) {
-            return $this->cachePool->getItem(self::SPI_CACHE_KEY_PREFIX);
+            return $this->handleTransactionItems(
+                [$this->cachePool->getItem(self::SPI_CACHE_KEY_PREFIX)]
+            )[0];
         }
 
         //  Upstream seems to no longer support array, so we flatten it
@@ -60,7 +71,9 @@ class CacheServiceDecorator
 
         $key = $key === '' ? self::SPI_CACHE_KEY_PREFIX : self::SPI_CACHE_KEY_PREFIX . '/' . $key;
 
-        return $this->cachePool->getItem($key);
+        return $this->handleTransactionItems(
+            [$this->cachePool->getItem($key)]
+        )[0];
     }
 
     /**
@@ -83,7 +96,41 @@ class CacheServiceDecorator
             $keys
         );
 
-        return $this->cachePool->getItems($keys);
+        return $this->handleTransactionItems(
+            $this->cachePool->getItems($keys)
+        );
+    }
+
+    /**
+     * @param Item[] $items
+     *
+     * @return Item[]
+     */
+    private function handleTransactionItems(array $items)
+    {
+        if ($this->transactionDepth === 0) {
+            return $items;
+        }
+
+        // If in transaction we set callback for save()/clear(), & for isMiss() detect if key is a deferred miss
+        foreach ($items as $item) {
+            /* @var TransactionItem $item */
+            $item->setClearCallback(function ($key) {
+                $this->rawClear([$key]);
+            });
+            $item->setIsClearedCallback(function ($key) {
+                // Due to keys in Stash being hierarchical we need to check if key or prefix of key has been cleared
+                foreach ($this->deferredClear as $clearedKey) {
+                    if ($key === $clearedKey || stripos($key, $clearedKey) === 0) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        }
+
+        return $items;
     }
 
     /**
@@ -101,12 +148,90 @@ class CacheServiceDecorator
      * Clears the cache for the key, or if none is specified clears the entire cache. The key can be either
      * a series of string arguments, or an array.
      *
-     * @internal param array|null|string $key , $key, $key...
+     * @internal
+     * @param array|null|string $key , $key, $key...
+     * @return bool
      */
-    public function clear()
+    public function clear(...$key)
     {
-        $item = call_user_func_array([$this, 'getItem'], func_get_args());
+        // Make washed string key out of the arguments
+        if (empty($key)) {
+            $key = self::SPI_CACHE_KEY_PREFIX;
+        } elseif (!isset($key[1]) && is_array($key[0])) {
+            $key = self::SPI_CACHE_KEY_PREFIX . '/' . implode('/', array_map([$this, 'washKey'], $key[0]));
+        } else {
+            $key = self::SPI_CACHE_KEY_PREFIX . '/' . implode('/', array_map([$this, 'washKey'], $key));
+        }
 
-        return $item->clear();
+        return $this->rawClear([$key]);
+    }
+
+    private function rawClear(array $keys)
+    {
+        // Store for later if in transaction
+        if ($this->transactionDepth) {
+            $this->deferredClear = array_merge($this->deferredClear, $keys);
+
+            return true;
+        }
+
+        return $this->executeClear($keys);
+    }
+
+    private function executeClear(array $keys)
+    {
+        // Detect full cache clear, if so ignore everything else
+        if (in_array(self::SPI_CACHE_KEY_PREFIX, $keys, true)) {
+            $item = $this->cachePool->getItem(self::SPI_CACHE_KEY_PREFIX);
+
+            return $item->clear();
+        }
+
+        return $this->cachePool->deleteItems($keys);
+    }
+
+    /**
+     * {@inheritdoc}.
+     */
+    public function beginTransaction()
+    {
+        if ($this->transactionDepth === 0) {
+            // Wrap Item(s) in order to also handle calls to $item->save() and $item->clear()
+            $this->cachePool->setItemClass(TransactionItem::class);
+        }
+        ++$this->transactionDepth;
+    }
+
+    /**
+     * {@inheritdoc}.
+     */
+    public function commitTransaction()
+    {
+        if ($this->transactionDepth === 0) {
+            // ignore, might have been a rollback
+            return;
+        }
+
+        --$this->transactionDepth;
+
+        // Cache commit time, it's now time to share the changes with the pool
+        if ($this->transactionDepth === 0) {
+            $this->cachePool->setItemClass(CacheItem::class);
+            if (!empty($this->deferredClear)) {
+                $this->executeClear($this->deferredClear);
+                $this->deferredClear = [];
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}.
+     */
+    public function rollbackTransaction()
+    {
+        // A rollback in SQL will by default set transaction level to 0 & wipe transaction changes, so we do the same.
+        $this->cachePool->setItemClass(CacheItem::class);
+        $this->transactionDepth = 0;
+        $this->deferredClear = [];
     }
 }

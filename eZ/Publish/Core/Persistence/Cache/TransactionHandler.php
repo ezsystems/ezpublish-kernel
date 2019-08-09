@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface;
 
 /**
@@ -18,14 +19,14 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
     /**
      * Begin transaction.
      *
-     * @todo Consider to either disable cache or layer it with in-memory cache per transaction, last layer would be the
-     *       normal layer. At the moment *all* cache is cleared on rollback for simplicity, as they are not frequent.
-     *
      * Begins an transaction, make sure you'll call commit or rollback when done,
      * otherwise work will be lost.
      */
     public function beginTransaction()
     {
+        /** @var TransactionAwareAdapterInterface */
+        $this->cache->beginTransaction();
+
         $this->logger->logCall(__METHOD__);
         $this->persistenceHandler->transactionHandler()->beginTransaction();
     }
@@ -41,6 +42,9 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
     {
         $this->logger->logCall(__METHOD__);
         $this->persistenceHandler->transactionHandler()->commit();
+
+        /** @var TransactionAwareAdapterInterface */
+        $this->cache->commitTransaction();
     }
 
     /**
@@ -53,8 +57,9 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
     public function rollback()
     {
         $this->logger->logCall(__METHOD__);
-        // {@see beginTransaction()}
-        $this->cache->clear();
         $this->persistenceHandler->transactionHandler()->rollback();
+
+        /** @var TransactionAwareAdapterInterface */
+        $this->cache->rollbackTransaction();
     }
 }
