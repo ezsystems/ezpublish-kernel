@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+
 class URLAliasServiceAuthorizationTest extends BaseTest
 {
     /**
@@ -32,12 +34,13 @@ class URLAliasServiceAuthorizationTest extends BaseTest
         $urlAliasService = $repository->getURLAliasService();
         $locationService = $repository->getLocationService();
 
-        $location = $locationService->newLocationCreateStruct($parentLocationId);
+        $content = $this->createFolder(['eng-GB' => 'Foo'], $parentLocationId);
+        $location = $locationService->loadLocation($content->contentInfo->mainLocationId);
 
         $anonymousUser = $userService->loadUser($anonymousUserId);
         $repository->getPermissionResolver()->setCurrentUserReference($anonymousUser);
 
-        // This call will fail with an UnauthorizedException
+        $this->expectException(UnauthorizedException::class);
         $urlAliasService->createUrlAlias($location, '/Home/My-New-Site', 'eng-US');
         /* END: Use Case */
     }

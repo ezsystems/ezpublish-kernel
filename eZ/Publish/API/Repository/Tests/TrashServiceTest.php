@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Trash\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use DateTime;
@@ -758,6 +759,55 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertEquals(0, $searchResult->count);
+
+        // Try to load content
+        $this->expectException(NotFoundException::class);
+        $contentService->loadContent($trashItem->contentId);
+    }
+
+    /**
+     * Test for the emptyTrash() method with user which has subtree limitations.
+     *
+     * @see \eZ\Publish\API\Repository\TrashService::emptyTrash()
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testFindTrashItems
+     */
+    public function testEmptyTrashForUserWithSubtreeLimitation()
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $trashItem = $this->createTrashItem();
+
+        $this->createRoleWithPolicies('roleTrashCleaner', [
+            ['module' => 'content', 'function' => 'cleantrash'],
+            ['module' => 'content', 'function' => 'read'],
+        ]);
+        $user = $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            'roleTrashCleaners',
+            'roleTrashCleaner',
+            new SubtreeLimitation(['limitationValues' => ['/1/2/']])
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        // Empty the trash
+        $trashService->emptyTrash();
+
+        // Create a search query for all trashed items
+        $query = new Query();
+        $query->filter = new Criterion\LogicalAnd(
+            [
+                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
+            ]
+        );
+        // Load all trashed locations, search result should be empty
+        $searchResult = $trashService->findTrashItems($query);
+        /* END: Use Case */
+
+        $this->assertEquals(0, $searchResult->totalCount);
 
         // Try to load content
         $this->expectException(NotFoundException::class);
