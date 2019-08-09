@@ -126,8 +126,8 @@ class SessionTest extends TestCase
         );
         $response = $this->sendHttpRequest($request);
 
-        // Since Session is reused, not created, expect 200 instead of 201
-        self::assertHttpResponseCodeEquals($response, 200);
+        // Session is recreated when using CSRF, expect 201 instead of 200
+        self::assertHttpResponseCodeEquals($response, 201);
     }
 
     /**
