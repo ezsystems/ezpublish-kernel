@@ -107,13 +107,9 @@ class RoleServiceAuthorizationTest extends BaseTest
      * Test for the loadRoles() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::loadRoles()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoles
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testLoadRolesThrowsUnauthorizedException()
+    public function testLoadRolesLoadsEmptyListForAnonymousUser()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -124,10 +120,39 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         // Get the role service
         $roleService = $repository->getRoleService();
-
-        // This call will fail with an "UnauthorizedException"
-        $roleService->loadRoles();
         /* END: Use Case */
+
+        $this->assertEquals([], $roleService->loadRoles());
+    }
+
+    /**
+     * Test for the loadRoles() method.
+     *
+     * @see \eZ\Publish\API\Repository\RoleService::loadRoles()
+     */
+    public function testLoadRolesForUserWithSubtreeLimitation()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        // create user that can read/create/delete but cannot edit or content
+        $this->createRoleWithPolicies('roleReader', [
+            ['module' => 'role', 'function' => 'read'],
+        ]);
+
+        $user = $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            'roleReaders',
+            'roleReader',
+            new SubtreeLimitation(['limitationValues' => ['/1/2/']])
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+        /* END: Use Case */
+
+        $this->assertCount(6, $roleService->loadRoles());
     }
 
     /**
@@ -564,13 +589,9 @@ class RoleServiceAuthorizationTest extends BaseTest
      * Test for the getRoleAssignmentsForUser() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignmentsForUserEmpty
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testGetRoleAssignmentsForUserThrowsUnauthorizedException()
+    public function testGetRoleAssignmentsForUserLoadsEmptyListForAnonymousUser()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
@@ -580,11 +601,39 @@ class RoleServiceAuthorizationTest extends BaseTest
         $this->createRole();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
-
-        // This call will fail with an "UnauthorizedException"
-        $roleService->getRoleAssignmentsForUser($user);
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
         /* END: Use Case */
+
+        $this->assertSame([], $roleService->getRoleAssignmentsForUser($user));
+    }
+
+    /**
+     * Test for the getRoleAssignmentsForUser() method.
+     *
+     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
+     */
+    public function testGetRoleAssignmentsForUserWithSubtreeLimitation()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserWithPolicies(
+            'trash_test_user',
+            [
+                ['module' => 'role', 'function' => 'read'],
+            ],
+            new SubtreeLimitation(['limitationValues' => ['/1/2/']])
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+        /* END: Use Case */
+
+        $roleAssignments = $roleService->getRoleAssignmentsForUser($user);
+        $this->assertCount(1, $roleAssignments);
+
+        $roleAssignment = $roleAssignments[0];
+        $this->assertSame($user, $roleAssignment->user);
     }
 
     /**

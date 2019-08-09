@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 
@@ -30,12 +31,12 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
         $userService = $repository->getUserService();
         $urlService = $repository->getURLService();
 
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         $query = new URLQuery();
         $query->filter = new Criterion\MatchAll();
 
-        // This call will fail with an UnauthorizedException
+        $this->expectException(UnauthorizedException::class);
         $urlService->findUrls($query);
         /* END: Use Case */
     }
@@ -60,7 +61,7 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
         $userService = $repository->getUserService();
         $urlService = $repository->getURLService();
 
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         $url = $urlService->loadById($urlId);
         $updateStruct = $urlService->createUpdateStruct();
@@ -91,7 +92,7 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
         $userService = $repository->getUserService();
         $urlService = $repository->getURLService();
 
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with an UnauthorizedException
         $urlService->loadById($urlId);
@@ -119,7 +120,7 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
         $userService = $repository->getUserService();
         $urlService = $repository->getURLService();
 
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with an UnauthorizedException
         $urlService->loadByUrl($url);
