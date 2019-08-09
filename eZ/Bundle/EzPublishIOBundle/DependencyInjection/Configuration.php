@@ -33,8 +33,9 @@ class Configuration implements ConfigurationInterface
 
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('ez_io');
+        $treeBuilder = new TreeBuilder('ez_io');
+
+        $rootNode = $treeBuilder->getRootNode();
 
         $this->addHandlersSection(
             $rootNode,

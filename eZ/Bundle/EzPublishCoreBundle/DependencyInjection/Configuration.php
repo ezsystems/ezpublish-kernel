@@ -45,8 +45,9 @@ class Configuration extends SiteAccessConfiguration
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('ezpublish');
+        $treeBuilder = new TreeBuilder('ezpublish');
+
+        $rootNode = $treeBuilder->getRootNode();
 
         $this->addRepositoriesSection($rootNode);
         $this->addSiteaccessSection($rootNode);
