@@ -225,10 +225,7 @@ class TrashService implements TrashServiceInterface
      */
     public function emptyTrash()
     {
-        // Will throw if you have Role assignment limitation where you have content/cleantrash permission.
-        // This is by design and means you can only delete one and one trash item, or you'll need to change how
-        // permissions is assigned to be on separate role with no Role assignment limitation.
-        if ($this->repository->hasAccess('content', 'cleantrash') !== true) {
+        if ($this->repository->hasAccess('content', 'cleantrash') === false) {
             throw new UnauthorizedException('content', 'cleantrash');
         }
 
