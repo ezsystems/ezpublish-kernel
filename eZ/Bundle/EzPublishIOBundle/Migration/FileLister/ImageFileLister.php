@@ -8,7 +8,7 @@ namespace eZ\Bundle\EzPublishIOBundle\Migration\FileLister;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileList;
-use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory;
+use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerRegistry;
 use eZ\Bundle\EzPublishIOBundle\Migration\FileListerInterface;
 use eZ\Bundle\EzPublishIOBundle\Migration\MigrationHandler;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
@@ -32,8 +32,8 @@ class ImageFileLister extends MigrationHandler implements FileListerInterface
     private $imagesDir;
 
     /**
-     * @param \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory $metadataHandlerFactory
-     * @param \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory $binarydataHandlerFactory
+     * @param \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerRegistry $metadataHandlerRegistry
+     * @param \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerRegistry $binarydataHandlerRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Iterator $imageFileList
      * @param \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator
@@ -41,8 +41,8 @@ class ImageFileLister extends MigrationHandler implements FileListerInterface
      * @param string $imagesDir Directory where images are stored, within the storage dir. Example: 'images'
      */
     public function __construct(
-        HandlerFactory $metadataHandlerFactory,
-        HandlerFactory $binarydataHandlerFactory,
+        HandlerRegistry $metadataHandlerRegistry,
+        HandlerRegistry $binarydataHandlerRegistry,
         LoggerInterface $logger = null,
         Iterator $imageFileList,
         VariationPathGenerator $variationPathGenerator,
@@ -56,7 +56,7 @@ class ImageFileLister extends MigrationHandler implements FileListerInterface
 
         $this->imageFileList->rewind();
 
-        parent::__construct($metadataHandlerFactory, $binarydataHandlerFactory, $logger);
+        parent::__construct($metadataHandlerRegistry, $binarydataHandlerRegistry, $logger);
     }
 
     public function countFiles()

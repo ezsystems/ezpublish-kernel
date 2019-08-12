@@ -50,7 +50,7 @@ class IOConfigurationPass implements CompilerPassInterface
             [];
         $this->processHandlers(
             $container,
-            $container->getDefinition('ezpublish.core.io.metadata_handler.factory'),
+            $container->getDefinition('ezpublish.core.io.metadata_handler.registry'),
             $ioMetadataHandlers,
             $this->metadataHandlerFactories,
             'ezpublish.core.io.metadata_handler.flysystem.default'
@@ -61,7 +61,7 @@ class IOConfigurationPass implements CompilerPassInterface
             [];
         $this->processHandlers(
             $container,
-            $container->getDefinition('ezpublish.core.io.binarydata_handler.factory'),
+            $container->getDefinition('ezpublish.core.io.binarydata_handler.registry'),
             $ioBinarydataHandlers,
             $this->binarydataHandlerFactories,
             'ezpublish.core.io.binarydata_handler.flysystem.default'
