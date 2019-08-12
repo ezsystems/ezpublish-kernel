@@ -67,7 +67,7 @@ class PreviewLocationProviderTest extends TestCase
 
         $location = $this->provider->loadMainLocation($contentId);
         $this->assertInstanceOf(APILocation::class, $location);
-        $this->assertSame($content, $location->content);
+        $this->assertSame($content, $location->getContent());
         $this->assertNull($location->id);
         $this->assertEquals($parentLocationId, $location->parentLocationId);
     }
@@ -99,8 +99,7 @@ class PreviewLocationProviderTest extends TestCase
 
         $returnedLocation = $this->provider->loadMainLocation($contentId);
         $this->assertSame($location, $returnedLocation);
-        $this->assertSame($content, $location->content);
-        //$this->assertSame($contentInfo, $returnedLocation->contentInfo);
+        $this->assertSame($content, $location->getContent());
     }
 
     public function testGetPreviewLocationNoLocation()
