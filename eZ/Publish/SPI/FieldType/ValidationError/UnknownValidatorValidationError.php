@@ -15,7 +15,7 @@ final class UnknownValidatorValidationError extends AbstractValidationError
         parent::__construct(
             "Validator '%validator%' is unknown",
             [
-                'validator' => $validatorIdentifier,
+                '%validator%' => $validatorIdentifier,
             ],
             $target
         );
