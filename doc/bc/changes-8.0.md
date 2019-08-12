@@ -70,6 +70,9 @@ Changes affecting version compatibility with former or future versions.
 * `ez_image_asset_content_field_identifier` twig function  was renamed to `ez_content_field_identifier_image_asset`
 * `richtext_to_html5` twig filter  was renamed to `ez_richtext_to_html5`
 * `richtext_to_html5_edit` twig filter  was renamed to `ez_richtext_to_html5_edit`
+* `\eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory` class was renamed to `HandlerRegistry`
+* `ezpublish.core.io.metadata_handler.factory` service was renamed to `ezpublish.core.io.metadata_handler.registry`
+* `ezpublish.core.io.binarydata_handler.factory` service was renamed to `ezpublish.core.io.binarydata_handler.registry`
 
 ## Removed services
 
