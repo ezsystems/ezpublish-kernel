@@ -15,7 +15,7 @@ final class NonConfigurableValidationError extends AbstractValidationError
         parent::__construct(
             "FieldType '%fieldType%' does not accept settings",
             [
-                'fieldType' => $fieldTypeValidatorIdentifier,
+                '%fieldType%' => $fieldTypeValidatorIdentifier,
             ],
             $target
         );
