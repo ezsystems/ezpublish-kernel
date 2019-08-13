@@ -151,7 +151,7 @@ abstract class Type extends FieldType
 
     public function validateFieldSettings($fieldSettings): array
     {
-        if (empty($this->settingsSchema) && !empty($fieldSettings)) {
+        if (empty($this->getSettingsSchema()) && !empty($fieldSettings)) {
             return [
                 new NonConfigurableValidationError($this->getFieldTypeIdentifier(), 'fieldType'),
             ];
