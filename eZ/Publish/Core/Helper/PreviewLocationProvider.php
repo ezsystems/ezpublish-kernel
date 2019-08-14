@@ -95,7 +95,7 @@ class PreviewLocationProvider
                 return null;
             }
 
-            // NOTE: Once Repository adds support for draft locations (and draft  location ops), then this can be removed 
+            // NOTE: Once Repository adds support for draft locations (and draft  location ops), then this can be removed
             $location = new Location(
                 [
                     'content' => $content,
