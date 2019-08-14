@@ -48,8 +48,6 @@ abstract class Flysystem implements ConfigurationFactory, ContainerAwareInterfac
 
     public function configureHandler(ServiceDefinition $definition, array $config)
     {
-        $definition->setPublic(true); // @todo should be private
-
         $filesystemId = $this->createFilesystem($this->container, $config['name'], $config['adapter']);
         $definition->replaceArgument(0, new Reference($filesystemId));
     }
@@ -72,7 +70,6 @@ abstract class Flysystem implements ConfigurationFactory, ContainerAwareInterfac
 
         $filesystemId = sprintf('ezpublish.core.io.flysystem.%s_filesystem', $name);
         $filesystemServiceDefinition = new ChildDefinition('ezpublish.core.io.flysystem.base_filesystem');
-        $filesystemServiceDefinition->setPublic(true); // @todo Should be private
         $definition = $container->setDefinition(
             $filesystemId,
             $filesystemServiceDefinition

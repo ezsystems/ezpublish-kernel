@@ -6,7 +6,7 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\Migration;
 
-use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory;
+use eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerRegistry;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -14,11 +14,11 @@ use Psr\Log\LoggerInterface;
  */
 abstract class MigrationHandler implements MigrationHandlerInterface
 {
-    /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory */
-    private $metadataHandlerFactory;
+    /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerRegistry */
+    private $metadataHandlerRegistry;
 
-    /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory */
-    private $binarydataHandlerFactory;
+    /** @var \eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerRegistry */
+    private $binarydataHandlerRegistry;
 
     /** @var \Psr\Log\LoggerInterface */
     private $logger;
@@ -36,12 +36,12 @@ abstract class MigrationHandler implements MigrationHandlerInterface
     protected $toBinarydataHandler;
 
     public function __construct(
-        HandlerFactory $metadataHandlerFactory,
-        HandlerFactory $binarydataHandlerFactory,
+        HandlerRegistry $metadataHandlerRegistry,
+        HandlerRegistry $binarydataHandlerRegistry,
         LoggerInterface $logger = null
     ) {
-        $this->metadataHandlerFactory = $metadataHandlerFactory;
-        $this->binarydataHandlerFactory = $binarydataHandlerFactory;
+        $this->metadataHandlerRegistry = $metadataHandlerRegistry;
+        $this->binarydataHandlerRegistry = $binarydataHandlerRegistry;
         $this->logger = $logger;
     }
 
@@ -51,10 +51,10 @@ abstract class MigrationHandler implements MigrationHandlerInterface
         $toMetadataHandlerIdentifier,
         $toBinarydataHandlerIdentifier
     ) {
-        $this->fromMetadataHandler = $this->metadataHandlerFactory->getConfiguredHandler($fromMetadataHandlerIdentifier);
-        $this->fromBinarydataHandler = $this->binarydataHandlerFactory->getConfiguredHandler($fromBinarydataHandlerIdentifier);
-        $this->toMetadataHandler = $this->metadataHandlerFactory->getConfiguredHandler($toMetadataHandlerIdentifier);
-        $this->toBinarydataHandler = $this->binarydataHandlerFactory->getConfiguredHandler($toBinarydataHandlerIdentifier);
+        $this->fromMetadataHandler = $this->metadataHandlerRegistry->getConfiguredHandler($fromMetadataHandlerIdentifier);
+        $this->fromBinarydataHandler = $this->binarydataHandlerRegistry->getConfiguredHandler($fromBinarydataHandlerIdentifier);
+        $this->toMetadataHandler = $this->metadataHandlerRegistry->getConfiguredHandler($toMetadataHandlerIdentifier);
+        $this->toBinarydataHandler = $this->binarydataHandlerRegistry->getConfiguredHandler($toBinarydataHandlerIdentifier);
 
         return $this;
     }

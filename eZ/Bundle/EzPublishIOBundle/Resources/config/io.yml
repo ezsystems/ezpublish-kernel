@@ -30,8 +30,8 @@ services:
     ezpublish.core.io.migration.migration_handler:
         class: "%ezpublish.core.io.migration.migration_handler.class%"
         arguments:
-            - "@ezpublish.core.io.metadata_handler.factory"
-            - "@ezpublish.core.io.binarydata_handler.factory"
+            - "@ezpublish.core.io.metadata_handler.registry"
+            - "@ezpublish.core.io.binarydata_handler.registry"
             - "@logger"
 
     ezpublish.core.io.migration.file_lister.binary_file_lister:
@@ -93,25 +93,21 @@ services:
     # Builds the binarydata and metadata handler based on the siteaccess config
     ezpublish.core.io.metadata_handler:
         class: eZ\Publish\Core\IO\IOMetadataHandler
-        factory: ["@ezpublish.core.io.metadata_handler.factory", getConfiguredHandler]
+        factory: ["@ezpublish.core.io.metadata_handler.registry", getConfiguredHandler]
         arguments:
             - "$io.metadata_handler$"
 
     ezpublish.core.io.binarydata_handler:
         class: eZ\Publish\Core\IO\IOBinarydataHandler
-        factory: ["@ezpublish.core.io.binarydata_handler.factory", getConfiguredHandler]
+        factory: ["@ezpublish.core.io.binarydata_handler.registry", getConfiguredHandler]
         arguments:
             - "$io.binarydata_handler$"
 
-    ezpublish.core.io.metadata_handler.factory:
-        class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
-        calls:
-            - [ setContainer, [ "@service_container" ] ]
+    ezpublish.core.io.metadata_handler.registry:
+        class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerRegistry
 
-    ezpublish.core.io.binarydata_handler.factory:
-        class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
-        calls:
-            - [ setContainer, [ "@service_container" ] ]
+    ezpublish.core.io.binarydata_handler.registry:
+        class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerRegistry
 
     # Inject the siteaccess config into a few io services
     ezpublish.core.io.flysystem.default_adapter:
@@ -132,7 +128,6 @@ services:
 
     # Base service for flysystem metadata handler
     ezpublish.core.io.metadata_handler.flysystem:
-        public: true # @todo should be private
         abstract: true
         class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
@@ -140,14 +135,12 @@ services:
 
     # Default flysystem metadata handler
     ezpublish.core.io.metadata_handler.flysystem.default:
-        public: true # @todo should be private
         class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
 
     # Base service for flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem:
-        public: true # @todo should be private
         abstract: true
         class: "%ezpublish.core.io.binarydata_handler.flysystem.class%"
         arguments:
@@ -156,7 +149,6 @@ services:
 
     # Default flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem.default:
-        public: true # @todo should be private
         class: "%ezpublish.core.io.binarydata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
