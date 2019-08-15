@@ -236,40 +236,8 @@ class LocationHandlerTest extends TestCase
             ->with(67, 2, 77, 5);
 
         $this->treeHandler
-            ->expects($this->at(0))
-            ->method('loadLocation')
-            ->with($sourceData['node_id'])
-            ->will($this->returnValue(
-                new Location(
-                    [
-                        'id' => $sourceData['node_id'],
-                        'contentId' => $sourceData['contentobject_id'],
-                    ]
-                )
-            ));
-
-        $this->treeHandler
-            ->expects($this->at(1))
-            ->method('loadLocation')
-            ->with($destinationData['node_id'])
-            ->will($this->returnValue(new Location(['contentId' => $destinationData['contentobject_id']])));
-
-        $this->contentHandler
-            ->expects($this->at(0))
-            ->method('loadContentInfo')
-            ->with($destinationData['contentobject_id'])
-            ->will($this->returnValue(new ContentInfo(['sectionId' => 12345])));
-
-        $this->contentHandler
-            ->expects($this->at(1))
-            ->method('loadContentInfo')
-            ->with($sourceData['contentobject_id'])
-            ->will($this->returnValue(new ContentInfo(['mainLocationId' => 69])));
-
-        $this->treeHandler
-            ->expects($this->once())
-            ->method('setSectionForSubtree')
-            ->with(69, 12345);
+            ->expects($this->never())
+            ->method('setSectionForSubtree');
 
         $handler->move(69, 77);
     }

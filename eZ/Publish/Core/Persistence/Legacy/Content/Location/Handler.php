@@ -397,10 +397,6 @@ class Handler implements BaseLocationHandler
             $destinationParentId,
             Gateway::NODE_ASSIGNMENT_OP_CODE_MOVE
         );
-
-        $sourceLocation = $this->load($sourceId);
-        $destinationParentSectionId = $this->getSectionId($destinationParentId);
-        $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
     }
 
     /**
