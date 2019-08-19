@@ -105,8 +105,8 @@ class PreviewControllerTest extends TestCase
 
         $this->locationProvider
             ->expects($this->once())
-            ->method('loadMainLocation')
-            ->with($contentId)
+            ->method('loadMainLocationByContent')
+            ->with($content)
             ->will($this->returnValue($this->createMock(Location::class)));
         $this->contentService
             ->expects($this->once())
@@ -136,8 +136,8 @@ class PreviewControllerTest extends TestCase
         // Repository expectations
         $this->locationProvider
             ->expects($this->once())
-            ->method('loadMainLocation')
-            ->with($contentId)
+            ->method('loadMainLocationByContent')
+            ->with($content)
             ->will($this->returnValue($location));
         $this->contentService
             ->expects($this->once())
@@ -227,8 +227,8 @@ class PreviewControllerTest extends TestCase
         // Repository expectations
         $this->locationProvider
             ->expects($this->once())
-            ->method('loadMainLocation')
-            ->with($contentId)
+            ->method('loadMainLocationByContent')
+            ->with($content)
             ->will($this->returnValue($location));
         $this->contentService
             ->expects($this->once())

@@ -638,6 +638,7 @@ class Repository implements RepositoryInterface
         $this->urlWildcardService = new URLWildcardService(
             $this,
             $this->persistenceHandler->urlWildcardHandler(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['urlWildcard']
         );
 

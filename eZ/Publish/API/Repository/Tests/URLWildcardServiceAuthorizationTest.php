@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+
 /**
  * Test case for operations in the URLWildcardService.
  *
@@ -39,9 +41,9 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
         $urlWildcardService = $repository->getURLWildcardService();
 
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
-        // This call will fail with an UnauthorizedException
+        $this->expectException(UnauthorizedException::class);
         $urlWildcardService->create('/articles/*', '/content/{1}');
         /* END: Use Case */
     }
@@ -68,12 +70,12 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
         // Create a new url wildcard
         $urlWildcardId = $urlWildcardService->create('/articles/*', '/content/{1}')->id;
 
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // Load newly created url wildcard
         $urlWildcard = $urlWildcardService->load($urlWildcardId);
 
-        // This call will fail with an UnauthorizedException
+        $this->expectException(UnauthorizedException::class);
         $urlWildcardService->remove($urlWildcard);
         /* END: Use Case */
     }

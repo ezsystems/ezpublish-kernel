@@ -72,7 +72,7 @@ class PreviewController
 
         try {
             $content = $this->contentService->loadContent($contentId, [$language], $versionNo);
-            $location = $this->locationProvider->loadMainLocation($contentId);
+            $location = $this->locationProvider->loadMainLocationByContent($content);
 
             if (!$location instanceof Location) {
                 throw new NotImplementedException('Preview for content without locations');
