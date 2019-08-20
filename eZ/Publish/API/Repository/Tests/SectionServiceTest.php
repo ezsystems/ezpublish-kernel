@@ -11,6 +11,9 @@ namespace eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use Exception;
+use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
 /**
  * Test case for operations in the SectionService using in memory storage.
@@ -21,6 +24,11 @@ use Exception;
  */
 class SectionServiceTest extends BaseTest
 {
+    private const SECTION_UNIQUE_KEY = 'uniqueKey';
+
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    protected $permissionResolver;
+
     /**
      * Tests that the required <b>ContentService::loadContentInfoByRemoteId()</b>
      * at least returns an object, because this method is utilized in several
@@ -57,6 +65,9 @@ class SectionServiceTest extends BaseTest
                 $e
             );
         }
+
+        $repository = $this->getRepository(false);
+        $this->permissionResolver = $repository->getPermissionResolver();
     }
 
     /**
@@ -74,7 +85,7 @@ class SectionServiceTest extends BaseTest
         $sectionCreate = $sectionService->newSectionCreateStruct();
         /* END: Use Case */
 
-        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct', $sectionCreate);
+        $this->assertInstanceOf(SectionCreateStruct::class, $sectionCreate);
     }
 
     /**
@@ -92,12 +103,50 @@ class SectionServiceTest extends BaseTest
 
         $sectionCreate = $sectionService->newSectionCreateStruct();
         $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
 
         $section = $sectionService->createSection($sectionCreate);
         /* END: Use Case */
 
-        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $section);
+        $this->assertInstanceOf(Section::class, $section);
+    }
+
+    /**
+     * Test for the createSection() method.
+     *
+     * @see \eZ\Publish\API\Repository\SectionService::createSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testNewSectionCreateStruct
+     */
+    public function testCreateSectionForUserWithSectionLimitation()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
+        $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
+
+        $this->createRoleWithPolicies('sectionCreator', [
+            ['module' => 'section', 'function' => 'edit'],
+        ]);
+
+        $user = $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            'sectionCreators',
+            'sectionCreator',
+            new SectionLimitation(['limitationValues' => [1]])
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        $section = $sectionService->createSection($sectionCreate);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(Section::class, $section);
+        $this->assertSame(self::SECTION_UNIQUE_KEY, $section->identifier);
     }
 
     /**
@@ -117,13 +166,13 @@ class SectionServiceTest extends BaseTest
 
         $sectionCreateOne = $sectionService->newSectionCreateStruct();
         $sectionCreateOne->name = 'Test section one';
-        $sectionCreateOne->identifier = 'uniqueKey';
+        $sectionCreateOne->identifier = self::SECTION_UNIQUE_KEY;
 
         $sectionService->createSection($sectionCreateOne);
 
         $sectionCreateTwo = $sectionService->newSectionCreateStruct();
         $sectionCreateTwo->name = 'Test section two';
-        $sectionCreateTwo->identifier = 'uniqueKey';
+        $sectionCreateTwo->identifier = self::SECTION_UNIQUE_KEY;
 
         // This will fail, because identifier uniqueKey already exists.
         $sectionService->createSection($sectionCreateTwo);
@@ -188,7 +237,7 @@ class SectionServiceTest extends BaseTest
         $sectionUpdate = $sectionService->newSectionUpdateStruct();
         /* END: Use Case */
 
-        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct', $sectionUpdate);
+        $this->assertInstanceOf(SectionUpdateStruct::class, $sectionUpdate);
     }
 
     /**
@@ -220,12 +269,69 @@ class SectionServiceTest extends BaseTest
         /* END: Use Case */
 
         // Verify that service returns an instance of Section
-        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $updatedSection);
+        $this->assertInstanceOf(Section::class, $updatedSection);
 
         // Verify that the service also persists the changes
         $updatedSection = $sectionService->loadSection($standardSectionId);
 
         $this->assertEquals('New section name', $updatedSection->name);
+    }
+
+    /**
+     * Test for the updateSection() method.
+     *
+     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSection
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testNewSectionUpdateStruct
+     */
+    public function testUpdateSectionForUserWithSectionLimitation()
+    {
+        $repository = $this->getRepository();
+        $administratorUserId = $this->generateId('user', 14);
+        /* BEGIN: Use Case */
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
+
+        $sectionService = $repository->getSectionService();
+        $userService = $repository->getUserService();
+
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name = 'Test Section';
+        $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
+        $section = $sectionService->createSection($sectionCreate);
+
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->name = 'New section name';
+        $sectionUpdate->identifier = 'newUniqueKey';
+
+        $this->createRoleWithPolicies('sectionCreator', [
+            ['module' => 'section', 'function' => 'edit'],
+        ]);
+        $user = $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            'sectionCreators',
+            'sectionCreator',
+            new SectionLimitation(['limitationValues' => [$section->id]])
+        );
+        $this->permissionResolver->setCurrentUserReference($user);
+
+        $updatedSection = $sectionService->updateSection($section, $sectionUpdate);
+        /* END: Use Case */
+
+        // Verify that service returns an instance of Section
+        $this->assertInstanceOf(Section::class, $updatedSection);
+
+        // Load section as an administrator
+        $administratorUser = $userService->loadUser($administratorUserId);
+        $this->permissionResolver->setCurrentUserReference($administratorUser);
+
+        // Verify that the service also persists the changes
+        $updatedSection = $sectionService->loadSection($section->id);
+
+        $this->assertEquals('New section name', $updatedSection->name);
+        $this->assertEquals('newUniqueKey', $updatedSection->identifier);
     }
 
     /**
@@ -448,11 +554,11 @@ class SectionServiceTest extends BaseTest
 
         $sectionCreate = $sectionService->newSectionCreateStruct();
         $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
 
         $sectionId = $sectionService->createSection($sectionCreate)->id;
 
-        $section = $sectionService->loadSectionByIdentifier('uniqueKey');
+        $section = $sectionService->loadSectionByIdentifier(self::SECTION_UNIQUE_KEY);
         /* END: Use Case */
 
         $this->assertEquals($sectionId, $section->id);
@@ -659,7 +765,7 @@ class SectionServiceTest extends BaseTest
 
         $sectionCreate = $sectionService->newSectionCreateStruct();
         $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
 
         $section = $sectionService->createSection($sectionCreate);
 
@@ -685,7 +791,7 @@ class SectionServiceTest extends BaseTest
 
         $sectionCreate = $sectionService->newSectionCreateStruct();
         $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
 
         $section = $sectionService->createSection($sectionCreate);
 
@@ -711,7 +817,7 @@ class SectionServiceTest extends BaseTest
 
         $sectionCreate = $sectionService->newSectionCreateStruct();
         $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
 
         $section = $sectionService->createSection($sectionCreate);
 
@@ -739,7 +845,7 @@ class SectionServiceTest extends BaseTest
 
         $sectionCreate = $sectionService->newSectionCreateStruct();
         $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
 
         $section = $sectionService->createSection($sectionCreate);
 
@@ -809,7 +915,7 @@ class SectionServiceTest extends BaseTest
             // Get a create struct and set some properties
             $sectionCreate = $sectionService->newSectionCreateStruct();
             $sectionCreate->name = 'Test Section';
-            $sectionCreate->identifier = 'uniqueKey';
+            $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
 
             // Create a new section
             $sectionService->createSection($sectionCreate);
@@ -824,7 +930,7 @@ class SectionServiceTest extends BaseTest
 
         try {
             // This call will fail with a not found exception
-            $sectionService->loadSectionByIdentifier('uniqueKey');
+            $sectionService->loadSectionByIdentifier(self::SECTION_UNIQUE_KEY);
         } catch (NotFoundException $e) {
             // Expected execution path
         }
@@ -854,7 +960,7 @@ class SectionServiceTest extends BaseTest
             // Get a create struct and set some properties
             $sectionCreate = $sectionService->newSectionCreateStruct();
             $sectionCreate->name = 'Test Section';
-            $sectionCreate->identifier = 'uniqueKey';
+            $sectionCreate->identifier = self::SECTION_UNIQUE_KEY;
 
             // Create a new section
             $sectionService->createSection($sectionCreate);
@@ -868,10 +974,10 @@ class SectionServiceTest extends BaseTest
         }
 
         // Load new section
-        $section = $sectionService->loadSectionByIdentifier('uniqueKey');
+        $section = $sectionService->loadSectionByIdentifier(self::SECTION_UNIQUE_KEY);
         /* END: Use Case */
 
-        $this->assertEquals('uniqueKey', $section->identifier);
+        $this->assertEquals(self::SECTION_UNIQUE_KEY, $section->identifier);
     }
 
     /**
