@@ -1,20 +1,20 @@
 <?php
 
 /**
- * File containing the ContentViewTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use PHPUnit\Framework\TestCase;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 /**
  * @group mvc
  */
-class ContentViewTest extends TestCase
+class ContentViewTest extends AbstractViewTest
 {
     /**
      * Params that are always returned by this view.
@@ -75,117 +75,13 @@ class ContentViewTest extends TestCase
         ];
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
-     */
-    public function testGetSetParameters()
+    protected function createViewUnderTest($template = null, array $parameters = [], $viewType = 'full'): View
     {
-        $params = ['bar' => 'baz', 'fruit' => 'apple'];
-        $contentView = new ContentView('foo');
-        $contentView->setParameters($params);
-        self::assertSame($this->valueParams + $params, $contentView->getParameters());
+        return new ContentView($template, $parameters, $viewType);
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
-     */
-    public function testAddParameters()
+    protected function getAlwaysAvailableParams(): array
     {
-        $params = ['bar' => 'baz', 'fruit' => 'apple'];
-        $contentView = new ContentView('foo', $params);
-
-        $additionalParams = ['truc' => 'muche', 'laurel' => 'hardy'];
-        $contentView->addParameters($additionalParams);
-        self::assertSame($this->valueParams + $params + $additionalParams, $contentView->getParameters());
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
-     */
-    public function testHasParameter()
-    {
-        $contentView = new ContentView(__METHOD__, ['foo' => 'bar']);
-        self::assertTrue($contentView->hasParameter('foo'));
-        self::assertFalse($contentView->hasParameter('nonExistent'));
-
-        return $contentView;
-    }
-
-    /**
-     * @depends testHasParameter
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
-     */
-    public function testGetParameter(ContentView $contentView)
-    {
-        self::assertSame('bar', $contentView->getParameter('foo'));
-
-        return $contentView;
-    }
-
-    /**
-     * @depends testGetParameter
-     * @expectedException \InvalidArgumentException
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
-     */
-    public function testGetParameterFail(ContentView $contentView)
-    {
-        $contentView->getParameter('nonExistent');
-    }
-
-    /**
-     * @dataProvider goodTemplateIdentifierProvider
-     *
-     * @param $templateIdentifier
-     */
-    public function testSetTemplateIdentifier($templateIdentifier)
-    {
-        $contentView = new ContentView();
-        $contentView->setTemplateIdentifier($templateIdentifier);
-        $this->assertSame($templateIdentifier, $contentView->getTemplateIdentifier());
-    }
-
-    public function goodTemplateIdentifierProvider()
-    {
-        return [
-            ['foo:bar:baz.html.twig'],
-            [
-                function () {
-                    return 'foo';
-                },
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider badTemplateIdentifierProvider
-     *
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
-     *
-     * @param $badTemplateIdentifier
-     */
-    public function testSetTemplateIdentifierWrongType($badTemplateIdentifier)
-    {
-        $contentView = new ContentView();
-        $contentView->setTemplateIdentifier($badTemplateIdentifier);
-    }
-
-    public function badTemplateIdentifierProvider()
-    {
-        return [
-            [123],
-            [true],
-            [new \stdClass()],
-            [['foo', 'bar']],
-        ];
+        return $this->valueParams;
     }
 }
