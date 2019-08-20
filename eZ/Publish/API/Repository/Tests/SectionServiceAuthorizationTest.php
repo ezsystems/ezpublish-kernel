@@ -8,13 +8,13 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * Test case for operations in the SectionService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\SectionService
- * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  * @group authorization
  */
@@ -24,8 +24,6 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the createSection() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
     public function testCreateSectionThrowsUnauthorizedException()
     {
@@ -43,9 +41,11 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionCreate->identifier = 'uniqueKey';
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessage("User does not have access to 'edit' 'section");
+
         $sectionService->createSection($sectionCreate);
         /* END: Use Case */
     }
@@ -54,8 +54,6 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the loadSection() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::loadSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSection
      */
     public function testLoadSectionThrowsUnauthorizedException()
     {
@@ -75,9 +73,11 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionId = $sectionService->createSection($sectionCreate)->id;
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessage("User does not have access to 'view' 'section");
+
         $sectionService->loadSection($sectionId);
         /* END: Use Case */
     }
@@ -86,8 +86,6 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the updateSection() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
     public function testUpdateSectionThrowsUnauthorizedException()
     {
@@ -111,9 +109,11 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionUpdate->identifier = 'newUniqueKey';
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessage("User does not have access to 'edit' 'section");
+
         $sectionService->updateSection($section, $sectionUpdate);
         /* END: Use Case */
     }
@@ -122,7 +122,6 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the loadSections() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
      */
     public function testLoadSectionsLoadsEmptyListForAnonymousUser()
     {
@@ -148,7 +147,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionService->createSection($sectionCreateTwo);
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         $sections = $sectionService->loadSections();
         /* END: Use Case */
@@ -160,7 +159,6 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the loadSections() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
      */
     public function testLoadSectionFiltersSections()
     {
@@ -206,7 +204,6 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the loadSectionByIdentifier() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::loadSectionByIdentifier()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testLoadSectionByIdentifierThrowsUnauthorizedException()
     {
@@ -226,9 +223,11 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionService->createSection($sectionCreate);
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessage("User does not have access to 'view' 'section");
+
         $sectionService->loadSectionByIdentifier('uniqueKey');
         /* END: Use Case */
     }
@@ -267,7 +266,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $section = $sectionService->loadSection($standardSectionId);
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->assignSection($contentInfo, $section);
@@ -298,7 +297,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $section = $sectionService->createSection($sectionCreate);
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->deleteSection($section);
