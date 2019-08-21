@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CleanupVersionsCommand extends Command
 {
     const DEFAULT_REPOSITORY_USER = 'admin';
-    const DEFAULT_EXCLUDED_CONTENT_TYPES = ['user'];
+    const DEFAULT_EXCLUDED_CONTENT_TYPES = 'user';
 
     const BEFORE_RUNNING_HINTS = <<<EOT
 <error>Before you continue:</error>
