@@ -1809,6 +1809,9 @@ class ContentService implements ContentServiceInterface
                 ]
             );
         }
+        if (!$this->repository->canUser('content', 'manage_locations', $contentInfo, [$destinationLocation])) {
+            throw new UnauthorizedException('content', 'manage_locations', ['contentId' => $contentInfo->id]);
+        }
 
         $defaultObjectStates = $this->getDefaultObjectStates();
 
