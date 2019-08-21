@@ -259,7 +259,7 @@ services:
         class: eZ\Bundle\EzPublishCoreBundle\Command\CleanupVersionsCommand
         arguments:
             - '@eZ\Publish\Core\Event\Repository'
-            - "@ezpublish.config.resolver"
+            - "@ezpublish.api.repository_configuration_provider"
             - "@ezpublish.persistence.connection"
         tags:
             - { name: console.command, command: ezplatform:content:cleanup-versions }
