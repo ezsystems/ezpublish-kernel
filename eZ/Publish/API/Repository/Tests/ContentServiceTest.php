@@ -4300,6 +4300,52 @@ XML
     }
 
     /**
+     * Test for the updateContentMetadata() method, and how cache + transactions play together.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
+     * @depends testUpdateContentMetadata
+     * @depends testLoadContentInfo
+     */
+    public function testUpdateContentMetadataCheckWithinTransaction()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentId = $this->generateId('object', 12);
+
+        // Load a ContentInfo object, and warmup cache
+        $contentInfo = $contentService->loadContentInfo($contentId);
+
+        // Store remoteId for later testing
+        $remoteId = $contentInfo->remoteId;
+
+        // Start a transaction
+        $repository->beginTransaction();
+
+        try {
+            // Get metadata update struct and change remoteId
+            $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+            $metadataUpdate->remoteId = md5(microtime(true));
+
+            // Update the metadata of the published content object
+            $contentService->updateContentMetadata(
+                $contentInfo,
+                $metadataUpdate
+            );
+
+            // Check that it's been updated
+            $remoteIdReloaded = $contentService->loadContentInfo($contentId)->remoteId;
+            $this->assertNotEquals($remoteId, $remoteIdReloaded);
+
+            // Commit all changes.
+            $repository->commit();
+        } catch (Exception $e) {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
+    }
+
+    /**
      * Test for the deleteVersion() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
