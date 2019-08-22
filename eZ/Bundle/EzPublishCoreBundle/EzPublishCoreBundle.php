@@ -29,6 +29,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RouterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SiteAccessMatcherRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SlugConverterConfigurationPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TranslationCollectorPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ViewProvidersPass;
@@ -82,6 +83,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new NotificationRendererPass());
         $container->addCompilerPass(new ConsoleCacheWarmupPass());
         $container->addCompilerPass(new ViewMatcherRegistryPass());
+        $container->addCompilerPass(new SiteAccessMatcherRegistryPass());
 
         // Storage passes
         $container->addCompilerPass(new ExternalStorageRegistryPass());
