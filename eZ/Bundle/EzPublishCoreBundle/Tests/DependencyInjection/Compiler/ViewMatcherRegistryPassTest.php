@@ -6,38 +6,38 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\MatcherServiceRegistryPass;
-use eZ\Bundle\EzPublishCoreBundle\Matcher\MatcherServiceRegistry;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ViewMatcherRegistryPass;
+use eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class MatcherServiceRegistryPassTest extends AbstractCompilerPassTestCase
+class ViewMatcherRegistryPassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->setDefinition(MatcherServiceRegistry::class, new Definition());
+        $this->setDefinition(ViewMatcherRegistry::class, new Definition());
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
-        $container->addCompilerPass(new MatcherServiceRegistryPass());
+        $container->addCompilerPass(new ViewMatcherRegistryPass());
     }
 
     public function testSetMatcher(): void
     {
         $def = new Definition();
-        $def->addTag(MatcherServiceRegistryPass::MATCHER_TAG);
+        $def->addTag(ViewMatcherRegistryPass::MATCHER_TAG);
         $serviceId = 'service_id';
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            MatcherServiceRegistry::class,
+            ViewMatcherRegistry::class,
             'setMatcher',
             [
                 $serviceId,

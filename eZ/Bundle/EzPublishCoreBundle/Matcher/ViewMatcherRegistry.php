@@ -7,40 +7,17 @@ namespace eZ\Bundle\EzPublishCoreBundle\Matcher;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface;
 
-class MatcherServiceRegistry
+final class ViewMatcherRegistry
 {
     /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[] */
     private $matchers;
 
     /**
-     * MatcherServiceRegistry constructor.
-     *
      * @param \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[] $matchers
      */
     public function __construct(array $matchers = [])
     {
         $this->matchers = $matchers;
-    }
-
-    /**
-     * @param \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[] $matchers
-     */
-    public function setMatchers(array $matchers): void
-    {
-        $this->matchers = $matchers;
-    }
-
-    /**
-     * @return \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[]
-     */
-    public function getMatchers(): array
-    {
-        return $this->matchers;
-    }
-
-    public function hasMatcher(string $matcherIentifier): bool
-    {
-        return isset($this->matchers[$matcherIentifier]);
     }
 
     public function setMatcher(string $matcherIdentifier, MatcherInterface $matcher): void
@@ -53,7 +30,7 @@ class MatcherServiceRegistry
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function getMatcher(string $matcherIdentifier): MatcherInterface
     {

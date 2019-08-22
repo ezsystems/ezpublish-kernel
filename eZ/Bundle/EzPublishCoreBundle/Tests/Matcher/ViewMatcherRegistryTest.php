@@ -8,14 +8,14 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface;
 use PHPUnit\Framework\TestCase;
 
-class MatcherServiceRegistryTest extends TestCase
+class ViewMatcherRegistryTest extends TestCase
 {
     private const MATCHER_NAME = 'test_matcher';
 
     public function testGetMatcher(): void
     {
         $matcher = $this->getMatcherMock();
-        $registry = new MatcherServiceRegistry([self::MATCHER_NAME => $matcher]);
+        $registry = new ViewMatcherRegistry([self::MATCHER_NAME => $matcher]);
 
         $this->assertSame($matcher, $registry->getMatcher(self::MATCHER_NAME));
     }
@@ -23,7 +23,7 @@ class MatcherServiceRegistryTest extends TestCase
     public function testSetMatcher(): void
     {
         $matcher = $this->getMatcherMock();
-        $registry = new MatcherServiceRegistry();
+        $registry = new ViewMatcherRegistry();
 
         $registry->setMatcher(self::MATCHER_NAME, $matcher);
 
@@ -34,7 +34,7 @@ class MatcherServiceRegistryTest extends TestCase
     {
         $matcher = $this->getMatcherMock();
         $newMatcher = $this->getMatcherMock();
-        $registry = new MatcherServiceRegistry([self::MATCHER_NAME, $matcher]);
+        $registry = new ViewMatcherRegistry([self::MATCHER_NAME, $matcher]);
 
         $registry->setMatcher(self::MATCHER_NAME, $newMatcher);
 
@@ -44,7 +44,7 @@ class MatcherServiceRegistryTest extends TestCase
     public function testGetMatcherNotFound(): void
     {
         $this->expectException(NotFoundException::class);
-        $registry = new MatcherServiceRegistry();
+        $registry = new ViewMatcherRegistry();
 
         $registry->getMatcher(self::MATCHER_NAME);
     }

@@ -1,35 +1,30 @@
 <?php
 
 /**
- * File containing the ChainConfigResolverPass class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
-use eZ\Bundle\EzPublishCoreBundle\Matcher\MatcherServiceRegistry;
+use eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * The MatcherServiceRegistryPass will register all services tagged as "ezpublish.matcher.content_based" to the registry.
+ * The ViewMatcherRegistryPass will register all services tagged as "ezplatform.matcher.view" to the registry.
  */
-class MatcherServiceRegistryPass implements CompilerPassInterface
+final class ViewMatcherRegistryPass implements CompilerPassInterface
 {
-    public const MATCHER_TAG = 'ezpublish.matcher.content_based';
+    public const MATCHER_TAG = 'ezplatform.matcher.view';
 
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        if (!$container->hasDefinition(MatcherServiceRegistry::class)) {
+        if (!$container->hasDefinition(ViewMatcherRegistry::class)) {
             return;
         }
 
-        $matcherServiceRegistry = $container->getDefinition(MatcherServiceRegistry::class);
+        $matcherServiceRegistry = $container->getDefinition(ViewMatcherRegistry::class);
 
         foreach ($container->findTaggedServiceIds(self::MATCHER_TAG) as $id => $attributes) {
             $matcherServiceRegistry->addMethodCall(

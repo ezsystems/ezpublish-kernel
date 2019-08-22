@@ -62,7 +62,7 @@ services:
           - "@ezpublish.view.configurator"
           - "@?logger"
 
-    eZ\Bundle\EzPublishCoreBundle\Matcher\MatcherServiceRegistry: ~
+    eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry: ~
 
     ezpublish.content_view_provider.configured:
         class: "%ezpublish.view_provider.configured.class%"
@@ -73,7 +73,7 @@ services:
     ezpublish.content_view.matcher_factory:
         class: "%ezpublish.view.matcher_factory.class%"
         arguments:
-            - '@eZ\Bundle\EzPublishCoreBundle\Matcher\MatcherServiceRegistry'
+            - '@eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry'
             - '@ezpublish.api.repository'
             - 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased'
 
@@ -94,7 +94,7 @@ services:
     ezpublish.content_view.default_matcher_factory:
         class: "%ezpublish.view.matcher_factory.class%"
         arguments:
-            - '@eZ\Bundle\EzPublishCoreBundle\Matcher\MatcherServiceRegistry'
+            - '@eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry'
             - '@ezpublish.api.repository'
             - 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased'
 
@@ -115,7 +115,7 @@ services:
     ezpublish.location_view.matcher_factory:
         class: "%ezpublish.view.matcher_factory.class%"
         arguments:
-            - '@eZ\Bundle\EzPublishCoreBundle\Matcher\MatcherServiceRegistry'
+            - '@eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry'
             - '@ezpublish.api.repository'
             - 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased'
 

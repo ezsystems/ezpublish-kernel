@@ -13,18 +13,18 @@ use eZ\Publish\Core\MVC\Symfony\Matcher\ClassNameMatcherFactory;
  * If a service id is passed as the MatcherIdentifier, this service will be used for the matching.
  * Otherwise, it will fallback to the class name based matcher factory.
  */
-class ServiceAwareMatcherFactory extends ClassNameMatcherFactory
+final class ServiceAwareMatcherFactory extends ClassNameMatcherFactory
 {
-    /** @var \eZ\Bundle\EzPublishCoreBundle\Matcher\MatcherServiceRegistry */
-    private $matcherServiceRegistry;
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry */
+    private $viewMatcherRegistry;
 
     public function __construct(
-        MatcherServiceRegistry $matcherServiceRegistry,
+        ViewMatcherRegistry $viewMatcherRegistry,
         Repository $repository,
         $relativeNamespace = null,
         array $matchConfig = []
     ) {
-        $this->matcherServiceRegistry = $matcherServiceRegistry;
+        $this->viewMatcherRegistry = $viewMatcherRegistry;
 
         parent::__construct($repository, $relativeNamespace, $matchConfig);
     }
@@ -37,7 +37,7 @@ class ServiceAwareMatcherFactory extends ClassNameMatcherFactory
     protected function getMatcher($matcherIdentifier)
     {
         if (strpos($matcherIdentifier, '@') === 0) {
-            return $this->matcherServiceRegistry->getMatcher(substr($matcherIdentifier, 1));
+            return $this->viewMatcherRegistry->getMatcher(substr($matcherIdentifier, 1));
         }
 
         return parent::getMatcher($matcherIdentifier);
