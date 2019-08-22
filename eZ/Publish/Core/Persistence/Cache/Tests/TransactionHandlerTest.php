@@ -51,12 +51,12 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
             ->method('logCall');
 
         $this->cacheMock
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('clear');
 
         $this->cacheMock
             ->expects($this->once())
-            ->method('stopTransaction');
+            ->method('rollbackTransaction');
 
         $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock
@@ -83,7 +83,7 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
 
         $this->cacheMock
             ->expects($this->once())
-            ->method('stopTransaction');
+            ->method('commitTransaction');
 
         $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock
@@ -110,7 +110,7 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
 
         $this->cacheMock
             ->expects($this->once())
-            ->method('startTransaction');
+            ->method('beginTransaction');
 
         $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock

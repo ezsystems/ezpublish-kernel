@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Cache\InMemory;
 /**
  * Simple internal In-Memory Cache Pool.
  *
- * @internal Only for use in ..\AbstractInMemoryHandler & ..\Adapter\InMemoryClearingProxyAdapter, may change depending on needs there.
+ * @internal Only for use in ..\AbstractInMemoryHandler & ..\Adapter\TransactionalInMemoryCacheAdapter, may change depending on needs there.
  *
  * Goal:
  * By nature caches stale objects in memory to avoid round-trips to cache backend over network.
