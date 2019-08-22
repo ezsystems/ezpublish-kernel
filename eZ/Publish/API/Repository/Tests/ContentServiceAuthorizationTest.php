@@ -8,10 +8,12 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
 /**
  * Test case for operations in the ContentServiceAuthorization using in memory storage.
@@ -31,8 +33,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCreateContentThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         if ($this->isVersion4()) {
             $this->markTestSkipped('This test requires eZ Publish 5');
         }
@@ -61,7 +61,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'create\' \'content\'/');
+
         $contentService->createContent($contentCreate);
         /* END: Use Case */
     }
@@ -74,8 +76,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCreateContentThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -87,6 +87,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'create\' \'content\'/');
 
         $this->createContentDraftVersion1();
         /* END: Use Case */
@@ -100,8 +103,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentInfoThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentId = $this->generateId('object', 10);
@@ -113,7 +114,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         // $contentId contains a content object ID not accessible for anonymous
         $contentService->loadContentInfo($contentId);
         /* END: Use Case */
@@ -168,8 +171,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentInfoByRemoteIdThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -183,7 +184,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContentInfoByRemoteId($anonymousRemoteId);
         /* END: Use Case */
     }
@@ -196,8 +199,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfoThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -215,7 +216,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadVersionInfo($contentInfo);
         /* END: Use Case */
     }
@@ -228,8 +231,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -247,7 +248,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadVersionInfo($contentInfo, 2);
         /* END: Use Case */
     }
@@ -260,8 +263,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -276,7 +277,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadVersionInfoById($anonymousUserId);
         /* END: Use Case */
     }
@@ -289,8 +292,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -305,7 +306,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadVersionInfoById($anonymousUserId, 2);
         /* END: Use Case */
     }
@@ -318,8 +321,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedExceptionForFirstDraft()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -336,7 +337,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        // content versionread policy is needed because it is a draft
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->loadVersionInfoById(
             $contentDraft->id,
             $contentDraft->contentInfo->currentVersionNo
@@ -352,8 +356,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -371,7 +373,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContentByContentInfo($contentInfo);
         /* END: Use Case */
     }
@@ -384,8 +388,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -403,7 +405,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContentByContentInfo($contentInfo, ['eng-US']);
         /* END: Use Case */
     }
@@ -416,8 +420,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -435,7 +437,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContentByContentInfo($contentInfo, ['eng-US'], 2);
         /* END: Use Case */
     }
@@ -448,8 +452,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByVersionInfoThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -470,7 +472,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContentByVersionInfo($versionInfo);
         /* END: Use Case */
     }
@@ -483,8 +487,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByVersionInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -505,7 +507,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContentByVersionInfo($versionInfo, ['eng-US']);
         /* END: Use Case */
     }
@@ -518,8 +522,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -534,7 +536,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContent($anonymousUserId);
         /* END: Use Case */
     }
@@ -547,8 +551,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -563,7 +565,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContent($anonymousUserId, ['eng-US']);
         /* END: Use Case */
     }
@@ -576,8 +580,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -592,7 +594,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContent($anonymousUserId, ['eng-US'], 2);
         /* END: Use Case */
     }
@@ -605,8 +609,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentThrowsUnauthorizedExceptionOnDrafts()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         /** @var $repository \eZ\Publish\API\Repository\Repository */
         $repository = $this->getRepository();
 
@@ -629,6 +631,11 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // Try to load the draft with anonymous user to make sure access won't be allowed by throwing an exception
         $contentService = $repository->getContentService();
+
+        $this->expectException(UnauthorizedException::class);
+        // content versionread policy is needed because it is a draft
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->loadContent($draft->id);
         /* END: Use Case */
     }
@@ -643,8 +650,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentThrowsUnauthorizedExceptionsOnArchives()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         /** @var $repository \eZ\Publish\API\Repository\Repository */
         $repository = $this->getRepository();
 
@@ -684,7 +689,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // set an anonymous as current user
         $repository->setCurrentUser($repository->getUserService()->loadUser($anonymousUserId));
 
-        // throws an unauthorized exception since anonymous user don't have access to archived versions
+        $this->expectException(UnauthorizedException::class);
+        // content versionread policy is needed because it is a draft
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->loadContent($objectUpdated->id, null, 1);
         /* END: Use Case */
     }
@@ -697,8 +705,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -712,7 +718,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContentByRemoteId($anonymousRemoteId);
         /* END: Use Case */
     }
@@ -725,8 +733,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -740,7 +746,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContentByRemoteId($anonymousRemoteId, ['eng-US']);
         /* END: Use Case */
     }
@@ -753,8 +761,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -768,7 +774,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set restricted editor user
         $repository->setCurrentUser($pseudoEditor);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadContentByRemoteId($anonymousRemoteId, ['eng-US'], 2);
         /* END: Use Case */
     }
@@ -781,8 +789,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -811,7 +817,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $metadataUpdate->publishedDate = $this->createDateTime();
         $metadataUpdate->modificationDate = $this->createDateTime();
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'edit\' \'content\'/');
+
         $contentService->updateContentMetadata(
             $contentInfo,
             $metadataUpdate
@@ -827,8 +835,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testDeleteContentThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
@@ -847,7 +853,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'remove\' \'content\'/');
+
         $contentService->deleteContent($contentInfo);
         /* END: Use Case */
     }
@@ -860,8 +868,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCreateContentDraftThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -881,7 +887,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'edit\' \'content\'/');
+
         $contentService->createContentDraft($contentInfo);
         /* END: Use Case */
     }
@@ -894,8 +902,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCreateContentDraftThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -916,7 +922,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'edit\' \'content\'/');
+
         $contentService->createContentDraft($contentInfo, $versionInfo);
         /* END: Use Case */
     }
@@ -930,8 +938,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentDraftsThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -946,7 +952,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->loadContentDrafts();
         /* END: Use Case */
     }
@@ -959,8 +967,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentDraftsThrowsUnauthorizedExceptionWithFirstParameter()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $administratorUserId = $this->generateId('user', 14);
@@ -982,7 +988,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->loadContentDrafts($administratorUser);
         /* END: Use Case */
     }
@@ -995,8 +1003,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
@@ -1024,7 +1030,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentUpdate->initialLanguageCode = 'eng-US';
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        /* TODO - the `content/edit` policy should be probably needed */
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->updateContent($versionInfo, $contentUpdate);
         /* END: Use Case */
     }
@@ -1037,8 +1046,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
@@ -1054,7 +1061,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'publish\' \'content\'/');
+
         $contentService->publishVersion($draft->getVersionInfo());
         /* END: Use Case */
     }
@@ -1067,8 +1076,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testDeleteVersionThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
@@ -1084,8 +1091,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException", because "content"
-        // "versionremove" permission is missing.
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'versionremove\' \'content\'/');
+
         $contentService->deleteVersion($draft->getVersionInfo());
         /* END: Use Case */
     }
@@ -1098,8 +1106,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionsThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1119,7 +1125,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->loadVersions($contentInfo);
         /* END: Use Case */
     }
@@ -1132,8 +1140,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCopyContentThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $parentLocationId = $this->generateId('location', 52);
 
         $repository = $this->getRepository();
@@ -1165,7 +1171,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->copyContent(
             $contentInfo,
             $targetLocationCreate
@@ -1177,12 +1185,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      * Test for the copyContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContentWithThirdParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContentWithGivenVersion
      */
-    public function testCopyContentThrowsUnauthorizedExceptionWithThirdParameter()
+    public function testCopyContentThrowsUnauthorizedExceptionWithGivenVersion()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $parentLocationId = $this->generateId('location', 52);
 
         $repository = $this->getRepository();
@@ -1211,7 +1217,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->copyContent(
             $contentVersion2->contentInfo,
             $targetLocationCreate,
@@ -1228,8 +1236,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadRelationsThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1249,7 +1255,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set media editor as current user
         $repository->setCurrentUser($user);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+
         $contentService->loadRelations($versionInfo);
         /* END: Use Case */
     }
@@ -1262,8 +1270,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadRelationsForDraftVersionThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1280,7 +1286,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->loadRelations($draft->versionInfo);
         /* END: Use Case */
     }
@@ -1293,8 +1301,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadReverseRelationsThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1312,7 +1318,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set media editor as current user
         $repository->setCurrentUser($user);
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'reverserelatedlist\' \'content\'/');
+
         $contentService->loadReverseRelations($contentInfo);
         /* END: Use Case */
     }
@@ -1325,8 +1333,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testAddRelationThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1352,7 +1358,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->addRelation(
             $versionInfo,
             $media
@@ -1368,8 +1376,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testDeleteRelationThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1401,7 +1407,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        // This call will fail with a "UnauthorizedException"
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+
         $contentService->deleteRelation($versionInfo, $media);
         /* END: Use Case */
     }
@@ -1665,16 +1673,66 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $policyCreateStruct->addLimitation($locationLimitation);
         $roleCreateStruct->addPolicy($policyCreateStruct);
 
-        // check if content/publish policy is available (@since 6.8)
-        $limitations = $roleService->getLimitationTypesByModuleFunction('content', 'publish');
-        if (array_key_exists('Node', $limitations)) {
-            $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'publish');
-            $policyCreateStruct->addLimitation($locationLimitation);
-            $roleCreateStruct->addPolicy($policyCreateStruct);
-        }
-
         $roleDraft = $roleService->createRole($roleCreateStruct);
         $roleService->publishRoleDraft($roleDraft);
+
+        // Create a user with that Role
+        $user = $this->createCustomUserVersion1('Users', $roleIdentifier);
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        // Test copying Content to the authorized Location
+        $contentService->copyContent(
+            $authorizedFolder->contentInfo,
+            $locationService->newLocationCreateStruct(
+                $authorizedFolder->contentInfo->mainLocationId
+            )
+        );
+    }
+
+    /**
+     * Test copying Content to the authorized Location (limited by policies).
+     */
+    public function testCopyContentToAuthorizedLocationWithSubtreeLimitation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $roleService = $repository->getRoleService();
+
+        // Create and publish folders for the test case
+        $folderDraft = $this->createContentDraft('folder', 2, ['name' => 'Folder1']);
+        $contentService->publishVersion($folderDraft->versionInfo);
+        $authorizedFolderDraft = $this->createContentDraft('folder', 2, ['name' => 'AuthorizedFolder']);
+        $authorizedFolder = $contentService->publishVersion($authorizedFolderDraft->versionInfo);
+
+        // Prepare Role for the test case
+        $roleIdentifier = 'authorized_subree';
+        $subtreeLimitation = new SubtreeLimitation(
+            ['limitationValues' => ['/1/2']]
+        );
+        $policiesData = [
+            [
+                'module' => 'content',
+                'function' => 'read',
+                'limitations' => [$subtreeLimitation],
+            ],
+            [
+                'module' => 'content',
+                'function' => 'versionread',
+                'limitations' => [$subtreeLimitation],
+            ],
+            [
+                'module' => 'content',
+                'function' => 'create',
+                'limitations' => [$subtreeLimitation],
+            ],
+            [
+                'module' => 'content',
+                'function' => 'manage_locations',
+            ],
+        ];
+
+        $this->createRoleWithPolicies($roleIdentifier, $policiesData);
 
         // Create a user with that Role
         $user = $this->createCustomUserVersion1('Users', $roleIdentifier);

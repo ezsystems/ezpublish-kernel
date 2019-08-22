@@ -419,21 +419,29 @@ class LocationService implements LocationServiceInterface
      */
     public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct)
     {
-        $content = $this->repository->getContentService()->loadContent($contentInfo->id);
-        $parentLocation = $this->loadLocation($locationCreateStruct->parentLocationId);
+        $content = $this->domainMapper->buildContentDomainObjectFromPersistence(
+            $this->persistenceHandler->contentHandler()->load($contentInfo->id),
+            $this->persistenceHandler->contentTypeHandler()->load($contentInfo->contentTypeId)
+        );
 
-        if (!$this->repository->canUser('content', 'manage_locations', $content->contentInfo)) {
+        $parentLocation = $this->domainMapper->buildLocation(
+            $this->persistenceHandler->locationHandler()->load($locationCreateStruct->parentLocationId)
+        );
+
+        $contentInfo = $content->contentInfo;
+
+        if (!$this->repository->canUser('content', 'manage_locations', $contentInfo, $parentLocation)) {
             throw new UnauthorizedException('content', 'manage_locations', ['contentId' => $contentInfo->id]);
         }
 
-        if (!$this->repository->canUser('content', 'create', $content->contentInfo, $parentLocation)) {
+        if (!$this->repository->canUser('content', 'create', $contentInfo, $parentLocation)) {
             throw new UnauthorizedException('content', 'create', ['locationId' => $parentLocation->id]);
         }
 
         // Check if the parent is a sub location of one of the existing content locations (this also solves the
         // situation where parent location actually one of the content locations),
         // or if the content already has location below given location create struct parent
-        $existingContentLocations = $this->loadLocations($content->contentInfo);
+        $existingContentLocations = $this->loadLocations($contentInfo);
         if (!empty($existingContentLocations)) {
             foreach ($existingContentLocations as $existingContentLocation) {
                 if (stripos($parentLocation->pathString, $existingContentLocation->pathString) !== false) {
@@ -454,15 +462,14 @@ class LocationService implements LocationServiceInterface
         $spiLocationCreateStruct = $this->domainMapper->buildSPILocationCreateStruct(
             $locationCreateStruct,
             $parentLocation,
-            $content->contentInfo->mainLocationId !== null ? $content->contentInfo->mainLocationId : true,
-            $content->contentInfo->id,
-            $content->contentInfo->currentVersionNo
+            $contentInfo->mainLocationId ?? true,
+            $contentInfo->id,
+            $contentInfo->currentVersionNo
         );
 
         $this->repository->beginTransaction();
         try {
             $newLocation = $this->persistenceHandler->locationHandler()->create($spiLocationCreateStruct);
-
             $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema($content);
             foreach ($urlAliasNames as $languageCode => $name) {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
@@ -470,9 +477,9 @@ class LocationService implements LocationServiceInterface
                     $newLocation->parentId,
                     $name,
                     $languageCode,
-                    $content->contentInfo->alwaysAvailable,
+                    $contentInfo->alwaysAvailable,
                     // @todo: this is legacy storage specific for updating ezcontentobject_tree.path_identification_string, to be removed
-                    $languageCode === $content->contentInfo->mainLanguageCode
+                    $languageCode === $contentInfo->mainLanguageCode
                 );
             }
 

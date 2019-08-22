@@ -3375,10 +3375,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
-     *
-     * @todo Fix to more descriptive name
      */
-    public function testCopyContentWithThirdParameter()
+    public function testCopyContentWithGivenVersion()
     {
         $parentLocationId = $this->generateId('location', 56);
 

@@ -30,7 +30,7 @@ use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
-use eZ\Publish\SPI\Persistence\Content\Type as SPIType;
+use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreateStruct;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -93,7 +93,7 @@ class DomainMapper
     }
 
     /**
-     * Builds a Content domain object from value object returned from persistence.
+     * Builds a Content domain object from value object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
@@ -127,6 +127,27 @@ class DomainMapper
                 'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,
             ]
         );
+    }
+
+    /**
+     * Builds a Content domain object from value object returned from persistence.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $spiContent
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $spiContentType
+     * @param string[] $prioritizedLanguages Prioritized language codes to filter fields on
+     * @param string|null $fieldAlwaysAvailableLanguage Language code fallback if a given field is not found in $prioritizedLanguages
+     *
+     * @return \eZ\Publish\Core\Repository\Values\Content\Content
+     */
+    public function buildContentDomainObjectFromPersistence(
+        SPIContent $spiContent,
+        SPIContentType $spiContentType,
+        array $prioritizedLanguages = [],
+        ?string $fieldAlwaysAvailableLanguage = null
+    ): APIContent {
+        $contentType = $this->contentTypeDomainMapper->buildContentTypeDomainObject($spiContentType, $prioritizedLanguages);
+
+        return $this->buildContentDomainObject($spiContent, $contentType, $prioritizedLanguages, $fieldAlwaysAvailableLanguage);
     }
 
     /**
@@ -221,7 +242,7 @@ class DomainMapper
      * @throws InvalidArgumentType On invalid $contentType
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
-     * @param ContentType|SPIType $contentType
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType|\eZ\Publish\SPI\Persistence\Content\Type $contentType
      * @param array $prioritizedLanguages A language priority, filters returned fields and is used as prioritized language code on
      *                         returned value object. If not given all languages are returned.
      * @param string|null $alwaysAvailableLanguage Language code fallback if a given field is not found in $prioritizedLanguages
@@ -234,7 +255,7 @@ class DomainMapper
         array $prioritizedLanguages = [],
         string $alwaysAvailableLanguage = null
     ) {
-        if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
+        if (!$contentType instanceof SPIContentType && !$contentType instanceof ContentType) {
             throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
         }
 
