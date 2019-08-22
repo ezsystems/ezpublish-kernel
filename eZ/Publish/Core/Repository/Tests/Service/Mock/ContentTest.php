@@ -5469,15 +5469,14 @@ class ContentTest extends BaseServiceMockTest
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
         $repositoryMock->expects($this->once())->method('commit');
-        $repositoryMock->expects($this->once())
+        $repositoryMock
             ->method('canUser')
-            ->with(
-                'content',
-                'create',
-                $contentInfoMock,
-                [$location]
-            )
-            ->will($this->returnValue(true));
+            ->willReturnMap(
+                [
+                    ['content', 'create', $contentInfoMock, [$location], true],
+                    ['content', 'manage_locations', $contentInfoMock, [$location], true],
+                ]
+            );
 
         $spiContentInfo = new SPIContentInfo(['id' => 42]);
         $spiVersionInfo = new SPIVersionInfo(
@@ -5593,15 +5592,14 @@ class ContentTest extends BaseServiceMockTest
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
         $repositoryMock->expects($this->once())->method('commit');
-        $repositoryMock->expects($this->once())
+        $repositoryMock
             ->method('canUser')
-            ->with(
-                'content',
-                'create',
-                $contentInfoMock,
-                [$location]
-            )
-            ->will($this->returnValue(true));
+            ->willReturnMap(
+                [
+                    ['content', 'create', $contentInfoMock, [$location], true],
+                    ['content', 'manage_locations', $contentInfoMock, [$location], true],
+                ]
+            );
 
         $spiContentInfo = new SPIContentInfo(['id' => 42]);
         $spiVersionInfo = new SPIVersionInfo(
@@ -5699,15 +5697,14 @@ class ContentTest extends BaseServiceMockTest
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
         $repositoryMock->expects($this->once())->method('rollback');
-        $repositoryMock->expects($this->once())
+        $repositoryMock
             ->method('canUser')
-            ->with(
-                'content',
-                'create',
-                $contentInfoMock,
-                [$location]
-            )
-            ->will($this->returnValue(true));
+            ->willReturnMap(
+                [
+                    ['content', 'create', $contentInfoMock, [$location], true],
+                    ['content', 'manage_locations', $contentInfoMock, [$location], true],
+                ]
+            );
 
         $contentHandlerMock->expects($this->once())
             ->method('copy')
