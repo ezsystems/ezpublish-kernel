@@ -12,7 +12,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 final class SiteAccessMatcherRegistry
 {
     /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher[] */
-    protected $matchers;
+    private $matchers;
 
     /**
      * @param \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher[] $matchers
