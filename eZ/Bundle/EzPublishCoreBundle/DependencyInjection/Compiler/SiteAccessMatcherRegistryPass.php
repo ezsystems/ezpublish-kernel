@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * The SiteAccessMatcherRegistryPass will register all services tagged as "ezpublish.matcher.siteaccess" to the registry.
  */
-class SiteAccessMatcherRegistryPass implements CompilerPassInterface
+final class SiteAccessMatcherRegistryPass implements CompilerPassInterface
 {
     public const MATCHER_TAG = 'ezpublish.matcher.siteaccess';
 

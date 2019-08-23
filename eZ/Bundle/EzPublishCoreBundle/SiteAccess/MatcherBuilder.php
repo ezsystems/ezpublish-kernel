@@ -14,7 +14,7 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 /**
  * Siteaccess matcher builder based on services.
  */
-class MatcherBuilder extends BaseMatcherBuilder
+final class MatcherBuilder extends BaseMatcherBuilder
 {
     /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistry */
     protected $siteAccessMatcherRegistry;
