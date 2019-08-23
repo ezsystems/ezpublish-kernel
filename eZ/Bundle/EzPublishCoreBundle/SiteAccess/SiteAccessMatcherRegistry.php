@@ -22,22 +22,6 @@ final class SiteAccessMatcherRegistry
         $this->matchers = $matchers;
     }
 
-    /**
-     * @return \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher[]
-     */
-    public function getMatchers(): array
-    {
-        return $this->matchers;
-    }
-
-    /**
-     * @param \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher[] $matchers
-     */
-    public function setMatchers(array $matchers): void
-    {
-        $this->matchers = $matchers;
-    }
-
     public function setMatcher(string $identifier, Matcher $matcher): void
     {
         $this->matchers[$identifier] = $matcher;
