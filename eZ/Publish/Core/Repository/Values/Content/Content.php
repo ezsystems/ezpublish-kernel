@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\Thumbnail;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
@@ -24,6 +25,9 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
  */
 class Content extends APIContent
 {
+    /** @var Thumbnail|null */
+    protected $thumbnail;
+
     /** @var mixed[][] An array of array of field values like[$fieldDefIdentifier][$languageCode] */
     protected $fields;
 
@@ -55,6 +59,11 @@ class Content extends APIContent
         foreach ($this->internalFields as $field) {
             $this->fields[$field->fieldDefIdentifier][$field->languageCode] = $field->value;
         }
+    }
+
+    public function getThumbnail(): ?Thumbnail
+    {
+        return $this->thumbnail;
     }
 
     /**
@@ -156,6 +165,9 @@ class Content extends APIContent
 
             case 'contentInfo':
                 return $this->versionInfo->contentInfo;
+
+            case 'thumbnail':
+                return $this->getThumbnail();
         }
 
         return parent::__get($property);

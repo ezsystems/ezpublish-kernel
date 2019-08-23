@@ -67,6 +67,13 @@ class FieldDefinitionUpdateStruct extends ValueObject
     public $isRequired;
 
     /**
+     * Indicates if the field can be a thumbnail.
+     *
+     * @var bool
+     */
+    public $isThumbnail;
+
+    /**
      * If set the information collector flag is set to this value.
      *
      * @var bool

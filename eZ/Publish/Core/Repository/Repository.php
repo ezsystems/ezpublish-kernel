@@ -15,6 +15,7 @@ use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -224,6 +225,9 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
     private $passwordHashService;
 
+    /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy */
+    private $thumbnailStrategy;
+
     /**
      * Construct repository object with provided storage engine.
      *
@@ -233,6 +237,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
+     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
      * @param array $serviceSettings
      * @param \Psr\Log\LoggerInterface|null $logger
      */
@@ -243,6 +248,7 @@ class Repository implements RepositoryInterface
         RelationProcessor $relationProcessor,
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashGenerator,
+        ThumbnailStrategy $thumbnailStrategy,
         array $serviceSettings = [],
         LoggerInterface $logger = null
     ) {
@@ -252,7 +258,7 @@ class Repository implements RepositoryInterface
         $this->relationProcessor = $relationProcessor;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->passwordHashService = $passwordHashGenerator;
-
+        $this->thumbnailStrategy = $thumbnailStrategy;
         $this->serviceSettings = $serviceSettings + [
             'content' => [],
             'contentType' => [],
@@ -765,7 +771,8 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->contentTypeHandler(),
             $this->getContentTypeDomainMapper(),
             $this->persistenceHandler->contentLanguageHandler(),
-            $this->fieldTypeRegistry
+            $this->fieldTypeRegistry,
+            $this->thumbnailStrategy
         );
 
         return $this->domainMapper;

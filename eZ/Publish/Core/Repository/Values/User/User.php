@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Values\User;
 
+use eZ\Publish\API\Repository\Values\Content\Thumbnail;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
@@ -134,6 +135,9 @@ class User extends APIUser
             case 'fields':
                 return $this->getFields();
 
+            case 'thumbnail':
+                return $this->getThumbnail();
+
             case 'content':
                 // trigger error for this, but for BC let it pass on to normal __get lookup for now
                 @trigger_error(
@@ -166,10 +170,19 @@ class User extends APIUser
             return true;
         }
 
+        if ($property === 'thumbnail') {
+            return true;
+        }
+
         if ($property === 'fields') {
             return true;
         }
 
         return parent::__isset($property);
+    }
+
+    public function getThumbnail(): ?Thumbnail
+    {
+        return $this->content->getThumbnail();
     }
 }

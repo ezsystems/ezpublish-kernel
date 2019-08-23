@@ -259,6 +259,7 @@ class ContentTypeDomainMapper
                 'position' => $spiFieldDefinition->position,
                 'fieldTypeIdentifier' => $spiFieldDefinition->fieldType,
                 'isTranslatable' => $spiFieldDefinition->isTranslatable,
+                'isThumbnail' => $spiFieldDefinition->isThumbnail,
                 'isRequired' => $spiFieldDefinition->isRequired,
                 'isInfoCollector' => $spiFieldDefinition->isInfoCollector,
                 'defaultValue' => $fieldType->fromPersistenceValue($spiFieldDefinition->defaultValue),
@@ -339,6 +340,9 @@ class ContentTypeDomainMapper
                 'isTranslatable' => $fieldDefinitionUpdateStruct->isTranslatable === null ?
                     $fieldDefinition->isTranslatable :
                     $fieldDefinitionUpdateStruct->isTranslatable,
+                'isThumbnail' => $fieldDefinitionUpdateStruct->isThumbnail === null ?
+                    $fieldDefinition->isThumbnail :
+                    $fieldDefinitionUpdateStruct->isThumbnail,
                 'isRequired' => $fieldDefinitionUpdateStruct->isRequired === null ?
                     $fieldDefinition->isRequired :
                     $fieldDefinitionUpdateStruct->isRequired,
@@ -428,6 +432,9 @@ class ContentTypeDomainMapper
                 'isTranslatable' => $fieldDefinitionUpdateStruct->isTranslatable === null ?
                     $fieldDefinition->isTranslatable :
                     $fieldDefinitionUpdateStruct->isTranslatable,
+                'isThumbnail' => $fieldDefinitionUpdateStruct->isThumbnail === null ?
+                    $fieldDefinition->isThumbnail :
+                    $fieldDefinitionUpdateStruct->isThumbnail,
                 'isRequired' => $fieldDefinitionUpdateStruct->isRequired === null ?
                     $fieldDefinition->isRequired :
                     $fieldDefinitionUpdateStruct->isRequired,
@@ -486,6 +493,9 @@ class ContentTypeDomainMapper
                 'isTranslatable' => $fieldDefinitionCreateStruct->isTranslatable === null ?
                     true :
                     $fieldDefinitionCreateStruct->isTranslatable,
+                'isThumbnail' => $fieldDefinitionCreateStruct->isThumbnail === null ?
+                    false :
+                    $fieldDefinitionCreateStruct->isThumbnail,
                 'isRequired' => $fieldDefinitionCreateStruct->isRequired === null ?
                     false :
                     $fieldDefinitionCreateStruct->isRequired,
@@ -542,6 +552,9 @@ class ContentTypeDomainMapper
                 'isTranslatable' => $fieldDefinitionCreateStruct->isTranslatable === null ?
                     true :
                     $fieldDefinitionCreateStruct->isTranslatable,
+                'isThumbnail' => $fieldDefinitionCreateStruct->isThumbnail === null ?
+                    false :
+                    $fieldDefinitionCreateStruct->isThumbnail,
                 'isRequired' => $fieldDefinitionCreateStruct->isRequired === null ?
                     false :
                     $fieldDefinitionCreateStruct->isRequired,

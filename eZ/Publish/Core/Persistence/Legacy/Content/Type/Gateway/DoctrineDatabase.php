@@ -80,6 +80,7 @@ class DoctrineDatabase extends Gateway
             'is_information_collector',
             'is_required',
             'is_searchable',
+            'is_thumbnail',
             'placement',
             'serialized_data_text',
             'serialized_description_list',
@@ -694,6 +695,9 @@ class DoctrineDatabase extends Gateway
             $this->dbHandler->quoteColumn('can_translate'),
             $q->bindValue(($fieldDefinition->isTranslatable ? 1 : 0), null, \PDO::PARAM_INT)
         )->set(
+            $this->dbHandler->quoteColumn('is_thumbnail'),
+            $q->bindValue($fieldDefinition->isThumbnail, null, \PDO::PARAM_BOOL)
+        )->set(
             $this->dbHandler->quoteColumn('is_required'),
             $q->bindValue(($fieldDefinition->isRequired ? 1 : 0), null, \PDO::PARAM_INT)
         )->set(
@@ -1131,6 +1135,7 @@ class DoctrineDatabase extends Gateway
                 'a.is_required AS ezcontentclass_attribute_is_required',
                 'a.is_information_collector AS ezcontentclass_attribute_is_information_collector',
                 'a.is_searchable AS ezcontentclass_attribute_is_searchable',
+                'a.is_thumbnail AS ezcontentclass_attribute_is_thumbnail',
                 'a.placement AS ezcontentclass_attribute_placement',
                 'a.data_float1 AS ezcontentclass_attribute_data_float1',
                 'a.data_float2 AS ezcontentclass_attribute_data_float2',

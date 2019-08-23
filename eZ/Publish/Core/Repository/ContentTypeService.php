@@ -599,6 +599,14 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
+        if ($fieldDefinitionCreateStruct->isThumbnail !== null && !is_bool($fieldDefinitionCreateStruct->isThumbnail)) {
+            throw new InvalidArgumentType(
+                $argumentName . '->isThumbnail',
+                'boolean',
+                $fieldDefinitionCreateStruct->isThumbnail
+            );
+        }
+
         if ($fieldDefinitionCreateStruct->isInfoCollector !== null && !is_bool($fieldDefinitionCreateStruct->isInfoCollector)) {
             throw new InvalidArgumentType(
                 $argumentName . '->isInfoCollector',

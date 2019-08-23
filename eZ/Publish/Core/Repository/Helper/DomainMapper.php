@@ -37,6 +37,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use DateTime;
+use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 
 /**
  * DomainMapper is an internal service.
@@ -66,6 +67,9 @@ class DomainMapper
     /** @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
+    /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy */
+    private $thumbnailStrategy;
+
     /**
      * Setups service with reference to repository.
      *
@@ -75,6 +79,7 @@ class DomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
      */
     public function __construct(
         ContentHandler $contentHandler,
@@ -82,7 +87,8 @@ class DomainMapper
         TypeHandler $contentTypeHandler,
         ContentTypeDomainMapper $contentTypeDomainMapper,
         LanguageHandler $contentLanguageHandler,
-        FieldTypeRegistry $fieldTypeRegistry
+        FieldTypeRegistry $fieldTypeRegistry,
+        ThumbnailStrategy $thumbnailStrategy
     ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
@@ -90,6 +96,7 @@ class DomainMapper
         $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
+        $this->thumbnailStrategy = $thumbnailStrategy;
     }
 
     /**
@@ -119,9 +126,12 @@ class DomainMapper
             }
         }
 
+        $internalFields = $this->buildDomainFields($spiContent->fields, $contentType, $prioritizedLanguages, $fieldAlwaysAvailableLanguage);
+
         return new Content(
             [
-                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $prioritizedLanguages, $fieldAlwaysAvailableLanguage),
+                'thumbnail' => $this->thumbnailStrategy->getThumbnail($contentType, $internalFields),
+                'internalFields' => $internalFields,
                 'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $prioritizedLanguages),
                 'contentType' => $contentType,
                 'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,

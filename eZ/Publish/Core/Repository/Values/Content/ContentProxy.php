@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\Thumbnail;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\GeneratorProxyTrait;
 
@@ -35,6 +36,10 @@ class ContentProxy extends APIContent
             return $this->getContentInfo();
         }
 
+        if ($name === 'thumbnail') {
+            return $this->getThumbnail();
+        }
+
         if ($this->object === null) {
             $this->loadObject();
         }
@@ -44,7 +49,7 @@ class ContentProxy extends APIContent
 
     public function __isset($name)
     {
-        if ($name === 'id' || $name === 'contentInfo') {
+        if ($name === 'id' || $name === 'contentInfo' || $name === 'thumbnail') {
             return true;
         }
 
@@ -130,5 +135,14 @@ class ContentProxy extends APIContent
         }
 
         return $this->object->getField($fieldDefIdentifier, $languageCode);
+    }
+
+    public function getThumbnail(): ?Thumbnail
+    {
+        if ($this->object === null) {
+            $this->loadObject();
+        }
+
+        return $this->object->getThumbnail();
     }
 }

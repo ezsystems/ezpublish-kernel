@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->contentInfo->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read \eZ\Publish\API\Repository\Values\Content\Field[] $fields access fields, calls getFields()
+ * @property-read \eZ\Publish\API\Repository\Values\Content\Thumbnail|null $thumbnail calls getThumbnail()
  */
 abstract class Content extends ValueObject
 {
@@ -105,4 +106,6 @@ abstract class Content extends ValueObject
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     abstract public function getContentType(): ContentType;
+
+    abstract public function getThumbnail(): ?Thumbnail;
 }
