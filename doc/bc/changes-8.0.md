@@ -79,3 +79,16 @@ Changes affecting version compatibility with former or future versions.
 * `ezpublish.field_type_collection.factory` has been removed in favor of `eZ\Publish\Core\FieldType\FieldTypeRegistry`
 
 * `ezpublish.persistence.external_storage_registry.factory`
+
+## Changed behavior
+
+* Service based View Matchers now require to be tagged with `ezpublish.matcher.view`. Moreover now to use it you have to prefix service name with `@` sign:
+```yaml
+site:
+    content_view:
+        full:
+            home:
+                template: "content.html.twig"
+                match:
+                    '@App\Matcher\MyMatcher': 2
+```
