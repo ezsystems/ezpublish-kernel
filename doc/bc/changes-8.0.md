@@ -93,4 +93,4 @@ site:
                     '@App\Matcher\MyMatcher': ~
 ```
 
-* Service based SiteAccess Matchers now require to be tagged with `ezpublish.matcher.siteaccess`.
+* Service based SiteAccess Matchers now require to be tagged with `ezplatform.matcher.siteaccess`.
