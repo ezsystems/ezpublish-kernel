@@ -359,7 +359,7 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
               ->expects($this->once())
               ->method('getItem')
-              ->with('content', 'info', 2, 'versioninfo', 0)
+              ->with('content', 'info', 2, 'versioninfo', ContentHandler::PUBLISHED_VERSION)
               ->willReturn($cacheItemMock);
 
         $cacheItemMock
