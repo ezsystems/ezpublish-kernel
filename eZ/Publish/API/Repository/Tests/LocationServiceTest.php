@@ -2758,6 +2758,56 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test that Legacy ezcontentobject_tree.path_identification_string field is correctly updated
+     * after moving subtree.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
+     *
+     * @throws \ErrorException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testMoveSubtreeUpdatesPathIdentificationString(): void
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $topNode = $this->createFolder(['eng-US' => 'top_node'], 2);
+
+        $newParentLocation = $locationService->loadLocation(
+            $this
+                ->createFolder(['eng-US' => 'Parent'], $topNode->contentInfo->mainLocationId)
+                ->contentInfo
+                ->mainLocationId
+        );
+        $location = $locationService->loadLocation(
+            $this
+                ->createFolder(['eng-US' => 'Move Me'], $topNode->contentInfo->mainLocationId)
+                ->contentInfo
+                ->mainLocationId
+        );
+
+        $locationService->moveSubtree($location, $newParentLocation);
+
+        // path location string is not present on API level, so we need to query database
+        $serviceContainer = $this->getSetupFactory()->getServiceContainer();
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $serviceContainer->get('ezpublish.persistence.connection');
+        $query = $connection->createQueryBuilder();
+        $query
+            ->select('path_identification_string')
+            ->from('ezcontentobject_tree')
+            ->where('node_id = :nodeId')
+            ->setParameter('nodeId', $location->id);
+
+        self::assertEquals(
+            'top_node/parent/move_me',
+            $query->execute()->fetchColumn()
+        );
+    }
+
+    /**
      * Loads properties from all locations in the $location's subtree.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
