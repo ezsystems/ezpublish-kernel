@@ -214,7 +214,6 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
             if (!empty($this->deferredTagsInvalidation)) {
                 $this->sharedPool->invalidateTags(\array_keys($this->deferredTagsInvalidation));
                 $this->deferredTagsInvalidation = [];
-
             }
         }
     }
@@ -275,8 +274,8 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
             if ($this->itemIsDeferredMiss($item)) {
                 $fnSetCacheItemAsMiss($item);
             }
-
         }
+
         return $iteratedItems;
     }
 
