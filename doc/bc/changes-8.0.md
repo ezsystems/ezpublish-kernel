@@ -82,7 +82,7 @@ Changes affecting version compatibility with former or future versions.
 
 ## Changed behavior
 
-* Service based View Matchers now require to be tagged with `ezplatform.matcher.view`. Moreover now to use it you have to prefix service name with `@` sign:
+* Service based View Matchers now require to be tagged with `ezplatform.view.matcher`. Moreover now to use it you have to prefix service name with `@` sign:
 ```yaml
 site:
     content_view:

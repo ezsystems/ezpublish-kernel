@@ -12,11 +12,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * The MatcherServiceRegistryPass will register all services tagged as "ezplatform.matcher.view" to the registry.
+ * The MatcherServiceRegistryPass will register all services tagged as "ezplatform.view.matcher" to the registry.
  */
 final class ViewMatcherRegistryPass implements CompilerPassInterface
 {
-    public const MATCHER_TAG = 'ezplatform.matcher.view';
+    public const MATCHER_TAG = 'ezplatform.view.matcher';
 
     public function process(ContainerBuilder $container): void
     {
