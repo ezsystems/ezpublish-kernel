@@ -305,7 +305,7 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
-            ->with('content', 'info', 2, 'versioninfo', 0)
+            ->with('content', 'info', 2, 'versioninfo', 1)
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -327,7 +327,7 @@ class ContentHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('loadVersionInfo')
-            ->with(2, 0)
+            ->with(2, 1)
             ->will(
                 $this->returnValue(
                     new VersionInfo(['contentInfo' => new ContentInfo(['id' => 2]), 'versionNo' => 1])
@@ -346,8 +346,58 @@ class ContentHandlerTest extends HandlerTest
             ->with();
 
         $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->loadVersionInfo(2, null);
+        $handler->loadVersionInfo(2, 1);
     }
+
+    /**
+       * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::loadVersionInfo
+       */
+      public function testLoadVersionInfoWithoutVersionNumberCacheIsMiss()
+      {
+          $this->loggerMock->expects($this->once())->method('logCall');
+          $cacheItemMock = $this->getMock(ItemInterface::class);
+          $this->cacheMock
+              ->expects($this->once())
+              ->method('getItem')
+              ->with('content', 'info', 2, 'versioninfo', 0)
+              ->willReturn($cacheItemMock);
+
+          $cacheItemMock
+              ->expects($this->once())
+              ->method('get')
+              ->willReturn(null);
+
+          $cacheItemMock
+              ->expects($this->once())
+              ->method('isMiss')
+              ->willReturn(true);
+
+          $innerHandlerMock = $this->getMock(Handler::class);
+          $this->persistenceHandlerMock
+              ->expects($this->once())
+              ->method('contentHandler')
+              ->willReturn($innerHandlerMock);
+
+          $innerHandlerMock
+              ->expects($this->once())
+              ->method('loadVersionInfo')
+              ->with(2, 0)
+              ->willReturn(new VersionInfo(['contentInfo' => new ContentInfo(['id' => 2]), 'versionNo' => 1]));
+
+          $cacheItemMock
+              ->expects($this->once())
+              ->method('set')
+              ->with($this->isInstanceOf(VersionInfo::class))
+              ->willReturn($cacheItemMock);
+
+          $cacheItemMock
+              ->expects($this->once())
+              ->method('save')
+              ->with();
+
+          $handler = $this->persistenceCacheHandler->contentHandler();
+          $handler->loadVersionInfo(2, null);
+      }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::loadVersionInfo
