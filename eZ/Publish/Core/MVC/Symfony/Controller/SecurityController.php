@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Symfony\Component\HttpFoundation\Response;
+use eZ\Publish\Core\MVC\Symfony\View\LoginFormView;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Templating\EngineInterface;
 
@@ -33,15 +33,13 @@ class SecurityController
 
     public function loginAction()
     {
-        return new Response(
-            $this->templateEngine->render(
-                $this->configResolver->getParameter('security.login_template'),
-                [
-                    'last_username' => $this->authenticationUtils->getLastUsername(),
-                    'error' => $this->authenticationUtils->getLastAuthenticationError(),
-                    'layout' => $this->configResolver->getParameter('security.base_layout'),
-                ]
-            )
-        );
+        $view = new LoginFormView($this->configResolver->getParameter('security.login_template'));
+        $view->setLastUsername($this->authenticationUtils->getLastUsername());
+        $view->setLastAuthenticationError($this->authenticationUtils->getLastAuthenticationError());
+        $view->addParameters([
+            'layout' => $this->configResolver->getParameter('security.base_layout'),
+        ]);
+
+        return $view;
     }
 }
