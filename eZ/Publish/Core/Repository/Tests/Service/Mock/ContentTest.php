@@ -130,7 +130,7 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
-        $versionInfoMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
+        $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock->expects($this->any())
             ->method('__get')
@@ -180,12 +180,12 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
-        $versionInfoMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
+        $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock->expects($this->any())
             ->method('__get')
             ->with('status')
-            ->will($this->returnValue(APIVersionInfo::STATUS_DRAFT));
+            ->willReturn(APIVersionInfo::STATUS_DRAFT);
 
         $contentServiceMock->expects($this->never())
             ->method('loadContentInfo');
@@ -195,14 +195,12 @@ class ContentTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo(42),
                 $this->equalTo(2)
-            )->will(
-                $this->returnValue(new SPIVersionInfo())
-            );
+            )->willReturn(new SPIVersionInfo());
 
         $domainMapperMock->expects($this->once())
             ->method('buildVersionInfoDomainObject')
             ->with(new SPIVersionInfo())
-            ->will($this->returnValue($versionInfoMock));
+            ->willReturn($versionInfoMock);
 
         $repository->expects($this->once())
             ->method('canUser')
@@ -210,7 +208,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo('content'),
                 $this->equalTo('versionread'),
                 $this->equalTo($versionInfoMock)
-            )->will($this->returnValue(true));
+            )->willReturn(true);
 
         $result = $contentServiceMock->loadVersionInfoById(42, 2);
 
