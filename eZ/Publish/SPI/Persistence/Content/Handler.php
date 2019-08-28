@@ -133,13 +133,22 @@ interface Handler
     public function loadVersionInfo($contentId, $versionNo);
 
     /**
+     * Returns the number of versions with draft status created by the given $userId.
+     *
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function countDraftsForUser($userId): int;
+
+    /**
      * Returns all versions with draft status created by the given $userId.
      *
      * @param int $userId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function loadDraftsForUser($userId);
+    public function loadDraftsForUser($userId, int $offset = 0, int $limit = -1);
 
     /**
      * Sets the status of object identified by $contentId and $version to $status.

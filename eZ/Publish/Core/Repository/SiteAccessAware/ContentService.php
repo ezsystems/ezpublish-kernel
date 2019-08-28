@@ -132,9 +132,14 @@ class ContentService implements ContentServiceInterface
         return $this->service->createContentDraft($contentInfo, $versionInfo, $user);
     }
 
-    public function loadContentDrafts(User $user = null)
+    public function countContentDrafts(?User $user = null): int
     {
-        return $this->service->loadContentDrafts($user);
+        return $this->service->countContentDrafts($user);
+    }
+
+    public function loadContentDrafts(User $user = null, int $offset = 0, int $limit = -1)
+    {
+        return $this->service->loadContentDrafts($user, $offset, $limit);
     }
 
     public function updateContent(VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct)

@@ -380,6 +380,25 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Returns the number of all versions with given status created by the given $userId.
+     *
+     * @param int $userId
+     * @param int $status
+     *
+     * @return int
+     */
+    public function countVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): int
+    {
+        try {
+            return $this->innerGateway->countVersionsForUser($userId, $status);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Returns data for all versions with given status created by the given $userId.
      *
      * @param int $userId
@@ -387,10 +406,10 @@ class ExceptionConversion extends Gateway
      *
      * @return string[][]
      */
-    public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT)
+    public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1)
     {
         try {
-            return $this->innerGateway->listVersionsForUser($userId, $status);
+            return $this->innerGateway->listVersionsForUser($userId, $status, $offset, $limit);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

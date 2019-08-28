@@ -342,19 +342,35 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Counts drafts for a user.
+     *
+     * If no user is given the number of drafts for the authenticated user a returned
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
+     *
+     * @return int The number of drafts ({@link VersionInfo}) owned by the given user
+     */
+    public function countContentDrafts(?User $user = null): int
+    {
+        return $this->service->countContentDrafts($user);
+    }
+
+    /**
      * Loads drafts for a user.
      *
      * If no user is given the drafts for the authenticated user a returned
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
-     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
      */
-    public function loadContentDrafts(User $user = null)
+    public function loadContentDrafts(User $user = null, int $offset = 0, int $limit = -1)
     {
-        return $this->service->loadContentDrafts($user);
+        return $this->service->loadContentDrafts($user, $offset, $limit);
     }
 
     /**

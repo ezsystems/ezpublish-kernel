@@ -469,15 +469,27 @@ class Handler implements BaseContentHandler
     }
 
     /**
+     * Returns the number of versions with draft status created by the given $userId.
+     *
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function countDraftsForUser($userId): int
+    {
+        return $this->contentGateway->countVersionsForUser($userId, VersionInfo::STATUS_DRAFT);
+    }
+
+    /**
      * Returns all versions with draft status created by the given $userId.
      *
      * @param int $userId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function loadDraftsForUser($userId)
+    public function loadDraftsForUser($userId, int $offset = 0, int $limit = -1)
     {
-        $rows = $this->contentGateway->listVersionsForUser($userId, VersionInfo::STATUS_DRAFT);
+        $rows = $this->contentGateway->listVersionsForUser($userId, VersionInfo::STATUS_DRAFT, $offset, $limit);
         if (empty($rows)) {
             return [];
         }

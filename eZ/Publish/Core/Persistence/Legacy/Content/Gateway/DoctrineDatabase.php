@@ -1089,6 +1089,32 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Returns the number of all versions with given status created by the given $userId.
+     *
+     * @param int $userId
+     * @param int $status
+     *
+     * @return int
+     */
+    public function countVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): int
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('COUNT(id)')
+            ->from('ezcontentobject_version')
+            ->where(
+                $query->expr()->andX(
+                    $query->expr()->eq('status', ':status'),
+                    $query->expr()->eq('creator_id', ':user_id')
+                )
+            )
+            ->setParameter(':status', $status, \PDO::PARAM_INT)
+            ->setParameter(':user_id', $userId, \PDO::PARAM_INT);
+
+        return (int) $query->execute()->fetchColumn();
+    }
+
+    /**
      * Returns data for all versions with given status created by the given $userId.
      *
      * @param int $userId
@@ -1096,7 +1122,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return string[][]
      */
-    public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT)
+    public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1)
     {
         $query = $this->queryBuilder->createVersionInfoFindQuery();
         $query->where(
@@ -1111,6 +1137,10 @@ class DoctrineDatabase extends Gateway
                 )
             )
         );
+
+        if ($limit > 0) {
+            $query->limit($limit, $offset);
+        }
 
         return $this->listVersionsHelper($query);
     }

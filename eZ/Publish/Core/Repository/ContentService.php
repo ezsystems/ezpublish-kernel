@@ -1154,28 +1154,48 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Counts drafts for a user.
+     *
+     * If no user is given the number of drafts for the authenticated user a returned
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
+     *
+     * @return int The number of drafts ({@link VersionInfo}) owned by the given user
+     */
+    public function countContentDrafts(?User $user = null): int
+    {
+        return $this->persistenceHandler->contentHandler()->countDraftsForUser(
+            $this->resolveUser($user)->getUserId()
+        );
+    }
+
+    /**
      * Loads drafts for a user.
      *
      * If no user is given the drafts for the authenticated user a returned
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to load the draft list
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param int $offset
+     * @param int $limit
      *
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
+     * @return array the drafts (<a href='psi_element://VersionInfo'>VersionInfo</a>) owned by the given user) owned by the given user
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo the drafts ({@link VersionInfo}) owned by the given user
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
-    public function loadContentDrafts(User $user = null)
+    public function loadContentDrafts(User $user = null, int $offset = 0, int $limit = -1)
     {
-        if ($user === null) {
-            $user = $this->repository->getCurrentUserReference();
-        }
-
         // throw early if user has absolutely no access to versionread
         if ($this->repository->hasAccess('content', 'versionread') === false) {
             throw new UnauthorizedException('content', 'versionread');
         }
 
-        $spiVersionInfoList = $this->persistenceHandler->contentHandler()->loadDraftsForUser($user->getUserId());
+        $spiVersionInfoList = $this->persistenceHandler->contentHandler()->loadDraftsForUser(
+            $this->resolveUser($user)->getUserId(),
+            $offset,
+            $limit
+        );
         $versionInfoList = [];
         foreach ($spiVersionInfoList as $spiVersionInfo) {
             $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
@@ -2351,5 +2371,19 @@ class ContentService implements ContentServiceInterface
     public function newContentUpdateStruct()
     {
         return new ContentUpdateStruct();
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\User\User|null $user
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User|\eZ\Publish\API\Repository\Values\User\UserReference
+     */
+    private function resolveUser(?User $user)
+    {
+        if ($user === null) {
+            $user = $this->repository->getCurrentUserReference();
+        }
+
+        return $user;
     }
 }

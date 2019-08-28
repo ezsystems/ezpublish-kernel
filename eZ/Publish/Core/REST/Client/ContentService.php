@@ -15,7 +15,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -95,7 +94,7 @@ class ContentService implements APIContentService, Sessionable
             'GET',
             $contentId,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentInfo'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentInfo')]
             )
         );
 
@@ -128,9 +127,9 @@ class ContentService implements APIContentService, Sessionable
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('objectByRemote', array('object' => $remoteId)),
+            $this->requestParser->generate('objectByRemote', ['object' => $remoteId]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentInfo'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentInfo')]
             )
         );
 
@@ -139,7 +138,7 @@ class ContentService implements APIContentService, Sessionable
                 'GET',
                 $response->headers['Location'],
                 new Message(
-                    array('Accept' => $this->outputVisitor->getMediaType('ContentInfo'))
+                    ['Accept' => $this->outputVisitor->getMediaType('ContentInfo')]
                 )
             );
         }
@@ -165,7 +164,7 @@ class ContentService implements APIContentService, Sessionable
 
         return new Values\Content\ContentInfo(
             $this->contentTypeService,
-            array(
+            [
                 'id' => $restContentInfo->id,
                 'name' => $restContentInfo->name,
                 'contentTypeId' => $restContentInfo->contentTypeId,
@@ -180,7 +179,7 @@ class ContentService implements APIContentService, Sessionable
                 'sectionId' => $restContentInfo->sectionId,
 
                 'currentVersionNo' => $versionUrlValues['version'],
-            )
+            ]
         );
     }
 
@@ -324,18 +323,18 @@ class ContentService implements APIContentService, Sessionable
             $url = $this->fetchCurrentVersionUrl(
                 $this->requestParser->generate(
                     'objectCurrentVersion',
-                    array(
+                    [
                         'object' => $contentIdValues['object'],
-                    )
+                    ]
                 )
             );
         } else {
             $url = $this->requestParser->generate(
                 'objectVersion',
-                array(
+                [
                     'object' => $contentIdValues['object'],
                     'version' => $versionNo,
-                )
+                ]
             );
         }
 
@@ -343,7 +342,7 @@ class ContentService implements APIContentService, Sessionable
             'GET',
             $url,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('Version'))
+                ['Accept' => $this->outputVisitor->getMediaType('Version')]
             )
         );
 
@@ -394,7 +393,7 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array())
+    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = [])
     {
         throw new \Exception('@todo: Implement.');
     }
@@ -450,17 +449,32 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
+     * Counts drafts for a user.
+     *
+     * If no user is given the number of drafts for the authenticated user a returned
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
+     *
+     * @return int The number of drafts ({@link VersionInfo}) owned by the given user
+     */
+    public function countContentDrafts(?User $user = null): int
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
      * Loads drafts for a user.
      *
      * If no user is given the drafts for the authenticated user a returned
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
-     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param int $offset
+     * @param int $limit
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo the drafts ({@link VersionInfo}) owned by the given user
+     *
+     * @throws \Exception
      */
-    public function loadContentDrafts(User $user = null)
+    public function loadContentDrafts(User $user = null, int $offset = 0, int $limit = -1)
     {
         throw new \Exception('@todo: Implement.');
     }
