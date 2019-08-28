@@ -5,8 +5,6 @@ parameters:
     ezpublish.view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Configured
 
     ezpublish.view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ServiceAwareMatcherFactory
-    ezpublish.content_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory
-    ezpublish.location_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationMatcherFactory
 
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
@@ -64,6 +62,8 @@ services:
           - "@ezpublish.view.configurator"
           - "@?logger"
 
+    eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry: ~
+
     ezpublish.content_view_provider.configured:
         class: "%ezpublish.view_provider.configured.class%"
         arguments: ["@ezpublish.content_view.matcher_factory"]
@@ -72,9 +72,10 @@ services:
 
     ezpublish.content_view.matcher_factory:
         class: "%ezpublish.view.matcher_factory.class%"
-        arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
-        calls:
-            - [setContainer, ["@service_container"]]
+        arguments:
+            - '@eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry'
+            - '@ezpublish.api.repository'
+            - 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased'
 
     ezpublish.content_view.matcher_factory.dynamically_configured:
         class: eZ\Publish\Core\MVC\Symfony\Matcher\DynamicallyConfiguredMatcherFactoryDecorator
@@ -92,9 +93,10 @@ services:
 
     ezpublish.content_view.default_matcher_factory:
         class: "%ezpublish.view.matcher_factory.class%"
-        arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
-        calls:
-            - [setContainer, ["@service_container"]]
+        arguments:
+            - '@eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry'
+            - '@ezpublish.api.repository'
+            - 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased'
 
     ezpublish.content_view.default_matcher_factory.dynamically_configured:
         class: eZ\Publish\Core\MVC\Symfony\Matcher\DynamicallyConfiguredMatcherFactoryDecorator
@@ -112,9 +114,10 @@ services:
 
     ezpublish.location_view.matcher_factory:
         class: "%ezpublish.view.matcher_factory.class%"
-        arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
-        calls:
-            - [setContainer, ["@service_container"]]
+        arguments:
+            - '@eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry'
+            - '@ezpublish.api.repository'
+            - 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased'
 
     ezpublish.location_view.matcher_factory.dynamically_configured:
         class: eZ\Publish\Core\MVC\Symfony\Matcher\DynamicallyConfiguredMatcherFactoryDecorator

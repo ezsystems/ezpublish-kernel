@@ -4,9 +4,8 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Matcher;
 
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ClassNameMatcherFactory;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * A view matcher factory that also accepts services as matchers.
@@ -14,9 +13,21 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  * If a service id is passed as the MatcherIdentifier, this service will be used for the matching.
  * Otherwise, it will fallback to the class name based matcher factory.
  */
-class ServiceAwareMatcherFactory extends ClassNameMatcherFactory implements ContainerAwareInterface
+final class ServiceAwareMatcherFactory extends ClassNameMatcherFactory
 {
-    use ContainerAwareTrait;
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry */
+    private $viewMatcherRegistry;
+
+    public function __construct(
+        ViewMatcherRegistry $viewMatcherRegistry,
+        Repository $repository,
+        $relativeNamespace = null,
+        array $matchConfig = []
+    ) {
+        $this->viewMatcherRegistry = $viewMatcherRegistry;
+
+        parent::__construct($repository, $relativeNamespace, $matchConfig);
+    }
 
     /**
      * @param string $matcherIdentifier
@@ -25,8 +36,8 @@ class ServiceAwareMatcherFactory extends ClassNameMatcherFactory implements Cont
      */
     protected function getMatcher($matcherIdentifier)
     {
-        if ($this->container->has($matcherIdentifier)) {
-            return $this->container->get($matcherIdentifier);
+        if (strpos($matcherIdentifier, '@') === 0) {
+            return $this->viewMatcherRegistry->getMatcher(substr($matcherIdentifier, 1));
         }
 
         return parent::getMatcher($matcherIdentifier);
