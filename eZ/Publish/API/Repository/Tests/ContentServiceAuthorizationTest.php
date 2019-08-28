@@ -963,6 +963,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
                 ]
             )
         );
+        /* END: Use Case */
 
         return $this->userService->loadUser($user->id);
     }

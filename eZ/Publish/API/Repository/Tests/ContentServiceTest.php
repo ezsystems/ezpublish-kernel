@@ -29,6 +29,7 @@ use DOMDocument;
 use Exception;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException as CoreUnauthorizedException;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use InvalidArgumentException;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -519,7 +520,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param ContentInfo $contentInfo
      */
     public function testLoadContentInfoSetsExpectedContentInfo(ContentInfo $contentInfo)
     {
@@ -538,6 +539,7 @@ class ContentServiceTest extends BaseContentServiceTest
     public function testLoadContentInfoThrowsNotFoundException()
     {
         $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
+
 
         $this->expectException(NotFoundException::class);
 
@@ -598,7 +600,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
      * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param ContentInfo $contentInfo
      */
     public function testLoadContentInfoByRemoteIdSetsExpectedContentInfo(ContentInfo $contentInfo)
     {
@@ -686,7 +688,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param VersionInfo $versionInfo
      */
     public function testLoadVersionInfoByIdSetsExpectedVersionInfo(VersionInfo $versionInfo)
     {
@@ -2027,6 +2029,8 @@ XML
 
         $this->expectException(NotFoundException::class);
 
+        $this->expectException(NotFoundException::class);
+
         foreach ($locations as $location) {
             $this->locationService->loadLocation($location->id);
         }
@@ -2050,6 +2054,8 @@ XML
 
         // This will delete the content, all versions and the associated locations
         $this->contentService->deleteContent($contentVersion->contentInfo);
+
+        $this->expectException(NotFoundException::class);
 
         $this->expectException(NotFoundException::class);
 
@@ -2934,7 +2940,7 @@ XML
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersions
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo[] $versions
+     * @param VersionInfo[] $versions
      */
     public function testLoadVersionsSetsExpectedVersionInfo(array $versions)
     {
@@ -3445,7 +3451,6 @@ XML
             $demoDesign
         );
 
-        // Load all relations
         $relations = $this->contentService->loadRelations($mediaDraft->getVersionInfo());
 
         $this->assertCount(1, $relations);
@@ -3500,7 +3505,6 @@ XML
         $this->contentService->publishVersion($mediaDraft->getVersionInfo());
         $this->contentService->publishVersion($demoDesignDraft->getVersionInfo());
 
-        // Load all relations
         $relations = $this->contentService->loadRelations($versionInfo);
         $reverseRelations = $this->contentService->loadReverseRelations($contentInfo);
 
@@ -3655,7 +3659,6 @@ XML
         // We will not publish new Content draft, therefore relation from it
         // will not be loaded as reverse relation for "Media" page
 
-        // Load all relations
         $relations = $this->contentService->loadRelations($media->versionInfo);
         $reverseRelations = $this->contentService->loadReverseRelations($media->contentInfo);
 
@@ -5025,8 +5028,8 @@ XML
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws NotFoundException
+     * @throws UnauthorizedException
      */
     public function testDeleteTranslationFromDraftRemovesUrlAliasOnPublishing(array $fieldValues)
     {
@@ -5491,7 +5494,7 @@ XML
     /**
      * Asserts that given Content has default ContentStates.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param ContentInfo $contentInfo
      */
     private function assertDefaultContentStates(ContentInfo $contentInfo)
     {
@@ -5660,8 +5663,8 @@ XML
      * @covers \eZ\Publish\API\Repository\ContentService::revealContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws NotFoundException
+     * @throws UnauthorizedException
      */
     public function testRevealContent()
     {
@@ -5979,8 +5982,8 @@ XML
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] A list of Locations aimed to be parents
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws NotFoundException
+     * @throws UnauthorizedException
      */
     private function createParentLocationsForHideReveal(int $parentLocationId): array
     {
