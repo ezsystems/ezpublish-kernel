@@ -71,10 +71,16 @@ class RequestEventListener implements EventSubscriberInterface
                     $request->server->all(),
                     $request->getContent()
                 );
-                $forwardRequest->attributes->add($request->attributes->all());
-                if ($request->headers->has('X-User-Hash')) {
-                    $forwardRequest->headers->set('X-User-Hash', $request->headers->get('X-User-Hash'));
+
+                if ($request->attributes->has('forwardRequestHeaders')) {
+                    foreach ($request->attributes->get('forwardRequestHeaders') as $headerName => $headerValue) {
+                        $forwardRequest->headers->set($headerName, $headerValue);
+                    }
+                    $request->attributes->remove('forwardRequestHeaders');
                 }
+
+                $forwardRequest->attributes->add($request->attributes->all());
+
                 // Not forcing HttpKernelInterface::SUB_REQUEST on purpose since we're very early here
                 // and we need to bootstrap essential stuff like sessions.
                 $event->setResponse($event->getKernel()->handle($forwardRequest));
