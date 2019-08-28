@@ -174,8 +174,14 @@ class ContentServiceTest extends ServiceTest
                 ],
             ],
             [
-                'loadContentDrafts',
+                'countContentDrafts',
                 [$user],
+                10,
+                0,
+            ],
+            [
+                'loadContentDrafts',
+                [$user, 0, 25],
                 $usersDraft,
                 0,
             ],

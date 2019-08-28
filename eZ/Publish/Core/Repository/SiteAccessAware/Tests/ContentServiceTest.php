@@ -60,8 +60,13 @@ class ContentServiceTest extends AbstractServiceTest
             ['createContentDraft', [$contentInfo, $versionInfo]],
             ['createContentDraft', [$contentInfo, $versionInfo, $user]],
 
+            ['countContentDrafts', []],
+            ['countContentDrafts', [$user]],
+
             ['loadContentDrafts', []],
             ['loadContentDrafts', [$user]],
+            ['loadContentDrafts', [$user, 1]],
+            ['loadContentDrafts', [$user, 1, 25]],
 
             ['updateContent', [$versionInfo, $contentUpdateStruct]],
 
