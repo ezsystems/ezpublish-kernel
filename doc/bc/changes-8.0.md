@@ -8,15 +8,15 @@ Changes affecting version compatibility with former or future versions.
   while the latest Elasticsearch release is 7.0.
 
   The support for this search engine will be provided once again as a separate bundle.
-  
+
 * The following Field Types are not supported any more and have been removed:
-    * `ezprice` 
+    * `ezprice`
     * `ezpage` together with block rendering subsystem
 
 * The following configuration nodes are not available anymore:
     * `ezpublish.<scope>.ezpage.*`
     * `ezpublish.<scope>.block_view.*`
-        
+
 * REST Client has been dropped.
 
 * REST Server implementation and Common namespace have been removed in favor of
@@ -27,10 +27,10 @@ Changes affecting version compatibility with former or future versions.
 
 * Minimal PHP version has been raised to 7.3.
 
-* Deprecated method `getName` from the interface `eZ\Publish\SPI\FieldType\FieldType` has been changed. 
+* Deprecated method `getName` from the interface `eZ\Publish\SPI\FieldType\FieldType` has been changed.
   Now it accepts two additional parameters: `FieldDefinition $fieldDefinition` and `string $languageCode`
-  
-* Interface `eZ\Publish\SPI\FieldType\FieldType` has been transformed to abstract class.   
+
+* Interface `eZ\Publish\SPI\FieldType\FieldType` has been transformed to abstract class.
 
 * Interface `eZ\Publish\SPI\FieldType\Nameable` has been removed.
 
@@ -49,11 +49,11 @@ Changes affecting version compatibility with former or future versions.
       ```yaml
       ezrichtext:
       ```
-  * the namespace `\eZ\Publish\Core\FieldType\RichText` has been dropped (all classes are available
+  * the namespace `eZ\Publish\Core\FieldType\RichText` has been dropped (all classes are available
   in the mentioned package).
 
-  * Deprecated `eZ\Publish\SPI\FieldType\EventListener` interface, `eZ\Publish\SPI\FieldType\Event` class and  
-  `eZ\Publish\SPI\FieldType\Events` namespace has been dropped
+* Deprecated `eZ\Publish\SPI\FieldType\EventListener` interface, `eZ\Publish\SPI\FieldType\Event` class and
+  `eZ\Publish\SPI\FieldType\Events` namespace have been dropped.
 
 ## Deprecated features
 
