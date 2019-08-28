@@ -253,6 +253,11 @@ class DoctrineDatabase extends Gateway
             } else {
                 $nextWordId = 0;
             }
+
+            if ($wordId === null || $nextWordId === null) {
+                continue;
+            }
+
             $frequency = 0;
             $this->searchIndex->addObjectWordLink(
                 $wordId,
