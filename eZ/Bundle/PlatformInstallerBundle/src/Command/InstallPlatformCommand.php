@@ -18,10 +18,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
 
-class InstallPlatformCommand extends Command
+final class InstallPlatformCommand extends Command
 {
     /** @var \Doctrine\DBAL\Connection */
-    private $db;
+    private $connection;
 
     /** @var \Symfony\Component\Console\Output\OutputInterface */
     private $output;
@@ -41,12 +41,12 @@ class InstallPlatformCommand extends Command
     const EXIT_MISSING_PERMISSIONS = 7;
 
     public function __construct(
-        Connection $db,
+        Connection $connection,
         array $installers,
         CacheItemPoolInterface $cachePool,
-        $environment
+        string $environment
     ) {
-        $this->db = $db;
+        $this->connection = $connection;
         $this->installers = $installers;
         $this->cachePool = $cachePool;
         $this->environment = $environment;
@@ -114,7 +114,7 @@ class InstallPlatformCommand extends Command
         $output->writeln(
             sprintf(
                 'Creating the database <comment>%s</comment> if it does not exist, executing command doctrine:database:create --if-not-exists',
-                $this->db->getDatabase()
+                $this->connection->getDatabase()
             )
         );
         try {
@@ -125,7 +125,7 @@ class InstallPlatformCommand extends Command
             $this->output->writeln(
                 sprintf(
                     "<error>The configured database '%s' does not exist or cannot be created (%s).</error>",
-                    $this->db->getDatabase(),
+                    $this->connection->getDatabase(),
                     $exception->getMessage()
                 )
             );
