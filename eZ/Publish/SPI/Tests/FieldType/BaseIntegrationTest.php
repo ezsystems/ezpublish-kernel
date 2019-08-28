@@ -213,9 +213,9 @@ abstract class BaseIntegrationTest extends TestCase
     {
         if (!self::$setUp) {
             self::$container = $this->getContainer();
-            $this->handler = self::$container->get('ezpublish.api.storage_engine.legacy.dbhandler');
-            $this->db = $this->handler->getName();
             parent::setUp();
+            $this->handler = $this->getDatabaseHandler();
+            $this->db = $this->handler->getName();
             $this->insertDatabaseFixture(__DIR__ . '/../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
             self::$setUp = $this->handler;
         } else {
@@ -586,6 +586,7 @@ abstract class BaseIntegrationTest extends TestCase
         $loader->load('tests/common.yml');
         $loader->load('policies.yml');
         $loader->load('events.yml');
+        $loader->load('tests/integration_legacy.yml');
 
         $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 

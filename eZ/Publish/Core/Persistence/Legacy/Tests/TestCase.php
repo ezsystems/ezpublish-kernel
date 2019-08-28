@@ -8,8 +8,15 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
+use Doctrine\Common\EventManager as DoctrineEventManager;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ConnectionException;
+use Doctrine\DBAL\DBALException;
+use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory;
+use EzSystems\DoctrineSchema\Database\DbPlatform\SqliteDbPlatform;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use InvalidArgumentException;
 use ReflectionObject;
@@ -96,12 +103,18 @@ abstract class TestCase extends BaseTestCase
     /**
      * Get native Doctrine database connection.
      *
-     * @return \Doctrine\DBAL\Connection
+     * @throws \Doctrine\DBAL\DBALException
      */
-    final public function getDatabaseConnection()
+    final public function getDatabaseConnection(): Connection
     {
         if (!$this->connection) {
-            $this->connection = ConnectionHandler::createConnectionFromDSN($this->getDsn());
+            $eventManager = new DoctrineEventManager();
+            $connectionFactory = new DatabaseConnectionFactory(
+                [new SqliteDbPlatform()],
+                $eventManager
+            );
+
+            $this->connection = $connectionFactory->createConnection($this->getDsn());
         }
 
         return $this->connection;
@@ -114,21 +127,22 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         try {
-            $handler = $this->getDatabaseHandler();
-        } catch (PDOException $e) {
-            $this->markTestSkipped(
-                'PDO session could not be created: ' . $e->getMessage()
+            $schemaImporter = new LegacySchemaImporter($this->getDatabaseConnection());
+            $schemaImporter->importSchema(
+                dirname(__DIR__, 5) .
+                '/Bundle/EzPublishCoreBundle/Resources/config/storage/legacy/schema.yaml'
+            );
+
+            $this->resetSequences();
+        } catch (PDOException | DBALException | ConnectionException $e) {
+            self::fail(
+                sprintf(
+                    'PDO session could not be created: %s: %s',
+                    get_class($e),
+                    $e->getMessage()
+                )
             );
         }
-
-        $schema = __DIR__ . '/_fixtures/schema.' . $this->db . '.sql';
-
-        $queries = array_filter(preg_split('(;\\s*$)m', file_get_contents($schema)));
-        foreach ($queries as $query) {
-            $handler->exec($query);
-        }
-
-        $this->resetSequences();
     }
 
     protected function tearDown(): void
