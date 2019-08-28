@@ -1,4 +1,4 @@
-=======================
+﻿=======================
 eZ Platform REST API V2
 =======================
 
@@ -9,10 +9,10 @@ eZ Platform REST API V2
 General considerations
 ======================
 
-Specifying a siteaccess
+Specifying SiteAccess
 -----------
 
-In order to specify a siteaccess when talking to the REST API, a custom header, "X-Siteaccess", needs to be provided.
+In order to specify SiteAccess when talking to the REST API, a custom header, `X-Siteaccess`, needs to be provided.
 If it isn't, the default one will be used.
 
 
