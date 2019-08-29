@@ -297,14 +297,14 @@ class DoctrineDatabase extends Gateway
         $wordIDArray = [];
         $wordArray = [];
 
-        // store the words in the index and remember the ID
+        // Store the words in the index and remember the ID
         $this->dbHandler->beginTransaction();
         for ($arrayCount = 0; $arrayCount < $wordCount; $arrayCount += 500) {
             // Fetch already indexed words from database
-            $wordArrayChuck = array_slice($indexArrayOnlyWords, $arrayCount, 500);
-            $wordRes = $this->searchIndex->getWords($wordArrayChuck);
+            $wordArrayChunk = array_slice($indexArrayOnlyWords, $arrayCount, 500);
+            $wordRes = $this->searchIndex->getWords($wordArrayChunk);
 
-            // Build a has of the existing words
+            // Build a hash of the existing words
             $wordResCount = count($wordRes);
             $existingWordArray = [];
             for ($i = 0; $i < $wordResCount; ++$i) {
@@ -318,8 +318,8 @@ class DoctrineDatabase extends Gateway
                 $this->searchIndex->incrementWordObjectCount($wordIDArray);
             }
 
-            // Insert if there is any news words
-            $newWordArray = array_diff($wordArrayChuck, $existingWordArray);
+            // Insert if there are any new words
+            $newWordArray = array_diff($wordArrayChunk, $existingWordArray);
             if (count($newWordArray) > 0) {
                 $this->searchIndex->addWords($newWordArray);
                 $newWordRes = $this->searchIndex->getWords($newWordArray);
