@@ -329,6 +329,17 @@ class DoctrineDatabase extends Gateway
                     $wordArray[$wordLowercase] = $newWordRes[$i]['id'];
                 }
             }
+
+            // Check if any of the words in $wordArrayChunk are missing in $wordArray, which can happen due to
+            // collation/transformation issues. If so, we must deal with them one by one.
+            $missingWordArray = array_diff($wordArrayChunk, array_keys($wordArray));
+            foreach ($missingWordArray as $missingWord) {
+                $foundWordRes = $this->searchIndex->getWords([$missingWord]);
+                // We may get more than one match. It's hard to deal intelligently with that. Just use the first one.
+                if (count($foundWordRes) > 0) {
+                    $wordArray[$missingWord] = $foundWordRes[0]['id'];
+                }
+            }
         }
         $this->dbHandler->commit();
 
