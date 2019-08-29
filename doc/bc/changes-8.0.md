@@ -90,5 +90,7 @@ site:
             home:
                 template: "content.html.twig"
                 match:
-                    '@App\Matcher\MyMatcher': 2
+                    '@App\Matcher\MyMatcher': ~
 ```
+
+* Service based SiteAccess Matchers now require to be tagged with `ezplatform.siteaccess.matcher`.

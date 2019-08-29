@@ -9,26 +9,24 @@
 namespace eZ\Bundle\EzPublishCoreBundle\SiteAccess;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder as BaseMatcherBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use RuntimeException;
 
 /**
  * Siteaccess matcher builder based on services.
  */
-class MatcherBuilder extends BaseMatcherBuilder
+final class MatcherBuilder extends BaseMatcherBuilder
 {
-    /** @var \Symfony\Component\DependencyInjection\ContainerInterface */
-    protected $container;
+    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistry */
+    protected $siteAccessMatcherRegistry;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(SiteAccessMatcherRegistry $siteAccessMatcherRegistry)
     {
-        $this->container = $container;
+        $this->siteAccessMatcherRegistry = $siteAccessMatcherRegistry;
     }
 
     /**
      * Builds siteaccess matcher.
-     * If $matchingClass begins with "@", it will be considered as a service identifier and loaded with the service container.
+     * If $matchingClass begins with "@", it will be considered as a service identifier.
      *
      * @param $matchingClass
      * @param $matchingConfiguration
@@ -36,16 +34,12 @@ class MatcherBuilder extends BaseMatcherBuilder
      *
      * @return \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher
      *
-     * @throws \RuntimeException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function buildMatcher($matchingClass, $matchingConfiguration, SimplifiedRequest $request)
     {
-        if ($matchingClass[0] === '@') {
-            /** @var $matcher \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher */
-            $matcher = $this->container->get(substr($matchingClass, 1));
-            if (!$matcher instanceof Matcher) {
-                throw new RuntimeException('A service based siteaccess matcher MUST implement ' . __NAMESPACE__ . '\\Matcher interface.');
-            }
+        if (strpos($matchingClass, '@') === 0) {
+            $matcher = $this->siteAccessMatcherRegistry->getMatcher(substr($matchingClass, 1));
 
             $matcher->setMatchingConfiguration($matchingConfiguration);
             $matcher->setRequest($request);
