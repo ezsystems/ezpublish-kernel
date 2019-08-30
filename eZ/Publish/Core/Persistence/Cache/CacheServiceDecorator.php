@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
-use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionItem;
+use eZ\Publish\Core\Persistence\Cache\Adapter\Item\TransactionItem;
 use Stash\Interfaces\PoolInterface;
 use Tedivm\StashBundle\Service\CacheItem;
 
@@ -31,7 +31,7 @@ class CacheServiceDecorator implements TransactionAwareAdapterInterface
     protected $transactionDepth = 0;
 
     /** @var array */
-    protected $deferredClear = [];
+    protected $deferredClearKeys = [];
 
     /**
      * Constructs the cache service decorator.
@@ -102,9 +102,8 @@ class CacheServiceDecorator implements TransactionAwareAdapterInterface
     }
 
     /**
-     * @param Item[] $items
-     *
-     * @return Item[]
+     * @param \Stash\Interfaces\ItemInterface[] $items
+     * @return \Stash\Interfaces\ItemInterface[]
      */
     private function handleTransactionItems(array $items)
     {
@@ -116,11 +115,11 @@ class CacheServiceDecorator implements TransactionAwareAdapterInterface
         foreach ($items as $item) {
             /* @var TransactionItem $item */
             $item->setClearCallback(function ($key) {
-                $this->rawClear([$key]);
+                $this->clearOrDefer([$key]);
             });
             $item->setIsClearedCallback(function ($key) {
                 // Due to keys in Stash being hierarchical we need to check if key or prefix of key has been cleared
-                foreach ($this->deferredClear as $clearedKey) {
+                foreach ($this->deferredClearKeys as $clearedKey) {
                     if ($key === $clearedKey || stripos($key, $clearedKey) === 0) {
                         return true;
                     }
@@ -163,14 +162,14 @@ class CacheServiceDecorator implements TransactionAwareAdapterInterface
             $key = self::SPI_CACHE_KEY_PREFIX . '/' . implode('/', array_map([$this, 'washKey'], $key));
         }
 
-        return $this->rawClear([$key]);
+        return $this->clearOrDefer([$key]);
     }
 
-    private function rawClear(array $keys)
+    private function clearOrDefer(array $keys)
     {
         // Store for later if in transaction
-        if ($this->transactionDepth) {
-            $this->deferredClear = array_merge($this->deferredClear, $keys);
+        if ($this->transactionDepth > 0) {
+            $this->deferredClearKeys = array_merge($this->deferredClearKeys, $keys);
 
             return true;
         }
@@ -217,9 +216,9 @@ class CacheServiceDecorator implements TransactionAwareAdapterInterface
         // Cache commit time, it's now time to share the changes with the pool
         if ($this->transactionDepth === 0) {
             $this->cachePool->setItemClass(CacheItem::class);
-            if (!empty($this->deferredClear)) {
-                $this->executeClear($this->deferredClear);
-                $this->deferredClear = [];
+            if (!empty($this->deferredClearKeys)) {
+                $this->executeClear($this->deferredClearKeys);
+                $this->deferredClearKeys = [];
             }
         }
     }
@@ -232,6 +231,6 @@ class CacheServiceDecorator implements TransactionAwareAdapterInterface
         // A rollback in SQL will by default set transaction level to 0 & wipe transaction changes, so we do the same.
         $this->cachePool->setItemClass(CacheItem::class);
         $this->transactionDepth = 0;
-        $this->deferredClear = [];
+        $this->deferredClearKeys = [];
     }
 }
