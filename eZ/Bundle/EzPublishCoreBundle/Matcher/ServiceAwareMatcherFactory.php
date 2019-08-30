@@ -33,6 +33,8 @@ final class ServiceAwareMatcherFactory extends ClassNameMatcherFactory
      * @param string $matcherIdentifier
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     protected function getMatcher($matcherIdentifier)
     {

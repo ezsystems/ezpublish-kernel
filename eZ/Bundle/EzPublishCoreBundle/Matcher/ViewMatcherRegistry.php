@@ -8,22 +8,22 @@ declare(strict_types=1);
 namespace eZ\Bundle\EzPublishCoreBundle\Matcher;
 
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
 
 final class ViewMatcherRegistry
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[] */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface[] */
     private $matchers;
 
     /**
-     * @param \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[] $matchers
+     * @param \eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface[] $matchers
      */
     public function __construct(array $matchers = [])
     {
         $this->matchers = $matchers;
     }
 
-    public function setMatcher(string $matcherIdentifier, MatcherInterface $matcher): void
+    public function setMatcher(string $matcherIdentifier, ViewMatcherInterface $matcher): void
     {
         $this->matchers[$matcherIdentifier] = $matcher;
     }
@@ -31,11 +31,11 @@ final class ViewMatcherRegistry
     /**
      * @param string $matcherIdentifier
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface
+     * @return \eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function getMatcher(string $matcherIdentifier): MatcherInterface
+    public function getMatcher(string $matcherIdentifier): ViewMatcherInterface
     {
         if (!isset($this->matchers[$matcherIdentifier])) {
             throw new NotFoundException('Matcher', $matcherIdentifier);

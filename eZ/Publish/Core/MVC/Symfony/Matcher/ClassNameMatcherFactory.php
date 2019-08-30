@@ -33,7 +33,7 @@ class ClassNameMatcherFactory implements ConfigurableMatcherFactoryInterface
      */
     protected $matchConfig;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[] */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface[] */
     protected $matchers = [];
 
     /**
@@ -68,7 +68,7 @@ class ClassNameMatcherFactory implements ConfigurableMatcherFactoryInterface
      *
      * @throws InvalidArgumentException
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface|\eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface
+     * @return \eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface
      */
     protected function getMatcher($matcherIdentifier)
     {
