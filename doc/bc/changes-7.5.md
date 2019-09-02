@@ -25,3 +25,13 @@ Changes affecting version compatibility with former or future versions.
   Creating draft from existing Versions is no longer disallowed, even if a source Version does not
   contain any of the translations that are within the scope of the Language Limitations.
   This is due to the fact that when creating a Draft, an intent of translating is not known yet.
+
+## Deprecations
+
+* The `\EzSystems\PlatformInstallerBundle\Installer\CleanInstaller` class and its Service Container
+  definition (`ezplatform.installer.clean_installer`) have been deprecated in favor of
+  `EzSystems\PlatformInstallerBundle\Installer\CoreInstaller` which requires the
+  [Doctrine Schema Bundle](https://github.com/ezsystems/doctrine-dbal-schema) to be enabled.
+
+* The `ezplatform.installer.db_based_installer` Service Container definition has been deprecated in
+  favor of its FQCN-named equivalent `EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller`.
