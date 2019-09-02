@@ -12,7 +12,6 @@ use EzSystems\DoctrineSchema\API\Builder\SchemaBuilder;
 use EzSystems\PlatformInstallerBundle\Installer\CoreInstaller;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Enable installer which uses SchemaBuilder.
@@ -35,14 +34,20 @@ class SchemaBuilderInstallerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasAlias(SchemaBuilder::class)
-            || !$container->hasDefinition(self::CLEAN_INSTALLER_DEF_ID)
-        ) {
-            return;
+        if (!$container->hasAlias(SchemaBuilder::class)) {
+            $container->removeDefinition(CoreInstaller::class);
+            @trigger_error(
+                sprintf(
+                    'Using eZ Platform Installer Bundle without enabling Doctrine Schema Bundle (%s) ' .
+                    'is deprecated since v2.5 LTS and will cause a fatal error in eZ Platform v3.0',
+                    'https://github.com/ezsystems/doctrine-dbal-schema'
+                ),
+                E_USER_DEPRECATED
+            );
+        } elseif ($container->hasDefinition(self::CLEAN_INSTALLER_DEF_ID)) {
+            // remove the actual definition first for alias to work properly
+            $container->removeDefinition(self::CLEAN_INSTALLER_DEF_ID);
+            $container->setAlias(self::CLEAN_INSTALLER_DEF_ID, CoreInstaller::class);
         }
-
-        $cleanInstallerDefinition = $container->getDefinition(self::CLEAN_INSTALLER_DEF_ID);
-        $cleanInstallerDefinition->setClass(CoreInstaller::class);
-        $cleanInstallerDefinition->addArgument(new Reference(SchemaBuilder::class));
     }
 }
