@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -361,16 +362,22 @@ class ContentService implements ContentServiceInterface
      * If no user is given the drafts for the authenticated user a returned
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param int $offset
-     * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
      */
-    public function loadContentDrafts(User $user = null, int $offset = 0, int $limit = -1)
+    public function loadContentDrafts(User $user = null)
     {
-        return $this->service->loadContentDrafts($user, $offset, $limit);
+        return $this->service->loadContentDrafts($user);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadContentDraftList(?User $user = null, int $offset = 0, int $limit = -1): ContentDraftList
+    {
+        return $this->service->loadContentDraftList($user, $offset, $limit);
     }
 
     /**

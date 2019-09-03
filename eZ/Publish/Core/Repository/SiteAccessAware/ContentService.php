@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -137,9 +138,14 @@ class ContentService implements ContentServiceInterface
         return $this->service->countContentDrafts($user);
     }
 
-    public function loadContentDrafts(User $user = null, int $offset = 0, int $limit = -1)
+    public function loadContentDrafts(User $user = null)
     {
-        return $this->service->loadContentDrafts($user, $offset, $limit);
+        return $this->service->loadContentDrafts($user);
+    }
+
+    public function loadContentDraftList(?User $user = null, int $offset = 0, int $limit = -1): ContentDraftList
+    {
+        return $this->service->loadContentDraftList($user, $offset, $limit);
     }
 
     public function updateContent(VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct)

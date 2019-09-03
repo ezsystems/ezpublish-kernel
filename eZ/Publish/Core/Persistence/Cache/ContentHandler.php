@@ -235,11 +235,21 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     /**
      * {@inheritdoc}
      */
-    public function loadDraftsForUser($userId, int $offset = 0, int $limit = -1)
+    public function loadDraftsForUser($userId)
+    {
+        $this->logger->logCall(__METHOD__, ['user' => $userId]);
+
+        return $this->persistenceHandler->contentHandler()->loadDraftsForUser($userId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadDraftListForUser($userId, int $offset = 0, int $limit = -1): array
     {
         $this->logger->logCall(__METHOD__, ['user' => $userId, 'offset' => $offset, 'limit' => $limit]);
 
-        return $this->persistenceHandler->contentHandler()->loadDraftsForUser($userId, $offset, $limit);
+        return $this->persistenceHandler->contentHandler()->loadDraftListForUser($userId, $offset, $limit);
     }
 
     /**

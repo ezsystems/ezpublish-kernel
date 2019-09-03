@@ -391,9 +391,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->countVersionsForUser($userId, $status);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -413,6 +411,18 @@ class ExceptionConversion extends Gateway
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1): array
+    {
+        try {
+            return $this->innerGateway->loadVersionsForUser($userId, $status, $offset, $limit);
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }

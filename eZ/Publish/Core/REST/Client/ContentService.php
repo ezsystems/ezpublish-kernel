@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\ContentService as APIContentService;
+use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
@@ -468,13 +469,19 @@ class ContentService implements APIContentService, Sessionable
      * If no user is given the drafts for the authenticated user a returned
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param int $offset
-     * @param int $limit
      *
      *
      * @throws \Exception
      */
-    public function loadContentDrafts(User $user = null, int $offset = 0, int $limit = -1)
+    public function loadContentDrafts(User $user = null)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadContentDraftList(?User $user = null, int $offset = 0, int $limit = -1): ContentDraftList
     {
         throw new \Exception('@todo: Implement.');
     }

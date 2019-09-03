@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\ContentService as APIContentService;
+use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -64,6 +65,7 @@ class ContentServiceTest extends ServiceTest
 
         $user = $this->getUser($userId, md5('Sauron'), $userVersionNo);
         $usersDraft = [$versionInfo];
+        $usersDraftList = new ContentDraftList();
 
         $copiedContent = $this->getContent(
             $this->getVersionInfo(
@@ -181,8 +183,14 @@ class ContentServiceTest extends ServiceTest
             ],
             [
                 'loadContentDrafts',
-                [$user, 0, 25],
+                [$user],
                 $usersDraft,
+                0,
+            ],
+            [
+                'loadContentDraftList',
+                [$user, 0, 25],
+                $usersDraftList,
                 0,
             ],
             [

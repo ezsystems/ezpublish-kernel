@@ -148,7 +148,18 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function loadDraftsForUser($userId, int $offset = 0, int $limit = -1);
+    public function loadDraftsForUser($userId);
+
+    /**
+     * Loads drafts for a user when content is not in the trash. The list is sorted by modification date.
+     *
+     * @param int $userId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
+     */
+    public function loadDraftListForUser($userId, int $offset = 0, int $limit = -1): array;
 
     /**
      * Sets the status of object identified by $contentId and $version to $status.

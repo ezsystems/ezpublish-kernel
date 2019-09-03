@@ -1089,7 +1089,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Returns the number of all versions with given status created by the given $userId.
+     * Returns the number of all versions with given status created by the given $userId for content which is not in Trash.
      *
      * @param int $userId
      * @param int $status
@@ -1099,13 +1099,23 @@ class DoctrineDatabase extends Gateway
     public function countVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): int
     {
         $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
         $query
-            ->select('COUNT(id)')
-            ->from('ezcontentobject_version')
+            ->select('COUNT(v.id)')
+            ->from('ezcontentobject_version', 'v')
+            ->innerJoin(
+                'v',
+                'ezcontentobject',
+                'c',
+                $expr->andX(
+                    $expr->eq('c.id', 'v.contentobject_id'),
+                    $expr->neq('c.status', ContentInfo::STATUS_TRASHED)
+                )
+            )
             ->where(
                 $query->expr()->andX(
-                    $query->expr()->eq('status', ':status'),
-                    $query->expr()->eq('creator_id', ':user_id')
+                    $query->expr()->eq('v.status', ':status'),
+                    $query->expr()->eq('v.creator_id', ':user_id')
                 )
             )
             ->setParameter(':status', $status, \PDO::PARAM_INT)
@@ -1122,7 +1132,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return string[][]
      */
-    public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1)
+    public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT)
     {
         $query = $this->queryBuilder->createVersionInfoFindQuery();
         $query->where(
@@ -1138,11 +1148,35 @@ class DoctrineDatabase extends Gateway
             )
         );
 
+        return $this->listVersionsHelper($query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1): array
+    {
+        $query = $this->createVersionInfoFindQueryBuilder();
+        $expr = $query->expr();
+        $query->where(
+            $expr->andX(
+                $expr->eq('v.status', ':status'),
+                $expr->eq('v.creator_id', ':user_id'),
+                $expr->neq('c.status', ContentInfo::STATUS_TRASHED)
+            )
+        )
+        ->setFirstResult($offset)
+        ->setParameter(':status', $status, \PDO::PARAM_INT)
+        ->setParameter(':user_id', $userId, \PDO::PARAM_INT);
+
         if ($limit > 0) {
-            $query->limit($limit, $offset);
+            $query->setMaxResults($limit);
         }
 
-        return $this->listVersionsHelper($query);
+        $query->orderBy('v.modified', 'DESC');
+        $query->addOrderBy('v.id', 'DESC');
+
+        return $this->loadVersionsHelper($query);
     }
 
     /**
@@ -2311,5 +2345,90 @@ class DoctrineDatabase extends Gateway
                 'Specified translation is the only one Content Object Version has'
             );
         }
+    }
+
+    /**
+     * Helper for {@see listVersions()} and {@see listVersionsForUser()} that filters duplicates
+     * that are the result of the cartesian product performed by createVersionInfoFindQuery().
+     *
+     * @return string[][]
+     */
+    private function loadVersionsHelper(DoctrineQueryBuilder $query)
+    {
+        $results = [];
+        $previousId = null;
+        foreach ($query->execute()->fetchAll(FetchMode::ASSOCIATIVE) as $row) {
+            if ($row['ezcontentobject_version_id'] == $previousId) {
+                continue;
+            }
+
+            $previousId = $row['ezcontentobject_version_id'];
+            $results[] = $row;
+        }
+
+        return $results;
+    }
+
+    /**
+     * Get query builder for content version objects, used for version loading w/o fields.
+     *
+     * Creates a select query with all necessary joins to fetch a complete
+     * content object. Does not apply any WHERE conditions, and does not contain
+     * name data as it will lead to large result set {@see createNamesQuery}.
+     *
+     * @return DoctrineQueryBuilder
+     */
+    private function createVersionInfoFindQueryBuilder()
+    {
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+
+        $query
+            ->select(
+                'v.id AS ezcontentobject_version_id',
+                'v.version AS ezcontentobject_version_version',
+                'v.modified AS ezcontentobject_version_modified',
+                'v.creator_id AS ezcontentobject_version_creator_id',
+                'v.created AS ezcontentobject_version_created',
+                'v.status AS ezcontentobject_version_status',
+                'v.contentobject_id AS ezcontentobject_version_contentobject_id',
+                'v.initial_language_id AS ezcontentobject_version_initial_language_id',
+                'v.language_mask AS ezcontentobject_version_language_mask',
+                // Content main location
+                't.main_node_id AS ezcontentobject_tree_main_node_id',
+                // Content object
+                // @todo: remove ezcontentobject.d from query as it duplicates ezcontentobject_version.contentobject_id
+                'c.id AS ezcontentobject_id',
+                'c.contentclass_id AS ezcontentobject_contentclass_id',
+                'c.section_id AS ezcontentobject_section_id',
+                'c.owner_id AS ezcontentobject_owner_id',
+                'c.remote_id AS ezcontentobject_remote_id',
+                'c.current_version AS ezcontentobject_current_version',
+                'c.initial_language_id AS ezcontentobject_initial_language_id',
+                'c.modified AS ezcontentobject_modified',
+                'c.published AS ezcontentobject_published',
+                'c.status AS ezcontentobject_status',
+                'c.name AS ezcontentobject_name',
+                'c.language_mask AS ezcontentobject_language_mask',
+                'c.is_hidden AS ezcontentobject_is_hidden'
+            )
+            ->from('ezcontentobject_version', 'v')
+            ->innerJoin(
+                'v',
+                'ezcontentobject',
+                'c',
+                $expr->eq('c.id', 'v.contentobject_id')
+            )
+            ->leftJoin(
+                'v',
+                'ezcontentobject_tree',
+                't',
+                $expr->andX(
+                    $expr->eq('t.contentobject_id', 'v.contentobject_id'),
+                    $expr->eq('t.main_node_id', 't.node_id')
+                )
+            );
+
+        return $query;
     }
 }

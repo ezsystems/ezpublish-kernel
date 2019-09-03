@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -265,12 +266,23 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to load the draft list
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
-     * @param int $limit
-     * @param int $offset
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
      */
-    public function loadContentDrafts(User $user = null, int $offset = 0, int $limit = -1);
+    public function loadContentDrafts(User $user = null);
+
+    /**
+     * Loads drafts for a user when content is not in the trash. The list is sorted by modification date.
+     *
+     * If no user is given the drafts for the authenticated user a returned
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentDraftList
+     */
+    public function loadContentDraftList(?User $user = null, int $offset = 0, int $limit = -1): ContentDraftList;
 
     /**
      * Updates the fields of a draft.

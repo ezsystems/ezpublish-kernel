@@ -243,7 +243,19 @@ abstract class Gateway
      *
      * @return string[][]
      */
-    abstract public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1);
+    abstract public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT);
+
+    /**
+     * Returns data for all versions with given status created by the given $userId when content is not in the trash.
+     *
+     * The list is sorted by modification date.
+     *
+     * @param int $userId
+     * @param int $status
+     *
+     * @return string[][]
+     */
+    abstract public function loadVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1): array;
 
     /**
      * Returns all version data for the given $contentId.

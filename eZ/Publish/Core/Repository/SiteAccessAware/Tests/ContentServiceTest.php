@@ -3,6 +3,7 @@
 namespace eZ\Publish\Core\Repository\SiteAccessAware\Tests;
 
 use eZ\Publish\API\Repository\ContentService as APIService;
+use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -65,8 +66,11 @@ class ContentServiceTest extends AbstractServiceTest
 
             ['loadContentDrafts', []],
             ['loadContentDrafts', [$user]],
-            ['loadContentDrafts', [$user, 1]],
-            ['loadContentDrafts', [$user, 1, 25]],
+
+            ['loadContentDraftList', [], new ContentDraftList()],
+            ['loadContentDraftList', [$user], new ContentDraftList()],
+            ['loadContentDraftList', [$user, 1], new ContentDraftList()],
+            ['loadContentDraftList', [$user, 1, 25], new ContentDraftList()],
 
             ['updateContent', [$versionInfo, $contentUpdateStruct]],
 

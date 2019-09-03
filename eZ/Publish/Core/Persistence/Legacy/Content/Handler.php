@@ -487,9 +487,33 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function loadDraftsForUser($userId, int $offset = 0, int $limit = -1)
+    public function loadDraftsForUser($userId)
     {
-        $rows = $this->contentGateway->listVersionsForUser($userId, VersionInfo::STATUS_DRAFT, $offset, $limit);
+        $rows = $this->contentGateway->listVersionsForUser($userId, VersionInfo::STATUS_DRAFT);
+        if (empty($rows)) {
+            return [];
+        }
+
+        $idVersionPairs = array_map(
+            function ($row) {
+                return [
+                    'id' => $row['ezcontentobject_version_contentobject_id'],
+                    'version' => $row['ezcontentobject_version_version'],
+                ];
+            },
+            $rows
+        );
+        $nameRows = $this->contentGateway->loadVersionedNameData($idVersionPairs);
+
+        return $this->mapper->extractVersionInfoListFromRows($rows, $nameRows);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadDraftListForUser($userId, int $offset = 0, int $limit = -1): array
+    {
+        $rows = $this->contentGateway->loadVersionsForUser($userId, VersionInfo::STATUS_DRAFT, $offset, $limit);
         if (empty($rows)) {
             return [];
         }

@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\UnauthorizedContentDraftListItem;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -27,6 +28,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use DOMDocument;
 use Exception;
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException as CoreUnauthorizedException;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use InvalidArgumentException;
@@ -2212,42 +2214,74 @@ XML
     }
 
     /**
-     * Test for the loadContentDrafts() method.
+     * Test for the loadContentDraftList() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
      */
-    public function testLoadContentDraftsWithPaginationParameters()
+    public function testLoadContentDraftListWithPaginationParameters()
     {
         // Create some drafts
         $publishedContent = $this->createContentVersion1();
         $draftContentA = $this->contentService->createContentDraft($publishedContent->contentInfo);
-        $draftContentB = $this->contentService->createContentDraft($publishedContent->contentInfo);
-        $draftContentC = $this->contentService->createContentDraft($publishedContent->contentInfo);
-        $draftContentD = $this->contentService->createContentDraft($publishedContent->contentInfo);
-        $draftContentE = $this->contentService->createContentDraft($publishedContent->contentInfo);
+        $draftContentB = $this->contentService->createContentDraft($draftContentA->contentInfo);
+        $draftContentC = $this->contentService->createContentDraft($draftContentB->contentInfo);
+        $draftContentD = $this->contentService->createContentDraft($draftContentC->contentInfo);
+        $draftContentE = $this->contentService->createContentDraft($draftContentD->contentInfo);
 
-        $draftsOnPage1 = $this->contentService->loadContentDrafts(null, 1, 2);
-        $draftsOnPage2 = $this->contentService->loadContentDrafts(null, 2, 2);
+        $draftsOnPage1 = $this->contentService->loadContentDraftList(null, 0, 2);
+        $draftsOnPage2 = $this->contentService->loadContentDraftList(null, 2, 2);
         /* END: Use Case */
-
-        $this->assertEquals(
-            [
-                $draftContentA->contentInfo->remoteId,
-                $draftContentB->contentInfo->remoteId,
-                $draftContentC->contentInfo->remoteId,
-                $draftContentD->contentInfo->remoteId,
-            ],
-            [
-                $draftsOnPage1[0]->getContentInfo()->remoteId,
-                $draftsOnPage1[1]->getContentInfo()->remoteId,
-                $draftsOnPage2[0]->getContentInfo()->remoteId,
-                $draftsOnPage2[1]->getContentInfo()->remoteId,
-            ]
-        );
+        $this->assertSame(5, $draftsOnPage1->totalCount);
+        $this->assertSame(5, $draftsOnPage2->totalCount);
+        $this->assertEquals($draftContentE->getVersionInfo(), $draftsOnPage1->items[0]->getVersionInfo());
+        $this->assertEquals($draftContentD->getVersionInfo(), $draftsOnPage1->items[1]->getVersionInfo());
+        $this->assertEquals($draftContentC->getVersionInfo(), $draftsOnPage2->items[0]->getVersionInfo());
+        $this->assertEquals($draftContentB->getVersionInfo(), $draftsOnPage2->items[1]->getVersionInfo());
     }
 
     /**
-     * Test for the loadContentDrafts() method.
+     * Test for the loadContentDraftList() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts($user)
+     */
+    public function testLoadContentDraftListWithForUserWithLimitation()
+    {
+        /* BEGIN: Use Case */
+        $oldUser = $this->permissionResolver->getCurrentUserReference();
+
+        $parentContent = $this->createFolder(['eng-US' => 'parentFolder'], 2);
+        $content = $this->createFolder(['eng-US' => 'parentFolder'], $parentContent->contentInfo->mainLocationId);
+
+        // User has limitation to read versions only for `$content`, not for `$parentContent`
+        $newUser = $this->createUserWithVersionreadLimitations([$content->contentInfo->mainLocationId]);
+
+        $this->permissionResolver->setCurrentUserReference($newUser);
+
+        $contentDraftUnauthorized = $this->contentService->createContentDraft($parentContent->contentInfo);
+        $contentDraftA = $this->contentService->createContentDraft($content->contentInfo);
+        $contentDraftB = $this->contentService->createContentDraft($content->contentInfo);
+        /* END: Use Case */
+
+        $newUserDraftList = $this->contentService->loadContentDraftList($newUser, 0);
+        $this->assertSame(3, $newUserDraftList->totalCount);
+        $this->assertEquals($contentDraftB->getVersionInfo(), $newUserDraftList->items[0]->getVersionInfo());
+        $this->assertEquals($contentDraftA->getVersionInfo(), $newUserDraftList->items[1]->getVersionInfo());
+        $this->assertEquals(
+            new UnauthorizedContentDraftListItem('content', 'versionread', ['contentId' => $contentDraftUnauthorized->id]),
+            $newUserDraftList->items[2]
+        );
+
+        // Reset to previous user
+        $this->permissionResolver->setCurrentUserReference($oldUser);
+
+        $oldUserDraftList = $this->contentService->loadContentDraftList();
+
+        $this->assertSame(0, $oldUserDraftList->totalCount);
+        $this->assertSame([], $oldUserDraftList->items);
+    }
+
+    /**
+     * Test for the loadContentDraftList() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
      */
@@ -2257,7 +2291,7 @@ XML
         $this->createContentDrafts(12);
         /* END: Use Case */
 
-        $this->assertCount(12, $this->contentService->loadContentDrafts());
+        $this->assertCount(12, $this->contentService->loadContentDraftList());
     }
 
     /**
@@ -6075,5 +6109,31 @@ XML
             $this->contentService->createContentDraft($publishedContent->contentInfo);
             ++$i;
         }
+    }
+
+    /**
+     * @param array $limitationValues
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function createUserWithVersionreadLimitations(array $limitationValues = [2]): User
+    {
+        $limitations = [
+            new LocationLimitation(['limitationValues' => $limitationValues]),
+        ];
+
+        return $this->createUserWithPolicies(
+            'user',
+            [
+                ['module' => 'content', 'function' => 'versionread', 'limitations' => $limitations],
+                ['module' => 'content', 'function' => 'create'],
+                ['module' => 'content', 'function' => 'read'],
+                ['module' => 'content', 'function' => 'edit'],
+            ]
+        );
     }
 }
