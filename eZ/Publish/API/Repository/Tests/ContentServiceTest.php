@@ -38,6 +38,25 @@ use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
  */
 class ContentServiceTest extends BaseContentServiceTest
 {
+    private const ADMINISTRATORS_USER_GROUP_NAME = 'Administrators';
+    private const ADMINISTRATORS_USER_GROUP_ID = 12;
+    private const ADMINISTRATORS_USER_GROUP_LOCATION_ID = 13;
+
+    private const WRITERS_USER_GROUP_NAME = 'Writers';
+
+    private const MEMBERS_USER_GROUP_ID = 11;
+
+    private const MEDIA_CONTENT_ID = 41;
+
+    private const MEDIA_REMOTE_ID = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
+    private const DEMO_DESIGN_REMOTE_ID = '8b8b22fe3c6061ed500fbd2b377b885f';
+
+    private const FORUM_IDENTIFIER = 'forum';
+
+    private const ENG_US = 'eng-US';
+    private const GER_DE = 'ger-DE';
+    private const ENG_GB = 'eng-GB';
+
     /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
@@ -67,12 +86,10 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testNewContentCreateStruct()
     {
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
-        $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
-        /* END: Use Case */
+        $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
 
         $this->assertInstanceOf(ContentCreateStruct::class, $contentCreate);
     }
@@ -93,19 +110,17 @@ class ContentServiceTest extends BaseContentServiceTest
             $this->markTestSkipped('This test requires eZ Publish 5');
         }
 
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
-        $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         $contentCreate->setField('name', 'My awesome forum');
 
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         $content = $this->contentService->createContent($contentCreate);
-        /* END: Use Case */
 
         $this->assertInstanceOf(Content::class, $content);
 
@@ -159,7 +174,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Create a new content object:
         $contentCreate = $this->contentService->newContentCreateStruct(
             $contentTypeService->loadContentTypeByIdentifier('folder'),
-            'eng-GB'
+            self::ENG_GB
         );
 
         $contentCreate->setField('name', 'Folder 1');
@@ -208,7 +223,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 true,
                 1,
                 'abcdef0123456789abcdef0123456789',
-                'eng-US',
+                self::ENG_US,
                 $this->getRepository()->getCurrentUser()->id,
                 false,
                 null,
@@ -262,7 +277,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 'status' => VersionInfo::STATUS_DRAFT,
                 'versionNo' => 1,
                 'creatorId' => $this->getRepository()->getCurrentUser()->id,
-                'initialLanguageCode' => 'eng-US',
+                'initialLanguageCode' => self::ENG_US,
             ],
             [
                 'status' => $content->getVersionInfo()->status,
@@ -317,12 +332,11 @@ class ContentServiceTest extends BaseContentServiceTest
             $this->markTestSkipped('This test requires eZ Publish 5');
         }
 
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
-        $contentCreate1 = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate1 = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         $contentCreate1->setField('name', 'An awesome Sidelfingen forum');
 
         $contentCreate1->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -331,7 +345,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $draft = $this->contentService->createContent($contentCreate1);
         $this->contentService->publishVersion($draft->versionInfo);
 
-        $contentCreate2 = $this->contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $contentCreate2 = $this->contentService->newContentCreateStruct($contentType, self::ENG_GB);
         $contentCreate2->setField('name', 'An awesome Bielefeld forum');
 
         $contentCreate2->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -339,7 +353,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->expectException(APIInvalidArgumentException::class);
         $this->contentService->createContent($contentCreate2);
-        /* END: Use Case */
     }
 
     /**
@@ -350,18 +363,16 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentThrowsInvalidArgumentExceptionOnFieldTypeNotAccept()
     {
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
-        $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         // The name field does only accept strings and null as its values
         $contentCreate->setField('name', new \stdClass());
 
         $this->expectException(APIInvalidArgumentException::class);
-        $draft = $this->contentService->createContent($contentCreate);
-        /* END: Use Case */
+        $this->contentService->createContent($contentCreate);
     }
 
     /**
@@ -372,12 +383,11 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
-        $contentCreate1 = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate1 = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         $contentCreate1->setField('name', 'An awesome Sidelfingen folder');
         // Violates string length constraint
         $contentCreate1->setField('short_name', str_repeat('a', 200));
@@ -385,8 +395,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->expectException(ContentFieldValidationException::class);
 
         // Throws ContentFieldValidationException, since short_name does not pass validation of the string length validator
-        $draft = $this->contentService->createContent($contentCreate1);
-        /* END: Use Case */
+        $this->contentService->createContent($contentCreate1);
     }
 
     /**
@@ -397,18 +406,16 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentRequiredFieldMissing()
     {
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
-        $contentCreate1 = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate1 = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         // Required field "name" is not set
 
         $this->expectException(ContentFieldValidationException::class);
 
         // Throws a ContentFieldValidationException, since a required field is missing
-        $draft = $this->contentService->createContent($contentCreate1);
-        /* END: Use Case */
+        $this->contentService->createContent($contentCreate1);
     }
 
     /**
@@ -426,14 +433,12 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately()
     {
-        /* BEGIN: Use Case */
         $this->createContentDraftVersion1();
 
         $this->expectException(NotFoundException::class);
 
         // The location will not have been created, yet, so this throws an exception
         $this->locationService->loadLocationByRemoteId('0123456789abcdef0123456789abcdef');
-        /* END: Use Case */
     }
 
     /**
@@ -445,12 +450,11 @@ class ContentServiceTest extends BaseContentServiceTest
     public function testCreateContentThrowsInvalidArgumentExceptionWithLocationCreateParameter()
     {
         $parentLocationId = $this->generateId('location', 56);
-        /* BEGIN: Use Case */
         // $parentLocationId is a valid location ID
 
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
         // Configure new locations
         $locationCreate1 = $this->locationService->newLocationCreateStruct($parentLocationId);
@@ -470,7 +474,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $locationCreate2->sortOrder = Location::SORT_ORDER_DESC;
 
         // Configure new content object
-        $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
 
         $contentCreate->setField('name', 'A awesome Sindelfingen forum');
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -489,7 +493,6 @@ class ContentServiceTest extends BaseContentServiceTest
             $contentCreate,
             [$locationCreate2]
         );
-        /* END: Use Case */
     }
 
     /**
@@ -500,12 +503,10 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadContentInfo()
     {
-        $mediaFolderId = $this->generateId('object', 41);
-        /* BEGIN: Use Case */
+        $mediaFolderId = $this->generateId('object', self::MEDIA_CONTENT_ID);
 
         // Load the ContentInfo for "Media" folder
         $contentInfo = $this->contentService->loadContentInfo($mediaFolderId);
-        /* END: Use Case */
 
         $this->assertInstanceOf(ContentInfo::class, $contentInfo);
 
@@ -518,7 +519,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
      *
-     * @param ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
     public function testLoadContentInfoSetsExpectedContentInfo(ContentInfo $contentInfo)
     {
@@ -537,13 +538,11 @@ class ContentServiceTest extends BaseContentServiceTest
     public function testLoadContentInfoThrowsNotFoundException()
     {
         $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
-        /* BEGIN: Use Case */
 
         $this->expectException(NotFoundException::class);
 
         // This call will fail with a NotFoundException
         $this->contentService->loadContentInfo($nonExistentContentId);
-        /* END: Use Case */
     }
 
     /**
@@ -553,7 +552,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadContentInfoList()
     {
-        $mediaFolderId = $this->generateId('object', 41);
+        $mediaFolderId = $this->generateId('object', self::MEDIA_CONTENT_ID);
         $list = $this->contentService->loadContentInfoList([$mediaFolderId]);
 
         $this->assertCount(1, $list);
@@ -585,10 +584,8 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadContentInfoByRemoteId()
     {
-        /* BEGIN: Use Case */
         // Load the ContentInfo for "Media" folder
         $contentInfo = $this->contentService->loadContentInfoByRemoteId('faaeb9be3bd98ed09f606fc16d144eca');
-        /* END: Use Case */
 
         $this->assertInstanceOf(ContentInfo::class, $contentInfo);
 
@@ -601,7 +598,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
      * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId
      *
-     * @param ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
     public function testLoadContentInfoByRemoteIdSetsExpectedContentInfo(ContentInfo $contentInfo)
     {
@@ -618,7 +615,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 'publishedDate' => $this->createDateTime(1033920665),
                 'alwaysAvailable' => 1,
                 'remoteId' => 'faaeb9be3bd98ed09f606fc16d144eca',
-                'mainLanguageCode' => 'eng-US',
+                'mainLanguageCode' => self::ENG_US,
                 'mainLocationId' => 45,
             ],
             $contentInfo
@@ -633,11 +630,9 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadContentInfoByRemoteIdThrowsNotFoundException()
     {
-        /* BEGIN: Use Case */
         $this->expectException(NotFoundException::class);
 
         $this->contentService->loadContentInfoByRemoteId('abcdefghijklmnopqrstuvwxyz0123456789');
-        /* END: Use Case */
     }
 
     /**
@@ -649,8 +644,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfo()
     {
-        $mediaFolderId = $this->generateId('object', 41);
-        /* BEGIN: Use Case */
+        $mediaFolderId = $this->generateId('object', self::MEDIA_CONTENT_ID);
         // $mediaFolderId contains the ID of the "Media" folder
 
         // Load the ContentInfo for "Media" folder
@@ -658,7 +652,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Now load the current version info of the "Media" folder
         $versionInfo = $this->contentService->loadVersionInfo($contentInfo);
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             VersionInfo::class,
@@ -673,13 +666,11 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfoById()
     {
-        $mediaFolderId = $this->generateId('object', 41);
-        /* BEGIN: Use Case */
+        $mediaFolderId = $this->generateId('object', self::MEDIA_CONTENT_ID);
         // $mediaFolderId contains the ID of the "Media" folder
 
         // Load the VersionInfo for "Media" folder
         $versionInfo = $this->contentService->loadVersionInfoById($mediaFolderId);
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             VersionInfo::class,
@@ -695,14 +686,14 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
-     * @param VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      */
     public function testLoadVersionInfoByIdSetsExpectedVersionInfo(VersionInfo $versionInfo)
     {
         $this->assertPropertiesCorrect(
             [
                 'names' => [
-                    'eng-US' => 'Media',
+                    self::ENG_US => 'Media',
                 ],
                 'contentInfo' => new ContentInfo($this->getExpectedMediaContentInfoProperties()),
                 'id' => 472,
@@ -711,9 +702,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 'creatorId' => 14,
                 'creationDate' => $this->createDateTime(1060695450),
                 'status' => VersionInfo::STATUS_PUBLISHED,
-                'initialLanguageCode' => 'eng-US',
+                'initialLanguageCode' => self::ENG_US,
                 'languageCodes' => [
-                    'eng-US',
+                    self::ENG_US,
                 ],
             ],
             $versionInfo
@@ -732,12 +723,10 @@ class ContentServiceTest extends BaseContentServiceTest
     public function testLoadVersionInfoByIdThrowsNotFoundException()
     {
         $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
-        /* BEGIN: Use Case */
 
         $this->expectException(NotFoundException::class);
 
         $this->contentService->loadVersionInfoById($nonExistentContentId);
-        /* END: Use Case */
     }
 
     /**
@@ -748,8 +737,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadContentByContentInfo()
     {
-        $mediaFolderId = $this->generateId('object', 41);
-        /* BEGIN: Use Case */
+        $mediaFolderId = $this->generateId('object', self::MEDIA_CONTENT_ID);
         // $mediaFolderId contains the ID of the "Media" folder
 
         // Load the ContentInfo for "Media" folder
@@ -757,7 +745,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Now load the current content version for the info instance
         $content = $this->contentService->loadContentByContentInfo($contentInfo);
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Content::class,
@@ -773,8 +760,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadContentByVersionInfo()
     {
-        $mediaFolderId = $this->generateId('object', 41);
-        /* BEGIN: Use Case */
+        $mediaFolderId = $this->generateId('object', self::MEDIA_CONTENT_ID);
         // $mediaFolderId contains the ID of the "Media" folder
 
         // Load the ContentInfo for "Media" folder
@@ -785,7 +771,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Now load the current content version for the info instance
         $content = $this->contentService->loadContentByVersionInfo($versionInfo);
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Content::class,
@@ -802,13 +787,11 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadContent()
     {
-        $mediaFolderId = $this->generateId('object', 41);
-        /* BEGIN: Use Case */
+        $mediaFolderId = $this->generateId('object', self::MEDIA_CONTENT_ID);
         // $mediaFolderId contains the ID of the "Media" folder
 
         // Load the Content for "Media" folder, any language and current version
         $content = $this->contentService->loadContent($mediaFolderId);
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Content::class,
@@ -825,12 +808,10 @@ class ContentServiceTest extends BaseContentServiceTest
     public function testLoadContentThrowsNotFoundException()
     {
         $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
-        /* BEGIN: Use Case */
 
         $this->expectException(NotFoundException::class);
 
         $this->contentService->loadContent($nonExistentContentId);
-        /* END: Use Case */
     }
 
     /**
@@ -842,13 +823,13 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         return [
             ['f5c88a2209584891056f987fd965b0ba', null, null],
-            ['f5c88a2209584891056f987fd965b0ba', ['eng-US'], null],
+            ['f5c88a2209584891056f987fd965b0ba', [self::ENG_US], null],
             ['f5c88a2209584891056f987fd965b0ba', null, 1],
-            ['f5c88a2209584891056f987fd965b0ba', ['eng-US'], 1],
-            ['a6e35cbcb7cd6ae4b691f3eee30cd262', null, null],
-            ['a6e35cbcb7cd6ae4b691f3eee30cd262', ['eng-US'], null],
-            ['a6e35cbcb7cd6ae4b691f3eee30cd262', null, 1],
-            ['a6e35cbcb7cd6ae4b691f3eee30cd262', ['eng-US'], 1],
+            ['f5c88a2209584891056f987fd965b0ba', [self::ENG_US], 1],
+            [self::MEDIA_REMOTE_ID, null, null],
+            [self::MEDIA_REMOTE_ID, [self::ENG_US], null],
+            [self::MEDIA_REMOTE_ID, null, 1],
+            [self::MEDIA_REMOTE_ID, [self::ENG_US], 1],
         ];
     }
 
@@ -886,12 +867,10 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testLoadContentByRemoteIdThrowsNotFoundException()
     {
-        /* BEGIN: Use Case */
         $this->expectException(NotFoundException::class);
 
         // This call will fail with a "NotFoundException", because no content object exists for the given remoteId
         $this->contentService->loadContentByRemoteId('a1b1c1d1e1f1a2b2c2d2e2f2a3b3c3d3');
-        /* END: Use Case */
     }
 
     /**
@@ -910,9 +889,7 @@ class ContentServiceTest extends BaseContentServiceTest
     public function testPublishVersion()
     {
         $time = time();
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
-        /* END: Use Case */
 
         $this->assertInstanceOf(Content::class, $content);
         $this->assertTrue($content->contentInfo->published);
@@ -942,7 +919,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 true,
                 1,
                 'abcdef0123456789abcdef0123456789',
-                'eng-US',
+                self::ENG_US,
                 $this->getRepository()->getCurrentUser()->id,
                 true,
             ],
@@ -978,7 +955,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             [
                 $this->getRepository()->getCurrentUser()->id,
-                'eng-US',
+                self::ENG_US,
                 VersionInfo::STATUS_PUBLISHED,
                 1,
             ],
@@ -1042,9 +1019,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testPublishVersionCreatesLocationsDefinedOnCreate()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
-        /* END: Use Case */
 
         $location = $this->locationService->loadLocationByRemoteId(
             '0123456789abcdef0123456789abcdef'
@@ -1099,7 +1074,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testPublishVersionThrowsBadStateException()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         // Publish the content draft
@@ -1109,7 +1083,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // This call will fail with a "BadStateException", because the version is already published.
         $this->contentService->publishVersion($draft->getVersionInfo());
-        /* END: Use Case */
     }
 
     /**
@@ -1151,12 +1124,10 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentDraft()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
         $draftedContent = $this->contentService->createContentDraft($content->contentInfo);
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Content::class,
@@ -1178,7 +1149,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentDraftAndLoadAccess()
     {
-        /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         // Set new editor as user
@@ -1189,8 +1159,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Try to load the draft
         $loadedDraft = $this->contentService->loadContent($draft->id);
-
-        /* END: Use Case */
 
         $this->assertEquals($draft->id, $loadedDraft->id);
     }
@@ -1234,7 +1202,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 $draft->id,
                 true,
                 1,
-                'eng-US',
+                self::ENG_US,
                 $this->getRepository()->getCurrentUser()->id,
                 'abcdef0123456789abcdef0123456789',
                 1,
@@ -1266,8 +1234,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             [
                 'creatorId' => $this->getRepository()->getCurrentUser()->id,
-                'initialLanguageCode' => 'eng-US',
-                'languageCodes' => [0 => 'eng-US'],
+                'initialLanguageCode' => self::ENG_US,
+                'languageCodes' => [0 => self::ENG_US],
                 'status' => VersionInfo::STATUS_DRAFT,
                 'versionNo' => 2,
             ],
@@ -1295,7 +1263,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentDraftLoadVersionInfoStillLoadsPublishedVersion($draft)
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
@@ -1303,7 +1270,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // This call will still load the published version
         $versionInfoPublished = $this->contentService->loadVersionInfo($content->contentInfo);
-        /* END: Use Case */
 
         $this->assertEquals(1, $versionInfoPublished->versionNo);
     }
@@ -1317,7 +1283,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentDraftLoadContentStillLoadsPublishedVersion()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
@@ -1325,7 +1290,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // This call will still load the published content version
         $contentPublished = $this->contentService->loadContent($content->id);
-        /* END: Use Case */
 
         $this->assertEquals(1, $contentPublished->getVersionInfo()->versionNo);
     }
@@ -1339,7 +1303,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentDraftLoadContentByRemoteIdStillLoadsPublishedVersion()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
@@ -1347,7 +1310,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // This call will still load the published content version
         $contentPublished = $this->contentService->loadContentByRemoteId('abcdef0123456789abcdef0123456789');
-        /* END: Use Case */
 
         $this->assertEquals(1, $contentPublished->getVersionInfo()->versionNo);
     }
@@ -1361,7 +1323,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentDraftLoadContentByContentInfoStillLoadsPublishedVersion()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         // Now we create a new draft from the published content
@@ -1369,7 +1330,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // This call will still load the published content version
         $contentPublished = $this->contentService->loadContentByContentInfo($content->contentInfo);
-        /* END: Use Case */
 
         $this->assertEquals(1, $contentPublished->getVersionInfo()->versionNo);
     }
@@ -1382,9 +1342,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testNewContentUpdateStruct()
     {
-        /* BEGIN: Use Case */
         $updateStruct = $this->contentService->newContentUpdateStruct();
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             ContentUpdateStruct::class,
@@ -1413,9 +1371,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testUpdateContent()
     {
-        /* BEGIN: Use Case */
         $draftVersion2 = $this->createUpdatedDraftVersion2();
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Content::class,
@@ -1444,9 +1400,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testUpdateContentWithDifferentUser()
     {
-        /* BEGIN: Use Case */
         $arrayWithDraftVersion2 = $this->createUpdatedDraftVersion2NotAdmin();
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Content::class,
@@ -1479,7 +1433,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-GB',
+                    'languageCode' => self::ENG_GB,
                     'fieldDefIdentifier' => 'description',
                     'fieldTypeIdentifier' => 'ezrichtext',
                 ]
@@ -1488,7 +1442,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-US',
+                    'languageCode' => self::ENG_US,
                     'fieldDefIdentifier' => 'description',
                     'fieldTypeIdentifier' => 'ezrichtext',
                 ]
@@ -1497,7 +1451,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-GB',
+                    'languageCode' => self::ENG_GB,
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -1506,7 +1460,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-US',
+                    'languageCode' => self::ENG_US,
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -1524,15 +1478,14 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testUpdateContentThrowsBadStateException()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         // Now create an update struct and modify some fields
         $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
         $contentUpdateStruct->setField('title', 'An awesome² story about ezp.');
-        $contentUpdateStruct->setField('title', 'An awesome²³ story about ezp.', 'eng-GB');
+        $contentUpdateStruct->setField('title', 'An awesome²³ story about ezp.', self::ENG_GB);
 
-        $contentUpdateStruct->initialLanguageCode = 'eng-US';
+        $contentUpdateStruct->initialLanguageCode = self::ENG_US;
 
         $this->expectException(BadStateException::class);
 
@@ -1541,7 +1494,6 @@ class ContentServiceTest extends BaseContentServiceTest
             $content->getVersionInfo(),
             $contentUpdateStruct
         );
-        /* END: Use Case */
     }
 
     /**
@@ -1552,13 +1504,12 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testUpdateContentThrowsInvalidArgumentExceptionWhenFieldTypeDoesNotAccept()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         // Now create an update struct and modify some fields
         $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
         // The name field does not accept a stdClass object as its input
-        $contentUpdateStruct->setField('name', new \stdClass(), 'eng-US');
+        $contentUpdateStruct->setField('name', new \stdClass(), self::ENG_US);
 
         $this->expectException(APIInvalidArgumentException::class);
         // is not accepted
@@ -1566,7 +1517,6 @@ class ContentServiceTest extends BaseContentServiceTest
             $draft->getVersionInfo(),
             $contentUpdateStruct
         );
-        /* END: Use Case */
     }
 
     /**
@@ -1577,7 +1527,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testUpdateContentWhenMandatoryFieldIsEmpty()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         // Now create an update struct and set a mandatory field to null
@@ -1585,7 +1534,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentUpdateStruct->setField('name', null);
 
         // Don't set this, then the above call without languageCode will fail
-        $contentUpdateStruct->initialLanguageCode = 'eng-US';
+        $contentUpdateStruct->initialLanguageCode = self::ENG_US;
 
         $this->expectException(ContentFieldValidationException::class);
 
@@ -1594,7 +1543,6 @@ class ContentServiceTest extends BaseContentServiceTest
             $draft->getVersionInfo(),
             $contentUpdateStruct
         );
-        /* END: Use Case */
     }
 
     /**
@@ -1605,24 +1553,22 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
-        $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         $contentCreate->setField('name', 'An awesome Sidelfingen folder');
 
         $draft = $this->contentService->createContent($contentCreate);
 
         $contentUpdate = $this->contentService->newContentUpdateStruct();
         // Violates string length constraint
-        $contentUpdate->setField('short_name', str_repeat('a', 200), 'eng-US');
+        $contentUpdate->setField('short_name', str_repeat('a', 200), self::ENG_US);
 
         $this->expectException(ContentFieldValidationException::class);
 
         // Throws ContentFieldValidationException because the string length validation of the field "short_name" fails
         $this->contentService->updateContent($draft->getVersionInfo(), $contentUpdate);
-        /* END: Use Case */
     }
 
     /**
@@ -1633,14 +1579,13 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testUpdateContentValidatorIgnoresRequiredFieldsOfNotUpdatedLanguages()
     {
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
         // Create multilangual content
-        $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
-        $contentCreate->setField('name', 'An awesome Sidelfingen folder', 'eng-US');
-        $contentCreate->setField('name', 'An awesome Sidelfingen folder', 'eng-GB');
+        $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
+        $contentCreate->setField('name', 'An awesome Sidelfingen folder', self::ENG_US);
+        $contentCreate->setField('name', 'An awesome Sidelfingen folder', self::ENG_GB);
 
         $contentDraft = $this->contentService->createContent($contentCreate);
 
@@ -1670,11 +1615,10 @@ XML
         );
 
         $contentUpdate = $this->contentService->newContentUpdateStruct();
-        $contentUpdate->setField('name', 'An awesome Sidelfingen folder (updated)', 'eng-US');
+        $contentUpdate->setField('name', 'An awesome Sidelfingen folder (updated)', self::ENG_US);
         $contentUpdate->setField('description', $description);
 
         $this->contentService->updateContent($contentDraft->getVersionInfo(), $contentUpdate);
-        /* END: Use Case */
     }
 
     /**
@@ -1685,7 +1629,6 @@ XML
      */
     public function testUpdateContentWithNotUpdatingMandatoryField()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         // Now create an update struct which does not overwrite mandatory
@@ -1697,18 +1640,16 @@ XML
         );
 
         // Don't set this, then the above call without languageCode will fail
-        $contentUpdateStruct->initialLanguageCode = 'eng-US';
+        $contentUpdateStruct->initialLanguageCode = self::ENG_US;
 
-        // This will only update the "description" field in the "eng-US"
-        // language
+        // This will only update the "description" field in the "eng-US" language
         $updatedDraft = $this->contentService->updateContent(
             $draft->getVersionInfo(),
             $contentUpdateStruct
         );
-        /* END: Use Case */
 
         foreach ($updatedDraft->getFields() as $field) {
-            if ($field->languageCode === 'eng-US' && $field->fieldDefIdentifier === 'name' && $field->value !== null) {
+            if ($field->languageCode === self::ENG_US && $field->fieldDefIdentifier === 'name' && $field->value !== null) {
                 // Found field
                 return;
             }
@@ -1726,7 +1667,6 @@ XML
      */
     public function testCreateContentDraftWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
         // Now we create a new draft from the initial version
@@ -1734,7 +1674,6 @@ XML
             $contentVersion2->contentInfo,
             $contentVersion2->getVersionInfo()
         );
-        /* END: Use Case */
 
         $this->assertEquals(3, $draftedContentReloaded->getVersionInfo()->versionNo);
     }
@@ -1770,9 +1709,7 @@ XML
      */
     public function testPublishVersionFromContentDraft()
     {
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
-        /* END: Use Case */
 
         $versionInfo = $this->contentService->loadVersionInfo($contentVersion2->contentInfo);
 
@@ -1799,9 +1736,7 @@ XML
      */
     public function testPublishVersionFromContentDraftArchivesOldVersion()
     {
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
-        /* END: Use Case */
 
         $versionInfo = $this->contentService->loadVersionInfo($contentVersion2->contentInfo, 1);
 
@@ -1828,9 +1763,7 @@ XML
      */
     public function testPublishVersionFromContentDraftUpdatesContentInfoCurrentVersion()
     {
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
-        /* END: Use Case */
 
         $this->assertEquals(2, $contentVersion2->contentInfo->currentVersionNo);
     }
@@ -1843,7 +1776,6 @@ XML
      */
     public function testPublishVersionFromOldContentDraftArchivesNewerVersionNo()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         // Create a new draft with versionNo = 2
@@ -1858,7 +1790,6 @@ XML
         // Publish the first draft with versionNo = 2
         // currentVersionNo is now 2, versionNo 3 will be archived
         $publishedDraft = $this->contentService->publishVersion($draftedContentVersion2->getVersionInfo());
-        /* END: Use Case */
 
         $this->assertEquals(2, $publishedDraft->contentInfo->currentVersionNo);
     }
@@ -1937,7 +1868,6 @@ XML
      */
     public function testNewContentMetadataUpdateStruct()
     {
-        /* BEGIN: Use Case */
         // Creates a new metadata update struct
         $metadataUpdate = $this->contentService->newContentMetadataUpdateStruct();
 
@@ -1946,9 +1876,8 @@ XML
         }
 
         $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
-        $metadataUpdate->mainLanguageCode = 'eng-GB';
+        $metadataUpdate->mainLanguageCode = self::ENG_GB;
         $metadataUpdate->alwaysAvailable = false;
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             ContentMetadataUpdateStruct::class,
@@ -1968,14 +1897,13 @@ XML
      */
     public function testUpdateContentMetadata()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         // Creates a metadata update struct
         $metadataUpdate = $this->contentService->newContentMetadataUpdateStruct();
 
         $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
-        $metadataUpdate->mainLanguageCode = 'eng-GB';
+        $metadataUpdate->mainLanguageCode = self::ENG_GB;
         $metadataUpdate->alwaysAvailable = false;
         $metadataUpdate->publishedDate = $this->createDateTime(441759600); // 1984/01/01
         $metadataUpdate->modificationDate = $this->createDateTime(441759600); // 1984/01/01
@@ -1985,7 +1913,6 @@ XML
             $content->contentInfo,
             $metadataUpdate
         );
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Content::class,
@@ -2013,7 +1940,7 @@ XML
                 'sectionId' => $this->generateId('section', 1),
                 'alwaysAvailable' => false,
                 'currentVersionNo' => 1,
-                'mainLanguageCode' => 'eng-GB',
+                'mainLanguageCode' => self::ENG_GB,
                 'modificationDate' => $this->createDateTime(441759600),
                 'ownerId' => $this->getRepository()->getCurrentUser()->id,
                 'published' => true,
@@ -2054,15 +1981,11 @@ XML
      */
     public function testUpdateContentMetadataThrowsInvalidArgumentExceptionOnDuplicateRemoteId()
     {
-        /* BEGIN: Use Case */
-        // RemoteId of the "Media" page of an eZ Publish demo installation
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-
         $content = $this->createContentVersion1();
 
         // Creates a metadata update struct
         $metadataUpdate = $this->contentService->newContentMetadataUpdateStruct();
-        $metadataUpdate->remoteId = $mediaRemoteId;
+        $metadataUpdate->remoteId = self::MEDIA_REMOTE_ID;
 
         $this->expectException(APIInvalidArgumentException::class);
         // specified remoteId is already used by the "Media" page.
@@ -2070,7 +1993,6 @@ XML
             $content->contentInfo,
             $metadataUpdate
         );
-        /* END: Use Case */
     }
 
     /**
@@ -2095,7 +2017,6 @@ XML
      */
     public function testDeleteContent()
     {
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
         // Load the locations for this content object
@@ -2103,7 +2024,6 @@ XML
 
         // This will delete the content, all versions and the associated locations
         $this->contentService->deleteContent($contentVersion2->contentInfo);
-        /* END: Use Case */
 
         $this->expectException(NotFoundException::class);
 
@@ -2123,7 +2043,6 @@ XML
      */
     public function testDeleteContentWithEmptyBinaryField()
     {
-        /* BEGIN: Use Case */
         $contentVersion = $this->createContentVersion1EmptyBinaryField();
 
         // Load the locations for this content object
@@ -2131,7 +2050,6 @@ XML
 
         // This will delete the content, all versions and the associated locations
         $this->contentService->deleteContent($contentVersion->contentInfo);
-        /* END: Use Case */
 
         $this->expectException(NotFoundException::class);
 
@@ -2147,9 +2065,7 @@ XML
      */
     public function testLoadContentDraftsReturnsEmptyArrayByDefault()
     {
-        /* BEGIN: Use Case */
         $contentDrafts = $this->contentService->loadContentDrafts();
-        /* END: Use Case */
 
         $this->assertSame([], $contentDrafts);
     }
@@ -2162,17 +2078,11 @@ XML
      */
     public function testLoadContentDrafts()
     {
-        /* BEGIN: Use Case */
-        // Remote ids of the "Media" and the "eZ Publish Demo Design ..." page
-        // of a eZ Publish demo installation.
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
-
         // "Media" content object
-        $mediaContentInfo = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
+        $mediaContentInfo = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
 
         // "eZ Publish Demo Design ..." content object
-        $demoDesignContentInfo = $this->contentService->loadContentInfoByRemoteId($demoDesignRemoteId);
+        $demoDesignContentInfo = $this->contentService->loadContentInfoByRemoteId(self::DEMO_DESIGN_REMOTE_ID);
 
         // Create some drafts
         $this->contentService->createContentDraft($mediaContentInfo);
@@ -2180,7 +2090,6 @@ XML
 
         // Now $contentDrafts should contain two drafted versions
         $draftedVersions = $this->contentService->loadContentDrafts();
-        /* END: Use Case */
 
         $actual = [
             $draftedVersions[0]->status,
@@ -2194,8 +2103,8 @@ XML
             [
                 VersionInfo::STATUS_DRAFT,
                 VersionInfo::STATUS_DRAFT,
-                $demoDesignRemoteId,
-                $mediaRemoteId,
+                self::DEMO_DESIGN_REMOTE_ID,
+                self::MEDIA_REMOTE_ID,
             ],
             $actual
         );
@@ -2208,7 +2117,6 @@ XML
      */
     public function testLoadContentDraftsWithFirstParameter()
     {
-        /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         // Get current user
@@ -2217,11 +2125,8 @@ XML
         // Set new editor as user
         $this->permissionResolver->setCurrentUserReference($user);
 
-        // Remote id of the "Media" content object in an eZ Publish demo installation.
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-
         // "Media" content object
-        $mediaContentInfo = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
+        $mediaContentInfo = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
 
         // Create a content draft
         $this->contentService->createContentDraft($mediaContentInfo);
@@ -2232,14 +2137,13 @@ XML
         // Now $contentDrafts for the previous current user and the new user
         $newCurrentUserDrafts = $this->contentService->loadContentDrafts($user);
         $oldCurrentUserDrafts = $this->contentService->loadContentDrafts();
-        /* END: Use Case */
 
         $this->assertSame([], $oldCurrentUserDrafts);
 
         $this->assertEquals(
             [
                 VersionInfo::STATUS_DRAFT,
-                $mediaRemoteId,
+                self::MEDIA_REMOTE_ID,
             ],
             [
                 $newCurrentUserDrafts[0]->status,
@@ -2259,14 +2163,12 @@ XML
      */
     public function testLoadVersionInfoWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $publishedContent = $this->createContentVersion1();
 
-        $draftContent = $this->contentService->createContentDraft($publishedContent->contentInfo);
+        $this->contentService->createContentDraft($publishedContent->contentInfo);
 
         // Will return the VersionInfo of the $draftContent
         $versionInfo = $this->contentService->loadVersionInfoById($publishedContent->id, 2);
-        /* END: Use Case */
 
         $this->assertEquals(2, $versionInfo->versionNo);
 
@@ -2285,14 +2187,12 @@ XML
      */
     public function testLoadVersionInfoThrowsNotFoundExceptionWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         $this->expectException(NotFoundException::class);
 
         // This call will fail with a "NotFoundException", because not versionNo 2 exists for this content object.
         $this->contentService->loadVersionInfo($draft->contentInfo, 2);
-        /* END: Use Case */
     }
 
     /**
@@ -2303,14 +2203,12 @@ XML
      */
     public function testLoadVersionInfoByIdWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $publishedContent = $this->createContentVersion1();
 
         $draftContent = $this->contentService->createContentDraft($publishedContent->contentInfo);
 
         // Will return the VersionInfo of the $draftContent
         $versionInfo = $this->contentService->loadVersionInfoById($publishedContent->id, 2);
-        /* END: Use Case */
 
         $this->assertEquals(2, $versionInfo->versionNo);
 
@@ -2344,7 +2242,7 @@ XML
         $this->assertPropertiesCorrect(
             [
                 'names' => [
-                    'eng-US' => 'An awesome forum',
+                    self::ENG_US => 'An awesome forum',
                 ],
                 'contentInfo' => new ContentInfo([
                     'id' => $draftContent->contentInfo->id,
@@ -2359,7 +2257,7 @@ XML
                     'publishedDate' => $versionInfo->contentInfo->publishedDate,
                     'alwaysAvailable' => 1,
                     'remoteId' => 'abcdef0123456789abcdef0123456789',
-                    'mainLanguageCode' => 'eng-US',
+                    'mainLanguageCode' => self::ENG_US,
                     'mainLocationId' => $draftContent->contentInfo->mainLocationId,
                     'status' => ContentInfo::STATUS_PUBLISHED,
                 ]),
@@ -2367,9 +2265,9 @@ XML
                 'versionNo' => 2,
                 'creatorId' => 14,
                 'status' => 0,
-                'initialLanguageCode' => 'eng-US',
+                'initialLanguageCode' => self::ENG_US,
                 'languageCodes' => [
-                    'eng-US',
+                    self::ENG_US,
                 ],
             ],
             $versionInfo
@@ -2383,14 +2281,12 @@ XML
      */
     public function testLoadVersionInfoByIdThrowsNotFoundExceptionWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         $this->expectException(NotFoundException::class);
 
         // This call will fail with a "NotFoundException", because not versionNo 2 exists for this content object.
         $this->contentService->loadVersionInfoById($content->id, 2);
-        /* END: Use Case */
     }
 
     /**
@@ -2403,16 +2299,15 @@ XML
     public function testLoadContentByVersionInfoWithSecondParameter()
     {
         $sectionId = $this->generateId('section', 1);
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
-        $contentCreateStruct = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
 
         $contentCreateStruct->setField('name', 'Sindelfingen forum²');
 
-        $contentCreateStruct->setField('name', 'Sindelfingen forum²³', 'eng-GB');
+        $contentCreateStruct->setField('name', 'Sindelfingen forum²³', self::ENG_GB);
 
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId contains the ID of section 1
@@ -2429,18 +2324,17 @@ XML
         $reloadedContent = $this->contentService->loadContentByVersionInfo(
             $publishedContent->getVersionInfo(),
             [
-                'eng-GB',
+                self::ENG_GB,
             ],
             false
         );
-        /* END: Use Case */
 
         $actual = [];
         foreach ($reloadedContent->getFields() as $field) {
             $actual[] = new Field(
                 [
                     'id' => 0,
-                    'value' => ($field->value !== null ? true : null), // Actual value tested by FieldType integration tests
+                    'value' => $field->value !== null, // Actual value tested by FieldType integration tests
                     'languageCode' => $field->languageCode,
                     'fieldDefIdentifier' => $field->fieldDefIdentifier,
                 ]
@@ -2462,7 +2356,7 @@ XML
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-GB',
+                    'languageCode' => self::ENG_GB,
                     'fieldDefIdentifier' => 'description',
                 ]
             ),
@@ -2470,7 +2364,7 @@ XML
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-GB',
+                    'languageCode' => self::ENG_GB,
                     'fieldDefIdentifier' => 'name',
                 ]
             ),
@@ -2488,16 +2382,15 @@ XML
     public function testLoadContentByContentInfoWithLanguageParameters()
     {
         $sectionId = $this->generateId('section', 1);
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
-        $contentCreateStruct = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
 
         $contentCreateStruct->setField('name', 'Sindelfingen forum²');
 
-        $contentCreateStruct->setField('name', 'Sindelfingen forum²³', 'eng-GB');
+        $contentCreateStruct->setField('name', 'Sindelfingen forum²³', self::ENG_GB);
 
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId contains the ID of section 1
@@ -2514,12 +2407,11 @@ XML
         $reloadedContent = $this->contentService->loadContentByContentInfo(
             $publishedContent->contentInfo,
             [
-                'eng-US',
+                self::ENG_US,
             ],
             null,
             false
         );
-        /* END: Use Case */
 
         $actual = $this->normalizeFields($reloadedContent->getFields());
 
@@ -2528,7 +2420,7 @@ XML
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-US',
+                    'languageCode' => self::ENG_US,
                     'fieldDefIdentifier' => 'description',
                     'fieldTypeIdentifier' => 'ezrichtext',
                 ]
@@ -2537,7 +2429,7 @@ XML
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-US',
+                    'languageCode' => self::ENG_US,
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -2550,7 +2442,7 @@ XML
         $reloadedContent = $this->contentService->loadContentByContentInfo(
             $publishedContent->contentInfo,
             [
-                'eng-GB',
+                self::ENG_GB,
             ],
             null,
             true
@@ -2563,7 +2455,7 @@ XML
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-GB',
+                    'languageCode' => self::ENG_GB,
                     'fieldDefIdentifier' => 'description',
                     'fieldTypeIdentifier' => 'ezrichtext',
                 ]
@@ -2572,7 +2464,7 @@ XML
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-GB',
+                    'languageCode' => self::ENG_GB,
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -2598,7 +2490,7 @@ XML
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-US',
+                    'languageCode' => self::ENG_US,
                     'fieldDefIdentifier' => 'description',
                     'fieldTypeIdentifier' => 'ezrichtext',
                 ]
@@ -2607,7 +2499,7 @@ XML
                 [
                     'id' => 0,
                     'value' => true,
-                    'languageCode' => 'eng-US',
+                    'languageCode' => self::ENG_US,
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -2625,10 +2517,9 @@ XML
      */
     public function testLoadContentByContentInfoWithVersionNumberParameter()
     {
-        /* BEGIN: Use Case */
         $publishedContent = $this->createContentVersion1();
 
-        $draftContent = $this->contentService->createContentDraft($publishedContent->contentInfo);
+        $this->contentService->createContentDraft($publishedContent->contentInfo);
 
         // This content instance is identical to $draftContent
         $draftContentReloaded = $this->contentService->loadContentByContentInfo(
@@ -2636,7 +2527,6 @@ XML
             null,
             2
         );
-        /* END: Use Case */
 
         $this->assertEquals(
             2,
@@ -2658,14 +2548,12 @@ XML
      */
     public function testLoadContentByContentInfoThrowsNotFoundExceptionWithVersionNumberParameter()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         $this->expectException(NotFoundException::class);
 
         // This call will fail with a "NotFoundException", because no content with versionNo = 2 exists.
         $this->contentService->loadContentByContentInfo($content->contentInfo, null, 2);
-        /* END: Use Case */
     }
 
     /**
@@ -2676,14 +2564,12 @@ XML
      */
     public function testLoadContentWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createMultipleLanguageDraftVersion1();
 
         // This draft contains those fields localized with "eng-GB"
-        $draftLocalized = $this->contentService->loadContent($draft->id, ['eng-GB'], null, false);
-        /* END: Use Case */
+        $draftLocalized = $this->contentService->loadContent($draft->id, [self::ENG_GB], null, false);
 
-        $this->assertLocaleFieldsEquals($draftLocalized->getFields(), 'eng-GB');
+        $this->assertLocaleFieldsEquals($draftLocalized->getFields(), self::ENG_GB);
 
         return $draft;
     }
@@ -2699,7 +2585,7 @@ XML
     {
         $this->expectException(NotFoundException::class);
 
-        $this->contentService->loadContent($contentDraft->id, ['ger-DE'], null, false);
+        $this->contentService->loadContent($contentDraft->id, [self::GER_DE], null, false);
     }
 
     /**
@@ -2710,14 +2596,12 @@ XML
      */
     public function testLoadContentWithThirdParameter()
     {
-        /* BEGIN: Use Case */
         $publishedContent = $this->createContentVersion1();
 
         $this->contentService->createContentDraft($publishedContent->contentInfo);
 
         // This content instance is identical to $draftContent
         $draftContentReloaded = $this->contentService->loadContent($publishedContent->id, null, 2);
-        /* END: Use Case */
 
         $this->assertEquals(2, $draftContentReloaded->getVersionInfo()->versionNo);
 
@@ -2736,14 +2620,12 @@ XML
      */
     public function testLoadContentThrowsNotFoundExceptionWithThirdParameter()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         $this->expectException(NotFoundException::class);
 
         // This call will fail with a "NotFoundException", because for this content object no versionNo=2 exists.
         $this->contentService->loadContent($content->id, null, 2);
-        /* END: Use Case */
     }
 
     /**
@@ -2754,7 +2636,6 @@ XML
      */
     public function testLoadContentByRemoteIdWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createMultipleLanguageDraftVersion1();
 
         $this->contentService->publishVersion($draft->versionInfo);
@@ -2762,13 +2643,12 @@ XML
         // This draft contains those fields localized with "eng-GB"
         $draftLocalized = $this->contentService->loadContentByRemoteId(
             $draft->contentInfo->remoteId,
-            ['eng-GB'],
+            [self::ENG_GB],
             null,
             false
         );
-        /* END: Use Case */
 
-        $this->assertLocaleFieldsEquals($draftLocalized->getFields(), 'eng-GB');
+        $this->assertLocaleFieldsEquals($draftLocalized->getFields(), self::ENG_GB);
     }
 
     /**
@@ -2779,7 +2659,6 @@ XML
      */
     public function testLoadContentByRemoteIdWithThirdParameter()
     {
-        /* BEGIN: Use Case */
         $publishedContent = $this->createContentVersion1();
 
         $this->contentService->createContentDraft($publishedContent->contentInfo);
@@ -2790,7 +2669,6 @@ XML
             null,
             2
         );
-        /* END: Use Case */
 
         $this->assertEquals(2, $draftContentReloaded->getVersionInfo()->versionNo);
 
@@ -2809,7 +2687,6 @@ XML
      */
     public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         $this->expectException(NotFoundException::class);
@@ -2820,7 +2697,6 @@ XML
             null,
             2
         );
-        /* END: Use Case */
     }
 
     /**
@@ -2852,10 +2728,10 @@ XML
     public function getPrioritizedLanguageList()
     {
         return [
-            [['eng-US']],
-            [['eng-GB']],
-            [['eng-GB', 'eng-US']],
-            [['eng-US', 'eng-GB']],
+            [[self::ENG_US]],
+            [[self::ENG_GB]],
+            [[self::ENG_GB, self::ENG_US]],
+            [[self::ENG_US, self::ENG_GB]],
         ];
     }
 
@@ -2870,7 +2746,6 @@ XML
      */
     public function testDeleteVersion()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         // Create new draft, because published or last version of the Content can't be deleted
@@ -2880,7 +2755,6 @@ XML
 
         // Delete the previously created draft
         $this->contentService->deleteVersion($draft->getVersionInfo());
-        /* END: Use Case */
 
         $versions = $this->contentService->loadVersions($content->getVersionInfo()->getContentInfo());
 
@@ -2901,14 +2775,12 @@ XML
      */
     public function testDeleteVersionThrowsBadStateExceptionOnPublishedVersion()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         $this->expectException(BadStateException::class);
 
         // This call will fail with a "BadStateException", because the content version is currently published.
         $this->contentService->deleteVersion($content->getVersionInfo());
-        /* END: Use Case */
     }
 
     /**
@@ -2921,7 +2793,6 @@ XML
      */
     public function testDeleteVersionWorksIfOnlyVersionIsDraft()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         $this->contentService->deleteVersion($draft->getVersionInfo());
@@ -2931,7 +2802,6 @@ XML
         // This call will fail with a "NotFound", because we allow to delete content if remaining version is draft.
         // Can normally only happen if there where always only a draft to begin with, simplifies UI edit API usage.
         $this->contentService->loadContent($draft->id);
-        /* END: Use Case */
     }
 
     /**
@@ -2944,12 +2814,10 @@ XML
      */
     public function testLoadVersions()
     {
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
         // Load versions of this ContentInfo instance
         $versions = $this->contentService->loadVersions($contentVersion2->contentInfo);
-        /* END: Use Case */
 
         $expectedVersionsOrder = [
             $this->contentService->loadVersionInfo($contentVersion2->contentInfo, 1),
@@ -2967,7 +2835,7 @@ XML
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersions
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
      *
-     * @param VersionInfo[] $versions
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo[] $versions
      */
     public function testLoadVersionsSetsExpectedVersionInfo(array $versions)
     {
@@ -2978,15 +2846,15 @@ XML
                 'versionNo' => 1,
                 'creatorId' => 14,
                 'status' => VersionInfo::STATUS_ARCHIVED,
-                'initialLanguageCode' => 'eng-US',
-                'languageCodes' => ['eng-US'],
+                'initialLanguageCode' => self::ENG_US,
+                'languageCodes' => [self::ENG_US],
             ],
             [
                 'versionNo' => 2,
                 'creatorId' => 10,
                 'status' => VersionInfo::STATUS_PUBLISHED,
-                'initialLanguageCode' => 'eng-US',
-                'languageCodes' => ['eng-US', 'eng-GB'],
+                'initialLanguageCode' => self::ENG_US,
+                'languageCodes' => [self::ENG_US, self::ENG_GB],
             ],
         ];
 
@@ -3024,7 +2892,6 @@ XML
     {
         $parentLocationId = $this->generateId('location', 56);
 
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createMultipleLanguageContentVersion2();
 
         // Configure new target location
@@ -3041,7 +2908,6 @@ XML
             $contentVersion2->contentInfo,
             $targetLocationCreate
         );
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Content::class,
@@ -3090,11 +2956,10 @@ XML
         $userService = $this->getRepository()->getUserService();
 
         $newOwner = $this->createUser('new_owner', 'foo', 'bar');
-        /* BEGIN: Use Case */
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $contentVersion2 */
         $contentVersion2 = $this->createContentDraftVersion1(
             $parentLocationId,
-            'forum',
+            self::FORUM_IDENTIFIER,
             'name',
             $newOwner
         );
@@ -3113,7 +2978,6 @@ XML
             $contentVersion2->contentInfo,
             $targetLocationCreate
         );
-        /* END: Use Case */
 
         $this->assertEquals(
             $newOwner->id,
@@ -3135,7 +2999,6 @@ XML
     {
         $parentLocationId = $this->generateId('location', 56);
 
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
         // Configure new target location
@@ -3153,7 +3016,6 @@ XML
             $targetLocationCreate,
             $this->contentService->loadVersionInfo($contentVersion2->contentInfo, 1)
         );
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Content::class,
@@ -3193,20 +3055,15 @@ XML
      */
     public function testAddRelation()
     {
-        /* BEGIN: Use Case */
-        // RemoteId of the "Media" content of an eZ Publish demo installation
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-
         $draft = $this->createContentDraftVersion1();
 
-        $media = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
+        $media = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
 
         // Create relation between new content object and "Media" page
         $relation = $this->contentService->addRelation(
             $draft->getVersionInfo(),
             $media
         );
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Relation',
@@ -3242,7 +3099,7 @@ XML
                 'type' => Relation::COMMON,
                 'sourceFieldDefinitionIdentifier' => null,
                 'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
-                'destinationContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
+                'destinationContentInfo' => self::MEDIA_REMOTE_ID,
             ],
             [
                 'type' => $relations[0]->type,
@@ -3276,10 +3133,8 @@ XML
      */
     public function testCreateContentDraftWithRelations()
     {
-        // RemoteId of the "Media" content of an eZ Publish demo installation
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
         $draft = $this->createContentDraftVersion1();
-        $media = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
+        $media = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
 
         // Create relation between new content object and "Media" page
         $this->contentService->addRelation(
@@ -3331,12 +3186,9 @@ XML
      */
     public function testAddRelationThrowsBadStateException()
     {
-        /* BEGIN: Use Case */
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-
         $content = $this->createContentVersion1();
 
-        $media = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
+        $media = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
 
         $this->expectException(BadStateException::class);
 
@@ -3345,7 +3197,6 @@ XML
             $content->getVersionInfo(),
             $media
         );
-        /* END: Use Case */
     }
 
     /**
@@ -3356,14 +3207,10 @@ XML
      */
     public function testLoadRelations()
     {
-        /* BEGIN: Use Case */
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
-
         $draft = $this->createContentDraftVersion1();
 
-        $media = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
-        $demoDesign = $this->contentService->loadContentInfoByRemoteId($demoDesignRemoteId);
+        $media = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
+        $demoDesign = $this->contentService->loadContentInfoByRemoteId(self::DEMO_DESIGN_REMOTE_ID);
 
         // Create relation between new content object and "Media" page
         $this->contentService->addRelation(
@@ -3378,7 +3225,6 @@ XML
         );
 
         $relations = $this->contentService->loadRelations($draft->getVersionInfo());
-        /* END: Use Case */
 
         usort(
             $relations,
@@ -3394,11 +3240,11 @@ XML
             [
                 [
                     'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
+                    'destinationContentInfo' => self::MEDIA_REMOTE_ID,
                 ],
                 [
                     'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo' => '8b8b22fe3c6061ed500fbd2b377b885f',
+                    'destinationContentInfo' => self::DEMO_DESIGN_REMOTE_ID,
                 ],
             ],
             [
@@ -3423,18 +3269,13 @@ XML
      */
     public function testLoadRelationsSkipsArchivedContent()
     {
-        /* BEGIN: Use Case */
         $trashService = $this->getRepository()->getTrashService();
-        // Remote ids of the "Media" and the "eZ Publish Demo Design ..." page
-        // of a eZ Publish demo installation.
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
 
         $draft = $this->createContentDraftVersion1();
 
         // Load other content objects
-        $media = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
-        $demoDesign = $this->contentService->loadContentInfoByRemoteId($demoDesignRemoteId);
+        $media = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
+        $demoDesign = $this->contentService->loadContentInfoByRemoteId(self::DEMO_DESIGN_REMOTE_ID);
 
         // Create relation between new content object and "Media" page
         $this->contentService->addRelation(
@@ -3456,14 +3297,13 @@ XML
 
         // Load all relations
         $relations = $this->contentService->loadRelations($draft->getVersionInfo());
-        /* END: Use Case */
 
         $this->assertCount(1, $relations);
         $this->assertEquals(
             [
                 [
                     'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
+                    'destinationContentInfo' => self::MEDIA_REMOTE_ID,
                 ],
             ],
             [
@@ -3484,17 +3324,11 @@ XML
      */
     public function testLoadRelationsSkipsDraftContent()
     {
-        /* BEGIN: Use Case */
-        // Remote ids of the "Media" and the "eZ Publish Demo Design ..." page
-        // of a eZ Publish demo installation.
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
-
         $draft = $this->createContentDraftVersion1();
 
         // Load other content objects
-        $media = $this->contentService->loadContentByRemoteId($mediaRemoteId);
-        $demoDesign = $this->contentService->loadContentInfoByRemoteId($demoDesignRemoteId);
+        $media = $this->contentService->loadContentByRemoteId(self::MEDIA_REMOTE_ID);
+        $demoDesign = $this->contentService->loadContentInfoByRemoteId(self::DEMO_DESIGN_REMOTE_ID);
 
         // Create draft of "Media" page
         $mediaDraft = $this->contentService->createContentDraft($media->contentInfo);
@@ -3514,14 +3348,13 @@ XML
 
         // Load all relations
         $relations = $this->contentService->loadRelations($mediaDraft->getVersionInfo());
-        /* END: Use Case */
 
         $this->assertCount(1, $relations);
         $this->assertEquals(
             [
                 [
-                    'sourceContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
-                    'destinationContentInfo' => '8b8b22fe3c6061ed500fbd2b377b885f',
+                    'sourceContentInfo' => self::MEDIA_REMOTE_ID,
+                    'destinationContentInfo' => self::DEMO_DESIGN_REMOTE_ID,
                 ],
             ],
             [
@@ -3541,21 +3374,15 @@ XML
      */
     public function testLoadReverseRelations()
     {
-        /* BEGIN: Use Case */
-        // Remote ids of the "Media" and the "eZ Publish Demo Design ..." page
-        // of a eZ Publish demo installation.
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
-
         $versionInfo = $this->createContentVersion1()->getVersionInfo();
         $contentInfo = $versionInfo->getContentInfo();
 
         // Create some drafts
         $mediaDraft = $this->contentService->createContentDraft(
-            $this->contentService->loadContentInfoByRemoteId($mediaRemoteId)
+            $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID)
         );
         $demoDesignDraft = $this->contentService->createContentDraft(
-            $this->contentService->loadContentInfoByRemoteId($demoDesignRemoteId)
+            $this->contentService->loadContentInfoByRemoteId(self::DEMO_DESIGN_REMOTE_ID)
         );
 
         // Create relation between new content object and "Media" page
@@ -3577,7 +3404,6 @@ XML
         // Load all relations
         $relations = $this->contentService->loadRelations($versionInfo);
         $reverseRelations = $this->contentService->loadReverseRelations($contentInfo);
-        /* END: Use Case */
 
         $this->assertEquals($contentInfo->id, $relation1->getDestinationContentInfo()->id);
         $this->assertEquals($mediaDraft->id, $relation1->getSourceContentInfo()->id);
@@ -3601,11 +3427,11 @@ XML
         $this->assertEquals(
             [
                 [
-                    'sourceContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
+                    'sourceContentInfo' => self::MEDIA_REMOTE_ID,
                     'destinationContentInfo' => 'abcdef0123456789abcdef0123456789',
                 ],
                 [
-                    'sourceContentInfo' => '8b8b22fe3c6061ed500fbd2b377b885f',
+                    'sourceContentInfo' => self::DEMO_DESIGN_REMOTE_ID,
                     'destinationContentInfo' => 'abcdef0123456789abcdef0123456789',
                 ],
             ],
@@ -3631,22 +3457,17 @@ XML
      */
     public function testLoadReverseRelationsSkipsArchivedContent()
     {
-        /* BEGIN: Use Case */
         $trashService = $this->getRepository()->getTrashService();
-        // Remote ids of the "Media" and the "eZ Publish Demo Design ..." page
-        // of a eZ Publish demo installation.
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
 
         $versionInfo = $this->createContentVersion1()->getVersionInfo();
         $contentInfo = $versionInfo->getContentInfo();
 
         // Create some drafts
         $mediaDraft = $this->contentService->createContentDraft(
-            $this->contentService->loadContentInfoByRemoteId($mediaRemoteId)
+            $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID)
         );
         $demoDesignDraft = $this->contentService->createContentDraft(
-            $this->contentService->loadContentInfoByRemoteId($demoDesignRemoteId)
+            $this->contentService->loadContentInfoByRemoteId(self::DEMO_DESIGN_REMOTE_ID)
         );
 
         // Create relation between new content object and "Media" page
@@ -3674,7 +3495,6 @@ XML
         // Load all relations
         $relations = $this->contentService->loadRelations($versionInfo);
         $reverseRelations = $this->contentService->loadReverseRelations($contentInfo);
-        /* END: Use Case */
 
         $this->assertEquals($contentInfo->id, $relation1->getDestinationContentInfo()->id);
         $this->assertEquals($mediaDraft->id, $relation1->getSourceContentInfo()->id);
@@ -3688,7 +3508,7 @@ XML
         $this->assertEquals(
             [
                 [
-                    'sourceContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
+                    'sourceContentInfo' => self::MEDIA_REMOTE_ID,
                     'destinationContentInfo' => 'abcdef0123456789abcdef0123456789',
                 ],
             ],
@@ -3710,19 +3530,13 @@ XML
      */
     public function testLoadReverseRelationsSkipsDraftContent()
     {
-        /* BEGIN: Use Case */
-        // Remote ids of the "Media" and the "eZ Publish Demo Design ..." page
-        // of a eZ Publish demo installation.
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
-
         // Load "Media" page Content
-        $media = $this->contentService->loadContentByRemoteId($mediaRemoteId);
+        $media = $this->contentService->loadContentByRemoteId(self::MEDIA_REMOTE_ID);
 
         // Create some drafts
         $newDraftVersionInfo = $this->createContentDraftVersion1()->getVersionInfo();
         $demoDesignDraft = $this->contentService->createContentDraft(
-            $this->contentService->loadContentInfoByRemoteId($demoDesignRemoteId)
+            $this->contentService->loadContentInfoByRemoteId(self::DEMO_DESIGN_REMOTE_ID)
         );
 
         // Create relation between "Media" page and new content object
@@ -3741,12 +3555,10 @@ XML
         $this->contentService->publishVersion($demoDesignDraft->getVersionInfo());
         // We will not publish new Content draft, therefore relation from it
         // will not be loaded as reverse relation for "Media" page
-        //$this->contentService->publishVersion( $newDraftVersionInfo );
 
         // Load all relations
         $relations = $this->contentService->loadRelations($media->versionInfo);
         $reverseRelations = $this->contentService->loadReverseRelations($media->contentInfo);
-        /* END: Use Case */
 
         $this->assertEquals($media->contentInfo->id, $relation1->getDestinationContentInfo()->id);
         $this->assertEquals($newDraftVersionInfo->contentInfo->id, $relation1->getSourceContentInfo()->id);
@@ -3760,8 +3572,8 @@ XML
         $this->assertEquals(
             [
                 [
-                    'sourceContentInfo' => '8b8b22fe3c6061ed500fbd2b377b885f',
-                    'destinationContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
+                    'sourceContentInfo' => self::DEMO_DESIGN_REMOTE_ID,
+                    'destinationContentInfo' => self::MEDIA_REMOTE_ID,
                 ],
             ],
             [
@@ -3781,16 +3593,10 @@ XML
      */
     public function testDeleteRelation()
     {
-        /* BEGIN: Use Case */
-        // Remote ids of the "Media" and the "Demo Design" page of a eZ Publish
-        // demo installation.
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
-
         $draft = $this->createContentDraftVersion1();
 
-        $media = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
-        $demoDesign = $this->contentService->loadContentInfoByRemoteId($demoDesignRemoteId);
+        $media = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
+        $demoDesign = $this->contentService->loadContentInfoByRemoteId(self::DEMO_DESIGN_REMOTE_ID);
 
         // Establish some relations
         $this->contentService->addRelation($draft->getVersionInfo(), $media);
@@ -3801,7 +3607,6 @@ XML
 
         // The relations array now contains only one element
         $relations = $this->contentService->loadRelations($draft->getVersionInfo());
-        /* END: Use Case */
 
         $this->assertEquals(1, count($relations));
     }
@@ -3814,14 +3619,10 @@ XML
      */
     public function testDeleteRelationThrowsBadStateException()
     {
-        /* BEGIN: Use Case */
-        // RemoteId of the "Media" page of an eZ Publish demo installation
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-
         $content = $this->createContentVersion1();
 
         // Load the destination object
-        $media = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
+        $media = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
 
         // Create a new draft
         $draftVersion2 = $this->contentService->createContentDraft($content->contentInfo);
@@ -3841,7 +3642,6 @@ XML
             $contentVersion2->getVersionInfo(),
             $media
         );
-        /* END: Use Case */
     }
 
     /**
@@ -3852,14 +3652,10 @@ XML
      */
     public function testDeleteRelationThrowsInvalidArgumentException()
     {
-        /* BEGIN: Use Case */
-        // RemoteId of the "Media" page of an eZ Publish demo installation
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-
         $draft = $this->createContentDraftVersion1();
 
         // Load the destination object
-        $media = $this->contentService->loadContentInfoByRemoteId($mediaRemoteId);
+        $media = $this->contentService->loadContentInfoByRemoteId(self::MEDIA_REMOTE_ID);
 
         // This call will fail with a "InvalidArgumentException", because no relation exists between $draft and $media.
         $this->expectException(APIInvalidArgumentException::class);
@@ -3867,7 +3663,6 @@ XML
             $draft->getVersionInfo(),
             $media
         );
-        /* END: Use Case */
     }
 
     /**
@@ -3885,17 +3680,16 @@ XML
 
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
         // Start a transaction
         $repository->beginTransaction();
 
         try {
-            $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+            $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
             // Get a content create struct and set mandatory properties
-            $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+            $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
             $contentCreate->setField('name', 'Sindelfingen forum');
 
             $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -3919,7 +3713,6 @@ XML
             // This is expected
             return;
         }
-        /* END: Use Case */
 
         $this->fail('Content object still exists after rollback.');
     }
@@ -3939,17 +3732,16 @@ XML
 
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
         // Start a transaction
         $repository->beginTransaction();
 
         try {
-            $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+            $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
 
             // Get a content create struct and set mandatory properties
-            $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+            $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
             $contentCreate->setField('name', 'Sindelfingen forum');
 
             $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -3968,7 +3760,6 @@ XML
 
         // Load the new content object
         $content = $this->contentService->loadContent($contentId);
-        /* END: Use Case */
 
         $this->assertEquals($contentId, $content->id);
     }
@@ -3984,7 +3775,6 @@ XML
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
         // Start a transaction
         $repository->beginTransaction();
 
@@ -4007,7 +3797,6 @@ XML
         } catch (NotFoundException $e) {
             return;
         }
-        /* END: Use Case */
 
         $this->fail('Can still load content object after rollback.');
     }
@@ -4023,7 +3812,6 @@ XML
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
         // Start a transaction
         $repository->beginTransaction();
 
@@ -4042,7 +3830,6 @@ XML
 
         // Load the new content object
         $content = $this->contentService->loadContent($contentId);
-        /* END: Use Case */
 
         $this->assertEquals($contentId, $content->id);
     }
@@ -4058,9 +3845,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 12);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Administrator users" user group
+        $contentId = $this->generateId('object', self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Load the user group content object
         $content = $this->contentService->loadContent($contentId);
@@ -4089,7 +3874,6 @@ XML
         } catch (NotFoundException $e) {
             return;
         }
-        /* END: Use Case */
 
         $this->fail('Can still load content draft after rollback');
     }
@@ -4105,9 +3889,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 12);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Administrator users" user group
+        $contentId = $this->generateId('object', self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Load the user group content object
         $content = $this->contentService->loadContent($contentId);
@@ -4131,7 +3913,6 @@ XML
         }
 
         $content = $this->contentService->loadContent($contentId, null, $versionNo);
-        /* END: Use Case */
 
         $this->assertEquals(
             $versionNo,
@@ -4150,9 +3931,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 12);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Administrator users" user group
+        $contentId = $this->generateId('object', self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Load the user group content object
         $content = $this->contentService->loadContent($contentId);
@@ -4183,7 +3962,6 @@ XML
         } catch (NotFoundException $e) {
             return;
         }
-        /* END: Use Case */
 
         $this->fail('Can still load content draft after rollback');
     }
@@ -4199,12 +3977,8 @@ XML
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        // ID of the "Administrator users" user group
-        $contentId = 12;
-
         // Load the user group content object
-        $template = $this->contentService->loadContent($contentId);
+        $template = $this->contentService->loadContent(self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Start a new transaction
         $repository->beginTransaction();
@@ -4228,7 +4002,6 @@ XML
 
         // Load current version info
         $versionInfo = $this->contentService->loadVersionInfo($content->contentInfo);
-        /* END: Use Case */
 
         $this->assertEquals($versionNo, $versionInfo->versionNo);
     }
@@ -4245,9 +4018,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 12);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Administrator users" user group
+        $contentId = $this->generateId('object', self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Create a new user group draft
         $draft = $this->contentService->createContentDraft(
@@ -4256,7 +4027,7 @@ XML
 
         // Get an update struct and change the group name
         $contentUpdate = $this->contentService->newContentUpdateStruct();
-        $contentUpdate->setField('name', 'Administrators', 'eng-US');
+        $contentUpdate->setField('name', self::ADMINISTRATORS_USER_GROUP_NAME, self::ENG_US);
 
         // Start a transaction
         $repository->beginTransaction();
@@ -4281,7 +4052,6 @@ XML
 
         // Name will still be "Administrator users"
         $name = $this->contentService->loadContent($contentId)->getFieldValue('name');
-        /* END: Use Case */
 
         $this->assertEquals('Administrator users', $name);
     }
@@ -4298,9 +4068,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 12);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Administrator users" user group
+        $contentId = $this->generateId('object', self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Create a new user group draft
         $draft = $this->contentService->createContentDraft(
@@ -4309,7 +4077,7 @@ XML
 
         // Get an update struct and change the group name
         $contentUpdate = $this->contentService->newContentUpdateStruct();
-        $contentUpdate->setField('name', 'Administrators', 'eng-US');
+        $contentUpdate->setField('name', self::ADMINISTRATORS_USER_GROUP_NAME, self::ENG_US);
 
         // Start a transaction
         $repository->beginTransaction();
@@ -4333,10 +4101,9 @@ XML
         }
 
         // Name is now "Administrators"
-        $name = $this->contentService->loadContent($contentId)->getFieldValue('name', 'eng-US');
-        /* END: Use Case */
+        $name = $this->contentService->loadContent($contentId)->getFieldValue('name', self::ENG_US);
 
-        $this->assertEquals('Administrators', $name);
+        $this->assertEquals(self::ADMINISTRATORS_USER_GROUP_NAME, $name);
     }
 
     /**
@@ -4350,9 +4117,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 12);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Administrator users" user group
+        $contentId = $this->generateId('object', self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Load a ContentInfo object
         $contentInfo = $this->contentService->loadContentInfo($contentId);
@@ -4384,7 +4149,6 @@ XML
 
         // Load current remoteId
         $remoteIdReloaded = $this->contentService->loadContentInfo($contentId)->remoteId;
-        /* END: Use Case */
 
         $this->assertEquals($remoteId, $remoteIdReloaded);
     }
@@ -4400,9 +4164,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 12);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Administrator users" user group
+        $contentId = $this->generateId('object', self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Load a ContentInfo object
         $contentInfo = $this->contentService->loadContentInfo($contentId);
@@ -4434,7 +4196,6 @@ XML
 
         // Load current remoteId
         $remoteIdReloaded = $this->contentService->loadContentInfo($contentId)->remoteId;
-        /* END: Use Case */
 
         $this->assertNotEquals($remoteId, $remoteIdReloaded);
     }
@@ -4451,9 +4212,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 12);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Administrator users" user group
+        $contentId = $this->generateId('object', self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Start a new transaction
         $repository->beginTransaction();
@@ -4476,7 +4235,6 @@ XML
 
         // This array will be empty
         $drafts = $this->contentService->loadContentDrafts();
-        /* END: Use Case */
 
         $this->assertSame([], $drafts);
     }
@@ -4493,9 +4251,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 12);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Administrator users" user group
+        $contentId = $this->generateId('object', self::ADMINISTRATORS_USER_GROUP_ID);
 
         // Start a new transaction
         $repository->beginTransaction();
@@ -4518,7 +4274,6 @@ XML
 
         // This array will contain no element
         $drafts = $this->contentService->loadContentDrafts();
-        /* END: Use Case */
 
         $this->assertSame([], $drafts);
     }
@@ -4534,10 +4289,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 11);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Members" user group in an eZ Publish
-        // demo installation
+        $contentId = $this->generateId('object', self::MEMBERS_USER_GROUP_ID);
 
         // Load a ContentInfo instance
         $contentInfo = $this->contentService->loadContentInfo($contentId);
@@ -4559,7 +4311,6 @@ XML
 
         // This call will return the original content object
         $contentInfo = $this->contentService->loadContentInfo($contentId);
-        /* END: Use Case */
 
         $this->assertEquals($contentId, $contentInfo->id);
     }
@@ -4575,10 +4326,7 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 11);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Members" user group in an eZ Publish
-        // demo installation
+        $contentId = $this->generateId('object', self::MEMBERS_USER_GROUP_ID);
 
         // Load a ContentInfo instance
         $contentInfo = $this->contentService->loadContentInfo($contentId);
@@ -4604,7 +4352,6 @@ XML
         } catch (NotFoundException $e) {
             return;
         }
-        /* END: Use Case */
 
         $this->fail('Can still load ContentInfo after commit.');
     }
@@ -4622,13 +4369,8 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 11);
-        $locationId = $this->generateId('location', 13);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Members" user group in an eZ Publish
-        // demo installation
-
-        // $locationId is the ID of the "Administrator users" group location
+        $contentId = $this->generateId('object', self::MEMBERS_USER_GROUP_ID);
+        $locationId = $this->generateId('location', self::ADMINISTRATORS_USER_GROUP_LOCATION_ID);
 
         // Load content object to copy
         $content = $this->contentService->loadContent($contentId);
@@ -4660,7 +4402,6 @@ XML
         $locations = $this->locationService->loadLocationChildren(
             $this->locationService->loadLocation($locationId)
         )->locations;
-        /* END: Use Case */
 
         $this->assertEquals(1, count($locations));
     }
@@ -4678,13 +4419,8 @@ XML
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId('object', 11);
-        $locationId = $this->generateId('location', 13);
-        /* BEGIN: Use Case */
-        // $contentId is the ID of the "Members" user group in an eZ Publish
-        // demo installation
-
-        // $locationId is the ID of the "Administrator users" group location
+        $contentId = $this->generateId('object', self::MEMBERS_USER_GROUP_ID);
+        $locationId = $this->generateId('location', self::ADMINISTRATORS_USER_GROUP_LOCATION_ID);
 
         // Load content object to copy
         $content = $this->contentService->loadContent($contentId);
@@ -4697,7 +4433,7 @@ XML
 
         try {
             // Copy content with all versions and drafts
-            $contentCopied = $this->contentService->copyContent(
+            $this->contentService->copyContent(
                 $content->contentInfo,
                 $locationCreate
             );
@@ -4716,7 +4452,6 @@ XML
         $locations = $this->locationService->loadLocationChildren(
             $this->locationService->loadLocation($locationId)
         )->locations;
-        /* END: Use Case */
 
         $this->assertEquals(2, count($locations));
     }
@@ -4725,12 +4460,10 @@ XML
     {
         $urlAliasService = $this->getRepository()->getURLAliasService();
 
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         // Automatically creates a new URLAlias for the content
         $liveContent = $this->contentService->publishVersion($draft->getVersionInfo());
-        /* END: Use Case */
 
         $location = $this->locationService->loadLocation(
             $liveContent->getVersionInfo()->getContentInfo()->mainLocationId
@@ -4744,7 +4477,7 @@ XML
                     'type' => URLAlias::LOCATION,
                     'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum',
-                    'languageCodes' => ['eng-US'],
+                    'languageCodes' => [self::ENG_US],
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
@@ -4758,7 +4491,6 @@ XML
     {
         $urlAliasService = $this->getRepository()->getURLAliasService();
 
-        /* BEGIN: Use Case */
         $draft = $this->createUpdatedDraftVersion2();
 
         $location = $this->locationService->loadLocation(
@@ -4775,7 +4507,7 @@ XML
                     'type' => URLAlias::LOCATION,
                     'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum',
-                    'languageCodes' => ['eng-US'],
+                    'languageCodes' => [self::ENG_US],
                     'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => false,
@@ -4788,7 +4520,6 @@ XML
         // Automatically marks old aliases for the content as history
         // and creates new aliases, based on the changes
         $liveContent = $this->contentService->publishVersion($draft->getVersionInfo());
-        /* END: Use Case */
 
         $location = $this->locationService->loadLocation(
             $liveContent->getVersionInfo()->getContentInfo()->mainLocationId
@@ -4802,7 +4533,7 @@ XML
                     'type' => URLAlias::LOCATION,
                     'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum2',
-                    'languageCodes' => ['eng-US'],
+                    'languageCodes' => [self::ENG_US],
                     'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => false,
@@ -4812,7 +4543,7 @@ XML
                     'type' => URLAlias::LOCATION,
                     'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum23',
-                    'languageCodes' => ['eng-GB'],
+                    'languageCodes' => [self::ENG_GB],
                     'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => false,
@@ -4825,7 +4556,6 @@ XML
 
     public function testCustomURLAliasesNotHistorizedOnUpdatedContent()
     {
-        /* BEGIN: Use Case */
         $urlAliasService = $this->getRepository()->getURLAliasService();
 
         $content = $this->createContentVersion1();
@@ -4836,13 +4566,13 @@ XML
                 $content->getVersionInfo()->getContentInfo()->mainLocationId
             ),
             '/my/fancy/story-about-ez-publish',
-            'eng-US'
+            self::ENG_US
         );
 
         $draftVersion2 = $this->contentService->createContentDraft($content->contentInfo);
 
         $contentUpdate = $this->contentService->newContentUpdateStruct();
-        $contentUpdate->initialLanguageCode = 'eng-US';
+        $contentUpdate->initialLanguageCode = self::ENG_US;
         $contentUpdate->setField('name', 'Amazing Bielefeld forum');
 
         $draftVersion2 = $this->contentService->updateContent(
@@ -4853,7 +4583,6 @@ XML
         // Only marks auto-generated aliases as history
         // the custom one is left untouched
         $liveContent = $this->contentService->publishVersion($draftVersion2->getVersionInfo());
-        /* END: Use Case */
 
         $location = $this->locationService->loadLocation(
             $liveContent->getVersionInfo()->getContentInfo()->mainLocationId
@@ -4867,7 +4596,7 @@ XML
                     'type' => URLAlias::LOCATION,
                     'destination' => $location->id,
                     'path' => '/my/fancy/story-about-ez-publish',
-                    'languageCodes' => ['eng-US'],
+                    'languageCodes' => [self::ENG_US],
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => false,
@@ -4890,8 +4619,8 @@ XML
         $loadedContent2 = $this->contentService->loadContent($contentVersion2->id, null, 2);
 
         $this->assertNotEquals(
-            $loadedContent1->getFieldValue('name', 'eng-US'),
-            $loadedContent2->getFieldValue('name', 'eng-US')
+            $loadedContent1->getFieldValue('name', self::ENG_US),
+            $loadedContent2->getFieldValue('name', self::ENG_US)
         );
     }
 
@@ -4915,7 +4644,7 @@ XML
         $writerUser = $this->createCustomUserWithLogin(
             'writer',
             'writer@example.com',
-            'Writers',
+            self::WRITERS_USER_GROUP_NAME,
             'Writer'
         );
 
@@ -4948,7 +4677,7 @@ XML
         $writerUser = $this->createCustomUserWithLogin(
             'writer',
             'writer@example.com',
-            'Writers',
+            self::WRITERS_USER_GROUP_NAME,
             'Writer'
         );
         $this->permissionResolver->setCurrentUserReference($writerUser);
@@ -4979,9 +4708,9 @@ XML
             $this->contentService->publishVersion($contentDraft->versionInfo);
         }
 
-        $this->contentService->deleteTranslation($content->contentInfo, 'eng-GB');
+        $this->contentService->deleteTranslation($content->contentInfo, self::ENG_GB);
 
-        $this->assertTranslationDoesNotExist('eng-GB', $content->id);
+        $this->assertTranslationDoesNotExist(self::ENG_GB, $content->id);
     }
 
     /**
@@ -5004,17 +4733,17 @@ XML
         );
 
         // sanity check
-        self::assertEquals('eng-US', $content->contentInfo->mainLanguageCode);
-        self::assertEquals('eng-US', $content->versionInfo->initialLanguageCode);
+        self::assertEquals(self::ENG_US, $content->contentInfo->mainLanguageCode);
+        self::assertEquals(self::ENG_US, $content->versionInfo->initialLanguageCode);
 
         // update mainLanguageCode so it is different than initialLanguageCode for Version
         $contentMetadataUpdateStruct = $this->contentService->newContentMetadataUpdateStruct();
-        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $contentMetadataUpdateStruct->mainLanguageCode = self::ENG_GB;
         $content = $this->contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
 
-        $this->contentService->deleteTranslation($content->contentInfo, 'eng-US');
+        $this->contentService->deleteTranslation($content->contentInfo, self::ENG_US);
 
-        $this->assertTranslationDoesNotExist('eng-US', $content->id);
+        $this->assertTranslationDoesNotExist(self::ENG_US, $content->id);
     }
 
     /**
@@ -5030,7 +4759,7 @@ XML
         $mainLocation = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
 
         // create custom URL alias for Content main Location
-        $urlAliasService->createUrlAlias($mainLocation, '/my-custom-url', 'eng-GB');
+        $urlAliasService->createUrlAlias($mainLocation, '/my-custom-url', self::ENG_GB);
 
         // create secondary Location for Content
         $secondaryLocation = $this->locationService->createLocation(
@@ -5039,20 +4768,20 @@ XML
         );
 
         // create custom URL alias for Content secondary Location
-        $urlAliasService->createUrlAlias($secondaryLocation, '/my-secondary-url', 'eng-GB');
+        $urlAliasService->createUrlAlias($secondaryLocation, '/my-secondary-url', self::ENG_GB);
 
         // delete Translation
-        $this->contentService->deleteTranslation($content->contentInfo, 'eng-GB');
+        $this->contentService->deleteTranslation($content->contentInfo, self::ENG_GB);
 
         foreach ([$mainLocation, $secondaryLocation] as $location) {
             // check auto-generated URL aliases
             foreach ($urlAliasService->listLocationAliases($location, false) as $alias) {
-                self::assertNotContains('eng-GB', $alias->languageCodes);
+                self::assertNotContains(self::ENG_GB, $alias->languageCodes);
             }
 
             // check custom URL aliases
             foreach ($urlAliasService->listLocationAliases($location) as $alias) {
-                self::assertNotContains('eng-GB', $alias->languageCodes);
+                self::assertNotContains(self::ENG_GB, $alias->languageCodes);
             }
         }
     }
@@ -5089,19 +4818,19 @@ XML
         // create new version and add eng-GB translation
         $contentDraft = $this->contentService->createContentDraft($content->contentInfo);
         $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField('name', 'Awesome Board', 'eng-GB');
+        $contentUpdateStruct->setField('name', 'Awesome Board', self::ENG_GB);
         $contentDraft = $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
         $publishedContent = $this->contentService->publishVersion($contentDraft->versionInfo);
 
         // update mainLanguageCode to avoid exception related to that
         $contentMetadataUpdateStruct = $this->contentService->newContentMetadataUpdateStruct();
-        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $contentMetadataUpdateStruct->mainLanguageCode = self::ENG_GB;
 
         $content = $this->contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
 
-        $this->contentService->deleteTranslation($content->contentInfo, 'eng-US');
+        $this->contentService->deleteTranslation($content->contentInfo, self::ENG_US);
 
-        $this->assertTranslationDoesNotExist('eng-US', $content->id);
+        $this->assertTranslationDoesNotExist(self::ENG_US, $content->id);
     }
 
     /**
@@ -5124,7 +4853,7 @@ XML
         $writerUser = $this->createCustomUserWithLogin(
             'writer',
             'writer@example.com',
-            'Writers',
+            self::WRITERS_USER_GROUP_NAME,
             'Writer'
         );
         $this->permissionResolver->setCurrentUserReference($writerUser);
@@ -5132,7 +4861,7 @@ XML
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessage('User does not have access to \'remove\' \'content\'');
 
-        $this->contentService->deleteTranslation($content->contentInfo, 'eng-GB');
+        $this->contentService->deleteTranslation($content->contentInfo, self::ENG_GB);
     }
 
     /**
@@ -5148,7 +4877,7 @@ XML
         $this->expectException(APIInvalidArgumentException::class);
         $this->expectExceptionMessage('Argument \'$languageCode\' is invalid: ger-DE does not exist in the Content item');
 
-        $this->contentService->deleteTranslation($content->contentInfo, 'ger-DE');
+        $this->contentService->deleteTranslation($content->contentInfo, self::GER_DE);
     }
 
     /**
@@ -5158,7 +4887,7 @@ XML
      */
     public function testDeleteTranslationFromDraft()
     {
-        $languageCode = 'eng-GB';
+        $languageCode = self::ENG_GB;
         $content = $this->createMultipleLanguageContentVersion2();
         $draft = $this->contentService->createContentDraft($content->contentInfo);
         $draft = $this->contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
@@ -5178,10 +4907,10 @@ XML
     {
         return [
             [
-                ['eng-US' => 'US Name', 'eng-GB' => 'GB Name'],
+                [self::ENG_US => 'US Name', self::ENG_GB => 'GB Name'],
             ],
             [
-                ['eng-US' => 'Same Name', 'eng-GB' => 'Same Name'],
+                [self::ENG_US => 'Same Name', self::ENG_GB => 'Same Name'],
             ],
         ];
     }
@@ -5197,23 +4926,23 @@ XML
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws NotFoundException
-     * @throws UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeleteTranslationFromDraftRemovesUrlAliasOnPublishing(array $fieldValues)
     {
         $urlAliasService = $this->getRepository()->getURLAliasService();
 
         // set language code to be removed
-        $languageCode = 'eng-GB';
+        $languageCode = self::ENG_GB;
         $draft = $this->createMultilingualContentDraft(
             'folder',
             2,
-            'eng-US',
+            self::ENG_US,
             [
                 'name' => [
-                    'eng-GB' => $fieldValues['eng-GB'],
-                    'eng-US' => $fieldValues['eng-US'],
+                    self::ENG_GB => $fieldValues[self::ENG_GB],
+                    self::ENG_US => $fieldValues[self::ENG_US],
                 ],
             ]
         );
@@ -5229,8 +4958,8 @@ XML
         $locations = $this->locationService->loadLocations($content->contentInfo);
         self::assertCount(2, $locations, 'Sanity check: Expected to find 2 Locations');
         foreach ($locations as $location) {
-            $urlAliasService->createUrlAlias($location, '/us-custom_' . $location->id, 'eng-US');
-            $urlAliasService->createUrlAlias($location, '/gb-custom_' . $location->id, 'eng-GB');
+            $urlAliasService->createUrlAlias($location, '/us-custom_' . $location->id, self::ENG_US);
+            $urlAliasService->createUrlAlias($location, '/gb-custom_' . $location->id, self::ENG_GB);
 
             // check default URL aliases
             $aliases = $urlAliasService->listLocationAliases($location, false, $languageCode);
@@ -5269,11 +4998,11 @@ XML
             $this->createMultilingualContentDraft(
                 'folder',
                 2,
-                'eng-US',
+                self::ENG_US,
                 [
                     'name' => [
-                        'eng-GB' => 'BritishEnglishContent',
-                        'eng-US' => 'AmericanEnglishContent',
+                        self::ENG_GB => 'BritishEnglishContent',
+                        self::ENG_US => 'AmericanEnglishContent',
                     ],
                 ]
             )->versionInfo
@@ -5283,11 +5012,11 @@ XML
             $this->createMultilingualContentDraft(
                 'folder',
                 2,
-                'eng-US',
+                self::ENG_US,
                 [
                     'name' => [
-                        'eng-GB' => 'AnotherBritishContent',
-                        'eng-US' => 'AnotherAmericanContent',
+                        self::ENG_GB => 'AnotherBritishContent',
+                        self::ENG_US => 'AnotherAmericanContent',
                     ],
                 ]
             )->versionInfo
@@ -5300,7 +5029,7 @@ XML
 
         $draft = $this->contentService->deleteTranslationFromDraft(
             $this->contentService->createContentDraft($content->contentInfo)->versionInfo,
-            'eng-GB'
+            self::ENG_GB
         );
         $content = $this->contentService->publishVersion($draft->versionInfo);
 
@@ -5325,7 +5054,7 @@ XML
         // create Content with single Translation
         $publishedContent = $this->contentService->publishVersion(
             $this->createContentDraft(
-                'forum',
+                self::FORUM_IDENTIFIER,
                 2,
                 ['name' => 'Eng-US Version name']
             )->versionInfo
@@ -5333,7 +5062,7 @@ XML
 
         // update mainLanguageCode to avoid exception related to trying to delete main Translation
         $contentMetadataUpdateStruct = $this->contentService->newContentMetadataUpdateStruct();
-        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $contentMetadataUpdateStruct->mainLanguageCode = self::ENG_GB;
         $publishedContent = $this->contentService->updateContentMetadata(
             $publishedContent->contentInfo,
             $contentMetadataUpdateStruct
@@ -5349,7 +5078,7 @@ XML
         $this->expectExceptionMessage('Specified Translation is the only one Content Object Version has');
 
         // attempt to delete Translation
-        $this->contentService->deleteTranslationFromDraft($draft->versionInfo, 'eng-US');
+        $this->contentService->deleteTranslationFromDraft($draft->versionInfo, self::ENG_US);
     }
 
     /**
@@ -5359,15 +5088,15 @@ XML
      */
     public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnMainTranslation()
     {
-        $mainLanguageCode = 'eng-US';
+        $mainLanguageCode = self::ENG_US;
         $draft = $this->createMultilingualContentDraft(
-            'forum',
+            self::FORUM_IDENTIFIER,
             2,
             $mainLanguageCode,
             [
                 'name' => [
-                    'eng-US' => 'An awesome eng-US forum',
-                    'eng-GB' => 'An awesome eng-GB forum',
+                    self::ENG_US => 'An awesome eng-US forum',
+                    self::ENG_GB => 'An awesome eng-GB forum',
                 ],
             ]
         );
@@ -5385,7 +5114,7 @@ XML
      */
     public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnPublishedVersion()
     {
-        $languageCode = 'eng-US';
+        $languageCode = self::ENG_US;
         $content = $this->createMultipleLanguageContentVersion2();
         $draft = $this->contentService->createContentDraft($content->contentInfo);
         $publishedContent = $this->contentService->publishVersion($draft->versionInfo);
@@ -5403,7 +5132,7 @@ XML
      */
     public function testDeleteTranslationFromDraftThrowsUnauthorizedException()
     {
-        $languageCode = 'eng-GB';
+        $languageCode = self::ENG_GB;
         $content = $this->createMultipleLanguageContentVersion2();
         $draft = $this->contentService->createContentDraft($content->contentInfo);
 
@@ -5417,7 +5146,7 @@ XML
         $writerUser = $this->createCustomUserWithLogin(
             'user',
             'user@example.com',
-            'Writers',
+            self::WRITERS_USER_GROUP_NAME,
             'Writer'
         );
         $this->permissionResolver->setCurrentUserReference($writerUser);
@@ -5435,7 +5164,7 @@ XML
      */
     public function testDeleteTranslationFromDraftThrowsInvalidArgumentException()
     {
-        $languageCode = 'ger-DE';
+        $languageCode = self::GER_DE;
         $content = $this->createMultipleLanguageContentVersion2();
         $draft = $this->contentService->createContentDraft($content->contentInfo);
         $this->expectException(APIInvalidArgumentException::class);
@@ -5479,19 +5208,19 @@ XML
      */
     public function testLoadVersionsAfterDeletingTwoDrafts()
     {
-        $content = $this->createFolder(['eng-GB' => 'Foo'], 2);
+        $content = $this->createFolder([self::ENG_GB => 'Foo'], 2);
 
         // First update and publish
-        $modifiedContent = $this->updateFolder($content, ['eng-GB' => 'Foo1']);
+        $modifiedContent = $this->updateFolder($content, [self::ENG_GB => 'Foo1']);
         $content = $this->contentService->publishVersion($modifiedContent->versionInfo);
 
         // Second update and publish
-        $modifiedContent = $this->updateFolder($content, ['eng-GB' => 'Foo2']);
+        $modifiedContent = $this->updateFolder($content, [self::ENG_GB => 'Foo2']);
         $content = $this->contentService->publishVersion($modifiedContent->versionInfo);
 
         // Create drafts
-        $this->updateFolder($content, ['eng-GB' => 'Foo3']);
-        $this->updateFolder($content, ['eng-GB' => 'Foo4']);
+        $this->updateFolder($content, [self::ENG_GB => 'Foo3']);
+        $this->updateFolder($content, [self::ENG_GB => 'Foo4']);
 
         $versions = $this->contentService->loadVersions($content->contentInfo);
 
@@ -5639,7 +5368,7 @@ XML
             $normalized[] = new Field(
                 [
                     'id' => 0,
-                    'value' => ($field->value !== null ? true : null),
+                    'value' => $field->value !== null,
                     'languageCode' => $field->languageCode,
                     'fieldDefIdentifier' => $field->fieldDefIdentifier,
                     'fieldTypeIdentifier' => $field->fieldTypeIdentifier,
@@ -5661,28 +5390,9 @@ XML
     }
 
     /**
-     * Returns a filtered set of the default fields fixture.
-     *
-     * @param string $languageCode
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
-     */
-    private function createLocaleFieldsFixture($languageCode)
-    {
-        $fields = [];
-        foreach ($this->createFieldsFixture() as $field) {
-            if (null === $field->languageCode || $languageCode === $field->languageCode) {
-                $fields[] = $field;
-            }
-        }
-
-        return $fields;
-    }
-
-    /**
      * Asserts that given Content has default ContentStates.
      *
-     * @param ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
     private function assertDefaultContentStates(ContentInfo $contentInfo)
     {
@@ -5713,7 +5423,7 @@ XML
     {
         $content = $this->contentService->loadContent($contentId);
 
-        foreach ($content->fields as $fieldIdentifier => $field) {
+        foreach ($content->fields as $field) {
             /** @var array $field */
             self::assertArrayNotHasKey($languageCode, $field);
             self::assertNotEquals($languageCode, $content->contentInfo->mainLanguageCode);
@@ -5741,7 +5451,7 @@ XML
                 [
                     'id' => 0,
                     'value' => 'Foo',
-                    'languageCode' => 'eng-US',
+                    'languageCode' => self::ENG_US,
                     'fieldDefIdentifier' => 'description',
                     'fieldTypeIdentifier' => 'ezrichtext',
                 ]
@@ -5750,7 +5460,7 @@ XML
                 [
                     'id' => 0,
                     'value' => 'Bar',
-                    'languageCode' => 'eng-GB',
+                    'languageCode' => self::ENG_GB,
                     'fieldDefIdentifier' => 'description',
                     'fieldTypeIdentifier' => 'ezrichtext',
                 ]
@@ -5759,7 +5469,7 @@ XML
                 [
                     'id' => 0,
                     'value' => 'An awesome multi-lang forum²',
-                    'languageCode' => 'eng-US',
+                    'languageCode' => self::ENG_US,
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -5768,7 +5478,7 @@ XML
                 [
                     'id' => 0,
                     'value' => 'An awesome multi-lang forum²³',
-                    'languageCode' => 'eng-GB',
+                    'languageCode' => self::ENG_GB,
                     'fieldDefIdentifier' => 'name',
                     'fieldTypeIdentifier' => 'ezstring',
                 ]
@@ -5784,7 +5494,7 @@ XML
     private function getExpectedMediaContentInfoProperties()
     {
         return [
-            'id' => 41,
+            'id' => self::MEDIA_CONTENT_ID,
             'contentTypeId' => 1,
             'name' => 'Media',
             'sectionId' => 3,
@@ -5794,8 +5504,8 @@ XML
             'modificationDate' => $this->createDateTime(1060695457),
             'publishedDate' => $this->createDateTime(1060695457),
             'alwaysAvailable' => 1,
-            'remoteId' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
-            'mainLanguageCode' => 'eng-US',
+            'remoteId' => self::MEDIA_REMOTE_ID,
+            'mainLanguageCode' => self::ENG_US,
             'mainLocationId' => 43,
             'status' => ContentInfo::STATUS_PUBLISHED,
         ];
@@ -5804,9 +5514,13 @@ XML
     /**
      * @covers \eZ\Publish\API\Repository\ContentService::hideContent
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     * @throws NotFoundException
-     * @throws UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testHideContent(): void
     {
@@ -5821,7 +5535,7 @@ XML
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
-        $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         $contentCreate->setField('name', 'Folder to hide');
 
         $content = $this->contentService->createContent(
@@ -5836,9 +5550,7 @@ XML
         $this->assertCount(3, $locations);
         $this->assertCount(0, $this->filterHiddenLocations($locations));
 
-        /* BEGIN: Use Case */
         $this->contentService->hideContent($publishedContent->contentInfo);
-        /* END: Use Case */
 
         $locations = $this->locationService->loadLocations($publishedContent->contentInfo);
         $this->assertCount(3, $locations);
@@ -5849,8 +5561,8 @@ XML
      * @covers \eZ\Publish\API\Repository\ContentService::revealContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     * @throws NotFoundException
-     * @throws UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testRevealContent()
     {
@@ -5865,7 +5577,7 @@ XML
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
-        $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         $contentCreate->setField('name', 'Folder to hide');
 
         $locationCreateStructs[0]->hidden = true;
@@ -5927,7 +5639,7 @@ XML
         $contents = [];
 
         foreach ($contentNames as $contentName) {
-            $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+            $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
             $contentCreate->setField('name', $contentName);
 
             $content = $this->contentService->createContent($contentCreate, [$parentLocation]);
@@ -5985,7 +5697,7 @@ XML
         $contents = [];
 
         foreach ($contentNames as $contentName) {
-            $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+            $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
             $contentCreate->setField('name', $contentName);
 
             $content = $this->contentService->createContent($contentCreate, [$parentLocation]);
@@ -6034,7 +5746,7 @@ XML
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
-        $contentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         $contentCreate->setField('name', 'Parent');
 
         $content = $this->contentService->createContent(
@@ -6048,13 +5760,11 @@ XML
 
         $publishedContent = $this->contentService->publishVersion($content->versionInfo);
 
-        /* BEGIN: Use Case */
         $this->contentService->hideContent($publishedContent->contentInfo);
-        /* END: Use Case */
 
         $locations = $this->locationService->loadLocations($publishedContent->contentInfo);
 
-        $childContentCreate = $this->contentService->newContentCreateStruct($contentType, 'eng-US');
+        $childContentCreate = $this->contentService->newContentCreateStruct($contentType, self::ENG_US);
         $childContentCreate->setField('name', 'Child');
 
         $childContent = $this->contentService->createContent(
@@ -6114,19 +5824,19 @@ XML
         $deDraft = $this->contentService->createContentDraft($publishedContent->contentInfo);
 
         $contentUpdateStruct = new ContentUpdateStruct([
-            'initialLanguageCode' => 'ger-DE',
+            'initialLanguageCode' => self::GER_DE,
             'fields' => $contentDraft->getFields(),
         ]);
 
-        $contentUpdateStruct->setField('name', 'Folder GER', 'ger-DE');
+        $contentUpdateStruct->setField('name', 'Folder GER', self::GER_DE);
 
         $deContent = $this->contentService->updateContent($deDraft->versionInfo, $contentUpdateStruct);
 
         $updatedContent = $this->contentService->loadContent($deContent->id, null, $deContent->versionInfo->versionNo);
         $this->assertEquals(
             [
-                'eng-US' => 'Folder US',
-                'ger-DE' => 'Folder GER',
+                self::ENG_US => 'Folder US',
+                self::GER_DE => 'Folder GER',
             ],
             $updatedContent->fields['name']
         );
@@ -6134,19 +5844,19 @@ XML
         $gbDraft = $this->contentService->createContentDraft($publishedContent->contentInfo);
 
         $contentUpdateStruct = new ContentUpdateStruct([
-            'initialLanguageCode' => 'eng-GB',
+            'initialLanguageCode' => self::ENG_GB,
             'fields' => $contentDraft->getFields(),
         ]);
 
-        $contentUpdateStruct->setField('name', 'Folder GB', 'eng-GB');
+        $contentUpdateStruct->setField('name', 'Folder GB', self::ENG_GB);
 
         $gbContent = $this->contentService->updateContent($gbDraft->versionInfo, $contentUpdateStruct);
         $this->contentService->publishVersion($gbDraft->versionInfo);
         $updatedContent = $this->contentService->loadContent($gbContent->id, null, $gbContent->versionInfo->versionNo);
         $this->assertEquals(
             [
-                'eng-US' => 'Folder US',
-                'eng-GB' => 'Folder GB',
+                self::ENG_US => 'Folder US',
+                self::ENG_GB => 'Folder GB',
             ],
             $updatedContent->fields['name']
         );
@@ -6154,9 +5864,9 @@ XML
         $dePublished = $this->contentService->publishVersion($deDraft->versionInfo);
         $this->assertEquals(
             [
-                'eng-US' => 'Folder US',
-                'ger-DE' => 'Folder GER',
-                'eng-GB' => 'Folder GB',
+                self::ENG_US => 'Folder US',
+                self::GER_DE => 'Folder GER',
+                self::ENG_GB => 'Folder GB',
             ],
             $dePublished->fields['name']
         );
@@ -6170,15 +5880,15 @@ XML
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] A list of Locations aimed to be parents
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     * @throws NotFoundException
-     * @throws UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     private function createParentLocationsForHideReveal(int $parentLocationId): array
     {
         $parentFoldersLocationsIds = [
-            $this->createFolder(['eng-US' => 'P1'], $parentLocationId)->contentInfo->mainLocationId,
-            $this->createFolder(['eng-US' => 'P2'], $parentLocationId)->contentInfo->mainLocationId,
-            $this->createFolder(['eng-US' => 'P3'], $parentLocationId)->contentInfo->mainLocationId,
+            $this->createFolder([self::ENG_US => 'P1'], $parentLocationId)->contentInfo->mainLocationId,
+            $this->createFolder([self::ENG_US => 'P2'], $parentLocationId)->contentInfo->mainLocationId,
+            $this->createFolder([self::ENG_US => 'P3'], $parentLocationId)->contentInfo->mainLocationId,
         ];
 
         return array_values($this->locationService->loadLocationList($parentFoldersLocationsIds));
@@ -6207,27 +5917,27 @@ XML
     {
         $publishedContent = $this->createFolder(
             [
-                'eng-US' => 'Published US',
-                'ger-DE' => 'Published DE',
+                self::ENG_US => 'Published US',
+                self::GER_DE => 'Published DE',
             ],
             $this->generateId('location', 2)
         );
 
         $draft = $this->contentService->createContentDraft($publishedContent->contentInfo);
         $contentUpdateStruct = new ContentUpdateStruct([
-            'initialLanguageCode' => 'eng-US',
+            'initialLanguageCode' => self::ENG_US,
         ]);
-        $contentUpdateStruct->setField('name', 'Draft 1 US', 'eng-US');
-        $contentUpdateStruct->setField('name', 'Draft 1 DE', 'ger-DE');
+        $contentUpdateStruct->setField('name', 'Draft 1 US', self::ENG_US);
+        $contentUpdateStruct->setField('name', 'Draft 1 DE', self::GER_DE);
 
         $this->contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
 
-        $this->contentService->publishVersion($draft->versionInfo, ['ger-DE']);
+        $this->contentService->publishVersion($draft->versionInfo, [self::GER_DE]);
         $content = $this->contentService->loadContent($draft->contentInfo->id);
         $this->assertEquals(
             [
-                'eng-US' => 'Published US',
-                'ger-DE' => 'Draft 1 DE',
+                self::ENG_US => 'Published US',
+                self::GER_DE => 'Draft 1 DE',
             ],
             $content->fields['name']
         );
@@ -6238,7 +5948,7 @@ XML
         $baseName = 'ȘșțȚdfdf';
         $expectedPath = '/SstTdfdf';
 
-        $this->createFolder(['eng-US' => $baseName], 2);
+        $this->createFolder([self::ENG_US => $baseName], 2);
 
         $urlAliasService = $this->getRepository()->getURLAliasService();
         $urlAlias = $urlAliasService->lookup($expectedPath);

@@ -71,7 +71,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             $this->markTestSkipped('This test requires eZ Publish 5');
         }
 
-        /* BEGIN: Use Case */
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $contentTypeService = $this->getRepository()->getContentTypeService();
@@ -88,7 +87,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'create\' \'content\'/');
 
         $this->contentService->createContent($contentCreate);
-        /* END: Use Case */
     }
 
     /**
@@ -99,14 +97,12 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCreateContentThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessageRegExp('/\'create\' \'content\'/');
 
         $this->createContentDraftVersion1();
-        /* END: Use Case */
     }
 
     /**
@@ -118,7 +114,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     public function testLoadContentInfoThrowsUnauthorizedException()
     {
         $contentId = $this->generateId('object', 10);
-        /* BEGIN: Use Case */
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
@@ -126,7 +121,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // $contentId contains a content object ID not accessible for anonymous
         $this->contentService->loadContentInfo($contentId);
-        /* END: Use Case */
     }
 
     /**
@@ -173,7 +167,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentInfoByRemoteIdThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
 
         $this->setRestrictedEditorUser();
@@ -182,7 +175,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContentInfoByRemoteId($anonymousRemoteId);
-        /* END: Use Case */
     }
 
     /**
@@ -193,7 +185,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfoThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $contentInfo = $this->getContentInfoForAnonymousUser();
 
         $this->setRestrictedEditorUser();
@@ -202,7 +193,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadVersionInfo($contentInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -213,7 +203,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $contentInfo = $this->getContentInfoForAnonymousUser();
 
         $this->setRestrictedEditorUser();
@@ -222,7 +211,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadVersionInfo($contentInfo, 2);
-        /* END: Use Case */
     }
 
     /**
@@ -234,14 +222,12 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     public function testLoadVersionInfoByIdThrowsUnauthorizedException()
     {
         $anonymousUserId = $this->generateId('user', 10);
-        /* BEGIN: Use Case */
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadVersionInfoById($anonymousUserId);
-        /* END: Use Case */
     }
 
     /**
@@ -253,14 +239,12 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     public function testLoadVersionInfoByIdThrowsUnauthorizedExceptionWithSecondParameter()
     {
         $anonymousUserId = $this->generateId('user', 10);
-        /* BEGIN: Use Case */
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadVersionInfoById($anonymousUserId, 2);
-        /* END: Use Case */
     }
 
     /**
@@ -271,7 +255,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedExceptionForFirstDraft()
     {
-        /* BEGIN: Use Case */
         $contentDraft = $this->createContentDraftVersion1();
 
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
@@ -284,7 +267,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             $contentDraft->id,
             $contentDraft->contentInfo->currentVersionNo
         );
-        /* END: Use Case */
     }
 
     /**
@@ -295,7 +277,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $contentInfo = $this->getContentInfoForAnonymousUser();
 
         $this->setRestrictedEditorUser();
@@ -304,7 +285,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByContentInfo($contentInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -315,7 +295,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $contentInfo = $this->getContentInfoForAnonymousUser();
 
         $this->setRestrictedEditorUser();
@@ -324,7 +303,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByContentInfo($contentInfo, ['eng-US']);
-        /* END: Use Case */
     }
 
     /**
@@ -335,7 +313,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByContentInfoThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        /* BEGIN: Use Case */
         $contentInfo = $this->getContentInfoForAnonymousUser();
 
         $this->setRestrictedEditorUser();
@@ -344,7 +321,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByContentInfo($contentInfo, ['eng-US'], 2);
-        /* END: Use Case */
     }
 
     /**
@@ -355,7 +331,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByVersionInfoThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $contentInfo = $this->getContentInfoForAnonymousUser();
 
         $versionInfo = $this->contentService->loadVersionInfo($contentInfo);
@@ -366,7 +341,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByVersionInfo($versionInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -377,7 +351,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByVersionInfoThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $contentInfo = $this->getContentInfoForAnonymousUser();
 
         $versionInfo = $this->contentService->loadVersionInfo($contentInfo);
@@ -388,7 +361,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByVersionInfo($versionInfo, ['eng-US']);
-        /* END: Use Case */
     }
 
     /**
@@ -400,14 +372,12 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     public function testLoadContentThrowsUnauthorizedException()
     {
         $anonymousUserId = $this->generateId('user', 10);
-        /* BEGIN: Use Case */
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContent($anonymousUserId);
-        /* END: Use Case */
     }
 
     /**
@@ -419,14 +389,12 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     public function testLoadContentThrowsUnauthorizedExceptionWithSecondParameter()
     {
         $anonymousUserId = $this->generateId('user', 10);
-        /* BEGIN: Use Case */
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContent($anonymousUserId, ['eng-US']);
-        /* END: Use Case */
     }
 
     /**
@@ -438,14 +406,12 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     public function testLoadContentThrowsUnauthorizedExceptionWithThirdParameter()
     {
         $anonymousUserId = $this->generateId('user', 10);
-        /* BEGIN: Use Case */
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContent($anonymousUserId, ['eng-US'], 2);
-        /* END: Use Case */
     }
 
     /**
@@ -456,7 +422,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentThrowsUnauthorizedExceptionOnDrafts()
     {
-        /* BEGIN: Use Case */
         $editorUser = $this->createUserVersion1();
 
         $this->permissionResolver->setCurrentUserReference($editorUser);
@@ -472,7 +437,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
 
         $this->contentService->loadContent($draft->id);
-        /* END: Use Case */
     }
 
     /**
@@ -485,7 +449,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentThrowsUnauthorizedExceptionsOnArchives()
     {
-        /* BEGIN: Use Case */
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
         // set admin as current user
@@ -520,7 +483,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
 
         $this->contentService->loadContent($objectUpdated->id, null, 1);
-        /* END: Use Case */
     }
 
     /**
@@ -531,7 +493,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
 
         $this->setRestrictedEditorUser();
@@ -540,7 +501,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByRemoteId($anonymousRemoteId);
-        /* END: Use Case */
     }
 
     /**
@@ -551,7 +511,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
 
         $this->setRestrictedEditorUser();
@@ -560,7 +519,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByRemoteId($anonymousRemoteId, ['eng-US']);
-        /* END: Use Case */
     }
 
     /**
@@ -571,7 +529,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        /* BEGIN: Use Case */
         $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
 
         $this->setRestrictedEditorUser();
@@ -580,7 +537,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByRemoteId($anonymousRemoteId, ['eng-US'], 2);
-        /* END: Use Case */
     }
 
     /**
@@ -591,7 +547,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         $contentInfo = $content->contentInfo;
@@ -613,7 +568,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             $contentInfo,
             $metadataUpdate
         );
-        /* END: Use Case */
     }
 
     /**
@@ -624,7 +578,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testDeleteContentThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
         $contentInfo = $contentVersion2->contentInfo;
@@ -635,7 +588,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'remove\' \'content\'/');
 
         $this->contentService->deleteContent($contentInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -646,7 +598,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCreateContentDraftThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         $contentInfo = $content->contentInfo;
@@ -657,7 +608,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'edit\' \'content\'/');
 
         $this->contentService->createContentDraft($contentInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -668,7 +618,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCreateContentDraftThrowsUnauthorizedExceptionWithSecondParameter()
     {
-        /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
 
         $contentInfo = $content->contentInfo;
@@ -680,7 +629,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'edit\' \'content\'/');
 
         $this->contentService->createContentDraft($contentInfo, $versionInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -692,14 +640,12 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadContentDraftsThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
 
         $this->contentService->loadContentDrafts();
-        /* END: Use Case */
     }
 
     /**
@@ -716,7 +662,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
 
         $this->contentService->loadContentDrafts($this->administratorUser);
-        /* END: Use Case */
     }
 
     /**
@@ -727,7 +672,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $draftVersion2 = $this->createContentDraftVersion2();
 
         $versionInfo = $draftVersion2->getVersionInfo();
@@ -746,7 +690,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
 
         $this->contentService->updateContent($versionInfo, $contentUpdate);
-        /* END: Use Case */
     }
 
     /**
@@ -757,7 +700,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
@@ -766,7 +708,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'publish\' \'content\'/');
 
         $this->contentService->publishVersion($draft->getVersionInfo());
-        /* END: Use Case */
     }
 
     /**
@@ -777,7 +718,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testDeleteVersionThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
@@ -786,7 +726,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'versionremove\' \'content\'/');
 
         $this->contentService->deleteVersion($draft->getVersionInfo());
-        /* END: Use Case */
     }
 
     /**
@@ -797,7 +736,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadVersionsThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
         $contentInfo = $contentVersion2->contentInfo;
@@ -808,7 +746,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
 
         $this->contentService->loadVersions($contentInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -823,7 +760,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $locationService = $this->repository->getLocationService();
 
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createMultipleLanguageContentVersion2();
 
         $contentInfo = $contentVersion2->contentInfo;
@@ -846,7 +782,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             $contentInfo,
             $targetLocationCreate
         );
-        /* END: Use Case */
     }
 
     /**
@@ -859,7 +794,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     {
         $parentLocationId = $this->generateId('location', 52);
 
-        /* BEGIN: Use Case */
         $contentVersion2 = $this->createContentVersion2();
 
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
@@ -881,7 +815,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             $targetLocationCreate,
             $this->contentService->loadVersionInfo($contentVersion2->contentInfo, 1)
         );
-        /* END: Use Case */
     }
 
     /**
@@ -892,7 +825,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadRelationsThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $mediaEditor = $this->createMediaUserVersion1();
 
         $setupRemoteId = '241d538ce310074e602f29f49e44e938';
@@ -909,7 +841,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
 
         $this->contentService->loadRelations($versionInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -920,7 +851,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadRelationsForDraftVersionThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
@@ -929,7 +859,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
 
         $this->contentService->loadRelations($draft->versionInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -940,7 +869,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadReverseRelationsThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $mediaEditor = $this->createMediaUserVersion1();
 
         $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
@@ -953,7 +881,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'reverserelatedlist\' \'content\'/');
 
         $this->contentService->loadReverseRelations($contentInfo);
-        /* END: Use Case */
     }
 
     /**
@@ -964,7 +891,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testAddRelationThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $draft = $this->createContentDraftVersion1();
@@ -982,7 +908,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             $versionInfo,
             $media
         );
-        /* END: Use Case */
     }
 
     /**
@@ -993,7 +918,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testDeleteRelationThrowsUnauthorizedException()
     {
-        /* BEGIN: Use Case */
         $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
         $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
 
@@ -1014,7 +938,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
 
         $this->contentService->deleteRelation($versionInfo, $media);
-        /* END: Use Case */
     }
 
     /**
@@ -1025,7 +948,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     private function createAnonymousWithEditorRole()
     {
-        /* BEGIN: Use Case */
         $roleService = $this->repository->getRoleService();
 
         $user = $this->anonymousUser;
@@ -1041,7 +963,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
                 ]
             )
         );
-        /* END: Use Case */
 
         return $this->userService->loadUser($user->id);
     }
@@ -1056,7 +977,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testLoadRelationsWithUnauthorizedRelations()
     {
-        /* BEGIN: Use Case */
         $mainLanguage = 'eng-GB';
 
         $contentTypeService = $this->repository->getContentTypeService();
@@ -1084,29 +1004,12 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // non-readable object 2 -> /Restricted Folder/Unavailable Folder
         //
         // here is created - readable object 1 -> /Main Folder
-        $mainFolderCreate = $this->contentService->newContentCreateStruct(
-            $contentTypeService->loadContentTypeByIdentifier('folder'),
-            $mainLanguage
-        );
-        $mainFolderCreate->setField('name', 'Main Folder');
-        $mainFolder = $this->contentService->publishVersion(
-            $this->contentService->createContent(
-                $mainFolderCreate,
-                [$locationService->newLocationCreateStruct(2)]
-            )->versionInfo
-        );
+        $mainFolder = $this->createFolder([$mainLanguage => 'Main Folder'], 2);
 
         // here is created readable object 2 -> /Main Folder/Available Folder
-        $availableFolderCreate = $this->contentService->newContentCreateStruct(
-            $contentTypeService->loadContentTypeByIdentifier('folder'),
-            $mainLanguage
-        );
-        $availableFolderCreate->setField('name', 'Avaliable Folder');
-        $availableFolder = $this->contentService->publishVersion(
-            $this->contentService->createContent(
-                $availableFolderCreate,
-                [$locationService->newLocationCreateStruct($mainFolder->contentInfo->mainLocationId)]
-            )->versionInfo
+        $availableFolder = $this->createFolder(
+            [$mainLanguage => 'Avaliable Folder'],
+            $mainFolder->contentInfo->mainLocationId
         );
 
         // here is created the non-readable object 1 -> /Restricted Folder
@@ -1124,16 +1027,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         );
 
         // here is created non-readable object 2 -> /Restricted Folder/Unavailable Folder
-        $unavailableFolderCreate = $this->contentService->newContentCreateStruct(
-            $contentTypeService->loadContentTypeByIdentifier('folder'),
-            $mainLanguage
-        );
-        $unavailableFolderCreate->setField('name', 'Unavailable Folder');
-        $unavailableFolder = $this->contentService->publishVersion(
-            $this->contentService->createContent(
-                $unavailableFolderCreate,
-                [$locationService->newLocationCreateStruct($restrictedFolder->contentInfo->mainLocationId)]
-            )->versionInfo
+        $unavailableFolder = $this->createFolder(
+            [$mainLanguage => 'Unavailable Folder'],
+            $restrictedFolder->contentInfo->mainLocationId
         );
 
         // this will be our test object, which will have all the relations (as source)
@@ -1183,8 +1079,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // finaly load relations ( verify no exception is thrown )
         $actualRelations = $this->contentService->loadRelations($testFolder->getVersionInfo());
-
-        /* END: Use case */
 
         // assert results
         // verify that the only expected relations are from the 2 readable objects
