@@ -36,11 +36,14 @@ class DoctrineDatabaseTest extends AbstractTestCase
      */
     protected function getContentHandler()
     {
+        $dbHandler = $this->getDatabaseHandler();
         if (!isset($this->contentHandler)) {
             $this->contentHandler = new ContentHandler(
                 new ContentGateway(
-                    $this->getDatabaseHandler(),
+                    $dbHandler,
                     $this->getDatabaseConnection(),
+                    new ContentGateway\QueryBuilder($dbHandler),
+                    $this->getLanguageHandler(),
                     $this->getLanguageMaskGenerator()
                 )
             );
