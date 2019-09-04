@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
-use eZ\Publish\API\Repository\Values\Content\ContentDraftListItem;
-use eZ\Publish\API\Repository\Values\Content\UnauthorizedContentDraftListItem;
+use eZ\Publish\API\Repository\Values\Content\DraftList\Item\ContentDraftListItem;
+use eZ\Publish\API\Repository\Values\Content\DraftList\Item\UnauthorizedContentDraftListItem;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
@@ -1159,9 +1159,9 @@ class ContentService implements ContentServiceInterface
     /**
      * Counts drafts for a user.
      *
-     * If no user is given the number of drafts for the authenticated user a returned
+     * If no user is given the number of drafts for the authenticated user are returned
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts for, if defined, otherwise drafts for current-user
      *
      * @return int The number of drafts ({@link VersionInfo}) owned by the given user
      */
@@ -1175,7 +1175,7 @@ class ContentService implements ContentServiceInterface
     /**
      * Loads drafts for a user.
      *
-     * If no user is given the drafts for the authenticated user a returned
+     * If no user is given the drafts for the authenticated user are returned
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
@@ -1231,16 +1231,15 @@ class ContentService implements ContentServiceInterface
             $contentDraftList = [];
             foreach ($spiVersionInfoList as $spiVersionInfo) {
                 $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
-                if (!$this->repository->canUser('content', 'versionread', $versionInfo)) {
+                if ($this->repository->canUser('content', 'versionread', $versionInfo)) {
+                    $contentDraftList[] = new ContentDraftListItem($versionInfo);
+                } else {
                     $contentDraftList[] = new UnauthorizedContentDraftListItem(
                         'content',
                         'versionread',
                         ['contentId' => $versionInfo->contentInfo->id]
                     );
-                    continue;
                 }
-
-                $contentDraftList[] = new ContentDraftListItem($versionInfo);
             }
 
             $list->items = $contentDraftList;
@@ -2420,7 +2419,7 @@ class ContentService implements ContentServiceInterface
     private function resolveUser(?User $user): UserReference
     {
         if ($user === null) {
-            $user = $this->repository->getCurrentUserReference();
+            $user = $this->repository->getPermissionResolver()->getCurrentUserReference();
         }
 
         return $user;

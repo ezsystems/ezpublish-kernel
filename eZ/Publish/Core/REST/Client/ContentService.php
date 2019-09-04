@@ -452,9 +452,9 @@ class ContentService implements APIContentService, Sessionable
     /**
      * Counts drafts for a user.
      *
-     * If no user is given the number of drafts for the authenticated user a returned
+     * If no user is given the number of drafts for the authenticated user are returned
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts for, if defined, otherwise drafts for current-user
      *
      * @return int The number of drafts ({@link VersionInfo}) owned by the given user
      */
@@ -466,7 +466,7 @@ class ContentService implements APIContentService, Sessionable
     /**
      * Loads drafts for a user.
      *
-     * If no user is given the drafts for the authenticated user a returned
+     * If no user is given the drafts for the authenticated user are returned
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *

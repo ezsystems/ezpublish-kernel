@@ -475,7 +475,7 @@ class Handler implements BaseContentHandler
      *
      * @return int
      */
-    public function countDraftsForUser($userId): int
+    public function countDraftsForUser(int $userId): int
     {
         return $this->contentGateway->countVersionsForUser($userId, VersionInfo::STATUS_DRAFT);
     }
@@ -511,7 +511,7 @@ class Handler implements BaseContentHandler
     /**
      * {@inheritdoc}
      */
-    public function loadDraftListForUser($userId, int $offset = 0, int $limit = -1): array
+    public function loadDraftListForUser(int $userId, int $offset = 0, int $limit = -1): array
     {
         $rows = $this->contentGateway->loadVersionsForUser($userId, VersionInfo::STATUS_DRAFT, $offset, $limit);
         if (empty($rows)) {

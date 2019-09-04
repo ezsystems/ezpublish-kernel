@@ -6,14 +6,19 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\API\Repository\Values\Content;
+namespace eZ\Publish\API\Repository\Values\Content\DraftList\Item;
+
+use eZ\Publish\API\Repository\Values\Content\DraftList\ContentDraftListItemInterface;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Item of content drafts list.
  */
 class ContentDraftListItem implements ContentDraftListItemInterface
 {
-    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
+     */
     private $versionInfo;
 
     /**
@@ -37,6 +42,6 @@ class ContentDraftListItem implements ContentDraftListItemInterface
      */
     public function hasVersionInfo(): bool
     {
-        return true;
+        return $this->versionInfo instanceof VersionInfo;
     }
 }

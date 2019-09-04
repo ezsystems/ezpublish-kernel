@@ -6,7 +6,10 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\API\Repository\Values\Content;
+namespace eZ\Publish\API\Repository\Values\Content\DraftList\Item;
+
+use eZ\Publish\API\Repository\Values\Content\DraftList\ContentDraftListItemInterface;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Item of content drafts list which represents draft to which user has no access for.

@@ -1098,10 +1098,11 @@ class DoctrineDatabase extends Gateway
      */
     public function countVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): int
     {
+        $platform = $this->connection->getDatabasePlatform();
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
         $query
-            ->select('COUNT(v.id)')
+            ->select($platform->getCountExpression('v.id'))
             ->from('ezcontentobject_version', 'v')
             ->innerJoin(
                 'v',
@@ -1176,7 +1177,7 @@ class DoctrineDatabase extends Gateway
         $query->orderBy('v.modified', 'DESC');
         $query->addOrderBy('v.id', 'DESC');
 
-        return $this->loadVersionsHelper($query);
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -2348,35 +2349,13 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Helper for {@see listVersions()} and {@see listVersionsForUser()} that filters duplicates
-     * that are the result of the cartesian product performed by createVersionInfoFindQuery().
-     *
-     * @return string[][]
-     */
-    private function loadVersionsHelper(DoctrineQueryBuilder $query)
-    {
-        $results = [];
-        $previousId = null;
-        foreach ($query->execute()->fetchAll(FetchMode::ASSOCIATIVE) as $row) {
-            if ($row['ezcontentobject_version_id'] == $previousId) {
-                continue;
-            }
-
-            $previousId = $row['ezcontentobject_version_id'];
-            $results[] = $row;
-        }
-
-        return $results;
-    }
-
-    /**
      * Get query builder for content version objects, used for version loading w/o fields.
      *
      * Creates a select query with all necessary joins to fetch a complete
      * content object. Does not apply any WHERE conditions, and does not contain
      * name data as it will lead to large result set {@see createNamesQuery}.
      *
-     * @return DoctrineQueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function createVersionInfoFindQueryBuilder()
     {

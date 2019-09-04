@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\UnauthorizedContentDraftListItem;
+use eZ\Publish\API\Repository\Values\Content\DraftList\Item\UnauthorizedContentDraftListItem;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -522,7 +522,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
      *
-     * @param ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
     public function testLoadContentInfoSetsExpectedContentInfo(ContentInfo $contentInfo)
     {
@@ -542,10 +542,8 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
 
-
         $this->expectException(NotFoundException::class);
 
-        // This call will fail with a NotFoundException
         $this->contentService->loadContentInfo($nonExistentContentId);
     }
 
@@ -602,7 +600,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
      * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId
      *
-     * @param ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
     public function testLoadContentInfoByRemoteIdSetsExpectedContentInfo(ContentInfo $contentInfo)
     {
@@ -690,7 +688,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
-     * @param VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      */
     public function testLoadVersionInfoByIdSetsExpectedVersionInfo(VersionInfo $versionInfo)
     {
@@ -2031,8 +2029,6 @@ XML
 
         $this->expectException(NotFoundException::class);
 
-        $this->expectException(NotFoundException::class);
-
         foreach ($locations as $location) {
             $this->locationService->loadLocation($location->id);
         }
@@ -2059,8 +2055,6 @@ XML
 
         $this->expectException(NotFoundException::class);
 
-        $this->expectException(NotFoundException::class);
-
         foreach ($locations as $location) {
             $this->locationService->loadLocation($location->id);
         }
@@ -2069,22 +2063,18 @@ XML
     public function testCountContentDraftsReturnsZeroByDefault(): void
     {
         $this->assertSame(0, $this->contentService->countContentDrafts());
-        $this->assertSame(0, $this->contentService->countContentDrafts());
     }
 
     public function testCountContentDrafts(): void
     {
-        /* BEGIN: Use Case */
         // Create 5 drafts
         $this->createContentDrafts(5);
-        /* END: Use Case */
 
         $this->assertSame(5, $this->contentService->countContentDrafts());
     }
 
     public function testCountContentDraftsForUsers(): void
     {
-        /* BEGIN: Use Case */
         $newUser = $this->createUserWithPolicies(
             'new_user',
             [
@@ -2110,7 +2100,6 @@ XML
         // Now $contentDrafts for the previous current user and the new user
         $newUserDrafts = $this->contentService->countContentDrafts($newUser);
         $previousUserDrafts = $this->contentService->countContentDrafts();
-        /* END: Use Case */
 
         $this->assertSame(1, $newUserDrafts);
         $this->assertSame(0, $previousUserDrafts);
@@ -2230,7 +2219,7 @@ XML
 
         $draftsOnPage1 = $this->contentService->loadContentDraftList(null, 0, 2);
         $draftsOnPage2 = $this->contentService->loadContentDraftList(null, 2, 2);
-        /* END: Use Case */
+
         $this->assertSame(5, $draftsOnPage1->totalCount);
         $this->assertSame(5, $draftsOnPage2->totalCount);
         $this->assertEquals($draftContentE->getVersionInfo(), $draftsOnPage1->items[0]->getVersionInfo());
@@ -2246,7 +2235,6 @@ XML
      */
     public function testLoadContentDraftListWithForUserWithLimitation()
     {
-        /* BEGIN: Use Case */
         $oldUser = $this->permissionResolver->getCurrentUserReference();
 
         $parentContent = $this->createFolder(['eng-US' => 'parentFolder'], 2);
@@ -2260,7 +2248,6 @@ XML
         $contentDraftUnauthorized = $this->contentService->createContentDraft($parentContent->contentInfo);
         $contentDraftA = $this->contentService->createContentDraft($content->contentInfo);
         $contentDraftB = $this->contentService->createContentDraft($content->contentInfo);
-        /* END: Use Case */
 
         $newUserDraftList = $this->contentService->loadContentDraftList($newUser, 0);
         $this->assertSame(3, $newUserDraftList->totalCount);
@@ -2289,7 +2276,6 @@ XML
     {
         // Create more drafts then default pagination limit
         $this->createContentDrafts(12);
-        /* END: Use Case */
 
         $this->assertCount(12, $this->contentService->loadContentDraftList());
     }
@@ -2974,7 +2960,7 @@ XML
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersions
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
      *
-     * @param VersionInfo[] $versions
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo[] $versions
      */
     public function testLoadVersionsSetsExpectedVersionInfo(array $versions)
     {
@@ -5062,8 +5048,8 @@ XML
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws NotFoundException
-     * @throws UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeleteTranslationFromDraftRemovesUrlAliasOnPublishing(array $fieldValues)
     {
@@ -5528,7 +5514,7 @@ XML
     /**
      * Asserts that given Content has default ContentStates.
      *
-     * @param ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
     private function assertDefaultContentStates(ContentInfo $contentInfo)
     {
@@ -5697,8 +5683,8 @@ XML
      * @covers \eZ\Publish\API\Repository\ContentService::revealContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     * @throws NotFoundException
-     * @throws UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testRevealContent()
     {
@@ -5731,7 +5717,6 @@ XML
         $this->assertCount(3, $locations);
         $this->assertCount(1, $hiddenLocations);
 
-        // BEGIN: Use Case
         $this->contentService->hideContent($publishedContent->contentInfo);
         $this->assertCount(
             3,
@@ -5741,7 +5726,6 @@ XML
         );
 
         $this->contentService->revealContent($publishedContent->contentInfo);
-        // END: Use Case
 
         $locations = $this->locationService->loadLocations($publishedContent->contentInfo);
         $hiddenLocationsAfterReveal = $this->filterHiddenLocations($locations);
@@ -6016,8 +6000,8 @@ XML
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] A list of Locations aimed to be parents
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     * @throws NotFoundException
-     * @throws UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     private function createParentLocationsForHideReveal(int $parentLocationId): array
     {
@@ -6094,7 +6078,7 @@ XML
     /**
      * @param int $amountOfDrafts
      *
-     * @throws UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     private function createContentDrafts(int $amountOfDrafts): void
     {
@@ -6104,10 +6088,8 @@ XML
 
         $publishedContent = $this->createContentVersion1();
 
-        $i = 1;
-        while ($i <= $amountOfDrafts) {
+        for ($i = 1; $i <= $amountOfDrafts; ++$i) {
             $this->contentService->createContentDraft($publishedContent->contentInfo);
-            ++$i;
         }
     }
 

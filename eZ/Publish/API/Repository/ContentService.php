@@ -250,9 +250,9 @@ interface ContentService
     /**
      * Counts drafts for a user.
      *
-     * If no user is given the number of drafts for the authenticated user a returned
+     * If no user is given the number of drafts for the authenticated user are returned
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts for, if defined, otherwise drafts for current-user
      *
      * @return int The number of drafts ({@link VersionInfo}) owned by the given user
      */
@@ -261,11 +261,11 @@ interface ContentService
     /**
      * Loads drafts for a user.
      *
-     * If no user is given the drafts for the authenticated user a returned
+     * If no user is given the drafts for the authenticated user are returned
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to load the draft list
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts for, if defined, otherwise drafts for current-user
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
      */
@@ -274,9 +274,9 @@ interface ContentService
     /**
      * Loads drafts for a user when content is not in the trash. The list is sorted by modification date.
      *
-     * If no user is given the drafts for the authenticated user a returned
+     * If no user is given the drafts for the authenticated user are returned
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts from if defined, otherwise drafts for current-user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts for, if defined, otherwise drafts for current-user
      * @param int $limit
      * @param int $offset
      *

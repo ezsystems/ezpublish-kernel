@@ -225,7 +225,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     /**
      * {@inheritdoc}
      */
-    public function countDraftsForUser($userId): int
+    public function countDraftsForUser(int $userId): int
     {
         $this->logger->logCall(__METHOD__, ['user' => $userId]);
 
@@ -245,7 +245,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     /**
      * {@inheritdoc}
      */
-    public function loadDraftListForUser($userId, int $offset = 0, int $limit = -1): array
+    public function loadDraftListForUser(int $userId, int $offset = 0, int $limit = -1): array
     {
         $this->logger->logCall(__METHOD__, ['user' => $userId, 'offset' => $offset, 'limit' => $limit]);
 

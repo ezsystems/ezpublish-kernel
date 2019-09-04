@@ -24,7 +24,7 @@ class ContentDraftList extends ValueObject implements IteratorAggregate
     public $totalCount = 0;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentDraftListItemInterface[]
+     * @var \eZ\Publish\API\Repository\Values\Content\DraftList\ContentDraftListItemInterface[]
      */
     public $items = [];
 

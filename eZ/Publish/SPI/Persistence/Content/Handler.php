@@ -139,7 +139,7 @@ interface Handler
      *
      * @return int
      */
-    public function countDraftsForUser($userId): int;
+    public function countDraftsForUser(int $userId): int;
 
     /**
      * Returns all versions with draft status created by the given $userId.
@@ -159,7 +159,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function loadDraftListForUser($userId, int $offset = 0, int $limit = -1): array;
+    public function loadDraftListForUser(int $userId, int $offset = 0, int $limit = -1): array;
 
     /**
      * Sets the status of object identified by $contentId and $version to $status.

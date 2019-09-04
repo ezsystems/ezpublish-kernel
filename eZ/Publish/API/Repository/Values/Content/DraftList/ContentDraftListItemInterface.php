@@ -6,7 +6,9 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\API\Repository\Values\Content;
+namespace eZ\Publish\API\Repository\Values\Content\DraftList;
+
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 interface ContentDraftListItemInterface
 {
