@@ -28,6 +28,15 @@ class DatabaseConnectionFactory
     private $eventManager;
 
     /**
+     * Connection Pool for re-using already created connection.
+     *
+     * An associative array mapping database URL to Connection object.
+     *
+     * @var \Doctrine\DBAL\Connection[]
+     */
+    private static $connectionPool;
+
+    /**
      * @param \EzSystems\DoctrineSchema\Database\DbPlatform\DbPlatform[] $databasePlatforms
      * @param \Doctrine\Common\EventManager $eventManager
      */
@@ -52,6 +61,10 @@ class DatabaseConnectionFactory
      */
     public function createConnection(string $databaseURL): Connection
     {
+        if (isset(self::$connectionPool[$databaseURL])) {
+            return self::$connectionPool[$databaseURL];
+        }
+
         $params = ['url' => $databaseURL];
 
         // set DbPlatform based on database url scheme
@@ -63,6 +76,12 @@ class DatabaseConnectionFactory
             $params['platform']->addEventSubscribers($this->eventManager);
         }
 
-        return DriverManager::getConnection($params, null, $this->eventManager);
+        self::$connectionPool[$databaseURL] = DriverManager::getConnection(
+            $params,
+            null,
+            $this->eventManager
+        );
+
+        return self::$connectionPool[$databaseURL];
     }
 }
