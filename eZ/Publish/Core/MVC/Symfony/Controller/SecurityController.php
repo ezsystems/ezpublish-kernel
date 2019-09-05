@@ -11,11 +11,11 @@ namespace eZ\Publish\Core\MVC\Symfony\Controller;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\View\LoginFormView;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class SecurityController
 {
-    /** @var \Symfony\Component\Templating\EngineInterface */
+    /** @var \Twig\Environment */
     protected $templateEngine;
 
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
@@ -24,7 +24,7 @@ class SecurityController
     /** @var \Symfony\Component\Security\Http\Authentication\AuthenticationUtils */
     protected $authenticationUtils;
 
-    public function __construct(EngineInterface $templateEngine, ConfigResolverInterface $configResolver, AuthenticationUtils $authenticationUtils)
+    public function __construct(Environment $templateEngine, ConfigResolverInterface $configResolver, AuthenticationUtils $authenticationUtils)
     {
         $this->templateEngine = $templateEngine;
         $this->configResolver = $configResolver;

@@ -27,7 +27,7 @@ services:
     ezpublish.security.controller:
         public: true
         class: "%ezpublish.security.controller.class%"
-        arguments: ["@templating", "@ezpublish.config.resolver", "@security.authentication_utils"]
+        arguments: ["@twig", "@ezpublish.config.resolver", "@security.authentication_utils"]
 
     ezpublish.security.login_listener:
         class: "%ezpublish.security.login_listener.class%"

@@ -216,7 +216,7 @@ class CommonTest extends AbstractParserTestCase
         );
         $this->assertConfigResolverParameterValue(
             'security.login_template',
-            'EzPublishCoreBundle:Security:login.html.twig',
+            '@EzPublishCore/Security/login.html.twig',
             'ezdemo_site'
         );
     }

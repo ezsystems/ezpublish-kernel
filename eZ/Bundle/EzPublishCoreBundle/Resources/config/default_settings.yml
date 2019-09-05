@@ -13,19 +13,19 @@ parameters:
 
 
     # Default view templates
-    ezplatform.default_view_templates.content.full: 'EzPublishCoreBundle:default:content/full.html.twig'
-    ezplatform.default_view_templates.content.line: 'EzPublishCoreBundle:default:content/line.html.twig'
-    ezplatform.default_view_templates.content.text_linked: 'EzPublishCoreBundle:default:content/text_linked.html.twig'
-    ezplatform.default_view_templates.content.embed: 'EzPublishCoreBundle:default:content/embed.html.twig'
-    ezplatform.default_view_templates.content.embed_inline: 'EzPublishCoreBundle:default:content/embed_inline.html.twig'
-    ezplatform.default_view_templates.content.embed_image: 'EzPublishCoreBundle:default:content/embed_image.html.twig'
-    ezplatform.default_view_templates.content.asset_image: 'EzPublishCoreBundle:default:content/asset_image.html.twig'
-    ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
+    ezplatform.default_view_templates.content.full: '@@EzPublishCore/default/content/full.html.twig'
+    ezplatform.default_view_templates.content.line: '@@EzPublishCore/default/content/line.html.twig'
+    ezplatform.default_view_templates.content.text_linked: '@@EzPublishCore/default/content/text_linked.html.twig'
+    ezplatform.default_view_templates.content.embed: '@@EzPublishCore/default/content/embed.html.twig'
+    ezplatform.default_view_templates.content.embed_inline: '@@EzPublishCore/default/content/embed_inline.html.twig'
+    ezplatform.default_view_templates.content.embed_image: '@@EzPublishCore/default/content/embed_image.html.twig'
+    ezplatform.default_view_templates.content.asset_image: '@@EzPublishCore/default/content/asset_image.html.twig'
+    ezplatform.default_view_templates.block: '@@EzPublishCore/default/block/block.html.twig'
 
     # Default templates
-    ezplatform.default_templates.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
-    ezplatform.default_templates.field_templates: 'EzPublishCoreBundle::content_fields.html.twig'
-    ezplatform.default_templates.fielddefinition_settings_templates: 'EzPublishCoreBundle::fielddefinition_settings.html.twig'
+    ezplatform.default_templates.pagelayout: '@@EzPublishCore/pagelayout.html.twig'
+    ezplatform.default_templates.field_templates: '@@EzPublishCore/content_fields.html.twig'
+    ezplatform.default_templates.fielddefinition_settings_templates: '@@EzPublishCore/fielddefinition_settings.html.twig'
 
     # Image Asset mappings
     ezsettings.default.fieldtypes.ezimageasset.mappings:
@@ -138,7 +138,7 @@ parameters:
     ezsettings.default.fielddefinition_edit_templates: []
 
     # Security settings
-    ezsettings.default.security.login_template: "EzPublishCoreBundle:Security:login.html.twig"
+    ezsettings.default.security.login_template: "@@EzPublishCore/Security/login.html.twig"
     ezsettings.default.security.base_layout: "%ezsettings.default.page_layout%"
 
     # Image settings

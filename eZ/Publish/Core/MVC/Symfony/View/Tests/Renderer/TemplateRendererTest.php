@@ -7,18 +7,18 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Renderer;
 
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
 
 class TemplateRendererTest extends TestCase
 {
     /** @var \eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer */
     private $renderer;
 
-    /** @var \Symfony\Component\Templating\EngineInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Twig\Environment|\PHPUnit\Framework\MockObject\MockObject */
     private $templateEngineMock;
 
     /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject */
@@ -26,7 +26,7 @@ class TemplateRendererTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->templateEngineMock = $this->createMock(EngineInterface::class);
+        $this->templateEngineMock = $this->createMock(Environment::class);
         $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $this->renderer = new TemplateRenderer(
             $this->templateEngineMock,
