@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
@@ -70,6 +71,7 @@ class RepositoryFactory implements ContainerAwareInterface
      * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface $passwordHashGenerator
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
@@ -78,7 +80,8 @@ class RepositoryFactory implements ContainerAwareInterface
         SearchHandler $searchHandler,
         BackgroundIndexer $backgroundIndexer,
         RelationProcessor $relationProcessor,
-        FieldTypeRegistry $fieldTypeRegistry
+        FieldTypeRegistry $fieldTypeRegistry,
+        PasswordHashGeneratorInterface $passwordHashGenerator
     ) {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 
@@ -88,6 +91,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $backgroundIndexer,
             $relationProcessor,
             $fieldTypeRegistry,
+            $passwordHashGenerator,
             [
                 'role' => [
                     'limitationTypes' => $this->roleLimitations,

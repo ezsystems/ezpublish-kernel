@@ -12,11 +12,13 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
+use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
+use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Persistence\Cache\UserHandler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
@@ -28,9 +30,6 @@ class Type extends FieldType
 {
     public const PASSWORD_TTL_SETTING = 'PasswordTTL';
     public const PASSWORD_TTL_WARNING_SETTING = 'PasswordTTLWarning';
-
-    /** @var \eZ\Publish\Core\Persistence\Cache\UserHandler */
-    protected $userHandler;
 
     /** @var array */
     protected $settingsSchema = [
@@ -70,12 +69,23 @@ class Type extends FieldType
         ],
     ];
 
-    /**
-     * @param \eZ\Publish\Core\Persistence\Cache\UserHandler $userHandler
-     */
-    public function __construct(UserHandler $userHandler)
-    {
+    /** @var \eZ\Publish\SPI\Persistence\User\Handler */
+    private $userHandler;
+
+    /** @var \eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface */
+    private $passwordHashGenerator;
+
+    /** @var \eZ\Publish\Core\Repository\User\PasswordValidatorInterface */
+    private $passwordValidator;
+
+    public function __construct(
+        SPIUserHandler $userHandler,
+        PasswordHashGeneratorInterface $passwordHashGenerator,
+        PasswordValidatorInterface $passwordValidator
+    ) {
         $this->userHandler = $userHandler;
+        $this->passwordHashGenerator = $passwordHashGenerator;
+        $this->passwordValidator = $passwordValidator;
     }
 
     /**
@@ -228,6 +238,14 @@ class Type extends FieldType
      */
     public function toPersistenceValue(SPIValue $value)
     {
+        $value->passwordHashType = $value->passwordHashType ?? $this->passwordHashGenerator->getHashType();
+        if ($value->plainPassword) {
+            $value->passwordHash = $this->passwordHashGenerator->createPasswordHash(
+                $value->plainPassword,
+                $value->passwordHashType
+            );
+        }
+
         return new FieldValue(
             [
                 'data' => null,
@@ -269,7 +287,50 @@ class Type extends FieldType
             return $errors;
         }
 
-        if (!$fieldValue->hasStoredLogin) {
+        if (!is_string($fieldValue->login) || empty($fieldValue->login)) {
+            $errors[] = new ValidationError(
+                'Login required',
+                null,
+                [],
+                'username'
+            );
+        }
+
+        if (!is_string($fieldValue->email) || empty($fieldValue->email)) {
+            $errors[] = new ValidationError(
+                'Email required',
+                null,
+                [],
+                'email'
+            );
+        } elseif (false === filter_var($fieldValue->email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = new ValidationError(
+                "The given e-mail '%email%' is invalid",
+                null,
+                ['%email%' => $fieldValue->email],
+                'email'
+            );
+        }
+
+        if (!$fieldValue->hasStoredLogin && (!is_string($fieldValue->plainPassword) || empty($fieldValue->plainPassword))) {
+            $errors[] = new ValidationError(
+                'Password required',
+                null,
+                [],
+                'password'
+            );
+        }
+
+        if (!is_bool($fieldValue->enabled)) {
+            $errors[] = new ValidationError(
+                'Enabled must be boolean value',
+                null,
+                [],
+                'enabled'
+            );
+        }
+
+        if (!$fieldValue->hasStoredLogin && isset($fieldValue->login)) {
             try {
                 $login = $fieldValue->login;
                 $this->userHandler->loadByLogin($login);
@@ -286,6 +347,15 @@ class Type extends FieldType
             } catch (NotFoundException $e) {
                 // Do nothing
             }
+        }
+
+        if (!empty($fieldValue->plainPassword)) {
+            $passwordValidationError[] = $this->passwordValidator->validatePassword(
+                $fieldValue->plainPassword,
+                $fieldDefinition
+            );
+
+            $errors = array_merge($errors, ...$passwordValidationError);
         }
 
         return $errors;
