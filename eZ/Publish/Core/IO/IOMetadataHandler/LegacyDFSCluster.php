@@ -69,15 +69,7 @@ class LegacyDFSCluster implements IOMetadataHandler
              * @todo what might go wrong here ? Can another process be trying to insert the same image ?
              *       what happens if somebody did ?
              **/
-            $stmt = $this->db->prepare(<<<SQL
-INSERT INTO ezdfsfile
-  (name, name_hash, name_trunk, mtime, size, scope, datatype)
-  VALUES (:name, :name_hash, :name_trunk, :mtime, :size, :scope, :datatype)
-ON DUPLICATE KEY UPDATE
-  datatype=VALUES(datatype), scope=VALUES(scope), size=VALUES(size),
-  mtime=VALUES(mtime)
-SQL
-            );
+            $stmt = $this->db->prepare($this->getFileInsertQuery());
             $stmt->bindValue('name', $path);
             $stmt->bindValue('name_hash', md5($path));
             $stmt->bindValue('name_trunk', $this->getNameTrunk($binaryFileCreateStruct));
@@ -109,7 +101,7 @@ SQL
         $stmt->bindValue('name_hash', md5($path));
         $stmt->execute();
 
-        if ($stmt->rowCount() != 1) {
+        if ($stmt->rowCount() != true) {
             // Is this really necessary ?
             throw new BinaryFileNotFoundException($path);
         }
@@ -129,7 +121,7 @@ SQL
     {
         $path = $this->addPrefix($spiBinaryFileId);
 
-        $stmt = $this->db->prepare('SELECT * FROM ezdfsfile WHERE name_hash LIKE ? AND expired != 1 AND mtime > 0');
+        $stmt = $this->db->prepare('SELECT * FROM ezdfsfile WHERE name_hash LIKE ? AND expired != true AND mtime > 0');
         $stmt->bindValue(1, md5($path));
         $stmt->execute();
 
@@ -156,7 +148,7 @@ SQL
     {
         $path = $this->addPrefix($spiBinaryFileId);
 
-        $stmt = $this->db->prepare('SELECT name FROM ezdfsfile WHERE name_hash LIKE ? and mtime > 0 and expired != 1');
+        $stmt = $this->db->prepare('SELECT name FROM ezdfsfile WHERE name_hash LIKE ? and mtime > 0 and expired != true');
         $stmt->bindValue(1, md5($path));
         $stmt->execute();
 
@@ -226,7 +218,7 @@ SQL
 
     public function getMimeType($spiBinaryFileId)
     {
-        $stmt = $this->db->prepare('SELECT * FROM ezdfsfile WHERE name_hash LIKE ? AND expired != 1 AND mtime > 0');
+        $stmt = $this->db->prepare('SELECT * FROM ezdfsfile WHERE name_hash LIKE ? AND expired != true AND mtime > 0');
         $stmt->bindValue(1, md5($this->addPrefix($spiBinaryFileId)));
         $stmt->execute();
 
@@ -290,5 +282,38 @@ SQL
         $spiBinaryFile->mimeType = $binaryFileCreateStruct->mimeType;
 
         return $spiBinaryFile;
+    }
+
+    /**
+     * Generate the correct SQL query to insert an entry.
+     *
+     * @return string
+     */
+    protected function getFileInsertQuery()
+    {
+        $dbDriver = $this->db->getDriver();
+
+        if ($dbDriver instanceof Connection && $dbDriver->getName() === 'pdo_mysql') {
+            return <<<SQL
+INSERT INTO ezdfsfile
+(name, name_hash, name_trunk, mtime, size, scope, datatype)
+VALUES (:name, :name_hash, :name_trunk, :mtime, :size, :scope, :datatype)
+ON DUPLICATE KEY UPDATE
+datatype=VALUES(datatype), scope=VALUES(scope), size=VALUES(size),
+mtime=VALUES(mtime)
+SQL;
+        }
+
+        // ANSI compatible: Postgres and others
+        return <<<SQL
+MERGE INTO ezdfsfile
+USING ( (name, name_hash, name_trunk, mtime, size, scope, datatype)
+        VALUES (:name, :name_hash, :name_trunk, :mtime, :size, :scope, :datatype) ) v
+ON v.name_hash = ezdfsfile.name_hash
+WHEN NOT MATCHED
+    INSERT VALUES(name, name_hash, name_trunk, mtime, size, scope, datatype)
+WHEN MATCHED
+    UPDATE SET datatype=v.datatype, scope=v.scope, size=v.size, mtime=v.mtime
+SQL;
     }
 }
