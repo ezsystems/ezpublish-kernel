@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\FieldType\User\UserStorage;
 
 use eZ\Publish\SPI\FieldType\StorageGateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 abstract class Gateway extends StorageGateway
 {
@@ -37,4 +39,16 @@ abstract class Gateway extends StorageGateway
      * @return array
      */
     abstract public function getFieldData($fieldId, $userId = null);
+
+    abstract public function storeFieldData(VersionInfo $versionInfo, Field $field): bool;
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param int[] $fieldIds
+     *
+     * @return bool
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    abstract public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds): bool;
 }

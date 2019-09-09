@@ -61,7 +61,7 @@ class UserStorage extends GatewayBasedStorage
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        // Only the UserService may update user data
+        return $this->gateway->storeFieldData($versionInfo, $field);
     }
 
     /**
@@ -80,15 +80,17 @@ class UserStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param VersionInfo $versionInfo
-     * @param array $fieldIds Array of field Ids
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param int[] $fieldIds Array of field Ids
      * @param array $context
      *
      * @return bool
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
-        // Only the UserService may update user data
+        return $this->gateway->deleteFieldData($versionInfo, $fieldIds);
     }
 
     /**
