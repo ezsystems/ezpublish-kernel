@@ -13,10 +13,12 @@ use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\AllValidationErrorsOccur as PHPUnitConstraintAllValidationErrorsOccur;
 use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\User\User;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
@@ -295,12 +297,8 @@ abstract class BaseTest extends TestCase
 
     /**
      * Create a user in editor user group.
-     *
-     * @param string $login
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function createUserVersion1($login = 'user')
+    protected function createUserVersion1(string $login = 'user', ?string $email = null): User
     {
         $repository = $this->getRepository();
 
@@ -311,9 +309,10 @@ abstract class BaseTest extends TestCase
         $userService = $repository->getUserService();
 
         // Instantiate a create struct with mandatory properties
+        $email = $email ?? "{$login}@example.com";
         $userCreate = $userService->newUserCreateStruct(
             $login,
-            "{$login}@example.com",
+            $email,
             'secret',
             'eng-US'
         );
@@ -669,9 +668,26 @@ abstract class BaseTest extends TestCase
      */
     protected function assertValidationErrorOccurs(
         ContentFieldValidationException $exception,
-        $expectedValidationErrorMessage
-    ) {
+        string $expectedValidationErrorMessage
+    ): void {
         $constraint = new PHPUnitConstraintValidationErrorOccurs($expectedValidationErrorMessage);
+
+        self::assertThat($exception, $constraint);
+    }
+
+    /**
+     * Traverse all errors for all fields in all Translations to find if all expected ones occurred.
+     *
+     * @param \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException $exception
+     * @param string[] $expectedValidationErrorMessages
+     */
+    protected function assertAllValidationErrorsOccur(
+        ContentFieldValidationException $exception,
+        array $expectedValidationErrorMessages
+    ): void {
+        $constraint = new PHPUnitConstraintAllValidationErrorsOccur(
+            $expectedValidationErrorMessages
+        );
 
         self::assertThat($exception, $constraint);
     }

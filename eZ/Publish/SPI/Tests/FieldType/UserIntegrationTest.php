@@ -10,11 +10,12 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
+use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\User;
-use eZ\Publish\Core\Persistence\Cache\UserHandler;
 
 /**
  * Integration test for legacy storage field types.
@@ -55,8 +56,18 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $userHandler = $this->createMock(UserHandler::class);
-        $fieldType = new FieldType\User\Type($userHandler);
+        $userHandler = $this->createMock(User\Handler::class);
+        $passwordHashGenerator = $this->createMock(PasswordHashGeneratorInterface::class);
+        $passwordHashGenerator
+            ->method('getHashType')
+            ->willReturn(0);
+        $passwordValidator = $this->createMock(PasswordValidatorInterface::class);
+
+        $fieldType = new FieldType\User\Type(
+            $userHandler,
+            $passwordHashGenerator,
+            $passwordValidator
+        );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
@@ -109,7 +120,14 @@ class UserIntegrationTest extends BaseIntegrationTest
         return new Content\FieldValue(
             [
                 'data' => null,
-                'externalData' => [],
+                'externalData' => [
+                    'login' => 'hans',
+                    'email' => 'hans@example.com',
+                    'passwordHash' => '*',
+                    'passwordHashType' => 0,
+                    'enabled' => true,
+                    'maxLogin' => 1000,
+                ],
                 'sortKey' => 'user',
             ]
         );
@@ -155,12 +173,12 @@ class UserIntegrationTest extends BaseIntegrationTest
             [
                 'data' => null,
                 'externalData' => [
-                    'login' => 'change', // Change is intended to not get through
-                    'email' => 'change', // Change is intended to not get through
-                    'passwordHash' => 'change', // Change is intended to not get through
-                    'passwordHashType' => 'change', // Change is intended to not get through
-                    'enabled' => 'changed', // Change is intended to not get through
-                    'maxLogin' => 'changed', // Change is intended to not get through
+                    'login' => 'changeLogin',
+                    'email' => 'changeEmail@ez.no',
+                    'passwordHash' => '*2',
+                    'passwordHashType' => 1,
+                    'enabled' => false,
+                    'maxLogin' => 1,
                 ],
                 'sortKey' => 'user',
             ]
@@ -179,31 +197,19 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function assertUpdatedFieldDataCorrect(Field $field)
     {
-        // No update of user data possible through field type
-        $this->assertLoadedFieldDataCorrect($field);
-    }
+        $expectedValues = [
+            'hasStoredLogin' => true,
+            'contentId' => self::$contentId,
+            'login' => 'changeLogin',
+            'email' => 'changeEmail@ez.no',
+            'passwordHash' => '*2',
+            'passwordHashType' => 1,
+            'enabled' => false,
+            'maxLogin' => 1,
+        ];
 
-    /**
-     * Method called after content creation.
-     *
-     * Useful, if additional stuff should be executed (like creating the actual
-     * user).
-     *
-     * @param Legacy\Handler $handler
-     * @param Content $content
-     */
-    public function postCreationHook(Legacy\Handler $handler, Content $content)
-    {
-        $user = new User();
-        $user->id = $content->versionInfo->contentInfo->id;
-        $user->login = 'hans';
-        $user->email = 'hans@example.com';
-        $user->passwordHash = '*';
-        $user->hashAlgorithm = 0;
-        $user->isEnabled = true;
-        $user->maxLogin = 1000;
-
-        $userHandler = $handler->userHandler();
-        $userHandler->create($user);
+        foreach ($expectedValues as $key => $value) {
+            $this->assertEquals($value, $field->value->externalData[$key]);
+        }
     }
 }

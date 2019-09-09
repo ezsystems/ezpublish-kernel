@@ -20,6 +20,8 @@ class DoctrineStorageTest extends UserStorageGatewayTest
     {
         $dbHandler = $this->getDatabaseHandler();
 
-        return new DoctrineStorage($dbHandler->getConnection());
+        return new DoctrineStorage(
+            $dbHandler->getConnection()
+        );
     }
 }

@@ -39,19 +39,19 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $policy = new Policy(['id' => 13, 'roleId' => 9]);
         $userToken = new User\UserTokenUpdateStruct(['userId' => 14, 'hashKey' => '4irj8t43r']);
 
-        // string $method, array $arguments, array? $tags, array? $key
+        // string $method, array $arguments, array? $tags, array? $key, returned $returnValue, bool $callInnerHandler
         return [
             ['create', [$user], ['content-fields-14'], [
                 'ez-user-14',
                 'ez-user-' . str_replace('@', '_A', $user->login) . '-by-login',
                 'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
-            ]],
+            ], $user, false],
             ['update', [$user], ['content-fields-14', 'user-14'], [
                 'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
-            ]],
+            ], $user, false],
             ['updateUserToken', [$userToken], ['user-14-account-key'], ['ez-user-4irj8t43r-by-account-key']],
             ['expireUserToken', ['4irj8t43r'], null, ['ez-user-4irj8t43r-by-account-key']],
-            ['delete', [14], ['content-fields-14', 'user-14']],
+            ['delete', [14], ['content-fields-14', 'user-14'], null, null, false],
             ['createRole', [new RoleCreateStruct()]],
             ['createRoleDraft', [new RoleCreateStruct()]],
             ['loadRole', [9, 1]],

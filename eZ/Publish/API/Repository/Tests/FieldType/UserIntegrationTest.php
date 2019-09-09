@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\User\Type;
@@ -23,6 +26,8 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  */
 class UserIntegrationTest extends BaseIntegrationTest
 {
+    private const TEST_LOGIN = 'hans';
+
     /**
      * Get name of tested field type.
      *
@@ -143,11 +148,16 @@ class UserIntegrationTest extends BaseIntegrationTest
     /**
      * Get initial field externals data.
      *
-     * @return array
+     * @return \eZ\Publish\Core\FieldType\User\Value
      */
-    public function getValidCreationFieldData()
+    public function getValidCreationFieldData(): UserValue
     {
-        return new UserValue(['login' => 'hans']);
+        return new UserValue([
+            'login' => self::TEST_LOGIN,
+            'email' => sprintf('%s@example.com', self::TEST_LOGIN),
+            'enabled' => true,
+            'plainPassword' => 'PassWord42',
+        ]);
     }
 
     /**
@@ -157,7 +167,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldName()
     {
-        return 'hans';
+        return self::TEST_LOGIN;
     }
 
     /**
@@ -171,13 +181,13 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\User\\Value',
+            UserValue::class,
             $field->value
         );
 
         $expectedData = [
             'hasStoredLogin' => true,
-            'login' => 'hans',
+            'login' => self::TEST_LOGIN,
             'email' => 'hans@example.com',
             'passwordHashType' => User::PASSWORD_HASH_PHP_DEFAULT,
             'enabled' => true,
@@ -225,17 +235,18 @@ class UserIntegrationTest extends BaseIntegrationTest
     /**
      * Get update field externals data.
      *
-     * @return array
+     * @return \eZ\Publish\Core\FieldType\User\Value
      */
     public function getValidUpdateFieldData()
     {
         return new UserValue(
             [
-                'login' => 'change', // Change is intended to not get through
-                'email' => 'change', // Change is intended to not get through
-                'passwordHash' => 'change', // Change is intended to not get through
-                'passwordHashType' => 'change', // Change is intended to not get through
-                'enabled' => 'change', // Change is intended to not get through
+                'hasStoredLogin' => true,
+                'login' => 'changeLogin',
+                'email' => 'changeEmail@ez.no',
+                'passwordHash' => '*2',
+                'passwordHashType' => 1,
+                'enabled' => false,
             ]
         );
     }
@@ -249,8 +260,25 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
-        // No update possible through field type
-        $this->assertFieldDataLoadedCorrect($field);
+        $this->assertInstanceOf(
+            UserValue::class,
+            $field->value
+        );
+
+        $expectedData = [
+            'hasStoredLogin' => true,
+            'login' => 'changeLogin',
+            'email' => 'changeEmail@ez.no',
+            'passwordHashType' => 1,
+            'enabled' => false,
+        ];
+
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
+        );
+
+        $this->assertNotNull($field->value->contentId);
     }
 
     /**
@@ -279,7 +307,7 @@ class UserIntegrationTest extends BaseIntegrationTest
         return [
             [
                 null,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentValidationException',
+                NotNullConstraintViolationException::class,
             ],
             // @todo: Define more failure cases ...
         ];
@@ -296,7 +324,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\User\\Value',
+            UserValue::class,
             $field->value
         );
 
@@ -341,9 +369,9 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return [
             [
-                new UserValue(['login' => 'hans']),
+                new UserValue(['login' => self::TEST_LOGIN]),
                 [
-                    'login' => 'hans',
+                    'login' => self::TEST_LOGIN,
                     'hasStoredLogin' => null,
                     'contentId' => null,
                     'email' => null,
@@ -351,6 +379,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                     'passwordHashType' => null,
                     'enabled' => null,
                     'maxLogin' => null,
+                    'plainPassword' => null,
                     'passwordUpdatedAt' => null,
                 ],
             ],
@@ -381,8 +410,8 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return [
             [
-                ['login' => 'hans'],
-                new UserValue(['login' => 'hans']),
+                ['login' => self::TEST_LOGIN],
+                new UserValue(['login' => self::TEST_LOGIN]),
             ],
         ];
     }
@@ -403,7 +432,7 @@ class UserIntegrationTest extends BaseIntegrationTest
 
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(
-            'hans',
+            self::TEST_LOGIN,
             'hans@example.com',
             'PassWord42',
             'eng-US',
@@ -472,22 +501,38 @@ class UserIntegrationTest extends BaseIntegrationTest
 
     public function testAddFieldDefinition()
     {
-        $this->markTestIncomplete(
-            'Currently cannot be tested since user can be properly created only through UserService'
-        );
+        // Field cannot be added to ContentType with existing content.
+        $this->expectException(BadStateException::class);
+
+        return parent::testAddFieldDefinition();
     }
 
     /**
-     * @param mixed $failingValue
-     * @param string $expectedException
-     *
-     * @dataProvider provideInvalidUpdateFieldData
+     * @depends testCreateContent
      */
-    public function testUpdateContentFails($failingValue, $expectedException)
+    public function testCopyField($content)
     {
-        $this->markTestIncomplete(
-            'Currently cannot be tested since user can be properly created only through UserService'
-        );
+        // Users cannot be copied.
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage(sprintf('User "%s" already exists', self::TEST_LOGIN));
+
+        return parent::testCopyField($content);
+    }
+
+    /**
+     * @depends testCopyField
+     */
+    public function testCopiedFieldType($content)
+    {
+        $this->markTestSkipped('Users cannot be copied, content is not passed to test.');
+    }
+
+    /**
+     * @depends testCopiedFieldType
+     */
+    public function testCopiedExternalData(Field $field)
+    {
+        $this->markTestSkipped('Users cannot be copied, field is not passed to test.');
     }
 
     /**

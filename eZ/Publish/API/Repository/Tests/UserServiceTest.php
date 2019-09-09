@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -900,7 +901,10 @@ class UserServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
-        $createdUser = $this->createUserVersion1('ez-user-Domain\username-by-login');
+        $createdUser = $this->createUserVersion1(
+            'ez-user-Domain\username-by-login',
+            'username-by-login@ez-user-Domain.com'
+        );
         $loadedUser = $userService->loadUserByLogin('ez-user-Domain\username-by-login');
 
         $this->assertEquals($createdUser, $loadedUser);
@@ -1042,9 +1046,6 @@ class UserServiceTest extends BaseTest
      */
     public function testCreateUserThrowsInvalidArgumentException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'userCreateStruct\' is invalid: User with provided login already exists');
-
         $repository = $this->getRepository();
 
         $editorsGroupId = $this->generateId('group', 13);
@@ -1069,10 +1070,20 @@ class UserServiceTest extends BaseTest
         // Load parent group for the user
         $group = $userService->loadUserGroup($editorsGroupId);
 
-        // This call will fail with a "InvalidArgumentException", because the
-        // user with "admin" login already exists.
-        $userService->createUser($userCreate, [$group]);
-        /* END: Use Case */
+        try {
+            // This call will fail with a "InvalidArgumentException", because the
+            // user with "admin" login already exists.
+            $userService->createUser($userCreate, [$group]);
+            /* END: Use Case */
+        } catch (ContentFieldValidationException $e) {
+            // Exception is caught, as there is no other way to check exception properties.
+            $this->assertValidationErrorOccurs($e, 'The user login \'%login%\' is used by another user. You must enter a unique login.');
+
+            /* END: Use Case */
+            return;
+        }
+
+        $this->fail('Expected ValidationError messages did not occur.');
     }
 
     /**
@@ -1154,16 +1165,28 @@ class UserServiceTest extends BaseTest
      */
     public function testCreateUserWithWeakPasswordThrowsUserPasswordValidationException()
     {
-        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException::class);
-        $this->expectExceptionMessage('Argument \'password\' is invalid: Password doesn\'t match the following rules: User password must be at least 8 characters long, User password must include at least one upper case letter, User password must include at least one number, User password must include at least one special character');
-
         $userContentType = $this->createUserContentTypeWithStrongPassword();
 
-        /* BEGIN: Use Case */
-        // This call will fail with a "UserPasswordValidationException" because the
-        // the password does not follow specified rules.
-        $this->createTestUserWithPassword('pass', $userContentType);
-        /* END: Use Case */
+        try {
+            // This call will fail with a "UserPasswordValidationException" because the
+            // the password does not follow specified rules.
+            $this->createUserWithPassword('pass', $userContentType);
+        } catch (ContentFieldValidationException $e) {
+            // Exception is caught, as there is no other way to check exception properties.
+            $this->assertAllValidationErrorsOccur(
+                $e,
+                [
+                    'User password must include at least one special character',
+                    'User password must be at least %length% characters long',
+                    'User password must include at least one upper case letter',
+                    'User password must include at least one number',
+                ]
+            );
+
+            return;
+        }
+
+        $this->fail('Expected ValidationError messages did not occur.');
     }
 
     /**
@@ -1695,7 +1718,7 @@ class UserServiceTest extends BaseTest
         $settingsProperty->setValue(
             $userService,
             [
-                'hashType' => User::PASSWORD_HASH_MD5_USER,
+                'hashType' => User::PASSWORD_HASH_PHP_DEFAULT,
             ] + $settingsProperty->getValue($userService)
         );
 
@@ -1945,9 +1968,6 @@ class UserServiceTest extends BaseTest
      */
     public function testUpdateUserWithWeakPasswordThrowsUserPasswordValidationException()
     {
-        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException::class);
-        $this->expectExceptionMessage('Argument \'password\' is invalid: Password doesn\'t match the following rules: User password must be at least 8 characters long, User password must include at least one upper case letter, User password must include at least one number, User password must include at least one special character');
-
         $userService = $this->getRepository()->getUserService();
 
         $user = $this->createTestUserWithPassword('H@xxxiR!_1', $this->createUserContentTypeWithStrongPassword());
@@ -1957,10 +1977,23 @@ class UserServiceTest extends BaseTest
         $userUpdate = $userService->newUserUpdateStruct();
         $userUpdate->password = 'pass';
 
-        // This call will fail with a "UserPasswordValidationException" because the
-        // the password does not follow specified rules
-        $userService->updateUser($user, $userUpdate);
-        /* END: Use Case */
+        try {
+            // This call will fail with a "UserPasswordValidationException" because the
+            // the password does not follow specified rules
+            $userService->updateUser($user, $userUpdate);
+            /* END: Use Case */
+        } catch (ContentFieldValidationException $e) {
+            // Exception is caught, as there is no other way to check exception properties.
+            $this->assertValidationErrorOccurs($e, 'User password must include at least one special character');
+            $this->assertValidationErrorOccurs($e, 'User password must be at least %length% characters long');
+            $this->assertValidationErrorOccurs($e, 'User password must include at least one upper case letter');
+            $this->assertValidationErrorOccurs($e, 'User password must include at least one number');
+
+            /* END: Use Case */
+            return;
+        }
+
+        $this->fail('Expected ValidationError messages did not occur.');
     }
 
     /**
@@ -2707,43 +2740,46 @@ class UserServiceTest extends BaseTest
      */
     public function testCreateUserInvalidPasswordHashTypeThrowsException()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Argument 'type' is invalid: Password hash type '42424242' is not recognized");
-
         $repository = $this->getRepository();
         $eventUserService = $repository->getUserService();
 
-        $eventUserServiceReflection = new ReflectionClass($eventUserService);
-        $userServiceProperty = $eventUserServiceReflection->getProperty('innerService');
-        $userServiceProperty->setAccessible(true);
-        $userService = $userServiceProperty->getValue($eventUserService);
-
-        $userServiceReflection = new ReflectionClass($userService);
-        $settingsProperty = $userServiceReflection->getProperty('settings');
-        $settingsProperty->setAccessible(true);
-
-        $defaultUserServiceSettings = $settingsProperty->getValue($userService);
-
-        /* BEGIN: Use Case */
-        $settingsProperty->setValue(
-            $userService,
-            [
-                'hashType' => 42424242, // Non-existing hash type
-            ] + $settingsProperty->getValue($userService)
+        // Instantiate a create struct with mandatory properties.
+        $createStruct = $eventUserService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
         );
 
-        try {
-            $this->createUserVersion1();
-        } catch (InvalidArgumentException $e) {
-            // Reset to default settings, so we don't break other tests
-            $settingsProperty->setValue($userService, $defaultUserServiceSettings);
+        // Set some fields required by the user ContentType.
+        $createStruct->setField('first_name', 'Example');
+        $createStruct->setField('last_name', 'User');
 
-            throw $e;
+        // Get User fieldType.
+        $userFieldDef = null;
+        foreach ($createStruct->fields as $field) {
+            if ($field->fieldTypeIdentifier === 'ezuser') {
+                $userFieldDef = $field;
+                break;
+            }
         }
-        /* END: Use Case */
 
-        // Reset to default settings, so we don't break other tests
-        $settingsProperty->setValue($userService, $defaultUserServiceSettings);
+        if (!$userFieldDef) {
+            $this->fail('User FieldType not found in userCreateStruct!');
+        }
+
+        /** @var \eZ\Publish\Core\FieldType\User\Value $userValue */
+        $userValue = $userFieldDef->value;
+
+        // Set not supported hash type.
+        $userValue->passwordHashType = 42424242;
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Argument 'hashType' is invalid: Password hash type '42424242' is not recognized");
+
+        // Create a new user instance.
+        // 13 is ID of the "Editors" user group in an eZ Publish demo installation.
+        $eventUserService->createUser($createStruct, [$eventUserService->loadUserGroup(13)]);
     }
 
     /**
