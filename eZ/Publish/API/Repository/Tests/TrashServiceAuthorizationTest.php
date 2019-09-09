@@ -28,7 +28,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      *
      * @see \eZ\Publish\API\Repository\TrashService::loadTrashItem()
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testLoadTrashItem
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
      */
     public function testLoadTrashItemThrowsUnauthorizedException()
     {
@@ -113,7 +113,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      *
      * @see \eZ\Publish\API\Repository\TrashService::recover()
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
      */
     public function testRecoverThrowsUnauthorizedException()
     {
@@ -143,7 +143,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      *
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
      */
     public function testRecoverThrowsUnauthorizedExceptionWithNewParentLocationParameter()
     {
@@ -181,7 +181,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      *
      * @see \eZ\Publish\API\Repository\TrashService::emptyTrash()
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testEmptyTrash
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
      */
     public function testEmptyTrashThrowsUnauthorizedException()
     {
@@ -211,7 +211,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      *
      * @see \eZ\Publish\API\Repository\TrashService::deleteTrashItem()
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testDeleteTrashItem
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
      */
     public function testDeleteTrashItemThrowsUnauthorizedException()
     {

@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
  * Test case for operations in the ContentTypeServiceAuthorization using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentTypeService
- * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
  * @group integration
  * @group authorization
  */

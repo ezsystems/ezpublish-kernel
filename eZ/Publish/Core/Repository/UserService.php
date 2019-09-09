@@ -565,20 +565,6 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Loads anonymous user.
-     *
-     * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
-     *
-     * @uses ::loadUser()
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    public function loadAnonymousUser()
-    {
-        return $this->loadUser($this->settings['anonymousUserID']);
-    }
-
-    /**
      * Loads a user for the given login and password.
      *
      * If the password hash type differs from that configured for the service, it will be updated to the configured one.

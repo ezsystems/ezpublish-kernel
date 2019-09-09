@@ -1231,33 +1231,6 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadAnonymousUser() method.
-     *
-     * @see \eZ\Publish\API\Repository\UserService::loadAnonymousUser()
-     */
-    public function testLoadAnonymousUser()
-    {
-        $repository = $this->getRepository();
-
-        $anonymousUserId = $this->generateId('user', 10);
-        /* BEGIN: Use Case */
-        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
-        // Publish demo installation.
-        $userService = $repository->getUserService();
-
-        // Load default anonymous user available in each eZ Publish installation
-        $anonymousUser = $userService->loadUser($anonymousUserId);
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\User',
-            $anonymousUser
-        );
-
-        $this->assertEquals('anonymous', $anonymousUser->login);
-    }
-
-    /**
      * Test for the loadUserByCredentials() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::loadUserByCredentials()

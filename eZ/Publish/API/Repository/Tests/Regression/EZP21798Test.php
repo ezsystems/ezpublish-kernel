@@ -98,7 +98,7 @@ class EZP21798Test extends BaseTest
         $roleService->updatePolicy($policies[$numPolicies], $newPolicy);
 
         // Access /Folder/Article
-        $anonymousUser = $userService->loadAnonymousUser();
+        $anonymousUser = $userService->loadUser(10);
         $repository->setCurrentUser($anonymousUser);
 
         $contentService->loadContent($contentInfoarticle->id);

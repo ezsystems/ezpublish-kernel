@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
  * Test case for operations in the SearchService.
  *
  * @see eZ\Publish\API\Repository\SearchService
- * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
  * @group integration
  * @group authorization
  */
