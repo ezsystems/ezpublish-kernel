@@ -84,7 +84,6 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function create(User $user)
     {
         $this->logger->logCall(__METHOD__, ['struct' => $user]);
-        $return = $this->persistenceHandler->userHandler()->create($user);
 
         // Clear corresponding content cache as creation of the User changes it's external data
         $this->cache->invalidateTags(['content-fields-' . $user->id]);
@@ -94,7 +93,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             'ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email',
         ]);
 
-        return $return;
+        return $user;
     }
 
     /**
@@ -183,14 +182,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function update(User $user)
     {
         $this->logger->logCall(__METHOD__, ['struct' => $user]);
-        $return = $this->persistenceHandler->userHandler()->update($user);
 
         // Clear corresponding content cache as update of the User changes it's external data
         $this->cache->invalidateTags(['content-fields-' . $user->id, 'user-' . $user->id]);
         // Clear especially by email key as it might already be cached and this might represent change to email
         $this->cache->deleteItems(['ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email']);
 
-        return $return;
+        return $user;
     }
 
     /**
@@ -226,12 +224,9 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function delete($userId)
     {
         $this->logger->logCall(__METHOD__, ['user' => $userId]);
-        $return = $this->persistenceHandler->userHandler()->delete($userId);
 
         // user id == content id == group id
         $this->cache->invalidateTags(['content-fields-' . $userId, 'user-' . $userId]);
-
-        return $return;
     }
 
     /**

@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
@@ -27,21 +28,23 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
+use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
 use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
-use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
-use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
-use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
@@ -399,51 +402,8 @@ class UserService implements UserServiceInterface
      */
     public function createUser(APIUserCreateStruct $userCreateStruct, array $parentGroups)
     {
-        if (empty($parentGroups)) {
-            throw new InvalidArgumentValue('parentGroups', $parentGroups);
-        }
-
-        if (!is_string($userCreateStruct->login) || empty($userCreateStruct->login)) {
-            throw new InvalidArgumentValue('login', $userCreateStruct->login, 'UserCreateStruct');
-        }
-
-        if (!is_string($userCreateStruct->email) || empty($userCreateStruct->email)) {
-            throw new InvalidArgumentValue('email', $userCreateStruct->email, 'UserCreateStruct');
-        }
-
-        if (!preg_match('/^.+@.+\..+$/', $userCreateStruct->email)) {
-            throw new InvalidArgumentValue('email', $userCreateStruct->email, 'UserCreateStruct');
-        }
-
-        if (!is_string($userCreateStruct->password) || empty($userCreateStruct->password)) {
-            throw new InvalidArgumentValue('password', $userCreateStruct->password, 'UserCreateStruct');
-        }
-
-        if (!is_bool($userCreateStruct->enabled)) {
-            throw new InvalidArgumentValue('enabled', $userCreateStruct->enabled, 'UserCreateStruct');
-        }
-
-        try {
-            $this->userHandler->loadByLogin($userCreateStruct->login);
-            throw new InvalidArgumentException('userCreateStruct', 'User with provided login already exists');
-        } catch (NotFoundException $e) {
-            // Do nothing
-        }
-
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
-        $contentTypeService = $this->repository->getContentTypeService();
-
-        if ($userCreateStruct->contentType === null) {
-            $userCreateStruct->contentType = $contentTypeService->loadContentType($this->settings['userClassID']);
-        }
-
-        $errors = $this->validatePassword($userCreateStruct->password, new PasswordValidationContext([
-            'contentType' => $userCreateStruct->contentType,
-        ]));
-        if (!empty($errors)) {
-            throw new UserPasswordValidationException('password', $errors);
-        }
 
         $locationCreateStructs = [];
         foreach ($parentGroups as $parentGroup) {
@@ -468,58 +428,23 @@ class UserService implements UserServiceInterface
             throw new ContentValidationException('Provided content type does not contain ezuser field type');
         }
 
-        $fixUserFieldType = true;
-        foreach ($userCreateStruct->fields as $index => $field) {
-            if ($field->fieldDefIdentifier == $userFieldDefinition->identifier) {
-                if ($field->value instanceof UserValue) {
-                    $userCreateStruct->fields[$index]->value->login = $userCreateStruct->login;
-                } else {
-                    $userCreateStruct->fields[$index]->value = new UserValue(
-                        [
-                            'login' => $userCreateStruct->login,
-                        ]
-                    );
-                }
-
-                $fixUserFieldType = false;
-            }
-        }
-
-        if ($fixUserFieldType) {
-            $userCreateStruct->setField(
-                $userFieldDefinition->identifier,
-                new UserValue(
-                    [
-                        'login' => $userCreateStruct->login,
-                    ]
-                )
-            );
-        }
-
         $this->repository->beginTransaction();
         try {
             $contentDraft = $contentService->createContent($userCreateStruct, $locationCreateStructs);
-            // Create user before publishing, so that external data can be returned
-            $spiUser = $this->userHandler->create(
+            // There is no need to create user separately, just load it from SPI
+            $spiUser = $this->userHandler->load($contentDraft->id);
+            $publishedContent = $contentService->publishVersion($contentDraft->getVersionInfo());
+
+            // User\Handler::create call is currently used to clear cache only
+            $this->userHandler->create(
                 new SPIUser(
                     [
-                        'id' => $contentDraft->id,
-                        'login' => $userCreateStruct->login,
-                        'email' => $userCreateStruct->email,
-                        'passwordHash' => $this->createPasswordHash(
-                            $userCreateStruct->login,
-                            $userCreateStruct->password,
-                            $this->settings['siteName'],
-                            $this->settings['hashType']
-                        ),
-                        'hashAlgorithm' => $this->settings['hashType'],
-                        'passwordUpdatedAt' => time(),
-                        'isEnabled' => $userCreateStruct->enabled,
-                        'maxLogin' => 0,
+                        'id' => $spiUser->id,
+                        'login' => $spiUser->login,
+                        'email' => $spiUser->email,
                     ]
                 )
             );
-            $publishedContent = $contentService->publishVersion($contentDraft->getVersionInfo());
 
             $this->repository->commit();
         } catch (Exception $e) {
@@ -733,6 +658,8 @@ class UserService implements UserServiceInterface
         $this->repository->beginTransaction();
         try {
             $affectedLocationIds = $this->repository->getContentService()->deleteContent($loadedUser->getVersionInfo()->getContentInfo());
+
+            // User\Handler::delete call is currently used to clear cache only
             $this->userHandler->delete($loadedUser->id);
             $this->repository->commit();
         } catch (Exception $e) {
@@ -762,66 +689,51 @@ class UserService implements UserServiceInterface
     {
         $loadedUser = $this->loadUser($user->id);
 
-        // We need to determine if we have anything to update.
-        // UserUpdateStruct is specific as some of the new content is in
-        // content update struct and some of it is in additional fields like
-        // email, password and so on
-        $doUpdate = false;
-        foreach ($userUpdateStruct as $propertyValue) {
-            if ($propertyValue !== null) {
-                $doUpdate = true;
-                break;
-            }
-        }
-
-        if (!$doUpdate) {
-            // Nothing to update, so we just quit
-            return $user;
-        }
-
-        if ($userUpdateStruct->email !== null) {
-            if (!is_string($userUpdateStruct->email) || empty($userUpdateStruct->email)) {
-                throw new InvalidArgumentValue('email', $userUpdateStruct->email, 'UserUpdateStruct');
-            }
-
-            if (!preg_match('/^.+@.+\..+$/', $userUpdateStruct->email)) {
-                throw new InvalidArgumentValue('email', $userUpdateStruct->email, 'UserUpdateStruct');
-            }
-        }
-
-        if ($userUpdateStruct->enabled !== null && !is_bool($userUpdateStruct->enabled)) {
-            throw new InvalidArgumentValue('enabled', $userUpdateStruct->enabled, 'UserUpdateStruct');
-        }
-
-        if ($userUpdateStruct->maxLogin !== null && !is_int($userUpdateStruct->maxLogin)) {
-            throw new InvalidArgumentValue('maxLogin', $userUpdateStruct->maxLogin, 'UserUpdateStruct');
-        }
-
-        if ($userUpdateStruct->password !== null) {
-            if (!is_string($userUpdateStruct->password) || empty($userUpdateStruct->password)) {
-                throw new InvalidArgumentValue('password', $userUpdateStruct->password, 'UserUpdateStruct');
-            }
-
-            $userContentType = $this->repository->getContentTypeService()->loadContentType(
-                $user->contentInfo->contentTypeId
-            );
-
-            $errors = $this->validatePassword($userUpdateStruct->password, new PasswordValidationContext([
-                'contentType' => $userContentType,
-                'user' => $user,
-            ]));
-
-            if (!empty($errors)) {
-                throw new UserPasswordValidationException('password', $errors);
-            }
-        }
-
         $contentService = $this->repository->getContentService();
 
         $canEditContent = $this->permissionResolver->canUser('content', 'edit', $loadedUser);
 
         if (!$canEditContent && $this->isUserProfileUpdateRequested($userUpdateStruct)) {
             throw new UnauthorizedException('content', 'edit');
+        }
+
+        $userFieldDefinition = null;
+        foreach ($loadedUser->getContentType()->fieldDefinitions as $fieldDefinition) {
+            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
+                $userFieldDefinition = $fieldDefinition;
+                break;
+            }
+        }
+
+        if ($userFieldDefinition === null) {
+            throw new ContentValidationException('Provided content type does not contain ezuser field type');
+        }
+
+        $userUpdateStruct->contentUpdateStruct = $userUpdateStruct->contentUpdateStruct ?? $contentService->newContentUpdateStruct();
+
+        $providedUserUpdateDataInField = false;
+        foreach ($userUpdateStruct->contentUpdateStruct->fields as $field) {
+            if ($field->value instanceof UserValue) {
+                $providedUserUpdateDataInField = true;
+                break;
+            }
+        }
+
+        if (!$providedUserUpdateDataInField) {
+            $userUpdateStruct->contentUpdateStruct->setField(
+                $userFieldDefinition->identifier,
+                new UserValue([
+                    'contentId' => $loadedUser->id,
+                    'hasStoredLogin' => true,
+                    'login' => $loadedUser->login,
+                    'email' => $userUpdateStruct->email ?? $loadedUser->email,
+                    'plainPassword' => $userUpdateStruct->password,
+                    'enabled' => $userUpdateStruct->enabled ?? $loadedUser->enabled,
+                    'maxLogin' => $userUpdateStruct->maxLogin ?? $loadedUser->maxLogin,
+                    'passwordHashType' => $user->hashAlgorithm,
+                    'passwordHash' => $user->passwordHash,
+                ])
+            );
         }
 
         if (!empty($userUpdateStruct->password) &&
@@ -850,30 +762,16 @@ class UserService implements UserServiceInterface
                 );
             }
 
-            $spiUser = new SPIUser([
-                'id' => $loadedUser->id,
-                'login' => $loadedUser->login,
-                'email' => $userUpdateStruct->email ?: $loadedUser->email,
-                'isEnabled' => $userUpdateStruct->enabled !== null ? $userUpdateStruct->enabled : $loadedUser->enabled,
-                'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int)$userUpdateStruct->maxLogin : $loadedUser->maxLogin,
-            ]);
-
-            if ($userUpdateStruct->password) {
-                $spiUser->passwordHash = $this->createPasswordHash(
-                    $loadedUser->login,
-                    $userUpdateStruct->password,
-                    $this->settings['siteName'],
-                    $this->settings['hashType']
-                );
-                $spiUser->hashAlgorithm = $this->settings['hashType'];
-                $spiUser->passwordUpdatedAt = time();
-            } else {
-                $spiUser->passwordHash = $loadedUser->passwordHash;
-                $spiUser->hashAlgorithm = $loadedUser->hashAlgorithm;
-                $spiUser->passwordUpdatedAt = $loadedUser->passwordUpdatedAt ? $loadedUser->passwordUpdatedAt->getTimestamp() : null;
-            }
-
-            $this->userHandler->update($spiUser);
+            // User\Handler::update call is currently used to clear cache only
+            $this->userHandler->update(
+                new SPIUser(
+                    [
+                        'id' => $loadedUser->id,
+                        'login' => $loadedUser->login,
+                        'email' => $userUpdateStruct->email ?: $loadedUser->email,
+                    ]
+                )
+            );
 
             $this->repository->commit();
         } catch (Exception $e) {
@@ -1205,6 +1103,13 @@ class UserService implements UserServiceInterface
                 $this->settings['userClassID']
             );
         }
+        $fieldDefIdentifier = '';
+        foreach ($contentType->fieldDefinitions as $fieldDefinition) {
+            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
+                $fieldDefIdentifier = $fieldDefinition->identifier;
+                break;
+            }
+        }
 
         return new UserCreateStruct(
             [
@@ -1214,7 +1119,19 @@ class UserService implements UserServiceInterface
                 'email' => $email,
                 'password' => $password,
                 'enabled' => true,
-                'fields' => [],
+                'fields' => [
+                    new Field([
+                        'fieldDefIdentifier' => $fieldDefIdentifier,
+                        'languageCode' => $mainLanguageCode,
+                        'fieldTypeIdentifier' => 'ezuser',
+                        'value' => new UserValue([
+                            'login' => $login,
+                            'email' => $email,
+                            'plainPassword' => $password,
+                            'enabled' => true,
+                        ]),
+                    ]),
+                ],
             ]
         );
     }
