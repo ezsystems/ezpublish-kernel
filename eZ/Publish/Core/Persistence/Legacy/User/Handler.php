@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\User;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Handler as BaseUserHandler;
@@ -74,13 +75,11 @@ class Handler implements BaseUserHandler
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
      *
-     * @return \eZ\Publish\SPI\Persistence\User
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
     public function create(User $user)
     {
-        $this->userGateway->createUser($user);
-
-        return $user;
+        throw new NotImplementedException('Should not be called, creation is done via content handler.');
     }
 
     /**
@@ -170,10 +169,12 @@ class Handler implements BaseUserHandler
      * Update the user information specified by the user struct.
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
     public function update(User $user)
     {
-        $this->userGateway->updateUser($user);
+        throw new NotImplementedException('Should not be called, update is done via content handler.');
     }
 
     /**
@@ -200,10 +201,12 @@ class Handler implements BaseUserHandler
      * Delete user with the given ID.
      *
      * @param mixed $userId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
     public function delete($userId)
     {
-        $this->userGateway->deleteUser($userId);
+        throw new NotImplementedException('Should not be called, delete is done via content handler.');
     }
 
     /**

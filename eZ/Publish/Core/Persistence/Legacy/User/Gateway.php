@@ -17,22 +17,6 @@ use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 abstract class Gateway
 {
     /**
-     * Create user.
-     *
-     * @param user $user
-     *
-     * @return mixed
-     */
-    abstract public function createUser(User $user);
-
-    /**
-     * Delete user with the given ID.
-     *
-     * @param mixed $userId
-     */
-    abstract public function deleteUser($userId);
-
-    /**
      * Loads user with user ID.
      *
      * @param mixed $userId
@@ -67,13 +51,6 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadUserByToken($hash);
-
-    /**
-     * Update the user information specified by the user struct.
-     *
-     * @param User $user
-     */
-    abstract public function updateUser(User $user);
 
     /**
      * Update the user acoount key specified by the user account key struct.
