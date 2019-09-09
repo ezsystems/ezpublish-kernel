@@ -1434,54 +1434,6 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Returns password hash based on user data and site settings.
-     *
-     * @param string $login User login
-     * @param string $password User password
-     * @param string $site The name of the site
-     * @param int $type Type of password to generate
-     *
-     * @return string Generated password hash
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the type is not recognized
-     */
-    protected function createPasswordHash($login, $password, $site, $type)
-    {
-        $deprecationWarningFormat = 'Password hash type %s is deprecated since 6.13.';
-
-        switch ($type) {
-            case APIUser::PASSWORD_HASH_MD5_PASSWORD:
-                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_PASSWORD'), E_USER_DEPRECATED);
-
-                return md5($password);
-
-            case APIUser::PASSWORD_HASH_MD5_USER:
-                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_USER'), E_USER_DEPRECATED);
-
-                return md5("$login\n$password");
-
-            case APIUser::PASSWORD_HASH_MD5_SITE:
-                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_SITE'), E_USER_DEPRECATED);
-
-                return md5("$login\n$password\n$site");
-
-            case APIUser::PASSWORD_HASH_PLAINTEXT:
-                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_PLAINTEXT'), E_USER_DEPRECATED);
-
-                return $password;
-
-            case APIUser::PASSWORD_HASH_BCRYPT:
-                return password_hash($password, PASSWORD_BCRYPT);
-
-            case APIUser::PASSWORD_HASH_PHP_DEFAULT:
-                return password_hash($password, PASSWORD_DEFAULT);
-
-            default:
-                throw new InvalidArgumentException('type', "Password hash type '$type' is not recognized");
-        }
-    }
-
-    /**
      * Return true if any of the UserUpdateStruct properties refers to User Profile (Content) update.
      *
      * @param UserUpdateStruct $userUpdateStruct
