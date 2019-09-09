@@ -55,6 +55,12 @@ Changes affecting version compatibility with former or future versions.
 * Deprecated `eZ\Publish\SPI\FieldType\EventListener` interface, `eZ\Publish\SPI\FieldType\Event` class and
   `eZ\Publish\SPI\FieldType\Events` namespace have been dropped.
 
+* Deprecated `eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface` interface has been dropped. Deprecated classes relying on that interface have been removed as well:
+    * `eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory`
+    * `eZ\Publish\Core\MVC\Symfony\Matcher\ContentBasedMatcherFactory`
+    * `eZ\Publish\Core\MVC\Symfony\Matcher\ContentMatcherFactory`
+    * `eZ\Publish\Core\MVC\Symfony\Matcher\LocationMatcherFactory`
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
