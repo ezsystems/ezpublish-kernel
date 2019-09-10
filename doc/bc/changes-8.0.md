@@ -63,7 +63,10 @@ Changes affecting version compatibility with former or future versions.
 
 * Deprecated Symfony framework templating component integration has been dropped.
 
-* Method `eZ\Publish\API\Repository\UserService::loadAnonymousUser` has been removed.
+* Following methods have been removed:
+
+    * `\eZ\Publish\API\Repository\UserService::loadAnonymousUser`
+    * `\eZ\Publish\API\Repository\Repository::getCurrentUser`
 
 ## Deprecated features
 

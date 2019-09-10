@@ -332,37 +332,6 @@ class RepositoryTest extends BaseTest
     }
 
     /**
-     * Test for the getCurrentUser() method.
-     *
-     * @group content
-     * @group user
-     *
-     * @see \eZ\Publish\API\Repository\Repository::getCurrentUser()
-     */
-    public function testGetCurrentUserReturnsAnonymousUser()
-    {
-        $repository = $this->getRepository();
-        $anonymousUserId = $this->generateId('user', 10);
-        $repository->setCurrentUser(new UserReference($anonymousUserId));
-
-        /* BEGIN: Use Case */
-        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
-        // Publish demo installation.
-        // Only a UserReference has previously been set to the $repository
-        $anonymousUser = $repository->getCurrentUser();
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\User',
-            $anonymousUser
-        );
-        $this->assertEquals(
-            $anonymousUser->id,
-            $repository->getUserService()->loadUser($anonymousUserId)->id
-        );
-    }
-
-    /**
      * Test for the setCurrentUser() method.
      *
      * @group content
@@ -374,8 +343,9 @@ class RepositoryTest extends BaseTest
     public function testSetCurrentUser()
     {
         $repository = $this->getRepository();
-        $repository->setCurrentUser(new UserReference($this->generateId('user', 10)));
+        $permissionResolver = $repository->getPermissionResolver();
 
+        $repository->setCurrentUser(new UserReference($this->generateId('user', 10)));
         $administratorUserId = $this->generateId('user', 14);
 
         /* BEGIN: Use Case */
@@ -392,17 +362,17 @@ class RepositoryTest extends BaseTest
 
         $this->assertEquals(
             $administratorUserId,
-            $repository->getCurrentUserReference()->getUserId()
+            $permissionResolver->getCurrentUserReference()->getUserId()
         );
 
         $this->assertEquals(
             $administratorUser->getUserId(),
-            $repository->getCurrentUser()->getUserId()
+            $permissionResolver->getCurrentUserReference()->getUserId()
         );
 
         $this->assertSame(
             $administratorUser,
-            $repository->getCurrentUser()
+            $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId())
         );
     }
 

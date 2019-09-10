@@ -2095,7 +2095,9 @@ class RoleServiceTest extends BaseTest
         $role = $roleService->loadRoleByIdentifier('Anonymous');
 
         // Get current user
-        $currentUser = $repository->getCurrentUser();
+        $permissionResolver = $this->getRepository()->getPermissionResolver();
+        $userService = $repository->getUserService();
+        $currentUser = $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId());
 
         // Assign the "Anonymous" role to the current user
         // This call will fail with an LimitationValidationException, because subtree "/lorem/ipsum/42/"
@@ -2134,7 +2136,9 @@ class RoleServiceTest extends BaseTest
         $role = $roleService->loadRoleByIdentifier('Anonymous');
 
         // Get current user
-        $currentUser = $repository->getCurrentUser();
+        $permissionResolver = $this->getRepository()->getPermissionResolver();
+        $userService = $repository->getUserService();
+        $currentUser = $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId());
 
         // Assign the "Anonymous" role to the current user
         try {
@@ -2177,7 +2181,9 @@ class RoleServiceTest extends BaseTest
         $role = $roleService->loadRoleByIdentifier('Anonymous');
 
         // Get current user
-        $currentUser = $repository->getCurrentUser();
+        $permissionResolver = $this->getRepository()->getPermissionResolver();
+        $userService = $repository->getUserService();
+        $currentUser = $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId());
 
         // Assign the "Anonymous" role to the current user
         try {
@@ -2331,7 +2337,9 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
-        $adminUser = $repository->getCurrentUser();
+        $permissionResolver = $this->getRepository()->getPermissionResolver();
+        $userService = $repository->getUserService();
+        $adminUser = $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId());
 
         // Load the currently assigned role
         $roleAssignments = $roleService->getRoleAssignmentsForUser($adminUser);
@@ -2353,7 +2361,9 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         /* BEGIN: Use Case */
-        $adminUser = $repository->getCurrentUser();
+        $permissionResolver = $this->getRepository()->getPermissionResolver();
+        $userService = $repository->getUserService();
+        $adminUser = $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId());
 
         // Load the currently assigned role + inherited role assignments
         $roleAssignments = $roleService->getRoleAssignmentsForUser($adminUser, true);

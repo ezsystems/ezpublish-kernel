@@ -25,7 +25,7 @@ use eZ\Publish\Core\Repository\Values\User\UserReference;
 class PermissionResolverTest extends BaseTest
 {
     /**
-     * Test for the getCurrentUser() method.
+     * Test for the getCurrentUserReference() method.
      *
      * @see \eZ\Publish\API\Repository\PermissionResolver::getCurrentUserReference()
      */

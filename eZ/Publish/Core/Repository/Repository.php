@@ -311,26 +311,6 @@ class Repository implements RepositoryInterface
     /**
      * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
      *
-     * Get current user.
-     *
-     * Loads the full user object if not already loaded, if you only need to know user id use {@see getCurrentUserReference()}
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    public function getCurrentUser()
-    {
-        if ($this->currentUser === null) {
-            $this->currentUser = $this->getUserService()->loadUser(
-                $this->getPermissionResolver()->getCurrentUserReference()->getUserId()
-            );
-        }
-
-        return $this->currentUser;
-    }
-
-    /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
-     *
      * Get current user reference.
      *
      * @since 5.4.5

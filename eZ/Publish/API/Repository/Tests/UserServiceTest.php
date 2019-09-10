@@ -3046,6 +3046,7 @@ class UserServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         $contentTypeService = $repository->getContentTypeService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $typeCreate = $contentTypeService->newContentTypeCreateStruct($identifier);
         $typeCreate->mainLanguageCode = 'eng-GB';
@@ -3057,7 +3058,7 @@ class UserServiceTest extends BaseTest
         $typeCreate->descriptions = [
             'eng-GB' => '',
         ];
-        $typeCreate->creatorId = $this->generateId('user', $repository->getPermissionResolver()->getCurrentUserReference()->getUserId());
+        $typeCreate->creatorId = $this->generateId('user', $permissionResolver->getCurrentUserReference()->getUserId());
         $typeCreate->creationDate = $this->createDateTime();
 
         $firstNameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('first_name', 'ezstring');

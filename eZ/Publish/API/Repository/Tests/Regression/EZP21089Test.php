@@ -33,8 +33,9 @@ class EZP21089Test extends BaseTest
         $repository = $this->getRepository();
 
         $contentTypeService = $repository->getContentTypeService();
+        $permissionResolver = $repository->getPermissionResolver();
 
-        $creatorId = $repository->getCurrentUser()->id;
+        $creatorId = $permissionResolver->getCurrentUserReference()->getUserId();
         $creationDate = new DateTime();
 
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(

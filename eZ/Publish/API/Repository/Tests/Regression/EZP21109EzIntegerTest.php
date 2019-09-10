@@ -93,12 +93,13 @@ class EZP21109EzIntegerTest extends BaseTest
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         // Create a test class with an integer field type
         $typeGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
 
         $contentType = $contentTypeService->newContentTypeCreateStruct($this->classShortName);
-        $contentType->creatorId = $repository->getCurrentUser()->id;
+        $contentType->creatorId = $permissionResolver->getCurrentUserReference()->getUserId();
         $contentType->mainLanguageCode = 'eng-GB';
         $contentType->names = [
             'eng-GB' => $this->classShortName,
