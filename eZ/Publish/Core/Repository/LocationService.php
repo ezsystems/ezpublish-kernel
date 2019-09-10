@@ -671,6 +671,24 @@ class LocationService implements LocationServiceInterface
         $location = $this->loadLocation($location->id);
         $newParentLocation = $this->loadLocation($newParentLocation->id);
 
+        if ($newParentLocation->id === $location->parentLocationId) {
+            throw new InvalidArgumentException(
+                '$newParentLocation', 'new parent location is the same as current'
+            );
+        }
+        if (strpos($newParentLocation->pathString, $location->pathString) === 0) {
+            throw new InvalidArgumentException(
+                '$newParentLocation',
+                'new parent location is in a subtree of the given $location'
+            );
+        }
+        if (!$newParentLocation->getContent()->getContentType()->isContainer) {
+            throw new InvalidArgumentException(
+                '$newParentLocation',
+                'Cannot move location to a parent that is not a container'
+            );
+        }
+
         // check create permission on target location
         if (!$this->repository->canUser('content', 'create', $location->getContentInfo(), $newParentLocation)) {
             throw new UnauthorizedException('content', 'create', ['locationId' => $newParentLocation->id]);
@@ -699,13 +717,6 @@ class LocationService implements LocationServiceInterface
             if ($result->totalCount > 0) {
                 throw new UnauthorizedException('content', 'read');
             }
-        }
-
-        if (strpos($newParentLocation->pathString, $location->pathString) === 0) {
-            throw new InvalidArgumentException(
-                '$newParentLocation',
-                'new parent location is in a subtree of the given $location'
-            );
         }
 
         $this->repository->beginTransaction();

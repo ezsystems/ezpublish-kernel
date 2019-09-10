@@ -2542,19 +2542,19 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation($mediaLocationId);
+        $locationToMove = $locationService->loadLocation($demoDesignLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+        $newParentLocation = $locationService->loadLocation($mediaLocationId);
 
-        // Move location from "Home" to "Demo Design"
+        // Move location from "Home" to "Media"
         $locationService->moveSubtree(
             $locationToMove,
             $newParentLocation
         );
 
         // Load moved location
-        $movedLocation = $locationService->loadLocation($mediaLocationId);
+        $movedLocation = $locationService->loadLocation($demoDesignLocationId);
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
@@ -2567,6 +2567,68 @@ class LocationServiceTest extends BaseTest
             ],
             $movedLocation
         );
+    }
+
+    /**
+     * Test for the moveSubtree() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testMoveSubtreeThrowsExceptionOnMoveNotIntoContainer()
+    {
+        $repository = $this->getRepository();
+
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+        /* BEGIN: Use Case */
+        // $mediaLocationId is the ID of the "Media" page location in
+        // an eZ Publish demo installation
+
+        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
+        // Publish demo installation
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation($mediaLocationId);
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        // Move location from "Home" to "Demo Design" (not container)
+        $locationService->moveSubtree($locationToMove, $newParentLocation);
+    }
+
+    /**
+     * Test for the moveSubtree() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testMoveSubtreeThrowsExceptionOnMoveToSame()
+    {
+        $repository = $this->getRepository();
+
+        $mediaLocationId = $this->generateId('location', 43);
+        /* BEGIN: Use Case */
+        // $mediaLocationId is the ID of the "Media" page location in
+        // an eZ Publish demo installation
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation($mediaLocationId);
+
+        // Load parent location
+        $newParentLocation = $locationService->loadLocation($locationToMove->parentLocationId);
+
+        // Move location from "Home" to "Home"
+        $locationService->moveSubtree($locationToMove, $newParentLocation);
     }
 
     /**
@@ -2592,22 +2654,22 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation($mediaLocationId);
+        $locationToMove = $locationService->loadLocation($demoDesignLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+        $newParentLocation = $locationService->loadLocation($mediaLocationId);
 
         // Hide the target location before we move
         $newParentLocation = $locationService->hideLocation($newParentLocation);
 
-        // Move location from "Home" to "Demo Design"
+        // Move location from "Demo Design" to "Home"
         $locationService->moveSubtree(
             $locationToMove,
             $newParentLocation
         );
 
         // Load moved location
-        $movedLocation = $locationService->loadLocation($mediaLocationId);
+        $movedLocation = $locationService->loadLocation($demoDesignLocationId);
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
@@ -2633,8 +2695,8 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $locationToMove = $locationService->loadLocation($this->generateId('location', 43));
-        $newParentLocation = $locationService->loadLocation($this->generateId('location', 56));
+        $locationToMove = $locationService->loadLocation($this->generateId('location', 56));
+        $newParentLocation = $locationService->loadLocation($this->generateId('location', 43));
 
         // Load Subtree properties before move
         $expected = $this->loadSubtreeProperties($locationToMove);
@@ -2660,19 +2722,19 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation($mediaLocationId);
+        $locationToMove = $locationService->loadLocation($demoDesignLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+        $newParentLocation = $locationService->loadLocation($mediaLocationId);
 
-        // Move location from "Home" to "Demo Design"
+        // Move location from "Demo Design" to "Home"
         $locationService->moveSubtree(
             $locationToMove,
             $newParentLocation
         );
 
         // Load moved location
-        $movedLocation = $locationService->loadLocation($mediaLocationId);
+        $movedLocation = $locationService->loadLocation($demoDesignLocationId);
         /* END: Use Case */
 
         $this->refreshSearch($repository);
@@ -2694,8 +2756,8 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $locationToMove = $locationService->loadLocation($this->generateId('location', 43));
-        $newParentLocation = $locationService->loadLocation($this->generateId('location', 56));
+        $locationToMove = $locationService->loadLocation($this->generateId('location', 2));
+        $newParentLocation = $locationService->loadLocation($this->generateId('location', 43));
 
         // Hide the target location before we move
         $newParentLocation = $locationService->hideLocation($newParentLocation);
@@ -2704,7 +2766,7 @@ class LocationServiceTest extends BaseTest
         $expected = $this->loadSubtreeProperties($locationToMove);
         foreach ($expected as $id => $properties) {
             $expected[$id]['invisible'] = true;
-            $expected[$id]['depth'] = $properties['depth'] + 2;
+            $expected[$id]['depth'] = $properties['depth'] + 1;
             $expected[$id]['pathString'] = str_replace(
                 $locationToMove->pathString,
                 $newParentLocation->pathString . $this->parseId('location', $locationToMove->id) . '/',
@@ -2712,23 +2774,23 @@ class LocationServiceTest extends BaseTest
             );
         }
 
+        $homeLocationId = $this->generateId('location', 2);
         $mediaLocationId = $this->generateId('location', 43);
-        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
         // an eZ Publish demo installation
 
-        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
+        // $homeLocationId is the ID of the "Home" page location in an eZ
         // Publish demo installation
 
         // Load the location service
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation($mediaLocationId);
+        $locationToMove = $locationService->loadLocation($homeLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+        $newParentLocation = $locationService->loadLocation($mediaLocationId);
 
         // Move location from "Home" to "Demo Design"
         $locationService->moveSubtree(
@@ -2737,7 +2799,7 @@ class LocationServiceTest extends BaseTest
         );
 
         // Load moved location
-        $movedLocation = $locationService->loadLocation($mediaLocationId);
+        $movedLocation = $locationService->loadLocation($homeLocationId);
         /* END: Use Case */
 
         $this->refreshSearch($repository);
@@ -2759,7 +2821,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $newParentLocation = $locationService->loadLocation($this->generateId('location', 56));
+        $newParentLocation = $locationService->loadLocation($this->generateId('location', 43));
 
         // Load expected properties before move
         $expected = $this->loadLocationProperties($newParentLocation);
@@ -2778,22 +2840,22 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation($mediaLocationId);
+        $locationToMove = $locationService->loadLocation($demoDesignLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+        $newParentLocation = $locationService->loadLocation($mediaLocationId);
 
-        // Move location from "Home" to "Demo Design"
+        // Move location from "Demo Design" to "Home"
         $locationService->moveSubtree(
             $locationToMove,
             $newParentLocation
         );
 
         // Load moved location
-        $movedLocation = $locationService->loadLocation($mediaLocationId);
+        $movedLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Reload new parent location
-        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+        $newParentLocation = $locationService->loadLocation($mediaLocationId);
         /* END: Use Case */
 
         $this->refreshSearch($repository);
@@ -2823,13 +2885,13 @@ class LocationServiceTest extends BaseTest
         $expected = $this->loadLocationProperties($oldParentLocation);
         $childCountBefore = $locationService->getLocationChildCount($oldParentLocation);
 
+        $homeLocationId = $this->generateId('location', 2);
         $mediaLocationId = $this->generateId('location', 43);
-        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
-        // $mediaLocationId is the ID of the "Media" page location in
+        // $homeLocationId is the ID of the "Home" page location in
         // an eZ Publish demo installation
 
-        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
+        // $mediaLocationId is the ID of the "Media" page location in an eZ
         // Publish demo installation
 
         // Load the location service
@@ -2842,9 +2904,9 @@ class LocationServiceTest extends BaseTest
         $oldParentLocationId = $locationToMove->parentLocationId;
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+        $newParentLocation = $locationService->loadLocation($homeLocationId);
 
-        // Move location from "Home" to "Demo Design"
+        // Move location from "Demo Design" to "Home"
         $locationService->moveSubtree(
             $locationToMove,
             $newParentLocation
