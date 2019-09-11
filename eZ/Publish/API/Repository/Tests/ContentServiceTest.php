@@ -1587,7 +1587,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // 3. Update only eng-US translation
         $contentUpdate = $this->contentService->newContentUpdateStruct();
-        $contentUpdate->setField('name', 'An awesome Sidelfingen folder (updated)', 'eng-US');
+        $contentUpdate->setField('name', 'An awesome Sidelfingen folder (updated)', self::ENG_US);
         $contentUpdate->setField('short_name', 'Lorem ipsum dolor');
 
         $this->contentService->updateContent($contentDraft->getVersionInfo(), $contentUpdate);
