@@ -18,7 +18,7 @@ class EzSystemsPlatformInstallerBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        $container->addCompilerPass(new InstallerTagPass());
         $container->addCompilerPass(new SchemaBuilderInstallerPass());
+        $container->addCompilerPass(new InstallerTagPass());
     }
 }

@@ -10,13 +10,22 @@ services:
         arguments:
             - '@=service("kernel").locateResource("@EzPublishCoreBundle/Resources/config/storage/legacy/schema.yaml")'
 
-    ezplatform.installer.db_based_installer:
+    EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller:
         abstract: true
-        class:  "%ezplatform.installer.db_based_installer.class%"
         arguments: ["@ezpublish.persistence.connection"]
         lazy: true
 
+    ezplatform.installer.db_based_installer:
+        alias: EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller
+
+    EzSystems\PlatformInstallerBundle\Installer\CoreInstaller:
+        autowire: true
+        parent: EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller
+        tags:
+            - {name: ezplatform.installer, type: clean}
+
     ezplatform.installer.clean_installer:
+        deprecated: '%service_id% is deprecated since eZ Platform v2.5 LTS. Enable DoctrineSchemaBundle and use CoreInstaller instead'
         class: "%ezplatform.installer.clean_installer.class%"
         parent: ezplatform.installer.db_based_installer
         tags:
