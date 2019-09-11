@@ -121,11 +121,6 @@ final class Repository implements RepositoryInterface
         $this->userService = $userService;
     }
 
-    public function getCurrentUserReference(): UserReference
-    {
-        return $this->repository->getCurrentUserReference();
-    }
-
     public function setCurrentUser(UserReference $user): void
     {
         $this->repository->setCurrentUser($user);

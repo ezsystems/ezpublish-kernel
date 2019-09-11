@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Values\Content\Location;
@@ -72,17 +73,9 @@ class ContentService implements ContentServiceInterface
     /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
-    /**
-     * Setups service with reference to repository object that created it & corresponding handler.
-     *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
-     * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
-     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry,
-     * @param array $settings
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     public function __construct(
         RepositoryInterface $repository,
         Handler $handler,
@@ -90,6 +83,7 @@ class ContentService implements ContentServiceInterface
         Helper\RelationProcessor $relationProcessor,
         Helper\NameSchemaService $nameSchemaService,
         FieldTypeRegistry $fieldTypeRegistry,
+        PermissionResolver $permissionResolver,
         array $settings = []
     ) {
         $this->repository = $repository;
@@ -103,6 +97,7 @@ class ContentService implements ContentServiceInterface
             // Version archive limit (0-50), only enforced on publish, not on un-publish.
             'default_version_archive_limit' => 5,
         ];
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -514,7 +509,7 @@ class ContentService implements ContentServiceInterface
         $contentCreateStruct = clone $contentCreateStruct;
 
         if ($contentCreateStruct->ownerId === null) {
-            $contentCreateStruct->ownerId = $this->repository->getCurrentUserReference()->getUserId();
+            $contentCreateStruct->ownerId = $this->permissionResolver->getCurrentUserReference()->getUserId();
         }
 
         if ($contentCreateStruct->alwaysAvailable === null) {
@@ -1107,7 +1102,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if ($creator === null) {
-            $creator = $this->repository->getCurrentUserReference();
+            $creator = $this->permissionResolver->getCurrentUserReference();
         }
 
         if (!$this->repository->getPermissionResolver()->canUser(
@@ -1162,7 +1157,7 @@ class ContentService implements ContentServiceInterface
     public function loadContentDrafts(User $user = null)
     {
         if ($user === null) {
-            $user = $this->repository->getCurrentUserReference();
+            $user = $this->permissionResolver->getCurrentUserReference();
         }
 
         // throw early if user has absolutely no access to versionread
@@ -1356,7 +1351,7 @@ class ContentService implements ContentServiceInterface
                     $allLanguageCodes,
                     $contentType
                 ),
-                'creatorId' => $contentUpdateStruct->creatorId ?: $this->repository->getCurrentUserReference()->getUserId(),
+                'creatorId' => $contentUpdateStruct->creatorId ?: $this->permissionResolver->getCurrentUserReference()->getUserId(),
                 'fields' => $spiFields,
                 'modificationDate' => time(),
                 'initialLanguageId' => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
@@ -1815,7 +1810,7 @@ class ContentService implements ContentServiceInterface
             $spiContent = $this->persistenceHandler->contentHandler()->copy(
                 $contentInfo->id,
                 $versionInfo ? $versionInfo->versionNo : null,
-                $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId()
+                $this->permissionResolver->getCurrentUserReference()->getUserId()
             );
 
             $objectStateHandler = $this->persistenceHandler->objectStateHandler();

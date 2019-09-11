@@ -309,19 +309,6 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
-     *
-     * Get current user reference.
-     *
-     * @since 5.4.5
-     * @return \eZ\Publish\API\Repository\Values\User\UserReference
-     */
-    public function getCurrentUserReference()
-    {
-        return $this->getPermissionResolver()->getCurrentUserReference();
-    }
-
-    /**
      * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
      *
      * Sets the current user to the given $user.
@@ -429,7 +416,8 @@ class Repository implements RepositoryInterface
             $this->getRelationProcessor(),
             $this->getNameSchemaService(),
             $this->fieldTypeRegistry,
-            $this->serviceSettings['content']
+            $this->getPermissionResolver(),
+            $this->serviceSettings['content'],
         );
 
         return $this->contentService;
@@ -478,6 +466,7 @@ class Repository implements RepositoryInterface
             $this->getDomainMapper(),
             $this->getContentTypeDomainMapper(),
             $this->fieldTypeRegistry,
+            $this->getPermissionResolver(),
             $this->serviceSettings['contentType']
         );
 

@@ -84,11 +84,6 @@ class Repository implements RepositoryInterface
         $this->notificationService = $notificationService;
     }
 
-    public function getCurrentUserReference()
-    {
-        return $this->repository->getCurrentUserReference();
-    }
-
     public function setCurrentUser(UserReference $user)
     {
         return $this->repository->setCurrentUser($user);

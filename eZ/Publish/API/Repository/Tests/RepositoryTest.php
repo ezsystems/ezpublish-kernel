@@ -370,7 +370,7 @@ class RepositoryTest extends BaseTest
             $permissionResolver->getCurrentUserReference()->getUserId()
         );
 
-        $this->assertSame(
+        $this->assertEquals(
             $administratorUser,
             $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId())
         );

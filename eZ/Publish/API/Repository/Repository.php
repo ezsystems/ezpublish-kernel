@@ -15,16 +15,6 @@ use eZ\Publish\API\Repository\Values\User\UserReference;
 interface Repository
 {
     /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
-     *
-     * Get current user reference.
-     *
-     * @since 5.4.5
-     * @return \eZ\Publish\API\Repository\Values\User\UserReference
-     */
-    public function getCurrentUserReference();
-
-    /**
      * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
      *
      * Sets the current user to the given $user.

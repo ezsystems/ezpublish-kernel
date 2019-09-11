@@ -67,6 +67,7 @@ Changes affecting version compatibility with former or future versions.
 
     * `\eZ\Publish\API\Repository\UserService::loadAnonymousUser`
     * `\eZ\Publish\API\Repository\Repository::getCurrentUser`
+    * `\eZ\Publish\API\Repository\Repository::getCurrentUserReference`
 
 ## Deprecated features
 

@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
@@ -69,6 +70,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     /** @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
@@ -87,6 +91,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         Helper\DomainMapper $domainMapper,
         Helper\ContentTypeDomainMapper $contentTypeDomainMapper,
         FieldTypeRegistry $fieldTypeRegistry,
+        PermissionResolver $permissionResolver,
         array $settings = []
     ) {
         $this->repository = $repository;
@@ -99,6 +104,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->settings = $settings + [
             //'defaultSetting' => array(),
         ];
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -135,7 +141,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         if ($contentTypeGroupCreateStruct->creatorId === null) {
-            $userId = $this->repository->getCurrentUserReference()->getUserId();
+            $userId = $this->permissionResolver->getCurrentUserReference()->getUserId();
         } else {
             $userId = $contentTypeGroupCreateStruct->creatorId;
         }
@@ -252,7 +258,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                     $contentTypeGroupUpdateStruct->identifier,
                 'modified' => $modifiedTimestamp,
                 'modifierId' => $contentTypeGroupUpdateStruct->modifierId === null ?
-                    $this->repository->getCurrentUserReference()->getUserId() :
+                    $this->permissionResolver->getCurrentUserReference()->getUserId() :
                     $contentTypeGroupUpdateStruct->modifierId,
             ]
         );
@@ -754,7 +760,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         if ($contentTypeCreateStruct->creatorId === null) {
-            $contentTypeCreateStruct->creatorId = $this->repository->getCurrentUserReference()->getUserId();
+            $contentTypeCreateStruct->creatorId = $this->permissionResolver->getCurrentUserReference()->getUserId();
         }
 
         if ($contentTypeCreateStruct->creationDate === null) {
@@ -908,7 +914,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             SPIContentType::STATUS_DRAFT
         );
 
-        if (!$ignoreOwnership && $spiContentType->modifierId != $this->repository->getCurrentUserReference()->getUserId()) {
+        if (!$ignoreOwnership && $spiContentType->modifierId != $this->permissionResolver->getCurrentUserReference()->getUserId()) {
             throw new NotFoundException('ContentType owned by someone else', $contentTypeId);
         }
 
@@ -988,7 +994,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->repository->beginTransaction();
             try {
                 $spiContentType = $this->contentTypeHandler->createDraft(
-                    $this->repository->getCurrentUserReference()->getUserId(),
+                    $this->permissionResolver->getCurrentUserReference()->getUserId(),
                     $contentType->id
                 );
                 $this->repository->commit();
@@ -1069,7 +1075,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $this->contentTypeDomainMapper->buildSPIContentTypeUpdateStruct(
                     $loadedContentTypeDraft,
                     $contentTypeUpdateStruct,
-                    $this->repository->getCurrentUserReference()
+                    $this->permissionResolver->getCurrentUserReference()
                 )
             );
             $this->repository->commit();
@@ -1138,7 +1144,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         if (empty($creator)) {
-            $creator = $this->repository->getCurrentUserReference();
+            $creator = $this->permissionResolver->getCurrentUserReference();
         }
 
         $this->repository->beginTransaction();
@@ -1486,7 +1492,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                                 'nameSchema' => '<' . $fieldDefinitions[0]->identifier . '>',
                             ]
                         ),
-                        $this->repository->getCurrentUserReference()
+                        $this->permissionResolver->getCurrentUserReference()
                     )
                 );
             }

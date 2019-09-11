@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
@@ -77,6 +78,7 @@ class ContentTest extends BaseServiceMockTest
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
         $fieldTypeRegistryMock = $this->getFieldTypeRegistryMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
         $settings = ['default_version_archive_limit' => 10];
 
         $service = new ContentService(
@@ -86,6 +88,7 @@ class ContentTest extends BaseServiceMockTest
             $relationProcessorMock,
             $nameSchemaServiceMock,
             $fieldTypeRegistryMock,
+            $permissionResolverMock,
             $settings
         );
     }
@@ -905,6 +908,12 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repositoryMock = $this->getRepositoryMock();
+
+        $permissionResolver = $this->getPermissionResolverMock();
+        $permissionResolver->expects($this->once())
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(169)));
+
         $mockedService = $this->getPartlyMockedContentService();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $contentType = new ContentType(
@@ -921,10 +930,6 @@ class ContentTest extends BaseServiceMockTest
                 'contentType' => $contentType,
             ]
         );
-
-        $repositoryMock->expects($this->once())
-            ->method('getCurrentUserReference')
-            ->will($this->returnValue(new UserReference(169)));
 
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
@@ -966,6 +971,12 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
 
         $repositoryMock = $this->getRepositoryMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('getCurrentUserReference')
+            ->willReturn($this->createMock(UserReference::class));
+
         $mockedService = $this->getPartlyMockedContentService(['loadContentByRemoteId']);
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $contentType = new ContentType(
@@ -983,10 +994,6 @@ class ContentTest extends BaseServiceMockTest
                 'contentType' => $contentType,
             ]
         );
-
-        $repositoryMock->expects($this->once())
-            ->method('getCurrentUserReference')
-            ->will($this->returnValue(new UserReference(169)));
 
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
@@ -3067,7 +3074,12 @@ class ContentTest extends BaseServiceMockTest
     ) {
         $repositoryMock = $this->getRepositoryMock();
         $permissionResolverMock = $this->getPermissionResolverMock();
-        $mockedService = $this->getPartlyMockedContentService(['loadContent', 'loadRelations']);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('getCurrentUserReference')
+            ->willReturn(new UserReference(169));
+        $mockedService = $this->getPartlyMockedContentService(['loadContent', 'loadRelations'], $permissionResolverMock);
+        $permissionResolverMock = $this->getPermissionResolverMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
@@ -3151,10 +3163,6 @@ class ContentTest extends BaseServiceMockTest
         $repositoryMock->expects($this->once())
             ->method('getContentTypeService')
             ->will($this->returnValue($contentTypeServiceMock));
-
-        $repositoryMock->expects($this->once())
-            ->method('getCurrentUserReference')
-            ->will($this->returnValue(new UserReference(169)));
 
         $fieldTypeMock->expects($this->any())
             ->method('acceptValue')
@@ -6067,6 +6075,7 @@ class ContentTest extends BaseServiceMockTest
                         $this->getRelationProcessorMock(),
                         $this->getNameSchemaServiceMock(),
                         $this->getFieldTypeRegistryMock(),
+                        $this->getPermissionResolverMock(),
                         [],
                     ]
                 )
