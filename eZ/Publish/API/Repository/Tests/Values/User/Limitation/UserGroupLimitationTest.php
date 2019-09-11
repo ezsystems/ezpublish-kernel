@@ -122,6 +122,7 @@ class UserGroupLimitationTest extends BaseLimitationTest
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Inline */
         $roleService = $repository->getRoleService();
@@ -159,7 +160,7 @@ class UserGroupLimitationTest extends BaseLimitationTest
         $content = $this->createWikiPage();
         $contentId = $content->id;
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $contentService->createContentDraft(
             $contentService->loadContentInfo($contentId)

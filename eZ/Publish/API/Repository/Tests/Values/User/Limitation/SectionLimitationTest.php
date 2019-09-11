@@ -36,6 +36,7 @@ class SectionLimitationTest extends BaseLimitationTest
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
 
@@ -63,7 +64,7 @@ class SectionLimitationTest extends BaseLimitationTest
         $roleService->updatePolicy($readPolicy, $policyUpdate);
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentService = $repository->getContentService();
 
@@ -94,6 +95,7 @@ class SectionLimitationTest extends BaseLimitationTest
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
 
@@ -121,7 +123,7 @@ class SectionLimitationTest extends BaseLimitationTest
         $roleService->updatePolicy($readPolicy, $policyUpdate);
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentService = $repository->getContentService();
 

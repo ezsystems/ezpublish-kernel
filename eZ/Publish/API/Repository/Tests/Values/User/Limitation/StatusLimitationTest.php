@@ -30,6 +30,7 @@ class StatusLimitationTest extends BaseLimitationTest
     public function testStatusLimitationAllow()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $administratorUserId = $this->generateId('user', 14);
         $anonymousUserId = $this->generateId('user', 10);
@@ -44,7 +45,7 @@ class StatusLimitationTest extends BaseLimitationTest
 
         // Load the "Administrator" user and set it as current user
         $administratorUser = $userService->loadUser($administratorUserId);
-        $repository->setCurrentUser($administratorUser);
+        $permissionResolver->setCurrentUserReference($administratorUser);
 
         // Create a Content draft with "Administrator" user
         $draft = $this->createWikiPageDraft();
@@ -70,7 +71,7 @@ class StatusLimitationTest extends BaseLimitationTest
         $anonymousUser = $userService->loadUser($anonymousUserId);
 
         // Set it as current user
-        $repository->setCurrentUser($anonymousUser);
+        $permissionResolver->setCurrentUserReference($anonymousUser);
 
         $contentService = $repository->getContentService();
 
@@ -99,6 +100,7 @@ class StatusLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $administratorUserId = $this->generateId('user', 14);
         $anonymousUserId = $this->generateId('user', 10);
@@ -113,7 +115,7 @@ class StatusLimitationTest extends BaseLimitationTest
 
         // Load the "Administrator" user and set it as current user
         $administratorUser = $userService->loadUser($administratorUserId);
-        $repository->setCurrentUser($administratorUser);
+        $permissionResolver->setCurrentUserReference($administratorUser);
 
         // Create a Content draft with "Administrator" user
         $draft = $this->createWikiPageDraft();
@@ -139,7 +141,7 @@ class StatusLimitationTest extends BaseLimitationTest
         $anonymousUser = $userService->loadUser($anonymousUserId);
 
         // Set it as current user
-        $repository->setCurrentUser($anonymousUser);
+        $permissionResolver->setCurrentUserReference($anonymousUser);
 
         $contentService = $repository->getContentService();
 

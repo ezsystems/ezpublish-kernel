@@ -332,51 +332,6 @@ class RepositoryTest extends BaseTest
     }
 
     /**
-     * Test for the setCurrentUser() method.
-     *
-     * @group content
-     * @group user
-     *
-     * @see \eZ\Publish\API\Repository\Repository::setCurrentUser()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
-     */
-    public function testSetCurrentUser()
-    {
-        $repository = $this->getRepository();
-        $permissionResolver = $repository->getPermissionResolver();
-
-        $repository->setCurrentUser(new UserReference($this->generateId('user', 10)));
-        $administratorUserId = $this->generateId('user', 14);
-
-        /* BEGIN: Use Case */
-        // $administratorUserId contains the ID of the administrator user
-
-        $userService = $repository->getUserService();
-
-        // Load administrator user
-        $administratorUser = $userService->loadUser($administratorUserId);
-
-        // Set administrator user as current user
-        $repository->setCurrentUser($administratorUser);
-        /* END: Use Case */
-
-        $this->assertEquals(
-            $administratorUserId,
-            $permissionResolver->getCurrentUserReference()->getUserId()
-        );
-
-        $this->assertEquals(
-            $administratorUser->getUserId(),
-            $permissionResolver->getCurrentUserReference()->getUserId()
-        );
-
-        $this->assertEquals(
-            $administratorUser,
-            $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId())
-        );
-    }
-
-    /**
      * Test for the hasAccess() method.
      *
      * @see \eZ\Publish\API\Repository\Repository::hasAccess()
@@ -419,12 +374,13 @@ class RepositoryTest extends BaseTest
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         // Load anonymous user
         $anonymousUser = $userService->loadUser($anonymousUserId);
 
         // Set anonymous user as current user
-        $repository->setCurrentUser($anonymousUser);
+        $permissionResolver->setCurrentUserReference($anonymousUser);
 
         // This call will return false because anonymous user does not have access
         // to content removal
@@ -466,12 +422,13 @@ class RepositoryTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\Repository::hasAccess()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+     * @depends eZ\Publish\API\Repository\Tests\PermissionResolverTest::testSetCurrentUserReference
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessWithAdministratorUser
      */
     public function testHasAccessForCurrentUserYes()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $administratorUserId = $this->generateId('user', 14);
 
@@ -484,7 +441,7 @@ class RepositoryTest extends BaseTest
         $administratorUser = $userService->loadUser($administratorUserId);
 
         // Set administrator user as current user
-        $repository->setCurrentUser($administratorUser);
+        $permissionResolver->setCurrentUserReference($administratorUser);
 
         // This call will return true
         $hasAccess = $repository->hasAccess('content', 'read');
@@ -498,17 +455,18 @@ class RepositoryTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\Repository::hasAccess()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+     * @depends eZ\Publish\API\Repository\Tests\PermissionResolverTest::testSetCurrentUserReference
      */
     public function testHasAccessLimited()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will return an array of permission sets describing user's access
         // to reading content
@@ -533,6 +491,7 @@ class RepositoryTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $homeId = $this->generateId('object', 57);
 
@@ -549,7 +508,7 @@ class RepositoryTest extends BaseTest
         $anonymousUser = $userService->loadUser($anonymousUserId);
 
         // Set anonymous user as current user
-        $repository->setCurrentUser($anonymousUser);
+        $permissionResolver->setCurrentUserReference($anonymousUser);
 
         // Load the ContentInfo for "Home" frontpage
         $contentInfo = $contentService->loadContentInfo($homeId);
@@ -578,6 +537,7 @@ class RepositoryTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $administratorUserId = $this->generateId('user', 14);
         $homeId = $this->generateId('object', 57);
@@ -593,7 +553,7 @@ class RepositoryTest extends BaseTest
         $administratorUser = $userService->loadUser($administratorUserId);
 
         // Set administrator user as current user
-        $repository->setCurrentUser($administratorUser);
+        $permissionResolver->setCurrentUserReference($administratorUser);
 
         // Load the ContentInfo for "Home" frontpage
         $contentInfo = $contentService->loadContentInfo($homeId);
@@ -620,6 +580,7 @@ class RepositoryTest extends BaseTest
     public function testCanUserWithLimitationYes()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $imagesFolderId = $this->generateId('object', 49);
 
@@ -629,7 +590,7 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentService = $repository->getContentService();
 
@@ -656,6 +617,7 @@ class RepositoryTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $administratorUserId = $this->generateId('user', 14);
 
@@ -665,7 +627,7 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $userService = $repository->getUserService();
 
@@ -691,7 +653,7 @@ class RepositoryTest extends BaseTest
      * @see \eZ\Publish\API\Repository\Repository::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+     * @depends eZ\Publish\API\Repository\Tests\PermissionResolverTest::testSetCurrentUserReference
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
      */
     public function testCanUserThrowsInvalidArgumentException()
@@ -699,6 +661,7 @@ class RepositoryTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $userGroupContentTypeId = $this->generateId('type', 3);
 
@@ -708,7 +671,7 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -734,6 +697,7 @@ class RepositoryTest extends BaseTest
     public function testCanUserWithTargetYes()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $homeLocationId = $this->generateId('location', 2);
 
@@ -743,7 +707,7 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -795,6 +759,7 @@ class RepositoryTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $homeLocationId = $this->generateId('location', 2);
 
@@ -804,7 +769,7 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -851,6 +816,7 @@ class RepositoryTest extends BaseTest
     public function testCanUserWithMultipleTargetsYes()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $imagesLocationId = $this->generateId('location', 51);
         $filesLocationId = $this->generateId('location', 52);
@@ -862,7 +828,7 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -913,6 +879,7 @@ class RepositoryTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $homeLocationId = $this->generateId('location', 2);
         $administratorUsersLocationId = $this->generateId('location', 13);
@@ -924,7 +891,7 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -964,7 +931,7 @@ class RepositoryTest extends BaseTest
      * @see \eZ\Publish\API\Repository\Repository::canUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+     * @depends eZ\Publish\API\Repository\Tests\PermissionResolverTest::testSetCurrentUserReference
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
      */
     public function testCanUserWithTargetThrowsInvalidArgumentException()
@@ -972,6 +939,7 @@ class RepositoryTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $homeId = $this->generateId('object', 57);
 
@@ -981,7 +949,7 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentService = $repository->getContentService();
 
@@ -1007,7 +975,7 @@ class RepositoryTest extends BaseTest
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetURLAliasService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+     * @depends eZ\Publish\API\Repository\Tests\PermissionResolverTest::testSetCurrentUserReference
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
      */
     public function testCanUserWithTargetThrowsInvalidArgumentExceptionVariant()
@@ -1015,12 +983,13 @@ class RepositoryTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentTypeService = $repository->getContentTypeService();
 

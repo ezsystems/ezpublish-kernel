@@ -32,29 +32,34 @@ class SecurityPass implements CompilerPassInterface
         }
 
         $configResolverRef = new Reference('ezpublish.config.resolver');
-        $repositoryReference = new Reference('ezpublish.api.repository');
+        $permissionResolverRef = new Reference('eZ\Publish\API\Repository\PermissionResolver');
+        $userServiceRef = new Reference('eZ\Publish\API\Repository\UserService');
 
         // Override and inject the Repository in the authentication provider.
         // We need it for checking user credentials
         $daoAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.dao');
         $daoAuthenticationProviderDef->setClass(RepositoryAuthenticationProvider::class);
         $daoAuthenticationProviderDef->addMethodCall(
-            'setRepository',
-            [$repositoryReference]
+            'setPermissionResolver',
+            [$permissionResolverRef]
+        );
+        $daoAuthenticationProviderDef->addMethodCall(
+            'setUserService',
+            [$userServiceRef]
         );
 
         $rememberMeAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.rememberme');
         $rememberMeAuthenticationProviderDef->setClass(RememberMeRepositoryAuthenticationProvider::class);
         $rememberMeAuthenticationProviderDef->addMethodCall(
-            'setRepository',
-            [$repositoryReference]
+            'setPermissionResolver',
+            [$permissionResolverRef]
         );
 
         $anonymousAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.anonymous');
         $anonymousAuthenticationProviderDef->setClass(AnonymousAuthenticationProvider::class);
         $anonymousAuthenticationProviderDef->addMethodCall(
-            'setRepository',
-            [$repositoryReference]
+            'setPermissionResolver',
+            [$permissionResolverRef]
         );
 
         $anonymousAuthenticationProviderDef->addMethodCall(

@@ -33,6 +33,7 @@ class ParentDepthLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentTypeId = $this->generateId('contentType', 22);
         /* BEGIN: Use Case */
@@ -58,7 +59,7 @@ class ParentDepthLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
         /* END: Use Case */
@@ -78,6 +79,7 @@ class ParentDepthLimitationTest extends BaseLimitationTest
     public function testParentDepthLimitationAllow()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentTypeId = $this->generateId('contentType', 22);
         /* BEGIN: Use Case */
@@ -103,7 +105,7 @@ class ParentDepthLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $this->createWikiPageDraft();
         /* END: Use Case */
@@ -120,6 +122,7 @@ class ParentDepthLimitationTest extends BaseLimitationTest
     public function testParentDepthLimitationAllowPublish()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentTypeId = $this->generateId('contentType', 22);
         /* BEGIN: Use Case */
@@ -145,7 +148,7 @@ class ParentDepthLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
 

@@ -36,18 +36,28 @@ class SecurityPassTest extends AbstractCompilerPassTestCase
         $this->compile();
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.provider.dao',
-            'setRepository',
-            [new Reference('ezpublish.api.repository')]
+            'setPermissionResolver',
+            [new Reference('eZ\Publish\API\Repository\PermissionResolver')]
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'security.authentication.provider.dao',
+            'setUserService',
+            [new Reference('eZ\Publish\API\Repository\UserService')]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.provider.rememberme',
-            'setRepository',
-            [new Reference('ezpublish.api.repository')]
+            'setPermissionResolver',
+            [new Reference('eZ\Publish\API\Repository\PermissionResolver')]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.provider.anonymous',
-            'setRepository',
-            [new Reference('ezpublish.api.repository')]
+            'setPermissionResolver',
+            [new Reference('eZ\Publish\API\Repository\PermissionResolver')]
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'security.authentication.provider.anonymous',
+            'setConfigResolver',
+            [new Reference('ezpublish.config.resolver')]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.http_utils',

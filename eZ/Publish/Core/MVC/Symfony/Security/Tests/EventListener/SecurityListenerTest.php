@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\EventListener;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener;
@@ -34,9 +34,6 @@ use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 class SecurityListenerTest extends TestCase
 {
     /** @var \PHPUnit\Framework\MockObject\MockObject */
-    protected $repository;
-
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $configResolver;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject */
@@ -51,21 +48,29 @@ class SecurityListenerTest extends TestCase
     /** @var \eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener */
     protected $listener;
 
+    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $permissionResolver;
+
+    /** @var \eZ\Publish\API\Repository\UserService|\PHPUnit\Framework\MockObject\MockObject */
+    private $userService;
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->repository = $this->createMock(Repository::class);
         $this->configResolver = $this->createMock(ConfigResolverInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->authChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $this->permissionResolver = $this->createMock(PermissionResolver::class);
+        $this->userService = $this->createMock(UserService::class);
         $this->listener = $this->generateListener();
     }
 
     protected function generateListener()
     {
         return new SecurityListener(
-            $this->repository,
+            $this->permissionResolver,
+            $this->userService,
             $this->configResolver,
             $this->eventDispatcher,
             $this->tokenStorage,
@@ -148,20 +153,15 @@ class SecurityListenerTest extends TestCase
             ->will($this->returnValue($anonymousUserId));
 
         $apiUser = $this->createMock(APIUser::class);
-        $userService = $this->createMock(UserService::class);
-        $userService
+        $this->userService
             ->expects($this->once())
             ->method('loadUser')
             ->with($anonymousUserId)
             ->will($this->returnValue($apiUser));
 
-        $this->repository
+        $this->permissionResolver
             ->expects($this->once())
-            ->method('getUserService')
-            ->will($this->returnValue($userService));
-        $this->repository
-            ->expects($this->once())
-            ->method('setCurrentUser')
+            ->method('setCurrentUserReference')
             ->with($apiUser);
 
         $this->tokenStorage

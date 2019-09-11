@@ -143,10 +143,13 @@ class Legacy extends SetupFactory
         }
 
         $this->clearInternalCaches();
+        /** @var \eZ\Publish\API\Repository\Repository $repository */
         $repository = $this->getServiceContainer()->get($this->repositoryReference);
 
         // Set admin user as current user by default
-        $repository->setCurrentUser(new UserReference(14));
+        $repository->getPermissionResolver()->setCurrentUserReference(
+            new UserReference(14)
+        );
 
         return $repository;
     }

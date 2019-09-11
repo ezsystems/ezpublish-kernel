@@ -39,6 +39,7 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
         $draft = $this->createWikiPageDraft();
 
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         // Create and assign limited state:assign policy
         $policyCreate = $roleService->newPolicyCreateStruct('state', 'assign');
@@ -59,7 +60,7 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $objectState = $objectStateService->loadObjectState($notLockedState);
 
@@ -88,6 +89,7 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
         $draft = $this->createWikiPageDraft();
 
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         // Create and assign limited state:assign policy
         $policyCreate = $roleService->newPolicyCreateStruct('state', 'assign');
@@ -108,7 +110,7 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $objectState = $objectStateService->loadObjectState($notLockedState);
 

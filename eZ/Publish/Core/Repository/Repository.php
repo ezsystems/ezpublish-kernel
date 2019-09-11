@@ -10,7 +10,6 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
@@ -306,33 +305,6 @@ class Repository implements RepositoryInterface
         }
 
         $this->logger = null !== $logger ? $logger : new NullLogger();
-    }
-
-    /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
-     *
-     * Sets the current user to the given $user.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
-     *
-     * @throws InvalidArgumentValue If UserReference does not contain a id
-     */
-    public function setCurrentUser(APIUserReference $user)
-    {
-        $id = $user->getUserId();
-        if (!$id) {
-            throw new InvalidArgumentValue('$user->getUserId()', $id);
-        }
-
-        if ($user instanceof User) {
-            $this->currentUser = $user;
-            $this->currentUserRef = new UserReference($id);
-        } else {
-            $this->currentUser = null;
-            $this->currentUserRef = $user;
-        }
-
-        return $this->getPermissionResolver()->setCurrentUserReference($this->currentUserRef);
     }
 
     /**

@@ -35,6 +35,7 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
 
@@ -59,7 +60,7 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
             $metadataUpdate
         );
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
         /* END: Use Case */
@@ -80,6 +81,7 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -99,7 +101,7 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $this->createWikiPageDraft();
         /* END: Use Case */

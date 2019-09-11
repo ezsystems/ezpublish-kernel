@@ -30,6 +30,7 @@ class SearchServiceAuthorizationTest extends BaseTest
     public function testFindContent()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
@@ -39,7 +40,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // Should return Content with location id: 2 as the anonymous user should have access to standard section
         $searchResult = $searchService->findContent(new Query(['filter' => new Criterion\LocationId(2)]));
@@ -59,6 +60,7 @@ class SearchServiceAuthorizationTest extends BaseTest
     public function testFindContentEmptyResult()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
@@ -68,7 +70,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will return an empty search result
         $searchResult = $searchService->findContent(new Query(['filter' => new Criterion\LocationId(5)]));
@@ -93,6 +95,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
@@ -102,7 +105,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "NotFoundException" as user does not have access
         $searchService->findSingle(
@@ -122,12 +125,13 @@ class SearchServiceAuthorizationTest extends BaseTest
     public function testFindContentWithUserPermissionFilter()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
         // Set new media editor as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $searchService = $repository->getSearchService();
 
@@ -159,12 +163,13 @@ class SearchServiceAuthorizationTest extends BaseTest
     public function testFindSingleWithUserPermissionFilter()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
         // Set new media editor as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Search for "Admin Users" user group which user normally does not have access to
         $content = $repository->getSearchService()->findSingle(
@@ -191,12 +196,13 @@ class SearchServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
         // Set new media editor as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $searchService = $repository->getSearchService();
 

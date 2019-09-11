@@ -36,6 +36,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
@@ -46,7 +47,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
         $trashService->loadTrashItem($trashItem->id);
@@ -121,6 +122,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
@@ -131,7 +133,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
         $trashService->recover($trashItem);
@@ -152,6 +154,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $homeLocationId = $this->generateId('location', 2);
         $anonymousUserId = $this->generateId('user', 10);
@@ -169,7 +172,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
         $trashService->recover($trashItem, $newParentLocation);
@@ -189,6 +192,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
@@ -199,7 +203,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
         $trashService->emptyTrash();
@@ -219,6 +223,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
@@ -229,7 +234,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
         $trashService->deleteTrashItem($trashItem);

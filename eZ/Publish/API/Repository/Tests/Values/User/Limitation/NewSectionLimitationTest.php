@@ -36,6 +36,7 @@ class NewSectionLimitationTest extends BaseLimitationTest
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $policyCreate = $roleService->newPolicyCreateStruct('section', 'assign');
         $policyCreate->addLimitation(
@@ -55,7 +56,7 @@ class NewSectionLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentService = $repository->getContentService();
         $contentInfo = $contentService->loadContentInfo($contentId);
@@ -83,6 +84,7 @@ class NewSectionLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentId = $this->generateId('content', 58);
         $sectionId = $this->generateId('section', 6);
@@ -110,7 +112,7 @@ class NewSectionLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentService = $repository->getContentService();
         $contentInfo = $contentService->loadContentInfo($contentId);

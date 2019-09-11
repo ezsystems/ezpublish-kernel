@@ -84,11 +84,6 @@ class Repository implements RepositoryInterface
         $this->notificationService = $notificationService;
     }
 
-    public function setCurrentUser(UserReference $user)
-    {
-        return $this->repository->setCurrentUser($user);
-    }
-
     public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
     {
         return $this->repository->sudo($callback, $outerRepository ?? $this);

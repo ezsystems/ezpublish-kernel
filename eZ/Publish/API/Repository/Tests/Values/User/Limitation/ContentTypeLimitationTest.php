@@ -31,6 +31,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
     public function testContentTypeLimitationAllow()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentService = $repository->getContentService();
 
@@ -67,7 +68,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
 
         $content = $this->createWikiPage();
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $updateDraft = $contentService->createContentDraft($content->contentInfo);
 
@@ -98,6 +99,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentService = $repository->getContentService();
 
@@ -134,7 +136,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
 
         $content = $this->createWikiPage();
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call fails with an UnauthorizedException
         $contentService->createContentDraft($content->contentInfo);
@@ -153,6 +155,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentService = $repository->getContentService();
 
@@ -191,7 +194,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
 
         $updateDraft = $contentService->createContentDraft($content->contentInfo);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->setField('title', 'Your wiki page');

@@ -61,7 +61,8 @@ EOT
 
         /** @var \eZ\Publish\API\Repository\Repository $repository */
         $repository = $this->getContainer()->get('ezpublish.api.repository');
-        $repository->setCurrentUser(
+        $permissionResolver = $this->getContainer()->get('eZ\Publish\API\Repository\PermissionResolver');
+        $permissionResolver->setCurrentUserReference(
             $repository->getUserService()->loadUser(14)
         );
 

@@ -76,7 +76,7 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUserGroup($role, $userGroup);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
         /* END: Use Case */
@@ -98,6 +98,7 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $parentUserGroupId = $this->generateId('location', 4);
         /* BEGIN: Use Case */
@@ -139,7 +140,7 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUserGroup($role, $userGroup);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $this->createWikiPageDraft();
         /* END: Use Case */

@@ -1357,11 +1357,12 @@ class LocationServiceTest extends BaseTest
     public function testUpdateLocationTwice()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         $locationService = $repository->getLocationService();
-        $repository->setCurrentUser($repository->getUserService()->loadUser(14));
+        $permissionResolver->setCurrentUserReference($repository->getUserService()->loadUser(14));
 
         $originalLocation = $locationService->loadLocation($locationId);
 

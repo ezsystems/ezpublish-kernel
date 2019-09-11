@@ -8,7 +8,9 @@ parameters:
 services:
     ezpublish.security.user_provider:
         class: "%ezpublish.security.user_provider.class%"
-        arguments: ["@ezpublish.api.repository"]
+        arguments:
+            - '@eZ\Publish\API\Repository\UserService'
+            - '@eZ\Publish\API\Repository\PermissionResolver'
 
     ezpublish.security.voter.core:
         class: "%ezpublish.security.voter.core.class%"
@@ -32,7 +34,8 @@ services:
     ezpublish.security.login_listener:
         class: "%ezpublish.security.login_listener.class%"
         arguments:
-            - "@ezpublish.api.repository"
+            - '@eZ\Publish\API\Repository\PermissionResolver'
+            - '@eZ\Publish\API\Repository\UserService'
             - "@ezpublish.config.resolver"
             - "@event_dispatcher"
             - "@security.token_storage"

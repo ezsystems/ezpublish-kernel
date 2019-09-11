@@ -15,15 +15,6 @@ use eZ\Publish\API\Repository\Values\User\UserReference;
 interface Repository
 {
     /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
-     *
-     * Sets the current user to the given $user.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
-     */
-    public function setCurrentUser(UserReference $user);
-
-    /**
      * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If module or function is invalid.

@@ -57,7 +57,7 @@ class PermissionResolverTest extends BaseTest
     }
 
     /**
-     * Test for the setCurrentUser() method.
+     * Test for the setCurrentUserReference() method.
      *
      * @see \eZ\Publish\API\Repository\PermissionResolver::setCurrentUserReference()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
