@@ -1161,7 +1161,7 @@ class ContentService implements ContentServiceInterface
         }
 
         // throw early if user has absolutely no access to versionread
-        if ($this->repository->hasAccess('content', 'versionread') === false) {
+        if ($this->permissionResolver->hasAccess('content', 'versionread') === false) {
             throw new UnauthorizedException('content', 'versionread');
         }
 

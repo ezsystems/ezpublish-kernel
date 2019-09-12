@@ -316,24 +316,6 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
-     *
-     * Check if user has access to a given module / function.
-     *
-     * Low level function, use canUser instead if you have objects to check against.
-     *
-     * @param string $module
-     * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
-     *
-     * @return bool|array Bool if user has full or no access, array if limitations if not
-     */
-    public function hasAccess($module, $function, APIUserReference $user = null)
-    {
-        return $this->getPermissionResolver()->hasAccess($module, $function, $user);
-    }
-
-    /**
      * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
      *
      * Check if user has access to a given action on a given value object.
@@ -490,6 +472,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler,
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['trash']
         );
 

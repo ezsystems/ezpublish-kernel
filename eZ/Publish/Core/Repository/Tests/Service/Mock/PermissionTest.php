@@ -230,7 +230,7 @@ class PermissionTest extends BaseServiceMockTest
 
         $result = $service->sudo(
             function (Repository $repo) {
-                return $repo->hasAccess('dummy-module', 'dummy-function');
+                return $repo->getPermissionResolver()->hasAccess('dummy-module', 'dummy-function');
             },
             $repositoryMock
         );

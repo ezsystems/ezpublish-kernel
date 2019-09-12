@@ -121,11 +121,6 @@ final class Repository implements RepositoryInterface
         $this->userService = $userService;
     }
 
-    public function hasAccess($module, $function, UserReference $user = null)
-    {
-        return $this->repository->hasAccess($module, $function, $user);
-    }
-
     public function canUser($module, $function, ValueObject $object, $targets = null): bool
     {
         return $this->repository->canUser($module, $function, $object, $targets);

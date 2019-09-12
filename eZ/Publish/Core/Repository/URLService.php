@@ -57,7 +57,7 @@ class URLService implements URLServiceInterface
      */
     public function findUrls(URLQuery $query)
     {
-        if ($this->repository->hasAccess('url', 'view') === false) {
+        if ($this->permissionResolver->hasAccess('url', 'view') === false) {
             throw new UnauthorizedException('url', 'view');
         }
 

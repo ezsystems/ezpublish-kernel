@@ -69,6 +69,7 @@ Changes affecting version compatibility with former or future versions.
     * `\eZ\Publish\API\Repository\Repository::getCurrentUser`
     * `\eZ\Publish\API\Repository\Repository::getCurrentUserReference`
     * `\eZ\Publish\API\Repository\Repository::setCurrentUser`
+    * `\eZ\Publish\API\Repository\Repository::hasAccess`
 
 ## Deprecated features
 

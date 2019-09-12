@@ -7,26 +7,12 @@
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\UserReference;
 
 /**
  * Repository interface.
  */
 interface Repository
 {
-    /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If module or function is invalid.
-     *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
-     *
-     * @return bool|array if limitations are on this function an array of limitations is returned
-     */
-    public function hasAccess($module, $function, UserReference $user = null);
-
     /**
      * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
      *

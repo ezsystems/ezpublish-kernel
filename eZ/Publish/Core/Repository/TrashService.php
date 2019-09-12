@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -48,6 +49,12 @@ class TrashService implements TrashServiceInterface
     /** @var \eZ\Publish\Core\Repository\Helper\NameSchemaService */
     protected $nameSchemaService;
 
+    /** @var \eZ\Publish\API\Repository\PermissionCriterionResolver */
+    private $permissionCriterionResolver;
+
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
@@ -62,9 +69,9 @@ class TrashService implements TrashServiceInterface
         Handler $handler,
         Helper\NameSchemaService $nameSchemaService,
         PermissionCriterionResolver $permissionCriterionResolver,
+        PermissionResolver $permissionResolver,
         array $settings = []
     ) {
-        $this->permissionCriterionResolver = $permissionCriterionResolver;
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
         $this->nameSchemaService = $nameSchemaService;
@@ -72,6 +79,8 @@ class TrashService implements TrashServiceInterface
         $this->settings = $settings + [
             //'defaultSetting' => array(),
         ];
+        $this->permissionCriterionResolver = $permissionCriterionResolver;
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -225,7 +234,7 @@ class TrashService implements TrashServiceInterface
      */
     public function emptyTrash()
     {
-        if ($this->repository->hasAccess('content', 'cleantrash') === false) {
+        if ($this->permissionResolver->hasAccess('content', 'cleantrash') === false) {
             throw new UnauthorizedException('content', 'cleantrash');
         }
 
