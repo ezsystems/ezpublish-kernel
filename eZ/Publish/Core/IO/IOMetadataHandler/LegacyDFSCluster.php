@@ -101,7 +101,7 @@ class LegacyDFSCluster implements IOMetadataHandler
         $stmt->bindValue('name_hash', md5($path));
         $stmt->execute();
 
-        if ($stmt->rowCount() != true) {
+        if ($stmt->rowCount() != 1) {
             // Is this really necessary ?
             throw new BinaryFileNotFoundException($path);
         }
