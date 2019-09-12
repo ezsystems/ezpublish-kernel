@@ -375,27 +375,33 @@ class DoctrineStorage extends Gateway
         return true;
     }
 
+    /**
+     * @param int[] $fieldIds
+     *
+     * @return bool
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
     protected function isLastRelationToFieldType(array $fieldIds): bool
     {
-        foreach ($fieldIds as $fieldId) {
-            $checkQuery = $this->connection->createQueryBuilder();
-            $checkQuery
-                ->select('count(*) as count')
-                ->from('ezcontentobject_attribute')
-                ->where(
-                    $checkQuery->expr()->eq(
-                        $this->connection->quoteIdentifier('id'),
-                        ':fieldId'
-                    )
+        $countExpr = $this->connection->getDatabasePlatform()->getCountExpression('id');
+
+        $checkQuery = $this->connection->createQueryBuilder();
+        $checkQuery
+            ->select($countExpr)
+            ->from('ezcontentobject_attribute')
+            ->where(
+                $checkQuery->expr()->in(
+                    $this->connection->quoteIdentifier('id'),
+                    ':fieldIds'
                 )
-                ->setParameter(':fieldId', $fieldId, ParameterType::INTEGER);
+            )
+            ->setParameter(':fieldIds', $fieldIds, Connection::PARAM_INT_ARRAY)
+            ->groupBy('id')
+            ->having($countExpr . ' > 1');
 
-            $numRows = (int)$checkQuery->execute()->fetchColumn();
-            if ($numRows > 1) {
-                return false;
-            }
-        }
+        $numRows = (int)$checkQuery->execute()->fetchColumn();
 
-        return true;
+        return $numRows === 0;
     }
 }
