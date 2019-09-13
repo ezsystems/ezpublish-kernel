@@ -79,7 +79,7 @@ class EZP22840RoleLimitations extends BaseTest
 
         // try to login
         $this->assertTrue(
-            $repository->canUser('user', 'login', new SiteAccess()),
+            $permissionResolver->canUser('user', 'login', new SiteAccess()),
             'Could not verify that user can login with section limitation'
         );
     }

@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
@@ -36,6 +37,9 @@ class LanguageService implements LanguageServiceInterface
     /** @var array */
     protected $settings;
 
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
@@ -43,10 +47,15 @@ class LanguageService implements LanguageServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $languageHandler, array $settings = [])
-    {
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $languageHandler,
+        PermissionResolver $permissionResolver,
+        array $settings = []
+    ) {
         $this->repository = $repository;
         $this->languageHandler = $languageHandler;
+        $this->permissionResolver = $permissionResolver;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + [
             'languages' => ['eng-GB'],
@@ -77,7 +86,7 @@ class LanguageService implements LanguageServiceInterface
             throw new InvalidArgumentValue('enabled', $languageCreateStruct->enabled, 'LanguageCreateStruct');
         }
 
-        if (!$this->repository->canUser('content', 'translations', $languageCreateStruct)) {
+        if (!$this->permissionResolver->canUser('content', 'translations', $languageCreateStruct)) {
             throw new UnauthorizedException('content', 'translations');
         }
 
@@ -127,7 +136,7 @@ class LanguageService implements LanguageServiceInterface
             throw new InvalidArgumentValue('newName', $newName);
         }
 
-        if (!$this->repository->canUser('content', 'translations', $language)) {
+        if (!$this->permissionResolver->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
         }
 
@@ -165,7 +174,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function enableLanguage(Language $language)
     {
-        if (!$this->repository->canUser('content', 'translations', $language)) {
+        if (!$this->permissionResolver->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
         }
 
@@ -203,7 +212,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function disableLanguage(Language $language)
     {
-        if (!$this->repository->canUser('content', 'translations', $language)) {
+        if (!$this->permissionResolver->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
         }
 
@@ -327,7 +336,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function deleteLanguage(Language $language)
     {
-        if (!$this->repository->canUser('content', 'translations', $language)) {
+        if (!$this->permissionResolver->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
         }
 

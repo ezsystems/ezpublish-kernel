@@ -121,11 +121,6 @@ final class Repository implements RepositoryInterface
         $this->userService = $userService;
     }
 
-    public function canUser($module, $function, ValueObject $object, $targets = null): bool
-    {
-        return $this->repository->canUser($module, $function, $object, $targets);
-    }
-
     public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
     {
         return $this->repository->sudo($callback, $outerRepository);

@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter;
 
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -18,12 +18,12 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  */
 class ValueObjectVoter implements VoterInterface
 {
-    /** @var \eZ\Publish\API\Repository\Repository */
-    private $repository;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
 
-    public function __construct(Repository $repository)
+    public function __construct(PermissionResolver $permissionResolver)
     {
-        $this->repository = $repository;
+        $this->permissionResolver = $permissionResolver;
     }
 
     public function supportsAttribute($attribute)
@@ -47,7 +47,7 @@ class ValueObjectVoter implements VoterInterface
      * This method must return one of the following constants:
      * ACCESS_GRANTED, ACCESS_DENIED, or ACCESS_ABSTAIN.
      *
-     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @see \eZ\Publish\API\Repository\PermissionResolver::canUser()
      *
      * @param TokenInterface $token      A TokenInterface instance
      * @param object         $object     The object to secure
@@ -59,9 +59,9 @@ class ValueObjectVoter implements VoterInterface
     {
         foreach ($attributes as $attribute) {
             if ($this->supportsAttribute($attribute)) {
-                $targets = isset($attribute->limitations['targets']) ? $attribute->limitations['targets'] : null;
+                $targets = isset($attribute->limitations['targets']) ? $attribute->limitations['targets'] : [];
                 if (
-                    $this->repository->canUser(
+                    $this->permissionResolver->canUser(
                         $attribute->module,
                         $attribute->function,
                         $attribute->limitations['valueObject'],

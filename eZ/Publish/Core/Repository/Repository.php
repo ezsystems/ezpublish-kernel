@@ -316,41 +316,6 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
-     *
-     * Check if user has access to a given action on a given value object.
-     *
-     * Indicates if the current user is allowed to perform an action given by the function on the given
-     * objects.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
-     *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
-     * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
-     *
-     * @return bool
-     */
-    public function canUser($module, $function, ValueObject $object, $targets = null)
-    {
-        if ($targets instanceof ValueObject) {
-            $targets = [$targets];
-        } elseif ($targets === null) {
-            $targets = [];
-        } elseif (!is_array($targets)) {
-            throw new InvalidArgumentType(
-                '$targets',
-                'null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]',
-                $targets
-            );
-        }
-
-        return $this->getPermissionResolver()->canUser($module, $function, $object, $targets);
-    }
-
-    /**
      * Get Content Service.
      *
      * Get service object to perform operations on Content objects and it's aggregate members.
@@ -393,6 +358,7 @@ class Repository implements RepositoryInterface
         $this->languageService = new LanguageService(
             $this,
             $this->persistenceHandler->contentLanguageHandler(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['language']
         );
 
@@ -446,6 +412,7 @@ class Repository implements RepositoryInterface
             $this->getDomainMapper(),
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['location'],
             $this->logger
         );
@@ -518,6 +485,7 @@ class Repository implements RepositoryInterface
 
         $this->userService = new UserService(
             $this,
+            $this->getPermissionResolver(),
             $this->persistenceHandler->userHandler(),
             $this->persistenceHandler->locationHandler(),
             $this->serviceSettings['user']
@@ -637,6 +605,7 @@ class Repository implements RepositoryInterface
         $this->objectStateService = new ObjectStateService(
             $this,
             $this->persistenceHandler->objectStateHandler(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['objectState']
         );
 

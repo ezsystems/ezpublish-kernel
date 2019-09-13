@@ -150,6 +150,7 @@ class UserTest extends BaseServiceMockTest
             ->setConstructorArgs(
                 [
                     $this->getRepositoryMock(),
+                    $this->getPermissionResolverMock(),
                     $this->getPersistenceMock()->userHandler(),
                     $this->getPersistenceMock()->locationHandler(),
                 ]

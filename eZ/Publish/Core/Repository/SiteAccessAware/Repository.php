@@ -89,11 +89,6 @@ class Repository implements RepositoryInterface
         return $this->repository->sudo($callback, $outerRepository ?? $this);
     }
 
-    public function canUser($module, $function, ValueObject $object, $targets = null)
-    {
-        return $this->repository->canUser($module, $function, $object, $targets);
-    }
-
     public function getContentService()
     {
         return $this->contentService;

@@ -21,7 +21,7 @@ services:
 
     ezpublish.security.voter.value_object:
         class: "%ezpublish.security.voter.value_object.class%"
-        arguments: ["@ezpublish.api.repository"]
+        arguments: ['@eZ\Publish\API\Repository\PermissionResolver']
         public: false
         tags:
             - { name: security.voter }

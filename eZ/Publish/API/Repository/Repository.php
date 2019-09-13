@@ -6,38 +6,11 @@
  */
 namespace eZ\Publish\API\Repository;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-
 /**
  * Repository interface.
  */
 interface Repository
 {
-    /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
-     *
-     * Indicates if the current user is allowed to perform an action given by the function on the given
-     * objects.
-     *
-     * Example: canUser( 'content', 'edit', $content, $location );
-     *          This will check edit permission on content given the specific location, if skipped if will check on all
-     *          locations.
-     *
-     * Example2: canUser( 'section', 'assign', $content, $section );
-     *           Check if user has access to assign $content to $section.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
-     *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
-     * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
-     *
-     * @return bool
-     */
-    public function canUser($module, $function, ValueObject $object, $targets = null);
-
     /**
      * Allows API execution to be performed with full access, sand-boxed.
      *

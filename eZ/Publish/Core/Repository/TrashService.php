@@ -102,11 +102,11 @@ class TrashService implements TrashServiceInterface
             $spiTrashItem,
             $this->repository->getContentService()->internalLoadContent($spiTrashItem->contentId)
         );
-        if (!$this->repository->canUser('content', 'read', $trash->getContentInfo())) {
+        if (!$this->permissionResolver->canUser('content', 'read', $trash->getContentInfo())) {
             throw new UnauthorizedException('content', 'read');
         }
 
-        if (!$this->repository->canUser('content', 'restore', $trash->getContentInfo())) {
+        if (!$this->permissionResolver->canUser('content', 'restore', $trash->getContentInfo())) {
             throw new UnauthorizedException('content', 'restore');
         }
 
@@ -184,7 +184,7 @@ class TrashService implements TrashServiceInterface
             throw new InvalidArgumentValue('parentLocationId', $newParentLocation->id, 'Location');
         }
 
-        if (!$this->repository->canUser(
+        if (!$this->permissionResolver->canUser(
             'content',
             'restore',
             $trashItem->getContentInfo(),
@@ -264,7 +264,7 @@ class TrashService implements TrashServiceInterface
      */
     public function deleteTrashItem(APITrashItem $trashItem)
     {
-        if (!$this->repository->canUser('content', 'cleantrash', $trashItem->getContentInfo())) {
+        if (!$this->permissionResolver->canUser('content', 'cleantrash', $trashItem->getContentInfo())) {
             throw new UnauthorizedException('content', 'cleantrash');
         }
 
@@ -397,7 +397,7 @@ class TrashService implements TrashServiceInterface
      */
     private function userHasPermissionsToRemove(ContentInfo $contentInfo, Location $location)
     {
-        if (!$this->repository->canUser('content', 'remove', $contentInfo, [$location])) {
+        if (!$this->permissionResolver->canUser('content', 'remove', $contentInfo, [$location])) {
             return false;
         }
         $contentRemoveCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'remove');

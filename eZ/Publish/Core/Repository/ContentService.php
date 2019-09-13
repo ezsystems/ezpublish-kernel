@@ -115,7 +115,7 @@ class ContentService implements ContentServiceInterface
     public function loadContentInfo($contentId)
     {
         $contentInfo = $this->internalLoadContentInfo($contentId);
-        if (!$this->repository->canUser('content', 'read', $contentInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'read', $contentInfo)) {
             throw new UnauthorizedException('content', 'read', ['contentId' => $contentId]);
         }
 
@@ -131,7 +131,7 @@ class ContentService implements ContentServiceInterface
         $spiInfoList = $this->persistenceHandler->contentHandler()->loadContentInfoList($contentIds);
         foreach ($spiInfoList as $id => $spiInfo) {
             $contentInfo = $this->domainMapper->buildContentInfoDomainObject($spiInfo);
-            if ($this->repository->canUser('content', 'read', $contentInfo)) {
+            if ($this->permissionResolver->canUser('content', 'read', $contentInfo)) {
                 $contentInfoList[$id] = $contentInfo;
             }
         }
@@ -184,7 +184,7 @@ class ContentService implements ContentServiceInterface
     {
         $contentInfo = $this->internalLoadContentInfo($remoteId, true);
 
-        if (!$this->repository->canUser('content', 'read', $contentInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'read', $contentInfo)) {
             throw new UnauthorizedException('content', 'read', ['remoteId' => $remoteId]);
         }
 
@@ -248,7 +248,7 @@ class ContentService implements ContentServiceInterface
             $function = 'versionread';
         }
 
-        if (!$this->repository->canUser('content', $function, $versionInfo)) {
+        if (!$this->permissionResolver->canUser('content', $function, $versionInfo)) {
             throw new UnauthorizedException('content', $function, ['contentId' => $contentId]);
         }
 
@@ -298,12 +298,12 @@ class ContentService implements ContentServiceInterface
     {
         $content = $this->internalLoadContent($contentId, $languages, $versionNo, false, $useAlwaysAvailable);
 
-        if (!$this->repository->canUser('content', 'read', $content)) {
+        if (!$this->permissionResolver->canUser('content', 'read', $content)) {
             throw new UnauthorizedException('content', 'read', ['contentId' => $contentId]);
         }
         if (
             !$content->getVersionInfo()->isPublished()
-            && !$this->repository->canUser('content', 'versionread', $content)
+            && !$this->permissionResolver->canUser('content', 'versionread', $content)
         ) {
             throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentId, 'versionNo' => $versionNo]);
         }
@@ -400,13 +400,13 @@ class ContentService implements ContentServiceInterface
     {
         $content = $this->internalLoadContent($remoteId, $languages, $versionNo, true, $useAlwaysAvailable);
 
-        if (!$this->repository->canUser('content', 'read', $content)) {
+        if (!$this->permissionResolver->canUser('content', 'read', $content)) {
             throw new UnauthorizedException('content', 'read', ['remoteId' => $remoteId]);
         }
 
         if (
             !$content->getVersionInfo()->isPublished()
-            && !$this->repository->canUser('content', 'versionread', $content)
+            && !$this->permissionResolver->canUser('content', 'versionread', $content)
         ) {
             throw new UnauthorizedException('content', 'versionread', ['remoteId' => $remoteId, 'versionNo' => $versionNo]);
         }
@@ -531,7 +531,7 @@ class ContentService implements ContentServiceInterface
             }
         }
 
-        if (!$this->repository->canUser('content', 'create', $contentCreateStruct, $locationCreateStructs)) {
+        if (!$this->permissionResolver->canUser('content', 'create', $contentCreateStruct, $locationCreateStructs)) {
             throw new UnauthorizedException(
                 'content',
                 'create',
@@ -903,7 +903,7 @@ class ContentService implements ContentServiceInterface
 
         $loadedContentInfo = $this->loadContentInfo($contentInfo->id);
 
-        if (!$this->repository->canUser('content', 'edit', $loadedContentInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'edit', $loadedContentInfo)) {
             throw new UnauthorizedException('content', 'edit', ['contentId' => $loadedContentInfo->id]);
         }
 
@@ -1021,7 +1021,7 @@ class ContentService implements ContentServiceInterface
     {
         $contentInfo = $this->internalLoadContentInfo($contentInfo->id);
 
-        if (!$this->repository->canUser('content', 'remove', $contentInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'remove', $contentInfo)) {
             throw new UnauthorizedException('content', 'remove', ['contentId' => $contentInfo->id]);
         }
 
@@ -1105,7 +1105,7 @@ class ContentService implements ContentServiceInterface
             $creator = $this->permissionResolver->getCurrentUserReference();
         }
 
-        if (!$this->repository->getPermissionResolver()->canUser(
+        if (!$this->permissionResolver->canUser(
             'content',
             'edit',
             $contentInfo,
@@ -1170,7 +1170,7 @@ class ContentService implements ContentServiceInterface
         foreach ($spiVersionInfoList as $spiVersionInfo) {
             $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
             // @todo: Change this to filter returned drafts by permissions instead of throwing
-            if (!$this->repository->canUser('content', 'versionread', $versionInfo)) {
+            if (!$this->permissionResolver->canUser('content', 'versionread', $versionInfo)) {
                 throw new UnauthorizedException('content', 'versionread', ['contentId' => $versionInfo->contentInfo->id]);
             }
 
@@ -1523,7 +1523,7 @@ class ContentService implements ContentServiceInterface
             }
         }
 
-        if (!$this->repository->getPermissionResolver()->canUser(
+        if (!$this->permissionResolver->canUser(
             'content',
             'publish',
             $content
@@ -1697,7 +1697,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if (!$this->repository->canUser('content', 'versionremove', $versionInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'versionremove', $versionInfo)) {
             throw new UnauthorizedException(
                 'content',
                 'versionremove',
@@ -1744,7 +1744,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersions(ContentInfo $contentInfo, ?int $status = null)
     {
-        if (!$this->repository->canUser('content', 'versionread', $contentInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'versionread', $contentInfo)) {
             throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentInfo->id]);
         }
 
@@ -1762,7 +1762,7 @@ class ContentService implements ContentServiceInterface
         $versions = [];
         foreach ($spiVersionInfoList as $spiVersionInfo) {
             $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
-            if (!$this->repository->canUser('content', 'versionread', $versionInfo)) {
+            if (!$this->permissionResolver->canUser('content', 'versionread', $versionInfo)) {
                 throw new UnauthorizedException('content', 'versionread', ['versionId' => $versionInfo->id]);
             }
 
@@ -1789,7 +1789,7 @@ class ContentService implements ContentServiceInterface
         $destinationLocation = $this->repository->getLocationService()->loadLocation(
             $destinationLocationCreateStruct->parentLocationId
         );
-        if (!$this->repository->canUser('content', 'create', $contentInfo, [$destinationLocation])) {
+        if (!$this->permissionResolver->canUser('content', 'create', $contentInfo, [$destinationLocation])) {
             throw new UnauthorizedException(
                 'content',
                 'create',
@@ -1799,7 +1799,7 @@ class ContentService implements ContentServiceInterface
                 ]
             );
         }
-        if (!$this->repository->canUser('content', 'manage_locations', $contentInfo, [$destinationLocation])) {
+        if (!$this->permissionResolver->canUser('content', 'manage_locations', $contentInfo, [$destinationLocation])) {
             throw new UnauthorizedException('content', 'manage_locations', ['contentId' => $contentInfo->id]);
         }
 
@@ -1857,7 +1857,7 @@ class ContentService implements ContentServiceInterface
             $function = 'versionread';
         }
 
-        if (!$this->repository->canUser('content', $function, $versionInfo)) {
+        if (!$this->permissionResolver->canUser('content', $function, $versionInfo)) {
             throw new UnauthorizedException('content', $function);
         }
 
@@ -1871,7 +1871,7 @@ class ContentService implements ContentServiceInterface
         $relations = [];
         foreach ($spiRelations as $spiRelation) {
             $destinationContentInfo = $this->internalLoadContentInfo($spiRelation->destinationContentId);
-            if (!$this->repository->canUser('content', 'read', $destinationContentInfo)) {
+            if (!$this->permissionResolver->canUser('content', 'read', $destinationContentInfo)) {
                 continue;
             }
 
@@ -1898,7 +1898,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadReverseRelations(ContentInfo $contentInfo)
     {
-        if (!$this->repository->canUser('content', 'reverserelatedlist', $contentInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'reverserelatedlist', $contentInfo)) {
             throw new UnauthorizedException('content', 'reverserelatedlist', ['contentId' => $contentInfo->id]);
         }
 
@@ -1909,7 +1909,7 @@ class ContentService implements ContentServiceInterface
         $returnArray = [];
         foreach ($spiRelations as $spiRelation) {
             $sourceContentInfo = $this->internalLoadContentInfo($spiRelation->sourceContentId);
-            if (!$this->repository->canUser('content', 'read', $sourceContentInfo)) {
+            if (!$this->permissionResolver->canUser('content', 'read', $sourceContentInfo)) {
                 continue;
             }
 
@@ -1951,7 +1951,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if (!$this->repository->canUser('content', 'edit', $sourceVersion)) {
+        if (!$this->permissionResolver->canUser('content', 'edit', $sourceVersion)) {
             throw new UnauthorizedException('content', 'edit', ['contentId' => $sourceVersion->contentInfo->id]);
         }
 
@@ -2003,7 +2003,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if (!$this->repository->canUser('content', 'edit', $sourceVersion)) {
+        if (!$this->permissionResolver->canUser('content', 'edit', $sourceVersion)) {
             throw new UnauthorizedException('content', 'edit', ['contentId' => $sourceVersion->contentInfo->id]);
         }
 
@@ -2082,7 +2082,7 @@ class ContentService implements ContentServiceInterface
         $this->repository->beginTransaction();
         try {
             foreach ($this->loadVersions($contentInfo) as $versionInfo) {
-                if (!$this->repository->canUser('content', 'remove', $versionInfo)) {
+                if (!$this->permissionResolver->canUser('content', 'remove', $versionInfo)) {
                     throw new UnauthorizedException(
                         'content',
                         'remove',
@@ -2181,7 +2181,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if (!$this->repository->canUser('content', 'edit', $versionInfo->contentInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'edit', $versionInfo->contentInfo)) {
             throw new UnauthorizedException(
                 'content', 'edit', ['contentId' => $versionInfo->contentInfo->id]
             );
@@ -2244,7 +2244,7 @@ class ContentService implements ContentServiceInterface
      */
     public function hideContent(ContentInfo $contentInfo): void
     {
-        if (!$this->repository->canUser('content', 'hide', $contentInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'hide', $contentInfo)) {
             throw new UnauthorizedException('content', 'hide', ['contentId' => $contentInfo->id]);
         }
 
@@ -2278,7 +2278,7 @@ class ContentService implements ContentServiceInterface
      */
     public function revealContent(ContentInfo $contentInfo): void
     {
-        if (!$this->repository->canUser('content', 'hide', $contentInfo)) {
+        if (!$this->permissionResolver->canUser('content', 'hide', $contentInfo)) {
             throw new UnauthorizedException('content', 'hide', ['contentId' => $contentInfo->id]);
         }
 

@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
@@ -46,6 +47,9 @@ class ObjectStateService implements ObjectStateServiceInterface
     /** @var array */
     protected $settings;
 
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
@@ -53,10 +57,15 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $objectStateHandler, array $settings = [])
-    {
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $objectStateHandler,
+        PermissionResolver $permissionResolver,
+        array $settings = []
+    ) {
         $this->repository = $repository;
         $this->objectStateHandler = $objectStateHandler;
+        $this->permissionResolver = $permissionResolver;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + [
             //'defaultSetting' => array(),
@@ -75,7 +84,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct)
     {
-        if (!$this->repository->canUser('state', 'administrate', $objectStateGroupCreateStruct)) {
+        if (!$this->permissionResolver->canUser('state', 'administrate', $objectStateGroupCreateStruct)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -175,7 +184,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectStateGroup(APIObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct)
     {
-        if (!$this->repository->canUser('state', 'administrate', $objectStateGroup)) {
+        if (!$this->permissionResolver->canUser('state', 'administrate', $objectStateGroup)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -227,7 +236,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectStateGroup(APIObjectStateGroup $objectStateGroup)
     {
-        if (!$this->repository->canUser('state', 'administrate', $objectStateGroup)) {
+        if (!$this->permissionResolver->canUser('state', 'administrate', $objectStateGroup)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -259,7 +268,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function createObjectState(APIObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct)
     {
-        if (!$this->repository->canUser('state', 'administrate', $objectStateCreateStruct, [$objectStateGroup])) {
+        if (!$this->permissionResolver->canUser('state', 'administrate', $objectStateCreateStruct, [$objectStateGroup])) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -327,7 +336,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectState(APIObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct)
     {
-        if (!$this->repository->canUser('state', 'administrate', $objectState)) {
+        if (!$this->permissionResolver->canUser('state', 'administrate', $objectState)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -388,7 +397,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             throw new InvalidArgumentValue('priority', $priority);
         }
 
-        if (!$this->repository->canUser('state', 'administrate', $objectState)) {
+        if (!$this->permissionResolver->canUser('state', 'administrate', $objectState)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -417,7 +426,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectState(APIObjectState $objectState)
     {
-        if (!$this->repository->canUser('state', 'administrate', $objectState)) {
+        if (!$this->permissionResolver->canUser('state', 'administrate', $objectState)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -445,7 +454,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function setContentState(ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState)
     {
-        if ($this->repository->canUser('state', 'assign', $contentInfo, $objectState) !== true) {
+        if (!$this->permissionResolver->canUser('state', 'assign', $contentInfo, [$objectState])) {
             throw new UnauthorizedException('state', 'assign', ['contentId' => $contentInfo->id]);
         }
 

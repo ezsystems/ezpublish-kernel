@@ -13,6 +13,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
@@ -93,12 +94,13 @@ class UserService implements UserServiceInterface
      */
     public function __construct(
         RepositoryInterface $repository,
+        PermissionResolver $permissionResolver,
         Handler $userHandler,
         LocationHandler $locationHandler,
         array $settings = []
     ) {
         $this->repository = $repository;
-        $this->permissionResolver = $repository->getPermissionResolver();
+        $this->permissionResolver = $permissionResolver;
         $this->userHandler = $userHandler;
         $this->locationHandler = $locationHandler;
         // Union makes sure default settings are ignored if provided in argument
@@ -197,7 +199,7 @@ class UserService implements UserServiceInterface
         $locationService = $this->repository->getLocationService();
 
         $loadedUserGroup = $this->loadUserGroup($userGroup->id);
-        if (!$this->repository->canUser('content', 'read', $loadedUserGroup)) {
+        if (!$this->permissionResolver->canUser('content', 'read', $loadedUserGroup)) {
             throw new UnauthorizedException('content', 'read');
         }
 
