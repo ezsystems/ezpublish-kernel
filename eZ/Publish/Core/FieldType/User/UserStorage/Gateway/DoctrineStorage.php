@@ -9,7 +9,9 @@
 namespace eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\ParameterType;
+use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 use eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -244,6 +246,9 @@ class DoctrineStorage extends Gateway
         return isset($rows[0]) ? $this->convertColumnsToProperties($rows[0]) : [];
     }
 
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     */
     public function storeFieldData(VersionInfo $versionInfo, Field $field): bool
     {
         if ($field->value->externalData === null) {
@@ -251,10 +256,19 @@ class DoctrineStorage extends Gateway
             return false;
         }
 
-        if (!empty($this->fetchUserData($versionInfo->contentInfo->id))) {
-            $this->updateFieldData($versionInfo, $field);
-        } else {
-            $this->insertFieldData($versionInfo, $field);
+        try {
+            if (!empty($this->fetchUserData($versionInfo->contentInfo->id))) {
+                $this->updateFieldData($versionInfo, $field);
+            } else {
+                $this->insertFieldData($versionInfo, $field);
+            }
+        } catch (UniqueConstraintViolationException $e) {
+            throw new ForbiddenException(
+                'User "%login%" already exists',
+                [
+                    '%login%' => $field->value->externalData['login'] ?? '?',
+                ]
+            );
         }
 
         return true;
