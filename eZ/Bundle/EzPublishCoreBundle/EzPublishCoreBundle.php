@@ -117,6 +117,7 @@ class EzPublishCoreBundle extends Bundle
                 new ConfigParser\FieldDefinitionEditTemplates(),
                 new ConfigParser\Image(),
                 new ConfigParser\Languages(),
+                new ConfigParser\LocationReferenceConfigParser(),
                 new ConfigParser\IO(new ComplexSettingParser()),
                 new ConfigParser\UrlChecker(),
             ]);

@@ -141,6 +141,9 @@ parameters:
     ezsettings.default.security.login_template: "@@EzPublishCore/Security/login.html.twig"
     ezsettings.default.security.base_layout: "%ezsettings.default.page_layout%"
 
+    # Location references
+    ezsettings.default.location_references: []
+
     # Image settings
     ezsettings.default.image.temporary_dir: imagetmp
     ezsettings.default.image.published_images_dir: images
