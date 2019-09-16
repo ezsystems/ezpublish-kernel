@@ -30,7 +30,6 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
     /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionResolver;
 
-
     protected function setUp(): void
     {
         parent::setUp();

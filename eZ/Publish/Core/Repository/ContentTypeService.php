@@ -67,7 +67,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry */
+    /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
     /** @var \eZ\Publish\API\Repository\PermissionResolver */
@@ -80,8 +80,9 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      * @param array $settings
      */
     public function __construct(
@@ -117,7 +118,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function createContentTypeGroup(ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct)
+    public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct)
     {
         if (!$this->permissionResolver->canUser('class', 'create', $contentTypeGroupCreateStruct)) {
             throw new UnauthorizedException('ContentType', 'create');

@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User;
 
 use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\UserService;

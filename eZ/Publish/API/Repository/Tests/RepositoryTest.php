@@ -11,7 +11,6 @@ namespace eZ\Publish\API\Repository\Tests;
 use Exception;
 use eZ\Publish\API\Repository\NotificationService;
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Repository\Values\User\UserReference;
 
 /**
  * Test case for operations in the Repository using in memory storage.

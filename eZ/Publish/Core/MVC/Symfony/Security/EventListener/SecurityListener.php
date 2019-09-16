@@ -20,7 +20,6 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent;
 use eZ\Publish\Core\MVC\Symfony\Security\UserWrapped;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
