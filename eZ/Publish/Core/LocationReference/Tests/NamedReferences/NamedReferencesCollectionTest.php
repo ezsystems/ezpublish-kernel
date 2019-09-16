@@ -52,6 +52,6 @@ final class NamedReferencesCollectionTest extends TestCase
 
     public function testCountEmptyCollection(): void
     {
-        $this->assertEquals(0, count(new NamedReferencesCollection([])));
+        $this->assertCount(0, new NamedReferencesCollection([]));
     }
 }
