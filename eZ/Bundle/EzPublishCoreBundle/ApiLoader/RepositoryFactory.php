@@ -97,7 +97,6 @@ class RepositoryFactory implements ContainerAwareInterface
                 'languages' => $this->configResolver->getParameter('languages'),
                 'content' => ['default_version_archive_limit' => $config['options']['default_version_archive_limit']],
             ],
-            new UserReference($this->configResolver->getParameter('anonymous_user_id')),
             $this->logger
         );
 

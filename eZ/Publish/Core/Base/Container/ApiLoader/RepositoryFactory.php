@@ -83,7 +83,6 @@ class RepositoryFactory implements ContainerAwareInterface
                 ],
                 'languages' => $this->container->getParameter('languages'),
             ],
-            new UserReference($this->container->getParameter('anonymous_user_id'))
         );
 
         return $repository;

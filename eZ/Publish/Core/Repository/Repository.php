@@ -7,10 +7,6 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
@@ -43,24 +39,6 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\SPI\Search\Handler
      */
     protected $searchHandler;
-
-    /**
-     * @deprecated since 6.6, to be removed. Current user handling is moved to PermissionResolver.
-     *
-     * Currently logged in user object if already loaded.
-     *
-     * @var \eZ\Publish\API\Repository\Values\User\User|null
-     */
-    protected $currentUser;
-
-    /**
-     * @deprecated since 6.6, to be removed. Current user handling is moved to PermissionResolver.
-     *
-     * Currently logged in user reference for permission purposes.
-     *
-     * @var \eZ\Publish\API\Repository\Values\User\UserReference
-     */
-    protected $currentUserRef;
 
     /**
      * Instance of content service.
@@ -243,9 +221,7 @@ class Repository implements RepositoryInterface
     private $logger;
 
     /**
-     * Constructor.
-     *
-     * Construct repository object with provided storage engine
+     * Construct repository object with provided storage engine.
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
@@ -253,7 +229,6 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param array $serviceSettings
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $user
      * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
@@ -263,7 +238,6 @@ class Repository implements RepositoryInterface
         RelationProcessor $relationProcessor,
         FieldTypeRegistry $fieldTypeRegistry,
         array $serviceSettings = [],
-        APIUserReference $user = null,
         LoggerInterface $logger = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
@@ -293,15 +267,6 @@ class Repository implements RepositoryInterface
 
         if (!empty($this->serviceSettings['languages'])) {
             $this->serviceSettings['language']['languages'] = $this->serviceSettings['languages'];
-        }
-
-        if ($user instanceof User) {
-            $this->currentUser = $user;
-            $this->currentUserRef = new UserReference($user->getUserId());
-        } elseif ($user instanceof APIUserReference) {
-            $this->currentUserRef = $user;
-        } else {
-            $this->currentUserRef = new UserReference($this->serviceSettings['user']['anonymousUserID']);
         }
 
         $this->logger = null !== $logger ? $logger : new NullLogger();
@@ -842,7 +807,7 @@ class Repository implements RepositoryInterface
                     $this->getRoleDomainMapper(),
                     $this->getLimitationService(),
                     $this->persistenceHandler->userHandler(),
-                    $this->currentUserRef,
+                    new UserReference($this->serviceSettings['user']['anonymousUserID']),
                     $this->serviceSettings['role']['policyMap']
                 ),
                 new PermissionCriterionResolver(
