@@ -1157,16 +1157,14 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Counts drafts for a user.
-     *
-     * If no user is given the number of drafts for the authenticated user are returned
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts for, if defined, otherwise drafts for current-user
-     *
-     * @return int The number of drafts ({@link VersionInfo}) owned by the given user
+     * {@inheritdoc}
      */
     public function countContentDrafts(?User $user = null): int
     {
+        if ($this->repository->hasAccess('content', 'versionread') === false) {
+            return 0;
+        }
+
         return $this->persistenceHandler->contentHandler()->countDraftsForUser(
             $this->resolveUser($user)->getUserId()
         );
@@ -1177,7 +1175,7 @@ class ContentService implements ContentServiceInterface
      *
      * If no user is given the drafts for the authenticated user are returned
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\User|null $user
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Drafts owned by the given user
      *
@@ -1228,21 +1226,18 @@ class ContentService implements ContentServiceInterface
                 $offset,
                 $limit
             );
-            $contentDraftList = [];
             foreach ($spiVersionInfoList as $spiVersionInfo) {
                 $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
                 if ($this->repository->canUser('content', 'versionread', $versionInfo)) {
-                    $contentDraftList[] = new ContentDraftListItem($versionInfo);
+                    $list->items[] = new ContentDraftListItem($versionInfo);
                 } else {
-                    $contentDraftList[] = new UnauthorizedContentDraftListItem(
+                    $list->items[] = new UnauthorizedContentDraftListItem(
                         'content',
                         'versionread',
                         ['contentId' => $versionInfo->contentInfo->id]
                     );
                 }
             }
-
-            $list->items = $contentDraftList;
         }
 
         return $list;

@@ -2357,7 +2357,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function createVersionInfoFindQueryBuilder()
+    private function createVersionInfoFindQueryBuilder(): DoctrineQueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();

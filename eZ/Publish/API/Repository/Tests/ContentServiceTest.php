@@ -2241,7 +2241,7 @@ XML
         $content = $this->createFolder(['eng-US' => 'parentFolder'], $parentContent->contentInfo->mainLocationId);
 
         // User has limitation to read versions only for `$content`, not for `$parentContent`
-        $newUser = $this->createUserWithVersionreadLimitations([$content->contentInfo->mainLocationId]);
+        $newUser = $this->createUserWithVersionReadLimitations([$content->contentInfo->mainLocationId]);
 
         $this->permissionResolver->setCurrentUserReference($newUser);
 
@@ -6102,7 +6102,7 @@ XML
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    private function createUserWithVersionreadLimitations(array $limitationValues = [2]): User
+    private function createUserWithVersionReadLimitations(array $limitationValues = []): User
     {
         $limitations = [
             new LocationLimitation(['limitationValues' => $limitationValues]),

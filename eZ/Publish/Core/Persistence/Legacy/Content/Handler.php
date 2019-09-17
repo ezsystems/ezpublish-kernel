@@ -519,7 +519,7 @@ class Handler implements BaseContentHandler
         }
 
         $idVersionPairs = array_map(
-            function ($row) {
+            static function (array $row): array {
                 return [
                     'id' => $row['ezcontentobject_version_contentobject_id'],
                     'version' => $row['ezcontentobject_version_version'],

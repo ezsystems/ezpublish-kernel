@@ -632,6 +632,18 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the countContentDrafts() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::countContentDrafts()
+     */
+    public function testCountContentDraftsReturnZero()
+    {
+        $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
+
+        $this->assertSame(0, $this->contentService->countContentDrafts());
+    }
+
+    /**
      * Test for the loadContentDrafts() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()

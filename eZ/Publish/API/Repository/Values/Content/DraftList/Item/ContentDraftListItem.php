@@ -22,7 +22,7 @@ class ContentDraftListItem implements ContentDraftListItemInterface
     private $versionInfo;
 
     /**
-     * @param $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      */
     public function __construct(VersionInfo $versionInfo)
     {

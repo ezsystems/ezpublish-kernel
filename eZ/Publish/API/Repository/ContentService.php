@@ -255,6 +255,8 @@ interface ContentService
      * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts for, if defined, otherwise drafts for current-user
      *
      * @return int The number of drafts ({@link VersionInfo}) owned by the given user
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function countContentDrafts(?User $user = null): int;
 
@@ -276,7 +278,7 @@ interface ContentService
      *
      * If no user is given the drafts for the authenticated user are returned
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts for, if defined, otherwise drafts for current-user
+     * @param \eZ\Publish\API\Repository\Values\User\User|null $user The user to load drafts for, if defined, otherwise drafts for current-user
      * @param int $limit
      * @param int $offset
      *
