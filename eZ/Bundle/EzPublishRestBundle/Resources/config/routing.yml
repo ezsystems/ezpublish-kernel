@@ -225,6 +225,22 @@ ezpublish_rest_createDraftFromCurrentVersion:
     requirements:
         contentId: \d+
 
+ezpublish_rest_hideContent:
+    path: /content/objects/{contentId}/hide
+    defaults:
+        _controller: ezpublish_rest.controller.content:hideContent
+    methods: [POST]
+    requirements:
+        contentId: \d+
+
+ezpublish_rest_revealContent:
+    path: /content/objects/{contentId}/reveal
+    defaults:
+        _controller: ezpublish_rest.controller.content:revealContent
+    methods: [POST]
+    requirements:
+        contentId: \d+
+
 # Binary content
 
 ezpublish_rest_binaryContent_getImageVariation:
