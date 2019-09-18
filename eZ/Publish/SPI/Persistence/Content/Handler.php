@@ -126,11 +126,11 @@ interface Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If version is not found
      *
      * @param int|string $contentId
-     * @param int $versionNo Version number to load
+     * @param int|null $versionNo Version number to load, loads current version if null.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
-    public function loadVersionInfo($contentId, $versionNo);
+    public function loadVersionInfo($contentId, $versionNo = null);
 
     /**
      * Returns all versions with draft status created by the given $userId.

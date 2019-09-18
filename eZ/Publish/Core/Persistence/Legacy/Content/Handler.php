@@ -444,16 +444,9 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Returns the version object for a content/version identified by $contentId and $versionNo.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If version is not found
-     *
-     * @param int|string $contentId
-     * @param int $versionNo Version number to load
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
+     * {@inheritdoc}
      */
-    public function loadVersionInfo($contentId, $versionNo)
+    public function loadVersionInfo($contentId, $versionNo = null)
     {
         $rows = $this->contentGateway->loadVersionInfo($contentId, $versionNo);
         if (empty($rows)) {
@@ -462,7 +455,7 @@ class Handler implements BaseContentHandler
 
         $versionInfo = $this->mapper->extractVersionInfoListFromRows(
             $rows,
-            $this->contentGateway->loadVersionedNameData([['id' => $contentId, 'version' => $versionNo]])
+            $this->contentGateway->loadVersionedNameData([['id' => $contentId, 'version' => $rows[0]['ezcontentobject_version_version']]])
         );
 
         return reset($versionInfo);

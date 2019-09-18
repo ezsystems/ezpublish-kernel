@@ -21,6 +21,15 @@ class QueryBuilder
     protected $dbHandler;
 
     /**
+     * The native Doctrine connection.
+     *
+     * Meant to be used to transition from eZ/Zeta interface to Doctrine.
+     *
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
      * Creates a new query builder.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
@@ -28,6 +37,7 @@ class QueryBuilder
     public function __construct(DatabaseHandler $dbHandler)
     {
         $this->dbHandler = $dbHandler;
+        $this->connection = $dbHandler->getConnection();
     }
 
     /**
@@ -183,6 +193,8 @@ class QueryBuilder
      * content object. Does not apply any WHERE conditions, and does not contain
      * name data as it will lead to large result set {@see createNamesQuery}.
      *
+     * @deprecated Move to Doctrine based query builder {@see createVersionInfoQueryBuilder}.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function createVersionInfoFindQuery()
@@ -240,5 +252,64 @@ class QueryBuilder
         );
 
         return $query;
+    }
+
+    /**
+     * Create a doctrine query builder with db fields needed to populate VersionInfo.
+     *
+     * @param int|null $versionNo Selects current version number if left undefined as null.
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    public function createVersionInfoQueryBuilder($versionNo = null)
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
+            ->select(
+                'c.id AS ezcontentobject_id',
+                'c.contentclass_id AS ezcontentobject_contentclass_id',
+                'c.section_id AS ezcontentobject_section_id',
+                'c.owner_id AS ezcontentobject_owner_id',
+                'c.remote_id AS ezcontentobject_remote_id',
+                'c.current_version AS ezcontentobject_current_version',
+                'c.initial_language_id AS ezcontentobject_initial_language_id',
+                'c.modified AS ezcontentobject_modified',
+                'c.published AS ezcontentobject_published',
+                'c.status AS ezcontentobject_status',
+                'c.name AS ezcontentobject_name',
+                'c.language_mask AS ezcontentobject_language_mask',
+                'c.is_hidden AS ezcontentobject_is_hidden',
+                'v.id AS ezcontentobject_version_id',
+                'v.version AS ezcontentobject_version_version',
+                'v.modified AS ezcontentobject_version_modified',
+                'v.creator_id AS ezcontentobject_version_creator_id',
+                'v.created AS ezcontentobject_version_created',
+                'v.status AS ezcontentobject_version_status',
+                'v.language_mask AS ezcontentobject_version_language_mask',
+                'v.initial_language_id AS ezcontentobject_version_initial_language_id',
+                't.main_node_id AS ezcontentobject_tree_main_node_id'
+            )
+            ->from('ezcontentobject', 'c')
+            ->innerJoin(
+                'c',
+                'ezcontentobject_version',
+                'v',
+                $expr->andX(
+                    $expr->eq('c.id', 'v.contentobject_id'),
+                    $expr->eq('v.version', $versionNo ?: 'c.current_version')
+                )
+            )
+            ->leftJoin(
+                'c',
+                'ezcontentobject_tree',
+                't',
+                $expr->andX(
+                    $expr->eq('c.id', 't.contentobject_id'),
+                    $expr->eq('t.node_id', 't.main_node_id')
+                )
+            );
+
+        return $queryBuilder;
     }
 }

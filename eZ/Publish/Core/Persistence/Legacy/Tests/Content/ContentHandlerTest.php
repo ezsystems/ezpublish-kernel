@@ -1122,11 +1122,13 @@ class ContentHandlerTest extends TestCase
         $locationHandlerMock = $this->getLocationGatewayMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
 
+        $rows = [['ezcontentobject_version_version' => 2]];
+
         // Load VersionInfo to delete fields
         $gatewayMock->expects($this->once())
             ->method('loadVersionInfo')
             ->with($this->equalTo(225), $this->equalTo(2))
-            ->will($this->returnValue([42]));
+            ->willReturn($rows);
 
         $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
@@ -1135,7 +1137,7 @@ class ContentHandlerTest extends TestCase
 
         $mapperMock->expects($this->once())
             ->method('extractVersionInfoListFromRows')
-            ->with($this->equalTo([42]), $this->equalTo([22]))
+            ->with($this->equalTo($rows), $this->equalTo([22]))
             ->will($this->returnValue([new VersionInfo()]));
 
         $locationHandlerMock->expects($this->once())

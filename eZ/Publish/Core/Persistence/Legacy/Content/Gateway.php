@@ -219,11 +219,11 @@ abstract class Gateway
      *  - initial_language_code => Language code for initial language in this version.
      *
      * @param int $contentId
-     * @param int $versionNo
+     * @param int|null $versionNo Load current version if null.
      *
      * @return array
      */
-    abstract public function loadVersionInfo($contentId, $versionNo);
+    abstract public function loadVersionInfo($contentId, $versionNo = null);
 
     /**
      * Returns data for all versions with given status created by the given $userId.

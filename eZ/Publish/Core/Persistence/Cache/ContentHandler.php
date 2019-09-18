@@ -204,9 +204,10 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     /**
      * {@inheritdoc}
      */
-    public function loadVersionInfo($contentId, $versionNo)
+    public function loadVersionInfo($contentId, $versionNo = null)
     {
-        $cacheItem = $this->cache->getItem("ez-content-version-info-${contentId}-${versionNo}");
+        $keySuffix = $versionNo ? "-${versionNo}" : '';
+        $cacheItem = $this->cache->getItem("ez-content-version-info-${contentId}${keySuffix}");
         if ($cacheItem->isHit()) {
             $this->logger->logCacheHit(['content' => $contentId, 'version' => $versionNo]);
 
