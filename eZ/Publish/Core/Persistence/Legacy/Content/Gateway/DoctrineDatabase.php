@@ -1063,29 +1063,21 @@ class DoctrineDatabase extends Gateway
      *  - initial_language_code => Language code for initial language in this version.
      *
      * @param int $contentId
-     * @param int $versionNo
+     * @param int|null $versionNo
      *
      * @return array
      */
-    public function loadVersionInfo($contentId, $versionNo)
+    public function loadVersionInfo($contentId, $versionNo = null)
     {
-        $query = $this->queryBuilder->createVersionInfoFindQuery();
-        $query->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_version'),
-                    $query->bindValue($contentId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_version'),
-                    $query->bindValue($versionNo, null, \PDO::PARAM_INT)
-                )
+        $queryBuilder = $this->queryBuilder->createVersionInfoQueryBuilder($versionNo);
+        $queryBuilder->where(
+            $queryBuilder->expr()->eq(
+                'c.id',
+                $queryBuilder->createNamedParameter($contentId, PDO::PARAM_INT)
             )
         );
-        $statement = $query->prepare();
-        $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

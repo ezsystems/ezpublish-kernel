@@ -229,11 +229,6 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfoById($contentId, $versionNo = null)
     {
-        // @todo SPI should also support null to avoid concurrency issues
-        if ($versionNo === null) {
-            $versionNo = $this->loadContentInfo($contentId)->currentVersionNo;
-        }
-
         try {
             $spiVersionInfo = $this->persistenceHandler->contentHandler()->loadVersionInfo(
                 $contentId,
