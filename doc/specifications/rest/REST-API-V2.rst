@@ -1,4 +1,4 @@
-=======================
+﻿=======================
 eZ Platform REST API V2
 =======================
 
@@ -8,6 +8,22 @@ eZ Platform REST API V2
 
 General considerations
 ======================
+
+Specifying SiteAccess
+-----------
+
+In order to specify SiteAccess when talking to the REST API, a custom header, `X-Siteaccess`, needs to be provided.
+If it isn't, the default one will be used.
+
+
+Example:
+
+.. code:: http
+
+    GET / HTTP/1.1
+    Host: api.example.com
+    Accept: application/vnd.ez.api.Root+json
+    X-Siteaccess: admin
 
 Media Types
 -----------
