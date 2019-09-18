@@ -228,10 +228,6 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfoById($contentId, $versionNo = null)
     {
-        if ($versionNo === null) {
-            $versionNo = $this->loadContentInfo($contentId)->currentVersionNo;
-        }
-
         try {
             $spiVersionInfo = $this->persistenceHandler->contentHandler()->loadVersionInfo(
                 $contentId,

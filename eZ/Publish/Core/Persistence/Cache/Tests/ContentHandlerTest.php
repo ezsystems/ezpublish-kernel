@@ -352,6 +352,56 @@ class ContentHandlerTest extends HandlerTest
     /**
      * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::loadVersionInfo
      */
+    public function testLoadVersionInfoWithoutVersionNumberCacheIsMiss()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+        $cacheItemMock = $this->getMock(ItemInterface::class);
+        $this->cacheMock
+              ->expects($this->once())
+              ->method('getItem')
+              ->with('content', 'info', 2, 'versioninfo', ContentHandler::PUBLISHED_VERSION)
+              ->willReturn($cacheItemMock);
+
+        $cacheItemMock
+              ->expects($this->once())
+              ->method('get')
+              ->willReturn(null);
+
+        $cacheItemMock
+              ->expects($this->once())
+              ->method('isMiss')
+              ->willReturn(true);
+
+        $innerHandlerMock = $this->getMock(Handler::class);
+        $this->persistenceHandlerMock
+              ->expects($this->once())
+              ->method('contentHandler')
+              ->willReturn($innerHandlerMock);
+
+        $innerHandlerMock
+              ->expects($this->once())
+              ->method('loadVersionInfo')
+              ->with(2, 0)
+              ->willReturn(new VersionInfo(['contentInfo' => new ContentInfo(['id' => 2]), 'versionNo' => 1]));
+
+        $cacheItemMock
+              ->expects($this->once())
+              ->method('set')
+              ->with($this->isInstanceOf(VersionInfo::class))
+              ->willReturn($cacheItemMock);
+
+        $cacheItemMock
+              ->expects($this->once())
+              ->method('save')
+              ->with();
+
+        $handler = $this->persistenceCacheHandler->contentHandler();
+        $handler->loadVersionInfo(2, null);
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::loadVersionInfo
+     */
     public function testLoadVersionInfoHasCache()
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
