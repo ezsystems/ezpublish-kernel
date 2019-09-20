@@ -21,8 +21,8 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Twig\Environment;
 
 /**
  * @group mvc
@@ -32,7 +32,7 @@ class ViewManagerTest extends TestCase
     /** @var \eZ\Publish\Core\MVC\Symfony\View\Manager */
     private $viewManager;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Templating\EngineInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Twig\Environment */
     private $templateEngineMock;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\EventDispatcher\EventDispatcherInterface */
@@ -52,7 +52,7 @@ class ViewManagerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->templateEngineMock = $this->createMock(EngineInterface::class);
+        $this->templateEngineMock = $this->createMock(Environment::class);
         $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $this->repositoryMock = $this->createMock(Repository::class);
         $this->configResolverMock = $this->createMock(ConfigResolverInterface::class);

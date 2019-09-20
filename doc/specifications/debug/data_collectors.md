@@ -37,16 +37,16 @@ services:
             -
                 name: ezpublish_data_collector
                 id: "ezpublish.debug.persistence"
-                panelTemplate: "EzPublishDebugBundle:Profiler/persistence:panel.html.twig"
-                toolbarTemplate: "EzPublishDebugBundle:Profiler/persistence:toolbar.html.twig"
+                panelTemplate: "@EzPublishDebug/Profiler/siteaccess/panel.html.twig"
+                toolbarTemplate: "@EzPublishDebug/Profiler/siteaccess/toolbar.html.twig"
 
     ezpublish_debug.templates_collector:
         class: %ezpublish_debug.templates_collector.class%
         tags:
             -
                 name: ezpublish_data_collector
-                panelTemplate: "EzPublishDebugBundle:Profiler/templates:panel.html.twig"
-                toolbarTemplate: "EzPublishDebugBundle:Profiler/templates:toolbar.html.twig"
+                panelTemplate: "@EzPublishDebug/Profiler/templates/panel.html.twig"
+                toolbarTemplate: "@EzPublishDebug/Profiler/templates/toolbar.html.twig"
 
 ```
 

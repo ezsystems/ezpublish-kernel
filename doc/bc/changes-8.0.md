@@ -61,6 +61,8 @@ Changes affecting version compatibility with former or future versions.
     * `eZ\Publish\Core\MVC\Symfony\Matcher\ContentMatcherFactory`
     * `eZ\Publish\Core\MVC\Symfony\Matcher\LocationMatcherFactory`
 
+* Deprecated Symfony framework templating component integration has been dropped.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.

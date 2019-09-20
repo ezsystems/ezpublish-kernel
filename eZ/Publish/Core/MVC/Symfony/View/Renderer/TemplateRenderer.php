@@ -11,18 +11,18 @@ use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
-use Symfony\Component\Templating\EngineInterface as TemplateEngine;
 use Closure;
+use Twig\Environment;
 
 class TemplateRenderer implements Renderer
 {
-    /** @var \Symfony\Component\Templating\EngineInterface */
+    /** @var \Twig\Environment */
     protected $templateEngine;
 
     /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
-    public function __construct(TemplateEngine $templateEngine, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Environment $templateEngine, EventDispatcherInterface $eventDispatcher)
     {
         $this->templateEngine = $templateEngine;
         $this->eventDispatcher = $eventDispatcher;

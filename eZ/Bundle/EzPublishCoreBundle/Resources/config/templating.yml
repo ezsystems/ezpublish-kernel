@@ -6,7 +6,7 @@ parameters:
 
     ezpublish.view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ServiceAwareMatcherFactory
 
-    ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
+    ezpublish.content_view.viewbase_layout: "@@EzPublishCore/viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
     ezpublish.view.custom_location_controller_checker.class: eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker
 
@@ -54,7 +54,7 @@ services:
     ezpublish.view_manager:
         class: "%ezpublish.view_manager.class%"
         arguments:
-          - "@templating"
+          - "@twig"
           - "@event_dispatcher"
           - "@ezpublish.siteaccessaware.repository"
           - "@ezpublish.config.resolver"
@@ -216,7 +216,7 @@ services:
 
     ezpublish.view.template_renderer:
         class: "%ezpublish.view.template_renderer.class%"
-        arguments: ["@templating", "@event_dispatcher"]
+        arguments: ["@twig", "@event_dispatcher"]
 
     ezpublish.view.renderer_listener:
         class: "%ezpublish.view.renderer_listener.class%"

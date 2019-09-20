@@ -14,14 +14,14 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use RuntimeException;
+use Twig\Environment;
 
 class Manager implements ViewManagerInterface
 {
-    /** @var \Symfony\Component\Templating\EngineInterface */
+    /** @var \Twig\Environment */
     protected $templateEngine;
 
     /** @var \Psr\Log\LoggerInterface */
@@ -68,7 +68,7 @@ class Manager implements ViewManagerInterface
     private $viewConfigurator;
 
     public function __construct(
-        EngineInterface $templateEngine,
+        Environment $templateEngine,
         EventDispatcherInterface $eventDispatcher,
         Repository $repository,
         ConfigResolverInterface $configResolver,
