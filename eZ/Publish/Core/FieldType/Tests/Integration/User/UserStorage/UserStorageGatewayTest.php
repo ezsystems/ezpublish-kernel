@@ -36,6 +36,7 @@ abstract class UserStorageGatewayTest extends BaseCoreFieldTypeIntegrationTest
                 'passwordHashType' => User::PASSWORD_HASH_PHP_DEFAULT,
                 'enabled' => true,
                 'maxLogin' => 1000,
+                'passwordUpdatedAt' => null,
             ],
             14 => [
                 'hasStoredLogin' => true,
@@ -46,6 +47,7 @@ abstract class UserStorageGatewayTest extends BaseCoreFieldTypeIntegrationTest
                 'passwordHashType' => User::PASSWORD_HASH_PHP_DEFAULT,
                 'enabled' => true,
                 'maxLogin' => 10,
+                'passwordUpdatedAt' => null,
             ],
         ];
 

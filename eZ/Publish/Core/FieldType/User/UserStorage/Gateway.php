@@ -24,6 +24,7 @@ abstract class Gateway extends StorageGateway
      * - email
      * - password_hash
      * - password_hash_type
+     * - password_updated_at
      * - is_enabled
      * - is_locked
      * - last_visit

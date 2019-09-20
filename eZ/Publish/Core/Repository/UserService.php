@@ -8,6 +8,10 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use DateInterval;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Exception;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
@@ -18,6 +22,9 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as Cr
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
@@ -34,14 +41,15 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
+use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\User as SPIUser;
 use eZ\Publish\SPI\Persistence\User\Handler;
-use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct as SPIUserTokenUpdateStruct;
 use Psr\Log\LoggerInterface;
 
@@ -497,6 +505,7 @@ class UserService implements UserServiceInterface
                             $this->settings['hashType']
                         ),
                         'hashAlgorithm' => $this->settings['hashType'],
+                        'passwordUpdatedAt' => time(),
                         'isEnabled' => $userCreateStruct->enabled,
                         'maxLogin' => 0,
                     ]
@@ -541,6 +550,7 @@ class UserService implements UserServiceInterface
             $spiUser->email = $value->email;
             $spiUser->hashAlgorithm = $value->passwordHashType;
             $spiUser->passwordHash = $value->passwordHash;
+            $spiUser->passwordUpdatedAt = $value->passwordUpdatedAt ? $value->passwordUpdatedAt->getTimestamp() : null;
             $spiUser->isEnabled = $value->enabled;
             $spiUser->maxLogin = $value->maxLogin;
             break;
@@ -747,9 +757,9 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -845,28 +855,30 @@ class UserService implements UserServiceInterface
                 );
             }
 
-            $this->userHandler->update(
-                new SPIUser(
-                    [
-                        'id' => $loadedUser->id,
-                        'login' => $loadedUser->login,
-                        'email' => $userUpdateStruct->email ?: $loadedUser->email,
-                        'passwordHash' => $userUpdateStruct->password ?
-                            $this->createPasswordHash(
-                                $loadedUser->login,
-                                $userUpdateStruct->password,
-                                $this->settings['siteName'],
-                                $this->settings['hashType']
-                            ) :
-                            $loadedUser->passwordHash,
-                        'hashAlgorithm' => $userUpdateStruct->password ?
-                            $this->settings['hashType'] :
-                            $loadedUser->hashAlgorithm,
-                        'isEnabled' => $userUpdateStruct->enabled !== null ? $userUpdateStruct->enabled : $loadedUser->enabled,
-                        'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int)$userUpdateStruct->maxLogin : $loadedUser->maxLogin,
-                    ]
-                )
-            );
+            $spiUser = new SPIUser([
+                'id' => $loadedUser->id,
+                'login' => $loadedUser->login,
+                'email' => $userUpdateStruct->email ?: $loadedUser->email,
+                'isEnabled' => $userUpdateStruct->enabled !== null ? $userUpdateStruct->enabled : $loadedUser->enabled,
+                'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int)$userUpdateStruct->maxLogin : $loadedUser->maxLogin,
+            ]);
+
+            if ($userUpdateStruct->password) {
+                $spiUser->passwordHash = $this->createPasswordHash(
+                    $loadedUser->login,
+                    $userUpdateStruct->password,
+                    $this->settings['siteName'],
+                    $this->settings['hashType']
+                );
+                $spiUser->hashAlgorithm = $this->settings['hashType'];
+                $spiUser->passwordUpdatedAt = time();
+            } else {
+                $spiUser->passwordHash = $loadedUser->passwordHash;
+                $spiUser->hashAlgorithm = $loadedUser->hashAlgorithm;
+                $spiUser->passwordUpdatedAt = $loadedUser->passwordUpdatedAt ? $loadedUser->passwordUpdatedAt->getTimestamp() : null;
+            }
+
+            $this->userHandler->update($spiUser);
 
             $this->repository->commit();
         } catch (Exception $e) {
@@ -1346,11 +1358,55 @@ class UserService implements UserServiceInterface
                 'login' => $spiUser->login,
                 'email' => $spiUser->email,
                 'passwordHash' => $spiUser->passwordHash,
+                'passwordUpdatedAt' => $this->getDateTime($spiUser->passwordUpdatedAt),
                 'hashAlgorithm' => (int)$spiUser->hashAlgorithm,
                 'enabled' => $spiUser->isEnabled,
                 'maxLogin' => (int)$spiUser->maxLogin,
             ]
         );
+    }
+
+    public function getPasswordInfo(APIUser $user): PasswordInfo
+    {
+        $passwordUpdatedAt = $user->passwordUpdatedAt;
+        if ($passwordUpdatedAt === null) {
+            return new PasswordInfo();
+        }
+
+        $definition = $this->getUserFieldDefinition($user->getContentType());
+        if ($definition === null) {
+            return new PasswordInfo();
+        }
+
+        $expirationDate = null;
+        $expirationWarningDate = null;
+
+        $passwordTTL = (int)$definition->fieldSettings[UserType::PASSWORD_TTL_SETTING];
+        if ($passwordTTL > 0) {
+            if ($passwordUpdatedAt instanceof DateTime) {
+                $passwordUpdatedAt = DateTimeImmutable::createFromMutable($passwordUpdatedAt);
+            }
+
+            $expirationDate = $passwordUpdatedAt->add(new DateInterval(sprintf('P%dD', $passwordTTL)));
+
+            $passwordTTLWarning = (int)$definition->fieldSettings[UserType::PASSWORD_TTL_WARNING_SETTING];
+            if ($passwordTTLWarning > 0) {
+                $expirationWarningDate = $expirationDate->sub(new DateInterval(sprintf('P%dD', $passwordTTLWarning)));
+            }
+        }
+
+        return new PasswordInfo($expirationDate, $expirationWarningDate);
+    }
+
+    private function getUserFieldDefinition(ContentType $contentType): ?FieldDefinition
+    {
+        foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
+            if ($fieldDefinition->fieldTypeIdentifier == 'ezuser') {
+                return $fieldDefinition;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -1447,5 +1503,18 @@ class UserService implements UserServiceInterface
             !empty($userUpdateStruct->email) ||
             !empty($userUpdateStruct->enabled) ||
             !empty($userUpdateStruct->maxLogin);
+    }
+
+    private function getDateTime(?int $timestamp): ?DateTimeInterface
+    {
+        if ($timestamp !== null) {
+            // Instead of using DateTime(ts) we use setTimeStamp() so timezone does not get set to UTC
+            $dateTime = new DateTime();
+            $dateTime->setTimestamp($timestamp);
+
+            return DateTimeImmutable::createFromMutable($dateTime);
+        }
+
+        return null;
     }
 }

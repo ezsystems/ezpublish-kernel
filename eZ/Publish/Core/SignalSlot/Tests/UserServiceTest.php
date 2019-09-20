@@ -8,7 +8,10 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use DateInterval;
+use DateTime;
 use eZ\Publish\API\Repository\UserService as APIUserService;
+use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
@@ -81,6 +84,9 @@ class UserServiceTest extends ServiceTest
         );
         $userGroupUpdateStruct = new UserGroupUpdateStruct();
         $passwordValidationContext = new PasswordValidationContext();
+
+        $passwordExpirationDate = (new DateTime())->add(new DateInterval('P30D'));
+        $passwordExpirationWarningDate = (new DateTime())->add(new DateInterval('P16D'));
 
         return [
             [
@@ -308,6 +314,12 @@ class UserServiceTest extends ServiceTest
                 'validatePassword',
                 [$password, $passwordValidationContext],
                 [],
+                0,
+            ],
+            [
+                'getPasswordInfo',
+                [$user],
+                new PasswordInfo(),
                 0,
             ],
         ];

@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -376,4 +377,13 @@ interface UserService
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function validatePassword(string $password, PasswordValidationContext $context = null): array;
+
+    /**
+     * Returns information about password for a given user.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\PasswordInfo
+     */
+    public function getPasswordInfo(User $user): PasswordInfo;
 }

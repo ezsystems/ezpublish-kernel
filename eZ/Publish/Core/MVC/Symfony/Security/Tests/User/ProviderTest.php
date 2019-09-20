@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -69,16 +70,24 @@ class ProviderTest extends TestCase
     {
         $username = 'foobar';
         $apiUser = $this->createMock(APIUser::class);
+
         $this->userService
             ->expects($this->once())
             ->method('loadUserByLogin')
             ->with($username)
             ->will($this->returnValue($apiUser));
 
+        $this->userService
+            ->expects($this->once())
+            ->method('getPasswordInfo')
+            ->with($apiUser)
+            ->willReturn(new PasswordInfo());
+
         $user = $this->userProvider->loadUserByUsername($username);
         $this->assertInstanceOf(UserInterface::class, $user);
         $this->assertSame($apiUser, $user->getAPIUser());
         $this->assertSame(['ROLE_USER'], $user->getRoles());
+        $this->assertSame(true, $user->isCredentialsNonExpired());
     }
 
     /**
@@ -181,8 +190,18 @@ class ProviderTest extends TestCase
     public function testLoadUserByAPIUser()
     {
         $apiUser = $this->createMock(APIUser::class);
+
+        $this->userService
+            ->expects($this->once())
+            ->method('getPasswordInfo')
+            ->with($apiUser)
+            ->willReturn(new PasswordInfo());
+
         $user = $this->userProvider->loadUserByAPIUser($apiUser);
+
         $this->assertInstanceOf(MVCUser::class, $user);
         $this->assertSame($apiUser, $user->getAPIUser());
+        $this->assertSame(['ROLE_USER'], $user->getRoles());
+        $this->assertSame(true, $user->isCredentialsNonExpired());
     }
 }

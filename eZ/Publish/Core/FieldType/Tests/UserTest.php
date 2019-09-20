@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use DateTimeImmutable;
 use eZ\Publish\Core\Persistence\Cache\UserHandler;
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
@@ -80,7 +81,16 @@ class UserTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return [];
+        return [
+            UserType::PASSWORD_TTL_SETTING => [
+                'type' => 'int',
+                'default' => null,
+            ],
+            UserType::PASSWORD_TTL_WARNING_SETTING => [
+                'type' => 'int',
+                'default' => null,
+            ],
+        ];
     }
 
     /**
@@ -238,6 +248,8 @@ class UserTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
+        $passwordUpdatedAt = new DateTimeImmutable();
+
         return [
             [
                 new UserValue(),
@@ -252,11 +264,14 @@ class UserTest extends FieldTypeTest
                         'email' => 'sindelfingen@example.com',
                         'passwordHash' => '1234567890abcdef',
                         'passwordHashType' => 'md5',
+                        'passwordUpdatedAt' => $passwordUpdatedAt,
                         'enabled' => true,
                         'maxLogin' => 1000,
                     ]
                 ),
-                $userData,
+                [
+                    'passwordUpdatedAt' => $passwordUpdatedAt->getTimestamp(),
+                ] + $userData,
             ],
         ];
     }
@@ -313,10 +328,13 @@ class UserTest extends FieldTypeTest
                     'email' => 'sindelfingen@example.com',
                     'passwordHash' => '1234567890abcdef',
                     'passwordHashType' => 'md5',
+                    'passwordUpdatedAt' => 1567071092,
                     'enabled' => true,
                     'maxLogin' => 1000,
                 ],
-                new UserValue($userData),
+                new UserValue([
+                    'passwordUpdatedAt' => new DateTimeImmutable('@1567071092'),
+                ] + $userData),
             ],
         ];
     }
@@ -377,6 +395,90 @@ class UserTest extends FieldTypeTest
                         ],
                         'username'
                     ),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Provide data sets with field settings which are considered valid by the
+     * {@link validateFieldSettings()} method.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array( 'rows' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidFieldSettings(): array
+    {
+        return [
+            [
+                [],
+            ],
+            [
+                [
+                    UserType::PASSWORD_TTL_SETTING => 30,
+                    UserType::PASSWORD_TTL_WARNING_SETTING => null,
+                ],
+            ],
+            [
+                [
+                    UserType::PASSWORD_TTL_SETTING => 30,
+                    UserType::PASSWORD_TTL_WARNING_SETTING => 14,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Provide data sets with field settings which are considered invalid by the
+     * {@link validateFieldSettings()} method. The method must return a
+     * non-empty array of validation error when receiving such field settings.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          true,
+     *      ),
+     *      array(
+     *          array( 'nonExistentKey' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInValidFieldSettings(): array
+    {
+        return [
+            [
+                [
+                    UserType::PASSWORD_TTL_SETTING => null,
+                    UserType::PASSWORD_TTL_WARNING_SETTING => 60,
+                ],
+            ],
+            [
+                [
+                    UserType::PASSWORD_TTL_SETTING => 30,
+                    UserType::PASSWORD_TTL_WARNING_SETTING => 60,
                 ],
             ],
         ];

@@ -8,8 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Client;
 
+use DateTimeInterface;
 use eZ\Publish\API\Repository\UserService as APIUserService;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -414,6 +416,11 @@ class UserService implements APIUserService, Sessionable
      * {@inheritdoc}
      */
     public function validatePassword(string $password, PasswordValidationContext $context = null): array
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    public function getPasswordInfo(User $user): PasswordInfo
     {
         throw new \Exception('@todo: Implement.');
     }
