@@ -1,0 +1,52 @@
+* text=auto
+*.php text
+composer.lock merge=ours
+
+# Root
+/.gitattributes export-ignore
+/.travis.yml export-ignore
+/.github export-ignore
+/var export-ignore
+/bisect_phpunit.sh export-ignore
+/bootstrap.php export-ignore
+/container.php export-ignore
+
+# Test folders
+/eZ/Bundle/EzPublishCoreBundle/Tests export-ignore
+/eZ/Bundle/EzPublishDebugBundle/Tests export-ignore
+/eZ/Bundle/EzPublishIOBundle/Tests export-ignore
+/eZ/Bundle/EzPublishIOBundle/Tests export-ignore
+
+/eZ/Publish/Core/Base/Tests export-ignore
+/eZ/Publish/Core/FieldType/Tests export-ignore
+/eZ/Publish/Core/Helper/Tests export-ignore
+/eZ/Publish/Core/IO/Tests export-ignore
+/eZ/Publish/Core/Limitation/Tests export-ignore
+/eZ/Publish/Core/Pagination/Tests export-ignore
+
+/eZ/Publish/Core/Persistence/Cache/Tests export-ignore
+/eZ/Publish/Core/Persistence/Doctrine/Tests export-ignore
+/eZ/Publish/Core/Persistence/Legacy/Tests export-ignore
+/eZ/Publish/Core/Persistence/Tests export-ignore
+
+/eZ/Publish/Core/Repository/Tests export-ignore
+
+/eZ/Publish/Core/REST/Client/Tests export-ignore
+/eZ/Publish/Core/REST/Common/Tests export-ignore
+/eZ/Publish/Core/REST/Server/Tests export-ignore
+
+/eZ/Publish/Core/Search/Legacy/Tests export-ignore
+/eZ/Publish/API/Repository/Tests/_fixtures/Legacy export-ignore
+/eZ/Publish/Core/Search/Tests export-ignore
+
+/eZ/Publish/SPI/Tests export-ignore
+
+# Unsupported Elastic Search 1.x prototype
+/eZ/Publish/Core/Search/Elasticsearch export-ignore
+/eZ/Publish/API/Repository/Tests/_fixtures/Elasticsearch export-ignore
+
+
+# Skipped for now due to dependency on integration tests in among others solr bundle
+#/config.php-DEVELOPMENT export-ignore
+#/eZ/Publish/API/Repository/Tests export-ignore
+
