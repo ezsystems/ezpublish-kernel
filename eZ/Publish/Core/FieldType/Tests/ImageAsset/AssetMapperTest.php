@@ -14,8 +14,10 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\FieldType\ImageAsset\AssetMapper;
+use eZ\Publish\Core\LocationReference\LocationReferenceResolverInterface;
 use eZ\Publish\Core\Repository\ContentTypeService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -27,21 +29,24 @@ class AssetMapperTest extends TestCase
 {
     const EXAMPLE_CONTENT_ID = 487;
 
-    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
     private $contentService;
 
-    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject */
     private $locationService;
 
-    /** @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit\Framework\MockObject\MockObject */
     private $contentTypeService;
+
+    /** @var \eZ\Publish\Core\LocationReference\LocationReferenceResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $locationReferenceResolver;
 
     /** @var array */
     private $mappings = [
         'content_type_identifier' => 'image',
         'content_field_identifier' => 'image',
         'name_field_identifier' => 'name',
-        'parent_location_id' => 51,
+        'parent_location_id' => 'remote_id("IMAGES")',
     ];
 
     protected function setUp(): void
@@ -49,6 +54,7 @@ class AssetMapperTest extends TestCase
         $this->contentService = $this->createMock(ContentService::class);
         $this->locationService = $this->createMock(LocationService::class);
         $this->contentTypeService = $this->createMock(ContentTypeService::class);
+        $this->locationReferenceResolver = $this->createMock(LocationReferenceResolverInterface::class);
     }
 
     public function testCreateAsset()
@@ -57,6 +63,7 @@ class AssetMapperTest extends TestCase
         $value = new Image\Value();
         $contentType = new ContentType();
         $languageCode = 'eng-GB';
+        $parentLocationId = 51;
         $contentCreateStruct = $this->createMock(ContentCreateStruct::class);
         $locationCreateStruct = new LocationCreateStruct();
         $contentDraft = new Content([
@@ -86,10 +93,15 @@ class AssetMapperTest extends TestCase
             ->method('setField')
             ->with($this->mappings['content_field_identifier'], $value);
 
+        $this->locationReferenceResolver
+            ->method('resolve')
+            ->with($this->mappings['parent_location_id'])
+            ->willReturn(new Location(['id' => $parentLocationId]));
+
         $this->locationService
             ->expects($this->once())
             ->method('newLocationCreateStruct')
-            ->with($this->mappings['parent_location_id'])
+            ->with($parentLocationId)
             ->willReturn($locationCreateStruct);
 
         $this->contentService
@@ -244,10 +256,17 @@ class AssetMapperTest extends TestCase
 
     public function testGetParentLocationId()
     {
+        $expectedParentLocationId = 43;
+
         $mapper = $this->createMapper();
 
+        $this->locationReferenceResolver
+            ->method('resolve')
+            ->with($this->mappings['parent_location_id'])
+            ->willReturn(new Location(['id' => $expectedParentLocationId]));
+
         $this->assertEquals(
-            $this->mappings['parent_location_id'],
+            $expectedParentLocationId,
             $mapper->getParentLocationId()
         );
     }
@@ -258,6 +277,7 @@ class AssetMapperTest extends TestCase
             $this->contentService,
             $this->locationService,
             $this->contentTypeService,
+            $this->locationReferenceResolver,
             $this->mappings
         );
     }
@@ -270,6 +290,7 @@ class AssetMapperTest extends TestCase
                 $this->contentService,
                 $this->locationService,
                 $this->contentTypeService,
+                $this->locationReferenceResolver,
                 $this->mappings,
             ])
             ->disableOriginalClone()

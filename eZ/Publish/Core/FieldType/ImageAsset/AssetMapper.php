@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use eZ\Publish\Core\LocationReference\LocationReferenceResolverInterface;
 
 class AssetMapper
 {
@@ -28,6 +29,9 @@ class AssetMapper
     /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
+    /** @var \eZ\Publish\Core\LocationReference\LocationReferenceResolverInterface */
+    private $locationReferenceResolver;
+
     /** @var array */
     private $mappings = [];
 
@@ -38,17 +42,20 @@ class AssetMapper
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
+     * @param \eZ\Publish\Core\LocationReference\LocationReferenceResolverInterface $locationReferenceResolver
      * @param array $mappings
      */
     public function __construct(
         ContentService $contentService,
         LocationService $locationService,
         ContentTypeService $contentTypeService,
+        LocationReferenceResolverInterface $locationReferenceResolver,
         array $mappings)
     {
         $this->contentService = $contentService;
         $this->locationService = $locationService;
         $this->contentTypeService = $contentTypeService;
+        $this->locationReferenceResolver = $locationReferenceResolver;
         $this->mappings = $mappings;
     }
 
@@ -72,7 +79,7 @@ class AssetMapper
         $contentCreateStruct->setField($this->mappings['content_field_identifier'], $image);
 
         $contentDraft = $this->contentService->createContent($contentCreateStruct, [
-            $this->locationService->newLocationCreateStruct($this->mappings['parent_location_id']),
+            $this->locationService->newLocationCreateStruct($this->getParentLocationId()),
         ]);
 
         return $this->contentService->publishVersion($contentDraft->versionInfo);
@@ -171,6 +178,8 @@ class AssetMapper
      */
     public function getParentLocationId(): int
     {
-        return $this->mappings['parent_location_id'];
+        return $this->locationReferenceResolver->resolve(
+            (string)$this->mappings['parent_location_id']
+        )->id;
     }
 }

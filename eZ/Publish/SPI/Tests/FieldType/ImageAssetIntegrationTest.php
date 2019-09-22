@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\LocationReference\LocationReferenceResolverInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageAssetConverter;
 use eZ\Publish\SPI\Persistence\Content;
 
@@ -33,6 +34,7 @@ class ImageAssetIntegrationTest extends BaseIntegrationTest
         $contentService = $this->createMock(ContentService::class);
         $locationService = $this->createMock(LocationService::class);
         $contentTypeService = $this->createMock(ContentTypeService::class);
+        $locationReferenceResolver = $this->createMock(LocationReferenceResolverInterface::class);
         $contentHandler = $this->createMock(Content\Handler::class);
 
         $config = [];
@@ -41,6 +43,7 @@ class ImageAssetIntegrationTest extends BaseIntegrationTest
             $contentService,
             $locationService,
             $contentTypeService,
+            $locationReferenceResolver,
             $config
         );
 

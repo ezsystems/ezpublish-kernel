@@ -106,4 +106,5 @@ services:
             $contentService: '@ezpublish.api.service.content'
             $locationService: '@ezpublish.api.service.location'
             $contentTypeService: '@ezpublish.api.service.content_type'
+            $locationReferenceResolver: '@eZ\Publish\Core\LocationReference\LocationReferenceResolverInterface'
             $mappings: '$fieldtypes.ezimageasset.mappings$'

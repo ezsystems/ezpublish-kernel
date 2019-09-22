@@ -8,17 +8,12 @@ services:
 
     eZ\Publish\Core\LocationReference\LimitedLocationService: ~
 
-    eZ\Publish\Core\LocationReference\NamedReferences\NamedReferencesProvider: ~
+    eZ\Publish\Core\LocationReference\NamedReferences\InMemoryNamedReferenceProvider: ~
 
     eZ\Publish\Core\LocationReference\NamedReferences\NamedReferencesProviderInterface:
-        alias: eZ\Publish\Core\LocationReference\NamedReferences\NamedReferencesProvider
+        alias: eZ\Publish\Core\LocationReference\NamedReferences\InMemoryNamedReferenceProvider
 
     eZ\Publish\Core\LocationReference\LocationReferenceResolver: ~
 
     eZ\Publish\Core\LocationReference\LocationReferenceResolverInterface:
         alias: eZ\Publish\Core\LocationReference\LocationReferenceResolver
-
-    eZ\Publish\Core\LocationReference\ConfigResolver\LocationConfigResolver: ~
-
-    eZ\Publish\Core\LocationReference\ConfigResolver\LocationConfigResolverInterface:
-        alias: eZ\Publish\Core\LocationReference\ConfigResolver\LocationConfigResolver
