@@ -15,7 +15,7 @@ use Symfony\Component\Cache\CacheItem;
 /**
  * Internal proxy adapter invalidating our isolated in-memory cache, and defer shared pool changes during transactions.
  *
- * @intenral For type hinting inside eZ\Publish\Core\Persistence\Cache\*. For external, type hint on TagAwareAdapterInterface.
+ * @internal For type hinting inside eZ\Publish\Core\Persistence\Cache\*. For external, type hint on TagAwareAdapterInterface.
  *
  * @todo Naming? Is this something like IsolatedCacheDecorator
  */
@@ -280,7 +280,7 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
     }
 
     /**
-     * @param CacheItem $item
+     * @param \Symfony\Component\Cache\CacheItem $item
      *
      * @return bool
      */
