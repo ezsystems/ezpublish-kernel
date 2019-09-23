@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use DateTimeImmutable;
-use eZ\Publish\Core\Persistence\Cache\UserHandler;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\User\Type as UserType;

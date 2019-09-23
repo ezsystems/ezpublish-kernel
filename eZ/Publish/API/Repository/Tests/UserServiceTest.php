@@ -1170,7 +1170,7 @@ class UserServiceTest extends BaseTest
         try {
             // This call will fail with a "UserPasswordValidationException" because the
             // the password does not follow specified rules.
-            $this->createUserWithPassword('pass', $userContentType);
+            $this->createTestUserWithPassword('pass', $userContentType);
         } catch (ContentFieldValidationException $e) {
             // Exception is caught, as there is no other way to check exception properties.
             $this->assertAllValidationErrorsOccur(

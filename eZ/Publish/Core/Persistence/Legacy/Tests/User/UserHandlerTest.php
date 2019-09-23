@@ -46,6 +46,7 @@ class UserHandlerTest extends TestCase
         $user->hashAlgorithm = 2;
         $user->isEnabled = true;
         $user->maxLogin = 23;
+        $user->passwordUpdatedAt = 1569229200;
 
         return $user;
     }
@@ -79,6 +80,7 @@ class UserHandlerTest extends TestCase
                 'password_hash_type' => 2,
                 'is_enabled' => true,
                 'max_login' => 23,
+                'password_updated_at' => 1569229200,
             ],
         ];
     }
@@ -264,10 +266,10 @@ class UserHandlerTest extends TestCase
     public function testUpdateUserSettings()
     {
         $handler = $this->getUserHandler();
-
-        $handler->create($user = $this->getValidUser());
+        $user = $this->getValidUser();
 
         $user->maxLogin = 42;
+        $this->expectException(NotImplementedException::class);
         $handler->update($user);
     }
 

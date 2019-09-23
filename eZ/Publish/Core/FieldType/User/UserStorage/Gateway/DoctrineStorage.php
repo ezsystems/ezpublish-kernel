@@ -285,11 +285,13 @@ class DoctrineStorage extends Gateway
             ->setValue('email', ':email')
             ->setValue('password_hash', ':passwordHash')
             ->setValue('password_hash_type', ':passwordHashType')
+            ->setValue('password_updated_at', ':passwordUpdatedAt')
             ->setParameter(':userId', $versionInfo->contentInfo->id, ParameterType::INTEGER)
             ->setParameter(':login', $field->value->externalData['login'], ParameterType::STRING)
             ->setParameter(':email', $field->value->externalData['email'], ParameterType::STRING)
             ->setParameter(':passwordHash', $field->value->externalData['passwordHash'], ParameterType::STRING)
             ->setParameter(':passwordHashType', $field->value->externalData['passwordHashType'], ParameterType::INTEGER)
+            ->setParameter(':passwordUpdatedAt', $field->value->externalData['passwordUpdatedAt'])
         ;
 
         $insertQuery->execute();
@@ -318,10 +320,12 @@ class DoctrineStorage extends Gateway
             ->set('email', ':email')
             ->set('password_hash', ':passwordHash')
             ->set('password_hash_type', ':passwordHashType')
+            ->set('password_updated_at', ':passwordUpdatedAt')
             ->setParameter(':login', $field->value->externalData['login'], ParameterType::STRING)
             ->setParameter(':email', $field->value->externalData['email'], ParameterType::STRING)
             ->setParameter(':passwordHash', $field->value->externalData['passwordHash'], ParameterType::STRING)
             ->setParameter(':passwordHashType', $field->value->externalData['passwordHashType'], ParameterType::INTEGER)
+            ->setParameter(':passwordUpdatedAt', $field->value->externalData['passwordUpdatedAt'])
             ->where(
                 $queryBuilder->expr()->eq(
                     $this->connection->quoteIdentifier('contentobject_id'),

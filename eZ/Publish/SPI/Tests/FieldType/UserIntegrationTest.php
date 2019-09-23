@@ -127,6 +127,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                     'passwordHashType' => 0,
                     'enabled' => true,
                     'maxLogin' => 1000,
+                    'passwordUpdatedAt' => 1569229200,
                 ],
                 'sortKey' => 'user',
             ]
@@ -153,6 +154,7 @@ class UserIntegrationTest extends BaseIntegrationTest
             'passwordHashType' => 0,
             'enabled' => true,
             'maxLogin' => 1000,
+            'passwordUpdatedAt' => 1569229200,
         ];
 
         foreach ($expectedValues as $key => $value) {
@@ -179,6 +181,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                     'passwordHashType' => 1,
                     'enabled' => false,
                     'maxLogin' => 1,
+                    'passwordUpdatedAt' => 1569229299,
                 ],
                 'sortKey' => 'user',
             ]
@@ -206,6 +209,7 @@ class UserIntegrationTest extends BaseIntegrationTest
             'passwordHashType' => 1,
             'enabled' => false,
             'maxLogin' => 1,
+            'passwordUpdatedAt' => 1569229299,
         ];
 
         foreach ($expectedValues as $key => $value) {
