@@ -8,6 +8,8 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\DefaultAuthenticationSuccessHandler;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RememberMeRepositoryAuthenticationProvider;
@@ -32,8 +34,8 @@ class SecurityPass implements CompilerPassInterface
         }
 
         $configResolverRef = new Reference('ezpublish.config.resolver');
-        $permissionResolverRef = new Reference('eZ\Publish\API\Repository\PermissionResolver');
-        $userServiceRef = new Reference('eZ\Publish\API\Repository\UserService');
+        $permissionResolverRef = new Reference(PermissionResolver::class);
+        $userServiceRef = new Reference(UserService::class);
 
         // Override and inject the Repository in the authentication provider.
         // We need it for checking user credentials
