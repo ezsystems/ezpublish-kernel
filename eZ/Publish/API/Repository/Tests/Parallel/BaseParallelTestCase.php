@@ -20,8 +20,8 @@ abstract class BaseParallelTestCase extends BaseTest
         $connection = $this->getRawDatabaseConnection();
         $dbms = $connection->getDatabasePlatform()->getName();
 
-        if (!in_array($dbms, ['mysql', 'postgresql'])) {
-            $this->markTestSkipped('Parallel test require mysql or postgresql db');
+        if ($dbms == 'sqlite') {
+            $this->markTestSkipped('Can not run parallel test on sqlite');
         }
     }
 
@@ -41,6 +41,7 @@ abstract class BaseParallelTestCase extends BaseTest
     protected function runParallelProcesses(ParallelProcessList $list): void
     {
         $connection = $this->getRawDatabaseConnection();
+        // @see https://www.php.net/manual/en/function.pcntl-fork.php#70721
         $connection->close();
 
         foreach ($list as $process) {

@@ -172,6 +172,15 @@ class ExceptionConversion extends Gateway
         }
     }
 
+    public function setPublishedStatus(int $contentId, int $status): void
+    {
+        try {
+            $this->innerGateway->setPublishedStatus($contentId, $status);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
     /**
      * Inserts a new field.
      *

@@ -10,14 +10,14 @@ namespace eZ\Publish\API\Repository\Tests\Parallel;
 
 use Jenner\SimpleFork\Process;
 
-class ParallelProcessList implements \IteratorAggregate
+final class ParallelProcessList implements \IteratorAggregate
 {
     /** @var \Jenner\SimpleFork\Process[] */
     private $pool = [];
 
-    public function addProcess(Process $callback): void
+    public function addProcess(Process $process): void
     {
-        $this->pool[] = $callback;
+        $this->pool[] = $process;
     }
 
     public function getIterator(): \Iterator
