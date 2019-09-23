@@ -37,7 +37,16 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return [];
+        return [
+            'PasswordTTL' => [
+                'type' => 'int',
+                'default' => null,
+            ],
+            'PasswordTTLWarning' => [
+                'type' => 'int',
+                'default' => null,
+            ],
+        ];
     }
 
     /**
@@ -47,7 +56,10 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return [];
+        return [
+            'PasswordTTL' => null,
+            'PasswordTTLWarning' => null,
+        ];
     }
 
     /**
@@ -336,6 +348,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                     'passwordHashType' => null,
                     'enabled' => null,
                     'maxLogin' => null,
+                    'passwordUpdatedAt' => null,
                 ],
             ],
         ];

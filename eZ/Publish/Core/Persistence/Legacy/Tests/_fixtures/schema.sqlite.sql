@@ -441,6 +441,7 @@ CREATE TABLE ezuser (
   login text(150) NOT NULL,
   password_hash text(255),
   password_hash_type integer NOT NULL DEFAULT 1,
+  password_updated_at integer DEFAULT NULL,
   PRIMARY KEY (contentobject_id)
 );
 CREATE UNIQUE INDEX ezuser_login ON ezuser (login COLLATE NOCASE);

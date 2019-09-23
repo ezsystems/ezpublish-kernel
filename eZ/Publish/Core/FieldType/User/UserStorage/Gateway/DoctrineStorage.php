@@ -35,6 +35,7 @@ class DoctrineStorage extends Gateway
         'email' => null,
         'passwordHash' => null,
         'passwordHashType' => null,
+        'passwordUpdatedAt' => null,
         'enabled' => false,
         'maxLogin' => null,
     ];
@@ -101,6 +102,12 @@ class DoctrineStorage extends Gateway
             'password_hash_type' => [
                 'name' => 'passwordHashType',
                 'cast' => 'strval',
+            ],
+            'password_updated_at' => [
+                'name' => 'passwordUpdatedAt',
+                'cast' => function ($timestamp) {
+                    return $timestamp ? (int)$timestamp : null;
+                },
             ],
             'is_enabled' => [
                 'name' => 'enabled',
@@ -181,7 +188,8 @@ class DoctrineStorage extends Gateway
                 $this->connection->quoteIdentifier('usr.login'),
                 $this->connection->quoteIdentifier('usr.email'),
                 $this->connection->quoteIdentifier('usr.password_hash'),
-                $this->connection->quoteIdentifier('usr.password_hash_type')
+                $this->connection->quoteIdentifier('usr.password_hash_type'),
+                $this->connection->quoteIdentifier('usr.password_updated_at')
             )
             ->from($this->connection->quoteIdentifier(self::USER_TABLE), 'usr')
             ->where(

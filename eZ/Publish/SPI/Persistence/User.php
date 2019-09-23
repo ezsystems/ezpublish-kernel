@@ -39,6 +39,13 @@ class User extends ValueObject
     public $passwordHash;
 
     /**
+     * Timestamp of last password update.
+     *
+     * @var int|null
+     */
+    public $passwordUpdatedAt;
+
+    /**
      * Hash algorithm used to has the password.
      *
      * @var int

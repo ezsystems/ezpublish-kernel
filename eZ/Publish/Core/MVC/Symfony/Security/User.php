@@ -24,11 +24,15 @@ class User implements ReferenceUserInterface, EquatableInterface
     /** @var array */
     private $roles;
 
-    public function __construct(APIUser $user = null, array $roles = [])
+    /** @var bool */
+    private $isCredentialsNonExpired;
+
+    public function __construct(APIUser $user = null, array $roles = [], bool $isCredentialsNonExpired = true)
     {
         $this->user = $user;
         $this->reference = new UserReference($user ? $user->getUserId() : null);
         $this->roles = $roles;
+        $this->isCredentialsNonExpired = $isCredentialsNonExpired;
     }
 
     /**
@@ -187,7 +191,7 @@ class User implements ReferenceUserInterface, EquatableInterface
      */
     public function isCredentialsNonExpired()
     {
-        return true;
+        return $this->isCredentialsNonExpired;
     }
 
     /**

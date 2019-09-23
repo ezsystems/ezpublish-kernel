@@ -44,6 +44,7 @@ class LegacyStorage extends Gateway
         'email' => null,
         'passwordHash' => null,
         'passwordHashType' => null,
+        'passwordUpdatedAt' => null,
         'enabled' => false,
         'maxLogin' => null,
     ];
@@ -82,6 +83,12 @@ class LegacyStorage extends Gateway
             'password_hash_type' => [
                 'name' => 'passwordHashType',
                 'cast' => 'strval',
+            ],
+            'password_updated_at' => [
+                'name' => 'passwordUpdatedAt',
+                'cast' => function ($timestamp) {
+                    return $timestamp ? (int)$timestamp : null;
+                },
             ],
             'is_enabled' => [
                 'name' => 'enabled',
@@ -201,7 +208,8 @@ class LegacyStorage extends Gateway
                 $this->dbHandler->quoteColumn('login', 'ezuser'),
                 $this->dbHandler->quoteColumn('email', 'ezuser'),
                 $this->dbHandler->quoteColumn('password_hash', 'ezuser'),
-                $this->dbHandler->quoteColumn('password_hash_type', 'ezuser')
+                $this->dbHandler->quoteColumn('password_hash_type', 'ezuser'),
+                $this->dbHandler->quoteColumn('password_updated_at', 'ezuser')
             )
             ->from($this->dbHandler->quoteTable('ezuser'))
             ->where(

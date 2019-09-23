@@ -8,13 +8,16 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
@@ -36,6 +39,12 @@ use ReflectionClass;
  */
 class UserServiceTest extends BaseTest
 {
+    // Example password matching default rules
+    private const EXAMPLE_PASSWORD = 'P@ssword123!';
+
+    private const EXAMPLE_PASSWORD_TTL = 30;
+    private const EXAMPLE_PASSWORD_TTL_WARNING = 14;
+
     /**
      * Test for the loadUserGroup() method.
      *
@@ -164,8 +173,8 @@ class UserServiceTest extends BaseTest
                         'versionInfo' => new VersionInfo(
                             [
                                 'contentInfo' => new ContentInfo(
-                                ['id' => 123456]
-                            ),
+                                    ['id' => 123456]
+                                ),
                             ]
                         ),
                         'internalFields' => [],
@@ -1148,12 +1157,12 @@ class UserServiceTest extends BaseTest
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException::class);
         $this->expectExceptionMessage('Argument \'password\' is invalid: Password doesn\'t match the following rules: User password must be at least 8 characters long, User password must include at least one upper case letter, User password must include at least one number, User password must include at least one special character');
 
-        $userContentType = $this->createUserWithStrongPasswordContentType();
+        $userContentType = $this->createUserContentTypeWithStrongPassword();
 
         /* BEGIN: Use Case */
         // This call will fail with a "UserPasswordValidationException" because the
         // the password does not follow specified rules.
-        $this->createUserWithPassword('pass', $userContentType);
+        $this->createTestUserWithPassword('pass', $userContentType);
         /* END: Use Case */
     }
 
@@ -1164,10 +1173,10 @@ class UserServiceTest extends BaseTest
      */
     public function testCreateUserWithStrongPassword()
     {
-        $userContentType = $this->createUserWithStrongPasswordContentType();
+        $userContentType = $this->createUserContentTypeWithStrongPassword();
 
         /* BEGIN: Use Case */
-        $user = $this->createUserWithPassword('H@xxi0r!', $userContentType);
+        $user = $this->createTestUserWithPassword('H@xxi0r!', $userContentType);
         /* END: Use Case */
 
         $this->assertInstanceOf(User::class, $user);
@@ -1555,7 +1564,7 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the deleteUser() method.
      *
-     * @covers  \eZ\Publish\API\Repository\UserService::deleteUser()
+     * @covers \eZ\Publish\API\Repository\UserService::deleteUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
      */
@@ -1968,7 +1977,7 @@ class UserServiceTest extends BaseTest
 
         $userService = $this->getRepository()->getUserService();
 
-        $user = $this->createUserWithPassword('H@xxxiR!_1', $this->createUserWithStrongPasswordContentType());
+        $user = $this->createTestUserWithPassword('H@xxxiR!_1', $this->createUserContentTypeWithStrongPassword());
 
         /* BEGIN: Use Case */
         // Create a new update struct instance
@@ -1990,7 +1999,7 @@ class UserServiceTest extends BaseTest
     {
         $userService = $this->getRepository()->getUserService();
 
-        $user = $this->createUserWithPassword('H@xxxiR!_1', $this->createUserWithStrongPasswordContentType());
+        $user = $this->createTestUserWithPassword('H@xxxiR!_1', $this->createUserContentTypeWithStrongPassword());
 
         /* BEGIN: Use Case */
         // Create a new update struct instance
@@ -2814,7 +2823,7 @@ class UserServiceTest extends BaseTest
     /**
      * Test updating User Token.
      *
-     * @covers  \eZ\Publish\API\Repository\UserService::updateUserToken()
+     * @covers \eZ\Publish\API\Repository\UserService::updateUserToken()
      *
      * @depends testLoadUserByToken
      *
@@ -2883,7 +2892,7 @@ class UserServiceTest extends BaseTest
     public function testValidatePassword(string $password, array $expectedErrorr)
     {
         $userService = $this->getRepository()->getUserService();
-        $contentType = $this->createUserWithStrongPasswordContentType();
+        $contentType = $this->createUserContentTypeWithStrongPassword();
 
         /* BEGIN: Use Case */
         $context = new PasswordValidationContext([
@@ -2922,6 +2931,81 @@ class UserServiceTest extends BaseTest
         ];
     }
 
+    public function testGetPasswordInfo(): void
+    {
+        $userService = $this->getRepository()->getUserService();
+        $contentType = $this->createUserContentTypeWithPasswordExpirationDate(
+            self::EXAMPLE_PASSWORD_TTL,
+            self::EXAMPLE_PASSWORD_TTL_WARNING
+        );
+
+        $user = $this->createTestUser($contentType);
+
+        /* BEGIN: Use Case */
+        $passwordInfo = $userService->getPasswordInfo($user);
+        /* END: Use Case */
+
+        $passwordUpdatedAt = $user->passwordUpdatedAt;
+        if ($passwordUpdatedAt instanceof DateTime) {
+            $passwordUpdatedAt = DateTimeImmutable::createFromFormat(DateTime::ATOM, $passwordUpdatedAt->format(DateTime::ATOM));
+        }
+
+        $expectedPasswordExpirationDate = $passwordUpdatedAt->add(
+            new DateInterval(sprintf('P%dD', self::EXAMPLE_PASSWORD_TTL))
+        );
+
+        $expectedPasswordExpirationWarningDate = $passwordUpdatedAt->add(
+            new DateInterval(sprintf('P%dD', self::EXAMPLE_PASSWORD_TTL - self::EXAMPLE_PASSWORD_TTL_WARNING))
+        );
+
+        $this->assertEquals(new PasswordInfo(
+            $expectedPasswordExpirationDate,
+            $expectedPasswordExpirationWarningDate
+        ), $passwordInfo);
+    }
+
+    public function testGetPasswordInfoIfExpirationIsDisabled(): void
+    {
+        $userService = $this->getRepository()->getUserService();
+        $contentType = $this->createUserContentTypeWithPasswordExpirationDate(null, null);
+
+        $user = $this->createTestUser($contentType);
+
+        /* BEGIN: Use Case */
+        $passwordInfo = $userService->getPasswordInfo($user);
+        /* END: Use Case */
+
+        $this->assertEquals(new PasswordInfo(), $passwordInfo);
+    }
+
+    public function testGetPasswordInfoIfExpirationWarningIsDisabled(): void
+    {
+        $userService = $this->getRepository()->getUserService();
+        $contentType = $this->createUserContentTypeWithPasswordExpirationDate(self::EXAMPLE_PASSWORD_TTL, null);
+
+        $user = $this->createTestUser($contentType);
+
+        /* BEGIN: Use Case */
+        $passwordInfo = $userService->getPasswordInfo($user);
+        /* END: Use Case */
+
+        $passwordUpdatedAt = $user->passwordUpdatedAt;
+        if ($passwordUpdatedAt instanceof DateTime) {
+            $passwordUpdatedAt = DateTimeImmutable::createFromFormat(DateTime::ATOM, $passwordUpdatedAt->format(DateTime::ATOM));
+        }
+
+        $expectedPasswordExpirationDate = $passwordUpdatedAt->add(
+            new DateInterval(sprintf('P%dD', self::EXAMPLE_PASSWORD_TTL))
+        );
+
+        $this->assertEquals(new PasswordInfo($expectedPasswordExpirationDate, null), $passwordInfo);
+    }
+
+    public function createTestUser(ContentType $contentType): User
+    {
+        return $this->createTestUserWithPassword(self::EXAMPLE_PASSWORD, $contentType);
+    }
+
     /**
      * Creates a user with given password.
      *
@@ -2930,7 +3014,7 @@ class UserServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    private function createUserWithPassword(string $password, ContentType $contentType): User
+    private function createTestUserWithPassword(string $password, ContentType $contentType): User
     {
         $userService = $this->getRepository()->getUserService();
         // ID of the "Editors" user group in an eZ Publish demo installation
@@ -2958,24 +3042,49 @@ class UserServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    private function createUserWithStrongPasswordContentType(): ContentType
+    private function createUserContentTypeWithStrongPassword(): ContentType
     {
+        return $this->createUserContentTypeWithAccountSettings('user-with-strong-password', null, [
+            'PasswordValueValidator' => [
+                'requireAtLeastOneUpperCaseCharacter' => 1,
+                'requireAtLeastOneLowerCaseCharacter' => 1,
+                'requireAtLeastOneNumericCharacter' => 1,
+                'requireAtLeastOneNonAlphanumericCharacter' => 1,
+                'minLength' => 8,
+            ],
+        ]);
+    }
+
+    private function createUserContentTypeWithPasswordExpirationDate(
+        ?int $passwordTTL = self::EXAMPLE_PASSWORD_TTL,
+        ?int $passwordTTLWarning = self::EXAMPLE_PASSWORD_TTL_WARNING
+    ): ContentType {
+        return $this->createUserContentTypeWithAccountSettings('password-expiration', [
+            'PasswordTTL' => $passwordTTL,
+            'PasswordTTLWarning' => $passwordTTLWarning,
+        ]);
+    }
+
+    private function createUserContentTypeWithAccountSettings(
+        string $identifier,
+        ?array $fieldSetting = null,
+        ?array $validatorConfiguration = null
+    ): ContentType {
         $repository = $this->getRepository();
 
         $contentTypeService = $repository->getContentTypeService();
 
-        $typeCreate = $contentTypeService->newContentTypeCreateStruct('user-with-strong-password');
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct($identifier);
         $typeCreate->mainLanguageCode = 'eng-GB';
-        $typeCreate->remoteId = '384b94a1bd6bc06826410e284dd9684887bf56fc';
         $typeCreate->urlAliasSchema = 'url|scheme';
         $typeCreate->nameSchema = 'name|scheme';
         $typeCreate->names = [
-            'eng-GB' => 'User with strong password',
+            'eng-GB' => 'User: ' . $identifier,
         ];
         $typeCreate->descriptions = [
             'eng-GB' => '',
         ];
-        $typeCreate->creatorId = $this->generateId('user', $repository->getCurrentUser()->id);
+        $typeCreate->creatorId = $this->generateId('user', $repository->getPermissionResolver()->getCurrentUserReference()->getUserId());
         $typeCreate->creationDate = $this->createDateTime();
 
         $firstNameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('first_name', 'ezstring');
@@ -3026,38 +3135,30 @@ class UserServiceTest extends BaseTest
 
         $typeCreate->addFieldDefinition($lastNameFieldCreate);
 
-        $accountFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('account', 'ezuser');
-        $accountFieldCreate->names = [
+        $accountFieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct('account', 'ezuser');
+        $accountFieldCreateStruct->names = [
             'eng-GB' => 'User account',
         ];
-        $accountFieldCreate->descriptions = [
+        $accountFieldCreateStruct->descriptions = [
             'eng-GB' => '',
         ];
-        $accountFieldCreate->fieldGroup = 'default';
-        $accountFieldCreate->position = 3;
-        $accountFieldCreate->isTranslatable = false;
-        $accountFieldCreate->isRequired = true;
-        $accountFieldCreate->isInfoCollector = false;
-        $accountFieldCreate->validatorConfiguration = [
-            'PasswordValueValidator' => [
-                'requireAtLeastOneUpperCaseCharacter' => 1,
-                'requireAtLeastOneLowerCaseCharacter' => 1,
-                'requireAtLeastOneNumericCharacter' => 1,
-                'requireAtLeastOneNonAlphanumericCharacter' => 1,
-                'minLength' => 8,
-            ],
-        ];
-        $accountFieldCreate->fieldSettings = [];
-        $accountFieldCreate->isSearchable = false;
-        $accountFieldCreate->defaultValue = null;
+        $accountFieldCreateStruct->fieldGroup = 'default';
+        $accountFieldCreateStruct->position = 3;
+        $accountFieldCreateStruct->isTranslatable = false;
+        $accountFieldCreateStruct->isRequired = true;
+        $accountFieldCreateStruct->isInfoCollector = false;
+        $accountFieldCreateStruct->validatorConfiguration = $validatorConfiguration;
+        $accountFieldCreateStruct->fieldSettings = $fieldSetting;
+        $accountFieldCreateStruct->isSearchable = false;
+        $accountFieldCreateStruct->defaultValue = null;
 
-        $typeCreate->addFieldDefinition($accountFieldCreate);
+        $typeCreate->addFieldDefinition($accountFieldCreateStruct);
 
         $contentTypeDraft = $contentTypeService->createContentType($typeCreate, [
             $contentTypeService->loadContentTypeGroupByIdentifier('Users'),
         ]);
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-        return $contentTypeService->loadContentTypeByIdentifier('user-with-strong-password');
+        return $contentTypeService->loadContentTypeByIdentifier($identifier);
     }
 }

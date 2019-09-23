@@ -49,6 +49,13 @@ services:
         tags:
             - {name: ezplatform.field_type.parameter_provider, alias: ezimageasset}
 
+    eZ\Publish\Core\MVC\Symfony\FieldType\User\ParameterProvider:
+        lazy: true
+        arguments:
+            - "@ezpublish.api.service.user"
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezuser}
+
     # Image
     ezpublish.fieldType.ezimage.io_service:
         class: "%ezpublish.fieldType.ezimage.io_legacy.class%"

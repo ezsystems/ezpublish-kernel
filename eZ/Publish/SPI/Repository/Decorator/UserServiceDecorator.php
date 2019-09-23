@@ -10,6 +10,7 @@ namespace eZ\Publish\SPI\Repository\Decorator;
 
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -217,5 +218,10 @@ abstract class UserServiceDecorator implements UserService
         PasswordValidationContext $context = null
     ): array {
         return $this->innerService->validatePassword($password, $context);
+    }
+
+    public function getPasswordInfo(User $user): PasswordInfo
+    {
+        return $this->innerService->getPasswordInfo($user);
     }
 }
