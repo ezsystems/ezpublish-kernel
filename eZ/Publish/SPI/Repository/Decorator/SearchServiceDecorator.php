@@ -64,7 +64,7 @@ abstract class SearchServiceDecorator implements SearchService
         return $this->innerService->findLocations($query, $languageFilter, $filterOnUserPermissions);
     }
 
-    public function supports($capabilityFlag)
+    public function supports(int $capabilityFlag): bool
     {
         return $this->innerService->supports($capabilityFlag);
     }

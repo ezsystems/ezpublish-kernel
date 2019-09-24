@@ -96,7 +96,7 @@ class SearchService implements SearchServiceInterface
         return $this->service->findLocations($query, $languageFilter, $filterOnUserPermissions);
     }
 
-    public function supports($capabilityFlag)
+    public function supports(int $capabilityFlag): bool
     {
         return $this->service->supports($capabilityFlag);
     }

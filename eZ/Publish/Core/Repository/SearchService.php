@@ -341,7 +341,7 @@ class SearchService implements SearchServiceInterface
         return true;
     }
 
-    public function supports($capabilityFlag)
+    public function supports(int $capabilityFlag): bool
     {
         if ($this->searchHandler instanceof Capable) {
             return $this->searchHandler->supports($capabilityFlag);
