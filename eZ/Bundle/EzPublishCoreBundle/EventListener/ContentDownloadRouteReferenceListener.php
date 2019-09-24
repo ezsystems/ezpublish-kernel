@@ -67,7 +67,7 @@ class ContentDownloadRouteReferenceListener implements EventSubscriberInterface
         }
 
         $routeReference->set(self::OPT_CONTENT_ID, $options[self::OPT_CONTENT_ID]);
-        $routeReference->set(self::OPT_DOWNLOAD_NAME, $options[self::OPT_DOWNLOAD_NAME]);
+        $routeReference->set(self::OPT_DOWNLOAD_NAME, rawurlencode($options[self::OPT_DOWNLOAD_NAME]));
     }
 
     /**

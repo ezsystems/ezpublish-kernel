@@ -134,10 +134,54 @@ class ContentDownloadRouteReferenceListenerTest extends TestCase
         self::assertEquals('My-custom-filename.pdf', $routeReference->get(ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME));
     }
 
+    public function testFilenameParenthesesAreEncoded()
+    {
+        $content = $this->getCompleteContent('(Parentheses)-filename.pdf');
+
+        $routeReference = new RouteReference(
+            ContentDownloadRouteReferenceListener::ROUTE_NAME,
+            [
+                ContentDownloadRouteReferenceListener::OPT_CONTENT => $content,
+                ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER => 'file',
+            ]
+        );
+        $event = new RouteReferenceGenerationEvent($routeReference, new Request());
+        $eventListener = $this->getListener();
+
+        $this
+            ->translationHelperMock
+            ->expects($this->once())
+            ->method('getTranslatedField')
+            ->will($this->returnValue($content->getField('file', 'eng-GB')));
+        $eventListener->onRouteReferenceGeneration($event);
+
+        self::assertEquals('%28Parentheses%29-filename.pdf', $routeReference->get(ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME));
+    }
+
+    public function testOverrideFilenameParenthesesAreEncoded()
+    {
+        $content = $this->getCompleteContent();
+
+        $routeReference = new RouteReference(
+            ContentDownloadRouteReferenceListener::ROUTE_NAME,
+            [
+                ContentDownloadRouteReferenceListener::OPT_CONTENT => $content,
+                ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER => 'file',
+                ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME => '(Override)-filename.pdf',
+            ]
+        );
+        $event = new RouteReferenceGenerationEvent($routeReference, new Request());
+        $eventListener = $this->getListener();
+
+        $eventListener->onRouteReferenceGeneration($event);
+
+        self::assertEquals('%28Override%29-filename.pdf', $routeReference->get(ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME));
+    }
+
     /**
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
-    protected function getCompleteContent()
+    protected function getCompleteContent($filename = 'Test-file.pdf')
     {
         return new Content(
             [
@@ -146,7 +190,7 @@ class ContentDownloadRouteReferenceListenerTest extends TestCase
                             [
                                 'fieldDefIdentifier' => 'file',
                                 'languageCode' => 'eng-GB',
-                                'value' => new BinaryFileValue(['fileName' => 'Test-file.pdf']),
+                                'value' => new BinaryFileValue(['fileName' => $filename]),
                             ]
                         ),
                     ],
