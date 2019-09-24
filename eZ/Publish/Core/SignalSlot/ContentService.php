@@ -521,6 +521,14 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function countReverseRelations(ContentInfo $contentInfo): int
+    {
+        return $this->service->countReverseRelations($contentInfo);
+    }
+
+    /**
      * Loads all incoming relations for a content object.
      *
      * The relations come only from published versions of the source content objects

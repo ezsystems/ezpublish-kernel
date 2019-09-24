@@ -178,6 +178,14 @@ class ContentService implements ContentServiceInterface
         return $this->service->loadRelations($versionInfo);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function countReverseRelations(ContentInfo $contentInfo): int
+    {
+        return $this->service->countReverseRelations($contentInfo);
+    }
+
     public function loadReverseRelations(ContentInfo $contentInfo)
     {
         return $this->service->loadReverseRelations($contentInfo);

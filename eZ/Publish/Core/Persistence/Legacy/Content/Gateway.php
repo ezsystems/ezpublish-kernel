@@ -401,6 +401,16 @@ abstract class Gateway
     abstract public function loadRelations($contentId, $contentVersionNo = null, $relationType = null);
 
     /**
+     * Counts number of related to/from $contentId.
+     *
+     * @param int $contentId
+     * @param int|null $relationType
+     *
+     * @return int
+     */
+    abstract public function countReverseRelations(int $contentId, ?int $relationType = null): int;
+
+    /**
      * Loads data of related to/from $contentId.
      *
      * @param int $contentId

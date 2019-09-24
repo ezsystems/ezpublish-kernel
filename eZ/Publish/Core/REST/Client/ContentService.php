@@ -618,6 +618,14 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function countReverseRelations(ContentInfo $contentInfo): int
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
      * Loads all incoming relations for a content object.
      *
      * The relations come only

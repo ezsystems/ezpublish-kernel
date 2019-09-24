@@ -374,6 +374,15 @@ interface ContentService
     public function loadRelations(VersionInfo $versionInfo);
 
     /**
+     * Counts all incoming relations for the given content object.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return int The number of reverse relations ({@link Relation})
+     */
+    public function countReverseRelations(ContentInfo $contentInfo): int;
+
+    /**
      * Loads all incoming relations for a content object.
      *
      * The relations come only from published versions of the source content objects

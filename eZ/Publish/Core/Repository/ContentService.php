@@ -1944,6 +1944,20 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function countReverseRelations(ContentInfo $contentInfo): int
+    {
+        if (!$this->repository->canUser('content', 'reverserelatedlist', $contentInfo)) {
+            return 0;
+        }
+
+        return $this->persistenceHandler->contentHandler()->countReverseRelations(
+            $contentInfo->id
+        );
+    }
+
+    /**
      * Loads all incoming relations for a content object.
      *
      * The relations come only from published versions of the source content objects
