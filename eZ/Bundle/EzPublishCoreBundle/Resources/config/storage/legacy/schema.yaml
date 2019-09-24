@@ -525,6 +525,26 @@ tables:
             name: { type: string, nullable: false, length: 60, options: { default: '' } }
         fields:
             value: { type: text, nullable: false, length: 0 }
+    ezstarrating:
+        id:
+            contentobject_id: { type: integer, nullable: false }
+            contentobject_attribute_id: { type: integer, nullable: false }
+        fields:
+            rating_average: { type: float, nullable: false, length: 0 }
+            rating_count: { type: integer, nullable: false }
+    ezstarrating_data:
+        indexes:
+            contentobject_id_contentobject_attribute_id: { fields: [contentobject_id, contentobject_attribute_id] }
+            user_id_session_key: { fields: [user_id, session_key] }
+        id:
+            id: { type: integer, nullable: false, options: { autoincrement: true } }
+        fields:
+            created_at: { type: integer, nullable: false }
+            user_id: { type: integer, nullable: false }
+            session_key: { type: string, nullable: false, length: 32 }
+            rating: { type: float, nullable: false, length: 0 }
+            contentobject_id: { type: integer, nullable: false }
+            contentobject_attribute_id: { type: integer, nullable: false }
     ezurl:
         indexes:
             ezurl_url: { fields: [url], options: { lengths: ['191'] } }
@@ -622,14 +642,3 @@ tables:
         fields:
             is_enabled: { type: integer, nullable: false, options: { default: '0' } }
             max_login: { type: integer, nullable: true }
-    ezuservisit:
-        indexes:
-            ezuservisit_co_visit_count: { fields: [current_visit_timestamp, login_count] }
-        id:
-            user_id: { type: integer, nullable: false, options: { default: '0' } }
-        fields:
-            current_visit_timestamp: { type: integer, nullable: false, options: { default: '0' } }
-            failed_login_attempts: { type: integer, nullable: false, options: { default: '0' } }
-            last_visit_timestamp: { type: integer, nullable: false, options: { default: '0' } }
-            login_count: { type: integer, nullable: false, options: { default: '0' } }
-

@@ -14044,15 +14044,4 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'user_id' => '14',
     ),
   ),
-  'ezuservisit' =>
-  array(
-    0 =>
-    array(
-      'current_visit_timestamp' => '1376486067',
-      'failed_login_attempts' => '0',
-      'last_visit_timestamp' => '1376485932',
-      'login_count' => '1',
-      'user_id' => '14',
-    ),
-  ),
 );

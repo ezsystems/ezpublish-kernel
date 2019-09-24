@@ -812,5 +812,3 @@ INSERT INTO `ezuser_role` (`contentobject_id`, `id`, `limit_identifier`, `limit_
 
 INSERT INTO `ezuser_setting` (`is_enabled`, `max_login`, `user_id`) VALUES (1,1000,10);
 INSERT INTO `ezuser_setting` (`is_enabled`, `max_login`, `user_id`) VALUES (1,10,14);
-
-INSERT INTO `ezuservisit` (`current_visit_timestamp`, `failed_login_attempts`, `last_visit_timestamp`, `login_count`, `user_id`) VALUES (1301057720,0,1301057720,0,14);
