@@ -181,6 +181,9 @@ Changes affecting version compatibility with former or future versions.
   Overriding it was never supported. Use the SchemaBuilder event-oriented extension point to inject
   custom behavior into the installation process (see eZ Platform Documentation for more details).
 
+* The deprecated Legacy SQL schema files (`data/mysql/schema.sql`, `data/mysql/dfs_schema.sql`)
+  have been removed. Use Schema Builder instead.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
