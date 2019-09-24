@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -61,7 +62,8 @@ EOT
 
         /** @var \eZ\Publish\API\Repository\Repository $repository */
         $repository = $this->getContainer()->get('ezpublish.api.repository');
-        $repository->setCurrentUser(
+        $permissionResolver = $this->getContainer()->get(PermissionResolver::class);
+        $permissionResolver->setCurrentUserReference(
             $repository->getUserService()->loadUser(14)
         );
 

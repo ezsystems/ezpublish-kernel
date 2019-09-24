@@ -29,6 +29,7 @@ class LocationLimitationTest extends BaseLimitationTest
     public function testLocationLimitationAllow()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $parentLocationId = $this->generateId('location', 60);
         /* BEGIN: Use Case */
@@ -49,7 +50,7 @@ class LocationLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
         /* END: Use Case */
@@ -70,6 +71,7 @@ class LocationLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $parentLocationId = $this->generateId('location', 61);
         /* BEGIN: Use Case */
@@ -90,7 +92,7 @@ class LocationLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $this->createWikiPageDraft();
         /* END: Use Case */

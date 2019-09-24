@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
@@ -18,17 +18,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AnonymousAuthenticationProviderTest extends TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
-    private $repository;
-
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $configResolver;
+
+    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $permissionResolver;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->repository = $this->createMock(Repository::class);
         $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->permissionResolver = $this->createMock(PermissionResolver::class);
     }
 
     public function testAuthenticate()
@@ -40,14 +40,14 @@ class AnonymousAuthenticationProviderTest extends TestCase
             ->with('anonymous_user_id')
             ->will($this->returnValue($anonymousUserId));
 
-        $this->repository
+        $this->permissionResolver
             ->expects($this->once())
-            ->method('setCurrentUser')
+            ->method('setCurrentUserReference')
             ->with(new UserReference($anonymousUserId));
 
         $key = 'some_key';
         $authProvider = new AnonymousAuthenticationProvider($key);
-        $authProvider->setRepository($this->repository);
+        $authProvider->setPermissionResolver($this->permissionResolver);
         $authProvider->setConfigResolver($this->configResolver);
         $anonymousToken = $this
             ->getMockBuilder(AnonymousToken::class)

@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Voter;
 
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
@@ -19,13 +19,13 @@ use PHPUnit\Framework\TestCase;
 
 class CoreVoterTest extends TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
-    private $repository;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $permissionResolver;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->repository = $this->createMock(Repository::class);
+        $this->permissionResolver = $this->createMock(PermissionResolver::class);
     }
 
     /**
@@ -33,7 +33,7 @@ class CoreVoterTest extends TestCase
      */
     public function testSupportsAttribute($attribute, $expectedResult)
     {
-        $voter = new CoreVoter($this->repository);
+        $voter = new CoreVoter($this->permissionResolver);
         $this->assertSame($expectedResult, $voter->supportsAttribute($attribute));
     }
 
@@ -61,7 +61,7 @@ class CoreVoterTest extends TestCase
      */
     public function testSupportsClass($class)
     {
-        $voter = new CoreVoter($this->repository);
+        $voter = new CoreVoter($this->permissionResolver);
         $this->assertTrue($voter->supportsClass($class));
     }
 
@@ -80,7 +80,7 @@ class CoreVoterTest extends TestCase
      */
     public function testVoteInvalidAttribute(array $attributes)
     {
-        $voter = new CoreVoter($this->repository);
+        $voter = new CoreVoter($this->permissionResolver);
         $this->assertSame(
             VoterInterface::ACCESS_ABSTAIN,
             $voter->vote(
@@ -116,15 +116,15 @@ class CoreVoterTest extends TestCase
      */
     public function testVote(Attribute $attribute, $repositoryCanUser, $expectedResult)
     {
-        $voter = new CoreVoter($this->repository);
+        $voter = new CoreVoter($this->permissionResolver);
         if ($repositoryCanUser !== null) {
-            $this->repository
+            $this->permissionResolver
                 ->expects($this->once())
                 ->method('hasAccess')
                 ->with($attribute->module, $attribute->function)
                 ->will($this->returnValue($repositoryCanUser));
         } else {
-            $this->repository
+            $this->permissionResolver
                 ->expects($this->never())
                 ->method('hasAccess');
         }

@@ -51,7 +51,6 @@ class UserServiceTest extends AbstractServiceTest
             ['updateUserGroup', [$userGroup, $userGroupUpdateStruct]],
 
             ['createUser', [$userCreateStruct, [$userGroup]]],
-            ['loadAnonymousUser', []],
             ['deleteUser', [$user]],
             ['updateUser', [$user, $userUpdateStruct]],
 

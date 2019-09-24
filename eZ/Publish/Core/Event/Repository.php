@@ -21,9 +21,6 @@ use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
-use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Values\User\UserReference;
-use eZ\Publish\API\Repository\Values\ValueObject;
 
 final class Repository implements RepositoryInterface
 {
@@ -119,31 +116,6 @@ final class Repository implements RepositoryInterface
         $this->urlWildcardService = $urlWildcardService;
         $this->userPreferenceService = $userPreferenceService;
         $this->userService = $userService;
-    }
-
-    public function getCurrentUser(): User
-    {
-        return $this->repository->getCurrentUser();
-    }
-
-    public function getCurrentUserReference(): UserReference
-    {
-        return $this->repository->getCurrentUserReference();
-    }
-
-    public function setCurrentUser(UserReference $user): void
-    {
-        $this->repository->setCurrentUser($user);
-    }
-
-    public function hasAccess($module, $function, UserReference $user = null)
-    {
-        return $this->repository->hasAccess($module, $function, $user);
-    }
-
-    public function canUser($module, $function, ValueObject $object, $targets = null): bool
-    {
-        return $this->repository->canUser($module, $function, $object, $targets);
     }
 
     public function sudo(callable $callback, RepositoryInterface $outerRepository = null)

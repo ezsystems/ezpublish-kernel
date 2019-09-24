@@ -33,6 +33,7 @@ class OwnerLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentService = $repository->getContentService();
 
@@ -77,7 +78,7 @@ class OwnerLimitationTest extends BaseLimitationTest
             $metadataUpdate
         );
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $contentService->deleteContent(
             $contentService->loadContentInfo($content->id)
@@ -99,6 +100,7 @@ class OwnerLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentService = $repository->getContentService();
 
@@ -135,7 +137,7 @@ class OwnerLimitationTest extends BaseLimitationTest
 
         $content = $this->createWikiPage();
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call fails with an UnauthorizedException, because the current
         // user is not the content owner

@@ -9,8 +9,6 @@
 namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\UserReference;
 
 /**
  * Repository class.
@@ -84,34 +82,9 @@ class Repository implements RepositoryInterface
         $this->notificationService = $notificationService;
     }
 
-    public function getCurrentUser()
-    {
-        return $this->repository->getCurrentUser();
-    }
-
-    public function getCurrentUserReference()
-    {
-        return $this->repository->getCurrentUserReference();
-    }
-
-    public function setCurrentUser(UserReference $user)
-    {
-        return $this->repository->setCurrentUser($user);
-    }
-
     public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
     {
         return $this->repository->sudo($callback, $outerRepository ?? $this);
-    }
-
-    public function hasAccess($module, $function, UserReference $user = null)
-    {
-        return $this->repository->hasAccess($module, $function, $user);
-    }
-
-    public function canUser($module, $function, ValueObject $object, $targets = null)
-    {
-        return $this->repository->canUser($module, $function, $object, $targets);
     }
 
     public function getContentService()

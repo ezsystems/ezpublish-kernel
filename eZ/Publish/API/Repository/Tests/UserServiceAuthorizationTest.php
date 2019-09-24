@@ -29,6 +29,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -36,7 +37,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $userGroup = $this->createUserGroupVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $userService->loadUserGroup($userGroup->id);
@@ -55,6 +56,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -62,7 +64,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $userGroup = $this->createUserGroupVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $userService->loadSubUserGroups($userGroup);
@@ -81,6 +83,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $editorsGroupId = $this->generateId('group', 13);
 
@@ -91,7 +94,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $parentUserGroup = $userService->loadUserGroup($editorsGroupId);
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Instantiate a new group create struct
         $userGroupCreate = $userService->newUserGroupCreateStruct('eng-GB');
@@ -114,6 +117,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -121,7 +125,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $userGroup = $this->createUserGroupVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $userService->deleteUserGroup($userGroup);
@@ -140,6 +144,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $memberGroupId = $this->generateId('group', 11);
         /* BEGIN: Use Case */
@@ -154,7 +159,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $newParentUserGroup = $userService->loadUserGroup($memberGroupId);
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $userService->moveUserGroup($userGroup, $newParentUserGroup);
@@ -173,6 +178,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -180,7 +186,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $userGroup = $this->createUserGroupVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Load content service
         $contentService = $repository->getContentService();
@@ -209,6 +215,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $editorsGroupId = $this->generateId('group', 13);
 
@@ -216,7 +223,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Instantiate a user create struct
         $userCreateStruct = $userService->newUserCreateStruct(
@@ -251,12 +258,13 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $userService->deleteUser($user);
@@ -274,12 +282,13 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Instantiate a user update struct
         $userUpdateStruct = $userService->newUserUpdateStruct();
@@ -302,6 +311,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $administratorGroupId = $this->generateId('group', 12);
         /* BEGIN: Use Case */
@@ -311,7 +321,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $userService->assignUserToUserGroup(
@@ -333,6 +343,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $editorsGroupId = $this->generateId('group', 13);
         $memberGroupId = $this->generateId('group', 11);
@@ -350,7 +361,7 @@ class UserServiceAuthorizationTest extends BaseTest
         );
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $userService->unAssignUserFromUserGroup(
@@ -371,6 +382,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $userService = $repository->getUserService();
 
@@ -378,7 +390,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $userService->loadUserGroupsOfUser($user);
@@ -397,6 +409,7 @@ class UserServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -404,7 +417,7 @@ class UserServiceAuthorizationTest extends BaseTest
         $userGroup = $this->createUserGroupVersion1();
 
         // Now set the currently created "Editor" as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $userService->loadUsersOfUserGroup($userGroup);

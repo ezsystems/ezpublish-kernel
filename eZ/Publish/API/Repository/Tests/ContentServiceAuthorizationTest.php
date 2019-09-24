@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
  * Test case for operations in the ContentServiceAuthorization using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentService
- * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUser
  * @group integration
  * @group authorization
  */

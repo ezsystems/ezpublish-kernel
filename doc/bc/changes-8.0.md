@@ -63,6 +63,15 @@ Changes affecting version compatibility with former or future versions.
 
 * Deprecated Symfony framework templating component integration has been dropped.
 
+* Following methods have been removed:
+
+    * `\eZ\Publish\API\Repository\UserService::loadAnonymousUser`
+    * `\eZ\Publish\API\Repository\Repository::getCurrentUser`
+    * `\eZ\Publish\API\Repository\Repository::getCurrentUserReference`
+    * `\eZ\Publish\API\Repository\Repository::setCurrentUser`
+    * `\eZ\Publish\API\Repository\Repository::hasAccess`
+    * `\eZ\Publish\API\Repository\Repository::canUser`
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.

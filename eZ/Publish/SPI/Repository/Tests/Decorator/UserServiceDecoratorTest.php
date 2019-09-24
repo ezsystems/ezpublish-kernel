@@ -154,18 +154,6 @@ class UserServiceDecoratorTest extends TestCase
         $decoratedService->loadUser(...$parameters);
     }
 
-    public function testLoadAnonymousUserDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [];
-
-        $serviceMock->expects($this->once())->method('loadAnonymousUser')->with(...$parameters);
-
-        $decoratedService->loadAnonymousUser(...$parameters);
-    }
-
     public function testLoadUserByCredentialsDecorator()
     {
         $serviceMock = $this->createServiceMock();

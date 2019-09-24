@@ -30,10 +30,14 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
     {
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $parentUserGroupId = $this->generateId('location', 4);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
+        $currentUser = $userService->loadUser(
+            $permissionResolver->getCurrentUserReference()->getUserId()
+        );
 
         $userGroupCreate = $userService->newUserGroupCreateStruct('eng-GB');
         $userGroupCreate->setField('name', 'Shared wiki');
@@ -47,7 +51,7 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
 
         // Assign system user and example user to same group
         $userService->assignUserToUserGroup($user, $userGroup);
-        $userService->assignUserToUserGroup($repository->getCurrentUser(), $userGroup);
+        $userService->assignUserToUserGroup($currentUser, $userGroup);
 
         $roleService = $repository->getRoleService();
 
@@ -72,7 +76,7 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUserGroup($role, $userGroup);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
         /* END: Use Case */
@@ -94,6 +98,7 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $parentUserGroupId = $this->generateId('location', 4);
         /* BEGIN: Use Case */
@@ -135,7 +140,7 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUserGroup($role, $userGroup);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $this->createWikiPageDraft();
         /* END: Use Case */

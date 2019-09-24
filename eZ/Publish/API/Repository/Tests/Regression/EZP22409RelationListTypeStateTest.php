@@ -24,11 +24,10 @@ class EZP22409RelationListTypeStateTest extends BaseTest
         parent::setUp();
 
         $repository = $this->getRepository();
-        $locationService = $repository->getLocationService();
-        $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
+        $permissionResolver = $repository->getPermissionResolver();
 
-        $creatorId = $repository->getCurrentUser()->id;
+        $creatorId = $permissionResolver->getCurrentUserReference()->getUserId();
         $creationDate = new DateTime();
 
         // create ContentType

@@ -31,6 +31,7 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
     public function testParentContentTypeLimitationAllow()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $parentContentTypeId = $this->generateId('contentType', 20);
         $contentTypeId = $this->generateId('contentType', 22);
@@ -58,7 +59,7 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
         $content = $contentService->publishVersion($draft->versionInfo);
@@ -81,6 +82,7 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $parentContentTypeId = $this->generateId('contentType', 20);
         $contentTypeId = $this->generateId('contentType', 33);
@@ -107,7 +109,7 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $this->createWikiPageDraft();
         /* END: Use Case */

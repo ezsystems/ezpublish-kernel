@@ -215,6 +215,8 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentSetsExpectedContentInfo($content)
     {
+        $permissionResolver = $this->getRepository()->getPermissionResolver();
+
         $this->assertEquals(
             [
                 $content->id,
@@ -223,7 +225,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 1,
                 'abcdef0123456789abcdef0123456789',
                 self::ENG_US,
-                $this->getRepository()->getCurrentUser()->id,
+                $permissionResolver->getCurrentUserReference()->getUserId(),
                 false,
                 null,
                 // Main Location id for unpublished Content should be null
@@ -271,11 +273,13 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentSetsExpectedVersionInfo($content)
     {
+        $currentUserReference = $this->getRepository()->getPermissionResolver()->getCurrentUserReference();
+
         $this->assertEquals(
             [
                 'status' => VersionInfo::STATUS_DRAFT,
                 'versionNo' => 1,
-                'creatorId' => $this->getRepository()->getCurrentUser()->id,
+                'creatorId' => $currentUserReference->getUserId(),
                 'initialLanguageCode' => self::ENG_US,
             ],
             [
@@ -912,6 +916,8 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testPublishVersionSetsExpectedContentInfo($content)
     {
+        $userReference = $this->getRepository()->getPermissionResolver()->getCurrentUserReference();
+
         $this->assertEquals(
             [
                 $content->id,
@@ -919,7 +925,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 1,
                 'abcdef0123456789abcdef0123456789',
                 self::ENG_US,
-                $this->getRepository()->getCurrentUser()->id,
+                $userReference->getUserId(),
                 true,
             ],
             [
@@ -951,9 +957,11 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testPublishVersionSetsExpectedVersionInfo($content)
     {
+        $currentUserReference = $this->getRepository()->getPermissionResolver()->getCurrentUserReference();
+
         $this->assertEquals(
             [
-                $this->getRepository()->getCurrentUser()->id,
+                $currentUserReference->getUserId(),
                 self::ENG_US,
                 VersionInfo::STATUS_PUBLISHED,
                 1,
@@ -1195,6 +1203,7 @@ class ContentServiceTest extends BaseContentServiceTest
     public function testCreateContentDraftSetsContentInfo($draft)
     {
         $contentInfo = $draft->contentInfo;
+        $currentUserReference = $this->getRepository()->getPermissionResolver()->getCurrentUserReference();
 
         $this->assertEquals(
             [
@@ -1202,7 +1211,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 true,
                 1,
                 self::ENG_US,
-                $this->getRepository()->getCurrentUser()->id,
+                $currentUserReference->getUserId(),
                 'abcdef0123456789abcdef0123456789',
                 1,
             ],
@@ -1229,10 +1238,11 @@ class ContentServiceTest extends BaseContentServiceTest
     public function testCreateContentDraftSetsVersionInfo($draft)
     {
         $versionInfo = $draft->getVersionInfo();
+        $currentUserReference = $this->getRepository()->getPermissionResolver()->getCurrentUserReference();
 
         $this->assertEquals(
             [
-                'creatorId' => $this->getRepository()->getCurrentUser()->id,
+                'creatorId' => $currentUserReference->getUserId(),
                 'initialLanguageCode' => self::ENG_US,
                 'languageCodes' => [0 => self::ENG_US],
                 'status' => VersionInfo::STATUS_DRAFT,
@@ -1901,6 +1911,7 @@ class ContentServiceTest extends BaseContentServiceTest
     public function testUpdateContentMetadataSetsExpectedProperties($content)
     {
         $contentInfo = $content->contentInfo;
+        $currentUserReference = $this->getRepository()->getPermissionResolver()->getCurrentUserReference();
 
         $this->assertEquals(
             [
@@ -1910,7 +1921,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 'currentVersionNo' => 1,
                 'mainLanguageCode' => self::ENG_GB,
                 'modificationDate' => $this->createDateTime(441759600),
-                'ownerId' => $this->getRepository()->getCurrentUser()->id,
+                'ownerId' => $currentUserReference->getUserId(),
                 'published' => true,
                 'publishedDate' => $this->createDateTime(441759600),
             ],

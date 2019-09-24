@@ -28,6 +28,7 @@ class EZP22840RoleLimitations extends BaseTest
         $notLockedState = $this->generateId('objectstate', 2);
         $contentId = $this->generateId('content', 57);
         $objectStateService = $repository->getObjectStateService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         // Get user assigned to editor role
         $user = $this->createUserVersion1();
@@ -50,7 +51,7 @@ class EZP22840RoleLimitations extends BaseTest
         );
 
         // set current user and get objects needed for the test
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
         $objectState = $objectStateService->loadObjectState($notLockedState);
         $contentInfo = $repository->getContentService()->loadContentInfo($contentId);
 
@@ -64,6 +65,7 @@ class EZP22840RoleLimitations extends BaseTest
     public function testSectionRoleAssignLimitation()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         // Get user assigned to editor role with section limitation
         $user = $this->createCustomUserVersion1(
@@ -73,11 +75,11 @@ class EZP22840RoleLimitations extends BaseTest
         );
 
         // set as current user
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // try to login
         $this->assertTrue(
-            $repository->canUser('user', 'login', new SiteAccess()),
+            $permissionResolver->canUser('user', 'login', new SiteAccess()),
             'Could not verify that user can login with section limitation'
         );
     }

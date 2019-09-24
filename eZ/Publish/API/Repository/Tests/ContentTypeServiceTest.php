@@ -87,11 +87,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $groupCreate->creatorId = $this->generateId('user', $repository->getCurrentUser()->id);
+        $groupCreate->creatorId = $this->generateId('user', $permissionResolver->getCurrentUserReference()->getUserId());
         $groupCreate->creationDate = $this->createDateTime();
         /* @todo uncomment when support for multilingual names and descriptions is added
         $groupCreate->mainLanguageCode = 'ger-DE';
@@ -710,6 +711,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $typeCreate = $contentTypeService->newContentTypeCreateStruct('blog-post');
         $typeCreate->mainLanguageCode = 'eng-GB';
@@ -724,7 +726,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'eng-GB' => 'A blog post',
             'ger-DE' => 'Ein Blog-Eintrag',
         ];
-        $typeCreate->creatorId = $this->generateId('user', $repository->getCurrentUser()->id);
+        $typeCreate->creatorId = $this->generateId('user', $permissionResolver->getCurrentUserReference()->getUserId());
         $typeCreate->creationDate = $this->createDateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');

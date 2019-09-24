@@ -20,9 +20,10 @@ class EZP26551DeleteContentTypeDraftTest extends BaseTest
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $contentTypeGroupCreateStruct = $contentTypeService->newContentTypeGroupCreateStruct('new-group');
-        $contentTypeGroupCreateStruct->creatorId = $this->generateId('user', $repository->getCurrentUser()->id);
+        $contentTypeGroupCreateStruct->creatorId = $this->generateId('user', $permissionResolver->getCurrentUserReference()->getUserId());
         $contentTypeGroupCreateStruct->creationDate = $this->createDateTime();
 
         $contentTypeGroup = $contentTypeService->createContentTypeGroup($contentTypeGroupCreateStruct);

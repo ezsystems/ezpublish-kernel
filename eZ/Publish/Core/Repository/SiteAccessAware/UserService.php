@@ -94,11 +94,6 @@ class UserService implements UserServiceInterface
         return $this->service->loadUser($userId, $prioritizedLanguages);
     }
 
-    public function loadAnonymousUser()
-    {
-        return $this->service->loadAnonymousUser();
-    }
-
     public function loadUserByCredentials($login, $password, array $prioritizedLanguages = null)
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);

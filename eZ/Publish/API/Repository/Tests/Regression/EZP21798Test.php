@@ -26,6 +26,7 @@ class EZP21798Test extends BaseTest
     public function testRoleChanges()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $sectionService = $repository->getSectionService();
         $contentService = $repository->getContentService();
@@ -36,7 +37,7 @@ class EZP21798Test extends BaseTest
         $userService = $repository->getUserService();
 
         $administratorUser = $userService->loadUser(14);
-        $repository->setCurrentUser($administratorUser);
+        $permissionResolver->setCurrentUserReference($administratorUser);
 
         // Create a new section
         $sectionCreateStruct = $sectionService->newSectionCreateStruct();
@@ -98,8 +99,8 @@ class EZP21798Test extends BaseTest
         $roleService->updatePolicy($policies[$numPolicies], $newPolicy);
 
         // Access /Folder/Article
-        $anonymousUser = $userService->loadAnonymousUser();
-        $repository->setCurrentUser($anonymousUser);
+        $anonymousUser = $userService->loadUser(10);
+        $permissionResolver->setCurrentUserReference($anonymousUser);
 
         $contentService->loadContent($contentInfoarticle->id);
     }

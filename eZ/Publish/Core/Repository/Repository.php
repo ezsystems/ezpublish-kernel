@@ -7,11 +7,6 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
@@ -44,24 +39,6 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\SPI\Search\Handler
      */
     protected $searchHandler;
-
-    /**
-     * @deprecated since 6.6, to be removed. Current user handling is moved to PermissionResolver.
-     *
-     * Currently logged in user object if already loaded.
-     *
-     * @var \eZ\Publish\API\Repository\Values\User\User|null
-     */
-    protected $currentUser;
-
-    /**
-     * @deprecated since 6.6, to be removed. Current user handling is moved to PermissionResolver.
-     *
-     * Currently logged in user reference for permission purposes.
-     *
-     * @var \eZ\Publish\API\Repository\Values\User\UserReference
-     */
-    protected $currentUserRef;
 
     /**
      * Instance of content service.
@@ -244,9 +221,7 @@ class Repository implements RepositoryInterface
     private $logger;
 
     /**
-     * Constructor.
-     *
-     * Construct repository object with provided storage engine
+     * Construct repository object with provided storage engine.
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
@@ -254,7 +229,6 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param array $serviceSettings
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $user
      * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
@@ -264,7 +238,6 @@ class Repository implements RepositoryInterface
         RelationProcessor $relationProcessor,
         FieldTypeRegistry $fieldTypeRegistry,
         array $serviceSettings = [],
-        APIUserReference $user = null,
         LoggerInterface $logger = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
@@ -296,76 +269,7 @@ class Repository implements RepositoryInterface
             $this->serviceSettings['language']['languages'] = $this->serviceSettings['languages'];
         }
 
-        if ($user instanceof User) {
-            $this->currentUser = $user;
-            $this->currentUserRef = new UserReference($user->getUserId());
-        } elseif ($user instanceof APIUserReference) {
-            $this->currentUserRef = $user;
-        } else {
-            $this->currentUserRef = new UserReference($this->serviceSettings['user']['anonymousUserID']);
-        }
-
         $this->logger = null !== $logger ? $logger : new NullLogger();
-    }
-
-    /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
-     *
-     * Get current user.
-     *
-     * Loads the full user object if not already loaded, if you only need to know user id use {@see getCurrentUserReference()}
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    public function getCurrentUser()
-    {
-        if ($this->currentUser === null) {
-            $this->currentUser = $this->getUserService()->loadUser(
-                $this->getPermissionResolver()->getCurrentUserReference()->getUserId()
-            );
-        }
-
-        return $this->currentUser;
-    }
-
-    /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
-     *
-     * Get current user reference.
-     *
-     * @since 5.4.5
-     * @return \eZ\Publish\API\Repository\Values\User\UserReference
-     */
-    public function getCurrentUserReference()
-    {
-        return $this->getPermissionResolver()->getCurrentUserReference();
-    }
-
-    /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
-     *
-     * Sets the current user to the given $user.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
-     *
-     * @throws InvalidArgumentValue If UserReference does not contain a id
-     */
-    public function setCurrentUser(APIUserReference $user)
-    {
-        $id = $user->getUserId();
-        if (!$id) {
-            throw new InvalidArgumentValue('$user->getUserId()', $id);
-        }
-
-        if ($user instanceof User) {
-            $this->currentUser = $user;
-            $this->currentUserRef = new UserReference($id);
-        } else {
-            $this->currentUser = null;
-            $this->currentUserRef = $user;
-        }
-
-        return $this->getPermissionResolver()->setCurrentUserReference($this->currentUserRef);
     }
 
     /**
@@ -374,59 +278,6 @@ class Repository implements RepositoryInterface
     public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
     {
         return $this->getPermissionResolver()->sudo($callback, $outerRepository ?? $this);
-    }
-
-    /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
-     *
-     * Check if user has access to a given module / function.
-     *
-     * Low level function, use canUser instead if you have objects to check against.
-     *
-     * @param string $module
-     * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
-     *
-     * @return bool|array Bool if user has full or no access, array if limitations if not
-     */
-    public function hasAccess($module, $function, APIUserReference $user = null)
-    {
-        return $this->getPermissionResolver()->hasAccess($module, $function, $user);
-    }
-
-    /**
-     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
-     *
-     * Check if user has access to a given action on a given value object.
-     *
-     * Indicates if the current user is allowed to perform an action given by the function on the given
-     * objects.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
-     *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
-     * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
-     *
-     * @return bool
-     */
-    public function canUser($module, $function, ValueObject $object, $targets = null)
-    {
-        if ($targets instanceof ValueObject) {
-            $targets = [$targets];
-        } elseif ($targets === null) {
-            $targets = [];
-        } elseif (!is_array($targets)) {
-            throw new InvalidArgumentType(
-                '$targets',
-                'null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]',
-                $targets
-            );
-        }
-
-        return $this->getPermissionResolver()->canUser($module, $function, $object, $targets);
     }
 
     /**
@@ -449,7 +300,8 @@ class Repository implements RepositoryInterface
             $this->getRelationProcessor(),
             $this->getNameSchemaService(),
             $this->fieldTypeRegistry,
-            $this->serviceSettings['content']
+            $this->getPermissionResolver(),
+            $this->serviceSettings['content'],
         );
 
         return $this->contentService;
@@ -471,6 +323,7 @@ class Repository implements RepositoryInterface
         $this->languageService = new LanguageService(
             $this,
             $this->persistenceHandler->contentLanguageHandler(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['language']
         );
 
@@ -498,6 +351,7 @@ class Repository implements RepositoryInterface
             $this->getDomainMapper(),
             $this->getContentTypeDomainMapper(),
             $this->fieldTypeRegistry,
+            $this->getPermissionResolver(),
             $this->serviceSettings['contentType']
         );
 
@@ -523,6 +377,7 @@ class Repository implements RepositoryInterface
             $this->getDomainMapper(),
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['location'],
             $this->logger
         );
@@ -549,6 +404,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler,
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['trash']
         );
 
@@ -594,6 +450,7 @@ class Repository implements RepositoryInterface
 
         $this->userService = new UserService(
             $this,
+            $this->getPermissionResolver(),
             $this->persistenceHandler->userHandler(),
             $this->persistenceHandler->locationHandler(),
             $this->serviceSettings['user']
@@ -713,6 +570,7 @@ class Repository implements RepositoryInterface
         $this->objectStateService = new ObjectStateService(
             $this,
             $this->persistenceHandler->objectStateHandler(),
+            $this->getPermissionResolver(),
             $this->serviceSettings['objectState']
         );
 
@@ -949,7 +807,7 @@ class Repository implements RepositoryInterface
                     $this->getRoleDomainMapper(),
                     $this->getLimitationService(),
                     $this->persistenceHandler->userHandler(),
-                    $this->currentUserRef,
+                    new UserReference($this->serviceSettings['user']['anonymousUserID']),
                     $this->serviceSettings['role']['policyMap']
                 ),
                 new PermissionCriterionResolver(

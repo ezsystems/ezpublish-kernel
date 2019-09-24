@@ -77,6 +77,7 @@ class ContentTest extends BaseServiceMockTest
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
         $fieldTypeRegistryMock = $this->getFieldTypeRegistryMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
         $settings = ['default_version_archive_limit' => 10];
 
         $service = new ContentService(
@@ -86,6 +87,7 @@ class ContentTest extends BaseServiceMockTest
             $relationProcessorMock,
             $nameSchemaServiceMock,
             $fieldTypeRegistryMock,
+            $permissionResolverMock,
             $settings
         );
     }
@@ -103,6 +105,7 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
+        $permissionResolver = $this->getPermissionResolverMock();
 
         $versionInfoMock->expects($this->once())
             ->method('isPublished')
@@ -125,7 +128,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(new SPIVersionInfo())
             ->will($this->returnValue($versionInfoMock));
 
-        $repository->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -234,6 +237,7 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
+        $permissionResolver = $this->getPermissionResolverMock();
 
         $versionInfoMock->expects($this->any())
             ->method('isPublished')
@@ -253,7 +257,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(new SPIVersionInfo())
             ->will($this->returnValue($versionInfoMock));
 
-        $repository->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -277,6 +281,7 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
+        $permissionResolver = $this->getPermissionResolverMock();
 
         $versionInfoMock->expects($this->once())
             ->method('isPublished')
@@ -296,7 +301,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(new SPIVersionInfo())
             ->will($this->returnValue($versionInfoMock));
 
-        $repository->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -322,6 +327,7 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
+        $permissionResolver = $this->getPermissionResolverMock();
 
         $versionInfoMock->expects($this->once())
             ->method('isPublished')
@@ -341,7 +347,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(new SPIVersionInfo())
             ->will($this->returnValue($versionInfoMock));
 
-        $repository->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -394,6 +400,8 @@ class ContentTest extends BaseServiceMockTest
         $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
         $versionInfo = $this->createMock(APIVersionInfo::class);
+        $permissionResolver = $this->getPermissionResolverMock();
+
         $content
             ->expects($this->once())
             ->method('getVersionInfo')
@@ -409,7 +417,7 @@ class ContentTest extends BaseServiceMockTest
             ->with($contentId)
             ->will($this->returnValue($content));
 
-        $repository
+        $permissionResolver
             ->expects($this->once())
             ->method('canUser')
             ->with('content', 'read', $content)
@@ -423,9 +431,9 @@ class ContentTest extends BaseServiceMockTest
         $repository = $this->getRepositoryMock();
         $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
-        $versionInfo = $this
-            ->getMockBuilder(APIVersionInfo::class)
-            ->getMockForAbstractClass();
+        $versionInfo = $this->createMock(APIVersionInfo::class);
+        $permissionResolver = $this->getPermissionResolverMock();
+
         $content
             ->expects($this->once())
             ->method('getVersionInfo')
@@ -437,14 +445,14 @@ class ContentTest extends BaseServiceMockTest
             ->with($contentId)
             ->will($this->returnValue($content));
 
-        $repository
+        $permissionResolver
             ->expects($this->exactly(2))
             ->method('canUser')
             ->will(
                 $this->returnValueMap(
                     [
-                        ['content', 'read', $content, null, true],
-                        ['content', 'versionread', $content, null, true],
+                        ['content', 'read', $content, [], true],
+                        ['content', 'versionread', $content, [], true],
                     ]
                 )
             );
@@ -457,6 +465,8 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepositoryMock();
+        $permissionResolver = $this->getPermissionResolverMock();
+
         $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
         $contentId = 123;
@@ -466,7 +476,7 @@ class ContentTest extends BaseServiceMockTest
             ->with($contentId)
             ->will($this->returnValue($content));
 
-        $repository
+        $permissionResolver
             ->expects($this->once())
             ->method('canUser')
             ->with('content', 'read', $content)
@@ -480,6 +490,7 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepositoryMock();
+        $permissionResolver = $this->getPermissionResolverMock();
         $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
         $versionInfo = $this
@@ -496,14 +507,14 @@ class ContentTest extends BaseServiceMockTest
             ->with($contentId)
             ->will($this->returnValue($content));
 
-        $repository
+        $permissionResolver
             ->expects($this->exactly(2))
             ->method('canUser')
             ->will(
                 $this->returnValueMap(
                     [
-                        ['content', 'read', $content, null, true],
-                        ['content', 'versionread', $content, null, false],
+                        ['content', 'read', $content, [], true],
+                        ['content', 'versionread', $content, [], false],
                     ]
                 )
             );
@@ -679,6 +690,7 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepositoryMock();
+        $permissionResolver = $this->getPermissionResolverMock();
         $contentService = $this->getPartlyMockedContentService(['internalLoadContentInfo']);
         $contentInfo = $this->createMock(APIContentInfo::class);
 
@@ -692,7 +704,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(42)
             ->will($this->returnValue($contentInfo));
 
-        $repository->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with('content', 'remove')
             ->will($this->returnValue(false));
@@ -709,8 +721,9 @@ class ContentTest extends BaseServiceMockTest
     public function testDeleteContent()
     {
         $repository = $this->getRepositoryMock();
+        $permissionResolver = $this->getPermissionResolverMock();
 
-        $repository->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with('content', 'remove')
             ->will($this->returnValue(true));
@@ -772,8 +785,9 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\Exception::class);
 
         $repository = $this->getRepositoryMock();
+        $permissionResolver = $this->getPermissionResolverMock();
 
-        $repository->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with('content', 'remove')
             ->will($this->returnValue(true));
@@ -817,7 +831,9 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
 
         $repository = $this->getRepositoryMock();
-        $repository
+        $permissionResolver = $this->getPermissionResolverMock();
+
+        $permissionResolver
             ->expects($this->once())
             ->method('canUser')
             ->with('content', 'versionremove')
@@ -905,6 +921,12 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repositoryMock = $this->getRepositoryMock();
+
+        $permissionResolver = $this->getPermissionResolverMock();
+        $permissionResolver->expects($this->once())
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(169)));
+
         $mockedService = $this->getPartlyMockedContentService();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $contentType = new ContentType(
@@ -922,10 +944,6 @@ class ContentTest extends BaseServiceMockTest
             ]
         );
 
-        $repositoryMock->expects($this->once())
-            ->method('getCurrentUserReference')
-            ->will($this->returnValue(new UserReference(169)));
-
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
             ->with($this->equalTo(123))
@@ -935,7 +953,7 @@ class ContentTest extends BaseServiceMockTest
             ->method('getContentTypeService')
             ->will($this->returnValue($contentTypeServiceMock));
 
-        $repositoryMock->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -966,6 +984,12 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
 
         $repositoryMock = $this->getRepositoryMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('getCurrentUserReference')
+            ->willReturn($this->createMock(UserReference::class));
+
         $mockedService = $this->getPartlyMockedContentService(['loadContentByRemoteId']);
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $contentType = new ContentType(
@@ -984,10 +1008,6 @@ class ContentTest extends BaseServiceMockTest
             ]
         );
 
-        $repositoryMock->expects($this->once())
-            ->method('getCurrentUserReference')
-            ->will($this->returnValue(new UserReference(169)));
-
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
             ->with($this->equalTo(123))
@@ -997,7 +1017,7 @@ class ContentTest extends BaseServiceMockTest
             ->method('getContentTypeService')
             ->will($this->returnValue($contentTypeServiceMock));
 
-        $repositoryMock->expects($this->once())
+        $permissionResolverMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -1161,6 +1181,7 @@ class ContentTest extends BaseServiceMockTest
         $domainMapperMock = $this->getDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
         $languageCodes = $this->determineLanguageCodesForCreate($mainLanguageCode, $structFields);
         $contentType = new ContentType(
@@ -1204,7 +1225,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($contentTypeServiceMock));
 
         $that = $this;
-        $repositoryMock->expects($this->once())
+        $permissionResolverMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -1792,6 +1813,8 @@ class ContentTest extends BaseServiceMockTest
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
+        $permissionResolver = $this->getPermissionResolverMock();
+
         $contentType = new ContentType(
             [
                 'id' => 123,
@@ -1834,7 +1857,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($contentTypeServiceMock));
 
         $that = $this;
-        $repositoryMock->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -1875,6 +1898,8 @@ class ContentTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedContentService(['loadContentByRemoteId']);
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
+        $permissionResolver = $this->getPermissionResolverMock();
+
         $contentType = new ContentType(
             [
                 'id' => 123,
@@ -1901,7 +1926,7 @@ class ContentTest extends BaseServiceMockTest
             ->method('getContentTypeService')
             ->will($this->returnValue($contentTypeServiceMock));
 
-        $repositoryMock->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -2031,6 +2056,8 @@ class ContentTest extends BaseServiceMockTest
         $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
+        $permissionResolver = $this->getPermissionResolverMock();
+
         $contentType = new ContentType(
             [
                 'id' => 123,
@@ -2070,7 +2097,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($contentTypeServiceMock));
 
         $that = $this;
-        $repositoryMock->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -2224,6 +2251,8 @@ class ContentTest extends BaseServiceMockTest
         $relationProcessorMock = $this->getRelationProcessorMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
         $languageCodes = $this->determineLanguageCodesForCreate($mainLanguageCode, $structFields);
+        $permissionResolver = $this->getPermissionResolverMock();
+
         $contentType = new ContentType(
             [
                 'id' => 123,
@@ -2263,7 +2292,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($contentTypeServiceMock));
 
         $that = $this;
-        $repositoryMock->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -2560,6 +2589,7 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock = $this->getLocationServiceMock();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
+        $permissionResolver = $this->getPermissionResolverMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $spiLocationCreateStruct = new SPILocation\CreateStruct();
@@ -2605,7 +2635,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($contentTypeServiceMock));
 
         $that = $this;
-        $repositoryMock->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -3067,7 +3097,12 @@ class ContentTest extends BaseServiceMockTest
     ) {
         $repositoryMock = $this->getRepositoryMock();
         $permissionResolverMock = $this->getPermissionResolverMock();
-        $mockedService = $this->getPartlyMockedContentService(['loadContent', 'loadRelations']);
+        $permissionResolverMock
+            ->expects($this->once())
+            ->method('getCurrentUserReference')
+            ->willReturn(new UserReference(169));
+        $mockedService = $this->getPartlyMockedContentService(['loadContent', 'loadRelations'], $permissionResolverMock);
+        $permissionResolverMock = $this->getPermissionResolverMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
@@ -3151,10 +3186,6 @@ class ContentTest extends BaseServiceMockTest
         $repositoryMock->expects($this->once())
             ->method('getContentTypeService')
             ->will($this->returnValue($contentTypeServiceMock));
-
-        $repositoryMock->expects($this->once())
-            ->method('getCurrentUserReference')
-            ->will($this->returnValue(new UserReference(169)));
 
         $fieldTypeMock->expects($this->any())
             ->method('acceptValue')
@@ -5387,6 +5418,7 @@ class ContentTest extends BaseServiceMockTest
         $locationCreateStruct = new LocationCreateStruct();
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
         $locationServiceMock = $this->getLocationServiceMock();
+        $permissionResolver = $this->getPermissionResolverMock();
 
         $repository->expects($this->once())
             ->method('getLocationService')
@@ -5406,7 +5438,7 @@ class ContentTest extends BaseServiceMockTest
             ->with('sectionId')
             ->will($this->returnValue(42));
 
-        $repository->expects($this->once())
+        $permissionResolver
             ->method('canUser')
             ->with(
                 'content',
@@ -5491,7 +5523,8 @@ class ContentTest extends BaseServiceMockTest
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
         $repositoryMock->expects($this->once())->method('commit');
-        $repositoryMock
+
+        $permissionResolverMock
             ->method('canUser')
             ->willReturnMap(
                 [
@@ -5614,7 +5647,8 @@ class ContentTest extends BaseServiceMockTest
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
         $repositoryMock->expects($this->once())->method('commit');
-        $repositoryMock
+
+        $permissionResolverMock
             ->method('canUser')
             ->willReturnMap(
                 [
@@ -5720,7 +5754,8 @@ class ContentTest extends BaseServiceMockTest
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
         $repositoryMock->expects($this->once())->method('rollback');
-        $repositoryMock
+
+        $permissionResolverMock
             ->method('canUser')
             ->willReturnMap(
                 [
@@ -6067,6 +6102,7 @@ class ContentTest extends BaseServiceMockTest
                         $this->getRelationProcessorMock(),
                         $this->getNameSchemaServiceMock(),
                         $this->getFieldTypeRegistryMock(),
+                        $this->getPermissionResolverMock(),
                         [],
                     ]
                 )

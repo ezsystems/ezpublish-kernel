@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
@@ -66,8 +67,11 @@ class ContentTypeService implements ContentTypeServiceInterface
     /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry */
+    /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
     protected $fieldTypeRegistry;
+
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
@@ -76,8 +80,9 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      * @param array $settings
      */
     public function __construct(
@@ -87,6 +92,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         Helper\DomainMapper $domainMapper,
         Helper\ContentTypeDomainMapper $contentTypeDomainMapper,
         FieldTypeRegistry $fieldTypeRegistry,
+        PermissionResolver $permissionResolver,
         array $settings = []
     ) {
         $this->repository = $repository;
@@ -99,6 +105,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->settings = $settings + [
             //'defaultSetting' => array(),
         ];
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -113,7 +120,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct)
     {
-        if (!$this->repository->canUser('class', 'create', $contentTypeGroupCreateStruct)) {
+        if (!$this->permissionResolver->canUser('class', 'create', $contentTypeGroupCreateStruct)) {
             throw new UnauthorizedException('ContentType', 'create');
         }
 
@@ -135,7 +142,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         if ($contentTypeGroupCreateStruct->creatorId === null) {
-            $userId = $this->repository->getCurrentUserReference()->getUserId();
+            $userId = $this->permissionResolver->getCurrentUserReference()->getUserId();
         } else {
             $userId = $contentTypeGroupCreateStruct->creatorId;
         }
@@ -218,7 +225,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateContentTypeGroup(APIContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct)
     {
-        if (!$this->repository->canUser('class', 'update', $contentTypeGroup)) {
+        if (!$this->permissionResolver->canUser('class', 'update', $contentTypeGroup)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -252,7 +259,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                     $contentTypeGroupUpdateStruct->identifier,
                 'modified' => $modifiedTimestamp,
                 'modifierId' => $contentTypeGroupUpdateStruct->modifierId === null ?
-                    $this->repository->getCurrentUserReference()->getUserId() :
+                    $this->permissionResolver->getCurrentUserReference()->getUserId() :
                     $contentTypeGroupUpdateStruct->modifierId,
             ]
         );
@@ -281,7 +288,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function deleteContentTypeGroup(APIContentTypeGroup $contentTypeGroup)
     {
-        if (!$this->repository->canUser('class', 'delete', $contentTypeGroup)) {
+        if (!$this->permissionResolver->canUser('class', 'delete', $contentTypeGroup)) {
             throw new UnauthorizedException('ContentType', 'delete');
         }
 
@@ -638,7 +645,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentType(APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups)
     {
-        if (!$this->repository->canUser('class', 'create', $contentTypeCreateStruct, $contentTypeGroups)) {
+        if (!$this->permissionResolver->canUser('class', 'create', $contentTypeCreateStruct, $contentTypeGroups)) {
             throw new UnauthorizedException('ContentType', 'create');
         }
 
@@ -754,7 +761,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         if ($contentTypeCreateStruct->creatorId === null) {
-            $contentTypeCreateStruct->creatorId = $this->repository->getCurrentUserReference()->getUserId();
+            $contentTypeCreateStruct->creatorId = $this->permissionResolver->getCurrentUserReference()->getUserId();
         }
 
         if ($contentTypeCreateStruct->creationDate === null) {
@@ -908,7 +915,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             SPIContentType::STATUS_DRAFT
         );
 
-        if (!$ignoreOwnership && $spiContentType->modifierId != $this->repository->getCurrentUserReference()->getUserId()) {
+        if (!$ignoreOwnership && $spiContentType->modifierId != $this->permissionResolver->getCurrentUserReference()->getUserId()) {
             throw new NotFoundException('ContentType owned by someone else', $contentTypeId);
         }
 
@@ -970,7 +977,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentTypeDraft(APIContentType $contentType)
     {
-        if (!$this->repository->canUser('class', 'create', $contentType)) {
+        if (!$this->permissionResolver->canUser('class', 'create', $contentType)) {
             throw new UnauthorizedException('ContentType', 'create');
         }
 
@@ -988,7 +995,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->repository->beginTransaction();
             try {
                 $spiContentType = $this->contentTypeHandler->createDraft(
-                    $this->repository->getCurrentUserReference()->getUserId(),
+                    $this->permissionResolver->getCurrentUserReference()->getUserId(),
                     $contentType->id
                 );
                 $this->repository->commit();
@@ -1015,7 +1022,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateContentTypeDraft(APIContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct)
     {
-        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
+        if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1069,7 +1076,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $this->contentTypeDomainMapper->buildSPIContentTypeUpdateStruct(
                     $loadedContentTypeDraft,
                     $contentTypeUpdateStruct,
-                    $this->repository->getCurrentUserReference()
+                    $this->permissionResolver->getCurrentUserReference()
                 )
             );
             $this->repository->commit();
@@ -1093,7 +1100,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function deleteContentType(APIContentType $contentType)
     {
-        if (!$this->repository->canUser('class', 'delete', $contentType)) {
+        if (!$this->permissionResolver->canUser('class', 'delete', $contentType)) {
             throw new UnauthorizedException('ContentType', 'delete');
         }
 
@@ -1133,12 +1140,12 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function copyContentType(APIContentType $contentType, User $creator = null)
     {
-        if (!$this->repository->canUser('class', 'create', $contentType)) {
+        if (!$this->permissionResolver->canUser('class', 'create', $contentType)) {
             throw new UnauthorizedException('ContentType', 'create');
         }
 
         if (empty($creator)) {
-            $creator = $this->repository->getCurrentUserReference();
+            $creator = $this->permissionResolver->getCurrentUserReference();
         }
 
         $this->repository->beginTransaction();
@@ -1168,7 +1175,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function assignContentTypeGroup(APIContentType $contentType, APIContentTypeGroup $contentTypeGroup)
     {
-        if (!$this->repository->canUser('class', 'update', $contentType)) {
+        if (!$this->permissionResolver->canUser('class', 'update', $contentType)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1210,7 +1217,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function unassignContentTypeGroup(APIContentType $contentType, APIContentTypeGroup $contentTypeGroup)
     {
-        if (!$this->repository->canUser('class', 'update', $contentType, [$contentTypeGroup])) {
+        if (!$this->permissionResolver->canUser('class', 'update', $contentType, [$contentTypeGroup])) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1266,7 +1273,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function addFieldDefinition(APIContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct)
     {
-        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
+        if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1351,7 +1358,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function removeFieldDefinition(APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition)
     {
-        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
+        if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1395,7 +1402,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateFieldDefinition(APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct)
     {
-        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
+        if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1451,7 +1458,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function publishContentTypeDraft(APIContentTypeDraft $contentTypeDraft)
     {
-        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
+        if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1486,7 +1493,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                                 'nameSchema' => '<' . $fieldDefinitions[0]->identifier . '>',
                             ]
                         ),
-                        $this->repository->getCurrentUserReference()
+                        $this->permissionResolver->getCurrentUserReference()
                     )
                 );
             }
@@ -1629,7 +1636,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function removeContentTypeTranslation(APIContentTypeDraft $contentTypeDraft, string $languageCode): APIContentTypeDraft
     {
-        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
+        if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 

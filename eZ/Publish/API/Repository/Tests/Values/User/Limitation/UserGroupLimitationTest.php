@@ -34,14 +34,16 @@ class UserGroupLimitationTest extends BaseLimitationTest
     {
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
+        $currentUser = $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId());
 
         $userGroup = $this->prepareUserGroup();
 
         // Assign system user and example user to same group
         $userService->assignUserToUserGroup($user, $userGroup);
-        $userService->assignUserToUserGroup($repository->getCurrentUser(), $userGroup);
+        $userService->assignUserToUserGroup($currentUser, $userGroup);
 
         $draft = $this->prepareLimitationAndContent($user, $userGroup);
         /* END: Use Case */
@@ -120,6 +122,7 @@ class UserGroupLimitationTest extends BaseLimitationTest
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Inline */
         $roleService = $repository->getRoleService();
@@ -157,7 +160,7 @@ class UserGroupLimitationTest extends BaseLimitationTest
         $content = $this->createWikiPage();
         $contentId = $content->id;
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $contentService->createContentDraft(
             $contentService->loadContentInfo($contentId)

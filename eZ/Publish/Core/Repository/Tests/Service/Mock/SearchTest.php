@@ -277,7 +277,7 @@ class SearchTest extends BaseServiceMockTest
             []
         );
 
-        $repositoryMock->expects($this->never())->method('hasAccess');
+        $repositoryMock->expects($this->never())->method('getPermissionResolver');
 
         $serviceQuery = new Query();
         $handlerQuery = new Query(['filter' => new Criterion\MatchAll(), 'limit' => 25]);
@@ -742,7 +742,7 @@ class SearchTest extends BaseServiceMockTest
             []
         );
 
-        $repositoryMock->expects($this->never())->method('hasAccess');
+        $repositoryMock->expects($this->never())->method('getPermissionResolver');
 
         $serviceQuery = new LocationQuery();
         $handlerQuery = new LocationQuery(['filter' => new Criterion\MatchAll(), 'limit' => 25]);

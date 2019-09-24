@@ -8,7 +8,8 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\EventListener;
 
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
@@ -41,8 +42,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class SecurityListener implements EventSubscriberInterface
 {
-    /** @var \eZ\Publish\API\Repository\Repository */
-    protected $repository;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    protected $permissionResolver;
+
+    /** @var \eZ\Publish\API\Repository\UserService */
+    protected $userService;
 
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
@@ -64,14 +68,16 @@ class SecurityListener implements EventSubscriberInterface
     protected $fragmentPath;
 
     public function __construct(
-        Repository $repository,
+        PermissionResolver $permissionResolver,
+        UserService $userService,
         ConfigResolverInterface $configResolver,
         EventDispatcherInterface $eventDispatcher,
         TokenStorageInterface $tokenStorage,
         AuthorizationCheckerInterface $authorizationChecker,
         $fragmentPath = '/_fragment'
     ) {
-        $this->repository = $repository;
+        $this->permissionResolver = $permissionResolver;
+        $this->userService = $userService;
         $this->configResolver = $configResolver;
         $this->eventDispatcher = $eventDispatcher;
         $this->tokenStorage = $tokenStorage;
@@ -120,12 +126,12 @@ class SecurityListener implements EventSubscriberInterface
         if ($subLoginEvent->hasAPIUser()) {
             $apiUser = $subLoginEvent->getAPIUser();
         } else {
-            $apiUser = $this->repository->getUserService()->loadUser(
+            $apiUser = $this->userService->loadUser(
                 $this->configResolver->getParameter('anonymous_user_id')
             );
         }
 
-        $this->repository->setCurrentUser($apiUser);
+        $this->permissionResolver->setCurrentUserReference($apiUser);
 
         $providerKey = method_exists($token, 'getProviderKey') ? $token->getProviderKey() : __CLASS__;
         $interactiveToken = new InteractiveLoginToken(

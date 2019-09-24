@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -29,21 +29,26 @@ class RepositoryAuthenticationProviderTest extends TestCase
     /** @var RepositoryAuthenticationProvider */
     private $authProvider;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
-    private $repository;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $permissionResolver;
+
+    /** @var \eZ\Publish\API\Repository\UserService|\PHPUnit\Framework\MockObject\MockObject */
+    private $userService;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->encoderFactory = $this->createMock(EncoderFactoryInterface::class);
-        $repository = $this->repository = $this->createMock(Repository::class);
         $this->authProvider = new RepositoryAuthenticationProvider(
             $this->createMock(UserProviderInterface::class),
             $this->createMock(UserCheckerInterface::class),
             'foo',
             $this->encoderFactory
         );
-        $this->authProvider->setRepository($repository);
+        $this->permissionResolver = $this->createMock(PermissionResolver::class);
+        $this->userService = $this->createMock(UserService::class);
+        $this->authProvider->setPermissionResolver($this->permissionResolver);
+        $this->authProvider->setUserService($this->userService);
     }
 
     public function testAuthenticationNotEzUser()
@@ -114,9 +119,9 @@ class RepositoryAuthenticationProviderTest extends TestCase
             ->method('getAPIUser')
             ->will($this->returnValue($apiUser));
 
-        $this->repository
+        $this->permissionResolver
             ->expects($this->once())
-            ->method('setCurrentUser')
+            ->method('setCurrentUserReference')
             ->with($apiUser);
 
         $method = new \ReflectionMethod($this->authProvider, 'checkAuthentication');
@@ -133,16 +138,11 @@ class RepositoryAuthenticationProviderTest extends TestCase
         $password = 'foo';
         $token = new UsernamePasswordToken($userName, $password, 'bar');
 
-        $userService = $this->createMock(UserService::class);
-        $userService
+        $this->userService
             ->expects($this->once())
             ->method('loadUserByCredentials')
             ->with($userName, $password)
             ->will($this->throwException(new NotFoundException('what', 'identifier')));
-        $this->repository
-            ->expects($this->once())
-            ->method('getUserService')
-            ->will($this->returnValue($userService));
 
         $method = new \ReflectionMethod($this->authProvider, 'checkAuthentication');
         $method->setAccessible(true);
@@ -156,20 +156,16 @@ class RepositoryAuthenticationProviderTest extends TestCase
         $password = 'foo';
         $token = new UsernamePasswordToken($userName, $password, 'bar');
 
-        $apiUser = $this->getMockForAbstractClass(APIUser::class);
-        $userService = $this->createMock(UserService::class);
-        $userService
+        $apiUser = $this->createMock(APIUser::class);
+        $this->userService
             ->expects($this->once())
             ->method('loadUserByCredentials')
             ->with($userName, $password)
             ->will($this->returnValue($apiUser));
-        $this->repository
+
+        $this->permissionResolver
             ->expects($this->once())
-            ->method('getUserService')
-            ->will($this->returnValue($userService));
-        $this->repository
-            ->expects($this->once())
-            ->method('setCurrentUser')
+            ->method('setCurrentUserReference')
             ->with($apiUser);
 
         $method = new \ReflectionMethod($this->authProvider, 'checkAuthentication');

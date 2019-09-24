@@ -31,12 +31,13 @@ class RoleServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Get the role service
         $roleService = $repository->getRoleService();
@@ -62,6 +63,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -69,7 +71,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $role = $this->createRole();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->loadRole($role->id);
@@ -89,6 +91,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -96,7 +99,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $role = $this->createRole();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->loadRoleByIdentifier($role->identifier);
@@ -111,12 +114,13 @@ class RoleServiceAuthorizationTest extends BaseTest
     public function testLoadRolesLoadsEmptyListForAnonymousUser()
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Get the role service
         $roleService = $repository->getRoleService();
@@ -168,6 +172,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -175,7 +180,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $role = $this->createRole();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Get a new role update struct and set new values
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
@@ -201,6 +206,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -208,7 +214,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $role = $this->createRole();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->deleteRole($role);
@@ -228,6 +234,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -235,7 +242,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $role = $this->createRole();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->addPolicy(
@@ -258,6 +265,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -269,7 +277,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $policy = reset($policies);
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Get a policy update struct and add a limitation
         $policyUpdate = $roleService->newPolicyUpdateStruct();
@@ -299,6 +307,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -320,7 +329,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         );
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->removePolicyByRoleDraft($roleDraft, $roleDraft->getPolicies()[0]);
@@ -340,6 +349,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -351,7 +361,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $policy = reset($policies);
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->deletePolicy($policy);
@@ -372,6 +382,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $editorsGroupId = $this->generateId('group', 13);
 
@@ -384,7 +395,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $userGroup = $userService->loadUserGroup($editorsGroupId);
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->assignRoleToUserGroup($role, $userGroup);
@@ -405,6 +416,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $editorsGroupId = $this->generateId('group', 13);
 
@@ -417,7 +429,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $userGroup = $userService->loadUserGroup($editorsGroupId);
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Create a subtree role limitation
         $limitation = new SubtreeLimitation(
@@ -445,6 +457,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $editorsGroupId = $this->generateId('group', 13);
 
@@ -460,7 +473,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $roleService->assignRoleToUserGroup($role, $userGroup);
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->unassignRoleFromUserGroup($role, $userGroup);
@@ -480,6 +493,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -487,7 +501,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $role = $this->createRole();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->assignRoleToUser($role, $user);
@@ -507,6 +521,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -514,7 +529,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $role = $this->createRole();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // Create a subtree role limitation
         $limitation = new SubtreeLimitation(
@@ -541,6 +556,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -551,7 +567,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $roleService->assignRoleToUser($role, $user);
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->unassignRoleFromUser($role, $user);
@@ -571,6 +587,7 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
@@ -578,7 +595,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $role = $this->createRole();
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->getRoleAssignments($role);
@@ -650,6 +667,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
         $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $editorsGroupId = $this->generateId('group', 13);
 
@@ -662,7 +680,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         $userGroup = $userService->loadUserGroup($editorsGroupId);
 
         // Set "Editor" user as current user.
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
         $roleService->getRoleAssignmentsForUserGroup($userGroup);

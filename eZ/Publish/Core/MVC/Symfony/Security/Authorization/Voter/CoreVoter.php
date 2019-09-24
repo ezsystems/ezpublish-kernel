@@ -8,19 +8,19 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter;
 
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 
 class CoreVoter implements VoterInterface
 {
-    /** @var \eZ\Publish\API\Repository\Repository */
-    private $repository;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
 
-    public function __construct(Repository $repository)
+    public function __construct(PermissionResolver $permissionResolver)
     {
-        $this->repository = $repository;
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -63,7 +63,7 @@ class CoreVoter implements VoterInterface
     {
         foreach ($attributes as $attribute) {
             if ($this->supportsAttribute($attribute)) {
-                if ($this->repository->hasAccess($attribute->module, $attribute->function) === false) {
+                if ($this->permissionResolver->hasAccess($attribute->module, $attribute->function) === false) {
                     return VoterInterface::ACCESS_DENIED;
                 }
 

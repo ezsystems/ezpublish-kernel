@@ -9,7 +9,8 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface as EzUserInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -18,12 +19,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
 {
-    /** @var \eZ\Publish\API\Repository\Repository */
-    private $repository;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
 
-    public function setRepository(Repository $repository)
+    /** @var \eZ\Publish\API\Repository\UserService */
+    private $userService;
+
+    public function setPermissionResolver(PermissionResolver $permissionResolver)
     {
-        $this->repository = $repository;
+        $this->permissionResolver = $permissionResolver;
+    }
+
+    public function setUserService(UserService $userService)
+    {
+        $this->userService = $userService;
     }
 
     protected function checkAuthentication(UserInterface $user, UsernamePasswordToken $token)
@@ -43,13 +52,13 @@ class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
             $apiUser = $currentUser->getAPIUser();
         } else {
             try {
-                $apiUser = $this->repository->getUserService()->loadUserByCredentials($token->getUsername(), $token->getCredentials());
+                $apiUser = $this->userService->loadUserByCredentials($token->getUsername(), $token->getCredentials());
             } catch (NotFoundException $e) {
                 throw new BadCredentialsException('Invalid credentials', 0, $e);
             }
         }
 
         // Finally inject current user in the Repository
-        $this->repository->setCurrentUser($apiUser);
+        $this->permissionResolver->setCurrentUserReference($apiUser);
     }
 }

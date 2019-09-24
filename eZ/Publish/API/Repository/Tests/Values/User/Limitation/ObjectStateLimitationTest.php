@@ -37,6 +37,8 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
+
         $notLockedState = $this->generateId('objectstate', 2);
 
         $contentService = $repository->getContentService();
@@ -79,7 +81,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
 
@@ -101,6 +103,8 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
+
         $lockedState = $this->generateId('objectstate', 1);
 
         $contentService = $repository->getContentService();
@@ -143,7 +147,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
 

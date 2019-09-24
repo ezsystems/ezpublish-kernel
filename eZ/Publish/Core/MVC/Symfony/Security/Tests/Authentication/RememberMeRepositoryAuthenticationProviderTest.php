@@ -8,14 +8,13 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\User\User as ApiUser;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RememberMeRepositoryAuthenticationProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
-use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -25,23 +24,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class RememberMeRepositoryAuthenticationProviderTest extends TestCase
 {
-    /** @var RememberMeRepositoryAuthenticationProvider */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Security\Authentication\RememberMeRepositoryAuthenticationProvider */
     private $authProvider;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
-    private $repository;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $permissionResolver;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->repository = $this->createMock(Repository::class);
+        $this->permissionResolver = $this->createMock(PermissionResolver::class);
         $this->authProvider = new RememberMeRepositoryAuthenticationProvider(
             $this->createMock(UserCheckerInterface::class),
             'my secret',
             'my provider secret'
         );
-        $this->authProvider->setRepository($this->repository);
+        $this->authProvider->setPermissionResolver($this->permissionResolver);
     }
 
     public function testAuthenticateUnsupportedToken()
@@ -107,11 +106,6 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
 
     public function testAuthenticate()
     {
-        $this->repository
-            ->expects($this->once())
-            ->method('getPermissionResolver')
-            ->will($this->returnValue($this->getPermissionResolverMock()));
-
         $apiUser = $this->createMock(ApiUser::class);
         $apiUser
             ->expects($this->any())

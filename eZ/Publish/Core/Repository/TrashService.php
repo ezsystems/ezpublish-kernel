@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -48,6 +49,12 @@ class TrashService implements TrashServiceInterface
     /** @var \eZ\Publish\Core\Repository\Helper\NameSchemaService */
     protected $nameSchemaService;
 
+    /** @var \eZ\Publish\API\Repository\PermissionCriterionResolver */
+    private $permissionCriterionResolver;
+
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
@@ -62,9 +69,9 @@ class TrashService implements TrashServiceInterface
         Handler $handler,
         Helper\NameSchemaService $nameSchemaService,
         PermissionCriterionResolver $permissionCriterionResolver,
+        PermissionResolver $permissionResolver,
         array $settings = []
     ) {
-        $this->permissionCriterionResolver = $permissionCriterionResolver;
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
         $this->nameSchemaService = $nameSchemaService;
@@ -72,6 +79,8 @@ class TrashService implements TrashServiceInterface
         $this->settings = $settings + [
             //'defaultSetting' => array(),
         ];
+        $this->permissionCriterionResolver = $permissionCriterionResolver;
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -93,11 +102,11 @@ class TrashService implements TrashServiceInterface
             $spiTrashItem,
             $this->repository->getContentService()->internalLoadContent($spiTrashItem->contentId)
         );
-        if (!$this->repository->canUser('content', 'read', $trash->getContentInfo())) {
+        if (!$this->permissionResolver->canUser('content', 'read', $trash->getContentInfo())) {
             throw new UnauthorizedException('content', 'read');
         }
 
-        if (!$this->repository->canUser('content', 'restore', $trash->getContentInfo())) {
+        if (!$this->permissionResolver->canUser('content', 'restore', $trash->getContentInfo())) {
             throw new UnauthorizedException('content', 'restore');
         }
 
@@ -175,7 +184,7 @@ class TrashService implements TrashServiceInterface
             throw new InvalidArgumentValue('parentLocationId', $newParentLocation->id, 'Location');
         }
 
-        if (!$this->repository->canUser(
+        if (!$this->permissionResolver->canUser(
             'content',
             'restore',
             $trashItem->getContentInfo(),
@@ -225,7 +234,7 @@ class TrashService implements TrashServiceInterface
      */
     public function emptyTrash()
     {
-        if ($this->repository->hasAccess('content', 'cleantrash') === false) {
+        if ($this->permissionResolver->hasAccess('content', 'cleantrash') === false) {
             throw new UnauthorizedException('content', 'cleantrash');
         }
 
@@ -255,7 +264,7 @@ class TrashService implements TrashServiceInterface
      */
     public function deleteTrashItem(APITrashItem $trashItem)
     {
-        if (!$this->repository->canUser('content', 'cleantrash', $trashItem->getContentInfo())) {
+        if (!$this->permissionResolver->canUser('content', 'cleantrash', $trashItem->getContentInfo())) {
             throw new UnauthorizedException('content', 'cleantrash');
         }
 
@@ -388,7 +397,7 @@ class TrashService implements TrashServiceInterface
      */
     private function userHasPermissionsToRemove(ContentInfo $contentInfo, Location $location)
     {
-        if (!$this->repository->canUser('content', 'remove', $contentInfo, [$location])) {
+        if (!$this->permissionResolver->canUser('content', 'remove', $contentInfo, [$location])) {
             return false;
         }
         $contentRemoveCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'remove');

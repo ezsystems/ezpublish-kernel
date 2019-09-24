@@ -9,26 +9,31 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\ReferenceUserInterface;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class Provider implements APIUserProviderInterface
 {
-    /** @var \eZ\Publish\API\Repository\Repository */
-    protected $repository;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
 
-    /**
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     */
-    public function __construct(Repository $repository)
-    {
-        $this->repository = $repository;
+    /** @var \eZ\Publish\API\Repository\UserService */
+    private $userService;
+
+    public function __construct(
+        UserService $userService,
+        PermissionResolver $permissionResolver
+    ) {
+        $this->permissionResolver = $permissionResolver;
+        $this->userService = $userService;
     }
 
     /**
@@ -53,7 +58,7 @@ class Provider implements APIUserProviderInterface
             }
 
             return $this->createSecurityUser(
-                $this->repository->getUserService()->loadUserByLogin($user)
+                $this->userService->loadUserByLogin($user)
             );
         } catch (NotFoundException $e) {
             throw new UsernameNotFoundException($e->getMessage(), 0, $e);
@@ -81,13 +86,15 @@ class Provider implements APIUserProviderInterface
         }
 
         try {
-            $refreshedAPIUser = $this->repository->getUserService()->loadUser(
+            $refreshedAPIUser = $this->userService->loadUser(
                 $user instanceof ReferenceUserInterface ?
                 $user->getAPIUserReference()->getUserId() :
                 $user->getAPIUser()->id
             );
             $user->setAPIUser($refreshedAPIUser);
-            $this->repository->setCurrentUser($refreshedAPIUser);
+            $this->permissionResolver->setCurrentUserReference(
+                new UserReference($refreshedAPIUser->getUserId())
+            );
 
             return $user;
         } catch (NotFoundException $e) {
@@ -130,7 +137,7 @@ class Provider implements APIUserProviderInterface
      */
     private function createSecurityUser(APIUser $apiUser): User
     {
-        $isPasswordExpired = $this->repository->getUserService()->getPasswordInfo($apiUser)->isPasswordExpired();
+        $isPasswordExpired = $this->userService->getPasswordInfo($apiUser)->isPasswordExpired();
 
         return new User(
             $apiUser,

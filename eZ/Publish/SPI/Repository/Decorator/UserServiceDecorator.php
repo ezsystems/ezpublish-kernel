@@ -86,11 +86,6 @@ abstract class UserServiceDecorator implements UserService
         return $this->innerService->loadUser($userId, $prioritizedLanguages);
     }
 
-    public function loadAnonymousUser()
-    {
-        return $this->innerService->loadAnonymousUser();
-    }
-
     public function loadUserByCredentials(
         $login,
         $password,

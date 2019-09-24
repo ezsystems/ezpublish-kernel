@@ -3625,7 +3625,9 @@ class SearchServiceTest extends BaseTest
         $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
         $userService = $repository->getUserService();
-        $administratorUser = $repository->getCurrentUser();
+        $permissionResolver = $repository->getPermissionResolver();
+
+        $administratorUser = $userService->loadUser($permissionResolver->getCurrentUserReference()->getUserId());
         // ID of the "Administrators" user group in an eZ Publish demo installation
         $administratorsUserGroupId = 12;
         // ID of the "Editors" user group in an eZ Publish demo installation
@@ -3773,6 +3775,7 @@ class SearchServiceTest extends BaseTest
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
+        $permissionResolver = $repository->getPermissionResolver();
         $editorsUserGroupId = 13;
 
         $content = $this->createContentForTestUserMetadataGroupHorizontal();
@@ -3835,7 +3838,7 @@ class SearchServiceTest extends BaseTest
                 $foundLocation1->valueObject->id
             );
             $this->assertEquals(
-                $repository->getCurrentUser()->id,
+                $permissionResolver->getCurrentUserReference()->getUserId(),
                 $foundLocation2->valueObject->contentId
             );
 

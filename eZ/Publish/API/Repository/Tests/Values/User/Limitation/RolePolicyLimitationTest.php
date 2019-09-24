@@ -51,6 +51,7 @@ class RolePolicyLimitationTest extends BaseLimitationTest
     ) {
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $subtreePathString = '/1/2/';
 
@@ -85,7 +86,7 @@ class RolePolicyLimitationTest extends BaseLimitationTest
 
         // create user assigned to the just created group
         $user = $this->createUserInGroup($userGroup);
-        $repository->setCurrentUser($user);
+        $permissionResolver->setCurrentUserReference($user);
 
         $this->refreshSearch($repository);
 

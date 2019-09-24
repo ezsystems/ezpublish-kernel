@@ -8,24 +8,24 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Voter;
 
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\ValueObjectVoter;
+use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use PHPUnit\Framework\TestCase;
 
 class ValueObjectVoterTest extends TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
-    private $repository;
+    /** @var \eZ\Publish\Core\Repository\Permission\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $permissionResolver;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->repository = $this->createMock(Repository::class);
+        $this->permissionResolver = $this->createMock(PermissionResolver::class);
     }
 
     /**
@@ -33,7 +33,7 @@ class ValueObjectVoterTest extends TestCase
      */
     public function testSupportsAttribute($attribute, $expectedResult)
     {
-        $voter = new ValueObjectVoter($this->repository);
+        $voter = new ValueObjectVoter($this->permissionResolver);
         $this->assertSame($expectedResult, $voter->supportsAttribute($attribute));
     }
 
@@ -61,7 +61,7 @@ class ValueObjectVoterTest extends TestCase
      */
     public function testSupportsClass($class)
     {
-        $voter = new ValueObjectVoter($this->repository);
+        $voter = new ValueObjectVoter($this->permissionResolver);
         $this->assertTrue($voter->supportsClass($class));
     }
 
@@ -80,7 +80,7 @@ class ValueObjectVoterTest extends TestCase
      */
     public function testVoteInvalidAttribute(array $attributes)
     {
-        $voter = new ValueObjectVoter($this->repository);
+        $voter = new ValueObjectVoter($this->permissionResolver);
         $this->assertSame(
             VoterInterface::ACCESS_ABSTAIN,
             $voter->vote(
@@ -107,9 +107,9 @@ class ValueObjectVoterTest extends TestCase
      */
     public function testVote(Attribute $attribute, $repositoryCanUser, $expectedResult)
     {
-        $voter = new ValueObjectVoter($this->repository);
-        $targets = isset($attribute->limitations['targets']) ? $attribute->limitations['targets'] : null;
-        $this->repository
+        $voter = new ValueObjectVoter($this->permissionResolver);
+        $targets = isset($attribute->limitations['targets']) ? $attribute->limitations['targets'] : [];
+        $this->permissionResolver
             ->expects($this->once())
             ->method('canUser')
             ->with($attribute->module, $attribute->function, $attribute->limitations['valueObject'], $targets)
@@ -144,7 +144,7 @@ class ValueObjectVoterTest extends TestCase
                     'read',
                     [
                         'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
-                        'targets' => $this->getMockForAbstractClass(ValueObject::class),
+                        'targets' => [$this->getMockForAbstractClass(ValueObject::class)],
                     ]
                 ),
                 true,
@@ -168,7 +168,7 @@ class ValueObjectVoterTest extends TestCase
                     'read',
                     [
                         'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
-                        'targets' => $this->getMockForAbstractClass(ValueObject::class),
+                        'targets' => [$this->getMockForAbstractClass(ValueObject::class)],
                     ]
                 ),
                 false,

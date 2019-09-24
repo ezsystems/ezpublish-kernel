@@ -142,17 +142,6 @@ interface UserService
     public function loadUser($userId, array $prioritizedLanguages = []);
 
     /**
-     * Loads anonymous user.
-     *
-     * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
-     *
-     * @uses ::loadUser()
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    public function loadAnonymousUser();
-
-    /**
      * Loads a user for the given login and password.
      *
      * Since 6.1 login is case-insensitive across all storage engines and database backends, however if login

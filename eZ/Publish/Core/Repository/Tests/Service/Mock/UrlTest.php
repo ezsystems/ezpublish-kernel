@@ -428,7 +428,7 @@ class UrlTest extends BaseServiceMockTest
 
     protected function configureUrlViewPermissionForHasAccess($hasAccess = false)
     {
-        $this->getRepositoryMock()
+        $this->permissionResolver
             ->expects($this->once())
             ->method('hasAccess')
             ->with('url', 'view')

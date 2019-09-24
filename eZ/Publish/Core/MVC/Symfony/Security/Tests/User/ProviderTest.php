@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User;
 
-use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\UserService;
@@ -20,30 +20,27 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\MVC\Symfony\Security\User as MVCUser;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
 class ProviderTest extends TestCase
 {
     /** @var \PHPUnit\Framework\MockObject\MockObject */
-    private $repository;
-
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $userService;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\Security\User\Provider */
     private $userProvider;
 
+    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $permissionResolver;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->userService = $this->createMock(UserService::class);
-        $this->repository = $this->createMock(Repository::class);
-        $this->repository
-            ->expects($this->any())
-            ->method('getUserService')
-            ->will($this->returnValue($this->userService));
-        $this->userProvider = new Provider($this->repository);
+        $this->permissionResolver = $this->createMock(PermissionResolver::class);
+        $this->userProvider = new Provider($this->userService, $this->permissionResolver);
     }
 
     public function testLoadUserByUsernameAlreadyUserObject()
@@ -128,10 +125,10 @@ class ProviderTest extends TestCase
             ->with($userId)
             ->will($this->returnValue($refreshedAPIUser));
 
-        $this->repository
+        $this->permissionResolver
             ->expects($this->once())
-            ->method('setCurrentUser')
-            ->with($refreshedAPIUser);
+            ->method('setCurrentUserReference')
+            ->with(new UserReference($apiUser->getUserId()));
 
         $this->assertSame($user, $this->userProvider->refreshUser($user));
     }

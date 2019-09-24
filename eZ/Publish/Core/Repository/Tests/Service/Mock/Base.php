@@ -67,7 +67,6 @@ abstract class Base extends TestCase
                 $this->getRelationProcessorMock(),
                 $this->getFieldTypeRegistryMock(),
                 $serviceSettings,
-                $this->getStubbedUser(14)
             );
 
             if (!empty($serviceSettings)) {

@@ -28,6 +28,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
@@ -35,7 +36,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         $objectStateService = $repository->getObjectStateService();
 
@@ -71,6 +72,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $objectStateGroupId = $this->generateId('objectstategroup', 2);
         $anonymousUserId = $this->generateId('user', 10);
@@ -79,7 +81,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // $objectStateGroupId contains the ID of the standard object state
         // group ez_lock.
@@ -119,6 +121,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $objectStateGroupId = $this->generateId('objectstategroup', 2);
         $anonymousUserId = $this->generateId('user', 10);
@@ -127,7 +130,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // $objectStateGroupId contains the ID of the standard object state
         // group ez_lock.
@@ -154,6 +157,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $objectStateGroupId = $this->generateId('objectstategroup', 2);
         $anonymousUserId = $this->generateId('user', 10);
@@ -162,7 +166,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // $objectStateGroupId contains the ID of the standard object state
         // group ez_lock.
@@ -204,6 +208,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $objectStateId = $this->generateId('objectstate', 2);
         $anonymousUserId = $this->generateId('user', 10);
@@ -212,7 +217,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // $objectStateId contains the ID of the "locked" state
         $objectStateService = $repository->getObjectStateService();
@@ -253,6 +258,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $objectStateId = $this->generateId('objectstate', 2);
         $anonymousUserId = $this->generateId('user', 10);
@@ -261,7 +267,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // $objectStateId contains the ID of the "locked" state
         $objectStateService = $repository->getObjectStateService();
@@ -290,6 +296,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $notLockedObjectStateId = $this->generateId('objectstate', 1);
         $lockedObjectStateId = $this->generateId('objectstate', 2);
@@ -299,7 +306,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // $notLockedObjectStateId is the ID of the state "not_locked"
         $objectStateService = $repository->getObjectStateService();
@@ -323,6 +330,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
 
         $anonymousUserId = $this->generateId('user', 10);
         $ezLockObjectStateGroupId = $this->generateId('objectstategroup', 2);
@@ -332,7 +340,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+        $permissionResolver->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         // $anonymousUserId is the content ID of "Anonymous User"
         // $ezLockObjectStateGroupId contains the ID of the "ez_lock" object
