@@ -32,9 +32,9 @@ parameters:
 services:
     # Setup cache pool, with InMemoryCacheAdapter as decorator
     eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter:
-          decorates: ezpublish.cache_pool
-          lazy: true
-          arguments:
+        decorates: ezpublish.cache_pool
+        lazy: true
+        arguments:
             $sharedPool: '@eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter.inner'
             $inMemoryPools: !tagged ez.spi.persistence.cache.inmemory
 
