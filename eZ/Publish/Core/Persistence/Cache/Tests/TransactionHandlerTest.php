@@ -25,8 +25,8 @@ class TransactionHandlerTest extends HandlerTest
             ->method('logCall');
 
         $this->cacheMock
-            ->expects($this->never())
-            ->method($this->anything());
+            ->expects($this->once())
+            ->method('beginTransaction');
 
         $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock
@@ -52,8 +52,8 @@ class TransactionHandlerTest extends HandlerTest
             ->method('logCall');
 
         $this->cacheMock
-            ->expects($this->never())
-            ->method($this->anything());
+            ->expects($this->once())
+            ->method('commitTransaction');
 
         $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock
@@ -79,10 +79,14 @@ class TransactionHandlerTest extends HandlerTest
             ->method('logCall');
 
         $this->cacheMock
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('clear');
 
-        $innerHandlerMock = $this->createMock(TransactionHandler::class);
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('rollbackTransaction');
+
+         $innerHandlerMock = $this->createMock(TransactionHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('transactionHandler')
