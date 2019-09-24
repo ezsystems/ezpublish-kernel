@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface;
 
 /**
@@ -16,13 +17,13 @@ use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface
 class TransactionHandler extends AbstractHandler implements TransactionHandlerInterface
 {
     /**
-     * @todo Maybe this can be solved by contributing to Symfony, as in for instance using a layered cache with memory
-     * cache first and use saveDefered so cache is not persisted before commit is made, and ommited on rollback.
-     *
      * {@inheritdoc}
      */
     public function beginTransaction()
     {
+        /** @var TransactionAwareAdapterInterface */
+        $this->cache->beginTransaction();
+
         $this->logger->logCall(__METHOD__);
         $this->persistenceHandler->transactionHandler()->beginTransaction();
     }
@@ -34,6 +35,9 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
     {
         $this->logger->logCall(__METHOD__);
         $this->persistenceHandler->transactionHandler()->commit();
+
+        /** @var TransactionAwareAdapterInterface */
+        $this->cache->commitTransaction();
     }
 
     /**
@@ -42,7 +46,9 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
     public function rollback()
     {
         $this->logger->logCall(__METHOD__);
-        $this->cache->clear();// TIMBER!! @see beginTransaction()
         $this->persistenceHandler->transactionHandler()->rollback();
+
+        /** @var TransactionAwareAdapterInterface */
+        $this->cache->rollbackTransaction();
     }
 }

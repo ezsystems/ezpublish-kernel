@@ -12,7 +12,6 @@ use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
 use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
 use eZ\Publish\Core\Persistence\Cache\ContentHandler;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Handler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
@@ -320,7 +319,7 @@ class ContentHandlerTest extends HandlerTest
             ->method('isMiss')
             ->will($this->returnValue(true));
 
-        $innerHandlerMock = $this->createMock(Handler::class);
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -357,7 +356,7 @@ class ContentHandlerTest extends HandlerTest
     public function testLoadVersionInfoWithoutVersionNumberCacheIsMiss()
     {
         $this->loggerMock->expects($this->once())->method('logCall');
-        $cacheItemMock = $this->getMock(ItemInterface::class);
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
               ->expects($this->once())
               ->method('getItem')
@@ -374,7 +373,7 @@ class ContentHandlerTest extends HandlerTest
               ->method('isMiss')
               ->willReturn(true);
 
-        $innerHandlerMock = $this->getMock(Handler::class);
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
               ->expects($this->once())
               ->method('contentHandler')
