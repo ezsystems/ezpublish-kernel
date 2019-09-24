@@ -503,17 +503,6 @@ tables:
             published: { type: integer, nullable: false, options: { default: '0' } }
             section_id: { type: integer, nullable: false, options: { default: '0' } }
             word_id: { type: integer, nullable: false, options: { default: '0' } }
-    ezsearch_search_phrase:
-        indexes:
-            ezsearch_search_phrase_count: { fields: [phrase_count] }
-        uniqueConstraints:
-            ezsearch_search_phrase_phrase: { fields: [phrase], options: { lengths: ['191'] } }
-        id:
-            id: { type: integer, nullable: false, options: { autoincrement: true } }
-        fields:
-            phrase: { type: string, nullable: true, length: 250 }
-            phrase_count: { type: integer, nullable: true, options: { default: '0' } }
-            result_count: { type: integer, nullable: true, options: { default: '0' } }
     ezsearch_word:
         indexes:
             ezsearch_word_word_i: { fields: [word] }
