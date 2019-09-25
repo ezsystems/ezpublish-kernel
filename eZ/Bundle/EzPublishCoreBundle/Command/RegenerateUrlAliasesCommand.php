@@ -132,6 +132,11 @@ EOT
             );
         }
 
+        if  ($locationsCount === 0) {
+            $output->writeln('<info>No location was found. Exiting.</info>');
+            return;
+        }
+
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
             sprintf(
