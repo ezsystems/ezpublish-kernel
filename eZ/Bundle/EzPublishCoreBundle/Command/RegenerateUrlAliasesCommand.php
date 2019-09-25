@@ -132,8 +132,9 @@ EOT
             );
         }
 
-        if  ($locationsCount === 0) {
+        if ($locationsCount === 0) {
             $output->writeln('<info>No location was found. Exiting.</info>');
+
             return;
         }
 
