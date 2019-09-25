@@ -148,7 +148,7 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testLoadVersionInfoByIdAndVersionNumber()
     {
-        $repository = $this->getRepositoryMock();
+        $permissionResolver = $this->getPermissionResolverMock();
         $contentServiceMock = $this->getPartlyMockedContentService(['loadContentInfo']);
         /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
@@ -175,7 +175,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(new SPIVersionInfo())
             ->willReturn($versionInfoMock);
 
-        $repository->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
