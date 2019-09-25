@@ -7,6 +7,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Exception;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -30,7 +31,7 @@ class RegenerateUrlAliasesCommand extends Command
     const BEFORE_RUNNING_HINTS = <<<EOT
 <error>Before you continue:</error>
 - Make sure to back up your database.
-- Take installation offline, during the script execution the database should not be modified.
+- If you are regenerating URL aliases for all Locations, take installation offline, during the script execution the database should not be modified.
 - Run this command without memory limit, i.e. processing of 300k Locations can take up to 1 GB of RAM.
 - Run this command in production environment using <info>--env=prod</info>
 - Manually clear HTTP cache after running this command.
@@ -72,8 +73,13 @@ EOT;
                 InputOption::VALUE_OPTIONAL,
                 'Number of Locations fetched into memory and processed at once',
                 self::DEFAULT_ITERATION_COUNT
-            )
-            ->setHelp(
+            )->addOption(
+                'location-id',
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Only Locations with provided id\'s will have URL aliases regenerated',
+                []
+            )->setHelp(
                 <<<EOT
 {$beforeRunningHints}
 
@@ -99,12 +105,32 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $iterationCount = (int)$input->getOption('iteration-count');
+        $locationIds = $input->getOption('location-id');
 
-        $locationsCount = $this->repository->sudo(
-            function (Repository $repository) {
-                return $repository->getLocationService()->getAllLocationsCount();
-            }
-        );
+        if (!empty($locationIds)) {
+            $locationIds = $this->repository->sudo(
+                function (Repository $repository) use ($locationIds) {
+                    $locationService = $repository->getLocationService();
+                    foreach ($locationIds as $index => $locationId) {
+                        try {
+                            $locationService->loadLocation($locationId);
+                        } catch (NotFoundException $e) {
+                            unset($locationIds[$index]);
+                        }
+                    }
+
+                    return array_values($locationIds);
+                }
+            );
+
+            $locationsCount = count($locationIds);
+        } else {
+            $locationsCount = $this->repository->sudo(
+                function (Repository $repository) {
+                    return $repository->getLocationService()->getAllLocationsCount();
+                }
+            );
+        }
 
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
@@ -126,11 +152,11 @@ EOT
 
         for ($offset = 0; $offset <= $locationsCount; $offset += $iterationCount) {
             gc_disable();
-            $locations = $this->repository->sudo(
-                function (Repository $repository) use ($offset, $iterationCount) {
-                    return $repository->getLocationService()->loadAllLocations($offset, $iterationCount);
-                }
-            );
+            if (!empty($locationIds)) {
+                $locations = $this->loadSpecificLocations($locationIds, $offset, $iterationCount);
+            } else {
+                $locations = $this->loadAllLocations($offset, $iterationCount);
+            }
             $this->processLocations($locations, $progressBar);
             gc_enable();
         }
@@ -223,5 +249,41 @@ EOT
                 $progressBar->advance(1);
             }
         }
+    }
+
+    /**
+     * @param int $offset
+     * @param int $iterationCount
+     * @return array
+     */
+    private function loadAllLocations($offset, $iterationCount)
+    {
+        return $this->repository->sudo(
+            function (Repository $repository) use ($offset, $iterationCount) {
+                return $repository->getLocationService()->loadAllLocations($offset, $iterationCount);
+            }
+        );
+    }
+
+    /**
+     * @param int $offset
+     * @param int $iterationCount
+     * @return array
+     */
+    private function loadSpecificLocations($locationIds, $offset, $iterationCount)
+    {
+        $locationIds = array_slice($locationIds, $offset, $iterationCount);
+
+        return $this->repository->sudo(
+            function (Repository $repository) use ($locationIds) {
+                $locations = [];
+                $locationService = $repository->getLocationService();
+                foreach ($locationIds as $locationId) {
+                    $locations[] = $locationService->loadLocation($locationId);
+                }
+
+                return $locations;
+            }
+        );
     }
 }
