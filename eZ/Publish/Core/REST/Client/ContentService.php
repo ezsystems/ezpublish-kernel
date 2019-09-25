@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -638,6 +639,14 @@ class ContentService implements APIContentService, Sessionable
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadReverseRelations(ContentInfo $contentInfo)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadReverseRelationList(ContentInfo $contentInfo, int $offset = 0, int $limit = -1): RelationList
     {
         throw new \Exception('@todo: Implement.');
     }

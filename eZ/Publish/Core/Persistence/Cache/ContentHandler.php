@@ -422,6 +422,25 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     /**
      * {@inheritdoc}
      */
+    public function loadReverseRelationList(
+        int $destinationContentId,
+        int $offset = 0,
+        int $limit = -1,
+        ?int $type = null
+    ): array {
+        $this->logger->logCall(__METHOD__, ['content' => $destinationContentId, 'type' => $type]);
+
+        return $this->persistenceHandler->contentHandler()->loadReverseRelationList(
+            $destinationContentId,
+            $offset,
+            $limit,
+            $type
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function publish($contentId, $versionNo, MetadataUpdateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, ['content' => $contentId, 'version' => $versionNo, 'struct' => $struct]);

@@ -727,6 +727,18 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function listReverseRelations($contentId, int $offset = 0, int $limit = -1, $relationType = null): array
+    {
+        try {
+            return $this->innerGateway->listReverseRelations($contentId, $offset, $limit, $relationType);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Deletes the relation with the given $relationId.
      *
      * @param int $relationId

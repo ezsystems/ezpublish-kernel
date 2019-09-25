@@ -13,7 +13,9 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\DraftList\Item\ContentDraftListItem;
 use eZ\Publish\API\Repository\Values\Content\DraftList\Item\UnauthorizedContentDraftListItem;
-use eZ\Publish\API\Repository\Values\User\UserReference;
+use eZ\Publish\API\Repository\Values\Content\RelationList;
+use eZ\Publish\API\Repository\Values\Content\RelationList\Item\RelationListItem;
+use eZ\Publish\API\Repository\Values\Content\RelationList\Item\UnauthorizedRelationListItem;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\SPI\Persistence\Handler;
@@ -1993,6 +1995,47 @@ class ContentService implements ContentServiceInterface
         }
 
         return $returnArray;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadReverseRelationList(ContentInfo $contentInfo, int $offset = 0, int $limit = -1): RelationList
+    {
+        $list = new RelationList();
+        if (!$this->repository->getPermissionResolver()->canUser('content', 'reverserelatedlist', $contentInfo)) {
+            return $list;
+        }
+
+        $list->totalCount = $this->persistenceHandler->contentHandler()->countReverseRelations(
+            $contentInfo->id
+        );
+        if ($list->totalCount > 0) {
+            $spiRelationList = $this->persistenceHandler->contentHandler()->loadReverseRelationList(
+                $contentInfo->id,
+                $offset,
+                $limit
+            );
+            foreach ($spiRelationList as $spiRelation) {
+                $sourceContentInfo = $this->internalLoadContentInfo($spiRelation->sourceContentId);
+                if ($this->repository->getPermissionResolver()->canUser('content', 'read', $sourceContentInfo)) {
+                    $relation = $this->domainMapper->buildRelationDomainObject(
+                        $spiRelation,
+                        $sourceContentInfo,
+                        $contentInfo
+                    );
+                    $list->items[] = new RelationListItem($relation);
+                } else {
+                    $list->items[] = new UnauthorizedRelationListItem(
+                        'content',
+                        'read',
+                        ['contentId' => $sourceContentInfo->id]
+                    );
+                }
+            }
+        }
+
+        return $list;
     }
 
     /**

@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
@@ -542,6 +543,14 @@ class ContentService implements ContentServiceInterface
     public function loadReverseRelations(ContentInfo $contentInfo)
     {
         return $this->service->loadReverseRelations($contentInfo);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadReverseRelationList(ContentInfo $contentInfo, int $offset = 0, int $limit = -1): RelationList
+    {
+        return $this->service->loadReverseRelationList($contentInfo, $offset, $limit);
     }
 
     /**
