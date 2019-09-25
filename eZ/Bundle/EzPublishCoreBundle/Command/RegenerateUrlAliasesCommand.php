@@ -107,18 +107,7 @@ EOT
         $locationIds = $input->getOption('location-id');
 
         if (!empty($locationIds)) {
-            $locations = $this->repository->sudo(
-                function (Repository $repository) use ($locationIds) {
-                    return $repository->getLocationService()->loadLocationList($locationIds);
-                }
-            );
-
-            $locationIds = [];
-
-            foreach ($locations as $location) {
-                $locationIds[] = $location->id;
-            }
-
+            $locationIds = $this->getFilteredLocationList($locationIds);
             $locationsCount = count($locationIds);
         } else {
             $locationsCount = $this->repository->sudo(
@@ -147,24 +136,7 @@ EOT
             return;
         }
 
-        $output->writeln('Regenerating System URL aliases...');
-
-        $progressBar = $this->getProgressBar($locationsCount, $output);
-        $progressBar->start();
-
-        for ($offset = 0; $offset <= $locationsCount; $offset += $iterationCount) {
-            gc_disable();
-            if (!empty($locationIds)) {
-                $locations = $this->loadSpecificLocations($locationIds, $offset, $iterationCount);
-            } else {
-                $locations = $this->loadAllLocations($offset, $iterationCount);
-            }
-            $this->processLocations($locations, $progressBar);
-            gc_enable();
-        }
-        $progressBar->finish();
-        $output->writeln('');
-        $output->writeln('<info>Done.</info>');
+        $this->regenerateSystemUrlAliases($output, $locationsCount, $locationIds, $iterationCount);
 
         $output->writeln('<info>Cleaning up corrupted URL aliases...</info>');
         $corruptedAliasesCount = $this->repository->sudo(
@@ -256,9 +228,12 @@ EOT
     /**
      * @param int $offset
      * @param int $iterationCount
-     * @return mixed
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     *
+     * @throws \Exception
      */
-    private function loadAllLocations(int $offset, int $iterationCount)
+    private function loadAllLocations(int $offset, int $iterationCount): array
     {
         return $this->repository->sudo(
             function (Repository $repository) use ($offset, $iterationCount) {
@@ -268,12 +243,15 @@ EOT
     }
 
     /**
-     * @param array $locationIds
+     * @param int[] $locationIds
      * @param int $offset
      * @param int $iterationCount
-     * @return mixed
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     *
+     * @throws \Exception
      */
-    private function loadSpecificLocations(array $locationIds, int $offset, int $iterationCount)
+    private function loadSpecificLocations(array $locationIds, int $offset, int $iterationCount): array
     {
         $locationIds = array_slice($locationIds, $offset, $iterationCount);
 
@@ -282,5 +260,62 @@ EOT
                 return $repository->getLocationService()->loadLocationList($locationIds);
             }
         );
+    }
+
+    /**
+     * @param int[] $locationIds
+     *
+     * @return int[]
+     *
+     * @throws \Exception
+     */
+    private function getFilteredLocationList(array $locationIds): array
+    {
+        $locations = $this->repository->sudo(
+            function (Repository $repository) use ($locationIds) {
+                $locationService = $repository->getLocationService();
+
+                return $locationService->loadLocationList($locationIds);
+            }
+        );
+
+        return array_map(
+            function (Location $location) {
+                return $location->id;
+            },
+            $locations
+        );
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param int $locationsCount
+     * @param int[] $locationIds
+     * @param int $iterationCount
+     */
+    private function regenerateSystemUrlAliases(
+        OutputInterface $output,
+        int $locationsCount,
+        array $locationIds,
+        int $iterationCount
+    ): void {
+        $output->writeln('Regenerating System URL aliases...');
+
+        $progressBar = $this->getProgressBar($locationsCount, $output);
+        $progressBar->start();
+
+        for ($offset = 0; $offset <= $locationsCount; $offset += $iterationCount) {
+            gc_disable();
+            if (!empty($locationIds)) {
+                $locations = $this->loadSpecificLocations($locationIds, $offset, $iterationCount);
+            } else {
+                $locations = $this->loadAllLocations($offset, $iterationCount);
+            }
+            $this->processLocations($locations, $progressBar);
+            gc_enable();
+        }
+        $progressBar->finish();
+        $output->writeln('');
+        $output->writeln('<info>Done.</info>');
     }
 }
