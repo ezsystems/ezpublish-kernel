@@ -10,7 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\SiteAccess;
 
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
-final class SiteAccessMatcherRegistry
+final class SiteAccessMatcherRegistry implements SiteAccessMatcherRegistryInterface
 {
     /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher[] */
     private $matchers;
