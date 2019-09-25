@@ -72,8 +72,8 @@ class UserConverter implements Converter
 
         $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
 
-        $storageDef->dataInt3 = $fieldSettings[UserType::PASSWORD_TTL_SETTING];
-        $storageDef->dataInt4 = $fieldSettings[UserType::PASSWORD_TTL_WARNING_SETTING];
+        $storageDef->dataInt3 = $fieldSettings[UserType::PASSWORD_TTL_SETTING] ?? null;
+        $storageDef->dataInt4 = $fieldSettings[UserType::PASSWORD_TTL_WARNING_SETTING] ?? null;
     }
 
     /**
