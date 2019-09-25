@@ -7,7 +7,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Exception;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -108,20 +107,17 @@ EOT
         $locationIds = $input->getOption('location-id');
 
         if (!empty($locationIds)) {
-            $locationIds = $this->repository->sudo(
+            $locations = $this->repository->sudo(
                 function (Repository $repository) use ($locationIds) {
-                    $locationService = $repository->getLocationService();
-                    foreach ($locationIds as $index => $locationId) {
-                        try {
-                            $locationService->loadLocation($locationId);
-                        } catch (NotFoundException $e) {
-                            unset($locationIds[$index]);
-                        }
-                    }
-
-                    return array_values($locationIds);
+                    return $repository->getLocationService()->loadLocationList($locationIds);
                 }
             );
+
+            $locationIds = [];
+
+            foreach ($locations as $location) {
+                $locationIds[] = $location->id;
+            }
 
             $locationsCount = count($locationIds);
         } else {
@@ -260,9 +256,9 @@ EOT
     /**
      * @param int $offset
      * @param int $iterationCount
-     * @return array
+     * @return mixed
      */
-    private function loadAllLocations($offset, $iterationCount)
+    private function loadAllLocations(int $offset, int $iterationCount)
     {
         return $this->repository->sudo(
             function (Repository $repository) use ($offset, $iterationCount) {
@@ -272,23 +268,18 @@ EOT
     }
 
     /**
+     * @param array $locationIds
      * @param int $offset
      * @param int $iterationCount
-     * @return array
+     * @return mixed
      */
-    private function loadSpecificLocations($locationIds, $offset, $iterationCount)
+    private function loadSpecificLocations(array $locationIds, int $offset, int $iterationCount)
     {
         $locationIds = array_slice($locationIds, $offset, $iterationCount);
 
         return $this->repository->sudo(
             function (Repository $repository) use ($locationIds) {
-                $locations = [];
-                $locationService = $repository->getLocationService();
-                foreach ($locationIds as $locationId) {
-                    $locations[] = $locationService->loadLocation($locationId);
-                }
-
-                return $locations;
+                return $repository->getLocationService()->loadLocationList($locationIds);
             }
         );
     }
