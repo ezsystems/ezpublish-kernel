@@ -384,8 +384,8 @@ class Type extends FieldType
             }
 
             if ($value > 0) {
-                $passwordTTL = (int)$fieldSettings[self::PASSWORD_TTL_SETTING];
-                if ($value >= $passwordTTL) {
+                $passwordTTL = $fieldSettings[self::PASSWORD_TTL_SETTING] ?? null;
+                if ($value >= (int)$passwordTTL) {
                     return new ValidationError(
                         'Password expiration warning value should be lower then password expiration value',
                         null,
