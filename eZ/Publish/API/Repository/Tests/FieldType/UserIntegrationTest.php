@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\FieldType\User\Type;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -456,17 +459,7 @@ class UserIntegrationTest extends BaseIntegrationTest
         $contentType = $contentTypeService->loadContentType($content->contentInfo->contentTypeId);
         $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
 
-        $userFieldDefinition = null;
-        foreach ($contentTypeDraft->getFieldDefinitions() as $fieldDefinition) {
-            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
-                $userFieldDefinition = $fieldDefinition;
-                break;
-            }
-        }
-
-        if ($userFieldDefinition === null) {
-            $this->fail("'ezuser' field definition was not found");
-        }
+        $userFieldDefinition = $this->getUserFieldDefinition($contentType);
 
         $contentTypeService->removeFieldDefinition($contentTypeDraft, $userFieldDefinition);
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
@@ -495,5 +488,47 @@ class UserIntegrationTest extends BaseIntegrationTest
         $this->markTestIncomplete(
             'Currently cannot be tested since user can be properly created only through UserService'
         );
+    }
+
+    /**
+     * @see https://jira.ez.no/browse/EZP-30966
+     */
+    public function testUpdateFieldDefinitionWithIncompleteSettingsSchema()
+    {
+        $contentTypeService = $this->getRepository()->getContentTypeService();
+        $contentType = $this->testCreateContentType();
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+
+        $userFieldDefinition = $this->getUserFieldDefinition($contentType);
+        $userFieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $userFieldDefinitionUpdateStruct->fieldSettings = [
+            Type::PASSWORD_TTL_WARNING_SETTING => null,
+        ];
+
+        $contentTypeService->updateFieldDefinition($contentTypeDraft, $userFieldDefinition, $userFieldDefinitionUpdateStruct);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        $contentType = $contentTypeService->loadContentType($contentType->id);
+        $userFieldDefinition = $this->getUserFieldDefinition($contentType);
+
+        $this->assertNull($userFieldDefinition->fieldSettings[Type::PASSWORD_TTL_WARNING_SETTING]);
+    }
+
+    /**
+     * Finds ezuser field definition in given $contentType or mark test as failed if it doens't exists.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     */
+    private function getUserFieldDefinition(ContentType $contentType): FieldDefinition
+    {
+        foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
+            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
+                return $fieldDefinition;
+            }
+        }
+
+        $this->fail("'ezuser' field definition was not found");
     }
 }

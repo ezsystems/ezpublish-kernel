@@ -431,6 +431,11 @@ class UserTest extends FieldTypeTest
             [
                 [
                     UserType::PASSWORD_TTL_SETTING => 30,
+                ],
+            ],
+            [
+                [
+                    UserType::PASSWORD_TTL_SETTING => 30,
                     UserType::PASSWORD_TTL_WARNING_SETTING => null,
                 ],
             ],
@@ -469,6 +474,11 @@ class UserTest extends FieldTypeTest
     public function provideInValidFieldSettings(): array
     {
         return [
+            [
+                [
+                    UserType::PASSWORD_TTL_WARNING_SETTING => 30,
+                ],
+            ],
             [
                 [
                     UserType::PASSWORD_TTL_SETTING => null,
