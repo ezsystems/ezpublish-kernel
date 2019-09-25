@@ -198,9 +198,8 @@ EOT
                     continue;
                 }
 
-                $content = $contentList[$location->contentId];
                 $this->repository->sudo(
-                    function (Repository $repository) use ($location, $content) {
+                    function (Repository $repository) use ($location) {
                         $repository->getURLAliasService()->refreshSystemUrlAliasesForLocation(
                             $location
                         );
