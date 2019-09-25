@@ -74,6 +74,8 @@ Changes affecting version compatibility with former or future versions.
 
 * The "Setup" folder and Section have been removed from the initial (clean installation) data.
 
+* The "Design" Section has been removed from the initial (clean installation) data.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.

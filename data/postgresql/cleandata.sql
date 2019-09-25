@@ -1324,9 +1324,7 @@ INSERT INTO "eznode_assignment" ("contentobject_id", "contentobject_version", "f
 INSERT INTO "eznode_assignment" ("contentobject_id", "contentobject_version", "from_node_id", "id", "is_main", "op_code", "parent_node", "parent_remote_id", "remote_id", "sort_field", "sort_order", "priority", "is_hidden") VALUES (49,1,0,27,1,2,43,'','0',9,1,0,0);
 INSERT INTO "eznode_assignment" ("contentobject_id", "contentobject_version", "from_node_id", "id", "is_main", "op_code", "parent_node", "parent_remote_id", "remote_id", "sort_field", "sort_order", "priority", "is_hidden") VALUES (50,1,0,28,1,2,43,'','0',9,1,0,0);
 INSERT INTO "eznode_assignment" ("contentobject_id", "contentobject_version", "from_node_id", "id", "is_main", "op_code", "parent_node", "parent_remote_id", "remote_id", "sort_field", "sort_order", "priority", "is_hidden") VALUES (51,1,0,29,1,2,43,'','0',9,1,0,0);
-INSERT INTO "eznode_assignment" ("contentobject_id", "contentobject_version", "from_node_id", "id", "is_main", "op_code", "parent_node", "parent_remote_id", "remote_id", "sort_field", "sort_order", "priority", "is_hidden") VALUES (56,1,0,34,1,2,1,'','0',2,0,0,0);
 INSERT INTO "eznode_assignment" ("contentobject_id", "contentobject_version", "from_node_id", "id", "is_main", "op_code", "parent_node", "parent_remote_id", "remote_id", "sort_field", "sort_order", "priority", "is_hidden") VALUES (14,3,-1,38,1,2,13,'','0',1,1,0,0);
-INSERT INTO "eznode_assignment" ("contentobject_id", "contentobject_version", "from_node_id", "id", "is_main", "op_code", "parent_node", "parent_remote_id", "remote_id", "sort_field", "sort_order", "priority", "is_hidden") VALUES (54,2,-1,39,1,2,58,'','0',1,1,0,0);
 
 INSERT INTO "ezorder_status" ("id", "is_active", "name", "status_id") VALUES (1,1,'Pending',1);
 INSERT INTO "ezorder_status" ("id", "is_active", "name", "status_id") VALUES (2,1,'Processing',2);
@@ -1675,8 +1673,6 @@ INSERT INTO "ezsearch_object_word_link" ("contentclass_attribute_id", "contentcl
 INSERT INTO "ezsearch_object_word_link" ("contentclass_attribute_id", "contentclass_id", "contentobject_id", "frequency", "id", "identifier", "integer_value", "next_word_id", "placement", "prev_word_id", "published", "section_id", "word_id") VALUES (4,1,49,0,4691,'name',0,0,0,0,1080220197,3,962);
 INSERT INTO "ezsearch_object_word_link" ("contentclass_attribute_id", "contentclass_id", "contentobject_id", "frequency", "id", "identifier", "integer_value", "next_word_id", "placement", "prev_word_id", "published", "section_id", "word_id") VALUES (4,1,50,0,4692,'name',0,0,0,0,1080220220,3,963);
 INSERT INTO "ezsearch_object_word_link" ("contentclass_attribute_id", "contentclass_id", "contentobject_id", "frequency", "id", "identifier", "integer_value", "next_word_id", "placement", "prev_word_id", "published", "section_id", "word_id") VALUES (4,1,51,0,4693,'name',0,0,0,0,1080220233,3,964);
-INSERT INTO "ezsearch_object_word_link" ("contentclass_attribute_id", "contentclass_id", "contentobject_id", "frequency", "id", "identifier", "integer_value", "next_word_id", "placement", "prev_word_id", "published", "section_id", "word_id") VALUES (176,15,54,0,4697,'id',0,0,0,0,1082016652,5,967);
-INSERT INTO "ezsearch_object_word_link" ("contentclass_attribute_id", "contentclass_id", "contentobject_id", "frequency", "id", "identifier", "integer_value", "next_word_id", "placement", "prev_word_id", "published", "section_id", "word_id") VALUES (4,1,56,0,4698,'name',0,0,0,0,1103023132,5,968);
 
 INSERT INTO "ezsearch_word" ("id", "object_count", "word") VALUES (800,1,'welcome');
 INSERT INTO "ezsearch_word" ("id", "object_count", "word") VALUES (801,1,'to');
@@ -1851,7 +1847,6 @@ INSERT INTO "ezsearch_word" ("id", "object_count", "word") VALUES (968,1,'design
 INSERT INTO "ezsection" ("id", "identifier", "locale", "name", "navigation_part_identifier") VALUES (1,'standard','','Standard','ezcontentnavigationpart');
 INSERT INTO "ezsection" ("id", "identifier", "locale", "name", "navigation_part_identifier") VALUES (2,'users','','Users','ezusernavigationpart');
 INSERT INTO "ezsection" ("id", "identifier", "locale", "name", "navigation_part_identifier") VALUES (3,'media','','Media','ezmedianavigationpart');
-INSERT INTO "ezsection" ("id", "identifier", "locale", "name", "navigation_part_identifier") VALUES (5,'design','','Design','ezvisualnavigationpart');
 
 INSERT INTO "ezsite_data" ("name", "value") VALUES ('ezpublish-release','1');
 INSERT INTO "ezsite_data" ("name", "value") VALUES ('ezpublish-version','6.4.0');
