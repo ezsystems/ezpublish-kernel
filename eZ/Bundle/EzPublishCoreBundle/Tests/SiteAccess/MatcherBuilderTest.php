@@ -9,7 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\SiteAccess;
 
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder;
-use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistry;
+use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistryInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher as CoreMatcher;
@@ -23,7 +23,7 @@ class MatcherBuilderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->siteAccessMatcherRegistry = $this->createMock(SiteAccessMatcherRegistry::class);
+        $this->siteAccessMatcherRegistry = $this->createMock(SiteAccessMatcherRegistryInterface::class);
     }
 
     /**

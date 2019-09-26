@@ -16,10 +16,10 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
  */
 final class MatcherBuilder extends BaseMatcherBuilder
 {
-    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistry */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistryInterface */
     protected $siteAccessMatcherRegistry;
 
-    public function __construct(SiteAccessMatcherRegistry $siteAccessMatcherRegistry)
+    public function __construct(SiteAccessMatcherRegistryInterface $siteAccessMatcherRegistry)
     {
         $this->siteAccessMatcherRegistry = $siteAccessMatcherRegistry;
     }

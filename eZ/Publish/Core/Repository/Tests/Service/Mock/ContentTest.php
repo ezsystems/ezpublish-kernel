@@ -99,7 +99,6 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testLoadVersionInfoById()
     {
-        $repository = $this->getRepositoryMock();
         $contentServiceMock = $this->getPartlyMockedContentService(['loadContentInfo']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
@@ -149,7 +148,7 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testLoadVersionInfoByIdAndVersionNumber()
     {
-        $repository = $this->getRepositoryMock();
+        $permissionResolver = $this->getPermissionResolverMock();
         $contentServiceMock = $this->getPartlyMockedContentService(['loadContentInfo']);
         /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
@@ -176,7 +175,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(new SPIVersionInfo())
             ->willReturn($versionInfoMock);
 
-        $repository->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -231,7 +230,6 @@ class ContentTest extends BaseServiceMockTest
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
-        $repository = $this->getRepositoryMock();
         $contentServiceMock = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
@@ -275,7 +273,6 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testLoadVersionInfoByIdPublishedVersion()
     {
-        $repository = $this->getRepositoryMock();
         $contentServiceMock = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
@@ -321,7 +318,6 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testLoadVersionInfoByIdNonPublishedVersion()
     {
-        $repository = $this->getRepositoryMock();
         $contentServiceMock = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
@@ -396,7 +392,6 @@ class ContentTest extends BaseServiceMockTest
 
     public function testLoadContent()
     {
-        $repository = $this->getRepositoryMock();
         $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
         $versionInfo = $this->createMock(APIVersionInfo::class);
@@ -428,7 +423,6 @@ class ContentTest extends BaseServiceMockTest
 
     public function testLoadContentNonPublished()
     {
-        $repository = $this->getRepositoryMock();
         $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
         $versionInfo = $this->createMock(APIVersionInfo::class);
@@ -464,7 +458,6 @@ class ContentTest extends BaseServiceMockTest
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
-        $repository = $this->getRepositoryMock();
         $permissionResolver = $this->getPermissionResolverMock();
 
         $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
@@ -489,7 +482,6 @@ class ContentTest extends BaseServiceMockTest
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
-        $repository = $this->getRepositoryMock();
         $permissionResolver = $this->getPermissionResolverMock();
         $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
@@ -689,7 +681,6 @@ class ContentTest extends BaseServiceMockTest
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
-        $repository = $this->getRepositoryMock();
         $permissionResolver = $this->getPermissionResolverMock();
         $contentService = $this->getPartlyMockedContentService(['internalLoadContentInfo']);
         $contentInfo = $this->createMock(APIContentInfo::class);
@@ -3108,7 +3099,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
@@ -4606,7 +4596,6 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
         $this->expectExceptionMessage('Could not find \'Language\' with identifier \'Klingon\'');
 
-        $repositoryMock = $this->getRepositoryMock();
         $permissionResolverMock = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(['loadContent']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
@@ -4863,7 +4852,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
         $existingLanguageCodes = array_map(
             function (Field $field) {
