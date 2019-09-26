@@ -732,6 +732,40 @@ class Content extends RestController
     }
 
     /**
+     * @param int $contentId
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function hideContent(int $contentId): Values\NoContent
+    {
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
+
+        $this->repository->getContentService()->hideContent($contentInfo);
+
+        return new Values\NoContent();
+    }
+
+    /**
+     * @param int $contentId
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function revealContent(int $contentId): Values\NoContent
+    {
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
+
+        $this->repository->getContentService()->revealContent($contentInfo);
+
+        return new Values\NoContent();
+    }
+
+    /**
      * Creates and executes a content view.
      *
      * @deprecated Since platform 1.0. Forwards the request to the new /views location, but returns a 301.
