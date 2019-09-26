@@ -172,21 +172,6 @@ interface RoleService
     public function publishRoleDraft(RoleDraft $roleDraft);
 
     /**
-     * Updates the name of the role.
-     *
-     * @deprecated since 6.0, use {@see updateRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function updateRole(Role $role, RoleUpdateStruct $roleUpdateStruct);
-
-    /**
      * Adds a new policy to the role.
      *
      * @deprecated since 6.0, use {@see addPolicyByRoleDraft}

@@ -510,65 +510,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Updates the name of the role.
-     *
-     * @deprecated since 6.0, use {@see updateRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function updateRole(APIRole $role, RoleUpdateStruct $roleUpdateStruct)
-    {
-        if ($roleUpdateStruct->identifier !== null && !is_string($roleUpdateStruct->identifier)) {
-            throw new InvalidArgumentValue('identifier', $roleUpdateStruct->identifier, 'RoleUpdateStruct');
-        }
-
-        $loadedRole = $this->loadRole($role->id);
-
-        if (!$this->permissionResolver->canUser('role', 'update', $role)) {
-            throw new UnauthorizedException('role', 'update');
-        }
-
-        if ($roleUpdateStruct->identifier !== null) {
-            try {
-                $existingRole = $this->loadRoleByIdentifier($roleUpdateStruct->identifier);
-
-                if ($existingRole->id != $loadedRole->id) {
-                    throw new InvalidArgumentException(
-                        '$roleUpdateStruct',
-                        'Role with provided identifier already exists'
-                    );
-                }
-            } catch (APINotFoundException $e) {
-                // Do nothing
-            }
-        }
-
-        $this->repository->beginTransaction();
-        try {
-            $this->userHandler->updateRole(
-                new SPIRoleUpdateStruct(
-                    [
-                        'id' => $loadedRole->id,
-                        'identifier' => $roleUpdateStruct->identifier ?: $loadedRole->identifier,
-                    ]
-                )
-            );
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-
-        return $this->loadRole($loadedRole->id);
-    }
-
-    /**
      * Adds a new policy to the role.
      *
      * @deprecated since 6.0, use {@see addPolicyByRoleDraft}

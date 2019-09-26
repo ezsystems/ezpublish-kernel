@@ -787,40 +787,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updateRole() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::updateRole()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleUpdateStruct
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
-     */
-    public function testUpdateRole()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-        $roleCreate = $roleService->newRoleCreateStruct('newRole');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->publishRoleDraft($roleDraft);
-        $role = $roleService->loadRole($roleDraft->id);
-
-        $roleUpdate = $roleService->newRoleUpdateStruct();
-        $roleUpdate->identifier = 'updatedRole';
-
-        $updatedRole = $roleService->updateRole($role, $roleUpdate);
-        /* END: Use Case */
-
-        // Now verify that our change was saved
-        $role = $roleService->loadRoleByIdentifier('updatedRole');
-
-        $this->assertEquals($role->id, $updatedRole->id);
-    }
-
-    /**
      * Test for the updateRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::updateRoleDraft()
@@ -850,37 +816,6 @@ class RoleServiceTest extends BaseTest
         $role = $roleService->loadRoleDraft($updatedRole->id);
 
         $this->assertEquals($role->identifier, 'updatedRole');
-    }
-
-    /**
-     * Test for the updateRole() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::updateRole()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRole
-     */
-    public function testUpdateRoleThrowsInvalidArgumentException()
-    {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-        $roleCreate = $roleService->newRoleCreateStruct('newRole');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->publishRoleDraft($roleDraft);
-        $role = $roleService->loadRole($roleDraft->id);
-
-        $roleUpdate = $roleService->newRoleUpdateStruct();
-        $roleUpdate->identifier = 'Editor';
-
-        // This call will fail with an InvalidArgumentException, because Editor is a predefined role
-        $roleService->updateRole($role, $roleUpdate);
-        /* END: Use Case */
     }
 
     /**

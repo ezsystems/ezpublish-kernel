@@ -42,7 +42,6 @@ use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleDraftEvent;
-use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleEvent;
 use eZ\Publish\API\Repository\Events\Role\CreateRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\CreateRoleEvent;
 use eZ\Publish\API\Repository\Events\Role\DeletePolicyEvent;
@@ -56,7 +55,6 @@ use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\UpdatePolicyByRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\UpdatePolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\UpdateRoleDraftEvent;
-use eZ\Publish\API\Repository\Events\Role\UpdateRoleEvent;
 use eZ\Publish\SPI\Repository\Decorator\RoleServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -262,33 +260,6 @@ class RoleService extends RoleServiceDecorator
         $this->eventDispatcher->dispatch(
             new PublishRoleDraftEvent(...$eventData)
         );
-    }
-
-    public function updateRole(
-        Role $role,
-        RoleUpdateStruct $roleUpdateStruct
-    ) {
-        $eventData = [
-            $role,
-            $roleUpdateStruct,
-        ];
-
-        $beforeEvent = new BeforeUpdateRoleEvent(...$eventData);
-
-        $this->eventDispatcher->dispatch($beforeEvent);
-        if ($beforeEvent->isPropagationStopped()) {
-            return $beforeEvent->getUpdatedRole();
-        }
-
-        $updatedRole = $beforeEvent->hasUpdatedRole()
-            ? $beforeEvent->getUpdatedRole()
-            : $this->innerService->updateRole($role, $roleUpdateStruct);
-
-        $this->eventDispatcher->dispatch(
-            new UpdateRoleEvent($updatedRole, ...$eventData)
-        );
-
-        return $updatedRole;
     }
 
     public function addPolicy(

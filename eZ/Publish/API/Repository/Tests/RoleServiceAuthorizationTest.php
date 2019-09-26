@@ -160,40 +160,6 @@ class RoleServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the updateRole() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::updateRole()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRole
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
-     */
-    public function testUpdateRoleThrowsUnauthorizedException()
-    {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
-        $repository = $this->getRepository();
-        $roleService = $repository->getRoleService();
-        $permissionResolver = $repository->getPermissionResolver();
-
-        /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
-
-        $role = $this->createRole();
-
-        // Set "Editor" user as current user.
-        $permissionResolver->setCurrentUserReference($user);
-
-        // Get a new role update struct and set new values
-        $roleUpdateStruct = $roleService->newRoleUpdateStruct();
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleUpdateStruct->mainLanguageCode = 'eng-US';
-
-        // This call will fail with an "UnauthorizedException"
-        $roleService->updateRole($role, $roleUpdateStruct);
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the deleteRole() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::deleteRole()
