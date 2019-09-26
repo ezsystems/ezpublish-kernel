@@ -1240,6 +1240,26 @@ In this example
       <status>PUBLISHED</status>
     </Content>
 
+Hide Content
+``````````````
+:Resource: /content/objects/<ID>/hide
+:Method: POST
+:Description: The content is hidden.
+:Response: 204
+:Error Codes:
+    :404: content object was not found
+    :401: If the user is not authorized to hide this object
+
+Reveal Content
+``````````````
+:Resource: /content/objects/<ID>/reveal
+:Method: POST
+:Description: The content is revealed.
+:Response: 204
+:Error Codes:
+    :404: content object was not found
+    :401: If the user is not authorized to reveal this object
+
 Delete Content
 ``````````````
 :Resource: /content/objects/<ID>
