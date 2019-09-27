@@ -272,10 +272,10 @@ class RoleServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the deletePolicy() method.
+     * Test for the removePolicyByRoleDraft() method.
      *
-     * @see \eZ\Publish\API\Repository\RoleService::deletePolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testDeletePolicy
+     * @see \eZ\Publish\API\Repository\RoleService::removePolicyByRoleDraft()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testRemovePolicyByRoleDraft
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testDeletePolicyThrowsUnauthorizedException()
@@ -292,14 +292,15 @@ class RoleServiceAuthorizationTest extends BaseTest
         $role = $this->createRole();
 
         // Get first role policy
-        $policies = $role->getPolicies();
-        $policy = reset($policies);
+        $roleDraft = $roleService->createRoleDraft($role);
+        $policiesDrafts = $roleDraft->getPolicies();
+        $policyDraft = reset($policiesDrafts);
 
         // Set "Editor" user as current user.
         $permissionResolver->setCurrentUserReference($user);
 
         // This call will fail with an "UnauthorizedException"
-        $roleService->deletePolicy($policy);
+        $roleService->removePolicyByRoleDraft($roleDraft, $policyDraft);
         /* END: Use Case */
     }
 

@@ -1520,49 +1520,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the deletePolicy() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::deletePolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyByRoleDraft
-     */
-    public function testDeletePolicy()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-
-        // Instantiate a new role create
-        $roleCreate = $roleService->newRoleCreateStruct('newRole');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        // Create a new role with two policies
-        $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'create')
-        );
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'delete')
-        );
-        $roleService->publishRoleDraft($roleDraft);
-        $role = $roleService->loadRole($roleDraft->id);
-
-        // Delete all policies from the new role
-        foreach ($role->getPolicies() as $policy) {
-            $roleService->deletePolicy($policy);
-        }
-        /* END: Use Case */
-
-        $role = $roleService->loadRole($role->id);
-        $this->assertSame([], $role->getPolicies());
-    }
-
-    /**
      * Test for the addPolicyByRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::addPolicyByRoleDraft()

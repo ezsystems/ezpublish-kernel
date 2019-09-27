@@ -55,63 +55,6 @@ use eZ\Publish\Core\Event\RoleService;
 
 class RoleServiceTest extends AbstractServiceTest
 {
-    public function testDeletePolicyEvents()
-    {
-        $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeletePolicyEvent::class,
-            DeletePolicyEvent::class
-        );
-
-        $parameters = [
-            $this->createMock(Policy::class),
-        ];
-
-        $innerServiceMock = $this->createMock(RoleServiceInterface::class);
-
-        $service = new RoleService($innerServiceMock, $traceableEventDispatcher);
-        $service->deletePolicy(...$parameters);
-
-        $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
-
-        $this->assertSame($calledListeners, [
-            [BeforeDeletePolicyEvent::class, 0],
-            [DeletePolicyEvent::class, 0],
-        ]);
-        $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
-    }
-
-    public function testDeletePolicyStopPropagationInBeforeEvents()
-    {
-        $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeDeletePolicyEvent::class,
-            DeletePolicyEvent::class
-        );
-
-        $parameters = [
-            $this->createMock(Policy::class),
-        ];
-
-        $innerServiceMock = $this->createMock(RoleServiceInterface::class);
-
-        $traceableEventDispatcher->addListener(BeforeDeletePolicyEvent::class, function (BeforeDeletePolicyEvent $event) {
-            $event->stopPropagation();
-        }, 10);
-
-        $service = new RoleService($innerServiceMock, $traceableEventDispatcher);
-        $service->deletePolicy(...$parameters);
-
-        $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
-        $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
-
-        $this->assertSame($calledListeners, [
-            [BeforeDeletePolicyEvent::class, 10],
-        ]);
-        $this->assertSame($notCalledListeners, [
-            [BeforeDeletePolicyEvent::class, 0],
-            [DeletePolicyEvent::class, 0],
-        ]);
-    }
-
     public function testPublishRoleDraftEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(

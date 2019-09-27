@@ -260,24 +260,6 @@ class RoleService extends RoleServiceDecorator
         );
     }
 
-    public function deletePolicy(Policy $policy): void
-    {
-        $eventData = [$policy];
-
-        $beforeEvent = new BeforeDeletePolicyEvent(...$eventData);
-
-        $this->eventDispatcher->dispatch($beforeEvent);
-        if ($beforeEvent->isPropagationStopped()) {
-            return;
-        }
-
-        $this->innerService->deletePolicy($policy);
-
-        $this->eventDispatcher->dispatch(
-            new DeletePolicyEvent(...$eventData)
-        );
-    }
-
     public function updatePolicy(
         Policy $policy,
         PolicyUpdateStruct $policyUpdateStruct

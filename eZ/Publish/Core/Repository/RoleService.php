@@ -512,27 +512,6 @@ class RoleService implements RoleServiceInterface
     /**
      * Deletes a policy.
      *
-     * @deprecated since 6.0, use {@link removePolicyByRoleDraft()} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
-     */
-    public function deletePolicy(APIPolicy $policy)
-    {
-        $spiRole = $this->userHandler->loadRole($policy->roleId);
-        $role = $this->roleDomainMapper->buildDomainRoleObject($spiRole);
-
-        if (!$this->permissionResolver->canUser('role', 'update', $role)) {
-            throw new UnauthorizedException('role', 'update');
-        }
-
-        $this->internalDeletePolicy($policy);
-    }
-
-    /**
-     * Deletes a policy.
-     *
      * Used by {@link removePolicy()} and {@link deletePolicy()}
      *
      * @param APIPolicy $policy
