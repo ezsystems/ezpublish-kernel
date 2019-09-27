@@ -462,6 +462,18 @@ class Handler implements BaseContentHandler
     }
 
     /**
+     * Returns the number of versions with draft status created by the given $userId.
+     *
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function countDraftsForUser(int $userId): int
+    {
+        return $this->contentGateway->countVersionsForUser($userId, VersionInfo::STATUS_DRAFT);
+    }
+
+    /**
      * Returns all versions with draft status created by the given $userId.
      *
      * @param int $userId
@@ -477,6 +489,30 @@ class Handler implements BaseContentHandler
 
         $idVersionPairs = array_map(
             function ($row) {
+                return [
+                    'id' => $row['ezcontentobject_version_contentobject_id'],
+                    'version' => $row['ezcontentobject_version_version'],
+                ];
+            },
+            $rows
+        );
+        $nameRows = $this->contentGateway->loadVersionedNameData($idVersionPairs);
+
+        return $this->mapper->extractVersionInfoListFromRows($rows, $nameRows);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadDraftListForUser(int $userId, int $offset = 0, int $limit = -1): array
+    {
+        $rows = $this->contentGateway->loadVersionsForUser($userId, VersionInfo::STATUS_DRAFT, $offset, $limit);
+        if (empty($rows)) {
+            return [];
+        }
+
+        $idVersionPairs = array_map(
+            static function (array $row): array {
                 return [
                     'id' => $row['ezcontentobject_version_contentobject_id'],
                     'version' => $row['ezcontentobject_version_version'],

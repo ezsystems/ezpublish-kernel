@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -342,19 +343,41 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Counts drafts for a user.
+     *
+     * If no user is given the number of drafts for the authenticated user are returned
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User|null $user The user to load drafts for, if defined, otherwise drafts for current-user
+     *
+     * @return int The number of drafts ({@link VersionInfo}) owned by the given user
+     */
+    public function countContentDrafts(?User $user = null): int
+    {
+        return $this->service->countContentDrafts($user);
+    }
+
+    /**
      * Loads drafts for a user.
      *
-     * If no user is given the drafts for the authenticated user a returned
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
+     * If no user is given the drafts for the authenticated user are returned
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
      */
     public function loadContentDrafts(User $user = null)
     {
         return $this->service->loadContentDrafts($user);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadContentDraftList(?User $user = null, int $offset = 0, int $limit = -1): ContentDraftList
+    {
+        return $this->service->loadContentDraftList($user, $offset, $limit);
     }
 
     /**
