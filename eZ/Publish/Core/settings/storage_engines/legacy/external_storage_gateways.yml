@@ -46,4 +46,5 @@ services:
 
     ezpublish.fieldType.ezuser.storage_gateway:
         class: "%ezpublish.fieldType.ezuser.storage_gateway.class%"
-        arguments: ["@ezpublish.api.storage_engine.legacy.connection"]
+        arguments:
+            - '@ezpublish.api.storage_engine.legacy.connection'

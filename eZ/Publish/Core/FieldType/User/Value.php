@@ -77,6 +77,11 @@ class Value extends BaseValue
     public $maxLogin;
 
     /**
+     * @var string Write only property, takes a plain password for use when creating user or updating password.
+     */
+    public $plainPassword;
+
+    /**
      * @see \eZ\Publish\Core\FieldType\Value
      */
     public function __toString()

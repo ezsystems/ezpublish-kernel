@@ -9,7 +9,12 @@
 namespace eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\ParameterType;
+use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 use eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use PDO;
 
 /**
@@ -40,8 +45,9 @@ class DoctrineStorage extends Gateway
         'maxLogin' => null,
     ];
 
-    public function __construct(Connection $connection)
-    {
+    public function __construct(
+        Connection $connection
+    ) {
         $this->connection = $connection;
     }
 
@@ -238,5 +244,182 @@ class DoctrineStorage extends Gateway
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return isset($rows[0]) ? $this->convertColumnsToProperties($rows[0]) : [];
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     */
+    public function storeFieldData(VersionInfo $versionInfo, Field $field): bool
+    {
+        if ($field->value->externalData === null) {
+            //to avoid unnecessary modifications when provided field is empty (like missing data for languageCode)
+            return false;
+        }
+
+        try {
+            if (!empty($this->fetchUserData($versionInfo->contentInfo->id))) {
+                $this->updateFieldData($versionInfo, $field);
+            } else {
+                $this->insertFieldData($versionInfo, $field);
+            }
+        } catch (UniqueConstraintViolationException $e) {
+            throw new ForbiddenException(
+                'User "%login%" already exists',
+                [
+                    '%login%' => $field->value->externalData['login'] ?? '?',
+                ]
+            );
+        }
+
+        return true;
+    }
+
+    protected function insertFieldData(VersionInfo $versionInfo, Field $field): void
+    {
+        $insertQuery = $this->connection->createQueryBuilder();
+
+        $insertQuery
+            ->insert($this->connection->quoteIdentifier(self::USER_TABLE))
+            ->setValue('contentobject_id', ':userId')
+            ->setValue('login', ':login')
+            ->setValue('email', ':email')
+            ->setValue('password_hash', ':passwordHash')
+            ->setValue('password_hash_type', ':passwordHashType')
+            ->setValue('password_updated_at', ':passwordUpdatedAt')
+            ->setParameter(':userId', $versionInfo->contentInfo->id, ParameterType::INTEGER)
+            ->setParameter(':login', $field->value->externalData['login'], ParameterType::STRING)
+            ->setParameter(':email', $field->value->externalData['email'], ParameterType::STRING)
+            ->setParameter(':passwordHash', $field->value->externalData['passwordHash'], ParameterType::STRING)
+            ->setParameter(':passwordHashType', $field->value->externalData['passwordHashType'], ParameterType::INTEGER)
+            ->setParameter(':passwordUpdatedAt', $field->value->externalData['passwordUpdatedAt'])
+        ;
+
+        $insertQuery->execute();
+
+        $settingsQuery = $this->connection->createQueryBuilder();
+
+        $settingsQuery
+            ->insert($this->connection->quoteIdentifier(self::USER_SETTING_TABLE))
+            ->setValue('user_id', ':userId')
+            ->setValue('is_enabled', ':isEnabled')
+            ->setValue('max_login', ':maxLogin')
+            ->setParameter(':userId', $versionInfo->contentInfo->id, ParameterType::INTEGER)
+            ->setParameter(':isEnabled', $field->value->externalData['enabled'], ParameterType::INTEGER)
+            ->setParameter(':maxLogin', $field->value->externalData['maxLogin'], ParameterType::INTEGER);
+
+        $settingsQuery->execute();
+    }
+
+    protected function updateFieldData(VersionInfo $versionInfo, Field $field): void
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+
+        $queryBuilder
+            ->update($this->connection->quoteIdentifier(self::USER_TABLE))
+            ->set('login', ':login')
+            ->set('email', ':email')
+            ->set('password_hash', ':passwordHash')
+            ->set('password_hash_type', ':passwordHashType')
+            ->set('password_updated_at', ':passwordUpdatedAt')
+            ->setParameter(':login', $field->value->externalData['login'], ParameterType::STRING)
+            ->setParameter(':email', $field->value->externalData['email'], ParameterType::STRING)
+            ->setParameter(':passwordHash', $field->value->externalData['passwordHash'], ParameterType::STRING)
+            ->setParameter(':passwordHashType', $field->value->externalData['passwordHashType'], ParameterType::INTEGER)
+            ->setParameter(':passwordUpdatedAt', $field->value->externalData['passwordUpdatedAt'])
+            ->where(
+                $queryBuilder->expr()->eq(
+                    $this->connection->quoteIdentifier('contentobject_id'),
+                    ':userId'
+                )
+            )
+            ->setParameter(':userId', $versionInfo->contentInfo->id, ParameterType::INTEGER)
+        ;
+
+        $queryBuilder->execute();
+
+        $settingsQuery = $this->connection->createQueryBuilder();
+
+        $settingsQuery
+            ->update($this->connection->quoteIdentifier(self::USER_SETTING_TABLE))
+            ->set('is_enabled', ':isEnabled')
+            ->set('max_login', ':maxLogin')
+            ->setParameter(':isEnabled', $field->value->externalData['enabled'], ParameterType::INTEGER)
+            ->setParameter(':maxLogin', $field->value->externalData['maxLogin'], ParameterType::INTEGER)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    $this->connection->quoteIdentifier('user_id'),
+                    ':userId'
+                )
+            )
+            ->setParameter(':userId', $versionInfo->contentInfo->id, ParameterType::INTEGER);
+
+        $settingsQuery->execute();
+    }
+
+    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds): bool
+    {
+        // Delete external storage only, when when deleting last relation to fieldType
+        // to avoid removing it when deleting draft, translation or by exceeding archive limit
+        if (!$this->isLastRelationToFieldType($fieldIds)) {
+            return false;
+        }
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete($this->connection->quoteIdentifier(self::USER_SETTING_TABLE))
+            ->where(
+                $query->expr()->eq(
+                    $this->connection->quoteIdentifier('user_id'),
+                    ':userId'
+                )
+            )
+            ->setParameter(':userId', $versionInfo->contentInfo->id, ParameterType::INTEGER);
+
+        $query->execute();
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete($this->connection->quoteIdentifier(self::USER_TABLE))
+            ->where(
+                $query->expr()->eq(
+                    $this->connection->quoteIdentifier('contentobject_id'),
+                    ':userId'
+                )
+            )
+            ->setParameter(':userId', $versionInfo->contentInfo->id, ParameterType::INTEGER);
+
+        $query->execute();
+
+        return true;
+    }
+
+    /**
+     * @param int[] $fieldIds
+     *
+     * @return bool
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    protected function isLastRelationToFieldType(array $fieldIds): bool
+    {
+        $countExpr = $this->connection->getDatabasePlatform()->getCountExpression('id');
+
+        $checkQuery = $this->connection->createQueryBuilder();
+        $checkQuery
+            ->select($countExpr)
+            ->from('ezcontentobject_attribute')
+            ->where(
+                $checkQuery->expr()->in(
+                    $this->connection->quoteIdentifier('id'),
+                    ':fieldIds'
+                )
+            )
+            ->setParameter(':fieldIds', $fieldIds, Connection::PARAM_INT_ARRAY)
+            ->groupBy('id')
+            ->having($countExpr . ' > 1');
+
+        $numRows = (int)$checkQuery->execute()->fetchColumn();
+
+        return $numRows === 0;
     }
 }

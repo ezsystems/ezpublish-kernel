@@ -8,24 +8,28 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\SPI\Persistence;
+use eZ\Publish\SPI\Persistence\User\Role;
 
 /**
  * Test case for UserHandlerTest.
  */
 class UserHandlerTest extends TestCase
 {
-    protected function getUserHandler()
+    private const TEST_USER_ID = 42;
+
+    protected function getUserHandler(User\Gateway $userGateway = null)
     {
         $dbHandler = $this->getDatabaseHandler();
 
         return new User\Handler(
-            new User\Gateway\DoctrineDatabase($dbHandler),
+            $userGateway ?? new User\Gateway\DoctrineDatabase($dbHandler),
             new User\Role\Gateway\DoctrineDatabase($dbHandler),
             new User\Mapper(),
             new LimitationConverter([new ObjectStateLimitationHandler($dbHandler)])
@@ -35,13 +39,14 @@ class UserHandlerTest extends TestCase
     protected function getValidUser()
     {
         $user = new Persistence\User();
-        $user->id = 42;
+        $user->id = self::TEST_USER_ID;
         $user->login = 'kore';
         $user->email = 'kore@example.org';
         $user->passwordHash = '1234567890';
         $user->hashAlgorithm = 2;
         $user->isEnabled = true;
         $user->maxLogin = 23;
+        $user->passwordUpdatedAt = 1569229200;
 
         return $user;
     }
@@ -49,7 +54,7 @@ class UserHandlerTest extends TestCase
     protected function getValidUserToken($time = null)
     {
         $userToken = new Persistence\User\UserTokenUpdateStruct();
-        $userToken->userId = 42;
+        $userToken->userId = self::TEST_USER_ID;
         $userToken->hashKey = md5('hash');
         $userToken->time = $time ?? (new \DateTime())->add(new \DateInterval('P1D'))->getTimestamp();
 
@@ -60,46 +65,39 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
+        $this->expectException(NotImplementedException::class);
         $handler->create($this->getValidUser());
-        $this->assertQueryResult(
-            [[1]],
-            $this->handler->createSelectQuery()->select('COUNT( * )')->from('ezuser'),
-            'Expected one user to be created.'
-        );
-
-        $this->assertQueryResult(
-            [[1]],
-            $this->handler->createSelectQuery()->select('COUNT( * )')->from('ezuser_setting'),
-            'Expected one user setting to be created.'
-        );
     }
 
-    public function testCreateDuplicateUser()
+    protected function getGatewayReturnValue(): array
     {
-        $this->expectException(\Doctrine\DBAL\DBALException::class);
-
-        $handler = $this->getUserHandler();
-
-        $handler->create($user = $this->getValidUser());
-        $handler->create($user);
-    }
-
-    public function testInsertIncompleteUser()
-    {
-        $this->expectException(\Doctrine\DBAL\DBALException::class);
-
-        $handler = $this->getUserHandler();
-
-        $user = new Persistence\User();
-        $user->id = 42;
-
-        $handler->create($user);
+        return [
+            [
+                'contentobject_id' => self::TEST_USER_ID,
+                'login' => 'kore',
+                'email' => 'kore@example.org',
+                'password_hash' => '1234567890',
+                'password_hash_type' => 2,
+                'is_enabled' => true,
+                'max_login' => 23,
+                'password_updated_at' => 1569229200,
+            ],
+        ];
     }
 
     public function testLoadUser()
     {
-        $handler = $this->getUserHandler();
-        $handler->create($user = $this->getValidUser());
+        $gatewayMock = $this
+            ->createMock(User\Gateway\DoctrineDatabase::class);
+
+        $gatewayMock
+            ->method('load')
+            ->with(self::TEST_USER_ID)
+            ->willReturn($this->getGatewayReturnValue());
+
+        $handler = $this->getUserHandler($gatewayMock);
+
+        $user = $this->getValidUser();
 
         $this->assertEquals(
             $user,
@@ -110,16 +108,31 @@ class UserHandlerTest extends TestCase
     public function testLoadUnknownUser()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $gatewayMock = $this
+            ->createMock(User\Gateway\DoctrineDatabase::class);
 
-        $handler = $this->getUserHandler();
+        $gatewayMock
+            ->method('load')
+            ->with(1337)
+            ->willReturn([]);
+
+        $handler = $this->getUserHandler($gatewayMock);
 
         $handler->load(1337);
     }
 
     public function testLoadUserByLogin()
     {
-        $handler = $this->getUserHandler();
-        $handler->create($user = $this->getValidUser());
+        $gatewayMock = $this
+            ->createMock(User\Gateway\DoctrineDatabase::class);
+
+        $gatewayMock
+            ->method('loadByLogin')
+            ->with('kore')
+            ->willReturn($this->getGatewayReturnValue());
+
+        $handler = $this->getUserHandler($gatewayMock);
+        $user = $this->getValidUser();
 
         $loadedUser = $handler->loadByLogin($user->login);
         $this->assertEquals(
@@ -133,15 +146,23 @@ class UserHandlerTest extends TestCase
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
 
         $handler = $this->getUserHandler();
-        $handler->create($user = $this->getValidUser());
+        $user = $this->getValidUser();
 
         $handler->loadByLogin($user->email);
     }
 
     public function testLoadUserByEmail()
     {
-        $handler = $this->getUserHandler();
-        $handler->create($user = $this->getValidUser());
+        $gatewayMock = $this
+            ->createMock(User\Gateway\DoctrineDatabase::class);
+
+        $gatewayMock
+            ->method('loadByEmail')
+            ->with('kore@example.org')
+            ->willReturn($this->getGatewayReturnValue());
+
+        $handler = $this->getUserHandler($gatewayMock);
+        $user = $this->getValidUser();
 
         $users = $handler->loadByEmail($user->email);
         $this->assertEquals(
@@ -155,7 +176,6 @@ class UserHandlerTest extends TestCase
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
 
         $handler = $this->getUserHandler();
-        $handler->create($user = $this->getValidUser());
         $handler->updateUserToken($this->getValidUserToken());
 
         $handler->loadUserByToken('asd');
@@ -163,9 +183,18 @@ class UserHandlerTest extends TestCase
 
     public function testLoadUserByToken()
     {
-        $handler = $this->getUserHandler();
-        $handler->create($user = $this->getValidUser());
-        $handler->updateUserToken($userToken = $this->getValidUserToken());
+        $gatewayMock = $this
+            ->createMock(User\Gateway\DoctrineDatabase::class);
+
+        $userToken = $this->getValidUserToken();
+        $gatewayMock
+            ->method('loadUserByToken')
+            ->with($userToken->hashKey)
+            ->willReturn($this->getGatewayReturnValue());
+
+        $handler = $this->getUserHandler($gatewayMock);
+        $user = $this->getValidUser();
+        $handler->updateUserToken($userToken);
 
         $loadedUser = $handler->loadUserByToken($userToken->hashKey);
         $this->assertEquals(
@@ -178,18 +207,18 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $handler->updateUserToken($userToken = $this->getValidUserToken(1234567890));
+        $handler->updateUserToken($this->getValidUserToken(1234567890));
 
         $this->assertQueryResult(
-            [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, 42]],
+            [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, self::TEST_USER_ID]],
             $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
             'Expected user data to be updated.'
         );
 
-        $handler->updateUserToken($userToken = $this->getValidUserToken(2234567890));
+        $handler->updateUserToken($this->getValidUserToken(2234567890));
 
         $this->assertQueryResult(
-            [['0800fc577294c34e0b28ad2839435945', 1, 2234567890, 42]],
+            [['0800fc577294c34e0b28ad2839435945', 1, 2234567890, self::TEST_USER_ID]],
             $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
             'Expected user token data to be updated.'
         );
@@ -202,7 +231,7 @@ class UserHandlerTest extends TestCase
         $handler->updateUserToken($userToken = $this->getValidUserToken(1234567890));
 
         $this->assertQueryResult(
-            [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, 42]],
+            [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, self::TEST_USER_ID]],
             $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
             'Expected user data to be updated.'
         );
@@ -210,40 +239,9 @@ class UserHandlerTest extends TestCase
         $handler->expireUserToken($userToken->hashKey);
 
         $this->assertQueryResult(
-            [['0800fc577294c34e0b28ad2839435945', 1, 0, 42]],
+            [['0800fc577294c34e0b28ad2839435945', 1, 0, self::TEST_USER_ID]],
             $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
             'Expected user token to be expired.'
-        );
-    }
-
-    public function testCreateAndDeleteUser()
-    {
-        $handler = $this->getUserHandler();
-
-        $handler->create($user = $this->getValidUser());
-        $this->assertQueryResult(
-            [[1]],
-            $this->handler->createSelectQuery()->select('COUNT( * )')->from('ezuser'),
-            'Expected one user to be created.'
-        );
-
-        $this->assertQueryResult(
-            [[1]],
-            $this->handler->createSelectQuery()->select('COUNT( * )')->from('ezuser_setting'),
-            'Expected one user setting to be created.'
-        );
-
-        $handler->delete($user->id);
-        $this->assertQueryResult(
-            [[0]],
-            $this->handler->createSelectQuery()->select('COUNT( * )')->from('ezuser'),
-            'Expected one user to be removed.'
-        );
-
-        $this->assertQueryResult(
-            [[0]],
-            $this->handler->createSelectQuery()->select('COUNT( * )')->from('ezuser_setting'),
-            'Expected one user setting to be removed.'
         );
     }
 
@@ -251,55 +249,28 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
+        $this->expectException(NotImplementedException::class);
         $handler->delete(1337);
-        $this->assertQueryResult(
-            [[0]],
-            $this->handler->createSelectQuery()->select('COUNT( * )')->from('ezuser'),
-            'Expected no existing user.'
-        );
     }
 
     public function testUpdateUser()
     {
         $handler = $this->getUserHandler();
-
-        $handler->create($user = $this->getValidUser());
+        $user = $this->getValidUser();
 
         $user->login = 'New_lögin';
+        $this->expectException(NotImplementedException::class);
         $handler->update($user);
-
-        $this->assertQueryResult(
-            [[42, 'kore@example.org', 'New_lögin', 1234567890, '2', null]],
-            $this->handler->createSelectQuery()->select('*')->from('ezuser'),
-            'Expected user data to be updated.'
-        );
     }
 
     public function testUpdateUserSettings()
     {
         $handler = $this->getUserHandler();
-
-        $handler->create($user = $this->getValidUser());
+        $user = $this->getValidUser();
 
         $user->maxLogin = 42;
+        $this->expectException(NotImplementedException::class);
         $handler->update($user);
-
-        $this->assertQueryResult(
-            [[1, 42, 42]],
-            $this->handler->createSelectQuery()->select('*')->from('ezuser_setting'),
-            'Expected user data to be updated.'
-        );
-    }
-
-    public function testSilentlyUpdateNotExistingUser()
-    {
-        $handler = $this->getUserHandler();
-        $handler->update($this->getValidUser());
-        $this->assertQueryResult(
-            [[0]],
-            $this->handler->createSelectQuery()->select('COUNT( * )')->from('ezuser'),
-            'Expected no existing user.'
-        );
     }
 
     public function testCreateNewRoleWithoutPolicies()
@@ -492,12 +463,7 @@ class UserHandlerTest extends TestCase
             $handler->loadRoles()
         );
 
-        $createStruct = new Persistence\User\RoleCreateStruct();
-        $createStruct->identifier = 'Test';
-
-        $roleDraft = $handler->createRole($createStruct);
-        $handler->publishRoleDraft($roleDraft->id);
-        $role = $handler->loadRole($roleDraft->id);
+        $role = $this->createTestRole($handler);
 
         $this->assertEquals(
             [$role],
@@ -509,12 +475,7 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $createStruct = new Persistence\User\RoleCreateStruct();
-        $createStruct->identifier = 'Test';
-
-        $roleDraft = $handler->createRole($createStruct);
-        $handler->publishRoleDraft($roleDraft->id);
-        $role = $handler->loadRole($roleDraft->id);
+        $role = $this->createTestRole($handler);
 
         $update = new Persistence\User\RoleUpdateStruct();
         $update->id = $role->id;
@@ -588,12 +549,7 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $createStruct = new Persistence\User\RoleCreateStruct();
-        $createStruct->identifier = 'Test';
-
-        $roleDraft = $handler->createRole($createStruct);
-        $handler->publishRoleDraft($roleDraft->id);
-        $role = $handler->loadRole($roleDraft->id);
+        $role = $this->createTestRole($handler);
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
@@ -612,12 +568,7 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $createStruct = new Persistence\User\RoleCreateStruct();
-        $createStruct->identifier = 'Test';
-
-        $roleDraft = $handler->createRole($createStruct);
-        $handler->publishRoleDraft($roleDraft->id);
-        $role = $handler->loadRole($roleDraft->id);
+        $role = $this->createTestRole($handler);
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
@@ -630,24 +581,7 @@ class UserHandlerTest extends TestCase
 
     public function testAddPolicyLimitations()
     {
-        $handler = $this->getUserHandler();
-
-        $createStruct = new Persistence\User\RoleCreateStruct();
-        $createStruct->identifier = 'Test';
-
-        $roleDraft = $handler->createRole($createStruct);
-        $handler->publishRoleDraft($roleDraft->id);
-        $role = $handler->loadRole($roleDraft->id);
-
-        $policy = new Persistence\User\Policy();
-        $policy->module = 'foo';
-        $policy->function = 'bar';
-        $policy->limitations = [
-            'Subtree' => ['/1', '/1/2'],
-            'Foo' => ['Bar'],
-        ];
-
-        $handler->addPolicy($role->id, $policy);
+        $this->createTestRoleWithTestPolicy();
 
         $this->assertQueryResult(
             [
@@ -661,24 +595,7 @@ class UserHandlerTest extends TestCase
 
     public function testAddPolicyLimitationValues()
     {
-        $handler = $this->getUserHandler();
-
-        $createStruct = new Persistence\User\RoleCreateStruct();
-        $createStruct->identifier = 'Test';
-
-        $roleDraft = $handler->createRole($createStruct);
-        $handler->publishRoleDraft($roleDraft->id);
-        $role = $handler->loadRole($roleDraft->id);
-
-        $policy = new Persistence\User\Policy();
-        $policy->module = 'foo';
-        $policy->function = 'bar';
-        $policy->limitations = [
-            'Subtree' => ['/1', '/1/2'],
-            'Foo' => ['Bar'],
-        ];
-
-        $handler->addPolicy($role->id, $policy);
+        $this->createTestRoleWithTestPolicy();
 
         $this->assertQueryResult(
             [
@@ -811,13 +728,13 @@ class UserHandlerTest extends TestCase
         $roleDraft = $this->createRole();
         $handler->publishRoleDraft($roleDraft->id);
         $role = $handler->loadRole($roleDraft->id);
-        $handler->create($user = $this->getValidUser());
+        $user = $this->getValidUser();
 
         $handler->assignRole($user->id, $role->id, []);
 
         $this->assertQueryResult(
             [
-                [1, 42, 1, null, null],
+                [1, self::TEST_USER_ID, 1, null, null],
             ],
             $this->handler->createSelectQuery()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
             'Expected a new user policy association.'
@@ -831,7 +748,7 @@ class UserHandlerTest extends TestCase
         $roleDraft = $this->createRole();
         $handler->publishRoleDraft($roleDraft->id);
         $role = $handler->loadRole($roleDraft->id);
-        $handler->create($user = $this->getValidUser());
+        $user = $this->getValidUser();
 
         $handler->assignRole(
             $user->id,
@@ -843,7 +760,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [
-                [1, 42, 1, 'Subtree', '/1'],
+                [1, self::TEST_USER_ID, 1, 'Subtree', '/1'],
             ],
             $this->handler->createSelectQuery()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
             'Expected a new user policy association.'
@@ -857,7 +774,7 @@ class UserHandlerTest extends TestCase
         $roleDraft = $this->createRole();
         $handler->publishRoleDraft($roleDraft->id);
         $role = $handler->loadRole($roleDraft->id);
-        $handler->create($user = $this->getValidUser());
+        $user = $this->getValidUser();
 
         $handler->assignRole(
             $user->id,
@@ -870,9 +787,9 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [
-                [1, 42, 1, 'Subtree', '/1'],
-                [2, 42, 1, 'Subtree', '/1/2'],
-                [3, 42, 1, 'Foo', 'Bar'],
+                [1, self::TEST_USER_ID, 1, 'Subtree', '/1'],
+                [2, self::TEST_USER_ID, 1, 'Subtree', '/1/2'],
+                [3, self::TEST_USER_ID, 1, 'Foo', 'Bar'],
             ],
             $this->handler->createSelectQuery()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
             'Expected a new user policy association.'
@@ -886,7 +803,7 @@ class UserHandlerTest extends TestCase
         $roleDraft = $this->createRole();
         $handler->publishRoleDraft($roleDraft->id);
         $role = $handler->loadRole($roleDraft->id);
-        $handler->create($user = $this->getValidUser());
+        $user = $this->getValidUser();
 
         $handler->assignRole(
             $user->id,
@@ -1120,7 +1037,7 @@ class UserHandlerTest extends TestCase
         }
 
         $draft = $handler->createRoleDraft($originalRoleId);
-        $loadedDraft = $handler->loadRole($draft->id, Persistence\User\Role::STATUS_DRAFT);
+        $loadedDraft = $handler->loadRole($draft->id, Role::STATUS_DRAFT);
         self::assertSame($loadedDraft->originalId, $originalRoleId);
         self::assertEquals($draft, $loadedDraft);
         foreach ($loadedDraft->policies as $policy) {
@@ -1134,7 +1051,7 @@ class UserHandlerTest extends TestCase
         $policyDraft = $handler->addPolicyByRoleDraft($loadedDraft->id, $policy);
 
         // Test again by reloading the draft.
-        $loadedDraft = $handler->loadRole($draft->id, Persistence\User\Role::STATUS_DRAFT);
+        $loadedDraft = $handler->loadRole($draft->id, Role::STATUS_DRAFT);
         foreach ($loadedDraft->policies as $policy) {
             if ($policy->id != $policyDraft->id) {
                 continue;
@@ -1143,5 +1060,39 @@ class UserHandlerTest extends TestCase
             self::assertNotNull($policy->originalId);
             self::assertSame($policy->id, $policy->originalId);
         }
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function createTestRole(User\Handler $handler): Role
+    {
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
+
+        $roleDraft = $handler->createRole($createStruct);
+        $handler->publishRoleDraft($roleDraft->id);
+
+        return $handler->loadRole($roleDraft->id);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function createTestRoleWithTestPolicy(): void
+    {
+        $handler = $this->getUserHandler();
+
+        $role = $this->createTestRole($handler);
+
+        $policy = new Persistence\User\Policy();
+        $policy->module = 'foo';
+        $policy->function = 'bar';
+        $policy->limitations = [
+            'Subtree' => ['/1', '/1/2'],
+            'Foo' => ['Bar'],
+        ];
+
+        $handler->addPolicy($role->id, $policy);
     }
 }

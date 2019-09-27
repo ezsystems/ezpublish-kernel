@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
@@ -59,6 +60,7 @@ class RepositoryFactory implements ContainerAwareInterface
      * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface $passwordHashGenerator
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
@@ -67,7 +69,8 @@ class RepositoryFactory implements ContainerAwareInterface
         SearchHandler $searchHandler,
         BackgroundIndexer $backgroundIndexer,
         RelationProcessor $relationProcessor,
-        FieldTypeRegistry $fieldTypeRegistry
+        FieldTypeRegistry $fieldTypeRegistry,
+        PasswordHashGeneratorInterface $passwordHashGenerator
     ) {
         $repository = new $this->repositoryClass(
             $persistenceHandler,
@@ -75,6 +78,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $backgroundIndexer,
             $relationProcessor,
             $fieldTypeRegistry,
+            $passwordHashGenerator,
             [
                 'role' => [
                     'limitationTypes' => $this->roleLimitations,

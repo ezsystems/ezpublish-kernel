@@ -56,3 +56,7 @@ services:
             $mappings: '$fieldtypes.ezimageasset.mappings$'
 
     eZ\Publish\Core\FieldType\FieldTypeRegistry: ~
+
+    eZ\Publish\Core\Repository\User\PasswordHashGenerator: ~
+
+    eZ\Publish\Core\Repository\User\PasswordValidator: ~

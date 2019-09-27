@@ -9,11 +9,16 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use DateTimeImmutable;
-use eZ\Publish\Core\Persistence\Cache\UserHandler;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Persistence\Cache\UserHandler;
+use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
+use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
+use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 
 /**
  * @group fieldType
@@ -30,12 +35,15 @@ class UserTest extends FieldTypeTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\Core\FieldType\User\Type
      */
-    protected function createFieldTypeUnderTest()
+    protected function createFieldTypeUnderTest(): UserType
     {
-        $userHandler = $this->createMock(UserHandler::class);
-        $fieldType = new UserType($userHandler);
+        $fieldType = new UserType(
+            $this->createMock(UserHandler::class),
+            $this->createMock(PasswordHashGeneratorInterface::class),
+            $this->createMock(PasswordValidatorInterface::class)
+        );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -267,6 +275,7 @@ class UserTest extends FieldTypeTest
                         'passwordUpdatedAt' => $passwordUpdatedAt,
                         'enabled' => true,
                         'maxLogin' => 1000,
+                        'plainPassword' => null,
                     ]
                 ),
                 [
@@ -340,42 +349,109 @@ class UserTest extends FieldTypeTest
     }
 
     /**
-     * Provides data sets with validator configuration and/or field settings and
-     * field value which are considered valid by the {@link validate()} method.
+     * Returns empty data set. Validation tests were moved to testValidate method.
      *
      * @return array
      */
-    public function provideValidDataForValidate()
+    public function provideValidDataForValidate(): array
     {
-        return [
-            [
-                [],
-                new UserValue([
-                    'hasStoredLogin' => true,
-                    'contentId' => 23,
-                    'login' => 'sindelfingen',
-                    'email' => 'sindelfingen@example.com',
-                    'passwordHash' => '1234567890abcdef',
-                    'passwordHashType' => 'md5',
-                    'enabled' => true,
-                    'maxLogin' => 1000,
-                ]),
-            ],
-        ];
+        return [];
     }
 
     /**
-     * Provides data sets with validator configuration and/or field settings,
-     * field value and corresponding validation errors returned by
-     * the {@link validate()} method.
+     * Returns empty data set. Validation tests were moved to testValidate method.
+     *
+     * @see testValidate
+     * @see providerForTestValidate
      *
      * @return array
      */
-    public function provideInvalidDataForValidate()
+    public function provideInvalidDataForValidate(): array
+    {
+        return [];
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\User\Type::validate
+     *
+     * @dataProvider providerForTestValidate
+     *
+     * @param \eZ\Publish\Core\FieldType\User\Value $userValue
+     * @param array $expectedValidationErrors
+     * @param null|callable $loadByLoginBehaviorCallback
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testValidate(
+        UserValue $userValue,
+        array $expectedValidationErrors,
+        ?callable $loadByLoginBehaviorCallback
+    ): void {
+        $userHandlerMock = $this->createMock(UserHandler::class);
+
+        if (null !== $loadByLoginBehaviorCallback) {
+            $loadByLoginBehaviorCallback(
+                $userHandlerMock
+                    ->expects($this->once())
+                    ->method('loadByLogin')
+                    ->with($userValue->login)
+            );
+        }
+
+        $userType = new UserType(
+            $userHandlerMock,
+            $this->createMock(PasswordHashGeneratorInterface::class),
+            $this->createMock(PasswordValidatorInterface::class)
+        );
+
+        $fieldDefinitionMock = $this->createMock(FieldDefinition::class);
+
+        $validationErrors = $userType->validate($fieldDefinitionMock, $userValue);
+
+        self::assertEquals($expectedValidationErrors, $validationErrors);
+    }
+
+    /**
+     * Data provider for testValidate test.
+     *
+     * @see testValidate
+     *
+     * @return array data sets for testValidate method (<code>$userValue, $expectedValidationErrors, $loadByLoginBehaviorCallback</code>)
+     */
+    public function providerForTestValidate(): array
     {
         return [
             [
-                [],
+                new UserValue(
+                    [
+                        'hasStoredLogin' => false,
+                        'contentId' => 23,
+                        'login' => 'user',
+                        'email' => 'invalid',
+                        'passwordHash' => '1234567890abcdef',
+                        'passwordHashType' => 'md5',
+                        'enabled' => true,
+                        'maxLogin' => 1000,
+                        'plainPassword' => 'testPassword',
+                    ]
+                ),
+                [
+                    new ValidationError(
+                        "The given e-mail '%email%' is invalid",
+                        null,
+                        [
+                            '%email%' => 'invalid',
+                        ],
+                        'email'
+                    ),
+                ],
+                function (InvocationMocker $loadByLoginInvocationMocker) {
+                    $loadByLoginInvocationMocker->willThrowException(
+                        new NotFoundException('user', 'user')
+                    );
+                },
+            ],
+            [
                 new UserValue([
                     'hasStoredLogin' => false,
                     'contentId' => 23,
@@ -385,6 +461,7 @@ class UserTest extends FieldTypeTest
                     'passwordHashType' => 'md5',
                     'enabled' => true,
                     'maxLogin' => 1000,
+                    'plainPassword' => 'testPassword',
                 ]),
                 [
                     new ValidationError(
@@ -396,6 +473,25 @@ class UserTest extends FieldTypeTest
                         'username'
                     ),
                 ],
+                function (InvocationMocker $loadByLoginInvocationMocker) {
+                    $loadByLoginInvocationMocker->willReturn(
+                        $this->createMock(UserValue::class)
+                    );
+                },
+            ],
+            [
+                new UserValue([
+                    'hasStoredLogin' => true,
+                    'contentId' => 23,
+                    'login' => 'sindelfingen',
+                    'email' => 'sindelfingen@example.com',
+                    'passwordHash' => '1234567890abcdef',
+                    'passwordHashType' => 'md5',
+                    'enabled' => true,
+                    'maxLogin' => 1000,
+                ]),
+                [],
+                null,
             ],
         ];
     }
