@@ -22,11 +22,9 @@ use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Events\Role\AddPolicyByRoleDraftEvent;
-use eZ\Publish\API\Repository\Events\Role\AddPolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\AssignRoleToUserEvent;
 use eZ\Publish\API\Repository\Events\Role\AssignRoleToUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyByRoleDraftEvent;
-use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleDraftEvent;
@@ -260,33 +258,6 @@ class RoleService extends RoleServiceDecorator
         $this->eventDispatcher->dispatch(
             new PublishRoleDraftEvent(...$eventData)
         );
-    }
-
-    public function addPolicy(
-        Role $role,
-        PolicyCreateStruct $policyCreateStruct
-    ) {
-        $eventData = [
-            $role,
-            $policyCreateStruct,
-        ];
-
-        $beforeEvent = new BeforeAddPolicyEvent(...$eventData);
-
-        $this->eventDispatcher->dispatch($beforeEvent);
-        if ($beforeEvent->isPropagationStopped()) {
-            return $beforeEvent->getUpdatedRole();
-        }
-
-        $updatedRole = $beforeEvent->hasUpdatedRole()
-            ? $beforeEvent->getUpdatedRole()
-            : $this->innerService->addPolicy($role, $policyCreateStruct);
-
-        $this->eventDispatcher->dispatch(
-            new AddPolicyEvent($updatedRole, ...$eventData)
-        );
-
-        return $updatedRole;
     }
 
     public function deletePolicy(Policy $policy): void

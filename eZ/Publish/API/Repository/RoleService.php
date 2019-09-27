@@ -172,23 +172,6 @@ interface RoleService
     public function publishRoleDraft(RoleDraft $roleDraft);
 
     /**
-     * Adds a new policy to the role.
-     *
-     * @deprecated since 6.0, use {@see addPolicyByRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy create
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyCreateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function addPolicy(Role $role, PolicyCreateStruct $policyCreateStruct);
-
-    /**
      * Deletes a policy.
      *
      * @deprecated since 6.0, use {@link removePolicyByRoleDraft()} instead.

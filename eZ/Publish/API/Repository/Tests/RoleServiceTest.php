@@ -942,68 +942,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the addPolicy() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
-     */
-    public function testAddPolicy()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-
-        $roleCreate = $roleService->newRoleCreateStruct('newRole');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->publishRoleDraft($roleDraft);
-        $role = $roleService->loadRole($roleDraft->id);
-
-        $role = $roleService->addPolicy(
-            $role,
-            $roleService->newPolicyCreateStruct('content', 'delete')
-        );
-        $role = $roleService->addPolicy(
-            $role,
-            $roleService->newPolicyCreateStruct('content', 'create')
-        );
-        /* END: Use Case */
-
-        $actual = [];
-        foreach ($role->getPolicies() as $policy) {
-            $actual[] = [
-                'module' => $policy->module,
-                'function' => $policy->function,
-            ];
-        }
-        usort(
-            $actual,
-            function ($p1, $p2) {
-                return strcasecmp($p1['function'], $p2['function']);
-            }
-        );
-
-        $this->assertEquals(
-            [
-                [
-                    'module' => 'content',
-                    'function' => 'create',
-                ],
-                [
-                    'module' => 'content',
-                    'function' => 'delete',
-                ],
-            ],
-            $actual
-        );
-    }
-
-    /**
      * Test for the addPolicyByRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::addPolicyByRoleDraft()
@@ -1064,49 +1002,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the addPolicy() method.
-     *
-     * @return array [\eZ\Publish\API\Repository\Values\User\Role, \eZ\Publish\API\Repository\Values\User\Policy]
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
-     */
-    public function testAddPolicyUpdatesRole()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-
-        $roleCreate = $roleService->newRoleCreateStruct('newRole');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->publishRoleDraft($roleDraft);
-        $role = $roleService->loadRole($roleDraft->id);
-
-        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $role = $roleService->addPolicy($role, $policyCreate);
-
-        $policy = null;
-        foreach ($role->getPolicies() as $policy) {
-            if ($policy->module === 'content' && $policy->function === 'create') {
-                break;
-            }
-        }
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy',
-            $policy
-        );
-
-        return [$role, $policy];
-    }
-
-    /**
      * Test for the addPolicyByRoleDraft() method.
      *
      * @return array [\eZ\Publish\API\Repository\Values\User\RoleDraft, \eZ\Publish\API\Repository\Values\User\Policy]
@@ -1148,24 +1043,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the addPolicy() method.
-     *
-     * @param array $roleAndPolicy
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyUpdatesRole
-     */
-    public function testAddPolicySetsPolicyProperties($roleAndPolicy)
-    {
-        list($role, $policy) = $roleAndPolicy;
-
-        $this->assertEquals(
-            [$role->id, 'content', 'create'],
-            [$policy->roleId, $policy->module, $policy->function]
-        );
-    }
-
-    /**
      * Test for the addPolicyByRoleDraft() method.
      *
      * @param array $roleAndPolicy
@@ -1181,48 +1058,6 @@ class RoleServiceTest extends BaseTest
             [$role->id, 'content', 'create'],
             [$policy->roleId, $policy->module, $policy->function]
         );
-    }
-
-    /**
-     * Test for the addPolicy() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
-     */
-    public function testAddPolicyThrowsLimitationValidationException()
-    {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
-
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-
-        $roleCreate = $roleService->newRoleCreateStruct('Lumberjack');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->publishRoleDraft($roleDraft);
-        $role = $roleService->loadRole($roleDraft->id);
-
-        // Create new subtree limitation
-        $limitation = new SubtreeLimitation(
-            [
-                'limitationValues' => ['/mountain/forest/tree/42/'],
-            ]
-        );
-
-        // Create policy create struct and add limitation to it
-        $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'remove');
-        $policyCreateStruct->addLimitation($limitation);
-
-        // This call will fail with an LimitationValidationException, because subtree
-        // "/mountain/forest/tree/42/" does not exist
-        $roleService->addPolicy($role, $policyCreateStruct);
-        /* END: Use Case */
     }
 
     /**
@@ -1269,7 +1104,7 @@ class RoleServiceTest extends BaseTest
      * Test for the createRole() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::createRole()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyUpdatesRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyByRoleDraftUpdatesRole
      */
     public function testCreateRoleWithAddPolicy()
     {
@@ -1454,7 +1289,7 @@ class RoleServiceTest extends BaseTest
      * @return array
      *
      * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyByRoleDraft
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyUpdateStruct
      */
     public function testUpdatePolicy()
@@ -1581,7 +1416,7 @@ class RoleServiceTest extends BaseTest
      * Test for the updatePolicy() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyByRoleDraft
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyUpdateStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCreateStruct
@@ -1689,7 +1524,7 @@ class RoleServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\RoleService::deletePolicy()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyByRoleDraft
      */
     public function testDeletePolicy()
     {

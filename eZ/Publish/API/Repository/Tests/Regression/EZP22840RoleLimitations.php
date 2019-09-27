@@ -44,11 +44,16 @@ class EZP22840RoleLimitations extends BaseTest
                 ]
             )
         );
+        $roleDraft = $roleService->createRoleDraft(
+            $roleService->loadRoleByIdentifier('Editor')
+        );
 
-        $roleService->addPolicy(
-            $roleService->loadRoleByIdentifier('Editor'),
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $policyCreate
         );
+
+        $roleService->publishRoleDraft($roleDraft);
 
         // set current user and get objects needed for the test
         $permissionResolver->setCurrentUserReference($user);

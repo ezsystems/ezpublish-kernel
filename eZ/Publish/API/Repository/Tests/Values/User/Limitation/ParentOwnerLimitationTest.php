@@ -46,7 +46,12 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy($role, $policyCreate);
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 
@@ -97,7 +102,12 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy($role, $policyCreate);
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 

@@ -152,7 +152,12 @@ class SubtreeLimitationTest extends BaseLimitationTest
                 ['limitationValues' => [$userTypeId, $groupTypeId]]
             )
         );
-        $roleService->addPolicy($role, $policyCreate);
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser(
             $role,

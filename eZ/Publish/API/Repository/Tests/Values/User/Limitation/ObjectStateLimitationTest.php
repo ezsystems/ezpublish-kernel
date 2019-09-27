@@ -77,7 +77,13 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         // Allow user to create everything
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $roleService->addPolicy($role, $policyCreate);
+
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 
@@ -143,7 +149,13 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         // Allow user to create everything
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $roleService->addPolicy($role, $policyCreate);
+
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 
@@ -212,7 +224,13 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         // Allow user to create everything
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $roleService->addPolicy($role, $policyCreate);
+
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 

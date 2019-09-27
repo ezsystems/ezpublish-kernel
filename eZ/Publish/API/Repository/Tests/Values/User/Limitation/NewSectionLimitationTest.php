@@ -45,14 +45,17 @@ class NewSectionLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy(
-            $roleService->loadRoleByIdentifier('Editor'),
+        $role = $roleService->loadRoleByIdentifier('Editor');
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $policyCreate
         );
-        $role = $roleService->addPolicy(
-            $role,
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $roleService->newPolicyCreateStruct('section', 'view')
         );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 
@@ -101,14 +104,17 @@ class NewSectionLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy(
-            $roleService->loadRoleByIdentifier('Editor'),
+        $role = $roleService->loadRoleByIdentifier('Editor');
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $policyCreate
         );
-        $role = $roleService->addPolicy(
-            $role,
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $roleService->newPolicyCreateStruct('section', 'view')
         );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 

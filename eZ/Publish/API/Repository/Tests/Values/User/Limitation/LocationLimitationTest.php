@@ -46,8 +46,9 @@ class LocationLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy($role, $policyCreate);
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft($roleDraft, $policyCreate);
+        $roleService->publishRoleDraft($roleDraft);
         $roleService->assignRoleToUser($role, $user);
 
         $permissionResolver->setCurrentUserReference($user);
@@ -88,7 +89,9 @@ class LocationLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy($role, $policyCreate);
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft($roleDraft, $policyCreate);
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 

@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
@@ -104,7 +105,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the addPolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::addPolicy
+     * @covers \eZ\Publish\Core\Repository\RoleService::addPolicyByRoleDraft
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
      */
@@ -132,12 +133,12 @@ class RoleTest extends BaseServiceMockTest
             'limitationTypes' => ['mockIdentifier' => $limitationTypeMock],
         ];
 
-        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRole'], $settings);
+        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRoleDraft'], $settings);
 
-        $roleMock = $this->createMock(Role::class);
+        $roleDraftMock = $this->createMock(RoleDraft::class);
         $policyCreateStructMock = $this->createMock(PolicyCreateStruct::class);
 
-        $roleMock->expects($this->any())
+        $roleDraftMock->expects($this->any())
             ->method('__get')
             ->with('id')
             ->will($this->returnValue(42));
@@ -146,9 +147,9 @@ class RoleTest extends BaseServiceMockTest
         $policyCreateStructMock->function = 'mockFunction';
 
         $roleServiceMock->expects($this->once())
-            ->method('loadRole')
+            ->method('loadRoleDraft')
             ->with($this->equalTo(42))
-            ->will($this->returnValue($roleMock));
+            ->will($this->returnValue($roleDraftMock));
 
         /* @var \PHPUnit\Framework\MockObject\MockObject $policyCreateStructMock */
         $policyCreateStructMock->expects($this->once())
@@ -161,12 +162,12 @@ class RoleTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo('role'),
                 $this->equalTo('update'),
-                $this->equalTo($roleMock)
+                $this->equalTo($roleDraftMock)
             )->will($this->returnValue(true));
 
-        /* @var \eZ\Publish\API\Repository\Values\User\Role $roleMock */
+        /* @var \eZ\Publish\API\Repository\Values\User\Role $roleDraftMock */
         /* @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStructMock */
-        $roleServiceMock->addPolicy($roleMock, $policyCreateStructMock);
+        $roleServiceMock->addPolicyByRoleDraft($roleDraftMock, $policyCreateStructMock);
     }
 
     /**

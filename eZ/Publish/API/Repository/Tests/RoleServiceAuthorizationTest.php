@@ -188,37 +188,6 @@ class RoleServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the addPolicy() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
-     */
-    public function testAddPolicyThrowsUnauthorizedException()
-    {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-
-        $repository = $this->getRepository();
-        $roleService = $repository->getRoleService();
-        $permissionResolver = $repository->getPermissionResolver();
-
-        /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
-
-        $role = $this->createRole();
-
-        // Set "Editor" user as current user.
-        $permissionResolver->setCurrentUserReference($user);
-
-        // This call will fail with an "UnauthorizedException"
-        $roleService->addPolicy(
-            $role,
-            $roleService->newPolicyCreateStruct('content', 'delete')
-        );
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the updatePolicy() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()

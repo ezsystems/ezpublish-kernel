@@ -7,11 +7,9 @@
 namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\Events\Role\AddPolicyByRoleDraftEvent;
-use eZ\Publish\API\Repository\Events\Role\AddPolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\AssignRoleToUserEvent;
 use eZ\Publish\API\Repository\Events\Role\AssignRoleToUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyByRoleDraftEvent;
-use eZ\Publish\API\Repository\Events\Role\BeforeAddPolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleDraftEvent;
@@ -229,108 +227,6 @@ class RoleServiceTest extends AbstractServiceTest
         $this->assertSame($notCalledListeners, [
             [AssignRoleToUserEvent::class, 0],
             [BeforeAssignRoleToUserEvent::class, 0],
-        ]);
-    }
-
-    public function testAddPolicyEvents()
-    {
-        $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAddPolicyEvent::class,
-            AddPolicyEvent::class
-        );
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(PolicyCreateStruct::class),
-        ];
-
-        $updatedRole = $this->createMock(Role::class);
-        $innerServiceMock = $this->createMock(RoleServiceInterface::class);
-        $innerServiceMock->method('addPolicy')->willReturn($updatedRole);
-
-        $service = new RoleService($innerServiceMock, $traceableEventDispatcher);
-        $result = $service->addPolicy(...$parameters);
-
-        $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
-
-        $this->assertSame($updatedRole, $result);
-        $this->assertSame($calledListeners, [
-            [BeforeAddPolicyEvent::class, 0],
-            [AddPolicyEvent::class, 0],
-        ]);
-        $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
-    }
-
-    public function testReturnAddPolicyResultInBeforeEvents()
-    {
-        $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAddPolicyEvent::class,
-            AddPolicyEvent::class
-        );
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(PolicyCreateStruct::class),
-        ];
-
-        $updatedRole = $this->createMock(Role::class);
-        $eventUpdatedRole = $this->createMock(Role::class);
-        $innerServiceMock = $this->createMock(RoleServiceInterface::class);
-        $innerServiceMock->method('addPolicy')->willReturn($updatedRole);
-
-        $traceableEventDispatcher->addListener(BeforeAddPolicyEvent::class, function (BeforeAddPolicyEvent $event) use ($eventUpdatedRole) {
-            $event->setUpdatedRole($eventUpdatedRole);
-        }, 10);
-
-        $service = new RoleService($innerServiceMock, $traceableEventDispatcher);
-        $result = $service->addPolicy(...$parameters);
-
-        $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
-
-        $this->assertSame($eventUpdatedRole, $result);
-        $this->assertSame($calledListeners, [
-            [BeforeAddPolicyEvent::class, 10],
-            [BeforeAddPolicyEvent::class, 0],
-            [AddPolicyEvent::class, 0],
-        ]);
-        $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
-    }
-
-    public function testAddPolicyStopPropagationInBeforeEvents()
-    {
-        $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeAddPolicyEvent::class,
-            AddPolicyEvent::class
-        );
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(PolicyCreateStruct::class),
-        ];
-
-        $updatedRole = $this->createMock(Role::class);
-        $eventUpdatedRole = $this->createMock(Role::class);
-        $innerServiceMock = $this->createMock(RoleServiceInterface::class);
-        $innerServiceMock->method('addPolicy')->willReturn($updatedRole);
-
-        $traceableEventDispatcher->addListener(BeforeAddPolicyEvent::class, function (BeforeAddPolicyEvent $event) use ($eventUpdatedRole) {
-            $event->setUpdatedRole($eventUpdatedRole);
-            $event->stopPropagation();
-        }, 10);
-
-        $service = new RoleService($innerServiceMock, $traceableEventDispatcher);
-        $result = $service->addPolicy(...$parameters);
-
-        $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
-        $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
-
-        $this->assertSame($eventUpdatedRole, $result);
-        $this->assertSame($calledListeners, [
-            [BeforeAddPolicyEvent::class, 10],
-        ]);
-        $this->assertSame($notCalledListeners, [
-            [AddPolicyEvent::class, 0],
-            [BeforeAddPolicyEvent::class, 0],
         ]);
     }
 

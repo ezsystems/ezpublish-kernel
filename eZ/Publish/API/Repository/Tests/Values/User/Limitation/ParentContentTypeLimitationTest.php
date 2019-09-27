@@ -55,7 +55,12 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy($role, $policyCreate);
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 
@@ -105,9 +110,13 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy($role, $policyCreate);
-
-        $roleService->assignRoleToUser($role, $user);
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        
+        $roleService->publishRoleDraft($roleDraft);
 
         $permissionResolver->setCurrentUserReference($user);
 

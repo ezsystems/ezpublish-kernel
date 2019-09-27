@@ -510,69 +510,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Adds a new policy to the role.
-     *
-     * @deprecated since 6.0, use {@see addPolicyByRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy create
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyCreateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function addPolicy(APIRole $role, APIPolicyCreateStruct $policyCreateStruct)
-    {
-        if (!is_string($policyCreateStruct->module) || empty($policyCreateStruct->module)) {
-            throw new InvalidArgumentValue('module', $policyCreateStruct->module, 'PolicyCreateStruct');
-        }
-
-        if (!is_string($policyCreateStruct->function) || empty($policyCreateStruct->function)) {
-            throw new InvalidArgumentValue('function', $policyCreateStruct->function, 'PolicyCreateStruct');
-        }
-
-        if ($policyCreateStruct->module === '*' && $policyCreateStruct->function !== '*') {
-            throw new InvalidArgumentValue('module', $policyCreateStruct->module, 'PolicyCreateStruct');
-        }
-
-        if (!$this->permissionResolver->canUser('role', 'update', $role)) {
-            throw new UnauthorizedException('role', 'update');
-        }
-
-        $loadedRole = $this->loadRole($role->id);
-
-        $limitations = $policyCreateStruct->getLimitations();
-        $limitationValidationErrors = $this->validatePolicy(
-            $policyCreateStruct->module,
-            $policyCreateStruct->function,
-            $limitations
-        );
-        if (!empty($limitationValidationErrors)) {
-            throw new LimitationValidationException($limitationValidationErrors);
-        }
-
-        $spiPolicy = $this->roleDomainMapper->buildPersistencePolicyObject(
-            $policyCreateStruct->module,
-            $policyCreateStruct->function,
-            $limitations
-        );
-
-        $this->repository->beginTransaction();
-        try {
-            $this->userHandler->addPolicy($loadedRole->id, $spiPolicy);
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-
-        return $this->loadRole($loadedRole->id);
-    }
-
-    /**
      * Deletes a policy.
      *
      * @deprecated since 6.0, use {@link removePolicyByRoleDraft()} instead.
