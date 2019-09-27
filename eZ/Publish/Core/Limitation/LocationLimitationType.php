@@ -22,6 +22,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation as APILocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Limitation\Target\Version;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
@@ -114,6 +115,8 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
      */
     public function evaluate(APILimitationValue $value, APIUserReference $currentUser, ValueObject $object, array $targets = null)
     {
+        $targets = $targets ?? [];
+
         if (!$value instanceof APILocationLimitation) {
             throw new InvalidArgumentException('$value', 'Must be of type: APILocationLimitation');
         }
@@ -131,12 +134,16 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
             );
         }
 
+        $targets = array_filter($targets, function ($target) {
+            return !$target instanceof Version;
+        });
+
         // Load locations if no specific placement was provided
-        if ($targets === null) {
+        if (empty($targets)) {
             if ($object->published) {
                 $targets = $this->persistence->locationHandler()->loadLocationsByContent($object->id);
             } else {
-                // @todo Need support for draft locations to to work correctly
+                // @todo Need support for draft locations to work correctly
                 $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent($object->id);
             }
         }
