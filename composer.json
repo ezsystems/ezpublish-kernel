@@ -52,6 +52,7 @@
     },
     "require-dev": {
         "brianium/paratest": "^3.0",
+        "jenner/simple_fork": "^1.2",
         "friendsofphp/php-cs-fixer": "~2.15.1",
         "phpunit/phpunit": "^8.2",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",

@@ -214,7 +214,7 @@ class ContentHandlerTest extends TestCase
      */
     public function testPublishFirstVersion()
     {
-        $handler = $this->getPartlyMockedHandler(['loadVersionInfo', 'setStatus']);
+        $handler = $this->getPartlyMockedHandler(['loadVersionInfo']);
 
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
@@ -273,10 +273,10 @@ class ContentHandlerTest extends TestCase
             ->method('updateLocationsContentVersionNo')
             ->with(23, 1);
 
-        $handler
+        $gatewayMock
             ->expects($this->once())
-            ->method('setStatus')
-            ->with(23, VersionInfo::STATUS_PUBLISHED, 1);
+            ->method('setPublishedStatus')
+            ->with(23, 1);
 
         $handler->publish(23, 1, $metadataUpdateStruct);
     }
@@ -286,7 +286,7 @@ class ContentHandlerTest extends TestCase
      */
     public function testPublish()
     {
-        $handler = $this->getPartlyMockedHandler(['loadVersionInfo', 'setStatus']);
+        $handler = $this->getPartlyMockedHandler(['loadVersionInfo']);
 
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
@@ -351,10 +351,10 @@ class ContentHandlerTest extends TestCase
             ->method('updateLocationsContentVersionNo')
             ->with(23, 2);
 
-        $handler
+        $gatewayMock
             ->expects($this->at(2))
-            ->method('setStatus')
-            ->with(23, VersionInfo::STATUS_PUBLISHED, 2);
+            ->method('setPublishedStatus')
+            ->with(23, 2);
 
         $handler->publish(23, 2, $metadataUpdateStruct);
     }
