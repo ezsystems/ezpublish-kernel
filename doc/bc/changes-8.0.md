@@ -164,6 +164,23 @@ Changes affecting version compatibility with former or future versions.
         DROP TABLE <table_name>;
     ```
 
+* Clean Installer (`EzSystems\PlatformInstallerBundle\Installer\CleanInstaller`), its service
+  definition (`ezplatform.installer.clean_installer`), and the
+  `ezplatform.installer.clean_installer.class` parameter have been dropped. Instead use
+  the `EzSystems\DoctrineSchema\API\Event\SchemaBuilderEvents::BUILD_SCHEMA` event
+  with an event subscriber, and if needed, additionally with the Core Installer
+  (`EzSystems\PlatformInstallerBundle\Installer\CoreInstaller`).
+  See eZ Platform Documentation for more details.
+
+* The `ezplatform.installer.db_based_installer.class` and `ezplatform.installer.install_command.class`
+  parameters have been dropped. The `ezplatform.installer.db_based_installer` service definition has
+  been dropped as well. Instead, the FQCN-named service
+  `EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller` is available.
+
+* The `EzSystems\PlatformInstallerBundle\Command\InstallPlatformCommand` has been marked as final.
+  Overriding it was never supported. Use the SchemaBuilder event-oriented extension point to inject
+  custom behavior into the installation process (see eZ Platform Documentation for more details).
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.

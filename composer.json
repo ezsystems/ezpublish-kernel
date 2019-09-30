@@ -75,6 +75,11 @@
             "eZ": ""
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "EzSystems\\PlatformInstallerBundleTests\\": "eZ/Bundle/PlatformInstallerBundle/tests"
+        }
+    },
     "config": {
         "process-timeout": 3000
     },

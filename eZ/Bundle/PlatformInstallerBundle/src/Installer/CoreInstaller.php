@@ -16,7 +16,7 @@ use EzSystems\DoctrineSchema\API\Builder\SchemaBuilder;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
- * New variant of CleanInstaller, which uses SchemaBuilder.
+ * Installer which uses SchemaBuilder.
  */
 class CoreInstaller extends DbBasedInstaller implements Installer
 {

@@ -8,6 +8,8 @@
  */
 namespace EzSystems\PlatformInstallerBundle\DependencyInjection\Compiler;
 
+use EzSystems\PlatformInstallerBundle\Command\InstallPlatformCommand;
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -17,25 +19,33 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class InstallerTagPass implements CompilerPassInterface
 {
+    public const INSTALLER_TAG = 'ezplatform.installer';
+
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('ezplatform.installer.install_command')) {
+        if (!$container->hasDefinition(InstallPlatformCommand::class)) {
             return;
         }
 
-        $installCommandDef = $container->findDefinition('ezplatform.installer.install_command');
+        $installCommandDef = $container->findDefinition(InstallPlatformCommand::class);
         $installers = [];
 
-        foreach ($container->findTaggedServiceIds('ezplatform.installer') as $id => $tags) {
+        foreach ($container->findTaggedServiceIds(self::INSTALLER_TAG) as $id => $tags) {
             foreach ($tags as $tag) {
                 if (!isset($tag['type'])) {
-                    throw new \LogicException("ezplatform.installer service tag needs a 'type' attribute to identify the installer. None given for $id.");
+                    throw new LogicException(
+                        sprintf(
+                            '%s service tag needs a "type" attribute to identify the installer. None given for %s.',
+                            self::INSTALLER_TAG,
+                            $id
+                        )
+                    );
                 }
 
                 $installers[$tag['type']] = new Reference($id);
             }
         }
 
-        $installCommandDef->replaceArgument(1, $installers);
+        $installCommandDef->replaceArgument('$installers', $installers);
     }
 }
