@@ -32,7 +32,7 @@
         "symfony/console": "^4.3",
         "symfony/expression-language": "^4.3",
         "symfony/validator": "^4.3",
-        "ezsystems/doctrine-dbal-schema": "^1.0@dev",
+        "ezsystems/doctrine-dbal-schema": "^1.0",
         "symfony-cmf/routing": "^2.1",
         "kriswallsmith/buzz": "^1.0",
         "nelmio/cors-bundle": "^1.5.0",
@@ -56,7 +56,7 @@
         "friendsofphp/php-cs-fixer": "~2.15.1",
         "phpunit/phpunit": "^8.2",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
-        "ezsystems/behatbundle": "^7.0@dev"
+        "ezsystems/behatbundle": "^7.0"
     },
     "conflict": {
         "doctrine/dbal": "2.7.0",
