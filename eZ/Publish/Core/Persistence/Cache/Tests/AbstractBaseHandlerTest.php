@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
-use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalCacheAdapterDecorator;
+use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter;
 use eZ\Publish\Core\Persistence\Cache\Handler as CacheHandler;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
 use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
@@ -36,7 +36,7 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractBaseHandlerTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalCacheAdapterDecorator|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheMock;
 
     /** @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject */
@@ -62,7 +62,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
         parent::setUp();
 
         $this->persistenceHandlerMock = $this->createMock(Handler::class);
-        $this->cacheMock = $this->createMock(TransactionalCacheAdapterDecorator::class);
+        $this->cacheMock = $this->createMock(TransactionalInMemoryCacheAdapter::class);
         $this->loggerMock = $this->createMock(PersistenceLogger::class);
         $this->inMemoryMock = $this->createMock(InMemoryCache::class);
 
