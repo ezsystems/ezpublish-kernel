@@ -1960,12 +1960,12 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the unassignRoleFromUser() method.
+     * Test for the removeRoleAssignment() method.
      *
-     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
+     * @see \eZ\Publish\API\Repository\RoleService::removeRoleAssignment()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
      */
-    public function testUnassignRoleFromUser()
+    public function testRemoveRoleAssignment()
     {
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
@@ -1980,38 +1980,18 @@ class RoleServiceTest extends BaseTest
         $roleService->assignRoleToUser($role, $user);
 
         // Unassign user from role
-        $roleService->unassignRoleFromUser($role, $user);
-
+        $roleAssignments = $roleService->getRoleAssignmentsForUser($user);
+        foreach ($roleAssignments as $roleAssignment) {
+            if ($roleAssignment->role->id === $role->id) {
+                $roleService->removeRoleAssignment($roleAssignment);
+            }
+        }
         // The assignments array will not contain the new role<->user assignment
         $roleAssignments = $roleService->getRoleAssignments($role);
         /* END: Use Case */
 
         // Members + Editors + Partners
         $this->assertCount(3, $roleAssignments);
-    }
-
-    /**
-     * Test for the unassignRoleFromUser() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
-     */
-    public function testUnassignRoleFromUserThrowsInvalidArgumentException()
-    {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-
-        $repository = $this->getRepository();
-        $roleService = $repository->getRoleService();
-
-        /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
-
-        // Load the existing "Member" role
-        $role = $roleService->loadRoleByIdentifier('Member');
-
-        // This call will fail with a "InvalidArgumentException", because the
-        // user does not have the "Member" role.
-        $roleService->unassignRoleFromUser($role, $user);
-        /* END: Use Case */
     }
 
     /**

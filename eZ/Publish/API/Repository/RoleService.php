@@ -264,19 +264,6 @@ interface RoleService
     public function assignRoleToUser(Role $role, User $user, RoleLimitation $roleLimitation = null);
 
     /**
-     * Removes a role from the given user.
-     *
-     * @deprecated since 6.0, use {@see removeRoleAssignment} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the role is not assigned to the user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     */
-    public function unassignRoleFromUser(Role $role, User $user);
-
-    /**
      * Loads a role assignment for the given id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role

@@ -19,7 +19,6 @@ use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforePublishRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeRemovePolicyByRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeRemoveRoleAssignmentEvent;
-use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleDraftEvent;
@@ -30,7 +29,6 @@ use eZ\Publish\API\Repository\Events\Role\DeleteRoleEvent;
 use eZ\Publish\API\Repository\Events\Role\PublishRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\RemovePolicyByRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\RemoveRoleAssignmentEvent;
-use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserEvent;
 use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\UpdatePolicyByRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\UpdateRoleDraftEvent;
@@ -328,65 +326,6 @@ class RoleServiceTest extends AbstractServiceTest
         $this->assertSame($notCalledListeners, [
             [AssignRoleToUserGroupEvent::class, 0],
             [BeforeAssignRoleToUserGroupEvent::class, 0],
-        ]);
-    }
-
-    public function testUnassignRoleFromUserEvents()
-    {
-        $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUnassignRoleFromUserEvent::class,
-            UnassignRoleFromUserEvent::class
-        );
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(User::class),
-        ];
-
-        $innerServiceMock = $this->createMock(RoleServiceInterface::class);
-
-        $service = new RoleService($innerServiceMock, $traceableEventDispatcher);
-        $service->unassignRoleFromUser(...$parameters);
-
-        $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
-
-        $this->assertSame($calledListeners, [
-            [BeforeUnassignRoleFromUserEvent::class, 0],
-            [UnassignRoleFromUserEvent::class, 0],
-        ]);
-        $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
-    }
-
-    public function testUnassignRoleFromUserStopPropagationInBeforeEvents()
-    {
-        $traceableEventDispatcher = $this->getEventDispatcher(
-            BeforeUnassignRoleFromUserEvent::class,
-            UnassignRoleFromUserEvent::class
-        );
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(User::class),
-        ];
-
-        $innerServiceMock = $this->createMock(RoleServiceInterface::class);
-
-        $traceableEventDispatcher->addListener(BeforeUnassignRoleFromUserEvent::class, function (BeforeUnassignRoleFromUserEvent $event) {
-            $event->stopPropagation();
-        }, 10);
-
-        $service = new RoleService($innerServiceMock, $traceableEventDispatcher);
-        $service->unassignRoleFromUser(...$parameters);
-
-        $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
-        $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
-
-        $this->assertSame($calledListeners, [
-            [BeforeUnassignRoleFromUserEvent::class, 10],
-        ]);
-        $this->assertSame($notCalledListeners, [
-            [BeforeUnassignRoleFromUserEvent::class, 0],
-            [UnassignRoleFromUserEvent::class, 0],
         ]);
     }
 

@@ -278,21 +278,6 @@ class RoleServiceDecoratorTest extends TestCase
         $decoratedService->assignRoleToUser(...$parameters);
     }
 
-    public function testUnassignRoleFromUserDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(User::class),
-        ];
-
-        $serviceMock->expects($this->once())->method('unassignRoleFromUser')->with(...$parameters);
-
-        $decoratedService->unassignRoleFromUser(...$parameters);
-    }
-
     public function testLoadRoleAssignmentDecorator()
     {
         $serviceMock = $this->createServiceMock();

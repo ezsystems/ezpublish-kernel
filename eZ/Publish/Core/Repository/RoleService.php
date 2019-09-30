@@ -792,47 +792,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * removes a role from the given user.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the role is not assigned to the user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     */
-    public function unassignRoleFromUser(APIRole $role, User $user)
-    {
-        if ($this->permissionResolver->canUser('role', 'assign', $user, [$role]) !== true) {
-            throw new UnauthorizedException('role', 'assign');
-        }
-
-        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId($user->id);
-        $isAssigned = false;
-        foreach ($spiRoleAssignments as $spiRoleAssignment) {
-            if ($spiRoleAssignment->roleId === $role->id) {
-                $isAssigned = true;
-                break;
-            }
-        }
-
-        if (!$isAssigned) {
-            throw new InvalidArgumentException(
-                '$user',
-                'Role is not assigned to the given User'
-            );
-        }
-
-        $this->repository->beginTransaction();
-        try {
-            $this->userHandler->unassignRole($user->id, $role->id);
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-    }
-
-    /**
      * Removes the given role assignment.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
