@@ -112,7 +112,6 @@ class SearchIndex
         $query = $this->dbHandler->createDeleteQuery();
         $tables = [
             'ezsearch_object_word_link',
-            'ezsearch_search_phrase',
             'ezsearch_word',
         ];
         foreach ($tables as $tbl) {
