@@ -315,7 +315,7 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function testFulltextLocationSearchSolr6($searchString, array $expectedKeys, array $idMap): void
     {
-        if (($solrVersion = getenv('SOLR_VERSION')) && ($solrVersion < 6 || $solrVersion >= 7)) {
+        if (!$this->isSolrMajorVersionInRange('6.0.0', '7.0.0')) {
             $this->markTestSkipped('This test is only relevant for Solr 6');
         }
 
@@ -449,5 +449,23 @@ class SearchServiceFulltextTest extends BaseTest
             },
             array_values($scoreGroupedIds)
         );
+    }
+
+    /**
+     * Checks if Solr version is in the given range.
+     *
+     * @param string $minVersion
+     * @param string $maxVersion
+     *
+     * @return bool
+     */
+    private function isSolrMajorVersionInRange(string $minVersion, string $maxVersion): bool
+    {
+        $version = getenv('SOLR_VERSION');
+        if (is_string($version) && !empty($version)) {
+            return version_compare($version, $minVersion, '>=') && version_compare($version, $maxVersion, '<');
+        }
+
+        return false;
     }
 }
