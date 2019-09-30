@@ -1,7 +1,7 @@
 services:
     # API Aliases
     ezpublish.api.repository:
-        alias: eZ\Publish\Core\Event\Repository
+        alias: ezpublish.siteaccessaware.repository
         public: true
 
     ezpublish.api.service.bookmark:
@@ -9,11 +9,11 @@ services:
         public: true
 
     ezpublish.api.service.content:
-        alias: eZ\Publish\Core\Event\ContentService
+        alias: ezpublish.siteaccessaware.service.content
         public: true
 
     ezpublish.api.service.content_type:
-        alias: eZ\Publish\Core\Event\ContentTypeService
+        alias: ezpublish.siteaccessaware.service.content_type
         public: true
 
     ezpublish.api.service.field_type:
@@ -25,7 +25,7 @@ services:
         public: true
 
     ezpublish.api.service.object_state:
-        alias: eZ\Publish\Core\Event\ObjectStateService
+        alias: ezpublish.siteaccessaware.service.object_state
         public: true
 
     ezpublish.api.service.url_wildcard:
@@ -33,31 +33,31 @@ services:
         public: true
 
     ezpublish.api.service.url_alias:
-        alias: eZ\Publish\Core\Event\URLAliasService
+        alias: ezpublish.siteaccessaware.service.url_alias
         public: true
 
     ezpublish.api.service.user:
-        alias: eZ\Publish\Core\Event\UserService
+        alias: ezpublish.siteaccessaware.service.user
         public: true
 
     ezpublish.api.service.search:
-        alias: eZ\Publish\Core\Event\SearchService
+        alias: ezpublish.siteaccessaware.service.search
         public: true
 
     ezpublish.api.service.section:
-        alias: eZ\Publish\Core\Event\SectionService
+        alias: ezpublish.siteaccessaware.service.section
         public: true
 
     ezpublish.api.service.trash:
-        alias: eZ\Publish\Core\Event\TrashService
+        alias: ezpublish.siteaccessaware.service.trash
         public: true
 
     ezpublish.api.service.location:
-        alias: eZ\Publish\Core\Event\LocationService
+        alias: ezpublish.siteaccessaware.service.location
         public: true
 
     ezpublish.api.service.language:
-        alias: eZ\Publish\Core\Event\LanguageService
+        alias: ezpublish.siteaccessaware.service.language
         public: true
 
     ezpublish.api.service.url:
@@ -65,7 +65,7 @@ services:
         public: true
 
     ezpublish.api.service.notification:
-        alias: eZ\Publish\Core\Event\NotificationService
+        alias: ezpublish.siteaccessaware.service.notification
         public: true
 
     ezpublish.api.service.user_preference:

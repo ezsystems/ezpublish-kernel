@@ -1414,12 +1414,14 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
             ],
             34 => [
                 [
+                    'languages' => [],
                     'useAlwaysAvailable' => true,
                 ],
                 $mainLanguages,
             ],
             35 => [
                 [
+                    'languages' => [],
                     'useAlwaysAvailable' => false,
                 ],
                 $mainLanguages,
@@ -1431,7 +1433,9 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 $mainLanguages,
             ],
             37 => [
-                [],
+                [
+                    'languages' => [],
+                ],
                 $mainLanguages,
             ],
             38 => [

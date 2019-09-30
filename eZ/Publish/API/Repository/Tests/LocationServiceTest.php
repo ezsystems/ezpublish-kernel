@@ -1510,12 +1510,12 @@ class LocationServiceTest extends BaseTest
 
         self::assertEquals(
             $folder1,
-            $contentService->loadContent($folder1->id)
+            $contentService->loadContent($folder1->id, [])
         );
 
         self::assertEquals(
             $folder2,
-            $contentService->loadContent($folder2->id)
+            $contentService->loadContent($folder2->id, [])
         );
 
         // only in case of Folder 3, main location id changed due to swap
@@ -1659,12 +1659,12 @@ class LocationServiceTest extends BaseTest
 
         self::assertEquals(
             $folder1,
-            $contentService->loadContent($folder1->id)
+            $contentService->loadContent($folder1->id, [])
         );
 
         self::assertEquals(
             $folder2,
-            $contentService->loadContent($folder2->id)
+            $contentService->loadContent($folder2->id, [])
         );
     }
 
@@ -2198,7 +2198,7 @@ class LocationServiceTest extends BaseTest
 
         foreach ($objectStateGroups as $objectStateGroup) {
             $contentState = $objectStateService->getContentState($contentInfo, $objectStateGroup);
-            foreach ($objectStateService->loadObjectStates($objectStateGroup) as $objectState) {
+            foreach ($objectStateService->loadObjectStates($objectStateGroup, []) as $objectState) {
                 // Only check the first object state which is the default one.
                 $this->assertEquals(
                     $objectState,

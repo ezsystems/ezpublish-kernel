@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the UserServiceTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -29,7 +27,6 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use Exception;
-use ReflectionClass;
 
 /**
  * Test case for operations in the UserService using in memory storage.
@@ -905,7 +902,7 @@ class UserServiceTest extends BaseTest
             'ez-user-Domain\username-by-login',
             'username-by-login@ez-user-Domain.com'
         );
-        $loadedUser = $userService->loadUserByLogin('ez-user-Domain\username-by-login');
+        $loadedUser = $userService->loadUserByLogin('ez-user-Domain\username-by-login', []);
 
         $this->assertEquals($createdUser, $loadedUser);
     }
@@ -1221,7 +1218,7 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Load the newly created user
-        $userReloaded = $userService->loadUser($user->id);
+        $userReloaded = $userService->loadUser($user->id, []);
         /* END: Use Case */
 
         $this->assertEquals($user, $userReloaded);
@@ -1269,7 +1266,7 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Load the newly created user
-        $userReloaded = $userService->loadUserByCredentials('user', 'secret');
+        $userReloaded = $userService->loadUserByCredentials('user', 'secret', []);
         /* END: Use Case */
 
         $this->assertEquals($user, $userReloaded);
@@ -1502,7 +1499,7 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Load the newly created user
-        $usersReloaded = $userService->loadUsersByEmail('user@example.com');
+        $usersReloaded = $userService->loadUsersByEmail('user@example.com', []);
         /* END: Use Case */
 
         $this->assertEquals([$user], $usersReloaded);
@@ -1705,32 +1702,10 @@ class UserServiceTest extends BaseTest
     public function testUpdateUserNoPassword()
     {
         $repository = $this->getRepository();
-        $eventUserService = $repository->getUserService();
-
-        $eventUserServiceReflection = new ReflectionClass($eventUserService);
-        $userServiceProperty = $eventUserServiceReflection->getProperty('innerService');
-        $userServiceProperty->setAccessible(true);
-        $userService = $userServiceProperty->getValue($eventUserService);
-
-        $userServiceReflection = new ReflectionClass($userService);
-        $settingsProperty = $userServiceReflection->getProperty('settings');
-        $settingsProperty->setAccessible(true);
-        $settingsProperty->setValue(
-            $userService,
-            [
-                'hashType' => User::PASSWORD_HASH_PHP_DEFAULT,
-            ] + $settingsProperty->getValue($userService)
-        );
+        $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
-
-        $settingsProperty->setValue(
-            $userService,
-            [
-                'hashType' => User::PASSWORD_HASH_PHP_DEFAULT,
-            ] + $settingsProperty->getValue($userService)
-        );
 
         // Create a new update struct instance
         $userUpdate = $userService->newUserUpdateStruct();
@@ -2800,7 +2775,7 @@ class UserServiceTest extends BaseTest
 
         $userService->updateUserToken($user, $userTokenUpdateStruct);
 
-        $loadedUser = $userService->loadUserByToken($userTokenUpdateStruct->hashKey);
+        $loadedUser = $userService->loadUserByToken($userTokenUpdateStruct->hashKey, []);
         self::assertEquals($user, $loadedUser);
 
         return $userTokenUpdateStruct->hashKey;

@@ -786,7 +786,8 @@ class ObjectStateServiceTest extends BaseTest
         $objectStateService = $repository->getObjectStateService();
 
         $loadedObjectStateGroup = $objectStateService->loadObjectStateGroup(
-            $objectStateGroupId
+            $objectStateGroupId,
+            []
         );
 
         $objectStateCreateStruct = $objectStateService->newObjectStateCreateStruct(
@@ -997,6 +998,11 @@ class ObjectStateServiceTest extends BaseTest
                 'priority' => 1,
                 'mainLanguageCode' => 'eng-US',
                 'languageCodes' => [0 => 'eng-US'],
+                'prioritizedLanguages' => [
+                    0 => 'eng-US',
+                    1 => 'eng-GB',
+                    2 => 'ger-DE',
+                ],
                 'names' => ['eng-US' => 'Locked'],
                 'descriptions' => ['eng-US' => ''],
             ],

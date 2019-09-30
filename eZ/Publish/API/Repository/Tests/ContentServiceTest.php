@@ -5739,7 +5739,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         foreach ($objectStateGroups as $objectStateGroup) {
             $contentState = $objectStateService->getContentState($contentInfo, $objectStateGroup);
-            foreach ($objectStateService->loadObjectStates($objectStateGroup) as $objectState) {
+            foreach ($objectStateService->loadObjectStates($objectStateGroup, []) as $objectState) {
                 // Only check the first object state which is the default one.
                 $this->assertEquals(
                     $objectState,
