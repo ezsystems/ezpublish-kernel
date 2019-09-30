@@ -63,6 +63,10 @@ class Type extends FieldType
                 'type' => 'int',
                 'default' => null,
             ],
+            'requireNewPassword' => [
+                'type' => 'int',
+                'default' => null,
+            ],
             'minLength' => [
                 'type' => 'int',
                 'default' => 10,

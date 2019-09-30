@@ -42,6 +42,7 @@ use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\Core\FieldType\User\Type as UserType;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
@@ -605,7 +606,7 @@ class UserService implements UserServiceInterface
         }
 
         $spiUser = $this->userHandler->loadByLogin($login);
-        if (!$this->verifyPassword($login, $password, $spiUser)) {
+        if (!$this->verifyPasswordForSPIUser($login, $password, $spiUser)) {
             throw new NotFoundException('user', $login);
         }
 
@@ -1274,6 +1275,8 @@ class UserService implements UserServiceInterface
      */
     public function validatePassword(string $password, PasswordValidationContext $context = null): array
     {
+        $errors = [];
+
         if ($context === null) {
             $contentType = $this->repository->getContentTypeService()->loadContentType(
                 $this->settings['userClassID']
@@ -1298,11 +1301,22 @@ class UserService implements UserServiceInterface
         }
 
         $configuration = $userFieldDefinition->getValidatorConfiguration();
-        if (!isset($configuration['PasswordValueValidator'])) {
-            return [];
+        if (isset($configuration['PasswordValueValidator'])) {
+            $errors = (new UserPasswordValidator($configuration['PasswordValueValidator']))->validate($password);
         }
 
-        return (new UserPasswordValidator($configuration['PasswordValueValidator']))->validate($password);
+        if ($context->user !== null) {
+            $isPasswordTTLEnabled = $this->getPasswordInfo($context->user)->hasExpirationDate();
+            $isNewPasswordRequired = $configuration['PasswordValueValidator']['requireNewPassword'] ?? false;
+
+            if (($isPasswordTTLEnabled || $isNewPasswordRequired) &&
+                $this->verifyPasswordForAPIUser($context->user->login, $password, $context->user)
+            ) {
+                $errors[] = new ValidationError('New password cannot be the same as old password', null, [], 'password');
+            }
+        }
+
+        return $errors;
     }
 
     /**
@@ -1410,7 +1424,37 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Verifies if the provided login and password are valid for eZ\Publish\SPI\Persistence\User.
+     *
+     * @param string $login User login
+     * @param string $password User password
+     * @param \eZ\Publish\SPI\Persistence\User $spiUser Loaded user handler
+     *
+     * @return bool return true if the login and password are sucessfully validate and false, if not.
+     */
+    protected function verifyPasswordForSPIUser(string $login, string $password, SPIUser $spiUser): bool
+    {
+        return $this->doVerifyPassword($login, $password, $spiUser->passwordHash, $spiUser->hashAlgorithm);
+    }
+
+    /**
+     * Verifies if the provided login and password are valid for eZ\Publish\API\Repository\Values\User\User.
+     *
+     * @param string $login User login
+     * @param string $password User password
+     * @param \eZ\Publish\API\Repository\Values\User\User $apiUser Loaded user
+     *
+     * @return bool return true if the login and password are sucessfully validate and false, if not.
+     */
+    protected function verifyPasswordForAPIUser(string $login, string $password, APIUser $apiUser): bool
+    {
+        return $this->doVerifyPassword($login, $password, $apiUser->passwordHash, $apiUser->hashAlgorithm);
+    }
+
+    /**
      * Verifies if the provided login and password are valid.
+     *
+     * @deprecated since v7.5.5 in favour of verifyPasswordForSPIUser
      *
      * @param string $login User login
      * @param string $password User password
@@ -1421,23 +1465,41 @@ class UserService implements UserServiceInterface
      */
     protected function verifyPassword($login, $password, $spiUser)
     {
+        return $this->verifyPasswordForSPIUser($login, $password, $spiUser);
+    }
+
+    /**
+     * Verifies if the provided login and password are valid against given password hash and hash type.
+     *
+     * @param string $login User login
+     * @param string $plainPassword User password
+     * @param string $passwordHash User password hash
+     * @param int $hashAlgorithm Hash type
+     *
+     * @return bool return true if the login and password are sucessfully validate and false, if not.
+     */
+    private function doVerifyPassword(
+        string $login,
+        string $plainPassword,
+        string $passwordHash,
+        int $hashAlgorithm
+    ): bool {
         // In case of bcrypt let php's password functionality do it's magic
-        if ($spiUser->hashAlgorithm === APIUser::PASSWORD_HASH_BCRYPT ||
-            $spiUser->hashAlgorithm === APIUser::PASSWORD_HASH_PHP_DEFAULT) {
-            return password_verify($password, $spiUser->passwordHash);
+        if ($hashAlgorithm === APIUser::PASSWORD_HASH_BCRYPT ||
+            $hashAlgorithm === APIUser::PASSWORD_HASH_PHP_DEFAULT
+        ) {
+            return password_verify($plainPassword, $passwordHash);
         }
 
         // Randomize login time to protect against timing attacks
         usleep(random_int(0, 30000));
 
-        $passwordHash = $this->createPasswordHash(
+        return $passwordHash === $this->createPasswordHash(
             $login,
-            $password,
+            $plainPassword,
             $this->settings['siteName'],
-            $spiUser->hashAlgorithm
+            $hashAlgorithm
         );
-
-        return $passwordHash === $spiUser->passwordHash;
     }
 
     /**
