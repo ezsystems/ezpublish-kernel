@@ -9,7 +9,6 @@
 namespace  eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
@@ -223,19 +222,6 @@ interface RoleService
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
     public function assignRoleToUserGroup(Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null);
-
-    /**
-     * Removes a role from the given user group.
-     *
-     * @deprecated since 6.0, use {@see removeRoleAssignment} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  If the role is not assigned to the given user group
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     */
-    public function unassignRoleFromUserGroup(Role $role, UserGroup $userGroup);
 
     /**
      * Assigns a role to the given user.

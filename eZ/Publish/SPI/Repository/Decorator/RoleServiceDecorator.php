@@ -119,13 +119,6 @@ abstract class RoleServiceDecorator implements RoleService
         return $this->innerService->assignRoleToUserGroup($role, $userGroup, $roleLimitation);
     }
 
-    public function unassignRoleFromUserGroup(
-        Role $role,
-        UserGroup $userGroup
-    ) {
-        return $this->innerService->unassignRoleFromUserGroup($role, $userGroup);
-    }
-
     public function assignRoleToUser(
         Role $role,
         User $user,

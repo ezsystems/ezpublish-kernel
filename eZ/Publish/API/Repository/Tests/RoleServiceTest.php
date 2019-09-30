@@ -2403,12 +2403,12 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the unassignRoleFromUserGroup() method.
+     * Test for the removeRoleAssignment() method.
      *
-     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup()
+     * @see \eZ\Publish\API\Repository\RoleService::removeRoleAssignment()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
-    public function testUnassignRoleFromUserGroup()
+    public function testRemoveRoleAssignmentFromUserGroup()
     {
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
@@ -2423,39 +2423,20 @@ class RoleServiceTest extends BaseTest
         $roleService->assignRoleToUserGroup($role, $userGroup);
 
         // Unassign group from role
-        $roleService->unassignRoleFromUserGroup($role, $userGroup);
+        $roleAssignments = $roleService->getRoleAssignmentsForUserGroup($userGroup);
 
+        // This call will fail with an "UnauthorizedException"
+        foreach ($roleAssignments as $roleAssignment) {
+            if ($roleAssignment->role->id === $role->id) {
+                $roleService->removeRoleAssignment($roleAssignment);
+            }
+        }
         // The assignments array will not contain the new role<->group assignment
         $roleAssignments = $roleService->getRoleAssignments($role);
         /* END: Use Case */
 
         // Members + Editors + Partners
         $this->assertCount(3, $roleAssignments);
-    }
-
-    /**
-     * Test for the unassignRoleFromUserGroup() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUnassignRoleFromUserGroup
-     */
-    public function testUnassignRoleFromUserGroupThrowsInvalidArgumentException()
-    {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-
-        $repository = $this->getRepository();
-        $roleService = $repository->getRoleService();
-
-        /* BEGIN: Use Case */
-        $userGroup = $this->createUserGroupVersion1();
-
-        // Load the existing "Member" role
-        $role = $roleService->loadRoleByIdentifier('Member');
-
-        // This call will fail with a "InvalidArgumentException", because the
-        // user group does not have the "Member" role.
-        $roleService->unassignRoleFromUserGroup($role, $userGroup);
-        /* END: Use Case */
     }
 
     /**

@@ -385,13 +385,13 @@ class RoleServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the unassignRoleFromUserGroup() method.
+     * Test for the removeRoleAssignment() method.
      *
-     * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUnassignRoleFromUserGroup
+     * @see \eZ\Publish\API\Repository\RoleService::removeRoleAssignment()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testRemoveRoleAssignmentFromUserGroup
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testUnassignRoleFromUserGroupThrowsUnauthorizedException()
+    public function testRemoveRoleAssignmentFromUserGroupThrowsUnauthorizedException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
@@ -416,8 +416,14 @@ class RoleServiceAuthorizationTest extends BaseTest
         // Set "Editor" user as current user.
         $permissionResolver->setCurrentUserReference($user);
 
+        $roleAssignments = $roleService->getRoleAssignmentsForUserGroup($userGroup);
+
         // This call will fail with an "UnauthorizedException"
-        $roleService->unassignRoleFromUserGroup($role, $userGroup);
+        foreach ($roleAssignments as $roleAssignment) {
+            if ($roleAssignment->role->id === $role->id) {
+                $roleService->removeRoleAssignment($roleAssignment);
+            }
+        }
         /* END: Use Case */
     }
 
