@@ -74,6 +74,10 @@ Changes affecting version compatibility with former or future versions.
     * `\eZ\Publish\API\Repository\Repository::hasAccess`
     * `\eZ\Publish\API\Repository\Repository::canUser`
 
+* The "Setup" folder and Section have been removed from the initial (clean installation) data.
+
+* The "Design" Section has been removed from the initial (clean installation) data.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
