@@ -315,7 +315,7 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function testFulltextLocationSearchSolr6($searchString, array $expectedKeys, array $idMap): void
     {
-        if (($solrVersion = getenv('SOLR_VERSION')) >= 7) {
+        if (($solrVersion = getenv('SOLR_VERSION')) && ($solrVersion < 6 || $solrVersion >= 7)) {
             $this->markTestSkipped('This test is only relevant for Solr 6');
         }
 
