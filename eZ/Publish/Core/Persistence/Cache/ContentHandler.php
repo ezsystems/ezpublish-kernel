@@ -223,6 +223,13 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         return $versionInfo;
     }
 
+    public function countDraftsForUser(int $userId): int
+    {
+        $this->logger->logCall(__METHOD__, ['user' => $userId]);
+
+        return $this->persistenceHandler->contentHandler()->countDraftsForUser($userId);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -231,6 +238,13 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $this->logger->logCall(__METHOD__, ['user' => $userId]);
 
         return $this->persistenceHandler->contentHandler()->loadDraftsForUser($userId);
+    }
+
+    public function loadDraftListForUser(int $userId, int $offset = 0, int $limit = -1): array
+    {
+        $this->logger->logCall(__METHOD__, ['user' => $userId, 'offset' => $offset, 'limit' => $limit]);
+
+        return $this->persistenceHandler->contentHandler()->loadDraftListForUser($userId, $offset, $limit);
     }
 
     /**

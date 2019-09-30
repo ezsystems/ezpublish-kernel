@@ -10,6 +10,7 @@ namespace eZ\Publish\SPI\Repository\Decorator;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -130,9 +131,19 @@ abstract class ContentServiceDecorator implements ContentService
         return $this->innerService->createContentDraft($contentInfo, $versionInfo, $creator);
     }
 
+    public function countContentDrafts(User $user = null): int
+    {
+        return $this->innerService->countContentDrafts($user);
+    }
+
     public function loadContentDrafts(User $user = null): array
     {
         return $this->innerService->loadContentDrafts($user);
+    }
+
+    public function loadContentDraftList(?User $user = null, int $offset = 0, int $limit = -1): ContentDraftList
+    {
+        return $this->innerService->loadContentDraftList($user, $offset, $limit);
     }
 
     public function updateContent(

@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\DraftList\Item\UnauthorizedContentDraftListItem;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -26,8 +27,10 @@ use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException as CoreUnauthorizedException;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use InvalidArgumentException;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -544,7 +547,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->expectException(NotFoundException::class);
 
-        // This call will fail with a NotFoundException
         $this->contentService->loadContentInfo($nonExistentContentId);
     }
 
@@ -2037,6 +2039,51 @@ class ContentServiceTest extends BaseContentServiceTest
         }
     }
 
+    public function testCountContentDraftsReturnsZeroByDefault(): void
+    {
+        $this->assertSame(0, $this->contentService->countContentDrafts());
+    }
+
+    public function testCountContentDrafts(): void
+    {
+        // Create 5 drafts
+        $this->createContentDrafts(5);
+
+        $this->assertSame(5, $this->contentService->countContentDrafts());
+    }
+
+    public function testCountContentDraftsForUsers(): void
+    {
+        $newUser = $this->createUserWithPolicies(
+            'new_user',
+            [
+                ['module' => 'content', 'function' => 'create'],
+                ['module' => 'content', 'function' => 'read'],
+                ['module' => 'content', 'function' => 'publish'],
+                ['module' => 'content', 'function' => 'edit'],
+            ]
+        );
+
+        $previousUser = $this->permissionResolver->getCurrentUserReference();
+
+        // Set new editor as user
+        $this->permissionResolver->setCurrentUserReference($newUser);
+
+        // Create a content draft as newUser
+        $publishedContent = $this->createContentVersion1();
+        $this->contentService->createContentDraft($publishedContent->contentInfo);
+
+        // Reset to previous current user
+        $this->permissionResolver->setCurrentUserReference($previousUser);
+
+        // Now $contentDrafts for the previous current user and the new user
+        $newUserDrafts = $this->contentService->countContentDrafts($newUser);
+        $previousUserDrafts = $this->contentService->countContentDrafts();
+
+        $this->assertSame(1, $newUserDrafts);
+        $this->assertSame(0, $previousUserDrafts);
+    }
+
     /**
      * Test for the loadContentDrafts() method.
      *
@@ -2132,6 +2179,84 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertTrue($newCurrentUserDrafts[0]->isDraft());
         $this->assertFalse($newCurrentUserDrafts[0]->isArchived());
         $this->assertFalse($newCurrentUserDrafts[0]->isPublished());
+    }
+
+    /**
+     * Test for the loadContentDraftList() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
+     */
+    public function testLoadContentDraftListWithPaginationParameters()
+    {
+        // Create some drafts
+        $publishedContent = $this->createContentVersion1();
+        $draftContentA = $this->contentService->createContentDraft($publishedContent->contentInfo);
+        $draftContentB = $this->contentService->createContentDraft($draftContentA->contentInfo);
+        $draftContentC = $this->contentService->createContentDraft($draftContentB->contentInfo);
+        $draftContentD = $this->contentService->createContentDraft($draftContentC->contentInfo);
+        $draftContentE = $this->contentService->createContentDraft($draftContentD->contentInfo);
+
+        $draftsOnPage1 = $this->contentService->loadContentDraftList(null, 0, 2);
+        $draftsOnPage2 = $this->contentService->loadContentDraftList(null, 2, 2);
+
+        $this->assertSame(5, $draftsOnPage1->totalCount);
+        $this->assertSame(5, $draftsOnPage2->totalCount);
+        $this->assertEquals($draftContentE->getVersionInfo(), $draftsOnPage1->items[0]->getVersionInfo());
+        $this->assertEquals($draftContentD->getVersionInfo(), $draftsOnPage1->items[1]->getVersionInfo());
+        $this->assertEquals($draftContentC->getVersionInfo(), $draftsOnPage2->items[0]->getVersionInfo());
+        $this->assertEquals($draftContentB->getVersionInfo(), $draftsOnPage2->items[1]->getVersionInfo());
+    }
+
+    /**
+     * Test for the loadContentDraftList() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts($user)
+     */
+    public function testLoadContentDraftListWithForUserWithLimitation()
+    {
+        $oldUser = $this->permissionResolver->getCurrentUserReference();
+
+        $parentContent = $this->createFolder(['eng-US' => 'parentFolder'], 2);
+        $content = $this->createFolder(['eng-US' => 'parentFolder'], $parentContent->contentInfo->mainLocationId);
+
+        // User has limitation to read versions only for `$content`, not for `$parentContent`
+        $newUser = $this->createUserWithVersionReadLimitations([$content->contentInfo->mainLocationId]);
+
+        $this->permissionResolver->setCurrentUserReference($newUser);
+
+        $contentDraftUnauthorized = $this->contentService->createContentDraft($parentContent->contentInfo);
+        $contentDraftA = $this->contentService->createContentDraft($content->contentInfo);
+        $contentDraftB = $this->contentService->createContentDraft($content->contentInfo);
+
+        $newUserDraftList = $this->contentService->loadContentDraftList($newUser, 0);
+        $this->assertSame(3, $newUserDraftList->totalCount);
+        $this->assertEquals($contentDraftB->getVersionInfo(), $newUserDraftList->items[0]->getVersionInfo());
+        $this->assertEquals($contentDraftA->getVersionInfo(), $newUserDraftList->items[1]->getVersionInfo());
+        $this->assertEquals(
+            new UnauthorizedContentDraftListItem('content', 'versionread', ['contentId' => $contentDraftUnauthorized->id]),
+            $newUserDraftList->items[2]
+        );
+
+        // Reset to previous user
+        $this->permissionResolver->setCurrentUserReference($oldUser);
+
+        $oldUserDraftList = $this->contentService->loadContentDraftList();
+
+        $this->assertSame(0, $oldUserDraftList->totalCount);
+        $this->assertSame([], $oldUserDraftList->items);
+    }
+
+    /**
+     * Test for the loadContentDraftList() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
+     */
+    public function testLoadAllContentDrafts()
+    {
+        // Create more drafts then default pagination limit
+        $this->createContentDrafts(12);
+
+        $this->assertCount(12, $this->contentService->loadContentDraftList());
     }
 
     /**
@@ -3290,7 +3415,6 @@ class ContentServiceTest extends BaseContentServiceTest
             $demoDesign
         );
 
-        // Load all relations
         $relations = $this->contentService->loadRelations($mediaDraft->getVersionInfo());
 
         $this->assertCount(1, $relations);
@@ -3345,7 +3469,6 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->contentService->publishVersion($mediaDraft->getVersionInfo());
         $this->contentService->publishVersion($demoDesignDraft->getVersionInfo());
 
-        // Load all relations
         $relations = $this->contentService->loadRelations($versionInfo);
         $reverseRelations = $this->contentService->loadReverseRelations($contentInfo);
 
@@ -3500,7 +3623,6 @@ class ContentServiceTest extends BaseContentServiceTest
         // We will not publish new Content draft, therefore relation from it
         // will not be loaded as reverse relation for "Media" page
 
-        // Load all relations
         $relations = $this->contentService->loadRelations($media->versionInfo);
         $reverseRelations = $this->contentService->loadReverseRelations($media->contentInfo);
 
@@ -5521,7 +5643,6 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertCount(3, $locations);
         $this->assertCount(1, $hiddenLocations);
 
-        // BEGIN: Use Case
         $this->contentService->hideContent($publishedContent->contentInfo);
         $this->assertCount(
             3,
@@ -5531,7 +5652,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->contentService->revealContent($publishedContent->contentInfo);
-        // END: Use Case
 
         $locations = $this->locationService->loadLocations($publishedContent->contentInfo);
         $hiddenLocationsAfterReveal = $this->filterHiddenLocations($locations);
@@ -5879,5 +5999,49 @@ class ContentServiceTest extends BaseContentServiceTest
         $urlAliasService = $this->getRepository()->getURLAliasService();
         $urlAlias = $urlAliasService->lookup($expectedPath);
         $this->assertSame($expectedPath, $urlAlias->path);
+    }
+
+    /**
+     * @param int $amountOfDrafts
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function createContentDrafts(int $amountOfDrafts): void
+    {
+        if (0 >= $amountOfDrafts) {
+            throw new InvalidArgumentException('$amountOfDrafts', 'Must be greater then 0');
+        }
+
+        $publishedContent = $this->createContentVersion1();
+
+        for ($i = 1; $i <= $amountOfDrafts; ++$i) {
+            $this->contentService->createContentDraft($publishedContent->contentInfo);
+        }
+    }
+
+    /**
+     * @param array $limitationValues
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function createUserWithVersionReadLimitations(array $limitationValues = []): User
+    {
+        $limitations = [
+            new LocationLimitation(['limitationValues' => $limitationValues]),
+        ];
+
+        return $this->createUserWithPolicies(
+            'user',
+            [
+                ['module' => 'content', 'function' => 'versionread', 'limitations' => $limitations],
+                ['module' => 'content', 'function' => 'create'],
+                ['module' => 'content', 'function' => 'read'],
+                ['module' => 'content', 'function' => 'edit'],
+            ]
+        );
     }
 }
