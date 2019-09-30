@@ -10617,15 +10617,6 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'user_id' => '14',
     ],
   ],
-  'ezuservisit' => [
-    0 => [
-      'current_visit_timestamp' => '1343140525',
-      'failed_login_attempts' => '0',
-      'last_visit_timestamp' => '1301057720',
-      'login_count' => '0',
-      'user_id' => '14',
-    ],
-  ],
   'ezcontentbrowsebookmark' => [
     0 => [
       'id' => '1',

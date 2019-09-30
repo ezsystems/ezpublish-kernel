@@ -74,6 +74,96 @@ Changes affecting version compatibility with former or future versions.
     * `\eZ\Publish\API\Repository\Repository::hasAccess`
     * `\eZ\Publish\API\Repository\Repository::canUser`
 
+* The "Setup" folder and Section have been removed from the initial (clean installation) data.
+
+* The "Design" Section has been removed from the initial (clean installation) data.
+
+* The following obsolete tables have been removed from the database schema:
+    - ezapprove_items,
+    - ezbasket,
+    - ezcollab_group,
+    - ezcollab_item,
+    - ezcollab_item_group_link,
+    - ezcollab_item_message_link,
+    - ezcollab_item_participant_link,
+    - ezcollab_item_status,
+    - ezcollab_notification_rule,
+    - ezcollab_profile,
+    - ezcollab_simple_message,
+    - ezcomment,
+    - ezcomment_notification,
+    - ezcomment_subscriber,
+    - ezcomment_subscription,
+    - ezcontentbrowserecent,
+    - ezcurrencydata,
+    - ezdiscountrule,
+    - ezdiscountsubrule,
+    - ezdiscountsubrule_value,
+    - ezenumobjectvalue,
+    - ezenumvalue,
+    - ezforgot_password,
+    - ezgeneral_digest_user_settings,
+    - ezinfocollection,
+    - ezinfocollection_attribute,
+    - ezisbn_group,
+    - ezisbn_group_range,
+    - ezisbn_registrant_range,
+    - ezm_block,
+    - ezm_pool,
+    - ezmessage,
+    - ezmodule_run,
+    - ezmultipricedata,
+    - eznotificationcollection,
+    - eznotificationcollection_item,
+    - eznotificationevent,
+    - ezoperation_memento,
+    - ezorder,
+    - ezorder_item,
+    - ezorder_nr_incr,
+    - ezorder_status,
+    - ezorder_status_history,
+    - ezpaymentobject,
+    - ezpdf_export,
+    - ezpending_actions,
+    - ezprest_authcode,
+    - ezprest_authorized_clients,
+    - ezprest_clients,
+    - ezprest_token,
+    - ezproductcategory,
+    - ezproductcollection,
+    - ezproductcollection_item,
+    - ezproductcollection_item_opt,
+    - ezpublishingqueueprocesses,
+    - ezrss_export,
+    - ezrss_export_item,
+    - ezrss_import,
+    - ezscheduled_script,
+    - ezsearch_search_phrase,
+    - ezsession,
+    - ezsubtree_notification_rule,
+    - eztipafriend_counter,
+    - eztipafriend_request,
+    - eztrigger,
+    - ezuservisit,
+    - ezuser_discountrule,
+    - ezvatrule,
+    - ezvatrule_product_category,
+    - ezvattype,
+    - ezview_counter,
+    - ezwaituntildatevalue,
+    - ezwishlist,
+    - ezworkflow,
+    - ezworkflow_assign,
+    - ezworkflow_event,
+    - ezworkflow_group,
+    - ezworkflow_group_link,
+    - ezworkflow_process.
+
+    If your project doesn't use them, you can drop them from your database by executing the SQL:
+    ```sql
+        DROP TABLE <table_name>;
+    ```
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
