@@ -1180,6 +1180,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setName
+     *
+     * @throws \Exception
      */
     public function testSetName()
     {
@@ -1194,7 +1196,17 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
             [['eng-GB', 2, 14, 4, 'Hello world!', 'eng-GB']],
-            $query->select('*')
+            $query
+                ->select(
+                    [
+                        'content_translation',
+                        'content_version',
+                        'contentobject_id',
+                        'language_id',
+                        'name',
+                        'real_translation',
+                    ]
+                )
                 ->from('ezcontentobject_name')
                 ->where(
                     $query->expr->lAnd(

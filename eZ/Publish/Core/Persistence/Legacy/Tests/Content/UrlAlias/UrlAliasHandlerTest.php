@@ -2150,7 +2150,7 @@ class UrlAliasHandlerTest extends TestCase
      * @group create
      * @group custom
      */
-    public function testCreateCustomUrlAliasWithNopElement()
+    public function testCreateCustomUrlAliasWithNopElement(): void
     {
         $handler = $this->getHandler();
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/publish_base.php');
@@ -2195,19 +2195,7 @@ class UrlAliasHandlerTest extends TestCase
             $customUrlAlias
         );
 
-        return $handler;
-    }
-
-    /**
-     * Test for the createUrlAlias() method.
-     *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
-     * @depends testCreateCustomUrlAliasWithNopElement
-     * @group create
-     * @group custom
-     */
-    public function testCreateUrlAliasWithNopElementCreatesValidNopElement(Handler $handler)
-    {
+        // test that valid NOP element has been created
         $url = 'ribar';
         $urlAlias = $handler->lookup($url);
 

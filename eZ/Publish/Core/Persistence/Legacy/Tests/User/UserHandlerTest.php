@@ -211,7 +211,9 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, self::TEST_USER_ID]],
-            $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
+            $this->handler->createSelectQuery()->select(
+                ['hash_key', 'id', 'time', 'user_id']
+            )->from('ezuser_accountkey'),
             'Expected user data to be updated.'
         );
 
@@ -219,7 +221,9 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [['0800fc577294c34e0b28ad2839435945', 1, 2234567890, self::TEST_USER_ID]],
-            $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
+            $this->handler->createSelectQuery()->select(
+                ['hash_key', 'id', 'time', 'user_id']
+            )->from('ezuser_accountkey'),
             'Expected user token data to be updated.'
         );
     }
@@ -232,7 +236,9 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, self::TEST_USER_ID]],
-            $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
+            $this->handler->createSelectQuery()->select(
+                ['hash_key', 'id', 'time', 'user_id']
+            )->from('ezuser_accountkey'),
             'Expected user data to be updated.'
         );
 
@@ -240,7 +246,9 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [['0800fc577294c34e0b28ad2839435945', 1, 0, self::TEST_USER_ID]],
-            $this->handler->createSelectQuery()->select('*')->from('ezuser_accountkey'),
+            $this->handler->createSelectQuery()->select(
+                ['hash_key', 'id', 'time', 'user_id']
+            )->from('ezuser_accountkey'),
             'Expected user token to be expired.'
         );
     }

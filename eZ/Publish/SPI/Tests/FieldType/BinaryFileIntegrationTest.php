@@ -77,7 +77,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\BinaryFileConverter(),
             new FieldType\BinaryFile\BinaryFileStorage(
-                new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage($this->getDatabaseHandler()),
+                new FieldType\BinaryFile\BinaryFileStorage\Gateway\DoctrineStorage($this->getDatabaseConnection()),
                 $this->ioService,
                 new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
                 new FileInfo()

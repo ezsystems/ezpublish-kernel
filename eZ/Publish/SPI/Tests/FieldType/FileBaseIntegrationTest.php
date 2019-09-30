@@ -150,6 +150,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         $loader->load('fieldtype_services.yml');
         $loader->load('utils.yml');
         $loader->load('tests/common.yml');
+        $loader->load('tests/integration_legacy.yml');
         $loader->load('policies.yml');
         $loader->load('events.yml');
 

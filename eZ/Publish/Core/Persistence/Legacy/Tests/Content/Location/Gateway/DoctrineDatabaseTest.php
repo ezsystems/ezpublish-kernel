@@ -294,6 +294,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testMoveSubtreeAssignmentUpdate()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
@@ -306,7 +309,23 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                 [67, 1, 0, 53, 1, 5, 77, '9cec85d730eec7578190ee95ce5a36f5', 0, 2, 1, 0, 0],
             ],
             $query
-                ->select('*')
+                ->select(
+                    [
+                        'contentobject_id',
+                        'contentobject_version',
+                        'from_node_id',
+                        'id',
+                        'is_main',
+                        'op_code',
+                        'parent_node',
+                        'parent_remote_id',
+                        'remote_id',
+                        'sort_field',
+                        'sort_order',
+                        'priority',
+                        'is_hidden',
+                    ]
+                )
                 ->from('eznode_assignment')
                 ->where($query->expr->eq('contentobject_id', 67))
         );

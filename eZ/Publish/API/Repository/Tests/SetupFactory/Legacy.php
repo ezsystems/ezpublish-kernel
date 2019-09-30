@@ -11,11 +11,9 @@ namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\PDOException;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
+use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
 use eZ\Publish\Core\Base\ServiceContainer;
-use EzSystems\DoctrineSchema\API\Exception\InvalidConfigurationException;
-use EzSystems\DoctrineSchema\Importer\SchemaImporter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
@@ -315,83 +313,20 @@ class Legacy extends SetupFactory
 
     /**
      * Initializes the database schema.
+     *
+     * @throws \Doctrine\DBAL\ConnectionException
      */
-    protected function initializeSchema()
+    protected function initializeSchema(): void
     {
         if (!self::$schemaInitialized) {
-            $this->createSchema(
+            $schemaImporter = new LegacySchemaImporter($this->getDatabaseConnection());
+            $schemaImporter->importSchema(
                 dirname(__DIR__, 5) .
                 '/Bundle/EzPublishCoreBundle/Resources/config/storage/legacy/schema.yaml'
             );
 
             self::$schemaInitialized = true;
         }
-    }
-
-    /**
-     * Import database schema from Doctrine Schema Yaml configuration file.
-     *
-     * @param string $schemaFilePath Yaml schema configuration file path
-     *
-     * @throws \Doctrine\DBAL\ConnectionException
-     */
-    private function createSchema(string $schemaFilePath)
-    {
-        if (!file_exists($schemaFilePath)) {
-            throw new \RuntimeException("The schema file path {$schemaFilePath} does not exist");
-        }
-
-        $connection = $this->getDatabaseConnection();
-        $connection->beginTransaction();
-        $importer = new SchemaImporter();
-        try {
-            $databasePlatform = $connection->getDatabasePlatform();
-            $schema = $importer->importFromFile($schemaFilePath);
-            $statements = array_merge(
-                $this->getDropSqlStatementsForExistingSchema(
-                    $schema,
-                    $databasePlatform,
-                    $connection
-                ),
-                // generate schema DDL queries
-                $schema->toSql($databasePlatform)
-            );
-
-            foreach ($statements as $statement) {
-                $connection->exec($statement);
-            }
-
-            $connection->commit();
-        } catch (InvalidConfigurationException | DBALException $e) {
-            $connection->rollBack();
-            throw new \RuntimeException($e->getMessage(), 1, $e);
-        }
-    }
-
-    /**
-     * @param \Doctrine\DBAL\Schema\Schema $newSchema
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $databasePlatform
-     * @param \Doctrine\DBAL\Connection $connection
-     *
-     * @return string[]
-     */
-    protected function getDropSqlStatementsForExistingSchema(
-        Schema $newSchema,
-        AbstractPlatform $databasePlatform,
-        Connection $connection
-    ): array {
-        $existingSchema = $connection->getSchemaManager()->createSchema();
-        $statements = [];
-        // reverse table order for clean-up (due to FKs)
-        $tables = array_reverse($newSchema->getTables());
-        // cleanup pre-existing database
-        foreach ($tables as $table) {
-            if ($existingSchema->hasTable($table->getName())) {
-                $statements[] = $databasePlatform->getDropTableSQL($table);
-            }
-        }
-
-        return $statements;
     }
 
     /**
@@ -407,18 +342,6 @@ class Legacy extends SetupFactory
     }
 
     // ************* Setup copied and refactored from common.php ************
-
-    /**
-     * Returns the database schema as an array of SQL statements.
-     *
-     * @return string[]
-     */
-    protected function getSchemaStatements()
-    {
-        $schemaPath = __DIR__ . '/../../../../Core/Persistence/Legacy/Tests/_fixtures/schema.' . self::$db . '.sql';
-
-        return array_filter(preg_split('(;\\s*$)m', file_get_contents($schemaPath)));
-    }
 
     /**
      * Returns the database handler from the service container.
