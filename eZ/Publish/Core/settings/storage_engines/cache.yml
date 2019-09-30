@@ -31,20 +31,15 @@ parameters:
 
 services:
     # Setup cache pool, with InMemoryCacheAdapter as decorator
-    ezpublish.cache_pool:
-        class: eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter
+    eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter:
+        decorates: ezpublish.cache_pool
         lazy: true
         arguments:
-          - "@ezpublish.cache_pool.inner"
-          - !tagged ez.spi.persistence.cache.inmemory
+            $sharedPool: '@eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter.inner'
+            $inMemoryPools: !tagged ez.spi.persistence.cache.inmemory
 
-    eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalCacheAdapterDecorator:
-          decorates: ezpublish.cache_pool
-          arguments:
-              $innerPool: '@eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalCacheAdapterDecorator.inner'
-
-    ezpublish.cache_pool.inner:
-        public: false
+    ezpublish.cache_pool:
+        public: true
         class: Symfony\Component\Cache\Adapter\TagAwareAdapter
         arguments: ["@ezpublish.cache_pool.driver"]
 

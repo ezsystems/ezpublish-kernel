@@ -18,7 +18,7 @@ use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 abstract class AbstractInMemoryHandler
 {
     /**
-     * NOTE: Instance of this must be InMemoryClearingProxyAdapter in order for cache clearing to affect in-memory cache.
+     * NOTE: Instance of this must be TransactionalInMemoryCacheAdapter in order for cache clearing to affect in-memory cache.
      *
      * @var \eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface
      */

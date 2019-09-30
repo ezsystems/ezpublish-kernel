@@ -9,7 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests\Regression;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;
-use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalCacheAdapterDecorator;
+use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -26,15 +26,11 @@ class EnvTest extends BaseTest
     {
         $pool = $this->getSetupFactory()->getServiceContainer()->get('ezpublish.cache_pool');
 
-        $this->assertInstanceOf(TransactionalCacheAdapterDecorator::class, $pool);
+        $this->assertInstanceOf(TransactionalInMemoryCacheAdapter::class, $pool);
 
-        $reflectionDecoratedPool = new \ReflectionProperty($pool, 'innerPool');
+        $reflectionDecoratedPool = new \ReflectionProperty($pool, 'sharedPool');
         $reflectionDecoratedPool->setAccessible(true);
-        $decoratedPool = $reflectionDecoratedPool->getValue($pool);
-
-        $reflectionPool = new \ReflectionProperty($decoratedPool, 'pool');
-        $reflectionPool->setAccessible(true);
-        $pool = $reflectionPool->getValue($decoratedPool);
+        $pool = $reflectionDecoratedPool->getValue($pool);
 
         $this->assertInstanceOf(TagAwareAdapter::class, $pool);
 
