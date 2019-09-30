@@ -171,21 +171,6 @@ class RoleServiceDecoratorTest extends TestCase
         $decoratedService->publishRoleDraft(...$parameters);
     }
 
-    public function testUpdatePolicyDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [
-            $this->createMock(Policy::class),
-            $this->createMock(PolicyUpdateStruct::class),
-        ];
-
-        $serviceMock->expects($this->once())->method('updatePolicy')->with(...$parameters);
-
-        $decoratedService->updatePolicy(...$parameters);
-    }
-
     public function testLoadRoleDecorator()
     {
         $serviceMock = $this->createServiceMock();

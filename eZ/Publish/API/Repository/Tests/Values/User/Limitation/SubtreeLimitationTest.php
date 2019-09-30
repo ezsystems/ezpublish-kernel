@@ -117,9 +117,11 @@ class SubtreeLimitationTest extends BaseLimitationTest
         $permissionResolver = $repository->getPermissionResolver();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $editPolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'read' != $policy->function) {
                 continue;
             }
@@ -143,7 +145,11 @@ class SubtreeLimitationTest extends BaseLimitationTest
                 ]
             )
         );
-        $roleService->updatePolicy($editPolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $editPolicy,
+            $policyUpdate
+        );
 
         // Allow subtree access and user+user-group edit
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'edit');
@@ -152,7 +158,6 @@ class SubtreeLimitationTest extends BaseLimitationTest
                 ['limitationValues' => [$userTypeId, $groupTypeId]]
             )
         );
-        $roleDraft = $roleService->createRoleDraft($role);
         $roleService->addPolicyByRoleDraft(
             $roleDraft,
             $policyCreate

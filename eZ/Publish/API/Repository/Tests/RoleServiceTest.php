@@ -1237,7 +1237,7 @@ class RoleServiceTest extends BaseTest
         );
     }
 
-    public function testUpdatePolicyNoLimitation()
+    public function testUpdatePolicyByRoleDraftNoLimitation()
     {
         $repository = $this->getRepository();
 
@@ -1260,9 +1260,12 @@ class RoleServiceTest extends BaseTest
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
+
+        $roleDraft = $roleService->createRoleDraft($role);
         // Search for the new policy instance
         $policy = null;
-        foreach ($role->getPolicies() as $policy) {
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ($policy->module === 'foo' && $policy->function === 'bar') {
                 break;
             }
@@ -1272,7 +1275,13 @@ class RoleServiceTest extends BaseTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
 
         // Update the the policy
-        $policy = $roleService->updatePolicy($policy, $policyUpdate);
+        $policy = $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $policy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
+
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1284,15 +1293,13 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updatePolicy() method.
-     *
      * @return array
      *
-     * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
+     * @see \eZ\Publish\API\Repository\RoleService::updatePolicyByRoleDraft()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyByRoleDraft
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyUpdateStruct
      */
-    public function testUpdatePolicy()
+    public function testUpdatePolicyByRoleDraft()
     {
         $repository = $this->getRepository();
 
@@ -1324,9 +1331,11 @@ class RoleServiceTest extends BaseTest
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
+        $roleDraft = $roleService->createRoleDraft($role);
         // Search for the new policy instance
         $policy = null;
-        foreach ($role->getPolicies() as $policy) {
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ($policy->module === 'content' && $policy->function === 'translate') {
                 break;
             }
@@ -1343,7 +1352,13 @@ class RoleServiceTest extends BaseTest
         );
 
         // Update the the policy
-        $policy = $roleService->updatePolicy($policy, $policyUpdate);
+        $policy = $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $policy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
+
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1355,12 +1370,10 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updatePolicy() method.
-     *
      * @param array $roleAndPolicy
      *
-     * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdatePolicy
+     * @see \eZ\Publish\API\Repository\RoleService::testUpdatePolicyByRoleDraft()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdatePolicyByRoleDraft
      */
     public function testUpdatePolicyUpdatesLimitations($roleAndPolicy)
     {
@@ -1385,7 +1398,7 @@ class RoleServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
-     * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
+     * @see \eZ\Publish\API\Repository\RoleService::updatePolicyByRoleDraft()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdatePolicyUpdatesLimitations
      */
     public function testUpdatePolicyUpdatesRole($role)
@@ -1415,14 +1428,14 @@ class RoleServiceTest extends BaseTest
     /**
      * Test for the updatePolicy() method.
      *
-     * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
+     * @see \eZ\Publish\API\Repository\RoleService::updatePolicyByRoleDraft()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicyByRoleDraft
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyUpdateStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
      */
-    public function testUpdatePolicyThrowsLimitationValidationException()
+    public function testUpdatePolicyByRoleDraftThrowsLimitationValidationException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
 
@@ -1455,10 +1468,11 @@ class RoleServiceTest extends BaseTest
         $roleDraft = $roleService->createRole($roleCreate);
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
-
+        $roleDraft = $roleService->createRoleDraft($role);
         // Search for the new policy instance
         $policy = null;
-        foreach ($role->getPolicies() as $policy) {
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ($policy->module === 'content' && $policy->function === 'remove') {
                 break;
             }
@@ -1476,7 +1490,11 @@ class RoleServiceTest extends BaseTest
 
         // This call will fail with an LimitationValidationException, because subtree
         // "/mountain/forest/tree/42/" does not exist
-        $policy = $roleService->updatePolicy($policy, $policyUpdate);
+        $policy = $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $policy,
+            $policyUpdate
+        );
         /* END: Use Case */
     }
 

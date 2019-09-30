@@ -75,10 +75,12 @@ class EZP21798Test extends BaseTest
         $contentInfoarticle = $contentService->loadContentInfo($contentArticle->contentInfo->id);
 
         // Allow anonymous user to Content/Read/Section( Standard, Private )
-        $roles = $roleService->loadRoleByIdentifier('Anonymous');
+        $role = $roleService->loadRoleByIdentifier('Anonymous');
+        $roleDraft = $roleService->createRoleDraft($role);
 
-        $numPolicies = count($roles->getPolicies());
-        $policies = $roles->getPolicies();
+        $numPolicies = count($roleDraft->getPolicies());
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft[] $policies */
+        $policies = $roleDraft->getPolicies();
         $found = false;
 
         do {
@@ -96,7 +98,12 @@ class EZP21798Test extends BaseTest
         $newLimitation->limitationValues = [1, $section->id];
         $newPolicy->addLimitation($newLimitation);
 
-        $roleService->updatePolicy($policies[$numPolicies], $newPolicy);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $policies[$numPolicies],
+            $newPolicy
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         // Access /Folder/Article
         $anonymousUser = $userService->loadUser(10);

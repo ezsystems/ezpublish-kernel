@@ -427,9 +427,11 @@ class LocationServiceAuthorizationTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
+        $roleDraft = $roleService->createRoleDraft($role);
 
         $removePolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'remove' != $policy->function) {
                 continue;
             }
@@ -448,7 +450,12 @@ class LocationServiceAuthorizationTest extends BaseTest
                 ['limitationValues' => [1]]
             )
         );
-        $roleService->updatePolicy($removePolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $removePolicy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         // Set current user to newly created user
         $permissionResolver->setCurrentUserReference($user);

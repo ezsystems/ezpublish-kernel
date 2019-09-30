@@ -91,13 +91,6 @@ abstract class RoleServiceDecorator implements RoleService
         return $this->innerService->publishRoleDraft($roleDraft);
     }
 
-    public function updatePolicy(
-        Policy $policy,
-        PolicyUpdateStruct $policyUpdateStruct
-    ) {
-        return $this->innerService->updatePolicy($policy, $policyUpdateStruct);
-    }
-
     public function loadRole($id)
     {
         return $this->innerService->loadRole($id);

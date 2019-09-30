@@ -531,64 +531,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitations are replaced by the ones in $roleUpdateStruct.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
-     */
-    public function updatePolicy(APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct)
-    {
-        if (!is_string($policy->module)) {
-            throw new InvalidArgumentValue('module', $policy->module, 'Policy');
-        }
-
-        if (!is_string($policy->function)) {
-            throw new InvalidArgumentValue('function', $policy->function, 'Policy');
-        }
-
-        if (!$this->permissionResolver->canUser('role', 'update', $policy)) {
-            throw new UnauthorizedException('role', 'update');
-        }
-
-        $limitations = $policyUpdateStruct->getLimitations();
-        $limitationValidationErrors = $this->validatePolicy(
-            $policy->module,
-            $policy->function,
-            $limitations
-        );
-        if (!empty($limitationValidationErrors)) {
-            throw new LimitationValidationException($limitationValidationErrors);
-        }
-
-        $spiPolicy = $this->roleDomainMapper->buildPersistencePolicyObject(
-            $policy->module,
-            $policy->function,
-            $limitations
-        );
-        $spiPolicy->id = $policy->id;
-        $spiPolicy->roleId = $policy->roleId;
-
-        $this->repository->beginTransaction();
-        try {
-            $this->userHandler->updatePolicy($spiPolicy);
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-
-        return $this->roleDomainMapper->buildDomainPolicyObject($spiPolicy);
-    }
-
-    /**
      * Loads a role for the given id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role

@@ -39,9 +39,11 @@ class SectionLimitationTest extends BaseLimitationTest
         $permissionResolver = $repository->getPermissionResolver();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $readPolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'read' != $policy->function) {
                 continue;
             }
@@ -61,7 +63,13 @@ class SectionLimitationTest extends BaseLimitationTest
             )
         );
 
-        $roleService->updatePolicy($readPolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $readPolicy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
+
         $roleService->assignRoleToUser($role, $user);
 
         $permissionResolver->setCurrentUserReference($user);
@@ -98,9 +106,11 @@ class SectionLimitationTest extends BaseLimitationTest
         $permissionResolver = $repository->getPermissionResolver();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $readPolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'read' != $policy->function) {
                 continue;
             }
@@ -120,7 +130,13 @@ class SectionLimitationTest extends BaseLimitationTest
             )
         );
 
-        $roleService->updatePolicy($readPolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $readPolicy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
+
         $roleService->assignRoleToUser($role, $user);
 
         $permissionResolver->setCurrentUserReference($user);

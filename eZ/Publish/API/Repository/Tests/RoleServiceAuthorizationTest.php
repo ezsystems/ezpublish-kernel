@@ -190,11 +190,11 @@ class RoleServiceAuthorizationTest extends BaseTest
     /**
      * Test for the updatePolicy() method.
      *
-     * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdatePolicy
+     * @see \eZ\Publish\API\Repository\RoleService::updatePolicyByRoleDraft()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdatePolicyByRoleDraft
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testUpdatePolicyThrowsUnauthorizedException()
+    public function testUpdatePolicyByRoleDraftThrowsUnauthorizedException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
@@ -206,9 +206,9 @@ class RoleServiceAuthorizationTest extends BaseTest
         $user = $this->createUserVersion1();
 
         $role = $this->createRole();
-
+        $roleDraft = $roleService->createRoleDraft($role);
         // Get first role policy
-        $policies = $role->getPolicies();
+        $policies = $roleDraft->getPolicies();
         $policy = reset($policies);
 
         // Set "Editor" user as current user.
@@ -225,7 +225,12 @@ class RoleServiceAuthorizationTest extends BaseTest
         );
 
         // This call will fail with an "UnauthorizedException"
-        $roleService->updatePolicy($policy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $policy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
         /* END: Use Case */
     }
 

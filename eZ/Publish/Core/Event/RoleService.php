@@ -10,7 +10,6 @@ namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
@@ -29,7 +28,6 @@ use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeAssignRoleToUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeCreateRoleEvent;
-use eZ\Publish\API\Repository\Events\Role\BeforeDeletePolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeDeleteRoleEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforePublishRoleDraftEvent;
@@ -38,11 +36,9 @@ use eZ\Publish\API\Repository\Events\Role\BeforeRemoveRoleAssignmentEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUnassignRoleFromUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyByRoleDraftEvent;
-use eZ\Publish\API\Repository\Events\Role\BeforeUpdatePolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\BeforeUpdateRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\CreateRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\CreateRoleEvent;
-use eZ\Publish\API\Repository\Events\Role\DeletePolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\DeleteRoleDraftEvent;
 use eZ\Publish\API\Repository\Events\Role\DeleteRoleEvent;
 use eZ\Publish\API\Repository\Events\Role\PublishRoleDraftEvent;
@@ -51,7 +47,6 @@ use eZ\Publish\API\Repository\Events\Role\RemoveRoleAssignmentEvent;
 use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserEvent;
 use eZ\Publish\API\Repository\Events\Role\UnassignRoleFromUserGroupEvent;
 use eZ\Publish\API\Repository\Events\Role\UpdatePolicyByRoleDraftEvent;
-use eZ\Publish\API\Repository\Events\Role\UpdatePolicyEvent;
 use eZ\Publish\API\Repository\Events\Role\UpdateRoleDraftEvent;
 use eZ\Publish\SPI\Repository\Decorator\RoleServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -258,33 +253,6 @@ class RoleService extends RoleServiceDecorator
         $this->eventDispatcher->dispatch(
             new PublishRoleDraftEvent(...$eventData)
         );
-    }
-
-    public function updatePolicy(
-        Policy $policy,
-        PolicyUpdateStruct $policyUpdateStruct
-    ) {
-        $eventData = [
-            $policy,
-            $policyUpdateStruct,
-        ];
-
-        $beforeEvent = new BeforeUpdatePolicyEvent(...$eventData);
-
-        $this->eventDispatcher->dispatch($beforeEvent);
-        if ($beforeEvent->isPropagationStopped()) {
-            return $beforeEvent->getUpdatedPolicy();
-        }
-
-        $updatedPolicy = $beforeEvent->hasUpdatedPolicy()
-            ? $beforeEvent->getUpdatedPolicy()
-            : $this->innerService->updatePolicy($policy, $policyUpdateStruct);
-
-        $this->eventDispatcher->dispatch(
-            new UpdatePolicyEvent($updatedPolicy, ...$eventData)
-        );
-
-        return $updatedPolicy;
     }
 
     public function deleteRole(Role $role): void

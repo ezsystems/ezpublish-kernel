@@ -172,24 +172,6 @@ interface RoleService
     public function publishRoleDraft(RoleDraft $roleDraft);
 
     /**
-     * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitations are replaced by the ones in $roleUpdateStruct.
-     *
-     * @deprecated since 6.0, use {@link updatePolicyByRoleDraft()} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
-     */
-    public function updatePolicy(Policy $policy, PolicyUpdateStruct $policyUpdateStruct);
-
-    /**
      * Loads a role for the given id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role

@@ -172,9 +172,9 @@ class RoleTest extends BaseServiceMockTest
     }
 
     /**
-     * Test for the updatePolicy() method.
+     * Test for the updatePolicyByRoleDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::updatePolicy
+     * @covers \eZ\Publish\Core\Repository\RoleService::updatePolicyByRoleDraft
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
      */
@@ -204,10 +204,11 @@ class RoleTest extends BaseServiceMockTest
 
         $roleServiceMock = $this->getPartlyMockedRoleService(['loadRole'], $settings);
 
-        $policyMock = $this->createMock(Policy::class);
+        $roleDraftMock = $this->createMock(RoleDraft::class);
+        $policyDraftMock = $this->createMock(PolicyDraft::class);
         $policyUpdateStructMock = $this->createMock(PolicyUpdateStruct::class);
 
-        $policyMock->expects($this->any())
+        $policyDraftMock->expects($this->any())
             ->method('__get')
             ->will(
                 $this->returnCallback(
@@ -235,12 +236,16 @@ class RoleTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo('role'),
                 $this->equalTo('update'),
-                $this->equalTo($policyMock)
+                $this->equalTo($roleDraftMock)
             )->will($this->returnValue(true));
 
-        /* @var \eZ\Publish\API\Repository\Values\User\Policy $policyMock */
+        /* @var \eZ\Publish\API\Repository\Values\User\Policy $policyDraftMock */
         /* @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStructMock */
-        $roleServiceMock->updatePolicy($policyMock, $policyUpdateStructMock);
+        $roleServiceMock->updatePolicyByRoleDraft(
+            $roleDraftMock,
+            $policyDraftMock,
+            $policyUpdateStructMock
+        );
     }
 
     /**
