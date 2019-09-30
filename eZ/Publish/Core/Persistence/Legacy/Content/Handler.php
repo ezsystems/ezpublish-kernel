@@ -210,6 +210,9 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $metaDataUpdateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function publish($contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct)
     {
@@ -233,7 +236,7 @@ class Handler implements BaseContentHandler
         );
 
         $this->locationGateway->updateLocationsContentVersionNo($contentId, $versionNo);
-        $this->setStatus($contentId, VersionInfo::STATUS_PUBLISHED, $versionNo);
+        $this->contentGateway->setPublishedStatus($contentId, $versionNo);
 
         return $this->load($contentId, $versionNo);
     }

@@ -312,6 +312,8 @@ interface Handler
      * @param int $versionNo
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $metaDataUpdateStruct
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
     public function publish($contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct);
