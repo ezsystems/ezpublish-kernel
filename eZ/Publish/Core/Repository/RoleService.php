@@ -630,31 +630,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
-     *
-     * @param mixed $userId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
-     */
-    public function loadPoliciesByUserId($userId)
-    {
-        $spiPolicies = $this->userHandler->loadPoliciesByUserId($userId);
-
-        $policies = [];
-        foreach ($spiPolicies as $spiPolicy) {
-            $policies[] = $this->roleDomainMapper->buildDomainPolicyObject($spiPolicy);
-        }
-
-        if (empty($policies)) {
-            $this->userHandler->load($userId);
-        }// For NotFoundException in case userId is invalid
-
-        return $policies;
-    }
-
-    /**
      * Assigns a role to the given user group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role

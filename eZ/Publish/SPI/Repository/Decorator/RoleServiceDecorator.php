@@ -111,11 +111,6 @@ abstract class RoleServiceDecorator implements RoleService
         return $this->innerService->deleteRole($role);
     }
 
-    public function loadPoliciesByUserId($userId)
-    {
-        return $this->innerService->loadPoliciesByUserId($userId);
-    }
-
     public function assignRoleToUserGroup(
         Role $role,
         UserGroup $userGroup,

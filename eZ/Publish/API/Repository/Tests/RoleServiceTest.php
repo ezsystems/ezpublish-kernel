@@ -2586,9 +2586,9 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadPoliciesByUserId() method.
+     * Test for the getRoleAssignmentsForUser() method.
      *
-     * @see \eZ\Publish\API\Repository\RoleService::loadPoliciesByUserId()
+     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
@@ -2629,14 +2629,20 @@ class RoleServiceTest extends BaseTest
 
         // Assign role to anon user
         $roleService->assignRoleToUser($role, $user);
+        $roleAssignments = $roleService->getRoleAssignmentsForUser($user, true);
 
-        // Load the currently assigned role
         $policies = [];
-        foreach ($roleService->loadPoliciesByUserId($user->id) as $policy) {
-            $policies[] = [$policy->roleId, $policy->module, $policy->function];
+        foreach ($roleAssignments as $roleAssignment) {
+            $policies[] = $roleAssignment->getRole()->getPolicies();
+        }
+        $policies = array_merge(...$policies);
+
+        $simplePolicyList = [];
+        foreach ($policies as $simplePolicy) {
+            $simplePolicyList[] = [$simplePolicy->roleId, $simplePolicy->module, $simplePolicy->function];
         }
         /* END: Use Case */
-        array_multisort($policies);
+        array_multisort($simplePolicyList);
 
         $this->assertEquals(
             [
@@ -2652,30 +2658,8 @@ class RoleServiceTest extends BaseTest
                 [$role->id, 'user', 'password'],
                 [$role->id, 'user', 'selfedit'],
             ],
-            $policies
+            $simplePolicyList
         );
-    }
-
-    /**
-     * Test for the loadPoliciesByUserId() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::loadPoliciesByUserId()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadPoliciesByUserId
-     */
-    public function testLoadPoliciesByUserIdThrowsNotFoundException()
-    {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
-
-        $repository = $this->getRepository();
-
-        $nonExistingUserId = $this->generateId('user', self::DB_INT_MAX);
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-
-        // This call will fail with a "NotFoundException", because hopefully no
-        // user with an ID equal to self::DB_INT_MAX exists.
-        $roleService->loadPoliciesByUserId($nonExistingUserId);
-        /* END: Use Case */
     }
 
     /**

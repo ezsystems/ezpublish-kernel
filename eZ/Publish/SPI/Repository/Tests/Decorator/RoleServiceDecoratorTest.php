@@ -219,18 +219,6 @@ class RoleServiceDecoratorTest extends TestCase
         $decoratedService->deleteRole(...$parameters);
     }
 
-    public function testLoadPoliciesByUserIdDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = ['random_value_5ced05ce14b7b9.92276046'];
-
-        $serviceMock->expects($this->once())->method('loadPoliciesByUserId')->with(...$parameters);
-
-        $decoratedService->loadPoliciesByUserId(...$parameters);
-    }
-
     public function testAssignRoleToUserGroupDecorator()
     {
         $serviceMock = $this->createServiceMock();
