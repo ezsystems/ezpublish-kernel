@@ -1941,6 +1941,45 @@ HEREDOC;
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function countReverseRelations(int $toContentId, ?int $relationType = null): int
+    {
+        $platform = $this->connection->getDatabasePlatform();
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select($platform->getCountExpression('l.id'))
+            ->from('ezcontentobject_link', 'l')
+            ->innerJoin(
+                'l',
+                'ezcontentobject',
+                'c',
+                $expr->andX(
+                    $expr->eq('l.from_contentobject_id', 'c.id'),
+                    $expr->eq('l.from_contentobject_version', 'c.current_version'),
+                    $expr->eq('c.status', 1)
+                )
+            )
+            ->where(
+                $expr->eq('l.to_contentobject_id', ':toContentId')
+            )
+            ->setParameter(':toContentId', $toContentId, ParameterType::INTEGER);
+
+        // relation type
+        if ($relationType !== null) {
+            $query->andWhere(
+                $expr->gt(
+                    $platform->getBitAndComparisonExpression('l.relation_type', $relationType),
+                    0
+                )
+            );
+        }
+
+        return (int) $query->execute()->fetchColumn();
+    }
+
+    /**
      * Loads data that related to $toContentId.
      *
      * @param int $toContentId

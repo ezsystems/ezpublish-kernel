@@ -85,6 +85,8 @@ class ContentServiceTest extends AbstractServiceTest
 
             ['loadRelations', [$versionInfo]],
 
+            ['countReverseRelations', [$contentInfo]],
+
             ['loadReverseRelations', [$contentInfo]],
 
             ['addRelation', [$versionInfo, $contentInfo]],

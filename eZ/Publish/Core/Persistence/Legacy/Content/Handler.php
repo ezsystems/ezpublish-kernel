@@ -820,6 +820,14 @@ class Handler implements BaseContentHandler
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function countReverseRelations(int $destinationContentId, ?int $type = null): int
+    {
+        return $this->contentGateway->countReverseRelations($destinationContentId, $type);
+    }
+
+    /**
      * Loads relations from $contentId. Optionally, loads only those with $type.
      *
      * Only loads relations against published versions.

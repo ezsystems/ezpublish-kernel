@@ -694,6 +694,18 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function countReverseRelations(int $contentId, ?int $relationType = null): int
+    {
+        try {
+            return $this->innerGateway->countReverseRelations($contentId, $relationType);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Loads data of related to/from $contentId.
      *
      * @param int $contentId

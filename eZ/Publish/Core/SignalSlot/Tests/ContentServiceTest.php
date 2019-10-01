@@ -253,6 +253,12 @@ class ContentServiceTest extends ServiceTest
                 0,
             ],
             [
+                'countReverseRelations',
+                [$contentInfo],
+                0,
+                0,
+            ],
+            [
                 'loadReverseRelations',
                 [$contentInfo],
                 $relations,
