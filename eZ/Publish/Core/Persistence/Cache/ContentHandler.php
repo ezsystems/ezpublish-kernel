@@ -396,6 +396,16 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     /**
      * {@inheritdoc}
      */
+    public function countReverseRelations(int $destinationContentId, ?int $type = null): int
+    {
+        $this->logger->logCall(__METHOD__, ['content' => $destinationContentId, 'type' => $type]);
+
+        return $this->persistenceHandler->contentHandler()->countReverseRelations($destinationContentId, $type);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadReverseRelations($destinationContentId, $type = null)
     {
         $this->logger->logCall(__METHOD__, ['content' => $destinationContentId, 'type' => $type]);

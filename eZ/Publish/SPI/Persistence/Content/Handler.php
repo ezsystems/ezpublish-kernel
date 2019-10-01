@@ -290,6 +290,16 @@ interface Handler
     public function loadRelations($sourceContentId, $sourceContentVersionNo = null, $type = null);
 
     /**
+     * Counts relations from $destinationContentId only against published versions. Optionally, count only those with $type.
+     *
+     * @param int $destinationContentId Destination Content ID
+     * @param int|null $type The relation type bitmask {@see \eZ\Publish\API\Repository\Values\Content\Relation}
+     *
+     * @return int
+     */
+    public function countReverseRelations(int $destinationContentId, ?int $type = null): int;
+
+    /**
      * Loads relations from $contentId. Optionally, loads only those with $type.
      *
      * Only loads relations against published versions.

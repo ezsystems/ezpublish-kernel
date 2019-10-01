@@ -181,6 +181,11 @@ abstract class ContentServiceDecorator implements ContentService
         return $this->innerService->loadRelations($versionInfo);
     }
 
+    public function countReverseRelations(ContentInfo $contentInfo): int
+    {
+        return $this->innerService->countReverseRelations($contentInfo);
+    }
+
     public function loadReverseRelations(ContentInfo $contentInfo): array
     {
         return $this->innerService->loadReverseRelations($contentInfo);

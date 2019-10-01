@@ -3435,6 +3435,59 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the countReverseRelations() method.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::countReverseRelations
+     */
+    public function testCountReverseRelations(): void
+    {
+        $contentWithReverseRelations = $this->createContentWithReverseRelations([
+            $this->contentService->createContentDraft(
+                $this->createFolder([self::ENG_GB => 'Foo'], 2)->contentInfo
+            ),
+            $this->contentService->createContentDraft(
+                $this->createFolder([self::ENG_GB => 'Bar'], 2)->contentInfo
+            ),
+        ]);
+
+        $contentInfo = $contentWithReverseRelations->content->getVersionInfo()->getContentInfo();
+
+        $this->assertEquals(2, $this->contentService->countReverseRelations($contentInfo));
+    }
+
+    /**
+     * Test for the countReverseRelations() method.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::countReverseRelations
+     */
+    public function testCountReverseRelationsReturnsZeroByDefault(): void
+    {
+        $draft = $this->createContentDraftVersion1();
+
+        $this->assertSame(0, $this->contentService->countReverseRelations($draft->getVersionInfo()->getContentInfo()));
+    }
+
+    /**
+     * Test for the countReverseRelations() method.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::countReverseRelations
+     */
+    public function testCountReverseRelationsForUnauthorizedUser(): void
+    {
+        $contentWithReverseRelations = $this->createContentWithReverseRelations([
+            $this->contentService->createContentDraft(
+                $this->createFolder([self::ENG_GB => 'Foo'], 2)->contentInfo
+            ),
+        ]);
+        $mediaUser = $this->createMediaUserVersion1();
+        $this->permissionResolver->setCurrentUserReference($mediaUser);
+
+        $contentInfo = $contentWithReverseRelations->content->contentInfo;
+
+        $this->assertSame(0, $this->contentService->countReverseRelations($contentInfo));
+    }
+
+    /**
      * Test for the loadReverseRelations() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadReverseRelations()
@@ -6089,5 +6142,40 @@ class ContentServiceTest extends BaseContentServiceTest
                 ['module' => 'content', 'function' => 'edit'],
             ]
         );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content[] $drafts
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @return object
+     */
+    private function createContentWithReverseRelations(array $drafts)
+    {
+        $contentWithReverseRelations = new class() {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content */
+            public $content;
+
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content[] */
+            public $reverseRelations;
+        };
+        $content = $this->createContentVersion1();
+        $versionInfo = $content->getVersionInfo();
+        $contentInfo = $versionInfo->getContentInfo();
+        $contentWithReverseRelations->content = $content;
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $draft */
+        foreach ($drafts as $draft) {
+            $this->contentService->addRelation(
+                $draft->getVersionInfo(),
+                $contentInfo
+            );
+
+            $contentWithReverseRelations->reverseRelations[] = $this->contentService->publishVersion($draft->getVersionInfo());
+        }
+
+        return $contentWithReverseRelations;
     }
 }
