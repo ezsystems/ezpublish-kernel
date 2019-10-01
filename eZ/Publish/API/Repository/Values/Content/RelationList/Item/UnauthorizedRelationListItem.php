@@ -17,17 +17,11 @@ use eZ\Publish\API\Repository\Values\Content\Relation;
  */
 final class UnauthorizedRelationListItem extends UnauthorizedListItem implements RelationListItemInterface
 {
-    /**
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation|null
-     */
     public function getRelation(): ?Relation
     {
         return null;
     }
 
-    /**
-     * @return bool
-     */
     public function hasRelation(): bool
     {
         return false;

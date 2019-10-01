@@ -729,7 +729,7 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function listReverseRelations($contentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array
+    public function listReverseRelations(int $contentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array
     {
         try {
             return $this->innerGateway->listReverseRelations($contentId, $offset, $limit, $relationType);

@@ -2040,15 +2040,12 @@ HEREDOC;
     /**
      * {@inheritdoc}
      */
-    public function listReverseRelations($toContentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array
+    public function listReverseRelations(int $toContentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array
     {
         $platform = $this->connection->getDatabasePlatform();
         $query = $this->createRelationFindQuery();
         $expr = $query->expr();
         $query
-            ->where(
-                $expr->eq('l.to_contentobject_id', ':toContentId')
-            )
             ->innerJoin(
                 'l',
                 'ezcontentobject',
@@ -2058,6 +2055,9 @@ HEREDOC;
                     $expr->eq('l.from_contentobject_version', 'c.current_version'),
                     $expr->eq('c.status', ContentInfo::STATUS_PUBLISHED)
                 )
+            )
+            ->where(
+                $expr->eq('l.to_contentobject_id', ':toContentId')
             )
             ->setParameter(':toContentId', $toContentId, ParameterType::INTEGER);
 

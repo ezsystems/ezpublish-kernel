@@ -16,9 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\RelationList\RelationListItemInterf
  */
 class RelationListItem implements RelationListItemInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Relation */
     private $relation;
 
     public function __construct(Relation $relation)
@@ -26,17 +24,11 @@ class RelationListItem implements RelationListItemInterface
         $this->relation = $relation;
     }
 
-    /**
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation|null
-     */
     public function getRelation(): ?Relation
     {
         return $this->relation;
     }
 
-    /**
-     * @return bool
-     */
     public function hasRelation(): bool
     {
         return true;
