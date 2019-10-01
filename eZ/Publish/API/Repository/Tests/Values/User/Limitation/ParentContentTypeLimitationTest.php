@@ -115,7 +115,7 @@ class ParentContentTypeLimitationTest extends BaseLimitationTest
             $roleDraft,
             $policyCreate
         );
-        
+
         $roleService->publishRoleDraft($roleDraft);
 
         $permissionResolver->setCurrentUserReference($user);

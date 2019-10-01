@@ -1260,7 +1260,6 @@ class RoleServiceTest extends BaseTest
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
-
         $roleDraft = $roleService->createRoleDraft($role);
         // Search for the new policy instance
         $policy = null;
