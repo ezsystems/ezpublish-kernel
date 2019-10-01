@@ -428,11 +428,11 @@ abstract class Gateway
      * @param int $contentId
      * @param int $offset
      * @param int $limit
-     * @param int $relationType
+     * @param int|null $relationType
      *
-     * @return string[][]
+     * @return array
      */
-    abstract public function listReverseRelations($contentId, int $offset = 0, int $limit = -1, $relationType = null): array;
+    abstract public function listReverseRelations($contentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array;
 
     /**
      * Deletes the relation with the given $relationId.

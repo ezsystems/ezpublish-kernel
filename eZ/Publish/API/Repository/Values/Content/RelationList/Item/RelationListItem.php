@@ -39,6 +39,6 @@ class RelationListItem implements RelationListItemInterface
      */
     public function hasRelation(): bool
     {
-        return $this->relation instanceof Relation;
+        return true;
     }
 }
