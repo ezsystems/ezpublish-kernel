@@ -73,6 +73,13 @@ Changes affecting version compatibility with former or future versions.
     * `\eZ\Publish\API\Repository\Repository::setCurrentUser`
     * `\eZ\Publish\API\Repository\Repository::hasAccess`
     * `\eZ\Publish\API\Repository\Repository::canUser`
+    * `\eZ\Publish\API\Repository\RoleService::updateRole`
+    * `\eZ\Publish\API\Repository\RoleService::addPolicy`
+    * `\eZ\Publish\API\Repository\RoleService::deletePolicy`
+    * `\eZ\Publish\API\Repository\RoleService::updatePolicy`
+    * `\eZ\Publish\API\Repository\RoleService::loadPoliciesByUserId`
+    * `\eZ\Publish\API\Repository\RoleService::unassignRoleFromUser`
+    * `\eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup`
 
 * The "Setup" folder and Section have been removed from the initial (clean installation) data.
 
