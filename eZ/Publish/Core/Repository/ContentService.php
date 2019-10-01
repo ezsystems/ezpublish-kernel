@@ -1636,12 +1636,13 @@ class ContentService implements ContentServiceInterface
             $publicationDate = $currentTime;
         }
 
+        $contentInfo = $versionInfo->getContentInfo();
         $metadataUpdateStruct = new SPIMetadataUpdateStruct();
         $metadataUpdateStruct->publicationDate = $publicationDate;
         $metadataUpdateStruct->modificationDate = $currentTime;
-        $metadataUpdateStruct->isHidden = $versionInfo->contentInfo->isHidden;
+        $metadataUpdateStruct->isHidden = $contentInfo->isHidden;
 
-        $contentId = $versionInfo->getContentInfo()->id;
+        $contentId = $contentInfo->id;
         $spiContent = $this->persistenceHandler->contentHandler()->publish(
             $contentId,
             $versionInfo->versionNo,
