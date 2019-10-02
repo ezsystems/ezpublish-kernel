@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\DraftList\Item\UnauthorizedContentD
 use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\API\Repository\Values\Content\RelationList\Item\RelationListItem;
 use eZ\Publish\API\Repository\Values\Content\RelationList\Item\UnauthorizedRelationListItem;
+use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\SPI\Persistence\Handler;

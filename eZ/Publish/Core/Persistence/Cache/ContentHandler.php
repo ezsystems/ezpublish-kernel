@@ -432,7 +432,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
             'content' => $destinationContentId,
             'offset' => $offset,
             'limit' => $limit,
-            'type' => $type
+            'type' => $type,
         ]);
 
         return $this->persistenceHandler->contentHandler()->loadReverseRelationList(
