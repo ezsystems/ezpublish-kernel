@@ -33,6 +33,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGatew
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
+use ReflectionException;
 
 /**
  * Test case for Content Handler.
@@ -311,7 +312,7 @@ class ContentHandlerTest extends TestCase
      */
     public function testPublish()
     {
-        $handler = $this->getPartlyMockedHandler(['loadVersionInfo']);
+        $handler = $this->getPartlyMockedHandler(['loadVersionInfo', 'setStatus']);
 
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
@@ -377,7 +378,7 @@ class ContentHandlerTest extends TestCase
             ->with(23, 2);
 
         $gatewayMock
-            ->expects($this->at(2))
+            ->expects($this->once())
             ->method('setPublishedStatus')
             ->with(23, 2);
 
@@ -1610,12 +1611,16 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a mock object for the Content Gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this->getMockForAbstractClass(ContentGateway::class);
+            try {
+                $this->gatewayMock = $this->getMockForAbstractClass(ContentGateway::class);
+            } catch (ReflectionException $e) {
+                self::fail($e);
+            }
         }
 
         return $this->gatewayMock;
