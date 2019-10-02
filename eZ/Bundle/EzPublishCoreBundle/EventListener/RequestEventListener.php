@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RouterInterface;
@@ -53,9 +53,9 @@ class RequestEventListener implements EventSubscriberInterface
     }
 
     /**
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
-    public function onKernelRequestForward(GetResponseEvent $event)
+    public function onKernelRequestForward(RequestEvent $event)
     {
         if ($event->getRequestType() === HttpKernelInterface::MASTER_REQUEST) {
             $request = $event->getRequest();
@@ -102,11 +102,11 @@ class RequestEventListener implements EventSubscriberInterface
      *
      * Note: The event propagation will be stopped to ensure that no response can be set later and override the redirection.
      *
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
      *
      * @see \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
      */
-    public function onKernelRequestRedirect(GetResponseEvent $event)
+    public function onKernelRequestRedirect(RequestEvent $event)
     {
         if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
             $request = $event->getRequest();

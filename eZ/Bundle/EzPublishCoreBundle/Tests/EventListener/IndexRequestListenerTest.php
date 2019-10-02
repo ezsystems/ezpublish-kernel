@@ -11,7 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\IndexRequestListener;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +27,7 @@ class IndexRequestListenerTest extends TestCase
     /** @var Request */
     private $request;
 
-    /** @var GetResponseEvent */
+    /** @var RequestEvent */
     private $event;
 
     /** @var HttpKernelInterface|\PHPUnit\Framework\MockObject\MockObject */
@@ -47,7 +47,7 @@ class IndexRequestListenerTest extends TestCase
             ->getMock();
 
         $this->httpKernel = $this->createMock(HttpKernelInterface::class);
-        $this->event = new GetResponseEvent(
+        $this->event = new RequestEvent(
             $this->httpKernel,
             $this->request,
             HttpKernelInterface::MASTER_REQUEST

@@ -9,7 +9,7 @@ use eZ\Publish\Core\MVC\Symfony\View\Renderer as ViewRenderer;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ViewRendererListener implements EventSubscriberInterface
@@ -27,7 +27,7 @@ class ViewRendererListener implements EventSubscriberInterface
         return [KernelEvents::VIEW => 'renderView'];
     }
 
-    public function renderView(GetResponseForControllerResultEvent $event)
+    public function renderView(ViewEvent $event)
     {
         if (!($view = $event->getControllerResult()) instanceof View) {
             return;

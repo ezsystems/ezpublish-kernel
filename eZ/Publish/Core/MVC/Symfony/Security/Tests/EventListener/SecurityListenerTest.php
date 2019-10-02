@@ -24,7 +24,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent as BaseInteractiveLoginEvent;
@@ -257,7 +257,7 @@ class SecurityListenerTest extends TestCase
 
     public function testOnKernelRequestSubRequest()
     {
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             new Request(),
             HttpKernelInterface::SUB_REQUEST
@@ -275,7 +275,7 @@ class SecurityListenerTest extends TestCase
 
     public function testOnKernelRequestSubRequestFragment()
     {
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             Request::create('/_fragment'),
             HttpKernelInterface::MASTER_REQUEST
@@ -296,7 +296,7 @@ class SecurityListenerTest extends TestCase
 
     public function testOnKernelRequestNoSiteAccess()
     {
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             new Request(),
             HttpKernelInterface::MASTER_REQUEST
@@ -316,7 +316,7 @@ class SecurityListenerTest extends TestCase
     {
         $request = new Request();
         $request->attributes->set('siteaccess', new SiteAccess());
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
@@ -338,7 +338,7 @@ class SecurityListenerTest extends TestCase
         $request = new Request();
         $request->attributes->set('siteaccess', new SiteAccess());
         $request->attributes->set('_route', 'login');
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
@@ -361,7 +361,7 @@ class SecurityListenerTest extends TestCase
 
         $request = new Request();
         $request->attributes->set('siteaccess', new SiteAccess());
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
@@ -389,7 +389,7 @@ class SecurityListenerTest extends TestCase
     {
         $request = new Request();
         $request->attributes->set('siteaccess', new SiteAccess());
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST

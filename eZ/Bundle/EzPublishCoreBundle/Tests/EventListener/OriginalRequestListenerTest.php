@@ -11,7 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\OriginalRequestListener;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -30,7 +30,7 @@ class OriginalRequestListenerTest extends TestCase
     public function testOnKernelRequestNotMaster()
     {
         $request = new Request();
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::SUB_REQUEST
@@ -44,7 +44,7 @@ class OriginalRequestListenerTest extends TestCase
     public function testOnKernelRequestNoOriginalRequest()
     {
         $request = new Request();
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
@@ -70,7 +70,7 @@ class OriginalRequestListenerTest extends TestCase
         $request = Request::create(sprintf('%s://%s:%d', $scheme, $host, $port) . '/_fos_user_hash');
         $request->headers->set('x-fos-original-url', $originalUri);
         $request->headers->set('x-fos-original-accept', $originalAccept);
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST

@@ -15,7 +15,7 @@ use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use DateTime;
 
@@ -156,11 +156,11 @@ class StreamFileListenerTest extends TestCase
     /**
      * @param $request
      *
-     * @return GetResponseEvent
+     * @return RequestEvent
      */
     protected function createEvent($request)
     {
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST

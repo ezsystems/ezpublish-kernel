@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RouterInterface;
@@ -38,7 +38,7 @@ class RequestEventListenerTest extends TestCase
     /** @var Request */
     private $request;
 
-    /** @var GetResponseEvent */
+    /** @var RequestEvent */
     private $event;
 
     /** @var HttpKernelInterface|\PHPUnit\Framework\MockObject\MockObject */
@@ -60,7 +60,7 @@ class RequestEventListenerTest extends TestCase
             ->getMock();
 
         $this->httpKernel = $this->createMock(HttpKernelInterface::class);
-        $this->event = new GetResponseEvent(
+        $this->event = new RequestEvent(
             $this->httpKernel,
             $this->request,
             HttpKernelInterface::MASTER_REQUEST
@@ -86,7 +86,7 @@ class RequestEventListenerTest extends TestCase
             ->expects($this->never())
             ->method('handle');
 
-        $event = new GetResponseEvent($this->httpKernel, new Request(), HttpKernelInterface::SUB_REQUEST);
+        $event = new RequestEvent($this->httpKernel, new Request(), HttpKernelInterface::SUB_REQUEST);
         $this->requestEventListener->onKernelRequestForward($event);
     }
 
@@ -111,7 +111,7 @@ class RequestEventListenerTest extends TestCase
             ->with($this->equalTo($expectedForwardRequest))
             ->will($this->returnValue($response));
 
-        $event = new GetResponseEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
         $this->requestEventListener->onKernelRequestForward($event);
         $this->assertSame($response, $event->getResponse());
         $this->assertTrue($event->isPropagationStopped());
@@ -119,7 +119,7 @@ class RequestEventListenerTest extends TestCase
 
     public function testOnKernelRequestRedirectSubRequest()
     {
-        $event = new GetResponseEvent($this->httpKernel, new Request(), HttpKernelInterface::SUB_REQUEST);
+        $event = new RequestEvent($this->httpKernel, new Request(), HttpKernelInterface::SUB_REQUEST);
         $this->requestEventListener->onKernelRequestRedirect($event);
         $this->assertFalse($event->hasResponse());
     }
@@ -134,7 +134,7 @@ class RequestEventListenerTest extends TestCase
         $request->attributes->set('needsRedirect', true);
         $request->attributes->set('siteaccess', new SiteAccess());
 
-        $event = new GetResponseEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
         $this->requestEventListener->onKernelRequestRedirect($event);
         $this->assertTrue($event->hasResponse());
         /** @var RedirectResponse $response */
@@ -156,7 +156,7 @@ class RequestEventListenerTest extends TestCase
         $request->attributes->set('locationId', 123);
         $request->attributes->set('siteaccess', new SiteAccess());
 
-        $event = new GetResponseEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
         $this->requestEventListener->onKernelRequestRedirect($event);
         $this->assertTrue($event->hasResponse());
         /** @var RedirectResponse $response */
@@ -189,7 +189,7 @@ class RequestEventListenerTest extends TestCase
             ->with($semanticPathinfo)
             ->will($this->returnValue($expectedURI));
 
-        $event = new GetResponseEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
         $this->requestEventListener->onKernelRequestRedirect($event);
         $this->assertTrue($event->hasResponse());
         /** @var RedirectResponse $response */

@@ -16,7 +16,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ViewControllerListener implements EventSubscriberInterface
@@ -53,11 +53,11 @@ class ViewControllerListener implements EventSubscriberInterface
     /**
      * Configures the View for eZ View controllers.
      *
-     * @param FilterControllerEvent $event
+     * @param ControllerEvent $event
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
-    public function getController(FilterControllerEvent $event)
+    public function getController(ControllerEvent $event)
     {
         $request = $event->getRequest();
 

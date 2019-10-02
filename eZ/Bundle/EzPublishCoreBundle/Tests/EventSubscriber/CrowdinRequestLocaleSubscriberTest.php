@@ -8,7 +8,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventSubscriber;
 use eZ\Bundle\EzPublishCoreBundle\EventSubscriber\CrowdinRequestLocaleSubscriber;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class CrowdinRequestLocaleSubscriberTest extends TestCase
@@ -18,7 +18,7 @@ class CrowdinRequestLocaleSubscriberTest extends TestCase
      */
     public function testSetLocale(Request $request, $shouldHaveCustomLocale)
     {
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->getMockBuilder(HttpKernelInterface::class)->getMock(),
             $request,
             HttpKernelInterface::MASTER_REQUEST
