@@ -96,11 +96,6 @@
         <target>Selection</target>
         <note>key: ezselection.name</note>
       </trans-unit>
-      <trans-unit id="5ee0acaf0f051f903ef78be433acbfe4412e4a59" resname="ezsrrating.name">
-        <source>Rating</source>
-        <target>Rating</target>
-        <note>key: ezsrrating.name</note>
-      </trans-unit>
       <trans-unit id="d958019d9702d5e89f247c24563da97ea0205f58" resname="ezstring.name">
         <source>Text line</source>
         <target>Text line</target>

@@ -14,7 +14,6 @@ parameters:
     ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
     ezpublish.fieldType.ezobjectrelation.class: eZ\Publish\Core\FieldType\Relation\Type
-    ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\FieldType\Rating\Type
     ezpublish.fieldType.ezselection.class: eZ\Publish\Core\FieldType\Selection\Type
     ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
     ezpublish.fieldType.ezstring.class: eZ\Publish\Core\FieldType\TextLine\Type
@@ -373,12 +372,6 @@ services:
             - "@ezpublish.spi.persistence.cache.contentHandler"
         tags:
             - {name: ezplatform.field_type, alias: ezobjectrelation}
-
-    ezpublish.fieldType.ezsrrating:
-        class: "%ezpublish.fieldType.ezsrrating.class%"
-        parent: ezpublish.fieldType
-        tags:
-            - {name: ezplatform.field_type, alias: ezsrrating}
 
     ezpublish.fieldType.ezselection:
         class: "%ezpublish.fieldType.ezselection.class%"

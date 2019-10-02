@@ -151,7 +151,6 @@ services:
             - {name: ezplatform.field_type.indexable, alias: ezpackage}
             - {name: ezplatform.field_type.indexable, alias: ezproductcategory}
             - {name: ezplatform.field_type.indexable, alias: ezrangeoption}
-            - {name: ezplatform.field_type.indexable, alias: ezsrrating}
             - {name: ezplatform.field_type.indexable, alias: ezsubtreesubscription}
             - {name: ezplatform.field_type.indexable, alias: ezcomcomments}
             - {name: ezplatform.field_type.indexable, alias: ezsurvey}
