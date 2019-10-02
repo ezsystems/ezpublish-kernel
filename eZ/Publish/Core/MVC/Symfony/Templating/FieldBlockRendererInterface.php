@@ -47,7 +47,7 @@ interface FieldBlockRendererInterface
     /**
      * Renders the HTML view markup for the given field definition.
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $definition
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      *
      * @return string
      */
@@ -56,7 +56,7 @@ interface FieldBlockRendererInterface
     /**
      * Renders the HTML edot markup for the given field definition.
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $definition
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      *
      * @return string
      */
