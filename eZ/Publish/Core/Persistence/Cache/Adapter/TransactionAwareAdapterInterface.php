@@ -13,8 +13,7 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 /**
  * Interface for cache adapter which is aware of persistence transactions.
  *
- * It is used for deferring cache invalidation until transaction is committed to avoid race conditions due to
- * shared cache pool vs isolated transactions.
+ * It is used for deferring cache invalidation until transaction is committed.
  *
  * @internal
  */
@@ -23,17 +22,10 @@ interface TransactionAwareAdapterInterface extends TagAwareAdapterInterface
     /**
      * Called when transaction starts.
      */
-    public function beginTransaction(): void;
+    public function startTransaction(): void;
 
     /**
-     * Called when transaction is committed.
-     *
-     * WARNING: Must be called just AFTER database commit, to avoid theoretical cache pool race issues if done before.
+     * Called when transaction is either committed or rolled back.
      */
-    public function commitTransaction(): void;
-
-    /**
-     * Called when transaction is rolled back.
-     */
-    public function rollbackTransaction(): void;
+    public function stopTransaction(): void;
 }

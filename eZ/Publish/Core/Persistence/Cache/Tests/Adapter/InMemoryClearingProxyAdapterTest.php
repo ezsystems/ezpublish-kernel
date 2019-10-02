@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Cache\Tests\Adapter;
 
-use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter;
+use eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Cache\CacheItem;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  */
 class InMemoryClearingProxyAdapterTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\Persistence\Cache\Adapter\TransactionalInMemoryCacheAdapter */
+    /** @var \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter */
     protected $cache;
 
     /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
@@ -41,7 +41,7 @@ class InMemoryClearingProxyAdapterTest extends TestCase
         $this->innerPool = $this->createMock(TagAwareAdapterInterface::class);
         $this->inMemory = $this->createMock(InMemoryCache::class);
 
-        $this->cache = new TransactionalInMemoryCacheAdapter(
+        $this->cache = new InMemoryClearingProxyAdapter(
             $this->innerPool,
             [$this->inMemory]
         );
