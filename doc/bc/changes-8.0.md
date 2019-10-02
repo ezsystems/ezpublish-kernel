@@ -140,6 +140,8 @@ Changes affecting version compatibility with former or future versions.
     - ezscheduled_script,
     - ezsearch_search_phrase,
     - ezsession,
+    - ezstarrating,
+    - ezstarrating_data,
     - ezsubtree_notification_rule,
     - eztipafriend_counter,
     - eztipafriend_request,
