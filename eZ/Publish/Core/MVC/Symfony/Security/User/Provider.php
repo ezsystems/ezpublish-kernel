@@ -137,12 +137,6 @@ class Provider implements APIUserProviderInterface
      */
     private function createSecurityUser(APIUser $apiUser): User
     {
-        $isPasswordExpired = $this->userService->getPasswordInfo($apiUser)->isPasswordExpired();
-
-        return new User(
-            $apiUser,
-            ['ROLE_USER'],
-            !$isPasswordExpired
-        );
+        return new User($apiUser, ['ROLE_USER']);
     }
 }

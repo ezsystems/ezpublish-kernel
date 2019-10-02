@@ -9,12 +9,12 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
 
 /**
  * Interface for Repository based users.
  */
-interface UserInterface extends AdvancedUserInterface
+interface UserInterface extends BaseUserInterface
 {
     /**
      * @return \eZ\Publish\API\Repository\Values\User\User

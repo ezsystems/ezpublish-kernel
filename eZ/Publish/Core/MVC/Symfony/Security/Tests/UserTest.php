@@ -47,10 +47,6 @@ class UserTest extends TestCase
         $this->assertSame($passwordHash, $user->getPassword());
         $this->assertSame($roles, $user->getRoles());
         $this->assertNull($user->getSalt());
-        $this->assertTrue($user->isAccountNonExpired());
-        $this->assertTrue($user->isAccountNonLocked());
-        $this->assertTrue($user->isCredentialsNonExpired());
-        $this->assertTrue($user->isEnabled());
     }
 
     public function testIsEqualTo()
