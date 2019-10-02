@@ -24,6 +24,7 @@
         "symfony/process": "^4.3",
         "symfony/dependency-injection": "^4.3",
         "symfony/event-dispatcher": "^4.3",
+        "symfony/mime": "^4.3",
         "symfony/translation": "^4.3",
         "symfony/yaml": "^4.3",
         "symfony/security": "^4.3",

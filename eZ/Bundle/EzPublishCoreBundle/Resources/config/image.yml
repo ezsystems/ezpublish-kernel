@@ -70,7 +70,7 @@ services:
     # Filter loaders
     ezpublish.image_alias.imagine.binary_loader:
         class: "%ezpublish.image_alias.imagine.binary_loader.class%"
-        arguments: ["@ezpublish.fieldType.ezimage.io_service", "@liip_imagine.extension_guesser"]
+        arguments: ["@ezpublish.fieldType.ezimage.io_service", "@mime_types"]
         tags:
             - { name: liip_imagine.binary.loader, loader: ezpublish }
 

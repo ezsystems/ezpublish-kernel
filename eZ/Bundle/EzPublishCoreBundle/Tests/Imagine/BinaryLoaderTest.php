@@ -17,15 +17,12 @@ use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\Binary;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
 
 class BinaryLoaderTest extends TestCase
 {
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $ioService;
-
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    private $extensionGuesser;
 
     /** @var BinaryLoader */
     private $binaryLoader;
@@ -34,8 +31,7 @@ class BinaryLoaderTest extends TestCase
     {
         parent::setUp();
         $this->ioService = $this->createMock(IOServiceInterface::class);
-        $this->extensionGuesser = $this->createMock(ExtensionGuesserInterface::class);
-        $this->binaryLoader = new BinaryLoader($this->ioService, $this->extensionGuesser);
+        $this->binaryLoader = new BinaryLoader($this->ioService, new MimeTypes());
     }
 
     public function testFindNotFound()
@@ -88,7 +84,7 @@ class BinaryLoaderTest extends TestCase
     public function testFind()
     {
         $path = 'something.jpg';
-        $mimeType = 'foo/mime-type';
+        $mimeType = 'image/jpeg';
         $content = 'some content';
         $binaryFile = new BinaryFile(['id' => $path]);
         $this->ioService
@@ -96,13 +92,6 @@ class BinaryLoaderTest extends TestCase
             ->method('loadBinaryFile')
             ->with($path)
             ->will($this->returnValue($binaryFile));
-
-        $format = 'jpg';
-        $this->extensionGuesser
-            ->expects($this->once())
-            ->method('guess')
-            ->with($mimeType)
-            ->will($this->returnValue($format));
 
         $this->ioService
             ->expects($this->once())
@@ -116,7 +105,7 @@ class BinaryLoaderTest extends TestCase
             ->with($binaryFile->id)
             ->will($this->returnValue($mimeType));
 
-        $expected = new Binary($content, $mimeType, $format);
+        $expected = new Binary($content, $mimeType, 'jpeg');
         $this->assertEquals($expected, $this->binaryLoader->find($path));
     }
 }

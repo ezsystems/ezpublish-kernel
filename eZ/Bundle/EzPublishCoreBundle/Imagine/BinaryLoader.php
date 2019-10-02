@@ -15,7 +15,7 @@ use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\Binary;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
+use Symfony\Component\Mime\MimeTypesInterface;
 
 /**
  * Binary loader using eZ IOService.
@@ -26,13 +26,13 @@ class BinaryLoader implements LoaderInterface
     /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $ioService;
 
-    /** @var \Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface */
-    private $extensionGuesser;
+    /** @var \Symfony\Component\Mime\MimeTypesInterface */
+    private $mimeTypes;
 
-    public function __construct(IOServiceInterface $ioService, ExtensionGuesserInterface $extensionGuesser)
+    public function __construct(IOServiceInterface $ioService, MimeTypesInterface $mimeTypes)
     {
         $this->ioService = $ioService;
-        $this->extensionGuesser = $extensionGuesser;
+        $this->mimeTypes = $mimeTypes;
     }
 
     public function find($path)
@@ -49,7 +49,7 @@ class BinaryLoader implements LoaderInterface
             return new Binary(
                 $this->ioService->getFileContents($binaryFile),
                 $mimeType,
-                $this->extensionGuesser->guess($mimeType)
+                $this->mimeTypes->getExtensions($mimeType)[0] ?? null
             );
         } catch (InvalidBinaryFileIdException $e) {
             $message =

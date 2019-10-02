@@ -293,7 +293,7 @@ services:
             $filterManager: '@liip_imagine.filter.manager'
             $permissionResolver: "@=service('ezpublish.api.repository').getPermissionResolver()"
             $userService: '@ezpublish.api.service.user'
-            $extensionGuesser: '@liip_imagine.extension_guesser'
+            $mimeTypes: '@mime_types'
         tags:
             - { name: console.command, command: ezplatform:images:resize-original }
 
