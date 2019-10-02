@@ -106,7 +106,6 @@ class AbstractTestCase extends LanguageAwareTestCase
                     'ezkeyword' => new Converter\KeywordConverter(),
                     'ezauthor' => new Converter\AuthorConverter(),
                     'ezimage' => new Converter\NullConverter(),
-                    'ezsrrating' => new Converter\NullConverter(),
                     'ezmultioption' => new Converter\NullConverter(),
                 ]
             );
