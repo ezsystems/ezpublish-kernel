@@ -106,9 +106,12 @@ services:
         alias: ezpublish.locale.converter
 
     # Overriding the original locale listener to trigger the internal locale conversion correctly.
-    locale_listener:
-        class: eZ\Bundle\EzPublishCoreBundle\EventListener\LocaleListener
-        arguments: ["@request_stack", "%kernel.default_locale%", "@?router"]
+    eZ\Bundle\EzPublishCoreBundle\EventListener\LocaleListener:
+        decorates: locale_listener
+        arguments:
+            - '@eZ\Bundle\EzPublishCoreBundle\EventListener\LocaleListener.inner'
+            - '@ezpublish.config.resolver'
+            - '@ezpublish.locale.converter'
         tags:
             - { name: kernel.event_subscriber }
 
