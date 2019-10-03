@@ -606,7 +606,7 @@ class UserService implements UserServiceInterface
         }
 
         $spiUser = $this->userHandler->loadByLogin($login);
-        if (!$this->verifyPasswordForSPIUser($login, $password, $spiUser)) {
+        if (!$this->comparePasswordHashForSPIUser($login, $password, $spiUser)) {
             throw new NotFoundException('user', $login);
         }
 
@@ -1310,7 +1310,7 @@ class UserService implements UserServiceInterface
             $isNewPasswordRequired = $configuration['PasswordValueValidator']['requireNewPassword'] ?? false;
 
             if (($isPasswordTTLEnabled || $isNewPasswordRequired) &&
-                $this->verifyPasswordForAPIUser($context->user->login, $password, $context->user)
+                $this->comparePasswordHashForAPIUser($context->user->login, $password, $context->user)
             ) {
                 $errors[] = new ValidationError('New password cannot be the same as old password', null, [], 'password');
             }
@@ -1432,9 +1432,9 @@ class UserService implements UserServiceInterface
      *
      * @return bool return true if the login and password are sucessfully validate and false, if not.
      */
-    protected function verifyPasswordForSPIUser(string $login, string $password, SPIUser $spiUser): bool
+    protected function comparePasswordHashForSPIUser(string $login, string $password, SPIUser $spiUser): bool
     {
-        return $this->doVerifyPassword($login, $password, $spiUser->passwordHash, $spiUser->hashAlgorithm);
+        return $this->comparePasswordHashes($login, $password, $spiUser->passwordHash, $spiUser->hashAlgorithm);
     }
 
     /**
@@ -1446,9 +1446,9 @@ class UserService implements UserServiceInterface
      *
      * @return bool return true if the login and password are sucessfully validate and false, if not.
      */
-    protected function verifyPasswordForAPIUser(string $login, string $password, APIUser $apiUser): bool
+    protected function comparePasswordHashForAPIUser(string $login, string $password, APIUser $apiUser): bool
     {
-        return $this->doVerifyPassword($login, $password, $apiUser->passwordHash, $apiUser->hashAlgorithm);
+        return $this->comparePasswordHashes($login, $password, $apiUser->passwordHash, $apiUser->hashAlgorithm);
     }
 
     /**
@@ -1465,7 +1465,7 @@ class UserService implements UserServiceInterface
      */
     protected function verifyPassword($login, $password, $spiUser)
     {
-        return $this->verifyPasswordForSPIUser($login, $password, $spiUser);
+        return $this->comparePasswordHashForSPIUser($login, $password, $spiUser);
     }
 
     /**
@@ -1478,7 +1478,7 @@ class UserService implements UserServiceInterface
      *
      * @return bool return true if the login and password are sucessfully validate and false, if not.
      */
-    private function doVerifyPassword(
+    private function comparePasswordHashes(
         string $login,
         string $plainPassword,
         string $passwordHash,
