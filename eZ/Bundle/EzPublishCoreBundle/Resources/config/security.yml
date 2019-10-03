@@ -12,6 +12,10 @@ services:
             - '@eZ\Publish\API\Repository\UserService'
             - '@eZ\Publish\API\Repository\PermissionResolver'
 
+    eZ\Publish\Core\MVC\Symfony\Security\UserChecker:
+        arguments:
+            - '@eZ\Publish\API\Repository\UserService'
+
     ezpublish.security.voter.core:
         class: "%ezpublish.security.voter.core.class%"
         arguments: ['@eZ\Publish\API\Repository\PermissionResolver']
