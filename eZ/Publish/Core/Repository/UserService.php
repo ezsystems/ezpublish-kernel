@@ -1430,7 +1430,7 @@ class UserService implements UserServiceInterface
      * @param string $password User password
      * @param \eZ\Publish\SPI\Persistence\User $spiUser Loaded user handler
      *
-     * @return bool return true if the login and password are sucessfully validate and false, if not.
+     * @return bool return true if the login and password are sucessfully validated and false, if not.
      */
     protected function comparePasswordHashForSPIUser(string $login, string $password, SPIUser $spiUser): bool
     {
@@ -1444,7 +1444,7 @@ class UserService implements UserServiceInterface
      * @param string $password User password
      * @param \eZ\Publish\API\Repository\Values\User\User $apiUser Loaded user
      *
-     * @return bool return true if the login and password are sucessfully validate and false, if not.
+     * @return bool return true if the login and password are sucessfully validated and false, if not.
      */
     protected function comparePasswordHashForAPIUser(string $login, string $password, APIUser $apiUser): bool
     {
@@ -1476,7 +1476,7 @@ class UserService implements UserServiceInterface
      * @param string $passwordHash User password hash
      * @param int $hashAlgorithm Hash type
      *
-     * @return bool return true if the login and password are sucessfully validate and false, if not.
+     * @return bool return true if the login and password are sucessfully validated and false, if not.
      */
     private function comparePasswordHashes(
         string $login,
