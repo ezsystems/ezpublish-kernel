@@ -52,9 +52,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getContext();
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -71,9 +69,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->insertContentObject($struct, $currentVersionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -90,9 +86,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->insertVersion($versionInfo, $fields);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -108,9 +102,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->updateContent($contentId, $struct, $prePublishVersionInfo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -126,9 +118,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->updateVersion($contentId, $versionNo, $struct);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -143,9 +133,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->updateAlwaysAvailableFlag($contentId, $newAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -165,9 +153,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->setStatus($contentId, $version, $status);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -198,9 +184,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->insertNewField($content, $field, $value);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -218,9 +202,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->insertExistingField($content, $field, $value);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -235,9 +217,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->updateField($field, $value);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -256,9 +236,7 @@ class ExceptionConversion extends Gateway
     ) {
         try {
             return $this->innerGateway->updateNonTranslatableField($field, $value, $contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -270,9 +248,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->load($contentId, $version, $translations);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -302,9 +278,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadContentInfoByRemoteId($remoteId);
-        } catch (DBALException $e) {
-            throw new \RuntimeException('Database error', 0, $e);
-        } catch (\PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new \RuntimeException('Database error', 0, $e);
         }
     }
@@ -324,9 +298,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadContentInfoByLocationId($locationId);
-        } catch (DBALException $e) {
-            throw new \RuntimeException('Database error', 0, $e);
-        } catch (\PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new \RuntimeException('Database error', 0, $e);
         }
     }
@@ -347,9 +319,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadContentInfo($contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -358,9 +328,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadContentInfoList($contentIds);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -381,9 +349,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadVersionInfo($contentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -417,9 +383,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->listVersionsForUser($userId, $status, $offset, $limit);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -451,9 +415,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->listVersions($contentId, $status, $limit);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -469,9 +431,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->listVersionNumbers($contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -487,9 +447,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getLastVersionNumber($contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -505,9 +463,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getAllLocationIds($contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -527,9 +483,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getFieldIdsByType($contentId, $versionNo, $languageCode);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -545,9 +499,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteRelations($contentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -561,9 +513,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->removeReverseFieldRelations($contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -577,9 +527,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteField($fieldId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -595,9 +543,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteFields($contentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -613,9 +559,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteVersions($contentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -631,9 +575,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteNames($contentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -650,9 +592,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->setName($contentId, $version, $name, $language);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -666,9 +606,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteContent($contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -686,9 +624,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadRelations($contentId, $contentVersionNo, $relationType);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -719,9 +655,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadReverseRelations($contentId, $relationType);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -739,9 +673,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteRelation($relationId, $type);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -757,9 +689,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->insertRelation($struct);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -775,9 +705,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getContentIdsByContentTypeId($contentTypeId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -793,9 +721,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadVersionedNameData($rows);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -813,9 +739,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->copyRelations($originalContentId, $copiedContentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -830,9 +754,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteTranslationFromContent($contentId, $languageCode);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -849,9 +771,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteTranslatedFields($languageCode, $contentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
@@ -867,9 +787,7 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteTranslationFromVersion($contentId, $versionNo, $languageCode);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
+        } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
     }
