@@ -10,6 +10,8 @@ namespace eZ\Publish\API\Repository\Values\User;
 
 /**
  * This class represents a draft of a role.
+ *
+ * @property-read \eZ\Publish\API\Repository\Values\User\PolicyDraft[] $policies
  */
 abstract class RoleDraft extends Role
 {
