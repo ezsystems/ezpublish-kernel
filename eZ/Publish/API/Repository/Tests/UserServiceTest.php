@@ -2886,18 +2886,17 @@ class UserServiceTest extends BaseTest
 
         $user = $this->createTestUserWithPassword($password, $contentType);
 
-        /* BEGIN: Use Case */
         $context = new PasswordValidationContext([
             'contentType' => $contentType,
             'user' => $user,
         ]);
 
         $actualErrors = $userService->validatePassword($password, $context);
-        /* END: Use Case */
 
-        $this->assertEquals([
-            new ValidationError('New password cannot be the same as old password', null, [], 'password'),
-        ], $actualErrors);
+        $this->assertEquals(
+            [new ValidationError('New password cannot be the same as old password', null, [], 'password')],
+            $actualErrors
+        );
     }
 
     /**
