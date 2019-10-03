@@ -141,9 +141,7 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
     public function invalidateTags(array $tags)
     {
         // No tracking of tags in in-memory, as it's anyway meant to only optimize for reads (GETs) and not writes.
-        foreach ($this->inMemoryPools as $inMemory) {
-            $inMemory->clear();
-        }
+        $this->clearInMemoryPools();
 
         if ($this->transactionDepth > 0) {
             $this->deferredTagsInvalidation += \array_fill_keys($tags, true);
@@ -159,9 +157,7 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
      */
     public function clear()
     {
-        foreach ($this->inMemoryPools as $inMemory) {
-            $inMemory->clear();
-        }
+        $this->clearInMemoryPools();
 
         // @todo Should we trow RunTime error or add support deferring full cache clearing?
         $this->transactionDepth = 0;
@@ -227,6 +223,8 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
         $this->transactionDepth = 0;
         $this->deferredItemsDeletion = [];
         $this->deferredTagsInvalidation = [];
+
+        $this->clearInMemoryPools();
     }
 
     /**
@@ -298,5 +296,12 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
         }
 
         return false;
+    }
+
+    private function clearInMemoryPools(): void
+    {
+        foreach ($this->inMemoryPools as $inMemory) {
+            $inMemory->clear();
+        }
     }
 }
