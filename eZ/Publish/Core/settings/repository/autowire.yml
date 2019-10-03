@@ -20,4 +20,4 @@ services:
     eZ\Publish\API\Repository\TrashService: '@ezpublish.api.service.trash'
 
     eZ\Publish\API\Repository\PermissionResolver:
-        factory: 'eZ\Publish\API\Repository\Repository:getPermissionResolver'
+        factory: ['@eZ\Publish\API\Repository\Repository', 'getPermissionResolver']
