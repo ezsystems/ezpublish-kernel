@@ -850,6 +850,20 @@ class Handler implements BaseContentHandler
     /**
      * {@inheritdoc}
      */
+    public function loadReverseRelationList(
+        int $destinationContentId,
+        int $offset = 0,
+        int $limit = -1,
+        ?int $type = null
+    ): array {
+        return $this->mapper->extractRelationsFromRows(
+            $this->contentGateway->listReverseRelations($destinationContentId, $offset, $limit, $type)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function removeTranslationFromContent($contentId, $languageCode)
     {
         @trigger_error(

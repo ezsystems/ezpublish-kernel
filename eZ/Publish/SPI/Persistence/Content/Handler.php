@@ -315,6 +315,25 @@ interface Handler
     public function loadReverseRelations($destinationContentId, $type = null);
 
     /**
+     * Loads paginated relations from $contentId. Optionally, loads only those with $type.
+     *
+     * Only loads relations against published versions.
+     *
+     * @param int $destinationContentId Destination Content ID
+     * @param int $offset
+     * @param int $limit
+     * @param int|null $type The relation type bitmask {@see \eZ\Publish\API\Repository\Values\Content\Relation}
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
+     */
+    public function loadReverseRelationList(
+        int $destinationContentId,
+        int $offset = 0,
+        int $limit = -1,
+        ?int $type = null
+    ): array;
+
+    /**
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
      * $updateStruct->id as the published one.
      *

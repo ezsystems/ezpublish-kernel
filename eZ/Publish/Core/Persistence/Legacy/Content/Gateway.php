@@ -423,6 +423,18 @@ abstract class Gateway
     abstract public function loadReverseRelations($contentId, $relationType = null);
 
     /**
+     * Loads paginated data of related to/from $contentId.
+     *
+     * @param int $contentId
+     * @param int $offset
+     * @param int $limit
+     * @param int|null $relationType
+     *
+     * @return array
+     */
+    abstract public function listReverseRelations(int $contentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array;
+
+    /**
      * Deletes the relation with the given $relationId.
      *
      * @param int $relationId
