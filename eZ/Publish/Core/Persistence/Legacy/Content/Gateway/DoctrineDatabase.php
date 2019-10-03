@@ -2038,6 +2038,48 @@ HEREDOC;
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function listReverseRelations(int $toContentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array
+    {
+        $platform = $this->connection->getDatabasePlatform();
+        $query = $this->createRelationFindQuery();
+        $expr = $query->expr();
+        $query
+            ->innerJoin(
+                'l',
+                'ezcontentobject',
+                'c',
+                $expr->andX(
+                    $expr->eq('l.from_contentobject_id', 'c.id'),
+                    $expr->eq('l.from_contentobject_version', 'c.current_version'),
+                    $expr->eq('c.status', ContentInfo::STATUS_PUBLISHED)
+                )
+            )
+            ->where(
+                $expr->eq('l.to_contentobject_id', ':toContentId')
+            )
+            ->setParameter(':toContentId', $toContentId, ParameterType::INTEGER);
+
+        // relation type
+        if ($relationType !== null) {
+            $query->andWhere(
+                $expr->gt(
+                    $platform->getBitAndComparisonExpression('l.relation_type', $relationType),
+                    0
+                )
+            );
+        }
+        $query->setFirstResult($offset);
+        if ($limit > 0) {
+            $query->setMaxResults($limit);
+        }
+        $query->orderBy('l.id', 'DESC');
+
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    /**
      * Inserts a new relation database record.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
@@ -2497,6 +2539,30 @@ HEREDOC;
                     $expr->eq('t.contentobject_id', 'v.contentobject_id'),
                     $expr->eq('t.main_node_id', 't.node_id')
                 )
+            );
+
+        return $query;
+    }
+
+    /**
+     * Creates a select query for content relations.
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    public function createRelationFindQuery(): DoctrineQueryBuilder
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(
+                'l.id AS ezcontentobject_link_id',
+                'l.contentclassattribute_id AS ezcontentobject_link_contentclassattribute_id',
+                'l.from_contentobject_id AS ezcontentobject_link_from_contentobject_id',
+                'l.from_contentobject_version AS ezcontentobject_link_from_contentobject_version',
+                'l.relation_type AS ezcontentobject_link_relation_type',
+                'l.to_contentobject_id AS ezcontentobject_link_to_contentobject_id'
+            )
+            ->from(
+                'ezcontentobject_link', 'l'
             );
 
         return $query;

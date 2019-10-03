@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -189,6 +190,11 @@ abstract class ContentServiceDecorator implements ContentService
     public function loadReverseRelations(ContentInfo $contentInfo): array
     {
         return $this->innerService->loadReverseRelations($contentInfo);
+    }
+
+    public function loadReverseRelationList(ContentInfo $contentInfo, int $offset = 0, int $limit = -1): RelationList
+    {
+        return $this->innerService->loadReverseRelationList($contentInfo, $offset, $limit);
     }
 
     public function addRelation(

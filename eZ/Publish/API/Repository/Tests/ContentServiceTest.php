@@ -3705,6 +3705,160 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\ContentService::loadReverseRelationList
+     */
+    public function testLoadReverseRelationList(): void
+    {
+        $draft1 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Foo'], 2)->contentInfo
+        );
+        $draft2 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Bar'], 2)->contentInfo
+        );
+        $draft3 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Baz'], 2)->contentInfo
+        );
+
+        $contentWithReverseRelations = $this->createContentWithReverseRelations([
+            $draft1,
+            $draft2,
+            $draft3,
+        ]);
+
+        $contentInfo = $contentWithReverseRelations->content->contentInfo;
+
+        $reverseRelationList = $this->contentService->loadReverseRelationList($contentInfo);
+
+        $this->assertSame(3, $reverseRelationList->totalCount);
+        $this->assertEquals(
+            $contentWithReverseRelations->reverseRelations[2]->contentInfo,
+            $reverseRelationList->items[0]->getRelation()->sourceContentInfo
+        );
+        $this->assertEquals(
+            $contentWithReverseRelations->reverseRelations[1]->contentInfo,
+            $reverseRelationList->items[1]->getRelation()->sourceContentInfo
+        );
+        $this->assertEquals(
+            $contentWithReverseRelations->reverseRelations[0]->contentInfo,
+            $reverseRelationList->items[2]->getRelation()->sourceContentInfo
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentService::loadReverseRelationList
+     */
+    public function testLoadReverseRelationListWithPagination(): void
+    {
+        $draft1 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Foo'], 2)->contentInfo
+        );
+        $draft2 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Bar'], 2)->contentInfo
+        );
+        $draft3 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Baz'], 2)->contentInfo
+        );
+
+        $contentWithReverseRelations = $this->createContentWithReverseRelations([
+            $draft1,
+            $draft2,
+            $draft3,
+        ]);
+
+        $contentInfo = $contentWithReverseRelations->content->contentInfo;
+
+        $reverseRelationPage1 = $this->contentService->loadReverseRelationList($contentInfo, 0, 2);
+        $reverseRelationPage2 = $this->contentService->loadReverseRelationList($contentInfo, 2, 2);
+        $this->assertSame(3, $reverseRelationPage1->totalCount);
+        $this->assertSame(3, $reverseRelationPage2->totalCount);
+        $this->assertEquals(
+            $contentWithReverseRelations->reverseRelations[2]->contentInfo,
+            $reverseRelationPage1->items[0]->getRelation()->sourceContentInfo
+        );
+        $this->assertEquals(
+            $contentWithReverseRelations->reverseRelations[1]->contentInfo,
+            $reverseRelationPage1->items[1]->getRelation()->sourceContentInfo
+        );
+        $this->assertEquals(
+            $contentWithReverseRelations->reverseRelations[0]->contentInfo,
+            $reverseRelationPage2->items[0]->getRelation()->sourceContentInfo
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentService::loadReverseRelationList
+     */
+    public function testLoadReverseRelationListSkipsArchivedContent(): void
+    {
+        $trashService = $this->getRepository()->getTrashService();
+
+        $draft1 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Foo'], 2)->contentInfo
+        );
+        $draft2 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Bar'], 2)->contentInfo
+        );
+        $draft3 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Baz'], 2)->contentInfo
+        );
+
+        $contentWithReverseRelations = $this->createContentWithReverseRelations([
+            $draft1,
+            $draft2,
+            $draft3,
+        ]);
+
+        $locationToTrash = $this->locationService->loadLocation($draft3->contentInfo->mainLocationId);
+
+        // Trashing Content's last Location will change its status to archived, in this case relation from it will not be loaded.
+        $trashService->trash($locationToTrash);
+
+        $contentInfo = $contentWithReverseRelations->content->contentInfo;
+        $reverseRelationList = $this->contentService->loadReverseRelationList($contentInfo);
+
+        $this->assertSame(2, $reverseRelationList->totalCount);
+        $this->assertEquals(
+            $contentWithReverseRelations->reverseRelations[1]->contentInfo,
+            $reverseRelationList->items[0]->getRelation()->sourceContentInfo
+        );
+        $this->assertEquals(
+            $contentWithReverseRelations->reverseRelations[0]->contentInfo,
+            $reverseRelationList->items[1]->getRelation()->sourceContentInfo
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentService::loadReverseRelationList
+     */
+    public function testLoadReverseRelationListSkipsDraftContent()
+    {
+        $draft1 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Foo'], 2)->contentInfo
+        );
+
+        $contentWithReverseRelations = $this->createContentWithReverseRelations([$draft1]);
+
+        $contentInfo = $contentWithReverseRelations->content->contentInfo;
+
+        // create a relation, but without publishing it
+        $draft2 = $this->contentService->createContentDraft(
+            $this->createFolder([self::ENG_GB => 'Bar'], 2)->contentInfo
+        );
+        $this->contentService->addRelation(
+            $draft2->getVersionInfo(),
+            $contentInfo
+        );
+
+        $reverseRelationList = $this->contentService->loadReverseRelationList($contentInfo);
+
+        $this->assertSame(1, $reverseRelationList->totalCount);
+        $this->assertEquals(
+            $contentWithReverseRelations->reverseRelations[0]->contentInfo,
+            $reverseRelationList->items[0]->getRelation()->sourceContentInfo
+        );
+    }
+
+    /**
      * Test for the deleteRelation() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()

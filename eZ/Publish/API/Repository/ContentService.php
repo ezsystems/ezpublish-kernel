@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -394,6 +395,21 @@ interface ContentService
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function loadReverseRelations(ContentInfo $contentInfo);
+
+    /**
+     * Loads all incoming relations for a content object.
+     *
+     * The relations come only from published versions of the source content objects.
+     * If the user is not allowed to read specific version then UnauthorizedRelationListItem is returned
+     * {@link \eZ\Publish\API\Repository\Values\Content\RelationList\Item\UnauthorizedRelationListItem}
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\RelationList
+     */
+    public function loadReverseRelationList(ContentInfo $contentInfo, int $offset = 0, int $limit = -1): RelationList;
 
     /**
      * Adds a relation of type common.
