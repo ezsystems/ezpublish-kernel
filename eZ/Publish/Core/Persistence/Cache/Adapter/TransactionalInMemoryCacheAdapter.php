@@ -223,6 +223,8 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
         $this->transactionDepth = 0;
         $this->deferredItemsDeletion = [];
         $this->deferredTagsInvalidation = [];
+
+        $this->clearInMemoryPools();
     }
 
     /**
