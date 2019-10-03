@@ -52,8 +52,6 @@ class StatusLimitationTest extends BaseLimitationTest
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier('Anonymous');
-
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'versionread');
         $policyCreate->addLimitation(
             new StatusLimitation(
@@ -62,12 +60,7 @@ class StatusLimitationTest extends BaseLimitationTest
         );
 
         // Add policy to load draft versions to "Anonymous" role
-        $roleDraft = $roleService->createRoleDraft($role);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $policyCreate
-        );
-        $roleService->publishRoleDraft($roleDraft);
+        $this->addPolicyToRole('Anonymous', $policyCreate);
 
         // Load the user service
         $userService = $repository->getUserService();

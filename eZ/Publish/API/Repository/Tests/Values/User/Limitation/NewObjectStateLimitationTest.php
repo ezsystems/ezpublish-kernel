@@ -53,10 +53,7 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->loadRoleByIdentifier('Editor');
-        $roleDraft = $roleService->createRoleDraft($role);
-        $roleService->addPolicyByRoleDraft($roleDraft, $policyCreate);
-        $roleService->publishRoleDraft($roleDraft);
+        $role = $this->addPolicyToRole('Editor', $policyCreate);
 
         $roleService->assignRoleToUser($role, $user);
 

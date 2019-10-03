@@ -37,8 +37,6 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
         $permissionResolver = $repository->getPermissionResolver();
 
-        $role = $roleService->loadRoleByIdentifier('Editor');
-
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentOwnerLimitation(
@@ -46,12 +44,7 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
             )
         );
 
-        $roleDraft = $roleService->createRoleDraft($role);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $policyCreate
-        );
-        $roleService->publishRoleDraft($roleDraft);
+        $role = $this->addPolicyToRole('Editor', $policyCreate);
 
         $roleService->assignRoleToUser($role, $user);
 
