@@ -102,6 +102,10 @@ class UserIntegrationTest extends BaseIntegrationTest
                     'type' => 'int',
                     'default' => null,
                 ],
+                'requireNewPassword' => [
+                    'type' => 'int',
+                    'default' => null,
+                ],
                 'minLength' => [
                     'type' => 'int',
                     'default' => 10,
@@ -123,6 +127,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                 'requireAtLeastOneLowerCaseCharacter' => true,
                 'requireAtLeastOneNumericCharacter' => true,
                 'requireAtLeastOneNonAlphanumericCharacter' => false,
+                'requireNewPassword' => false,
                 'minLength' => 10,
             ],
         ];
