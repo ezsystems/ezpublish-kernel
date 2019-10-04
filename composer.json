@@ -60,7 +60,8 @@
     },
     "conflict": {
         "doctrine/dbal": "2.7.0",
-        "ezsystems/ezpublish-legacy": "<2019.03"
+        "ezsystems/ezpublish-legacy": "<2019.03",
+        "phpunit/phpunit": "8.4.0"
     },
     "replace": {
         "ezsystems/ezpublish": "*",
