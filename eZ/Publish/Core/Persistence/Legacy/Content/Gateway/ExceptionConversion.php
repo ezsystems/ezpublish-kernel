@@ -659,8 +659,6 @@ class ExceptionConversion extends Gateway
      * Loads data of related to/from $contentId.
      *
      * @param int $contentId
-     * @param bool $reverse Reverse relation, default false
-     * @param int $contentVersionNo
      * @param int $relationType
      *
      * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
