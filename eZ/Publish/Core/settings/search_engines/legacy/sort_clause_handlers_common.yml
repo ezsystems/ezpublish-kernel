@@ -85,7 +85,7 @@ services:
     ezpublish.search.legacy.gateway.sort_clause_handler.common.random:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: '%ezpublish.search.legacy.gateway.sort_clause_handler.common.random.class%'
-        factory: 'eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\RandomSortClauseHandlerFactory:getGateway'
+        factory: ['@eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\RandomSortClauseHandlerFactory', 'getGateway']
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}

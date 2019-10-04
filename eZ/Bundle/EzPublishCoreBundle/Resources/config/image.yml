@@ -95,7 +95,7 @@ services:
 
     ezpublish.image_alias.imagine.cache_resolver_decorator:
         class: Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
-        factory: 'ezpublish.image_alias.imagine.cache_resolver_decorator_factory:createCacheResolver'
+        factory: ['@ezpublish.image_alias.imagine.cache_resolver_decorator_factory', 'createCacheResolver']
         decorates: ezpublish.image_alias.imagine.cache_resolver
         lazy: true
 

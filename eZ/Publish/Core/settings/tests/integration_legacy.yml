@@ -48,6 +48,6 @@ services:
     # build ezpublish.api.storage_engine.legacy.connection for test purposes
     ezpublish.api.storage_engine.legacy.connection:
         class: Doctrine\DBAL\Connection
-        factory: 'eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory:createConnection'
+        factory: ['@eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory', 'createConnection']
         arguments:
             $databaseURL: '%legacy_dsn%'
