@@ -83,6 +83,7 @@ class Mapper
         $contentInfo->currentVersionNo = $currentVersionNo;
         $contentInfo->status = ContentInfo::STATUS_DRAFT;
         $contentInfo->isPublished = false;
+        $contentInfo->isHidden = $struct->isHidden;
 
         return $contentInfo;
     }
@@ -507,6 +508,7 @@ class Mapper
         $struct->initialLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->initialLanguageCode)->id;
         $struct->mainLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->contentInfo->mainLanguageCode)->id;
         $struct->modified = time();
+        $struct->isHidden = $content->versionInfo->contentInfo->isHidden;
 
         foreach ($content->fields as $field) {
             $newField = clone $field;

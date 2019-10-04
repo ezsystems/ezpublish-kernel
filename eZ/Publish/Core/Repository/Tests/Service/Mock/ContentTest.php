@@ -5483,8 +5483,14 @@ class ContentTest extends BaseServiceMockTest
 
         $contentInfoMock->expects($this->any())
             ->method('__get')
-            ->with('id')
-            ->will($this->returnValue(42));
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['isHidden', true],
+                        ['id', 42],
+                    ]
+                )
+            );
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock->expects($this->any())
@@ -5543,7 +5549,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($versionInfoMock));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfoMock */
-        $content = $this->mockPublishVersion(123456, 126666);
+        $content = $this->mockPublishVersion(123456, 126666, true);
         $locationServiceMock->expects($this->once())
             ->method('createLocation')
             ->with(
@@ -5609,8 +5615,13 @@ class ContentTest extends BaseServiceMockTest
 
         $contentInfoMock->expects($this->any())
             ->method('__get')
-            ->with('id')
-            ->will($this->returnValue(42));
+            ->will(
+                $this->returnValueMap([
+                    ['isHidden', true],
+                    ['id', 42],
+                ])
+            );
+
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock->expects($this->any())
@@ -5667,7 +5678,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($versionInfoMock));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfoMock */
-        $content = $this->mockPublishVersion(123456, 126666);
+        $content = $this->mockPublishVersion(123456, 126666, true);
         $locationServiceMock->expects($this->once())
             ->method('createLocation')
             ->with(
@@ -5866,10 +5877,11 @@ class ContentTest extends BaseServiceMockTest
     /**
      * @param int|null $publicationDate
      * @param int|null $modificationDate
+     * @param bool $isHidden
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function mockPublishVersion($publicationDate = null, $modificationDate = null)
+    protected function mockPublishVersion($publicationDate = null, $modificationDate = null, $isHidden = false)
     {
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
         $contentInfoMock = $this->createMock(APIContentInfo::class);
@@ -5929,6 +5941,7 @@ class ContentTest extends BaseServiceMockTest
         // Account for 1 second of test execution time
         $metadataUpdateStruct->publicationDate = $publicationDate;
         $metadataUpdateStruct->modificationDate = $modificationDate ?? $currentTime;
+        $metadataUpdateStruct->isHidden = $isHidden;
 
         $contentHandlerMock->expects($this->once())
             ->method('publish')
