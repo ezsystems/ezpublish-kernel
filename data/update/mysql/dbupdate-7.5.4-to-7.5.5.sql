@@ -4,6 +4,8 @@
 
 ALTER TABLE ezuser ADD COLUMN password_updated_at INT(11) NULL;
 
+UPDATE ezuser SET password_updated_at = CURRENT_TIMESTAMP;
+
 --
 -- EZP-30797: end.
 --
