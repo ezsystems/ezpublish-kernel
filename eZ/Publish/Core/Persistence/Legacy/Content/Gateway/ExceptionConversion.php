@@ -697,7 +697,7 @@ class ExceptionConversion extends Gateway
     /**
      * Inserts a new relation database record.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $struct
      *
      * @return int ID the inserted ID
      */
