@@ -14,10 +14,10 @@ use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\EventListener\LocaleListener as BaseLocaleListener;
 
 class LocaleListenerTest extends TestCase
 {
@@ -32,8 +32,6 @@ class LocaleListenerTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-        $this->container = $this->createMock(ContainerInterface::class);
         $this->localeConverter = $this->createMock(LocaleConverterInterface::class);
         $this->configResolver = $this->createMock(ConfigResolverInterface::class);
 
@@ -44,18 +42,13 @@ class LocaleListenerTest extends TestCase
         $requestMock = $this->createMock(Request::class);
         $requestMock->attributes = $parameterBagMock;
 
-//        $requestMock->expects($this->any())
-//            ->method('__get')
-//            ->with($this->equalTo('attributes'))
-//            ->will($this->returnValue($parameterBagMock));
-
         $this->requestStack->push($requestMock);
     }
 
     /**
      * @dataProvider onKernelRequestProvider
      */
-    public function testOnKernelRequest(array $configuredLanguages, array $convertedLocalesValueMap, $expectedLocale)
+    public function testOnKernelRequest(array $configuredLanguages, array $convertedLocalesValueMap, $expectedLocale): void
     {
         $this->configResolver
             ->expects($this->once())
@@ -71,13 +64,12 @@ class LocaleListenerTest extends TestCase
             );
 
         $defaultLocale = 'en';
-        $localeListener = new LocaleListener($this->requestStack, $defaultLocale);
-        $localeListener->setConfigResolver($this->configResolver);
-        $localeListener->setLocaleConverter($this->localeConverter);
+        $baseLocaleListener = new BaseLocaleListener($this->requestStack, $defaultLocale);
+        $localeListener = new LocaleListener($baseLocaleListener, $this->configResolver, $this->localeConverter);
 
         $request = new Request();
         $localeListener->onKernelRequest(
-            new GetResponseEvent(
+            new RequestEvent(
                 $this->createMock(HttpKernelInterface::class),
                 $request,
                 HttpKernelInterface::MASTER_REQUEST
@@ -86,7 +78,7 @@ class LocaleListenerTest extends TestCase
         $this->assertSame($expectedLocale, $request->attributes->get('_locale'));
     }
 
-    public function onKernelRequestProvider()
+    public function onKernelRequestProvider(): array
     {
         return [
             [
