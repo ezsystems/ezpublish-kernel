@@ -1,41 +1,32 @@
 <?php
 
 /**
- * File containing the Controller class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class Controller extends BaseController
+class Controller extends AbstractController
 {
-    /**
-     * @throws \LogicException
-     *
-     * @return \eZ\Publish\API\Repository\Repository
-     */
-    public function getRepository()
+    public function getRepository(): Repository
     {
         return $this->container->get('ezpublish.api.repository');
     }
 
-    /**
-     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
-     */
-    protected function getConfigResolver()
+    protected function getConfigResolver(): ConfigResolverInterface
     {
         return $this->container->get('ezpublish.config.resolver');
     }
 
-    /**
-     * Returns the general helper service, exposed in Twig templates as "ezpublish" global variable.
-     *
-     * @return \eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper
-     */
-    public function getGlobalHelper()
+    public function getGlobalHelper(): GlobalHelper
     {
         return $this->container->get('ezpublish.templating.global_helper');
     }
@@ -45,8 +36,20 @@ class Controller extends BaseController
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function getRootLocation()
+    public function getRootLocation(): Location
     {
         return $this->getGlobalHelper()->getRootLocation();
+    }
+
+    public static function getSubscribedServices(): array
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                'ezpublish.api.repository' => Repository::class,
+                'ezpublish.config.resolver' => ConfigResolverInterface::class,
+                'ezpublish.templating.global_helper' => GlobalHelper::class,
+            ]
+        );
     }
 }

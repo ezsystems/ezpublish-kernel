@@ -234,3 +234,5 @@ site:
 ```
 
 * Service based SiteAccess Matchers now require to be tagged with `ezplatform.siteaccess.matcher`.
+
+* `eZ\Bundle\EzPublishCoreBundle\Controller` extends `Symfony\Bundle\FrameworkBundle\Controller\AbstractController` instead of `Symfony\Bundle\FrameworkBundle\Controller\Controller` which has limited access to the dependency injection container. See https://symfony.com/doc/current/service_container/service_subscribers_locators.html
