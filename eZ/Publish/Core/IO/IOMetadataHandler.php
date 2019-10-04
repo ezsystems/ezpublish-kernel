@@ -28,27 +28,27 @@ interface IOMetadataHandler
     public function create(BinaryFileCreateStruct $spiBinaryFileCreateStruct);
 
     /**
-     * Deletes file $path.
+     * Deletes file $spiBinaryFileId.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $path is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $spiBinaryFileId is not found
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      */
     public function delete($spiBinaryFileId);
 
     /**
-     * Loads and returns metadata for $path.
+     * Loads and returns metadata for $spiBinaryFileId.
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return BinaryFile
      */
     public function load($spiBinaryFileId);
 
     /**
-     * Checks if a file $path exists.
+     * Checks if a file $spiBinaryFileId exists.
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return bool
      */
