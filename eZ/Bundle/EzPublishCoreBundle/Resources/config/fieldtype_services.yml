@@ -54,7 +54,7 @@ services:
         arguments:
             - "@ezpublish.api.service.user"
         tags:
-            - {name: ezpublish.fieldType.parameterProvider, alias: ezuser}
+            - {name: ezplatform.field_type.parameter_provider, alias: ezuser}
 
     # Image
     ezpublish.fieldType.ezimage.io_service:
