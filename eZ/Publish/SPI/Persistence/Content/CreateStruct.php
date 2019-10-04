@@ -72,4 +72,11 @@ class CreateStruct extends ValueObject
      * @var int
      */
     public $modified;
+
+    /**
+     * Is hidden flag.
+     *
+     * @var bool
+     */
+    public $isHidden;
 }
