@@ -661,8 +661,6 @@ class ExceptionConversion extends Gateway
      * Loads data of related to/from $contentId.
      *
      * @param int $contentId
-     * @param bool $reverse Reverse relation, default false
-     * @param int $contentVersionNo
      * @param int $relationType
      *
      * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
@@ -701,7 +699,7 @@ class ExceptionConversion extends Gateway
     /**
      * Inserts a new relation database record.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $struct
      *
      * @return int ID the inserted ID
      */
