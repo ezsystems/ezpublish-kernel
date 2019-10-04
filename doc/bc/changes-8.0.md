@@ -184,6 +184,8 @@ Changes affecting version compatibility with former or future versions.
 * The deprecated Legacy SQL schema files (`data/mysql/schema.sql`, `data/mysql/dfs_schema.sql`)
   have been removed. Use Schema Builder instead.
 
+* The obsolete `data/demo_data.php` file has been removed.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
