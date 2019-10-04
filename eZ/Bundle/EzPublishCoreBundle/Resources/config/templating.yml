@@ -133,6 +133,9 @@ services:
         calls:
             - [setRequestStack, ["@request_stack"]]
 
+    eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper:
+        alias: ezpublish.templating.global_helper.core
+
     ezpublish.templating.global_helper:
         alias: ezpublish.templating.global_helper.core
 
