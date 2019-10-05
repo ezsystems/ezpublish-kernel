@@ -24,7 +24,7 @@ final class PasswordHashGenerator implements PasswordHashGeneratorInterface
         $this->hashType = $hashType;
     }
 
-    public function getHashType(): int
+    public function getDefaultHashType(): int
     {
         return $this->hashType;
     }

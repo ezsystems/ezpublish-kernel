@@ -113,7 +113,7 @@ class UserService implements UserServiceInterface
             'defaultUserPlacement' => 12,
             'userClassID' => 4, // @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
-            'hashType' => $passwordHashGenerator->getHashType(),
+            'hashType' => $passwordHashGenerator->getDefaultHashType(),
             'siteName' => 'ez.no',
         ];
         $this->passwordHashGenerator = $passwordHashGenerator;
@@ -542,7 +542,7 @@ class UserService implements UserServiceInterface
      */
     private function updatePasswordHash($login, $password, SPIUser $spiUser)
     {
-        $hashType = $this->passwordHashGenerator->getHashType();
+        $hashType = $this->passwordHashGenerator->getDefaultHashType();
         if ($spiUser->hashAlgorithm === $hashType) {
             return;
         }

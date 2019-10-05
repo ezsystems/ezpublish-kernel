@@ -238,7 +238,7 @@ class Type extends FieldType
      */
     public function toPersistenceValue(SPIValue $value)
     {
-        $value->passwordHashType = $value->passwordHashType ?? $this->passwordHashGenerator->getHashType();
+        $value->passwordHashType = $value->passwordHashType ?? $this->passwordHashGenerator->getDefaultHashType();
         if ($value->plainPassword) {
             $value->passwordHash = $this->passwordHashGenerator->createPasswordHash(
                 $value->plainPassword,

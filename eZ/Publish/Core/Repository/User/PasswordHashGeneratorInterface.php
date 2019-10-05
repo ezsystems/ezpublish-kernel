@@ -13,7 +13,7 @@ namespace eZ\Publish\Core\Repository\User;
  */
 interface PasswordHashGeneratorInterface
 {
-    public function getHashType(): int;
+    public function getDefaultHashType(): int;
 
     public function createPasswordHash(string $password, ?int $hashType = null): string;
 }
