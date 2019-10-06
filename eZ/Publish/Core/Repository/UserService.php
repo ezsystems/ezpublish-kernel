@@ -1331,21 +1331,7 @@ class UserService implements UserServiceInterface
      */
     protected function verifyPassword($login, $password, $spiUser)
     {
-        // In case of bcrypt let php's password functionality do it's magic
-        if ($spiUser->hashAlgorithm === APIUser::PASSWORD_HASH_BCRYPT ||
-            $spiUser->hashAlgorithm === APIUser::PASSWORD_HASH_PHP_DEFAULT) {
-            return password_verify($password, $spiUser->passwordHash);
-        }
-
-        // Randomize login time to protect against timing attacks
-        usleep(random_int(0, 30000));
-
-        $passwordHash = $this->passwordHashGenerator->createPasswordHash(
-            $password,
-            $spiUser->hashAlgorithm
-        );
-
-        return $passwordHash === $spiUser->passwordHash;
+        return $this->passwordHashGenerator->isValidPassword($password, $spiUser->passwordHash, $spiUser->hashAlgorithm);
     }
 
     /**

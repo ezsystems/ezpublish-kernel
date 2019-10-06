@@ -16,4 +16,6 @@ interface PasswordHashGeneratorInterface
     public function getDefaultHashType(): int;
 
     public function createPasswordHash(string $password, ?int $hashType = null): string;
+
+    public function isValidPassword(string $plainPassword, string $passwordHash, ?int $hashType = null): bool;
 }

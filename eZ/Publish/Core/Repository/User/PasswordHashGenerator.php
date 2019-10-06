@@ -44,4 +44,17 @@ final class PasswordHashGenerator implements PasswordHashGeneratorInterface
                 throw new InvalidArgumentException('hashType', "Password hash type '$hashType' is not recognized");
         }
     }
+
+    public function isValidPassword(string $plainPassword, string $passwordHash, ?int $hashType = null): bool
+    {
+        if ($hashType === User::PASSWORD_HASH_BCRYPT || $hashType === User::PASSWORD_HASH_PHP_DEFAULT) {
+            // In case of bcrypt let php's password functionality do it's magic
+            return password_verify($plainPassword, $passwordHash);
+        }
+
+        // Randomize login time to protect against timing attacks
+        usleep(random_int(0, 30000));
+
+        return $passwordHash === $this->createPasswordHash($plainPassword, $hashType);
+    }
 }
