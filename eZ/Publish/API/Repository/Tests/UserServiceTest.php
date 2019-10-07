@@ -2898,7 +2898,7 @@ class UserServiceTest extends BaseTest
      * @covers \eZ\Publish\API\Repository\UserService::validatePassword()
      * @dataProvider dataProviderForValidatePassword
      */
-    public function testValidatePassword(string $password, array $expectedErrorr)
+    public function testValidatePassword(string $password, array $expectedErrors)
     {
         $userService = $this->getRepository()->getUserService();
         $contentType = $this->createUserContentTypeWithStrongPassword();
@@ -2911,7 +2911,30 @@ class UserServiceTest extends BaseTest
         $actualErrors = $userService->validatePassword($password, $context);
         /* END: Use Case */
 
-        $this->assertEquals($expectedErrorr, $actualErrors);
+        $this->assertEquals($expectedErrors, $actualErrors);
+    }
+
+    public function testValidatePasswordReturnsErrorWhenOldPasswordIsReused(): void
+    {
+        $password = 'P@blish123!';
+
+        $userService = $this->getRepository()->getUserService();
+        // Password expiration needs to be enabled
+        $contentType = $this->createUserContentTypeWithPasswordExpirationDate();
+
+        $user = $this->createTestUserWithPassword($password, $contentType);
+
+        $context = new PasswordValidationContext([
+            'contentType' => $contentType,
+            'user' => $user,
+        ]);
+
+        $actualErrors = $userService->validatePassword($password, $context);
+
+        $this->assertEquals(
+            [new ValidationError('New password cannot be the same as old password', null, [], 'password')],
+            $actualErrors
+        );
     }
 
     /**
@@ -3059,6 +3082,7 @@ class UserServiceTest extends BaseTest
                 'requireAtLeastOneLowerCaseCharacter' => 1,
                 'requireAtLeastOneNumericCharacter' => 1,
                 'requireAtLeastOneNonAlphanumericCharacter' => 1,
+                'requireNewPassword' => 1,
                 'minLength' => 8,
             ],
         ]);
