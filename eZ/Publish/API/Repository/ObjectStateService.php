@@ -33,7 +33,7 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct);
+    public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct): ObjectStateGroup;
 
     /**
      * Loads a object state group.
@@ -45,7 +45,7 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function loadObjectStateGroup($objectStateGroupId, array $prioritizedLanguages = []);
+    public function loadObjectStateGroup(int $objectStateGroupId, array $prioritizedLanguages = []): ObjectStateGroup;
 
     /**
      * Loads all object state groups.
@@ -56,7 +56,7 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
-    public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = []);
+    public function loadObjectStateGroups(int $offset = 0, int $limit = -1, array $prioritizedLanguages = []): iterable;
 
     /**
      * This method returns the ordered list of object states of a group.
@@ -66,7 +66,7 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
-    public function loadObjectStates(ObjectStateGroup $objectStateGroup, array $prioritizedLanguages = []);
+    public function loadObjectStates(ObjectStateGroup $objectStateGroup, array $prioritizedLanguages = []): iterable;
 
     /**
      * Updates an object state group.
@@ -79,7 +79,7 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function updateObjectStateGroup(ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct);
+    public function updateObjectStateGroup(ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct): ObjectStateGroup;
 
     /**
      * Deletes a object state group including all states and links to content.
@@ -88,7 +88,7 @@ interface ObjectStateService
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      */
-    public function deleteObjectStateGroup(ObjectStateGroup $objectStateGroup);
+    public function deleteObjectStateGroup(ObjectStateGroup $objectStateGroup): void;
 
     /**
      * Creates a new object state in the given group.
@@ -104,7 +104,7 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function createObjectState(ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct);
+    public function createObjectState(ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct): ObjectState;
 
     /**
      * Loads an object state.
@@ -116,20 +116,20 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function loadObjectState($stateId, array $prioritizedLanguages = []);
+    public function loadObjectState(int $stateId, array $prioritizedLanguages = []): ObjectState;
 
     /**
      * Updates an object state.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function updateObjectState(ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct);
+    public function updateObjectState(ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct): ObjectState;
 
     /**
      * Changes the priority of the state.
@@ -139,7 +139,7 @@ interface ObjectStateService
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param int $priority
      */
-    public function setPriorityOfObjectState(ObjectState $objectState, $priority);
+    public function setPriorityOfObjectState(ObjectState $objectState, int $priority): void;
 
     /**
      * Deletes a object state. The state of the content objects is reset to the
@@ -149,7 +149,7 @@ interface ObjectStateService
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function deleteObjectState(ObjectState $objectState);
+    public function deleteObjectState(ObjectState $objectState): void;
 
     /**
      * Sets the object-state of a state group to $state for the given content.
@@ -161,7 +161,7 @@ interface ObjectStateService
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function setContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState);
+    public function setContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState): void;
 
     /**
      * Gets the object-state of object identified by $contentId.
@@ -173,7 +173,7 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup);
+    public function getContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup): ObjectState;
 
     /**
      * Returns the number of objects which are in this state.
@@ -182,7 +182,7 @@ interface ObjectStateService
      *
      * @return int
      */
-    public function getContentCount(ObjectState $objectState);
+    public function getContentCount(ObjectState $objectState): int;
 
     /**
      * Instantiates a new Object State Group Create Struct and sets $identified in it.
@@ -191,14 +191,14 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
      */
-    public function newObjectStateGroupCreateStruct($identifier);
+    public function newObjectStateGroupCreateStruct(string $identifier): ObjectStateGroupCreateStruct;
 
     /**
      * Instantiates a new Object State Group Update Struct.
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct
      */
-    public function newObjectStateGroupUpdateStruct();
+    public function newObjectStateGroupUpdateStruct(): ObjectStateGroupUpdateStruct;
 
     /**
      * Instantiates a new Object State Create Struct and sets $identifier in it.
@@ -207,12 +207,12 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
      */
-    public function newObjectStateCreateStruct($identifier);
+    public function newObjectStateCreateStruct(string $identifier): ObjectStateCreateStruct;
 
     /**
      * Instantiates a new Object State Update Struct.
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct
      */
-    public function newObjectStateUpdateStruct();
+    public function newObjectStateUpdateStruct(): ObjectStateUpdateStruct;
 }

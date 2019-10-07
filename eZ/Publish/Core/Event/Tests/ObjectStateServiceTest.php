@@ -509,7 +509,7 @@ class ObjectStateServiceTest extends AbstractServiceTest
 
         $parameters = [
             $this->createMock(ObjectState::class),
-            'random_value_5cff79c31cf588.18908758',
+            100,
         ];
 
         $innerServiceMock = $this->createMock(ObjectStateServiceInterface::class);
@@ -535,7 +535,7 @@ class ObjectStateServiceTest extends AbstractServiceTest
 
         $parameters = [
             $this->createMock(ObjectState::class),
-            'random_value_5cff79c31cf609.77890182',
+            100,
         ];
 
         $innerServiceMock = $this->createMock(ObjectStateServiceInterface::class);

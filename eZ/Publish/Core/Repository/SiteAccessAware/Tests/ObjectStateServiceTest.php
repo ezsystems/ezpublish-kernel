@@ -36,38 +36,39 @@ class ObjectStateServiceTest extends AbstractServiceTest
 
         $contentInfo = new ContentInfo();
 
-        // string $method, array $arguments, bool $return = true
+        // string $method, array $arguments, mixed $return = true
         return [
-            ['createObjectStateGroup', [$objectStateGroupCreateStruct]],
-            ['updateObjectStateGroup', [$objectStateGroup, $objectStateGroupUpdateStruct]],
-            ['deleteObjectStateGroup', [$objectStateGroup]],
+            ['createObjectStateGroup', [$objectStateGroupCreateStruct], $objectStateGroup],
+            ['updateObjectStateGroup', [$objectStateGroup, $objectStateGroupUpdateStruct], $objectStateGroup],
+            ['deleteObjectStateGroup', [$objectStateGroup], null],
 
-            ['createObjectState', [$objectStateGroup, $objectStateCreateStruct]],
-            ['updateObjectState', [$objectState, $objectStateUpdateStruct]],
-            ['setPriorityOfObjectState', [$objectState, 4]],
-            ['deleteObjectState', [$objectState]],
+            ['createObjectState', [$objectStateGroup, $objectStateCreateStruct], $objectState],
+            ['updateObjectState', [$objectState, $objectStateUpdateStruct], $objectState],
+            ['setPriorityOfObjectState', [$objectState, 4], null],
+            ['deleteObjectState', [$objectState], null],
 
-            ['setContentState', [$contentInfo, $objectStateGroup, $objectState]],
-            ['getContentState', [$contentInfo, $objectStateGroup]],
-            ['getContentCount', [$objectState]],
+            ['setContentState', [$contentInfo, $objectStateGroup, $objectState], null],
+            ['getContentState', [$contentInfo, $objectStateGroup], $objectState],
+            ['getContentCount', [$objectState], 100],
 
-            ['newObjectStateGroupCreateStruct', ['locker']],
-            ['newObjectStateGroupUpdateStruct', []],
-            ['newObjectStateCreateStruct', ['locked']],
-            ['newObjectStateUpdateStruct', []],
+            ['newObjectStateGroupCreateStruct', ['locker'], $objectStateGroupCreateStruct],
+            ['newObjectStateGroupUpdateStruct', [], $objectStateGroupUpdateStruct],
+            ['newObjectStateCreateStruct', ['locked'], $objectStateCreateStruct],
+            ['newObjectStateUpdateStruct', [], $objectStateUpdateStruct],
         ];
     }
 
     public function providerForLanguagesLookupMethods()
     {
         $objectStateGroup = new ObjectStateGroup();
+        $objectState = new ObjectState();
 
-        // string $method, array $arguments, bool $return, int $languageArgumentIndex
+        // string $method, array $arguments, mixed $return, int $languageArgumentIndex
         return [
-            ['loadObjectStateGroup', [11, self::LANG_ARG], true, 1],
-            ['loadObjectStateGroups', [50, 50, self::LANG_ARG], true, 2],
-            ['loadObjectStates', [$objectStateGroup, self::LANG_ARG], true, 1],
-            ['loadObjectState', [3, self::LANG_ARG], true, 1],
+            ['loadObjectStateGroup', [11, self::LANG_ARG], $objectStateGroup, 1],
+            ['loadObjectStateGroups', [50, 50, self::LANG_ARG], [$objectStateGroup], 2],
+            ['loadObjectStates', [$objectStateGroup, self::LANG_ARG], [$objectState], 1],
+            ['loadObjectState', [3, self::LANG_ARG], $objectState, 1],
         ];
     }
 }
