@@ -11,9 +11,11 @@ namespace eZ\Publish\Core\Repository\User;
 /**
  * @internal
  */
-interface PasswordHashGeneratorInterface
+interface PasswordHashServiceInterface
 {
-    public function getHashType(): int;
+    public function getDefaultHashType(): int;
 
     public function createPasswordHash(string $password, ?int $hashType = null): string;
+
+    public function isValidPassword(string $plainPassword, string $passwordHash, ?int $hashType = null): bool;
 }

@@ -13,7 +13,7 @@ use DateTimeInterface;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
-use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
+use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -72,19 +72,19 @@ class Type extends FieldType
     /** @var \eZ\Publish\SPI\Persistence\User\Handler */
     private $userHandler;
 
-    /** @var \eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface */
-    private $passwordHashGenerator;
+    /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
+    private $passwordHashService;
 
     /** @var \eZ\Publish\Core\Repository\User\PasswordValidatorInterface */
     private $passwordValidator;
 
     public function __construct(
         SPIUserHandler $userHandler,
-        PasswordHashGeneratorInterface $passwordHashGenerator,
+        PasswordHashServiceInterface $passwordHashGenerator,
         PasswordValidatorInterface $passwordValidator
     ) {
         $this->userHandler = $userHandler;
-        $this->passwordHashGenerator = $passwordHashGenerator;
+        $this->passwordHashService = $passwordHashGenerator;
         $this->passwordValidator = $passwordValidator;
     }
 
@@ -238,9 +238,9 @@ class Type extends FieldType
      */
     public function toPersistenceValue(SPIValue $value)
     {
-        $value->passwordHashType = $value->passwordHashType ?? $this->passwordHashGenerator->getHashType();
+        $value->passwordHashType = $value->passwordHashType ?? $this->passwordHashService->getDefaultHashType();
         if ($value->plainPassword) {
-            $value->passwordHash = $this->passwordHashGenerator->createPasswordHash(
+            $value->passwordHash = $this->passwordHashService->createPasswordHash(
                 $value->plainPassword,
                 $value->passwordHashType
             );

@@ -8,7 +8,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
-use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
+use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
@@ -221,8 +221,8 @@ class Repository implements RepositoryInterface
     /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
-    /** @var \eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface */
-    private $passwordHashGenerator;
+    /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
+    private $passwordHashService;
 
     /**
      * Construct repository object with provided storage engine.
@@ -232,7 +232,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface $passwordHashGenerator
+     * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
      * @param array $serviceSettings
      * @param \Psr\Log\LoggerInterface|null $logger
      */
@@ -242,7 +242,7 @@ class Repository implements RepositoryInterface
         BackgroundIndexer $backgroundIndexer,
         RelationProcessor $relationProcessor,
         FieldTypeRegistry $fieldTypeRegistry,
-        PasswordHashGeneratorInterface $passwordHashGenerator,
+        PasswordHashServiceInterface $passwordHashGenerator,
         array $serviceSettings = [],
         LoggerInterface $logger = null
     ) {
@@ -251,7 +251,7 @@ class Repository implements RepositoryInterface
         $this->backgroundIndexer = $backgroundIndexer;
         $this->relationProcessor = $relationProcessor;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
-        $this->passwordHashGenerator = $passwordHashGenerator;
+        $this->passwordHashService = $passwordHashGenerator;
 
         $this->serviceSettings = $serviceSettings + [
             'content' => [],
@@ -461,7 +461,7 @@ class Repository implements RepositoryInterface
             $this->getPermissionResolver(),
             $this->persistenceHandler->userHandler(),
             $this->persistenceHandler->locationHandler(),
-            $this->passwordHashGenerator,
+            $this->passwordHashService,
             $this->serviceSettings['user']
         );
 

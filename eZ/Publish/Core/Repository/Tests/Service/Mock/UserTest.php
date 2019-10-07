@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\ContentService as APIContentService;
-use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
+use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\UserService;
 
@@ -154,7 +154,7 @@ class UserTest extends BaseServiceMockTest
                     $this->getPermissionResolverMock(),
                     $this->getPersistenceMock()->userHandler(),
                     $this->getPersistenceMock()->locationHandler(),
-                    $this->createMock(PasswordHashGeneratorInterface::class),
+                    $this->createMock(PasswordHashServiceInterface::class),
                 ]
             )
             ->getMock();

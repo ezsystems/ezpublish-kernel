@@ -14,7 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 /**
  * @internal
  */
-final class PasswordHashGenerator implements PasswordHashGeneratorInterface
+final class PasswordHashService implements PasswordHashServiceInterface
 {
     /** @var int */
     private $hashType;
@@ -24,7 +24,7 @@ final class PasswordHashGenerator implements PasswordHashGeneratorInterface
         $this->hashType = $hashType;
     }
 
-    public function getHashType(): int
+    public function getDefaultHashType(): int
     {
         return $this->hashType;
     }
@@ -43,5 +43,18 @@ final class PasswordHashGenerator implements PasswordHashGeneratorInterface
             default:
                 throw new InvalidArgumentException('hashType', "Password hash type '$hashType' is not recognized");
         }
+    }
+
+    public function isValidPassword(string $plainPassword, string $passwordHash, ?int $hashType = null): bool
+    {
+        if ($hashType === User::PASSWORD_HASH_BCRYPT || $hashType === User::PASSWORD_HASH_PHP_DEFAULT) {
+            // In case of bcrypt let php's password functionality do it's magic
+            return password_verify($plainPassword, $passwordHash);
+        }
+
+        // Randomize login time to protect against timing attacks
+        usleep(random_int(0, 30000));
+
+        return $passwordHash === $this->createPasswordHash($plainPassword, $hashType);
     }
 }

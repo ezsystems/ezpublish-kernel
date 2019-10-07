@@ -16,7 +16,7 @@ use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Persistence\Cache\UserHandler;
-use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
+use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 
@@ -41,7 +41,7 @@ class UserTest extends FieldTypeTest
     {
         $fieldType = new UserType(
             $this->createMock(UserHandler::class),
-            $this->createMock(PasswordHashGeneratorInterface::class),
+            $this->createMock(PasswordHashServiceInterface::class),
             $this->createMock(PasswordValidatorInterface::class)
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
@@ -400,7 +400,7 @@ class UserTest extends FieldTypeTest
 
         $userType = new UserType(
             $userHandlerMock,
-            $this->createMock(PasswordHashGeneratorInterface::class),
+            $this->createMock(PasswordHashServiceInterface::class),
             $this->createMock(PasswordValidatorInterface::class)
         );
 
