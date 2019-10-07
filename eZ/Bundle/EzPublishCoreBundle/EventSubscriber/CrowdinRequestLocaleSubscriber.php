@@ -6,7 +6,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -24,7 +24,7 @@ class CrowdinRequestLocaleSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function setInContextAcceptLanguage(GetResponseEvent $e)
+    public function setInContextAcceptLanguage(RequestEvent $e)
     {
         if (!$e->getRequest()->cookies->has('ez_in_context_translation')) {
             return;

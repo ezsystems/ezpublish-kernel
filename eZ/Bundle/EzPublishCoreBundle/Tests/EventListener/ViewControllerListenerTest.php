@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ViewControllerListenerTest extends TestCase
@@ -65,7 +65,7 @@ class ViewControllerListenerTest extends TestCase
         );
 
         $this->request = new Request();
-        $this->event = $this->createMock(FilterControllerArgumentsEvent::class);
+        $this->event = $this->createMock(ControllerEvent::class);
         $this->event
             ->expects($this->any())
             ->method('getRequest')

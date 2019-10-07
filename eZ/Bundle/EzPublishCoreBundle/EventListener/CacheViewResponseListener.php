@@ -9,7 +9,7 @@ use eZ\Publish\Core\MVC\Symfony\View\CachableView;
 use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -49,7 +49,7 @@ class CacheViewResponseListener implements EventSubscriberInterface
         return [KernelEvents::RESPONSE => 'configureCache'];
     }
 
-    public function configureCache(FilterResponseEvent $event)
+    public function configureCache(ResponseEvent $event)
     {
         if (!($view = $event->getRequest()->attributes->get('view')) instanceof CachableView) {
             return;

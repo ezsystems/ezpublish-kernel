@@ -27,7 +27,7 @@ use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -61,11 +61,11 @@ class ExceptionListenerTest extends TestCase
 
     /**
      * @param Exception $exception
-     * @return GetResponseForExceptionEvent
+     * @return ExceptionEvent
      */
     private function generateExceptionEvent(Exception $exception)
     {
-        return new GetResponseForExceptionEvent(
+        return new ExceptionEvent(
             $this->createMock(HttpKernelInterface::class),
             new Request(),
             HttpKernelInterface::MASTER_REQUEST,

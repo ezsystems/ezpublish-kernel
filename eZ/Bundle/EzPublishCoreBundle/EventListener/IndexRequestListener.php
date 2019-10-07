@@ -11,7 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -38,9 +38,9 @@ class IndexRequestListener implements EventSubscriberInterface
     /**
      * Checks if the IndexPage is configured and which page must be shown.
      *
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      */
-    public function onKernelRequestIndex(GetResponseEvent $event)
+    public function onKernelRequestIndex(RequestEvent $event)
     {
         $request = $event->getRequest();
         $semanticPathinfo = $request->attributes->get('semanticPathinfo') ?: '/';

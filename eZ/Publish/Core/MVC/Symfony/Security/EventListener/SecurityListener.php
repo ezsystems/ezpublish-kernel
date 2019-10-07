@@ -23,7 +23,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -184,11 +184,11 @@ class SecurityListener implements EventSubscriberInterface
     /**
      * Throws an UnauthorizedSiteAccessException if current user doesn't have access to current SiteAccess.
      *
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      *
      * @throws \eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
         // Ignore sub-requests, including fragments.

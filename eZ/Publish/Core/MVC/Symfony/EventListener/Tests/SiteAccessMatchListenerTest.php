@@ -16,7 +16,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -53,7 +53,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $siteAccess = new SiteAccess();
         $request = new Request();
         $request->attributes->set('serialized_siteaccess', serialize($siteAccess));
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
@@ -79,7 +79,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $siteAccess = new SiteAccess();
         $request = new Request();
         $request->attributes->set('siteaccess', $siteAccess);
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
@@ -107,7 +107,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $port = 1234;
         $path = '/foo/bar';
         $request = Request::create(sprintf('%s://%s:%d%s', $scheme, $host, $port, $path));
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
@@ -151,7 +151,7 @@ class SiteAccessMatchListenerTest extends TestCase
         $originalRequest = Request::create(sprintf('%s://%s:%d%s', $scheme, $host, $port, $path));
         $request = Request::create('http://localhost/_fos_user_hash');
         $request->attributes->set('_ez_original_request', $originalRequest);
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
