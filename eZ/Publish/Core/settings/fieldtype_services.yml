@@ -57,6 +57,6 @@ services:
 
     eZ\Publish\Core\FieldType\FieldTypeRegistry: ~
 
-    eZ\Publish\Core\Repository\User\PasswordHashGenerator: ~
+    eZ\Publish\Core\Repository\User\PasswordHashService: ~
 
     eZ\Publish\Core\Repository\User\PasswordValidator: ~

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Repository\User;
 /**
  * @internal
  */
-interface PasswordHashGeneratorInterface
+interface PasswordHashServiceInterface
 {
     public function getDefaultHashType(): int;
 

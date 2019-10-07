@@ -30,7 +30,7 @@ use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
-use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
+use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -80,8 +80,8 @@ class UserService implements UserServiceInterface
     /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
-    /** @var \eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface */
-    private $passwordHashGenerator;
+    /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
+    private $passwordHashService;
 
     public function setLogger(LoggerInterface $logger = null)
     {
@@ -101,7 +101,7 @@ class UserService implements UserServiceInterface
         PermissionResolver $permissionResolver,
         Handler $userHandler,
         LocationHandler $locationHandler,
-        PasswordHashGeneratorInterface $passwordHashGenerator,
+        PasswordHashServiceInterface $passwordHashGenerator,
         array $settings = []
     ) {
         $this->repository = $repository;
@@ -116,7 +116,7 @@ class UserService implements UserServiceInterface
             'hashType' => $passwordHashGenerator->getDefaultHashType(),
             'siteName' => 'ez.no',
         ];
-        $this->passwordHashGenerator = $passwordHashGenerator;
+        $this->passwordHashService = $passwordHashGenerator;
     }
 
     /**
@@ -542,12 +542,12 @@ class UserService implements UserServiceInterface
      */
     private function updatePasswordHash($login, $password, SPIUser $spiUser)
     {
-        $hashType = $this->passwordHashGenerator->getDefaultHashType();
+        $hashType = $this->passwordHashService->getDefaultHashType();
         if ($spiUser->hashAlgorithm === $hashType) {
             return;
         }
 
-        $spiUser->passwordHash = $this->passwordHashGenerator->createPasswordHash($password, $hashType);
+        $spiUser->passwordHash = $this->passwordHashService->createPasswordHash($password, $hashType);
         $spiUser->hashAlgorithm = $hashType;
 
         $this->repository->beginTransaction();
@@ -1331,7 +1331,7 @@ class UserService implements UserServiceInterface
      */
     protected function verifyPassword($login, $password, $spiUser)
     {
-        return $this->passwordHashGenerator->isValidPassword($password, $spiUser->passwordHash, $spiUser->hashAlgorithm);
+        return $this->passwordHashService->isValidPassword($password, $spiUser->passwordHash, $spiUser->hashAlgorithm);
     }
 
     /**

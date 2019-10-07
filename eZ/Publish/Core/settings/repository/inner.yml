@@ -41,7 +41,7 @@ services:
             - '@ezpublish.search.background_indexer'
             - '@ezpublish.repository.relation_processor'
             - '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
-            - '@eZ\Publish\Core\Repository\User\PasswordHashGenerator'
+            - '@eZ\Publish\Core\Repository\User\PasswordHashService'
         lazy: true
 
     ezpublish.api.service.inner_content:

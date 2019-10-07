@@ -7,7 +7,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\Core\Repository\User\PasswordHashGeneratorInterface;
+use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
@@ -67,7 +67,7 @@ abstract class Base extends TestCase
                 new NullIndexer(),
                 $this->getRelationProcessorMock(),
                 $this->getFieldTypeRegistryMock(),
-                $this->createMock(PasswordHashGeneratorInterface::class),
+                $this->createMock(PasswordHashServiceInterface::class),
                 $serviceSettings,
             );
 

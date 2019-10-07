@@ -14,7 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 /**
  * @internal
  */
-final class PasswordHashGenerator implements PasswordHashGeneratorInterface
+final class PasswordHashService implements PasswordHashServiceInterface
 {
     /** @var int */
     private $hashType;
