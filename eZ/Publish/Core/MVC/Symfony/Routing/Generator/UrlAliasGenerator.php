@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\Routing\RouterInterface;
@@ -72,57 +73,15 @@ class UrlAliasGenerator extends Generator
      */
     public function doGenerate($location, array $parameters)
     {
-        $urlAliasService = $this->repository->getURLAliasService();
+        $siteaccess = $parameters['siteaccess'] ?? null;
 
-        $siteaccess = null;
-        if (isset($parameters['siteaccess'])) {
-            $siteaccess = $parameters['siteaccess'];
-            unset($parameters['siteaccess']);
-        }
+        unset($parameters['language'], $parameters['contentId'], $parameters['siteaccess']);
 
-        if ($siteaccess) {
-            // We generate for a different SiteAccess, so potentially in a different language.
-            $languages = $this->configResolver->getParameter('languages', null, $siteaccess);
-            $urlAliases = $urlAliasService->listLocationAliases($location, false, null, null, $languages);
-            // Use the target SiteAccess root location
-            $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id', null, $siteaccess);
-        } else {
-            $languages = null;
-            $urlAliases = $urlAliasService->listLocationAliases($location, false);
-            $rootLocationId = $this->rootLocationId;
-        }
+        $pathString = $this->createPathString($location, $siteaccess);
+        $queryString = $this->createQueryString($parameters);
+        $url = $pathString . $queryString;
 
-        $queryString = '';
-        unset($parameters['language'], $parameters['contentId']);
-        if (!empty($parameters)) {
-            $queryString = '?' . http_build_query($parameters, '', '&');
-        }
-
-        if (!empty($urlAliases)) {
-            $path = $urlAliases[0]->path;
-            // Remove rootLocation's prefix if needed.
-            if ($rootLocationId !== null) {
-                $pathPrefix = $this->getPathPrefixByRootLocationId($rootLocationId, $languages, $siteaccess);
-                // "/" cannot be considered as a path prefix since it's root, so we ignore it.
-                if ($pathPrefix !== '/' && ($path === $pathPrefix || mb_stripos($path, $pathPrefix . '/') === 0)) {
-                    $path = mb_substr($path, mb_strlen($pathPrefix));
-                } elseif ($pathPrefix !== '/' && !$this->isUriPrefixExcluded($path) && $this->logger !== null) {
-                    // Location path is outside configured content tree and doesn't have an excluded prefix.
-                    // This is most likely an error (from content edition or link generation logic).
-                    $this->logger->warning("Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$rootLocationId");
-                }
-            }
-        } else {
-            $path = $this->defaultRouter->generate(
-                self::INTERNAL_CONTENT_VIEW_ROUTE,
-                ['contentId' => $location->contentId, 'locationId' => $location->id]
-            );
-        }
-
-        $path = $path ?: '/';
-
-        // replace potentially unsafe characters with url-encoded counterpart
-        return strtr($path . $queryString, $this->unsafeCharMap);
+        return $this->filterCharactersOfURL($url);
     }
 
     /**
@@ -212,5 +171,91 @@ class UrlAliasGenerator extends Generator
                 return $repository->getLocationService()->loadLocation($locationId);
             }
         );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string|null $siteaccess
+     *
+     * @return string
+     */
+    private function createPathString(Location $location, ?string $siteaccess = null): string
+    {
+        $urlAliasService = $this->repository->getURLAliasService();
+
+        if ($siteaccess) {
+            // We generate for a different SiteAccess, so potentially in a different language.
+            $languages = $this->configResolver->getParameter('languages', null, $siteaccess);
+            $urlAliases = $urlAliasService->listLocationAliases($location, false, null, null, $languages);
+            // Use the target SiteAccess root location
+            $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id', null, $siteaccess);
+        } else {
+            $languages = null;
+            $urlAliases = $urlAliasService->listLocationAliases($location, false);
+            $rootLocationId = $this->rootLocationId;
+        }
+
+        if (!empty($urlAliases)) {
+            $path = $urlAliases[0]->path;
+            // Remove rootLocation's prefix if needed.
+            if ($rootLocationId !== null) {
+                $pathPrefix = $this->getPathPrefixByRootLocationId($rootLocationId, $languages, $siteaccess);
+                // "/" cannot be considered as a path prefix since it's root, so we ignore it.
+                if ($pathPrefix !== '/' && ($path === $pathPrefix || mb_stripos($path, $pathPrefix . '/') === 0)) {
+                    $path = mb_substr($path, mb_strlen($pathPrefix));
+                } elseif ($pathPrefix !== '/' && !$this->isUriPrefixExcluded($path) && $this->logger !== null) {
+                    // Location path is outside configured content tree and doesn't have an excluded prefix.
+                    // This is most likely an error (from content edition or link generation logic).
+                    $this->logger->warning("Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$rootLocationId");
+                }
+            }
+        } else {
+            $path = $this->defaultRouter->generate(
+                self::INTERNAL_CONTENT_VIEW_ROUTE,
+                ['contentId' => $location->contentId, 'locationId' => $location->id]
+            );
+        }
+
+        return $path ?: '/';
+    }
+
+    /**
+     * Creates query string from parameters. If `_fragment` parameter is provided then
+     * fragment identifier is added at the end of the URL.
+     *
+     * @param array $parameters
+     *
+     * @return string
+     */
+    private function createQueryString(array $parameters): string
+    {
+        $queryString = '';
+        $fragment = null;
+        if (isset($parameters['_fragment'])) {
+            $fragment = $parameters['_fragment'];
+            unset($parameters['_fragment']);
+        }
+
+        if (!empty($parameters)) {
+            $queryString = '?' . http_build_query($parameters, '', '&');
+        }
+
+        if ($fragment) {
+            $queryString .= '#' . strtr(rawurlencode($fragment), ['%2F' => '/', '%3F' => '?']);
+        }
+
+        return $queryString;
+    }
+
+    /**
+     * Replace potentially unsafe characters with url-encoded counterpart.
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    private function filterCharactersOfURL(string $url): string
+    {
+        return strtr($url, $this->unsafeCharMap);
     }
 }

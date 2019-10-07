@@ -185,20 +185,25 @@ class UrlAliasGeneratorTest extends TestCase
     public function providerTestDoGenerate()
     {
         return [
-            [
+            'without_parameters' => [
                 new URLAlias(['path' => '/foo/bar']),
                 [],
                 '/foo/bar',
             ],
-            [
+            'one_parameter' => [
                 new URLAlias(['path' => '/foo/bar']),
                 ['some' => 'thing'],
                 '/foo/bar?some=thing',
             ],
-            [
+            'two_parameters' => [
                 new URLAlias(['path' => '/foo/bar']),
                 ['some' => 'thing', 'truc' => 'muche'],
                 '/foo/bar?some=thing&truc=muche',
+            ],
+            '_fragment in parameters' => [
+                new URLAlias(['path' => '/foo/bar']),
+                ['some' => 'thing', 'truc' => 'muche', '_fragment' => 'foo'],
+                '/foo/bar?some=thing&truc=muche#foo',
             ],
         ];
     }
@@ -290,6 +295,102 @@ class UrlAliasGeneratorTest extends TestCase
                 new UrlAlias(['path' => '/special-chars-"<>\'']),
                 [],
                 '/special-chars-%22%3C%3E%27',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider providerTestDoGenerateWithFragment
+     */
+    public function testDoGenerateWithFragmentParameter(URLAlias $urlAlias, array $parameters, $expected)
+    {
+        $siteaccessName = 'foo';
+        $parameters += ['siteaccess' => $siteaccessName];
+        $languages = ['esl-ES', 'fre-FR', 'eng-GB'];
+
+        $saRootLocations = [
+            'foo' => 2,
+            'bar' => 100,
+        ];
+        $treeRootUrlAlias = [
+            2 => new URLAlias(['path' => '/']),
+            100 => new URLAlias(['path' => '/foo/bar']),
+        ];
+
+        $this->configResolver
+            ->expects($this->any())
+            ->method('getParameter')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['languages', null, 'foo', $languages],
+                        ['languages', null, 'bar', $languages],
+                        ['content.tree_root.location_id', null, 'foo', $saRootLocations['foo']],
+                        ['content.tree_root.location_id', null, 'bar', $saRootLocations['bar']],
+                    ]
+                )
+            );
+
+        $location = new Location(['id' => 123]);
+        $this->urlAliasService
+            ->expects($this->exactly(1))
+            ->method('listLocationAliases')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [$location, false, null, null, $languages, [$urlAlias]],
+                    ]
+                )
+            );
+
+        $this->locationService
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->will(
+                $this->returnCallback(
+                    function ($locationId) {
+                        return new Location(['id' => $locationId]);
+                    }
+                )
+            );
+        $this->urlAliasService
+            ->expects($this->exactly(1))
+            ->method('reverseLookup')
+            ->will(
+                $this->returnCallback(
+                    function ($location) use ($treeRootUrlAlias) {
+                        return $treeRootUrlAlias[$location->id];
+                    }
+                )
+            );
+
+        $this->urlAliasGenerator->setSiteAccess(new SiteAccess('test', 'fake', $this->createMock(SiteAccess\URILexer::class)));
+
+        $this->assertSame($expected, $this->urlAliasGenerator->doGenerate($location, $parameters));
+    }
+
+    public function providerTestDoGenerateWithFragment()
+    {
+        return [
+            'fragment' => [
+                new URLAlias(['path' => '/foo/bar']),
+                ['_fragment' => 'qux'],
+                '/foo/bar#qux',
+            ],
+            'fragment_and_siteaccess' => [
+                new URLAlias(['path' => '/foo/bar/baz']),
+                ['_fragment' => 'qux', 'siteaccess' => 'bar'],
+                '/baz#qux',
+            ],
+            'fragment_and_special_chars' => [
+                new UrlAlias(['path' => '/special-chars-"<>\'']),
+                ['_fragment' => 'qux'],
+                '/special-chars-%22%3C%3E%27#qux',
+            ],
+            'fragment_site_siteaccess_and_params' => [
+                new UrlAlias(['path' => '/foo/bar/baz']),
+                ['_fragment' => 'qux', 'siteaccess' => 'bar', 'some' => 'foo'],
+                '/baz?some=foo#qux',
             ],
         ];
     }
