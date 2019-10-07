@@ -62,6 +62,10 @@ class Type extends FieldType
                 'type' => 'int',
                 'default' => null,
             ],
+            'requireNewPassword' => [
+                'type' => 'int',
+                'default' => null,
+            ],
             'minLength' => [
                 'type' => 'int',
                 'default' => 10,
@@ -350,12 +354,24 @@ class Type extends FieldType
         }
 
         if (!empty($fieldValue->plainPassword)) {
-            $passwordValidationError[] = $this->passwordValidator->validatePassword(
+            $passwordValidationErrors = $this->passwordValidator->validatePassword(
                 $fieldValue->plainPassword,
                 $fieldDefinition
             );
 
-            $errors = array_merge($errors, ...$passwordValidationError);
+            $errors = array_merge($errors, $passwordValidationErrors);
+
+            if (!empty($fieldValue->passwordHash) && $this->isNewPasswordRequired($fieldDefinition)) {
+                $isPasswordReused = $this->passwordHashService->isValidPassword(
+                    $fieldValue->plainPassword,
+                    $fieldValue->passwordHash,
+                    $fieldValue->passwordHashType
+                );
+
+                if ($isPasswordReused) {
+                    $errors[] = new ValidationError('New password cannot be the same as old password', null, [], 'password');
+                }
+            }
         }
 
         return $errors;
@@ -467,5 +483,20 @@ class Type extends FieldType
         }
 
         return null;
+    }
+
+    private function isNewPasswordRequired(FieldDefinition $fieldDefinition): bool
+    {
+        $isExplicitRequired = $fieldDefinition->validatorConfiguration['PasswordValueValidator']['requireNewPassword'] ?? false;
+        if ($isExplicitRequired) {
+            return true;
+        }
+
+        return $this->isPasswordTTLEnabled($fieldDefinition);
+    }
+
+    private function isPasswordTTLEnabled(FieldDefinition $fieldDefinition): bool
+    {
+        return ($fieldDefinition->fieldSettings[self::PASSWORD_TTL_SETTING] ?? null) > 0;
     }
 }

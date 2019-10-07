@@ -74,6 +74,10 @@ class UserTest extends FieldTypeTest
                     'type' => 'int',
                     'default' => null,
                 ],
+                'requireNewPassword' => [
+                    'type' => 'int',
+                    'default' => null,
+                ],
                 'minLength' => [
                     'type' => 'int',
                     'default' => 10,
