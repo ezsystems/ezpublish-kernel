@@ -114,6 +114,30 @@ class FieldNameResolver
         return array_keys($fieldTypeNameMap);
     }
 
+    public function getFieldName(
+        Criterion $criterion,
+        string $contentTypeIdentifier,
+        string $fieldDefinitionIdentifier,
+        ?string $name = null
+    ): ?string {
+        $fieldMap = $this->getSearchableFieldMap();
+
+        if (!isset($fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier])) {
+            return null;
+        }
+
+        $mapping = $this->getIndexFieldName(
+            $criterion,
+            $contentTypeIdentifier,
+            $fieldDefinitionIdentifier,
+            $fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier]['field_type_identifier'],
+            $name,
+            false
+        );
+
+        return array_key_first($mapping);
+    }
+
     /**
      * For the given parameters returns a set of search backend field names/types to search on.
      *
