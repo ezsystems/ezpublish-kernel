@@ -43,6 +43,8 @@ class FieldFacetBuilder extends FacetBuilder
     /**
      * A value that field values must start with.
      *
+     * @since 8.0
+     *
      * @var string
      */
     public $prefix;
@@ -50,12 +52,16 @@ class FieldFacetBuilder extends FacetBuilder
     /**
      * A value that field values must contain.
      *
+     * @since 8.0
+     *
      * @var string
      */
     public $contains;
 
     /**
      * Whether or not contains should be case sensitive.
+     *
+     * @since 8.0
      *
      * @var bool
      */
