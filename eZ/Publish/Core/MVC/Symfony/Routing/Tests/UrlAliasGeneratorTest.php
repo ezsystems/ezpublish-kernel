@@ -302,7 +302,7 @@ class UrlAliasGeneratorTest extends TestCase
     /**
      * @dataProvider providerTestDoGenerateWithFragment
      */
-    public function testDoGenerateWithFragmentParameter(URLAlias $urlAlias, array $parameters, $expected)
+    public function testDoGenerateWithFragmentParameter(URLAlias $urlAlias, array $parameters, string $expected)
     {
         $siteaccessName = 'foo';
         $parameters += ['siteaccess' => $siteaccessName];
