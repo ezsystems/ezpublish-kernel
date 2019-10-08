@@ -73,11 +73,11 @@ class UrlAliasGenerator extends Generator
      */
     public function doGenerate($location, array $parameters)
     {
-        $siteaccess = $parameters['siteaccess'] ?? null;
+        $siteAccess = $parameters['siteaccess'] ?? null;
 
         unset($parameters['language'], $parameters['contentId'], $parameters['siteaccess']);
 
-        $pathString = $this->createPathString($location, $siteaccess);
+        $pathString = $this->createPathString($location, $siteAccess);
         $queryString = $this->createQueryString($parameters);
         $url = $pathString . $queryString;
 
@@ -175,20 +175,20 @@ class UrlAliasGenerator extends Generator
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param string|null $siteaccess
+     * @param string|null $siteAccess
      *
      * @return string
      */
-    private function createPathString(Location $location, ?string $siteaccess = null): string
+    private function createPathString(Location $location, ?string $siteAccess = null): string
     {
         $urlAliasService = $this->repository->getURLAliasService();
 
-        if ($siteaccess) {
+        if ($siteAccess) {
             // We generate for a different SiteAccess, so potentially in a different language.
-            $languages = $this->configResolver->getParameter('languages', null, $siteaccess);
+            $languages = $this->configResolver->getParameter('languages', null, $siteAccess);
             $urlAliases = $urlAliasService->listLocationAliases($location, false, null, null, $languages);
             // Use the target SiteAccess root location
-            $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id', null, $siteaccess);
+            $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id', null, $siteAccess);
         } else {
             $languages = null;
             $urlAliases = $urlAliasService->listLocationAliases($location, false);
@@ -199,7 +199,7 @@ class UrlAliasGenerator extends Generator
             $path = $urlAliases[0]->path;
             // Remove rootLocation's prefix if needed.
             if ($rootLocationId !== null) {
-                $pathPrefix = $this->getPathPrefixByRootLocationId($rootLocationId, $languages, $siteaccess);
+                $pathPrefix = $this->getPathPrefixByRootLocationId($rootLocationId, $languages, $siteAccess);
                 // "/" cannot be considered as a path prefix since it's root, so we ignore it.
                 if ($pathPrefix !== '/' && ($path === $pathPrefix || mb_stripos($path, $pathPrefix . '/') === 0)) {
                     $path = mb_substr($path, mb_strlen($pathPrefix));
@@ -241,6 +241,7 @@ class UrlAliasGenerator extends Generator
         }
 
         if ($fragment) {
+            // logic aligned with Symfony 3.4: \Symfony\Component\Routing\Generator\UrlGenerator::doGenerate
             $queryString .= '#' . strtr(rawurlencode($fragment), ['%2F' => '/', '%3F' => '?']);
         }
 
