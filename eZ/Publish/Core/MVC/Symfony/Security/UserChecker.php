@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\Security;
@@ -27,18 +31,25 @@ final class UserChecker implements UserCheckerInterface
             return;
         }
 
-        $apiUser = $user->getAPIUser();
+        if (!$user->getAPIUser()->enabled) {
+            $exception = new DisabledException();
+            $exception->setUser($user);
 
-        if (!$apiUser->enabled) {
-            throw new DisabledException();
-        }
-
-        if ($this->userService->getPasswordInfo($apiUser)->isPasswordExpired()) {
-            throw new CredentialsExpiredException();
+            throw $exception;
         }
     }
 
     public function checkPostAuth(UserInterface $user): void
     {
+        if (!$user instanceof EzUserInterface) {
+            return;
+        }
+
+        if ($this->userService->getPasswordInfo($user->getAPIUser())->isPasswordExpired()) {
+            $exception = new CredentialsExpiredException();
+            $exception->setUser($user);
+
+            throw $exception;
+        }
     }
 }

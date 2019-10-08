@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
@@ -49,12 +53,6 @@ final class UserCheckerTest extends TestCase
             ]
         );
 
-        $this->userServiceMock
-            ->expects(self::once())
-            ->method('getPasswordInfo')
-            ->with(self::identicalTo($apiUser))
-            ->willReturn(new PasswordInfo());
-
         try {
             $this->userChecker->checkPreAuth(new User($apiUser));
         } catch (Throwable $t) {
@@ -79,16 +77,12 @@ final class UserCheckerTest extends TestCase
             ]
         );
 
-        $this->userServiceMock
-            ->expects(self::never())
-            ->method('getPasswordInfo');
-
         $this->expectException(DisabledException::class);
 
         $this->userChecker->checkPreAuth(new User($apiUser));
     }
 
-    public function testCheckPreAuthWithExpiredUser(): void
+    public function testCheckPostAuthWithNonExpiredUser(): void
     {
         $apiUser = new APIUser(
             [
@@ -101,7 +95,35 @@ final class UserCheckerTest extends TestCase
                         ),
                     ]
                 ),
-                'enabled' => true,
+            ]
+        );
+
+        $this->userServiceMock
+            ->expects(self::once())
+            ->method('getPasswordInfo')
+            ->with(self::identicalTo($apiUser))
+            ->willReturn(new PasswordInfo());
+
+        try {
+            $this->userChecker->checkPostAuth(new User($apiUser));
+        } catch (Throwable $t) {
+            self::fail('Error was not expected to be raised.');
+        }
+    }
+
+    public function testCheckPostAuthWithExpiredUser(): void
+    {
+        $apiUser = new APIUser(
+            [
+                'content' => new Content(
+                    [
+                        'versionInfo' => new VersionInfo(
+                            [
+                                'contentInfo' => new ContentInfo(),
+                            ]
+                        ),
+                    ]
+                ),
             ]
         );
 
@@ -117,6 +139,6 @@ final class UserCheckerTest extends TestCase
 
         $this->expectException(CredentialsExpiredException::class);
 
-        $this->userChecker->checkPreAuth(new User($apiUser));
+        $this->userChecker->checkPostAuth(new User($apiUser));
     }
 }
