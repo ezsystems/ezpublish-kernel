@@ -26,27 +26,27 @@ class LanguageServiceTest extends AbstractServiceTest
 
         // string $method, array $arguments, bool $return = true
         return [
-            ['createLanguage', [$languageCreateStruct]],
+            ['createLanguage', [$languageCreateStruct], $language],
 
-            ['updateLanguageName', [$language, 'Afrikaans']],
+            ['updateLanguageName', [$language, 'Afrikaans'], $language],
 
-            ['enableLanguage', [$language]],
+            ['enableLanguage', [$language], $language],
 
-            ['disableLanguage', [$language]],
+            ['disableLanguage', [$language], $language],
 
-            ['loadLanguage', ['eng-GB']],
+            ['loadLanguage', ['eng-GB'], $language],
             ['loadLanguageListByCode', [['eng-GB']], []],
 
-            ['loadLanguages', []],
+            ['loadLanguages', [], []],
 
-            ['loadLanguageById', [4]],
+            ['loadLanguageById', [4], $language],
             ['loadLanguageListById', [[4]], []],
 
-            ['deleteLanguage', [$language]],
+            ['deleteLanguage', [$language], null],
 
-            ['getDefaultLanguageCode', []],
+            ['getDefaultLanguageCode', [], ''],
 
-            ['newLanguageCreateStruct', []],
+            ['newLanguageCreateStruct', [], $languageCreateStruct],
         ];
     }
 

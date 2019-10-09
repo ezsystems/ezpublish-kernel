@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
 use eZ\Publish\API\Repository\Values\Content\Language;
@@ -128,7 +129,7 @@ class LanguageServiceTest extends BaseTest
      */
     public function testCreateLanguageThrowsInvalidArgumentException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Argument \'languageCreateStruct\' is invalid: language with specified language code already exists');
 
         $repository = $this->getRepository();
@@ -263,7 +264,7 @@ class LanguageServiceTest extends BaseTest
      */
     public function testUpdateLanguageNameThrowsInvalidArgumentException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Argument \'newName\' is invalid: \'\' is wrong value');
 
         $repository = $this->getRepository();
@@ -412,12 +413,12 @@ class LanguageServiceTest extends BaseTest
      */
     public function testLoadLanguageThrowsInvalidArgumentException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Argument \'languageCode\' is invalid: language code has an invalid value');
 
         $repository = $this->getRepository();
 
-        $repository->getContentLanguageService()->loadLanguage(PHP_INT_MAX);
+        $repository->getContentLanguageService()->loadLanguage('');
     }
 
     /**
@@ -531,7 +532,7 @@ class LanguageServiceTest extends BaseTest
      */
     public function testDeleteLanguageThrowsInvalidArgumentException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Argument \'language\' is invalid: Deleting language logic error, some content still references that language and therefore it can\'t be deleted');
 
         $repository = $this->getRepository();

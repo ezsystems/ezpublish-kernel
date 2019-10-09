@@ -65,14 +65,14 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Creates the a new Language in the content repository.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the languageCode already exists
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the languageCode already exists
      */
-    public function createLanguage(LanguageCreateStruct $languageCreateStruct)
+    public function createLanguage(LanguageCreateStruct $languageCreateStruct): Language
     {
         if (!is_string($languageCreateStruct->name) || empty($languageCreateStruct->name)) {
             throw new InvalidArgumentValue('name', $languageCreateStruct->name, 'LanguageCreateStruct');
@@ -121,18 +121,17 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Changes the name of the language in the content repository.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
-     *         is not string
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      * @param string $newName
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is not string
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      */
-    public function updateLanguageName(Language $language, $newName)
+    public function updateLanguageName(Language $language, string $newName): Language
     {
-        if (!is_string($newName) || empty($newName)) {
+        if (empty($newName)) {
             throw new InvalidArgumentValue('newName', $newName);
         }
 
@@ -166,13 +165,12 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Enables a language.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      */
-    public function enableLanguage(Language $language)
+    public function enableLanguage(Language $language): Language
     {
         if (!$this->permissionResolver->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
@@ -204,13 +202,12 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Disables a language.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      */
-    public function disableLanguage(Language $language)
+    public function disableLanguage(Language $language): Language
     {
         if (!$this->permissionResolver->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
@@ -242,17 +239,16 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Loads a Language from its language code ($languageCode).
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
-     *         is not string
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
-     *
      * @param string $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is not string
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
      */
-    public function loadLanguage($languageCode)
+    public function loadLanguage(string $languageCode): Language
     {
-        if (!is_string($languageCode) || empty($languageCode)) {
+        if (empty($languageCode)) {
             throw new InvalidArgumentException('languageCode', 'language code has an invalid value');
         }
 
@@ -266,7 +262,7 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language[]
      */
-    public function loadLanguages()
+    public function loadLanguages(): iterable
     {
         $languages = $this->languageHandler->loadAll();
 
@@ -281,13 +277,12 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Loads a Language by its id ($languageId).
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
-     *
      * @param mixed $languageId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
      */
-    public function loadLanguageById($languageId)
+    public function loadLanguageById(int $languageId): Language
     {
         $language = $this->languageHandler->load($languageId);
 
@@ -327,14 +322,13 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Deletes  a language from content repository.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *         if language can not be deleted
+     * @param \eZ\Publish\API\Repository\Values\Content\Language $language
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if language can not be deleted
      *         because it is still assigned to some content / type / (...).
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      */
-    public function deleteLanguage(Language $language)
+    public function deleteLanguage(Language $language): void
     {
         if (!$this->permissionResolver->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
@@ -360,7 +354,7 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return string
      */
-    public function getDefaultLanguageCode()
+    public function getDefaultLanguageCode(): string
     {
         return $this->settings['languages'][0];
     }
@@ -381,7 +375,7 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */
-    public function newLanguageCreateStruct()
+    public function newLanguageCreateStruct(): LanguageCreateStruct
     {
         return new LanguageCreateStruct();
     }

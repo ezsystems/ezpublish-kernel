@@ -19,77 +19,77 @@ interface LanguageService
     /**
      * Creates the a new Language in the content repository.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the languageCode already exists
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the languageCode already exists
      */
-    public function createLanguage(LanguageCreateStruct $languageCreateStruct);
+    public function createLanguage(LanguageCreateStruct $languageCreateStruct): Language;
 
     /**
      * Changes the name of the language in the content repository.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      * @param string $newName
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      */
-    public function updateLanguageName(Language $language, $newName);
+    public function updateLanguageName(Language $language, string $newName): Language;
 
     /**
      * Enables a language.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      */
-    public function enableLanguage(Language $language);
+    public function enableLanguage(Language $language): Language;
 
     /**
      * Disables a language.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      */
-    public function disableLanguage(Language $language);
+    public function disableLanguage(Language $language): Language;
 
     /**
      * Loads a Language from its language code ($languageCode).
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
-     *
      * @param string $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
      */
-    public function loadLanguage($languageCode);
+    public function loadLanguage(string $languageCode): Language;
 
     /**
      * Loads all Languages.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language[]
      */
-    public function loadLanguages();
+    public function loadLanguages(): iterable;
 
     /**
      * Loads a Language by its id ($languageId).
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
-     *
-     * @param mixed $languageId
+     * @param int $languageId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
      */
-    public function loadLanguageById($languageId);
+    public function loadLanguageById(int $languageId): Language;
 
     /**
      * Bulk-load Languages by language codes.
@@ -116,26 +116,26 @@ interface LanguageService
     /**
      * Deletes  a language from content repository.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *         if language can not be deleted
+     * @param \eZ\Publish\API\Repository\Values\Content\Language $language
+     *
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if language can not be deleted
      *         because it is still assigned to some content / type / (...).
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user is not allowed to delete a language
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      */
-    public function deleteLanguage(Language $language);
+    public function deleteLanguage(Language $language): void;
 
     /**
      * Returns a configured default language code.
      *
      * @return string
      */
-    public function getDefaultLanguageCode();
+    public function getDefaultLanguageCode(): string;
 
     /**
      * Instantiates an object to be used for creating languages.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */
-    public function newLanguageCreateStruct();
+    public function newLanguageCreateStruct(): LanguageCreateStruct;
 }
