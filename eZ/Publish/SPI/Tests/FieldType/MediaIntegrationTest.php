@@ -75,7 +75,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\MediaConverter(),
             new FieldType\Media\MediaStorage(
-                new FieldType\Media\MediaStorage\Gateway\LegacyStorage($this->getDatabaseHandler()),
+                new FieldType\Media\MediaStorage\Gateway\DoctrineStorage($this->getDatabaseConnection()),
                 $this->ioService = self::$container->get('ezpublish.fieldType.ezbinaryfile.io_service'),
                 $legacyPathGenerator = new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
                 new FileInfo()
