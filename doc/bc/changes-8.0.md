@@ -186,6 +186,18 @@ Changes affecting version compatibility with former or future versions.
 
 * The obsolete `data/demo_data.php` file has been removed.
 
+* The following deprecated (since v6.11) LegacyStorage Gateways were removed:
+    - `eZ\Publish\Core\FieldType\BinaryFile\BinaryBaseStorage\Gateway\LegacyStorage`,
+    - `eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage`,
+    - `eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage`,
+    - `eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\LegacyStorage`,
+    - `eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage`,
+    - `eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\LegacyStorage`,
+    - `eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage`,
+    - `eZ\Publish\Core\FieldType\User\UserStorage\Gateway\LegacyStorage`.
+
+  Use `DoctrineStorage` Gateways from the same namespace instead.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
