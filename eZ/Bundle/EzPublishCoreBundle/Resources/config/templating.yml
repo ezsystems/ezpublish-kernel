@@ -37,7 +37,7 @@ parameters:
 services:
     # Enable Twig intl extension
     twig.extension.intl:
-        class: Twig_Extensions_Extension_Intl
+        class: Twig\Extensions\IntlExtension
         tags:
             - {name: twig.extension}
 
