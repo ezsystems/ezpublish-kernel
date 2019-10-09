@@ -134,7 +134,7 @@ class LocationService implements LocationServiceInterface
         /** Check read access to whole source subtree
          * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
          */
-        $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion();
+        $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'read');
         if ($contentReadCriterion === false) {
             throw new UnauthorizedException('content', 'read');
         } elseif ($contentReadCriterion !== true) {
@@ -681,7 +681,7 @@ class LocationService implements LocationServiceInterface
         /** Check read access to whole source subtree
          * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
          */
-        $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion();
+        $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'read');
         if ($contentReadCriterion === false) {
             throw new UnauthorizedException('content', 'read');
         } elseif ($contentReadCriterion !== true) {
