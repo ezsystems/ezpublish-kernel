@@ -10,8 +10,9 @@ Changes affecting version compatibility with former or future versions.
   The support for this search engine will be provided once again as a separate bundle.
 
 * The following Field Types are not supported any more and have been removed:
-    * `ezprice`
-    * `ezpage` together with block rendering subsystem
+    * `ezprice`,
+    * `ezpage` together with block rendering subsystem,
+    * `ezsrrating`.
 
 * The following configuration nodes are not available anymore:
     * `ezpublish.<scope>.ezpage.*`
@@ -147,6 +148,8 @@ Changes affecting version compatibility with former or future versions.
     - ezscheduled_script,
     - ezsearch_search_phrase,
     - ezsession,
+    - ezstarrating,
+    - ezstarrating_data,
     - ezsubtree_notification_rule,
     - eztipafriend_counter,
     - eztipafriend_request,

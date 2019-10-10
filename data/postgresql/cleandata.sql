@@ -839,7 +839,6 @@ SELECT SETVAL('ezrole_id_seq', COALESCE(MAX(id), 1) ) FROM ezrole;
 SELECT SETVAL('ezsearch_object_word_link_id_seq', COALESCE(MAX(id), 1) ) FROM ezsearch_object_word_link;
 SELECT SETVAL('ezsearch_word_id_seq', COALESCE(MAX(id), 1) ) FROM ezsearch_word;
 SELECT SETVAL('ezsection_id_seq', COALESCE(MAX(id), 1) ) FROM ezsection;
-SELECT SETVAL('ezstarrating_data_id_seq', COALESCE(MAX(id), 1) ) FROM ezstarrating_data;
 SELECT SETVAL('ezurl_id_seq', COALESCE(MAX(id), 1) ) FROM ezurl;
 SELECT SETVAL('ezurlalias_id_seq', COALESCE(MAX(id), 1) ) FROM ezurlalias;
 SELECT SETVAL('ezurlalias_ml_incr_id_seq', COALESCE(MAX(id), 1) ) FROM ezurlalias_ml_incr;

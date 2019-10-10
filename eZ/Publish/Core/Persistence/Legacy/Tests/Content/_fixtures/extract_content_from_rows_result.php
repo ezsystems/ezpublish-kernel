@@ -41,8 +41,8 @@ $content->versionInfo = $versionInfo;
 
 $field = new Field();
 $field->id = 4000;
-$field->fieldDefinitionId = 194;
-$field->type = 'ezsrrating';
+$field->fieldDefinitionId = 193;
+$field->type = 'ezkeyword';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-GB';
 $field->versionNo = 2;
@@ -123,16 +123,6 @@ $field = new Field();
 $field->id = 1342;
 $field->fieldDefinitionId = 193;
 $field->type = 'ezkeyword';
-$field->value = new FieldValue();
-$field->languageCode = 'eng-US';
-$field->versionNo = 2;
-
-$content->fields[] = $field;
-
-$field = new Field();
-$field->id = 1343;
-$field->fieldDefinitionId = 194;
-$field->type = 'ezsrrating';
 $field->value = new FieldValue();
 $field->languageCode = 'eng-US';
 $field->versionNo = 2;

@@ -21,7 +21,6 @@ parameters:
     ezpublish.fieldType.ezselection.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\SelectionConverter
     ezpublish.fieldType.ezstring.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLineConverter
     ezpublish.fieldType.eztext.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter
-    ezpublish.fieldType.ezsrrating.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter
     ezpublish.fieldType.ezurl.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UrlConverter
     ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UserConverter
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullConverter
@@ -98,11 +97,6 @@ services:
         class: "%ezpublish.fieldType.eztext.converter.class%"
         tags:
             - {name: ezplatform.field_type.legacy_storage.converter, alias: eztext}
-
-    ezpublish.fieldType.ezsrrating.converter:
-        class: "%ezpublish.fieldType.ezsrrating.converter.class%"
-        tags:
-            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezsrrating}
 
     ezpublish.fieldType.ezurl.converter:
         class: "%ezpublish.fieldType.ezurl.converter.class%"

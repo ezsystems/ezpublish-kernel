@@ -192,7 +192,6 @@ class MapperTest extends LanguageAwareTestCase
                 'ezimage' => $convMock,
                 'ezdatetime' => $convMock,
                 'ezkeyword' => $convMock,
-                'ezsrrating' => $convMock,
             ]
         );
 
