@@ -85,7 +85,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $this->setDefinition($storageHandlerServiceId, $handlerDef);
 
         $gatewayDef = new Definition();
-        $gatewayIdentifier = 'LegacyStorage';
+        $gatewayIdentifier = 'DoctrineStorage';
         $gatewayDef->addTag($tag, [
             'alias' => $fieldTypeIdentifier,
             'identifier' => $gatewayIdentifier,
@@ -150,7 +150,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $this->setDefinition($storageHandlerServiceId, $handlerDef);
 
         $gatewayDef = new Definition();
-        $gatewayIdentifier = 'LegacyStorage';
+        $gatewayIdentifier = 'DoctrineStorage';
         $gatewayDef->addTag($tag);
         $gatewayServiceId = 'gateway_service';
         $this->setDefinition($gatewayServiceId, $gatewayDef);
@@ -181,7 +181,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $this->setDefinition($storageHandlerServiceId, $handlerDef);
 
         $gatewayDef = new Definition();
-        $gatewayIdentifier = 'LegacyStorage';
+        $gatewayIdentifier = 'DoctrineStorage';
         $gatewayDef->addTag($tag, ['alias' => $fieldTypeIdentifier]);
         $gatewayServiceId = 'gateway_service';
         $this->setDefinition($gatewayServiceId, $gatewayDef);
