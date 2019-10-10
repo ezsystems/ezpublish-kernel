@@ -6,7 +6,10 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\ComparingService as ComparingServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\Core\Compare\CompareEngineRegistry;
+use eZ\Publish\Core\Compare\FieldRegistry;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
@@ -224,6 +227,15 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
     private $passwordHashService;
 
+    /** @var \eZ\Publish\Core\Repository\ComparingService */
+    private $comparingService;
+
+    /** @var \eZ\Publish\Core\Compare\FieldRegistry */
+    private $comparableFieldRegistry;
+
+    /** @var \eZ\Publish\Core\Compare\CompareEngineRegistry */
+    private $compareEngineRegistry;
+
     /**
      * Construct repository object with provided storage engine.
      *
@@ -243,6 +255,8 @@ class Repository implements RepositoryInterface
         RelationProcessor $relationProcessor,
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashGenerator,
+        FieldRegistry $comparableFieldRegistry,
+        CompareEngineRegistry $compareEngineRegistry,
         array $serviceSettings = [],
         LoggerInterface $logger = null
     ) {
@@ -252,6 +266,8 @@ class Repository implements RepositoryInterface
         $this->relationProcessor = $relationProcessor;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->passwordHashService = $passwordHashGenerator;
+        $this->comparableFieldRegistry = $comparableFieldRegistry;
+        $this->compareEngineRegistry = $compareEngineRegistry;
 
         $this->serviceSettings = $serviceSettings + [
             'content' => [],
@@ -731,6 +747,23 @@ class Repository implements RepositoryInterface
         );
 
         return $this->notificationService;
+    }
+
+    public function getComparingService(): ComparingServiceInterface
+    {
+        if (null !== $this->comparingService) {
+            return $this->comparingService;
+        }
+
+        $this->comparingService = new ComparingService(
+            $this->persistenceHandler->contentHandler(),
+            $this->persistenceHandler->contentTypeHandler(),
+            $this->comparableFieldRegistry,
+            $this->compareEngineRegistry,
+            $this->getContentTypeDomainMapper()
+        );
+
+        return $this->comparingService;
     }
 
     /**
