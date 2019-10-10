@@ -8,14 +8,13 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
-use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Base\Exceptions\DatabaseException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use Doctrine\DBAL\DBALException;
 use PDOException;
-use RuntimeException;
 
 /**
  * Base class for location gateways.
@@ -25,14 +24,14 @@ class ExceptionConversion extends Gateway
     /**
      * The wrapped gateway.
      *
-     * @var Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $innerGateway;
 
     /**
      * Creates a new exception conversion gateway around $innerGateway.
      *
-     * @param Gateway $innerGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $innerGateway
      */
     public function __construct(Gateway $innerGateway)
     {
@@ -46,10 +45,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getBasicNodeData($nodeId, $translations, $useAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -61,7 +58,7 @@ class ExceptionConversion extends Gateway
         try {
             return $this->innerGateway->getNodeDataList($locationIds, $translations, $useAlwaysAvailable);
         } catch (DBALException | PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -72,10 +69,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getBasicNodeDataByRemoteId($remoteId, $translations, $useAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -93,10 +88,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->find($criterion, $offset, $limit, $sortClauses);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -113,10 +106,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadLocationDataByContent($contentId, $rootLocationId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -127,10 +118,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadParentLocationsDataForDraftContent($contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -146,10 +135,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getSubtreeContent($sourceId, $onlyIds);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -164,10 +151,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getChildren($locationId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -186,10 +171,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->moveSubtreeNodes($fromPathString, $toPathString);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -203,10 +186,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->updateSubtreeModificationTime($pathString, $timestamp);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -222,10 +203,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->updateNodeAssignment($contentObjectId, $oldParent, $newParent, $opcode);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -241,10 +220,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->createLocationsFromNodeAssignments($contentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -258,10 +235,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->updateLocationsContentVersionNo($contentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -274,10 +249,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->hideSubtree($pathString);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -291,10 +264,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->unHideSubtree($pathString);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -305,10 +276,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->setNodeWithChildrenInvisible($pathString);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -319,10 +288,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->setNodeHidden($pathString);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -333,10 +300,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->setNodeWithChildrenVisible($pathString);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -347,10 +312,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->setNodeUnhidden($pathString);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -369,10 +332,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->swap($locationId1, $locationId2);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -388,10 +349,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->create($createStruct, $parentNode);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -406,10 +365,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->createNodeAssignment($createStruct, $parentNodeId, $type);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -423,10 +380,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->deleteNodeAssignment($contentId, $versionNo);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -442,10 +397,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->update($location, $locationId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -460,10 +413,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->updatePathIdentificationString($locationId, $parentLocationId, $text);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -476,10 +427,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->removeLocation($locationId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -499,10 +448,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getFallbackMainNodeData($contentId, $locationId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -519,10 +466,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->trashLocation($locationId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -543,10 +488,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->untrashLocation($locationId, $newParentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -561,10 +504,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadTrashByLocation($locationId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -578,10 +519,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->cleanupTrash();
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -599,10 +538,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->listTrashed($offset, $limit, $sort);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -616,10 +553,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->removeElementFromTrash($id);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -635,10 +570,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->setSectionForSubtree($pathString, $sectionId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -653,10 +586,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->countLocationsByContentId($contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -676,10 +607,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -694,10 +623,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->countAllLocations();
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -713,10 +640,8 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadAllLocationsData($offset, $limit);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 }
