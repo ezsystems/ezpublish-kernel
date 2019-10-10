@@ -185,28 +185,35 @@ class UrlAliasGeneratorTest extends TestCase
     public function providerTestDoGenerate()
     {
         return [
-            [
+            'without_parameters' => [
                 new URLAlias(['path' => '/foo/bar']),
                 [],
                 '/foo/bar',
             ],
-            [
+            'one_parameter' => [
                 new URLAlias(['path' => '/foo/bar']),
                 ['some' => 'thing'],
                 '/foo/bar?some=thing',
             ],
-            [
+            'two_parameters' => [
                 new URLAlias(['path' => '/foo/bar']),
                 ['some' => 'thing', 'truc' => 'muche'],
                 '/foo/bar?some=thing&truc=muche',
+            ],
+            '_fragment in parameters' => [
+                new URLAlias(['path' => '/foo/bar']),
+                ['some' => 'thing', 'truc' => 'muche', '_fragment' => 'foo'],
+                '/foo/bar?some=thing&truc=muche#foo',
             ],
         ];
     }
 
     /**
      * @dataProvider providerTestDoGenerateWithSiteaccess
+     *
+     * @param array $parameters
      */
-    public function testDoGenerateWithSiteAccessParam(URLAlias $urlAlias, array $parameters, $expected)
+    public function testDoGenerateWithSiteAccessParam(URLAlias $urlAlias, array $parameters, string $expected)
     {
         $siteaccessName = 'foo';
         $parameters += ['siteaccess' => $siteaccessName];
@@ -290,6 +297,26 @@ class UrlAliasGeneratorTest extends TestCase
                 new UrlAlias(['path' => '/special-chars-"<>\'']),
                 [],
                 '/special-chars-%22%3C%3E%27',
+            ],
+            'fragment' => [
+                new URLAlias(['path' => '/foo/bar']),
+                ['_fragment' => 'qux'],
+                '/foo/bar#qux',
+            ],
+            'fragment_and_siteaccess' => [
+                new URLAlias(['path' => '/foo/bar/baz']),
+                ['_fragment' => 'qux', 'siteaccess' => 'bar'],
+                '/baz#qux',
+            ],
+            'fragment_and_special_chars' => [
+                new UrlAlias(['path' => '/special-chars-"<>\'']),
+                ['_fragment' => 'qux'],
+                '/special-chars-%22%3C%3E%27#qux',
+            ],
+            'fragment_site_siteaccess_and_params' => [
+                new UrlAlias(['path' => '/foo/bar/baz']),
+                ['_fragment' => 'qux', 'siteaccess' => 'bar', 'some' => 'foo'],
+                '/baz?some=foo#qux',
             ],
         ];
     }
