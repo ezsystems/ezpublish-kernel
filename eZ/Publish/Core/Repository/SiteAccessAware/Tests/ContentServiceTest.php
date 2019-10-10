@@ -3,10 +3,12 @@
 namespace eZ\Publish\Core\Repository\SiteAccessAware\Tests;
 
 use eZ\Publish\API\Repository\ContentService as APIService;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\SiteAccessAware\ContentService;
@@ -30,6 +32,8 @@ class ContentServiceTest extends AbstractServiceTest
     {
         $contentInfo = new ContentInfo();
         $versionInfo = new VersionInfo();
+        $content = $this->createMock(Content::class);
+        $relationList = new RelationList();
         $contentCreateStruct = new ContentCreateStruct();
         $contentUpdateStruct = new ContentUpdateStruct();
         $contentMetaStruct = new ContentMetadataUpdateStruct();
@@ -87,7 +91,8 @@ class ContentServiceTest extends AbstractServiceTest
 
             ['countReverseRelations', [$contentInfo]],
 
-            ['loadReverseRelations', [$contentInfo]],
+            ['loadReverseRelations', [$contentInfo], $relationList],
+            ['loadReverseRelationList', [$contentInfo], $relationList],
 
             ['addRelation', [$versionInfo, $contentInfo]],
 
@@ -98,6 +103,9 @@ class ContentServiceTest extends AbstractServiceTest
             ['deleteTranslation', [$contentInfo, 'eng-GB']],
 
             ['deleteTranslationFromDraft', [$versionInfo, 'eng-GB']],
+
+            ['hideContent', [$contentInfo], null],
+            ['revealContent', [$contentInfo], null],
 
             ['newContentCreateStruct', [$contentType, 'eng-GB']],
             ['newContentMetadataUpdateStruct', []],
