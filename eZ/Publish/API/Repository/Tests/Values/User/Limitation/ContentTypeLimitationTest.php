@@ -42,9 +42,10 @@ class ContentTypeLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
         $editPolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'edit' != $policy->function) {
                 continue;
             }
@@ -63,7 +64,12 @@ class ContentTypeLimitationTest extends BaseLimitationTest
             )
         );
 
-        $roleService->updatePolicy($editPolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $editPolicy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
         $roleService->assignRoleToUser($roleService->loadRole($role->id), $user);
 
         $content = $this->createWikiPage();
@@ -110,9 +116,10 @@ class ContentTypeLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
         $editPolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'edit' != $policy->function) {
                 continue;
             }
@@ -131,7 +138,12 @@ class ContentTypeLimitationTest extends BaseLimitationTest
             )
         );
 
-        $roleService->updatePolicy($editPolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $editPolicy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
         $roleService->assignRoleToUser($roleService->loadRole($role->id), $user);
 
         $content = $this->createWikiPage();
@@ -166,9 +178,12 @@ class ContentTypeLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        $policy = null;
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $editPolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'edit' != $policy->function) {
                 continue;
             }
@@ -187,7 +202,12 @@ class ContentTypeLimitationTest extends BaseLimitationTest
             )
         );
 
-        $roleService->updatePolicy($editPolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $editPolicy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
         $roleService->assignRoleToUser($roleService->loadRole($role->id), $user);
 
         $content = $this->createWikiPage();

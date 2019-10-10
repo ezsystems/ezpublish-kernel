@@ -11,11 +11,12 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
@@ -104,7 +105,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the addPolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::addPolicy
+     * @covers \eZ\Publish\Core\Repository\RoleService::addPolicyByRoleDraft
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
      */
@@ -132,12 +133,12 @@ class RoleTest extends BaseServiceMockTest
             'limitationTypes' => ['mockIdentifier' => $limitationTypeMock],
         ];
 
-        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRole'], $settings);
+        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRoleDraft'], $settings);
 
-        $roleMock = $this->createMock(Role::class);
+        $roleDraftMock = $this->createMock(RoleDraft::class);
         $policyCreateStructMock = $this->createMock(PolicyCreateStruct::class);
 
-        $roleMock->expects($this->any())
+        $roleDraftMock->expects($this->any())
             ->method('__get')
             ->with('id')
             ->will($this->returnValue(42));
@@ -146,9 +147,9 @@ class RoleTest extends BaseServiceMockTest
         $policyCreateStructMock->function = 'mockFunction';
 
         $roleServiceMock->expects($this->once())
-            ->method('loadRole')
+            ->method('loadRoleDraft')
             ->with($this->equalTo(42))
-            ->will($this->returnValue($roleMock));
+            ->will($this->returnValue($roleDraftMock));
 
         /* @var \PHPUnit\Framework\MockObject\MockObject $policyCreateStructMock */
         $policyCreateStructMock->expects($this->once())
@@ -161,18 +162,18 @@ class RoleTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo('role'),
                 $this->equalTo('update'),
-                $this->equalTo($roleMock)
+                $this->equalTo($roleDraftMock)
             )->will($this->returnValue(true));
 
-        /* @var \eZ\Publish\API\Repository\Values\User\Role $roleMock */
+        /* @var \eZ\Publish\API\Repository\Values\User\Role $roleDraftMock */
         /* @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStructMock */
-        $roleServiceMock->addPolicy($roleMock, $policyCreateStructMock);
+        $roleServiceMock->addPolicyByRoleDraft($roleDraftMock, $policyCreateStructMock);
     }
 
     /**
-     * Test for the updatePolicy() method.
+     * Test for the updatePolicyByRoleDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::updatePolicy
+     * @covers \eZ\Publish\Core\Repository\RoleService::updatePolicyByRoleDraft
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
      */
@@ -202,10 +203,11 @@ class RoleTest extends BaseServiceMockTest
 
         $roleServiceMock = $this->getPartlyMockedRoleService(['loadRole'], $settings);
 
-        $policyMock = $this->createMock(Policy::class);
+        $roleDraftMock = $this->createMock(RoleDraft::class);
+        $policyDraftMock = $this->createMock(PolicyDraft::class);
         $policyUpdateStructMock = $this->createMock(PolicyUpdateStruct::class);
 
-        $policyMock->expects($this->any())
+        $policyDraftMock->expects($this->any())
             ->method('__get')
             ->will(
                 $this->returnCallback(
@@ -233,12 +235,16 @@ class RoleTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo('role'),
                 $this->equalTo('update'),
-                $this->equalTo($policyMock)
+                $this->equalTo($roleDraftMock)
             )->will($this->returnValue(true));
 
-        /* @var \eZ\Publish\API\Repository\Values\User\Policy $policyMock */
+        /* @var \eZ\Publish\API\Repository\Values\User\Policy $policyDraftMock */
         /* @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStructMock */
-        $roleServiceMock->updatePolicy($policyMock, $policyUpdateStructMock);
+        $roleServiceMock->updatePolicyByRoleDraft(
+            $roleDraftMock,
+            $policyDraftMock,
+            $policyUpdateStructMock
+        );
     }
 
     /**
@@ -919,23 +925,22 @@ class RoleTest extends BaseServiceMockTest
     }
 
     /**
-     * Test for the deletePolicy() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\RoleService::deletePolicy
+     * @covers \eZ\Publish\Core\Repository\RoleService::removePolicyByRoleDraft
      */
-    public function testDeletePolicyThrowsUnauthorizedException()
+    public function testRemovePolicyByRoleDraftThrowsUnauthorizedException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
-        $roleMock = $this->createMock(Role::class);
+        $roleDraftMock = $this->createMock(RoleDraft::class);
         $roleDomainMapper = $this->createMock(RoleDomainMapper::class);
         $roleDomainMapper
             ->method('buildDomainRoleObject')
-            ->willReturn($roleMock);
+            ->willReturn($roleDraftMock);
 
-        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRole'], [], $roleDomainMapper);
-        $policyMock = $this->createMock(Policy::class);
-        $policyMock->expects($this->any())
+        $roleServiceMock = $this->getPartlyMockedRoleService(null, [], $roleDomainMapper);
+        $policyDraftMock = $this->createMock(PolicyDraft::class);
+
+        $policyDraftMock->expects($this->any())
             ->method('__get')
             ->will(
                 $this->returnValueMap(
@@ -945,45 +950,44 @@ class RoleTest extends BaseServiceMockTest
                 )
             );
 
-        $userHandlerMock = $this->getPersistenceMockHandler('User\\Handler');
-        $userHandlerMock->expects($this->once())
-            ->method('loadRole')
-            ->with($this->equalTo(17))
-            ->will($this->returnValue(new SPIRole(['id' => 17])));
-
         $permissionResolverMock = $this->getPermissionResolverMock();
         $permissionResolverMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('role'),
                 $this->equalTo('update'),
-                $this->equalTo($roleMock)
+                $this->equalTo($roleDraftMock)
             )->will($this->returnValue(false));
 
         /* @var \eZ\Publish\API\Repository\Values\User\Policy $policyMock */
-        $roleServiceMock->deletePolicy($policyMock);
+        $roleServiceMock->removePolicyByRoleDraft($roleDraftMock, $policyDraftMock);
     }
 
     /**
-     * Test for the deletePolicy() method.
+     * Test for the removePolicyByRoleDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::deletePolicy
+     * @covers \eZ\Publish\Core\Repository\RoleService::removePolicyByRoleDraft
      */
-    public function testDeletePolicyWithRollback()
+    public function testRemovePolicyByRoleDraftWithRollback()
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Handler threw an exception');
 
         $repository = $this->getRepositoryMock();
-        $roleMock = $this->createMock(Role::class);
+        $roleDraftMock = $this->createMock(RoleDraft::class);
+        $roleDraftMock->expects($this->any())
+            ->method('__get')
+            ->with('id')
+            ->willReturn(17);
+
         $roleDomainMapper = $this->createMock(RoleDomainMapper::class);
         $roleDomainMapper
             ->method('buildDomainRoleObject')
-            ->willReturn($roleMock);
+            ->willReturn($roleDraftMock);
         $roleServiceMock = $this->getPartlyMockedRoleService(null, [], $roleDomainMapper);
 
-        $policyMock = $this->createMock(Policy::class);
-        $policyMock->expects($this->any())
+        $policyDraftMock = $this->createMock(PolicyDraft::class);
+        $policyDraftMock->expects($this->any())
             ->method('__get')
             ->will(
                 $this->returnValueMap(
@@ -994,19 +998,13 @@ class RoleTest extends BaseServiceMockTest
                 )
             );
 
-        $userHandlerMock = $this->getPersistenceMockHandler('User\\Handler');
-        $userHandlerMock->expects($this->once())
-            ->method('loadRole')
-            ->with($this->equalTo(17))
-            ->will($this->returnValue(new SPIRole(['id' => 17])));
-
         $permissionResolverMock = $this->getPermissionResolverMock();
         $permissionResolverMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('role'),
                 $this->equalTo('update'),
-                $this->equalTo($roleMock)
+                $this->equalTo($roleDraftMock)
             )->will($this->returnValue(true));
 
         $repository->expects($this->once())->method('beginTransaction');
@@ -1021,28 +1019,32 @@ class RoleTest extends BaseServiceMockTest
 
         $repository->expects($this->once())->method('rollback');
 
-        /* @var \eZ\Publish\API\Repository\Values\User\Policy $policyMock */
-        $roleServiceMock->deletePolicy($policyMock);
+        /* @var \eZ\Publish\API\Repository\Values\User\Policy $policyDraftMock */
+        $roleServiceMock->removePolicyByRoleDraft($roleDraftMock, $policyDraftMock);
     }
 
     /**
-     * Test for the deletePolicy() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\RoleService::deletePolicy
+     * @covers \eZ\Publish\Core\Repository\RoleService::removePolicyByRoleDraft
      */
-    public function testDeletePolicy() /// FIX THIS
+    public function testRemovePolicyByRoleDraft()
     {
         $repository = $this->getRepositoryMock();
-        $roleMock = $this->createMock(Role::class);
+        $roleDraftMock = $this->createMock(RoleDraft::class);
+        $roleDraftMock
+            ->expects($this->any())
+            ->method('__get')
+            ->with('id')
+            ->willReturn(17);
+
         $roleDomainMapper = $this->createMock(RoleDomainMapper::class);
         $roleDomainMapper
             ->method('buildDomainRoleObject')
-            ->willReturn($roleMock);
+            ->willReturn($roleDraftMock);
 
-        $roleServiceMock = $this->getPartlyMockedRoleService(null, [], $roleDomainMapper);
+        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRoleDraft'], [], $roleDomainMapper);
 
-        $policyMock = $this->createMock(Policy::class);
-        $policyMock->expects($this->any())
+        $policyDraftMock = $this->createMock(PolicyDraft::class);
+        $policyDraftMock->expects($this->any())
             ->method('__get')
             ->will(
                 $this->returnValueMap(
@@ -1059,7 +1061,7 @@ class RoleTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo('role'),
                 $this->equalTo('update'),
-                $this->equalTo($roleMock)
+                $this->equalTo($roleDraftMock)
             )->will($this->returnValue(true));
 
         $repository->expects($this->once())->method('beginTransaction');
@@ -1072,15 +1074,15 @@ class RoleTest extends BaseServiceMockTest
                 $this->equalTo(42)
             );
 
-        $userHandlerMock->expects($this->once())
-            ->method('loadRole')
+        $roleServiceMock->expects($this->once())
+            ->method('loadRoleDraft')
             ->with($this->equalTo(17))
-            ->will($this->returnValue(new SPIRole(['id' => 17])));
+            ->will($this->returnValue($roleDraftMock));
 
         $repository->expects($this->once())->method('commit');
 
-        /* @var \eZ\Publish\API\Repository\Values\User\Policy $policyMock */
-        $roleServiceMock->deletePolicy($policyMock);
+        /* @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policyDraftMock */
+        $roleServiceMock->removePolicyByRoleDraft($roleDraftMock, $policyDraftMock);
     }
 
     /** @var \eZ\Publish\Core\Repository\RoleService */

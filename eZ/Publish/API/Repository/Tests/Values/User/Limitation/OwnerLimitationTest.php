@@ -43,9 +43,11 @@ class OwnerLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $removePolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'remove' != $policy->function) {
                 continue;
             }
@@ -64,7 +66,12 @@ class OwnerLimitationTest extends BaseLimitationTest
                 ['limitationValues' => [1]]
             )
         );
-        $roleService->updatePolicy($removePolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $removePolicy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 
@@ -110,9 +117,11 @@ class OwnerLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $removePolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'remove' != $policy->function) {
                 continue;
             }
@@ -131,7 +140,12 @@ class OwnerLimitationTest extends BaseLimitationTest
                 ['limitationValues' => [1]]
             )
         );
-        $roleService->updatePolicy($removePolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $removePolicy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 

@@ -10,6 +10,8 @@ namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\Role;
 
 /**
  * Abstract base class for limitation tests.
@@ -84,5 +86,17 @@ abstract class BaseLimitationTest extends BaseTest
         /* END: Inline */
 
         return $draft;
+    }
+
+    protected function addPolicyToRole(string $roleIdentifier, PolicyCreateStruct $policyCreateStruct): Role
+    {
+        $roleService = $this->getRepository()->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier($roleIdentifier);
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+        $roleService->publishRoleDraft($roleDraft);
+
+        return $roleService->loadRoleByIdentifier($roleIdentifier);
     }
 }

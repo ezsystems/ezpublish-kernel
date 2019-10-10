@@ -128,9 +128,11 @@ class UserGroupLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $editPolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'edit' != $policy->function) {
                 continue;
             }
@@ -153,7 +155,12 @@ class UserGroupLimitationTest extends BaseLimitationTest
                 ]
             )
         );
-        $roleService->updatePolicy($editPolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $editPolicy,
+            $policyUpdate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUserGroup($role, $userGroup);
 

@@ -48,9 +48,11 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $removePolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'remove' != $policy->function) {
                 continue;
             }
@@ -73,11 +75,20 @@ class ObjectStateLimitationTest extends BaseLimitationTest
                 ]
             )
         );
-        $roleService->updatePolicy($removePolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $removePolicy,
+            $policyUpdate
+        );
 
         // Allow user to create everything
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $roleService->addPolicy($role, $policyCreate);
+
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 
@@ -114,9 +125,11 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $removePolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' != $policy->module || 'remove' != $policy->function) {
                 continue;
             }
@@ -139,11 +152,20 @@ class ObjectStateLimitationTest extends BaseLimitationTest
                 ]
             )
         );
-        $roleService->updatePolicy($removePolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $removePolicy,
+            $policyUpdate
+        );
 
         // Allow user to create everything
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $roleService->addPolicy($role, $policyCreate);
+
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 
@@ -184,9 +206,11 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         $role = $roleService->loadRoleByIdentifier('Editor');
-
+        $roleDraft = $roleService->createRoleDraft($role);
+        // Search for the new policy instance
+        /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft $policy */
         $removePolicy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ('content' !== $policy->module || 'remove' !== $policy->function) {
                 continue;
             }
@@ -208,11 +232,20 @@ class ObjectStateLimitationTest extends BaseLimitationTest
                 ]
             )
         );
-        $roleService->updatePolicy($removePolicy, $policyUpdate);
+        $roleService->updatePolicyByRoleDraft(
+            $roleDraft,
+            $removePolicy,
+            $policyUpdate
+        );
 
         // Allow user to create everything
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $roleService->addPolicy($role, $policyCreate);
+
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $policyCreate
+        );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 

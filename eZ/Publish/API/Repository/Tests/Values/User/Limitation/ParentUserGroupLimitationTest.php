@@ -63,16 +63,17 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
                 ]
             )
         );
-
-        $role = $roleService->addPolicy(
-            $roleService->loadRoleByIdentifier('Editor'),
+        $role = $roleService->loadRoleByIdentifier('Editor');
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $policyCreate
         );
-
-        $role = $roleService->addPolicy(
-            $role,
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $roleService->newPolicyCreateStruct('content', 'read')
         );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUserGroup($role, $userGroup);
 
@@ -128,15 +129,17 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy(
-            $roleService->loadRoleByIdentifier('Editor'),
+        $role = $roleService->loadRoleByIdentifier('Editor');
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $policyCreate
         );
-
-        $role = $roleService->addPolicy(
-            $role,
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $roleService->newPolicyCreateStruct('content', 'read')
         );
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUserGroup($role, $userGroup);
 

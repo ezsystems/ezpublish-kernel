@@ -10,7 +10,6 @@ namespace eZ\Publish\SPI\Repository\Decorator;
 
 use eZ\Publish\API\Repository\RoleService;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
@@ -91,32 +90,6 @@ abstract class RoleServiceDecorator implements RoleService
         return $this->innerService->publishRoleDraft($roleDraft);
     }
 
-    public function updateRole(
-        Role $role,
-        RoleUpdateStruct $roleUpdateStruct
-    ) {
-        return $this->innerService->updateRole($role, $roleUpdateStruct);
-    }
-
-    public function addPolicy(
-        Role $role,
-        PolicyCreateStruct $policyCreateStruct
-    ) {
-        return $this->innerService->addPolicy($role, $policyCreateStruct);
-    }
-
-    public function deletePolicy(Policy $policy)
-    {
-        return $this->innerService->deletePolicy($policy);
-    }
-
-    public function updatePolicy(
-        Policy $policy,
-        PolicyUpdateStruct $policyUpdateStruct
-    ) {
-        return $this->innerService->updatePolicy($policy, $policyUpdateStruct);
-    }
-
     public function loadRole($id)
     {
         return $this->innerService->loadRole($id);
@@ -137,11 +110,6 @@ abstract class RoleServiceDecorator implements RoleService
         return $this->innerService->deleteRole($role);
     }
 
-    public function loadPoliciesByUserId($userId)
-    {
-        return $this->innerService->loadPoliciesByUserId($userId);
-    }
-
     public function assignRoleToUserGroup(
         Role $role,
         UserGroup $userGroup,
@@ -150,26 +118,12 @@ abstract class RoleServiceDecorator implements RoleService
         return $this->innerService->assignRoleToUserGroup($role, $userGroup, $roleLimitation);
     }
 
-    public function unassignRoleFromUserGroup(
-        Role $role,
-        UserGroup $userGroup
-    ) {
-        return $this->innerService->unassignRoleFromUserGroup($role, $userGroup);
-    }
-
     public function assignRoleToUser(
         Role $role,
         User $user,
         RoleLimitation $roleLimitation = null
     ) {
         return $this->innerService->assignRoleToUser($role, $user, $roleLimitation);
-    }
-
-    public function unassignRoleFromUser(
-        Role $role,
-        User $user
-    ) {
-        return $this->innerService->unassignRoleFromUser($role, $user);
     }
 
     public function loadRoleAssignment($roleAssignmentId)

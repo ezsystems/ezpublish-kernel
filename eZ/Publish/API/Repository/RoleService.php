@@ -9,7 +9,6 @@
 namespace  eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
@@ -172,67 +171,6 @@ interface RoleService
     public function publishRoleDraft(RoleDraft $roleDraft);
 
     /**
-     * Updates the name of the role.
-     *
-     * @deprecated since 6.0, use {@see updateRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function updateRole(Role $role, RoleUpdateStruct $roleUpdateStruct);
-
-    /**
-     * Adds a new policy to the role.
-     *
-     * @deprecated since 6.0, use {@see addPolicyByRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy create
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyCreateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function addPolicy(Role $role, PolicyCreateStruct $policyCreateStruct);
-
-    /**
-     * Deletes a policy.
-     *
-     * @deprecated since 6.0, use {@link removePolicyByRoleDraft()} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
-     */
-    public function deletePolicy(Policy $policy);
-
-    /**
-     * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitations are replaced by the ones in $roleUpdateStruct.
-     *
-     * @deprecated since 6.0, use {@link updatePolicyByRoleDraft()} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
-     */
-    public function updatePolicy(Policy $policy, PolicyUpdateStruct $policyUpdateStruct);
-
-    /**
      * Loads a role for the given id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
@@ -273,19 +211,6 @@ interface RoleService
     public function deleteRole(Role $role);
 
     /**
-     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs.
-     *
-     * @deprecated Since 6.8, not currently in use as permission system needs to know about role assignment limitations.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
-     *
-     * @param mixed $userId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
-     */
-    public function loadPoliciesByUserId($userId);
-
-    /**
      * Assigns a role to the given user group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
@@ -299,19 +224,6 @@ interface RoleService
     public function assignRoleToUserGroup(Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null);
 
     /**
-     * Removes a role from the given user group.
-     *
-     * @deprecated since 6.0, use {@see removeRoleAssignment} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  If the role is not assigned to the given user group
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     */
-    public function unassignRoleFromUserGroup(Role $role, UserGroup $userGroup);
-
-    /**
      * Assigns a role to the given user.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
@@ -323,19 +235,6 @@ interface RoleService
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
     public function assignRoleToUser(Role $role, User $user, RoleLimitation $roleLimitation = null);
-
-    /**
-     * Removes a role from the given user.
-     *
-     * @deprecated since 6.0, use {@see removeRoleAssignment} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the role is not assigned to the user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     */
-    public function unassignRoleFromUser(Role $role, User $user);
 
     /**
      * Loads a role assignment for the given id.

@@ -510,149 +510,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Updates the name of the role.
-     *
-     * @deprecated since 6.0, use {@see updateRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function updateRole(APIRole $role, RoleUpdateStruct $roleUpdateStruct)
-    {
-        if ($roleUpdateStruct->identifier !== null && !is_string($roleUpdateStruct->identifier)) {
-            throw new InvalidArgumentValue('identifier', $roleUpdateStruct->identifier, 'RoleUpdateStruct');
-        }
-
-        $loadedRole = $this->loadRole($role->id);
-
-        if (!$this->permissionResolver->canUser('role', 'update', $role)) {
-            throw new UnauthorizedException('role', 'update');
-        }
-
-        if ($roleUpdateStruct->identifier !== null) {
-            try {
-                $existingRole = $this->loadRoleByIdentifier($roleUpdateStruct->identifier);
-
-                if ($existingRole->id != $loadedRole->id) {
-                    throw new InvalidArgumentException(
-                        '$roleUpdateStruct',
-                        'Role with provided identifier already exists'
-                    );
-                }
-            } catch (APINotFoundException $e) {
-                // Do nothing
-            }
-        }
-
-        $this->repository->beginTransaction();
-        try {
-            $this->userHandler->updateRole(
-                new SPIRoleUpdateStruct(
-                    [
-                        'id' => $loadedRole->id,
-                        'identifier' => $roleUpdateStruct->identifier ?: $loadedRole->identifier,
-                    ]
-                )
-            );
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-
-        return $this->loadRole($loadedRole->id);
-    }
-
-    /**
-     * Adds a new policy to the role.
-     *
-     * @deprecated since 6.0, use {@see addPolicyByRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy create
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyCreateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function addPolicy(APIRole $role, APIPolicyCreateStruct $policyCreateStruct)
-    {
-        if (!is_string($policyCreateStruct->module) || empty($policyCreateStruct->module)) {
-            throw new InvalidArgumentValue('module', $policyCreateStruct->module, 'PolicyCreateStruct');
-        }
-
-        if (!is_string($policyCreateStruct->function) || empty($policyCreateStruct->function)) {
-            throw new InvalidArgumentValue('function', $policyCreateStruct->function, 'PolicyCreateStruct');
-        }
-
-        if ($policyCreateStruct->module === '*' && $policyCreateStruct->function !== '*') {
-            throw new InvalidArgumentValue('module', $policyCreateStruct->module, 'PolicyCreateStruct');
-        }
-
-        if (!$this->permissionResolver->canUser('role', 'update', $role)) {
-            throw new UnauthorizedException('role', 'update');
-        }
-
-        $loadedRole = $this->loadRole($role->id);
-
-        $limitations = $policyCreateStruct->getLimitations();
-        $limitationValidationErrors = $this->validatePolicy(
-            $policyCreateStruct->module,
-            $policyCreateStruct->function,
-            $limitations
-        );
-        if (!empty($limitationValidationErrors)) {
-            throw new LimitationValidationException($limitationValidationErrors);
-        }
-
-        $spiPolicy = $this->roleDomainMapper->buildPersistencePolicyObject(
-            $policyCreateStruct->module,
-            $policyCreateStruct->function,
-            $limitations
-        );
-
-        $this->repository->beginTransaction();
-        try {
-            $this->userHandler->addPolicy($loadedRole->id, $spiPolicy);
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-
-        return $this->loadRole($loadedRole->id);
-    }
-
-    /**
-     * Deletes a policy.
-     *
-     * @deprecated since 6.0, use {@link removePolicyByRoleDraft()} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
-     */
-    public function deletePolicy(APIPolicy $policy)
-    {
-        $spiRole = $this->userHandler->loadRole($policy->roleId);
-        $role = $this->roleDomainMapper->buildDomainRoleObject($spiRole);
-
-        if (!$this->permissionResolver->canUser('role', 'update', $role)) {
-            throw new UnauthorizedException('role', 'update');
-        }
-
-        $this->internalDeletePolicy($policy);
-    }
-
-    /**
      * Deletes a policy.
      *
      * Used by {@link removePolicy()} and {@link deletePolicy()}
@@ -671,64 +528,6 @@ class RoleService implements RoleServiceInterface
             $this->repository->rollback();
             throw $e;
         }
-    }
-
-    /**
-     * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitations are replaced by the ones in $roleUpdateStruct.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
-     */
-    public function updatePolicy(APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct)
-    {
-        if (!is_string($policy->module)) {
-            throw new InvalidArgumentValue('module', $policy->module, 'Policy');
-        }
-
-        if (!is_string($policy->function)) {
-            throw new InvalidArgumentValue('function', $policy->function, 'Policy');
-        }
-
-        if (!$this->permissionResolver->canUser('role', 'update', $policy)) {
-            throw new UnauthorizedException('role', 'update');
-        }
-
-        $limitations = $policyUpdateStruct->getLimitations();
-        $limitationValidationErrors = $this->validatePolicy(
-            $policy->module,
-            $policy->function,
-            $limitations
-        );
-        if (!empty($limitationValidationErrors)) {
-            throw new LimitationValidationException($limitationValidationErrors);
-        }
-
-        $spiPolicy = $this->roleDomainMapper->buildPersistencePolicyObject(
-            $policy->module,
-            $policy->function,
-            $limitations
-        );
-        $spiPolicy->id = $policy->id;
-        $spiPolicy->roleId = $policy->roleId;
-
-        $this->repository->beginTransaction();
-        try {
-            $this->userHandler->updatePolicy($spiPolicy);
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-
-        return $this->roleDomainMapper->buildDomainPolicyObject($spiPolicy);
     }
 
     /**
@@ -831,31 +630,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
-     *
-     * @param mixed $userId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
-     */
-    public function loadPoliciesByUserId($userId)
-    {
-        $spiPolicies = $this->userHandler->loadPoliciesByUserId($userId);
-
-        $policies = [];
-        foreach ($spiPolicies as $spiPolicy) {
-            $policies[] = $this->roleDomainMapper->buildDomainPolicyObject($spiPolicy);
-        }
-
-        if (empty($policies)) {
-            $this->userHandler->load($userId);
-        }// For NotFoundException in case userId is invalid
-
-        return $policies;
-    }
-
-    /**
      * Assigns a role to the given user group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
@@ -904,47 +678,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * removes a role from the given user group.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  If the role is not assigned to the given user group
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     */
-    public function unassignRoleFromUserGroup(APIRole $role, UserGroup $userGroup)
-    {
-        if ($this->permissionResolver->canUser('role', 'assign', $userGroup, [$role]) !== true) {
-            throw new UnauthorizedException('role', 'assign');
-        }
-
-        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId($userGroup->id);
-        $isAssigned = false;
-        foreach ($spiRoleAssignments as $spiRoleAssignment) {
-            if ($spiRoleAssignment->roleId === $role->id) {
-                $isAssigned = true;
-                break;
-            }
-        }
-
-        if (!$isAssigned) {
-            throw new InvalidArgumentException(
-                '$userGroup',
-                'Role is not assigned to the given UserGroup'
-            );
-        }
-
-        $this->repository->beginTransaction();
-        try {
-            $this->userHandler->unassignRole($userGroup->id, $role->id);
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-    }
-
-    /**
      * Assigns a role to the given user.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
@@ -985,47 +718,6 @@ class RoleService implements RoleServiceInterface
                 $spiRole->id,
                 $limitation
             );
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-    }
-
-    /**
-     * removes a role from the given user.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the role is not assigned to the user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     */
-    public function unassignRoleFromUser(APIRole $role, User $user)
-    {
-        if ($this->permissionResolver->canUser('role', 'assign', $user, [$role]) !== true) {
-            throw new UnauthorizedException('role', 'assign');
-        }
-
-        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId($user->id);
-        $isAssigned = false;
-        foreach ($spiRoleAssignments as $spiRoleAssignment) {
-            if ($spiRoleAssignment->roleId === $role->id) {
-                $isAssigned = true;
-                break;
-            }
-        }
-
-        if (!$isAssigned) {
-            throw new InvalidArgumentException(
-                '$user',
-                'Role is not assigned to the given User'
-            );
-        }
-
-        $this->repository->beginTransaction();
-        try {
-            $this->userHandler->unassignRole($user->id, $role->id);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();

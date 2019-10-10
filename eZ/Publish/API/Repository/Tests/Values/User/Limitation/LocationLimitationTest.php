@@ -37,8 +37,6 @@ class LocationLimitationTest extends BaseLimitationTest
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier('Editor');
-
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new LocationLimitation(
@@ -46,7 +44,7 @@ class LocationLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy($role, $policyCreate);
+        $role = $this->addPolicyToRole('Editor', $policyCreate);
 
         $roleService->assignRoleToUser($role, $user);
 
@@ -88,7 +86,9 @@ class LocationLimitationTest extends BaseLimitationTest
             )
         );
 
-        $role = $roleService->addPolicy($role, $policyCreate);
+        $roleDraft = $roleService->createRoleDraft($role);
+        $roleService->addPolicyByRoleDraft($roleDraft, $policyCreate);
+        $roleService->publishRoleDraft($roleDraft);
 
         $roleService->assignRoleToUser($role, $user);
 

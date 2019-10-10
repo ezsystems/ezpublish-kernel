@@ -12,7 +12,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\RoleService;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
@@ -171,63 +170,6 @@ class RoleServiceDecoratorTest extends TestCase
         $decoratedService->publishRoleDraft(...$parameters);
     }
 
-    public function testUpdateRoleDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(RoleUpdateStruct::class),
-        ];
-
-        $serviceMock->expects($this->once())->method('updateRole')->with(...$parameters);
-
-        $decoratedService->updateRole(...$parameters);
-    }
-
-    public function testAddPolicyDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(PolicyCreateStruct::class),
-        ];
-
-        $serviceMock->expects($this->once())->method('addPolicy')->with(...$parameters);
-
-        $decoratedService->addPolicy(...$parameters);
-    }
-
-    public function testDeletePolicyDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [$this->createMock(Policy::class)];
-
-        $serviceMock->expects($this->once())->method('deletePolicy')->with(...$parameters);
-
-        $decoratedService->deletePolicy(...$parameters);
-    }
-
-    public function testUpdatePolicyDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [
-            $this->createMock(Policy::class),
-            $this->createMock(PolicyUpdateStruct::class),
-        ];
-
-        $serviceMock->expects($this->once())->method('updatePolicy')->with(...$parameters);
-
-        $decoratedService->updatePolicy(...$parameters);
-    }
-
     public function testLoadRoleDecorator()
     {
         $serviceMock = $this->createServiceMock();
@@ -276,18 +218,6 @@ class RoleServiceDecoratorTest extends TestCase
         $decoratedService->deleteRole(...$parameters);
     }
 
-    public function testLoadPoliciesByUserIdDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = ['random_value_5ced05ce14b7b9.92276046'];
-
-        $serviceMock->expects($this->once())->method('loadPoliciesByUserId')->with(...$parameters);
-
-        $decoratedService->loadPoliciesByUserId(...$parameters);
-    }
-
     public function testAssignRoleToUserGroupDecorator()
     {
         $serviceMock = $this->createServiceMock();
@@ -304,21 +234,6 @@ class RoleServiceDecoratorTest extends TestCase
         $decoratedService->assignRoleToUserGroup(...$parameters);
     }
 
-    public function testUnassignRoleFromUserGroupDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(UserGroup::class),
-        ];
-
-        $serviceMock->expects($this->once())->method('unassignRoleFromUserGroup')->with(...$parameters);
-
-        $decoratedService->unassignRoleFromUserGroup(...$parameters);
-    }
-
     public function testAssignRoleToUserDecorator()
     {
         $serviceMock = $this->createServiceMock();
@@ -333,21 +248,6 @@ class RoleServiceDecoratorTest extends TestCase
         $serviceMock->expects($this->once())->method('assignRoleToUser')->with(...$parameters);
 
         $decoratedService->assignRoleToUser(...$parameters);
-    }
-
-    public function testUnassignRoleFromUserDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [
-            $this->createMock(Role::class),
-            $this->createMock(User::class),
-        ];
-
-        $serviceMock->expects($this->once())->method('unassignRoleFromUser')->with(...$parameters);
-
-        $decoratedService->unassignRoleFromUser(...$parameters);
     }
 
     public function testLoadRoleAssignmentDecorator()
