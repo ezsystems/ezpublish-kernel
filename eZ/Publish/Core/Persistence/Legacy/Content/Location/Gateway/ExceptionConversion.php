@@ -75,25 +75,6 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Returns total count and data for all Locations satisfying the parameters.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int|null $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
-     *
-     * @return mixed[][]
-     */
-    public function find(Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null)
-    {
-        try {
-            return $this->innerGateway->find($criterion, $offset, $limit, $sortClauses);
-        } catch (DBALException | PDOException $e) {
-            throw DatabaseException::wrap($e);
-        }
-    }
-
-    /**
      * Loads data for all Locations for $contentId, optionally only in the
      * subtree starting at $rootLocationId.
      *
