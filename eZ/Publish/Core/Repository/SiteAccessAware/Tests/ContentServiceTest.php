@@ -123,6 +123,9 @@ class ContentServiceTest extends AbstractServiceTest
 
             ['loadContentByRemoteId', ['f348tj4gorgji4'], true, 1],
             ['loadContentByRemoteId', ['f348tj4gorgji4', self::LANG_ARG, 4, false], true, 1],
+
+            ['loadContentListByContentInfo', [[$contentInfo]], [], 1],
+            ['loadContentListByContentInfo', [[$contentInfo], self::LANG_ARG, false], [], 1],
         ];
     }
 }

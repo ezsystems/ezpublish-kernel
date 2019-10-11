@@ -222,9 +222,13 @@ class ContentService implements ContentServiceInterface
         return $this->service->deleteTranslationFromDraft($versionInfo, $languageCode);
     }
 
-    public function loadContentListByContentInfo(array $contentInfoList, array $languages = [], $useAlwaysAvailable = true)
+    public function loadContentListByContentInfo(array $contentInfoList, array $languages = null, $useAlwaysAvailable = null)
     {
-        return $this->service->loadContentListByContentInfo($contentInfoList, $languages, $useAlwaysAvailable);
+        return $this->service->loadContentListByContentInfo(
+            $contentInfoList,
+            $this->languageResolver->getPrioritizedLanguages($languages),
+            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable)
+        );
     }
 
     public function hideContent(ContentInfo $contentInfo): void
