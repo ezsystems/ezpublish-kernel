@@ -1666,7 +1666,6 @@ class DoctrineDatabase extends Gateway
                     ),
                     // Root location doesn't have language mask
                     $expr->eq(
-                        //'t.contentobject_id', 0
                         't.node_id', 't.parent_node_id'
                     )
                 )
