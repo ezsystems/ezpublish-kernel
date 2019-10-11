@@ -1130,6 +1130,60 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Create movie Content with subtitle field set to null.
+     *
+     * @return Content
+     */
+    protected function createMovieContent()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct('movie');
+        $createStruct->mainLanguageCode = 'eng-GB';
+        $createStruct->remoteId = 'movie-123';
+        $createStruct->names = ['eng-GB' => 'Movie'];
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new \DateTime();
+
+        $fieldTitle = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
+        $fieldTitle->names = ['eng-GB' => 'Title'];
+        $fieldTitle->fieldGroup = 'main';
+        $fieldTitle->position = 1;
+        $fieldTitle->isTranslatable = false;
+        $fieldTitle->isSearchable = true;
+        $fieldTitle->isRequired = true;
+        $createStruct->addFieldDefinition($fieldTitle);
+
+        $fieldSubtitle = $contentTypeService->newFieldDefinitionCreateStruct('subtitle', 'ezstring');
+        $fieldSubtitle->names = ['eng-GB' => 'Subtitle'];
+        $fieldSubtitle->fieldGroup = 'main';
+        $fieldSubtitle->position = 2;
+        $fieldSubtitle->isTranslatable = false;
+        $fieldSubtitle->isSearchable = true;
+        $fieldSubtitle->isRequired = false;
+        $createStruct->addFieldDefinition($fieldSubtitle);
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
+        $contentTypeDraft = $contentTypeService->createContentType($createStruct, [$contentGroup]);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStruct->remoteId = 'movie-456';
+        $createStruct->alwaysAvailable = false;
+        $createStruct->setField('title','Rambo');
+
+        $draft = $contentService->createContent($createStruct);
+        $content = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
+
+        return $content;
+    }
+
+    /**
      * Create test Content with ezcountry field having multiple countries selected.
      *
      * @return Content
@@ -1318,6 +1372,39 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => [new SortClause\Field('template_look', 'title')],
                 ]
             )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFieldIsNull()
+    {
+        $testContent = $this->createMovieContent();
+
+        $query = new Query(
+            [
+                'query' => new Criterion\Field(
+                    'subtitle',
+                    Criterion\Operator::EQ,
+                    NULL
+                ),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent($query);
+
+        foreach ($result->searchHits as $searchHit) {
+            echo $searchHit->valueObject->contentInfo->name . '\n\n';
+        }
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $testContent->id,
+            $result->searchHits[0]->valueObject->id
         );
     }
 
