@@ -108,7 +108,7 @@ class LanguageServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce0e4f86.21411523'];
+        $parameters = [100];
 
         $serviceMock->expects($this->once())->method('loadLanguageById')->with(...$parameters);
 

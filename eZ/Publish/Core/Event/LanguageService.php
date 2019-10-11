@@ -62,7 +62,7 @@ class LanguageService extends LanguageServiceDecorator
 
     public function updateLanguageName(
         Language $language,
-        $newName
+        string $newName
     ): Language {
         $eventData = [
             $language,

@@ -33,37 +33,37 @@ class LanguageService implements LanguageServiceInterface
         $this->service = $service;
     }
 
-    public function createLanguage(LanguageCreateStruct $languageCreateStruct)
+    public function createLanguage(LanguageCreateStruct $languageCreateStruct): Language
     {
         return $this->service->createLanguage($languageCreateStruct);
     }
 
-    public function updateLanguageName(Language $language, $newName)
+    public function updateLanguageName(Language $language, string $newName): Language
     {
         return $this->service->updateLanguageName($language, $newName);
     }
 
-    public function enableLanguage(Language $language)
+    public function enableLanguage(Language $language): Language
     {
         return $this->service->enableLanguage($language);
     }
 
-    public function disableLanguage(Language $language)
+    public function disableLanguage(Language $language): Language
     {
         return $this->service->disableLanguage($language);
     }
 
-    public function loadLanguage($languageCode)
+    public function loadLanguage(string $languageCode): Language
     {
         return $this->service->loadLanguage($languageCode);
     }
 
-    public function loadLanguages()
+    public function loadLanguages(): iterable
     {
         return $this->service->loadLanguages();
     }
 
-    public function loadLanguageById($languageId)
+    public function loadLanguageById(int $languageId): Language
     {
         return $this->service->loadLanguageById($languageId);
     }
@@ -78,17 +78,17 @@ class LanguageService implements LanguageServiceInterface
         return $this->service->loadLanguageListById($languageIds);
     }
 
-    public function deleteLanguage(Language $language)
+    public function deleteLanguage(Language $language): void
     {
-        return $this->service->deleteLanguage($language);
+        $this->service->deleteLanguage($language);
     }
 
-    public function getDefaultLanguageCode()
+    public function getDefaultLanguageCode(): string
     {
         return $this->service->getDefaultLanguageCode();
     }
 
-    public function newLanguageCreateStruct()
+    public function newLanguageCreateStruct(): LanguageCreateStruct
     {
         return $this->service->newLanguageCreateStruct();
     }
