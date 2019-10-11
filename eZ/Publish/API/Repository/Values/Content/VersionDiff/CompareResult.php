@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Values\Content\VersionDiff;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-
-abstract class DiffValue extends ValueObject
+interface CompareResult
 {
 }

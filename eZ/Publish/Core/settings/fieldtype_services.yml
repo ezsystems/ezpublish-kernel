@@ -60,3 +60,7 @@ services:
     eZ\Publish\Core\Repository\User\PasswordHashService: ~
 
     eZ\Publish\Core\Repository\User\PasswordValidator: ~
+
+    eZ\Publish\Core\Compare\FieldRegistry: ~
+
+    eZ\Publish\Core\Compare\CompareEngineRegistry: ~

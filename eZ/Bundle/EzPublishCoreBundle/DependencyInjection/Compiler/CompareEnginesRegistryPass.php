@@ -14,9 +14,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class CompareEnginesRegistryPass implements CompilerPassInterface
+final class CompareEnginesRegistryPass implements CompilerPassInterface
 {
-    const COMPARE_ENGINE_SERVICE_TAG = 'ezplatform.compare.engine';
+    public const COMPARE_ENGINE_SERVICE_TAG = 'ezplatform.field_type.comparable.engine';
 
     public function process(ContainerBuilder $container)
     {

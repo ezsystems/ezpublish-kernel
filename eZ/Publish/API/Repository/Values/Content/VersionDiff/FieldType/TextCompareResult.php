@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType;
 
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\DiffValue;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\CompareResult;
 
-class TextLine extends DiffValue
+class TextCompareResult implements CompareResult
 {
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff[] */
     private $stringDiffs;
 
     /**
@@ -23,11 +24,10 @@ class TextLine extends DiffValue
     }
 
     /**
-     * @return array|\eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff[]
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff[]
      */
     public function getStringDiffs()
     {
         return $this->stringDiffs;
     }
-
 }

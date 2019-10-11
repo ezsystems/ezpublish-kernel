@@ -53,12 +53,12 @@ class ComparingService implements ComparingServiceInterface
     }
 
     public function compareVersions(
-        VersionInfo $version,
-        VersionInfo $versionToCompare,
+        VersionInfo $versionA,
+        VersionInfo $versionB,
         ?string $languageCode = null
     ): VersionDiff {
-        $content = $this->contentHandler->load($version->getContentInfo()->id, $version->versionNo);
-        $contentToCompare = $this->contentHandler->load($versionToCompare->getContentInfo()->id, $versionToCompare->versionNo);
+        $content = $this->contentHandler->load($versionA->getContentInfo()->id, $versionA->versionNo);
+        $contentToCompare = $this->contentHandler->load($versionB->getContentInfo()->id, $versionB->versionNo);
         $fieldsDiff = [];
         foreach ($content->fields as $field) {
             $comparableField = $this->fieldRegistry->getType($field->type);
@@ -72,14 +72,14 @@ class ComparingService implements ComparingServiceInterface
             );
             $diffs = [];
             foreach ($dataA as $name => $fieldAData) {
-                $engine = $this->comparatorEngineRegistry->getEngineForType(get_class($fieldAData));
+                $engine = $this->comparatorEngineRegistry->getEngine(get_class($fieldAData));
 
                 $diffs[$name] = $engine->compareFieldsData($fieldAData, $dataB[$name]);
             }
             $fieldsDiff[$field->fieldDefinitionId] = new FieldDiff(
                 $this->contentTypeDomainMapper->buildFieldDefinitionDomainObject(
                     $fieldDefinition,
-                    $languageCode ?? $version->initialLanguageCode
+                    $languageCode ?? $versionA->initialLanguageCode
                 ),
                 $diffs
             );

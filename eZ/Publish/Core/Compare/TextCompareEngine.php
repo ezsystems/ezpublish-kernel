@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\Compare;
 use eZ\Publish\API\Repository\CompareEngine;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\DiffStatus;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff;
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\DiffValue;
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLine;
-use eZ\Publish\SPI\Compare\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\CompareResult;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextCompareResult;
+use eZ\Publish\SPI\Compare\CompareField;
 use SebastianBergmann\Diff\Differ;
 
 class TextCompareEngine implements CompareEngine
@@ -26,11 +26,10 @@ class TextCompareEngine implements CompareEngine
         $this->innerEngine = new Differ();
     }
 
-    public function compareFieldsData(Field $fieldA, Field $fieldB): DiffValue
+    public function compareFieldsData(CompareField $fieldA, CompareField $fieldB): CompareResult
     {
-        /** @var \eZ\Publish\SPI\Compare\Field\StringCompareField $fieldA */
-        /** @var \eZ\Publish\SPI\Compare\Field\StringCompareField $fieldB */
-
+        /** @var \eZ\Publish\SPI\Compare\Field\TextCompareField $fieldA */
+        /** @var \eZ\Publish\SPI\Compare\Field\TextCompareField $fieldB */
         $rawDiff = $this->innerEngine->diffToArray(
             explode(' ', $fieldA->value),
             explode(' ', $fieldB->value)
@@ -44,7 +43,7 @@ class TextCompareEngine implements CompareEngine
             );
         }
 
-        return new TextLine($stringDiff);
+        return new TextCompareResult($stringDiff);
     }
 
     private function mapStatus(int $status): string

@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Compare;
 
 use eZ\Publish\API\Repository\CompareEngine;
+use OutOfBoundsException;
 
-class CompareEngineRegistry
+final class CompareEngineRegistry
 {
     /** @var \eZ\Publish\API\Repository\CompareEngine[] */
-    protected $engines = [];
+    private $engines = [];
 
     /**
      * @param \eZ\Publish\API\Repository\CompareEngine[] $engines
@@ -29,8 +30,17 @@ class CompareEngineRegistry
         $this->engines[$supportedType] = $engine;
     }
 
-    public function getEngineForType(string $supportedType): CompareEngine
+    public function getEngine(string $supportedType): CompareEngine
     {
+        if (!isset($this->engines[$supportedType])) {
+            throw new OutOfBoundsException(
+                sprintf(
+                    'There is no compare engine for type "%s".',
+                    $supportedType,
+                )
+            );
+        }
+
         return $this->engines[$supportedType];
     }
 }

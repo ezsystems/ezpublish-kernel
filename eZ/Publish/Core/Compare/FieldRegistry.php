@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -10,10 +11,10 @@ namespace eZ\Publish\Core\Compare;
 use eZ\Publish\SPI\FieldType\Comparable;
 use OutOfBoundsException;
 
-class FieldRegistry
+final class FieldRegistry
 {
     /** @var \eZ\Publish\SPI\FieldType\Comparable[] */
-    protected $types = [];
+    private $types = [];
 
     /**
      * @param \eZ\Publish\SPI\FieldType\Comparable[] $types

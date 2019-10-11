@@ -1,13 +1,8 @@
 services:
-
-    eZ\Publish\Core\Compare\FieldRegistry: ~
-
-    eZ\Publish\Core\Compare\CompareEngineRegistry: ~
-
     eZ\Publish\Core\Compare\TextCompareEngine:
         tags:
-            - {name: ezplatform.compare.engine, supported_type: \eZ\Publish\SPI\Compare\Field\StringCompareField }
+            - { name: ezplatform.field_type.comparable.engine, supported_type: \eZ\Publish\SPI\Compare\Field\StringCompareField }
 
-    eZ\Publish\Core\FieldType\TextLine\CompareField:
+    eZ\Publish\Core\FieldType\TextLine\Comparable:
         tags:
-            - {name: ezplatform.field_type.comparable, alias: ezstring}
+            - { name: ezplatform.field_type.comparable, alias: ezstring }

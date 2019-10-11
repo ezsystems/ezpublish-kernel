@@ -16,11 +16,11 @@ class FieldDiff extends ValueObject
     /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition */
     private $fieldDef;
 
-    /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\DiffValue */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\CompareResult */
     private $diffValue;
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionDiff\DiffValue[] $diffValue
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionDiff\CompareResult[] $diffValue
      */
     public function __construct(
         FieldDefinition $fieldDef,
@@ -31,7 +31,7 @@ class FieldDiff extends ValueObject
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\DiffValue[]
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\CompareResult[]
      */
     public function getDiffValue(): array
     {
@@ -42,5 +42,4 @@ class FieldDiff extends ValueObject
     {
         return $this->fieldDef;
     }
-
 }

@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff;
 
-interface DiffStatus
+final class DiffStatus
 {
     public const UNCHANGED = 'unchanged';
 

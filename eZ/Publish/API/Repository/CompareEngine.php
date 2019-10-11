@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\DiffValue;
-use eZ\Publish\SPI\Compare\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\CompareResult;
+use eZ\Publish\SPI\Compare\CompareField;
 
 interface CompareEngine
 {
-    public function compareFieldsData(Field $fieldA, Field $fieldB): DiffValue;
+    public function compareFieldsData(CompareField $fieldA, CompareField $fieldB): CompareResult;
 }

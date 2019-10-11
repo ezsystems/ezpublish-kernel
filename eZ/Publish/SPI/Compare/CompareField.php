@@ -10,7 +10,7 @@ namespace eZ\Publish\SPI\Compare;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
-abstract class Field extends ValueObject
+abstract class CompareField extends ValueObject
 {
     /** @var string */
     public $name;

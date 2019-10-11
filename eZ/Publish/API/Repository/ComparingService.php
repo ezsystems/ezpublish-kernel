@@ -14,8 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 interface ComparingService
 {
     public function compareVersions(
-        VersionInfo $version,
-        VersionInfo $versionToCompare,
+        VersionInfo $versionA,
+        VersionInfo $versionB,
         ?string $languageCode = null
     ): VersionDiff;
 }

@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\DiffStatus;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff;
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLine;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextCompareResult;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
@@ -20,10 +20,10 @@ use eZ\Publish\Core\Compare\CompareEngineRegistry;
 use eZ\Publish\Core\Compare\FieldRegistry;
 use eZ\Publish\Core\Compare\TextCompareEngine;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
-use eZ\Publish\Core\FieldType\TextLine\CompareField as TextLineCompareField;
+use eZ\Publish\Core\FieldType\TextLine\Comparable as TextLineCompareField;
 use eZ\Publish\Core\Repository\ComparingService;
 use eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper;
-use eZ\Publish\SPI\Compare\Field\StringCompareField;
+use eZ\Publish\SPI\Compare\Field\TextCompareField;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
@@ -57,7 +57,7 @@ class ComparingTest extends Base
 
         $this->compareEngineRegistry = $this->buildCompareEngineRegistry();
         $this->compareEngineRegistry->registerEngine(
-            StringCompareField::class,
+            TextCompareField::class,
             new TextCompareEngine()
         );
 
@@ -179,7 +179,7 @@ class ComparingTest extends Base
             $versionDiff
         );
 
-        $diffValue = new TextLine([
+        $diffValue = new TextCompareResult([
             new StringDiff('We', DiffStatus::UNCHANGED),
             new StringDiff('love', DiffStatus::UNCHANGED),
             new StringDiff('the', DiffStatus::REMOVED),

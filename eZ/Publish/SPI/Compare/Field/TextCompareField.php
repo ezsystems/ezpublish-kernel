@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Compare\Field;
 
-use eZ\Publish\SPI\Compare\Field;
+use eZ\Publish\SPI\Compare\CompareField;
 
-class StringCompareField extends Field
+class TextCompareField extends CompareField
 {
 }
