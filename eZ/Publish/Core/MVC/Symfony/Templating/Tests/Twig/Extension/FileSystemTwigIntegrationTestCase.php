@@ -20,7 +20,7 @@ use Exception;
 
 /**
  * Class FileSystemTwigIntegrationTestCase
- * This class adds a custom version of the doIntegrationTest from Twig_Test_IntegrationTestCase to
+ * This class adds a custom version of the doIntegrationTest from \Twig\Test\IntegrationTestCase to
  * allow loading (custom) templates located in the FixturesDir.
  */
 abstract class FileSystemTwigIntegrationTestCase extends IntegrationTestCase
@@ -38,7 +38,7 @@ abstract class FileSystemTwigIntegrationTestCase extends IntegrationTestCase
             }
         }
 
-        // changes from the original is here, Twig_Loader_Filesystem has been added
+        // changes from the original is here, \Twig\Loader\FilesystemLoader has been added
         $loader = new ChainLoader(
             [
                 new ArrayLoader($templates),

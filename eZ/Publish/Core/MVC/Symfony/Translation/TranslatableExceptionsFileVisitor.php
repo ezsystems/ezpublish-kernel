@@ -21,6 +21,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\Node\Scalar\String_;
 use Psr\Log\LoggerInterface;
+use Twig\Node\Node as TwigNode;
 
 /**
  * Visits calls to some known translatable exceptions, into the repository_exceptions domain.
@@ -188,9 +189,9 @@ class TranslatableExceptionsFileVisitor implements LoggerAwareInterface, FileVis
     /**
      * @param \SplFileInfo $file
      * @param MessageCatalogue $catalogue
-     * @param \Twig_Node $ast
+     * @param \Twig\Node\Node $ast
      */
-    public function visitTwigFile(\SplFileInfo $file, MessageCatalogue $catalogue, \Twig_Node $ast)
+    public function visitTwigFile(\SplFileInfo $file, MessageCatalogue $catalogue, TwigNode $ast)
     {
     }
 

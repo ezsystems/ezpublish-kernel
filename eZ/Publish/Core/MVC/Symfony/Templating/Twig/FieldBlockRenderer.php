@@ -167,7 +167,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
 
         $params += ['field' => $field];
 
-        // Getting instance of Twig_Template that will be used to render blocks
+        // Getting instance of \Twig\Template that will be used to render blocks
         if (is_string($this->baseTemplate)) {
             $this->baseTemplate = $this->twig->loadTemplate($this->baseTemplate);
         }
