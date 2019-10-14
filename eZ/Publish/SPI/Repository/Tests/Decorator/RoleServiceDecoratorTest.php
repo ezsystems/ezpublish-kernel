@@ -26,6 +26,9 @@ use eZ\Publish\SPI\Repository\Decorator\RoleServiceDecorator;
 
 class RoleServiceDecoratorTest extends TestCase
 {
+    private const ROLE_ID = 1;
+    private const ROLE_ASSIGNMENT_ID = 1;
+
     protected function createDecorator(MockObject $service): RoleService
     {
         return new class($service) extends RoleServiceDecorator {
@@ -66,7 +69,7 @@ class RoleServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce149001.67591733'];
+        $parameters = [self::ROLE_ID];
 
         $serviceMock->expects($this->once())->method('loadRoleDraft')->with(...$parameters);
 
@@ -78,7 +81,7 @@ class RoleServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce149054.31531435'];
+        $parameters = [self::ROLE_ID];
 
         $serviceMock->expects($this->once())->method('loadRoleDraftByRoleId')->with(...$parameters);
 
@@ -175,7 +178,7 @@ class RoleServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce14b703.67687595'];
+        $parameters = [self::ROLE_ID];
 
         $serviceMock->expects($this->once())->method('loadRole')->with(...$parameters);
 
@@ -255,7 +258,7 @@ class RoleServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce14cfc5.25468747'];
+        $parameters = [self::ROLE_ASSIGNMENT_ID];
 
         $serviceMock->expects($this->once())->method('loadRoleAssignment')->with(...$parameters);
 
@@ -281,7 +284,7 @@ class RoleServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(User::class),
-            'random_value_5ced05ce14d033.64536244',
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('getRoleAssignmentsForUser')->with(...$parameters);
