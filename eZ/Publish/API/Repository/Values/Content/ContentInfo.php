@@ -1,13 +1,13 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\ContentInfo class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -144,6 +144,21 @@ class ContentInfo extends ValueObject
     /** @var bool */
     protected $isHidden;
 
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+    protected $contentType;
+
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
+    protected $section;
+
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
+    protected $mainLanguage;
+
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    protected $mainLocation;
+
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    protected $owner;
+
     /**
      * @return bool
      */
@@ -166,5 +181,30 @@ class ContentInfo extends ValueObject
     public function isTrashed()
     {
         return $this->status === self::STATUS_TRASHED;
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
+    }
+
+    public function getSection(): Section
+    {
+        return $this->section;
+    }
+
+    public function getMainLanguage(): Language
+    {
+        return $this->mainLanguage;
+    }
+
+    public function getMainLocation(): Location
+    {
+        return $this->mainLocation;
+    }
+
+    public function getOwner(): User
+    {
+        return $this->owner;
     }
 }

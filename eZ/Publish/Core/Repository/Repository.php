@@ -8,6 +8,8 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\Helper\ProxyFactory;
+use eZ\Publish\Core\Repository\Helper\ProxyFactoryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
@@ -223,6 +225,9 @@ class Repository implements RepositoryInterface
 
     /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
     private $passwordHashService;
+
+    /** @var \eZ\Publish\Core\Repository\Helper\ProxyFactoryInterface */
+    private $proxyFactory;
 
     /**
      * Construct repository object with provided storage engine.
@@ -765,10 +770,22 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->contentTypeHandler(),
             $this->getContentTypeDomainMapper(),
             $this->persistenceHandler->contentLanguageHandler(),
-            $this->fieldTypeRegistry
+            $this->fieldTypeRegistry,
+            $this->getProxyFactory()
         );
 
         return $this->domainMapper;
+    }
+
+    protected function getProxyFactory(): ProxyFactoryInterface
+    {
+        if ($this->proxyFactory !== null) {
+            return $this->proxyFactory;
+        }
+
+        $this->proxyFactory = new ProxyFactory($this);
+
+        return $this->proxyFactory;
     }
 
     /**
@@ -787,7 +804,8 @@ class Repository implements RepositoryInterface
         $this->contentTypeDomainMapper = new Helper\ContentTypeDomainMapper(
             $this->persistenceHandler->contentTypeHandler(),
             $this->persistenceHandler->contentLanguageHandler(),
-            $this->fieldTypeRegistry
+            $this->fieldTypeRegistry,
+            $this->getProxyFactory()
         );
 
         return $this->contentTypeDomainMapper;
