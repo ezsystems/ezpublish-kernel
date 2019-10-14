@@ -30,6 +30,8 @@ class UrlAliasServiceTest extends AbstractServiceTest
             ['removeAliases', [[555]]],
             ['lookup', [['/James', 'eng-GB']]],
             ['load', [[555]]],
+            ['refreshSystemUrlAliasesForLocation', [$location], null],
+            ['deleteCorruptedUrlAliases', [], 50],
         ];
     }
 

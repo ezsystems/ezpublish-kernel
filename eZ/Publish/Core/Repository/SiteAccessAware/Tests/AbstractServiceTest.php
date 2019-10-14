@@ -5,6 +5,8 @@ namespace eZ\Publish\Core\Repository\SiteAccessAware\Tests;
 use eZ\Publish\API\Repository\LanguageResolver;
 use PHPUnit\Framework\TestCase;
 use Closure;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Abstract tests for SiteAccessAware Services.
@@ -245,6 +247,30 @@ abstract class AbstractServiceTest extends TestCase
 
         if ($return) {
             $this->assertEquals($return, $actualReturn);
+        }
+    }
+
+    /**
+     * @todo replace with coverage testing (see EZP-31035)
+     */
+    final public function testIfThereIsMissingTest(): void
+    {
+        $tested = array_merge(
+            array_column($this->providerForLanguagesLookupMethods(), 0),
+            array_column($this->providerForPassTroughMethods(), 0)
+        );
+
+        $class = new ReflectionClass($this->getSiteAccessAwareServiceClassName());
+        foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            if (!$method->isConstructor() && !in_array($method->getShortName(), $tested)) {
+                $this->addWarning(
+                    sprintf(
+                        'Test for the %s::%s method is missing',
+                        $this->getSiteAccessAwareServiceClassName(),
+                        $method->getName()
+                    )
+                );
+            }
         }
     }
 }
