@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -144,6 +145,15 @@ class ContentInfo extends ValueObject
     /** @var bool */
     protected $isHidden;
 
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
+    protected $contentType;
+
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
+    protected $section;
+
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
+    protected $mainLanguage;
+
     /**
      * @return bool
      */
@@ -166,5 +176,20 @@ class ContentInfo extends ValueObject
     public function isTrashed()
     {
         return $this->status === self::STATUS_TRASHED;
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
+    }
+
+    public function getSection(): Section
+    {
+        return $this->section;
+    }
+
+    public function getMainLanguage(): Language
+    {
+        return $this->mainLanguage;
     }
 }

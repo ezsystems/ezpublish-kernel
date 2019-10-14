@@ -26,6 +26,7 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Repository\Helper\SectionDomainMapper;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
@@ -51,6 +52,9 @@ class SectionService implements SectionServiceInterface
     /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
     protected $locationHandler;
 
+    /** @var \eZ\Publish\Core\Repository\Helper\SectionDomainMapper */
+    protected $sectionDomainMapper;
+
     /** @var array */
     protected $settings;
 
@@ -61,15 +65,23 @@ class SectionService implements SectionServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
+     * @param \eZ\Publish\Core\Repository\Helper\SectionDomainMapper $sectionDomainMapper
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, SectionHandler $sectionHandler, LocationHandler $locationHandler, PermissionCriterionResolver $permissionCriterionResolver, array $settings = [])
-    {
+    public function __construct(
+        RepositoryInterface $repository,
+        SectionHandler $sectionHandler,
+        LocationHandler $locationHandler,
+        PermissionCriterionResolver $permissionCriterionResolver,
+        SectionDomainMapper $sectionDomainMapper,
+        array $settings = []
+    ) {
         $this->repository = $repository;
         $this->sectionHandler = $sectionHandler;
         $this->locationHandler = $locationHandler;
         $this->permissionResolver = $repository->getPermissionResolver();
         $this->permissionCriterionResolver = $permissionCriterionResolver;
+        $this->sectionDomainMapper = $sectionDomainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + [
             //'defaultSetting' => array(),
@@ -445,12 +457,6 @@ class SectionService implements SectionServiceInterface
      */
     protected function buildDomainSectionObject(SPISection $spiSection)
     {
-        return new Section(
-            [
-                'id' => $spiSection->id,
-                'identifier' => $spiSection->identifier,
-                'name' => $spiSection->name,
-            ]
-        );
+        return $this->sectionDomainMapper->buildDomainObject($spiSection);
     }
 }

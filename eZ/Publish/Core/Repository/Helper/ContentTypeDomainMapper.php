@@ -23,6 +23,7 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroupProxy;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeProxy;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
@@ -32,6 +33,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdate
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as SPILanguageHandler;
 use DateTime;
+use Generator;
 
 /**
  * ContentTypeDomainMapper is an internal service.
@@ -73,6 +75,18 @@ class ContentTypeDomainMapper
         SPIContentType $spiContentType,
         array $prioritizedLanguages = []
     ): APIContentType {
+        return new ContentType(
+            $this->getContentTypeDomainObjectConstructData(
+                $spiContentType,
+                $prioritizedLanguages
+            )
+        );
+    }
+
+    private function getContentTypeDomainObjectConstructData(
+        SPIContentType $spiContentType,
+        array $prioritizedLanguages = []
+    ): array {
         $mainLanguageCode = $this->contentLanguageHandler->load(
             $spiContentType->initialLanguageId
         )->languageCode;
@@ -86,30 +100,48 @@ class ContentTypeDomainMapper
             );
         }
 
-        return new ContentType(
-            [
-                'names' => $spiContentType->name,
-                'descriptions' => $spiContentType->description,
-                'contentTypeGroups' => $this->buildContentTypeGroupProxyList($spiContentType->groupIds, $prioritizedLanguages),
-                'fieldDefinitions' => $fieldDefinitions,
-                'id' => $spiContentType->id,
-                'status' => $spiContentType->status,
-                'identifier' => $spiContentType->identifier,
-                'creationDate' => $this->getDateTime($spiContentType->created),
-                'modificationDate' => $this->getDateTime($spiContentType->modified),
-                'creatorId' => $spiContentType->creatorId,
-                'modifierId' => $spiContentType->modifierId,
-                'remoteId' => $spiContentType->remoteId,
-                'urlAliasSchema' => $spiContentType->urlAliasSchema,
-                'nameSchema' => $spiContentType->nameSchema,
-                'isContainer' => $spiContentType->isContainer,
-                'mainLanguageCode' => $mainLanguageCode,
-                'defaultAlwaysAvailable' => $spiContentType->defaultAlwaysAvailable,
-                'defaultSortField' => $spiContentType->sortField,
-                'defaultSortOrder' => $spiContentType->sortOrder,
-                'prioritizedLanguages' => $prioritizedLanguages,
-                'languageCodes' => $spiContentType->languageCodes,
-            ]
+        return [
+            'names' => $spiContentType->name,
+            'descriptions' => $spiContentType->description,
+            'contentTypeGroups' => $this->buildContentTypeGroupProxyList($spiContentType->groupIds, $prioritizedLanguages),
+            'fieldDefinitions' => $fieldDefinitions,
+            'id' => $spiContentType->id,
+            'status' => $spiContentType->status,
+            'identifier' => $spiContentType->identifier,
+            'creationDate' => $this->getDateTime($spiContentType->created),
+            'modificationDate' => $this->getDateTime($spiContentType->modified),
+            'creatorId' => $spiContentType->creatorId,
+            'modifierId' => $spiContentType->modifierId,
+            'remoteId' => $spiContentType->remoteId,
+            'urlAliasSchema' => $spiContentType->urlAliasSchema,
+            'nameSchema' => $spiContentType->nameSchema,
+            'isContainer' => $spiContentType->isContainer,
+            'mainLanguageCode' => $mainLanguageCode,
+            'defaultAlwaysAvailable' => $spiContentType->defaultAlwaysAvailable,
+            'defaultSortField' => $spiContentType->sortField,
+            'defaultSortOrder' => $spiContentType->sortOrder,
+            'prioritizedLanguages' => $prioritizedLanguages,
+            'languageCodes' => $spiContentType->languageCodes,
+        ];
+    }
+
+    public function buildContentTypeProxy(
+        int $contentTypeId,
+        array $prioritizedLanguages = []
+    ): APIContentType {
+        return new ContentTypeProxy(
+            $this->getContentTypeProxyInitializer($prioritizedLanguages),
+            $contentTypeId
+        );
+    }
+
+    private function getContentTypeProxyInitializer(array $prioritizedLanguages = []): Generator
+    {
+        $contentTypeId = yield;
+
+        yield $this->getContentTypeDomainObjectConstructData(
+            $this->contentTypeHandler->load($contentTypeId),
+            $prioritizedLanguages
         );
     }
 

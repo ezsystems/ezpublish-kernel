@@ -8,6 +8,8 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\Helper\LanguageDomainMapper;
+use eZ\Publish\Core\Repository\Helper\SectionDomainMapper;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
@@ -209,6 +211,13 @@ class Repository implements RepositoryInterface
     protected $contentTypeDomainMapper;
 
     /**
+     * Instance of section domain mapper.
+     *
+     * @var \eZ\Publish\Core\Repository\Helper\SectionDomainMapper
+     */
+    protected $sectionDomainMapper;
+
+    /**
      * Instance of permissions-resolver and -criterion resolver.
      *
      * @var \eZ\Publish\API\Repository\PermissionCriterionResolver|\eZ\Publish\API\Repository\PermissionResolver
@@ -223,6 +232,9 @@ class Repository implements RepositoryInterface
 
     /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
     private $passwordHashService;
+
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageDomainMapper */
+    private $languageDomainMapper;
 
     /**
      * Construct repository object with provided storage engine.
@@ -332,6 +344,7 @@ class Repository implements RepositoryInterface
             $this,
             $this->persistenceHandler->contentLanguageHandler(),
             $this->getPermissionResolver(),
+            $this->getLanguageDomainMapper(),
             $this->serviceSettings['language']
         );
 
@@ -437,6 +450,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->sectionHandler(),
             $this->persistenceHandler->locationHandler(),
             $this->getPermissionCriterionResolver(),
+            $this->getSectionDomainMapper(),
             $this->serviceSettings['section']
         );
 
@@ -765,7 +779,9 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->contentTypeHandler(),
             $this->getContentTypeDomainMapper(),
             $this->persistenceHandler->contentLanguageHandler(),
-            $this->fieldTypeRegistry
+            $this->fieldTypeRegistry,
+            $this->getSectionDomainMapper(),
+            $this->getLanguageDomainMapper()
         );
 
         return $this->domainMapper;
@@ -791,6 +807,32 @@ class Repository implements RepositoryInterface
         );
 
         return $this->contentTypeDomainMapper;
+    }
+
+    protected function getSectionDomainMapper(): SectionDomainMapper
+    {
+        if ($this->sectionDomainMapper !== null) {
+            return $this->sectionDomainMapper;
+        }
+
+        $this->sectionDomainMapper = new SectionDomainMapper(
+            $this->persistenceHandler->sectionHandler()
+        );
+
+        return $this->sectionDomainMapper;
+    }
+
+    protected function getLanguageDomainMapper(): LanguageDomainMapper
+    {
+        if ($this->languageDomainMapper !== null) {
+            return $this->languageDomainMapper;
+        }
+
+        $this->languageDomainMapper = new LanguageDomainMapper(
+            $this->persistenceHandler->contentLanguageHandler()
+        );
+
+        return $this->languageDomainMapper;
     }
 
     /**

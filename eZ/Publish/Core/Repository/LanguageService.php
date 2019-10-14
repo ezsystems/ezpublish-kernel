@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\Core\Repository\Helper\LanguageDomainMapper;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
@@ -40,22 +41,30 @@ class LanguageService implements LanguageServiceInterface
     /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageDomainMapper */
+    private $languageDomainMapper;
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
+     * @param \eZ\Publish\Core\Repository\Helper\LanguageDomainMapper $languageDomainMapper
+     *
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $languageHandler,
         PermissionResolver $permissionResolver,
+        LanguageDomainMapper $languageDomainMapper,
         array $settings = []
     ) {
         $this->repository = $repository;
         $this->languageHandler = $languageHandler;
         $this->permissionResolver = $permissionResolver;
+        $this->languageDomainMapper = $languageDomainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + [
             'languages' => ['eng-GB'],
@@ -389,13 +398,6 @@ class LanguageService implements LanguageServiceInterface
      */
     protected function buildDomainObject(SPILanguage $spiLanguage)
     {
-        return new Language(
-            [
-                'id' => $spiLanguage->id,
-                'languageCode' => $spiLanguage->languageCode,
-                'name' => $spiLanguage->name,
-                'enabled' => $spiLanguage->isEnabled,
-            ]
-        );
+        return $this->languageDomainMapper->buildDomainObject($spiLanguage);
     }
 }

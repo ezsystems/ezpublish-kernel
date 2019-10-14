@@ -37,6 +37,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use DateTime;
+use Generator;
 
 /**
  * DomainMapper is an internal service.
@@ -66,6 +67,12 @@ class DomainMapper
     /** @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
+    /** @var \eZ\Publish\Core\Repository\Helper\SectionDomainMapper */
+    private $sectionDomainMapper;
+
+    /** @var \eZ\Publish\Core\Repository\Helper\LanguageDomainMapper */
+    private $languageDomainMapper;
+
     /**
      * Setups service with reference to repository.
      *
@@ -75,6 +82,8 @@ class DomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\Core\Repository\Helper\SectionDomainMapper $sectionDomainMapper
+     * @param \eZ\Publish\Core\Repository\Helper\LanguageDomainMapper $languageDomainMapper
      */
     public function __construct(
         ContentHandler $contentHandler,
@@ -82,7 +91,9 @@ class DomainMapper
         TypeHandler $contentTypeHandler,
         ContentTypeDomainMapper $contentTypeDomainMapper,
         LanguageHandler $contentLanguageHandler,
-        FieldTypeRegistry $fieldTypeRegistry
+        FieldTypeRegistry $fieldTypeRegistry,
+        SectionDomainMapper $sectionDomainMapper,
+        LanguageDomainMapper $languageDomainMapper
     ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
@@ -90,6 +101,8 @@ class DomainMapper
         $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
+        $this->sectionDomainMapper = $sectionDomainMapper;
+        $this->languageDomainMapper = $languageDomainMapper;
     }
 
     /**
@@ -411,6 +424,16 @@ class DomainMapper
                 'mainLocationId' => $spiContentInfo->mainLocationId,
                 'status' => $status,
                 'isHidden' => $spiContentInfo->isHidden,
+                'contentType' => $this->contentTypeDomainMapper->buildContentTypeProxy(
+                    $spiContentInfo->contentTypeId
+                    // TODO: Prioritized languages should be specified
+                ),
+                'section' => $this->sectionDomainMapper->buildDomainObjectProxy(
+                    $spiContentInfo->sectionId
+                ),
+                'mainLanguage' => $this->languageDomainMapper->buildDomainObjectProxy(
+                    $spiContentInfo->mainLanguageCode
+                ),
             ]
         );
     }
