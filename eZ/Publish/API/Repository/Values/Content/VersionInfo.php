@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\SPI\Repository\Values\MultiLanguageName;
 
@@ -47,13 +48,6 @@ abstract class VersionInfo extends ValueObject implements MultiLanguageName
      * @var int
      */
     protected $versionNo;
-
-    /**
-     * Content of the content this version belongs to.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
-    abstract public function getContentInfo();
 
     /**
      * the last modified date of this version.
@@ -98,11 +92,22 @@ abstract class VersionInfo extends ValueObject implements MultiLanguageName
     protected $languageCodes = [];
 
     /**
+     * Content of the content this version belongs to.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    abstract public function getContentInfo(): ContentInfo;
+
+    abstract public function getCreator(): User;
+
+    abstract public function getInitialLanguage(): Language;
+
+    /**
      * Returns true if version is a draft.
      *
      * @return bool
      */
-    public function isDraft()
+    public function isDraft(): bool
     {
         return $this->status === self::STATUS_DRAFT;
     }
@@ -112,7 +117,7 @@ abstract class VersionInfo extends ValueObject implements MultiLanguageName
      *
      * @return bool
      */
-    public function isPublished()
+    public function isPublished(): bool
     {
         return $this->status === self::STATUS_PUBLISHED;
     }
@@ -122,7 +127,7 @@ abstract class VersionInfo extends ValueObject implements MultiLanguageName
      *
      * @return bool
      */
-    public function isArchived()
+    public function isArchived(): bool
     {
         return $this->status === self::STATUS_ARCHIVED;
     }

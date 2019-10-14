@@ -1,5 +1,9 @@
 parameters:
     ezpublish.kernel.root_dir: "%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel"
+
+    # API
+    ezpublish.api.proxy_cache_dir: '%kernel.cache_dir%/repository/proxy'
+
     # Using legacy storage engine for data compatibility with 4.x
     ezpublish.api.storage_engine.default: legacy
     ezpublish.api.search_engine.default: legacy
