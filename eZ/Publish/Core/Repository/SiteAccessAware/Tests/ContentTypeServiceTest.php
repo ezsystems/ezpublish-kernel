@@ -57,6 +57,8 @@ class ContentTypeServiceTest extends AbstractServiceTest
 
             ['loadContentTypeDraft', [22]],
 
+            ['loadContentTypeList', [[22]], [$contentType]],
+
             ['createContentTypeDraft', [$contentType]],
 
             ['updateContentTypeDraft', [$contentTypeDraft, $contentTypeUpdateStruct]],
@@ -93,6 +95,8 @@ class ContentTypeServiceTest extends AbstractServiceTest
             ['isContentTypeUsed', [$contentType]],
 
             ['removeContentTypeTranslation', [$contentTypeDraft, 'ger-DE'], $contentTypeDraft],
+
+            ['deleteUserDrafts', [14], null],
         ];
     }
 

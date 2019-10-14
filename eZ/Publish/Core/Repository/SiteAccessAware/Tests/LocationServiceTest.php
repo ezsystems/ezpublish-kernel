@@ -52,6 +52,9 @@ class LocationServiceTest extends AbstractServiceTest
             ['newLocationCreateStruct', [55]],
 
             ['newLocationUpdateStruct', []],
+
+            ['getAllLocationsCount', [], 100],
+            ['loadAllLocations', [10, 100], [$location]],
         ];
     }
 
