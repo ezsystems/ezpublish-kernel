@@ -4,6 +4,9 @@ sudo: required
 
 language: php
 
+# Disable tests on merge, run them using a cron job in the night
+if: type != push
+
 services:
   - mysql
   - postgresql
