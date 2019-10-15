@@ -50,6 +50,7 @@ $loader->load('utils.yml');
 $loader->load('tests/common.yml');
 $loader->load('policies.yml');
 $loader->load('events.yml');
+$loader->load('comparable_fieldtypes.yml');
 
 // Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
 if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
@@ -83,6 +84,9 @@ $containerBuilder->addCompilerPass(new Compiler\Storage\Legacy\RoleLimitationCon
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\CriteriaConverterPass());
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass());
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\SortClauseConverterPass());
+$containerBuilder->addCompilerPass(new Compiler\Search\Legacy\SortClauseConverterPass());
+$containerBuilder->addCompilerPass(new eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComparableFieldRegistryPass());
+$containerBuilder->addCompilerPass(new eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\CompareEnginesRegistryPass());
 
 //
 // Symfony 4 makes services private by default. Test cases are not prepared for this.
