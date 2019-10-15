@@ -3,6 +3,7 @@
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
+use eZ\Publish\API\Repository\CompareService as CompareServiceInterface;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
@@ -78,6 +79,9 @@ final class Repository implements RepositoryInterface
     /** @var \eZ\Publish\API\Repository\UserService */
     private $userService;
 
+    /** @var \eZ\Publish\API\Repository\CompareService */
+    private $compareService;
+
     public function __construct(
         RepositoryInterface $repository,
         BookmarkServiceInterface $bookmarkService,
@@ -96,7 +100,8 @@ final class Repository implements RepositoryInterface
         URLServiceInterface $urlService,
         URLWildcardServiceInterface $urlWildcardService,
         UserPreferenceServiceInterface $userPreferenceService,
-        UserServiceInterface $userService
+        UserServiceInterface $userService,
+        CompareServiceInterface $compareService
     ) {
         $this->repository = $repository;
         $this->bookmarkService = $bookmarkService;
@@ -116,6 +121,7 @@ final class Repository implements RepositoryInterface
         $this->urlWildcardService = $urlWildcardService;
         $this->userPreferenceService = $userPreferenceService;
         $this->userService = $userService;
+        $this->compareService = $compareService;
     }
 
     public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
@@ -181,6 +187,11 @@ final class Repository implements RepositoryInterface
     public function getObjectStateService(): ObjectStateServiceInterface
     {
         return $this->objectStateService;
+    }
+
+    public function getCompareService(): CompareServiceInterface
+    {
+        return $this->compareService;
     }
 
     public function getRoleService(): RoleServiceInterface
