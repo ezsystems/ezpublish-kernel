@@ -1398,9 +1398,6 @@ class SearchServiceTest extends BaseTest
         $searchService = $repository->getSearchService();
         $result = $searchService->findContent($query);
 
-        foreach ($result->searchHits as $searchHit) {
-            echo $searchHit->valueObject->contentInfo->name . '\n\n';
-        }
         $this->assertEquals(1, $result->totalCount);
         $this->assertEquals(
             $testContent->id,
