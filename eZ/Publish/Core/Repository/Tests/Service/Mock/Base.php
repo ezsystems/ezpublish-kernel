@@ -70,8 +70,8 @@ abstract class Base extends TestCase
                 $this->getRelationProcessorMock(),
                 $this->getFieldTypeRegistryMock(),
                 $this->createMock(PasswordHashServiceInterface::class),
-                $this->createMock(FieldRegistry::class),
-                $this->createMock(CompareEngineRegistry::class),
+                new FieldRegistry(),
+                new CompareEngineRegistry(),
                 $serviceSettings
             );
 

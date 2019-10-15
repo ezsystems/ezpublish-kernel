@@ -28,8 +28,37 @@ class TextCompareEngine implements CompareEngine
 
     public function compareFieldsData(CompareField $fieldA, CompareField $fieldB): CompareResult
     {
-        /** @var \eZ\Publish\SPI\Compare\Field\TextCompareField $fieldA */
-        /** @var \eZ\Publish\SPI\Compare\Field\TextCompareField $fieldB */
+        if ($fieldA->value === null && $fieldB->value === null) {
+            return new TextCompareResult([]);
+        }
+
+        if ($fieldA->value === $fieldB->value) {
+            return new TextCompareResult([
+                new StringDiff(
+                    $fieldA->value,
+                    DiffStatus::UNCHANGED
+                ),
+            ]);
+        }
+
+        if ($fieldA->value === null && $fieldB->value !== null) {
+            return new TextCompareResult([
+                new StringDiff(
+                    $fieldB->value,
+                    DiffStatus::ADDED
+                ),
+            ]);
+        }
+
+        if ($fieldA->value !== null && $fieldB->value === null) {
+            return new TextCompareResult([
+                new StringDiff(
+                    $fieldA->value,
+                    DiffStatus::REMOVED
+                ),
+            ]);
+        }
+
         $rawDiff = $this->innerEngine->diffToArray(
             explode(' ', $fieldA->value),
             explode(' ', $fieldB->value)

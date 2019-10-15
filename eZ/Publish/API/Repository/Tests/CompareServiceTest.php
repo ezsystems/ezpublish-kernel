@@ -145,9 +145,7 @@ class CompareServiceTest extends BaseContentServiceTest
         $textCompareResult = $fieldDiff->getDiffValue()['text'];
 
         $expectedDiff = [
-            new StringDiff('content', DiffStatus::ADDED),
-            new StringDiff('two', DiffStatus::ADDED),
-            new StringDiff('new', DiffStatus::ADDED),
+            new StringDiff('content two new', DiffStatus::ADDED),
         ];
 
         $this->assertEquals($expectedDiff, $textCompareResult->getStringDiffs());

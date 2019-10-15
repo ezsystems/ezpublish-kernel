@@ -80,6 +80,7 @@ class CompareTest extends Base
                 $this->fieldRegistry,
                 $this->compareEngineRegistry,
                 $this->contentTypeDomainMapperMock,
+                $this->getPermissionResolverMock(),
             ])
             ->getMock();
     }
