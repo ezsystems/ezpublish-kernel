@@ -17,7 +17,7 @@ services:
             - '@ezpublish.siteaccessaware.service.location'
             - '@ezpublish.siteaccessaware.service.language'
             - '@ezpublish.siteaccessaware.service.notification'
-
+            - '@ezpublish.siteaccessaware.service.compare'
 
     ezpublish.siteaccessaware.service.content:
         class: eZ\Publish\Core\Repository\SiteAccessAware\ContentService
@@ -81,6 +81,12 @@ services:
         class: eZ\Publish\Core\Repository\SiteAccessAware\NotificationService
         arguments:
             - '@eZ\Publish\Core\Event\NotificationService'
+            -
+    ezpublish.siteaccessaware.service.compare:
+        class: eZ\Publish\Core\Repository\SiteAccessAware\CompareService
+        arguments:
+            - '@eZ\Publish\Core\Event\CompareService'
+            - '@ezpublish.helper.language_resolver'
 
     # Helpers
     eZ\Publish\Core\Repository\SiteAccessAware\Language\AbstractLanguageResolver:

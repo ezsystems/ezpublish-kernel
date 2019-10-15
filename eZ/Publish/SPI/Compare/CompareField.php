@@ -15,6 +15,6 @@ abstract class CompareField extends ValueObject
     /** @var string */
     public $name;
 
-    /** @var array|int|string */
+    /** @var mixed */
     public $value;
 }

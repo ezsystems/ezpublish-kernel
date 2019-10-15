@@ -6,7 +6,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\ComparingService as ComparingServiceInterface;
+use eZ\Publish\API\Repository\CompareService as CompareServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\Compare\CompareEngineRegistry;
 use eZ\Publish\Core\Compare\FieldRegistry;
@@ -227,7 +227,7 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
     private $passwordHashService;
 
-    /** @var \eZ\Publish\Core\Repository\ComparingService */
+    /** @var \eZ\Publish\Core\Repository\CompareService */
     private $comparingService;
 
     /** @var \eZ\Publish\Core\Compare\FieldRegistry */
@@ -749,18 +749,19 @@ class Repository implements RepositoryInterface
         return $this->notificationService;
     }
 
-    public function getComparingService(): ComparingServiceInterface
+    public function getCompareService(): CompareServiceInterface
     {
         if (null !== $this->comparingService) {
             return $this->comparingService;
         }
 
-        $this->comparingService = new ComparingService(
+        $this->comparingService = new CompareService(
             $this->persistenceHandler->contentHandler(),
             $this->persistenceHandler->contentTypeHandler(),
             $this->comparableFieldRegistry,
             $this->compareEngineRegistry,
-            $this->getContentTypeDomainMapper()
+            $this->getContentTypeDomainMapper(),
+            $this->getPermissionResolver()
         );
 
         return $this->comparingService;
