@@ -9,22 +9,32 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Values\Content\VersionDiff;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use OutOfBoundsException;
 
 class VersionDiff extends ValueObject
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff[] */
-    private $diffPerFieldId;
+    private $fieldDiffs;
 
-    public function __construct(array $diffPerFieldId = [])
+    public function __construct(array $fieldDiffs = [])
     {
-        $this->diffPerFieldId = $diffPerFieldId;
+        $this->fieldDiffs = $fieldDiffs;
     }
 
     /**
      * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff
      */
-    public function getDiffPerFieldId(string $fieldId): FieldDiff
+    public function getFieldDiffByIdentifier(string $fieldIdentifier): FieldDiff
     {
-        return $this->diffPerFieldId[$fieldId];
+        if (!isset($this->fieldDiffs[$fieldIdentifier])) {
+            throw new OutOfBoundsException(
+                sprintf(
+                    'There is no diff for field with "%s" identifier.',
+                    $fieldIdentifier,
+                )
+            );
+        }
+
+        return $this->fieldDiffs[$fieldIdentifier];
     }
 }

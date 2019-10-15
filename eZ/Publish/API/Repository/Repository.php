@@ -178,6 +178,8 @@ interface Repository
      */
     public function getUserPreferenceService();
 
+    public function getCompareService(): CompareService;
+
     /**
      * Begin transaction.
      *

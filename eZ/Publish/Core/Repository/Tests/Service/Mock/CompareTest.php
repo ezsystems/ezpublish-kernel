@@ -21,7 +21,7 @@ use eZ\Publish\Core\Compare\FieldRegistry;
 use eZ\Publish\Core\Compare\TextCompareEngine;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\FieldType\TextLine\Comparable as TextLineCompareField;
-use eZ\Publish\Core\Repository\ComparingService;
+use eZ\Publish\Core\Repository\CompareService;
 use eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper;
 use eZ\Publish\SPI\Compare\Field\TextCompareField;
 use eZ\Publish\SPI\Persistence\Content;
@@ -30,7 +30,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition;
 
-class ComparingTest extends Base
+class CompareTest extends Base
 {
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $contentHandler;
@@ -67,12 +67,12 @@ class ComparingTest extends Base
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\ComparingService|\PHPUnit\Framework\MockObject\MockObject
+     * @return \eZ\Publish\API\Repository\CompareService|\PHPUnit\Framework\MockObject\MockObject
      */
-    private function createComparingService(array $methods = [])
+    private function createCompareService(array $methods = [])
     {
         return $this
-            ->getMockBuilder(ComparingService::class)
+            ->getMockBuilder(CompareService::class)
             ->onlyMethods([])
             ->setConstructorArgs([
                 $this->contentHandler,
@@ -162,15 +162,18 @@ class ComparingTest extends Base
 
         $this->contentTypeHandler
             ->method('getFieldDefinition')
-            ->with(3, Type::STATUS_DEFINED)
-            ->willReturn(new SPIFieldDefinition(['fieldType' => 'ezstring']));
+            ->with('textDefId', Type::STATUS_DEFINED)
+            ->willReturn(new SPIFieldDefinition([
+                'fieldType' => 'ezstring',
+                'identifier' => 'textDefId',
+            ]));
 
         $fieldDefinition = new FieldDefinition();
         $this->contentTypeDomainMapperMock
             ->method('buildFieldDefinitionDomainObject')
             ->willReturn($fieldDefinition);
 
-        $service = $this->createComparingService(['compareVersions']);
+        $service = $this->createCompareService(['compareVersions']);
 
         $versionDiff = $service->compareVersions($versionOne, $versionTwo);
 

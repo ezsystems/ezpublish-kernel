@@ -18,7 +18,7 @@ parameters:
     ezpublish.api.service.bookmark.class: eZ\Publish\Core\Repository\BookmarkService
     ezpublish.api.service.notification.class: eZ\Publish\Core\Repository\NotificationService
     ezpublish.api.service.user_preference.class: eZ\Publish\Core\Repository\UserPreferenceService
-    ezpublish.api.service.comparing.class: eZ\Publish\Core\Repository\ComparingService
+    ezpublish.api.service.compare.class: eZ\Publish\Core\Repository\CompareService
 
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
     ezpublish.api.search_engine.class: eZ\Publish\SPI\Search\Handler
@@ -134,9 +134,9 @@ services:
         factory: ["@ezpublish.api.inner_repository", getUserPreferenceService]
         lazy: true
 
-    ezpublish.api.service.inner_comparing:
-        class: '%ezpublish.api.service.comparing.class%'
-        factory: ["@ezpublish.api.inner_repository", getComparingService]
+    ezpublish.api.service.inner_compare:
+        class: '%ezpublish.api.service.compare.class%'
+        factory: ["@ezpublish.api.inner_repository", getCompareService]
         lazy: true
 
     # Factories

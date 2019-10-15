@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
-interface ComparingService
+interface CompareService
 {
     public function compareVersions(
         VersionInfo $versionA,

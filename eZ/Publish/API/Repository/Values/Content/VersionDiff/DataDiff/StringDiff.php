@@ -18,27 +18,17 @@ class StringDiff extends ValueObject
     /** @var string */
     private $status;
 
-    /**
-     * @param string $token
-     * @param string $status
-     */
     public function __construct(string $token, string $status)
     {
         $this->token = $token;
         $this->status = $status;
     }
 
-    /**
-     * @return string
-     */
     public function getToken(): string
     {
         return $this->token;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
