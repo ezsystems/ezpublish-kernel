@@ -24,12 +24,12 @@ final class CompareEnginesRegistryPass implements CompilerPassInterface
             return;
         }
 
-        $fieldRegistryDefinition = $container->getDefinition(FieldRegistry::class);
+        $compareEngineRegistryDefinition = $container->getDefinition(CompareEngineRegistry::class);
         $comparableFieldTypeTags = $container->findTaggedServiceIds(self::COMPARE_ENGINE_SERVICE_TAG);
 
         foreach ($comparableFieldTypeTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
-                $fieldRegistryDefinition->addMethodCall(
+                $compareEngineRegistryDefinition->addMethodCall(
                     'registerEngine',
                     [
                         $attribute['supported_type'],
