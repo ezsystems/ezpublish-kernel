@@ -123,7 +123,7 @@ interface RoleService
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      * @param PolicyDraft $policyDraft the policy to remove from the RoleDraft
      *
-     * @return RoleDraft
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given RoleDraft

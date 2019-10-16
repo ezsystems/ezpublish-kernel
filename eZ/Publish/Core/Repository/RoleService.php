@@ -99,10 +99,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the same type
      *         is repeated in the policy create struct or if limitation is not allowed on module/function
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a RoleDraft
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
-     * @throws \eZ\Publish\Core\Base\Exceptions\LimitationValidationException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
      */
     public function createRole(APIRoleCreateStruct $roleCreateStruct): APIRoleDraft
     {
@@ -156,8 +153,7 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the Role already has a RoleDraft that will need to be removed first
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a RoleDraft
      */
     public function createRoleDraft(APIRole $role): APIRoleDraft
     {
@@ -199,7 +195,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a RoleDraft with the given id was not found
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a RoleDraft
      */
     public function loadRoleDraft(int $id): APIRoleDraft
     {
@@ -224,7 +220,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a RoleDraft with the given id was not found
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      */
     public function loadRoleDraftByRoleId(int $roleId): APIRoleDraft
     {
@@ -252,9 +248,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier of the RoleDraft already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a RoleDraft
      */
     public function updateRoleDraft(APIRoleDraft $roleDraft, RoleUpdateStruct $roleUpdateStruct): APIRoleDraft
     {
@@ -321,10 +315,8 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy create
      *                                                                        struct or if limitation is not allowed on module/function
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
-     * @throws \eZ\Publish\Core\Base\Exceptions\LimitationValidationException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyCreateStruct is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add a policy
      */
     public function addPolicyByRoleDraft(APIRoleDraft $roleDraft, APIPolicyCreateStruct $policyCreateStruct): APIRoleDraft
     {
@@ -387,8 +379,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given RoleDraft
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
      */
     public function removePolicyByRoleDraft(APIRoleDraft $roleDraft, PolicyDraft $policyDraft): APIRoleDraft
     {
@@ -420,10 +411,8 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update
      *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
-     * @throws \eZ\Publish\Core\Base\Exceptions\LimitationValidationException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
      */
     public function updatePolicyByRoleDraft(
         APIRoleDraft $roleDraft,
@@ -487,7 +476,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this RoleDraft
      */
     public function deleteRoleDraft(APIRoleDraft $roleDraft): void
     {
@@ -513,8 +502,7 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the role draft cannot be loaded
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to publish this RoleDraft
      */
     public function publishRoleDraft(APIRoleDraft $roleDraft): void
     {
@@ -552,7 +540,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      */
     public function loadRole(int $id): APIRole
     {
@@ -572,11 +560,12 @@ class RoleService implements RoleServiceInterface
      *
      * @param string $identifier
      *
-     * @return \eZ\Publish\Core\Repository\Values\User\Role
+     * @return \eZ\Publish\API\Repository\Values\User\Role
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      */
     public function loadRoleByIdentifier(string $identifier): APIRole
     {
@@ -623,7 +612,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
      */
     public function deleteRole(APIRole $role): void
     {
@@ -654,7 +643,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If assignment already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
      */
     public function assignRoleToUserGroup(APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null): void
     {
@@ -703,8 +692,8 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If assignment already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      */
     public function assignRoleToUser(APIRole $role, User $user, RoleLimitation $roleLimitation = null): void
     {
@@ -751,7 +740,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
      */
     public function removeRoleAssignment(RoleAssignment $roleAssignment): void
     {
@@ -782,7 +771,6 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function loadRoleAssignment(int $roleAssignmentId): RoleAssignment
     {
@@ -922,7 +910,7 @@ class RoleService implements RoleServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function getRoleAssignmentsForUserGroup(UserGroup $userGroup): iterable
     {
@@ -948,7 +936,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param string $name
      *
-     * @return \eZ\Publish\Core\Repository\Values\User\RoleCreateStruct
+     * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
      */
     public function newRoleCreateStruct(string $name): APIRoleCreateStruct
     {
@@ -966,7 +954,7 @@ class RoleService implements RoleServiceInterface
      * @param string $module
      * @param string $function
      *
-     * @return \eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
      */
     public function newPolicyCreateStruct(string $module, string $function): APIPolicyCreateStruct
     {
@@ -982,7 +970,7 @@ class RoleService implements RoleServiceInterface
     /**
      * Instantiates a policy update class.
      *
-     * @return \eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
     public function newPolicyUpdateStruct(): APIPolicyUpdateStruct
     {
@@ -1065,7 +1053,8 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
      * @return \eZ\Publish\Core\FieldType\ValidationError[][][]
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     protected function validateRoleCreateStruct(APIRoleCreateStruct $roleCreateStruct): iterable
     {
@@ -1088,7 +1077,7 @@ class RoleService implements RoleServiceInterface
     /**
      * Validates Policy context: Limitations on a module and function.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the same limitation is repeated or if
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the same limitation is repeated or if
      *                                                                   limitation is not allowed on module/function
      *
      * @param string $module
@@ -1127,12 +1116,12 @@ class RoleService implements RoleServiceInterface
      * Validate that assignments not already exists and filter validations against existing.
      *
      * @param int $contentId
-     * @param SPIRole $spiRole
+     * @param \eZ\Publish\SPI\Persistence\User\Role $spiRole
      * @param array|null $limitation
      *
      * @return array[]|null Filtered version of $limitation
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If assignment already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If assignment already exists
      */
     protected function checkAssignmentAndFilterLimitationValues(
         int $contentId,
