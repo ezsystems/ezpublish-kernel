@@ -30,7 +30,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
+use Symfony\Component\Mime\MimeTypesInterface;
 use Exception;
 
 /**
@@ -62,8 +62,8 @@ class ResizeOriginalImagesCommand extends Command
     /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $ioService;
 
-    /** @var \Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface */
-    private $extensionGuesser;
+    /** @var \Symfony\Component\Mime\MimeTypesInterface */
+    private $mimeTypes;
 
     /** @var \Imagine\Image\ImagineInterface */
     private $imagine;
@@ -76,7 +76,7 @@ class ResizeOriginalImagesCommand extends Command
         SearchService $searchService,
         FilterManager $filterManager,
         IOServiceInterface $ioService,
-        ExtensionGuesserInterface $extensionGuesser,
+        MimeTypesInterface $mimeTypes,
         ImagineInterface $imagine
     ) {
         $this->permissionResolver = $permissionResolver;
@@ -86,7 +86,7 @@ class ResizeOriginalImagesCommand extends Command
         $this->searchService = $searchService;
         $this->filterManager = $filterManager;
         $this->ioService = $ioService;
-        $this->extensionGuesser = $extensionGuesser;
+        $this->mimeTypes = $mimeTypes;
         $this->imagine = $imagine;
 
         parent::__construct();
@@ -243,7 +243,7 @@ class ResizeOriginalImagesCommand extends Command
                 $binary = new Binary(
                     $this->ioService->getFileContents($binaryFile),
                     $mimeType,
-                    $this->extensionGuesser->guess($mimeType)
+                    $this->mimeTypes->getExtensions($mimeType)[0] ?? null
                 );
 
                 $resizedImageBinary = $this->filterManager->applyFilter($binary, $filter);
