@@ -77,6 +77,14 @@ services:
     ezpublish.fieldType.ezimage.pathGenerator:
         class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
 
+    ezpublish.fieldType.validator.black_list:
+        class: eZ\Publish\Core\FieldType\Validator\FileExtensionBlackListValidator
+        arguments:
+            - '@ezpublish.config.resolver'
+
+    ezpublish.fieldType.validator.image:
+        class: eZ\Publish\Core\FieldType\Validator\ImageValidator
+
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.io_service:
         parent: ezpublish.core.io.service
