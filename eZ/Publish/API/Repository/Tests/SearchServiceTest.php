@@ -1175,7 +1175,7 @@ class SearchServiceTest extends BaseTest
         $createStructRambo = $contentService->newContentCreateStruct($contentType, 'eng-GB');
         $createStructRambo->remoteId = 'movie-456';
         $createStructRambo->alwaysAvailable = false;
-        $createStructRambo->setField('title','Rambo');
+        $createStructRambo->setField('title', 'Rambo');
 
         $ramboDraft = $contentService->createContent($createStructRambo);
         $movies[] = $contentService->publishVersion($ramboDraft->getVersionInfo());
@@ -1183,8 +1183,8 @@ class SearchServiceTest extends BaseTest
         $createStructRobocop = $contentService->newContentCreateStruct($contentType, 'eng-GB');
         $createStructRobocop->remoteId = 'movie-789';
         $createStructRobocop->alwaysAvailable = false;
-        $createStructRobocop->setField('title','Robocop');
-        $createStructRobocop->setField('subtitle','');
+        $createStructRobocop->setField('title', 'Robocop');
+        $createStructRobocop->setField('subtitle', '');
 
         $robocopDraft = $contentService->createContent($createStructRobocop);
         $movies[] = $contentService->publishVersion($robocopDraft->getVersionInfo());
@@ -1192,8 +1192,8 @@ class SearchServiceTest extends BaseTest
         $createStructLastHope = $contentService->newContentCreateStruct($contentType, 'eng-GB');
         $createStructLastHope->remoteId = 'movie-101112';
         $createStructLastHope->alwaysAvailable = false;
-        $createStructLastHope->setField('title','Star Wars');
-        $createStructLastHope->setField('subtitle','Last Hope');
+        $createStructLastHope->setField('title', 'Star Wars');
+        $createStructLastHope->setField('subtitle', 'Last Hope');
 
         $lastHopeDraft = $contentService->createContent($createStructLastHope);
         $movies[] = $contentService->publishVersion($lastHopeDraft->getVersionInfo());
@@ -1266,7 +1266,7 @@ class SearchServiceTest extends BaseTest
                 'query' => new Criterion\Field(
                     'subtitle',
                     Criterion\Operator::EQ,
-                    NULL
+                    null
                 ),
             ]
         );
