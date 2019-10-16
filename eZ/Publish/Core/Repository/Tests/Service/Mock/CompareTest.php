@@ -62,6 +62,11 @@ class CompareTest extends Base
         );
 
         $this->contentTypeDomainMapperMock = $this->buildContentTypeDomainMapperMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
+
+        $permissionResolverMock
+            ->method('canUser')
+            ->willReturn(true);
 
         parent::setUp();
     }
@@ -73,7 +78,7 @@ class CompareTest extends Base
     {
         return $this
             ->getMockBuilder(CompareService::class)
-            ->onlyMethods([])
+            ->setMethodsExcept($methods)
             ->setConstructorArgs([
                 $this->contentHandler,
                 $this->contentTypeHandler,

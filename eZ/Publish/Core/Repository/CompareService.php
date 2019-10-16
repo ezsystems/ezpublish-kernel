@@ -65,7 +65,7 @@ class CompareService implements ComparingServiceInterface
         VersionInfo $versionB,
         ?string $languageCode = null
     ): VersionDiff {
-        if ($versionA->contentInfo->id !== $versionB->contentInfo->id) {
+        if ($versionA->getContentInfo()->id !== $versionB->getContentInfo()->id) {
             throw new InvalidArgumentException(
                 '$versionB',
                 'Version B is not version of the same content as $versionA'
@@ -73,7 +73,7 @@ class CompareService implements ComparingServiceInterface
         }
 
         if (!$this->permissionResolver->canUser('content', 'versionread', $versionA)) {
-            throw new UnauthorizedException('content', 'versionread', ['contentId' => $versionA->contentInfo->id]);
+            throw new UnauthorizedException('content', 'versionread', ['contentId' => $versionA->getContentInfo()->id]);
         }
 
         $languageCode = $languageCode ?? $versionA->initialLanguageCode;
