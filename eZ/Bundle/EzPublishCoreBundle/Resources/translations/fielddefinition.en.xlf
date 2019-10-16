@@ -267,10 +267,16 @@
         <note>key: fielddefinition.multiple.label</note>
         <jms:reference-file line="386">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
       </trans-unit>
-      <trans-unit id="77c3603526e153eea2b11a851601dabd3bfdbd9a" resname="fielddefinition.multiple.yes_no">
-        <source>{0} No|{1} Yes</source>
-        <target>{0} No|{1} Yes</target>
-        <note>key: fielddefinition.multiple.yes_no</note>
+      <trans-unit id="ec31a6088a9e8cb3266bf0b99e057ca0677fcd82" resname="fielddefinition.multiple.yes">
+        <source>Yes</source>
+        <target>Yes</target>
+        <note>key: fielddefinition.multiple.yes</note>
+        <jms:reference-file line="387">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="0b8ef090df7e5c7780364c51f060db3f5b8f076a" resname="fielddefinition.multiple.no">
+        <source>No</source>
+        <target>No</target>
+        <note>key: fielddefinition.multiple.no</note>
         <jms:reference-file line="387">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
       </trans-unit>
       <trans-unit id="4d59776118124c81734aacab8a71198ee555479c" resname="fielddefinition.options.label">
@@ -373,10 +379,17 @@
         <jms:reference-file line="122">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
         <jms:reference-file line="96">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
       </trans-unit>
-      <trans-unit id="f875a84fc9f3c1e0610a90197722f04b9442fa01" resname="fielddefinition.use-seconds.yes_no">
-        <source>{0} No|{1} Yes</source>
-        <target>{0} No|{1} Yes</target>
-        <note>key: fielddefinition.use-seconds.yes_no</note>
+      <trans-unit id="edc26cd0186a48016fc5bc286c4d64e238043658" resname="fielddefinition.use-seconds.yes">
+        <source>Yes</source>
+        <target>Yes</target>
+        <note>key: fielddefinition.use-seconds.yes</note>
+        <jms:reference-file line="123">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+        <jms:reference-file line="97">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="8c785cf266419d05f444b0e88bbf34f07c0b6fde" resname="fielddefinition.use-seconds.no">
+        <source>No</source>
+        <target>No</target>
+        <note>key: fielddefinition.use-seconds.no</note>
         <jms:reference-file line="123">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
         <jms:reference-file line="97">eZ/Bundle/EzPublishCoreBundle/Resources/views/fielddefinition_settings.html.twig</jms:reference-file>
       </trans-unit>
