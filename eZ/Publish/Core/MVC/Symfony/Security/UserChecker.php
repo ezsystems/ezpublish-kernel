@@ -32,7 +32,7 @@ final class UserChecker implements UserCheckerInterface
         }
 
         if (!$user->getAPIUser()->enabled) {
-            $exception = new DisabledException();
+            $exception = new DisabledException('User account is locked.');
             $exception->setUser($user);
 
             throw $exception;
@@ -46,7 +46,7 @@ final class UserChecker implements UserCheckerInterface
         }
 
         if ($this->userService->getPasswordInfo($user->getAPIUser())->isPasswordExpired()) {
-            $exception = new CredentialsExpiredException();
+            $exception = new CredentialsExpiredException('User account has expired.');
             $exception->setUser($user);
 
             throw $exception;

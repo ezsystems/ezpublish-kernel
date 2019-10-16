@@ -78,6 +78,7 @@ final class UserCheckerTest extends TestCase
         );
 
         $this->expectException(DisabledException::class);
+        $this->expectExceptionMessage('User account is locked.');
 
         $this->userChecker->checkPreAuth(new User($apiUser));
     }
@@ -138,6 +139,7 @@ final class UserCheckerTest extends TestCase
             );
 
         $this->expectException(CredentialsExpiredException::class);
+        $this->expectExceptionMessage('User account has expired.');
 
         $this->userChecker->checkPostAuth(new User($apiUser));
     }
