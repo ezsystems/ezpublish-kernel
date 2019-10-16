@@ -73,7 +73,10 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $fieldType = new FieldType\Image\Type();
+        $fieldType = new FieldType\Image\Type([
+            self::$container->get('ezpublish.fieldType.validator.black_list'),
+            self::$container->get('ezpublish.fieldType.validator.image')
+        ]);
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         $this->ioService = self::$container->get('ezpublish.fieldType.ezimage.io_service');

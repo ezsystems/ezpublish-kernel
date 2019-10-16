@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Value;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\FieldType\Validator\FileExtensionBlackListValidator;
 
 /**
  * Base class for binary field types.
@@ -18,6 +20,16 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  */
 abstract class BinaryBaseTest extends FieldTypeTest
 {
+    protected $blackListedExtensions = [
+        'php',
+        'php3',
+        'phar',
+        'phpt',
+        'pht',
+        'phtml',
+        'pgif',
+    ];
+
     protected function getValidatorConfigurationSchemaExpectation()
     {
         return [
@@ -28,6 +40,30 @@ abstract class BinaryBaseTest extends FieldTypeTest
                 ],
             ],
         ];
+    }
+
+    protected function getConfigResolverMock()
+    {
+        $configResolver = $this
+            ->createMock(ConfigResolverInterface::class);
+
+        $configResolver
+            ->method('getParameter')
+            ->with('io.file_storage.file_type_blacklist')
+            ->willReturn($this->blackListedExtensions);
+
+        return $configResolver;
+    }
+
+    protected function getBlackListValidatorMock()
+    {
+        return $this
+            ->getMockBuilder(FileExtensionBlackListValidator::class)
+            ->setConstructorArgs([
+                $this->getConfigResolverMock()
+            ])
+            ->setMethods(null)
+            ->getMock();
     }
 
     protected function getSettingsSchemaExpectation()

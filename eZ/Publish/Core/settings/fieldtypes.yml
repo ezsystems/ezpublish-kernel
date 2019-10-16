@@ -288,6 +288,8 @@ services:
 
     ezpublish.fieldType.ezbinaryfile:
         class: "%ezpublish.fieldType.ezbinaryfile.class%"
+        arguments:
+            - ['@ezpublish.fieldType.validator.black_list']
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
@@ -345,6 +347,8 @@ services:
 
     ezpublish.fieldType.ezimage:
         class: "%ezpublish.fieldType.ezimage.class%"
+        arguments:
+            - ['@ezpublish.fieldType.validator.black_list', '@ezpublish.fieldType.validator.image']
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezimage}
@@ -363,6 +367,8 @@ services:
 
     ezpublish.fieldType.ezmedia:
         class: "%ezpublish.fieldType.ezmedia.class%"
+        arguments:
+            - ['@ezpublish.fieldType.validator.black_list']
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}

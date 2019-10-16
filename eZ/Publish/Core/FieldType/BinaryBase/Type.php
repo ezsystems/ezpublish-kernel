@@ -33,6 +33,17 @@ abstract class Type extends FieldType
         ],
     ];
 
+    /** @var \eZ\Publish\Core\FieldType\Validator[] */
+    private $validators;
+
+    /**
+     * @param \eZ\Publish\Core\FieldType\Validator[] $validators
+     */
+    public function __construct(array $validators)
+    {
+        $this->validators = $validators;
+    }
+
     /**
      * Creates a specific value of the derived class from $inputValue.
      *
@@ -282,6 +293,12 @@ abstract class Type extends FieldType
 
         if ($this->isEmptyValue($fieldValue)) {
             return $errors;
+        }
+
+        foreach ($this->validators as $externalValidator) {
+            if (!$externalValidator->validate($fieldValue)) {
+                $errors = array_merge($errors, $externalValidator->getMessage());
+            }
         }
 
         foreach ((array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters) {
