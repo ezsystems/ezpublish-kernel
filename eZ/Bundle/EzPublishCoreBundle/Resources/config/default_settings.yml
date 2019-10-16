@@ -102,6 +102,15 @@ parameters:
     ezsettings.default.io.root_dir: "%webroot_dir%/$var_dir$/$storage_dir$"
     ezsettings.default.io.permissions.files: 0644
     ezsettings.default.io.permissions.directories: 0755
+    # Blacklist against storing certain file types, validation will be refused for these
+    ezsettings.default.io.file_storage.file_type_blacklist:
+        - php
+        - php3
+        - phar
+        - phpt
+        - pht
+        - phtml
+        - pgif
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)

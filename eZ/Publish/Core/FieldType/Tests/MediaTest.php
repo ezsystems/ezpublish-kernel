@@ -8,9 +8,11 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use eZ\Publish\Core\FieldType\Media\Type as MediaType;
 use eZ\Publish\Core\FieldType\Media\Value as MediaValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * @group fieldType
@@ -31,7 +33,7 @@ class MediaTest extends BinaryBaseTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new MediaType();
+        $fieldType = new MediaType([$this->getBlackListValidatorMock()]);
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -678,6 +680,91 @@ class MediaTest extends BinaryBaseTest
             [
                 new MediaValue(['fileName' => 'sindelfingen.jpg']),
                 'sindelfingen.jpg',
+            ],
+        ];
+    }
+
+    public function provideValidDataForValidate()
+    {
+        return [
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
+                            'maxFileSize' => 1,
+                        ],
+                    ],
+                ],
+                new BinaryFileValue(
+                    [
+                        'id' => 'some/file/here',
+                        'fileName' => 'sindelfingen.mp4',
+                        'fileSize' => 15000,
+                        'downloadCount' => 0,
+                        'mimeType' => 'video/mp4',
+                    ]
+                ),
+            ],
+        ];
+    }
+
+    public function provideInvalidDataForValidate()
+    {
+        return [
+            // File is too large
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
+                            'maxFileSize' => 0.01,
+                        ],
+                    ],
+                ],
+                new MediaValue(
+                    [
+                        'id' => 'some/file/here',
+                        'fileName' => 'sindelfingen.mp4',
+                        'fileSize' => 150000,
+                        'mimeType' => 'video/mp4',
+                    ]
+                ),
+                [
+                    new ValidationError(
+                        'The file size cannot exceed %size% byte.',
+                        'The file size cannot exceed %size% bytes.',
+                        [
+                            '%size%' => 0.01,
+                        ],
+                        'fileSize'
+                    ),
+                ],
+            ],
+
+            // file extension is in blacklist
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
+                            'maxFileSize' => 1,
+                        ],
+                    ],
+                ],
+                new MediaValue(
+                    [
+                        'id' => 'phppng.php',
+                        'fileName' => 'phppng.php',
+                        'fileSize' => 'phppng.php',
+                        'mimeType' => 'video/mp4',
+                    ]
+                ),
+                [
+                    new ValidationError(
+                        'A valid file is required. Following file extensions are on the blacklist: %extensionsBlackList%',
+                        null,
+                        ['%extensionsBlackList%' => implode(', ', $this->blackListedExtensions)],
+                        'fileExtensionBlackList'
+                    ),
+                ],
             ],
         ];
     }
