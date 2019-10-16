@@ -6,7 +6,6 @@
  */
 declare(strict_types=1);
 
-
 namespace eZ\Publish\Core\Compare\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\DiffStatus;

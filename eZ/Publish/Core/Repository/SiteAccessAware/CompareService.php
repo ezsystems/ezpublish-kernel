@@ -8,7 +8,6 @@ use eZ\Publish\API\Repository\LanguageResolver;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
-
 class CompareService implements CompareServiceInterface
 {
     /** @var \eZ\Publish\API\Repository\CompareService */

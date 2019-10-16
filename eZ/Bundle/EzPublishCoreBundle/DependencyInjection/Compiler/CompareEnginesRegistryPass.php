@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use eZ\Publish\Core\Compare\CompareEngineRegistry;
-use eZ\Publish\Core\Compare\FieldRegistry;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
