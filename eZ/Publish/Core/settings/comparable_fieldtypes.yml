@@ -3,6 +3,10 @@ services:
         tags:
             - { name: ezplatform.field_type.comparable.engine, supported_type: eZ\Publish\SPI\Compare\Field\TextCompareField }
 
+    eZ\Publish\Core\Compare\NoCompareEngine:
+        tags:
+            - { name: ezplatform.field_type.comparable.engine, supported_type: eZ\Publish\SPI\Compare\Field\NonCompareField }
+
     eZ\Publish\Core\FieldType\TextLine\Comparable:
         tags:
             - { name: ezplatform.field_type.comparable, alias: ezstring }
