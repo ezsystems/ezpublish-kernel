@@ -5,3 +5,22 @@ parameters:
     ignored_storage_files:
         -
             var/ezdemo_site/storage/images/design/plain-site/172-2-eng-US/eZ-Publish-Demo-Design-without-demo-content1.png
+
+    ezsettings.default.io.file_storage.file_type_blacklist:
+        - php
+        - php3
+        - phar
+        - phpt
+        - pht
+        - phtml
+        - pgif
+
+services:
+    ezpublish.config.resolver:
+        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
+        arguments:
+            - []
+            - 'ezsettings'
+        calls:
+            - [setContainer, ['@service_container']]
+            - [setDefaultScope, ['default']]

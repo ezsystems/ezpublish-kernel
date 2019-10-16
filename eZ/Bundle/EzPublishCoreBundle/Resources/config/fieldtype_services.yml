@@ -109,6 +109,14 @@ services:
     ezpublish.fieldType.ezpage.hashConverter:
         class: "%ezpublish.fieldType.ezpage.hashConverter.class%"
 
+    ezpublish.fieldType.validator.black_list:
+        class: eZ\Publish\Core\FieldType\Validator\FileExtensionBlackListValidator
+        arguments:
+            - '@ezpublish.config.resolver'
+
+    ezpublish.fieldType.validator.image:
+        class: eZ\Publish\Core\FieldType\Validator\ImageValidator
+
     # RichText
     ezpublish.fieldType.ezrichtext.normalizer.input:
         class: "%ezpublish.fieldType.ezrichtext.normalizer.document_type_definition.class%"
