@@ -61,6 +61,14 @@ services:
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: "%ezpublish.fieldType.ezbinaryfile.pathGenerator.class%"
 
+    ezpublish.fieldType.validator.black_list:
+        class: eZ\Publish\Core\FieldType\Validator\FileExtensionBlackListValidator
+        arguments:
+            - '@ezpublish.config.resolver'
+
+    ezpublish.fieldType.validator.image:
+        class: eZ\Publish\Core\FieldType\Validator\ImageValidator
+
     # RichText
     ezpublish.fieldType.ezrichtext.converter.input.dispatcher:
         class: "%ezpublish.fieldType.ezrichtext.converter.dispatcher.class%"

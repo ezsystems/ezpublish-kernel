@@ -63,6 +63,7 @@ $loader->load('search_engines/common.yml');
 $loader->load('settings.yml');
 $loader->load('utils.yml');
 $loader->load('tests/common.yml');
+$loader->load('tests/integration_legacy_core.yml');
 
 $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
@@ -77,5 +78,6 @@ $containerBuilder->addCompilerPass(new Compiler\Storage\Legacy\RoleLimitationCon
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\CriteriaConverterPass());
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass());
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\SortClauseConverterPass());
+
 
 return $containerBuilder;

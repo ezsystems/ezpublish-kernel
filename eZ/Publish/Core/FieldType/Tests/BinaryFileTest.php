@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType;
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * @group fieldType
@@ -31,7 +32,7 @@ class BinaryFileTest extends BinaryBaseTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new BinaryFileType();
+        $fieldType = new BinaryFileType([$this->getBlackListValidatorMock()]);
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -465,6 +466,121 @@ class BinaryFileTest extends BinaryBaseTest
             [
                 new BinaryFileValue(['fileName' => 'sindelfingen.jpg']),
                 'sindelfingen.jpg',
+            ],
+        ];
+    }
+
+    public function provideValidDataForValidate()
+    {
+        return [
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
+                            'maxFileSize' => 1,
+                        ],
+                    ],
+                ],
+                new BinaryFileValue(
+                    [
+                        'id' => 'some/file/here',
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                    ]
+                ),
+            ],
+        ];
+    }
+
+    public function provideInvalidDataForValidate()
+    {
+        return [
+            // File is too large
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
+                            'maxFileSize' => 0.01,
+                        ],
+                    ],
+                ],
+                new BinaryFileValue(
+                    [
+                        'id' => 'some/file/here',
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 150000,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                    ]
+                ),
+                [
+                    new ValidationError(
+                        'The file size cannot exceed %size% byte.',
+                        'The file size cannot exceed %size% bytes.',
+                        [
+                            '%size%' => 0.01,
+                        ],
+                        'fileSize'
+                    ),
+                ],
+            ],
+
+            // file extension is in blacklist
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
+                            'maxFileSize' => 1,
+                        ],
+                    ],
+                ],
+                new BinaryFileValue(
+                    [
+                        'id' => 'phppng.php',
+                        'fileName' => 'phppng.php',
+                        'fileSize' => 'phppng.php',
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                    ]
+                ),
+                [
+                    new ValidationError(
+                        'A valid file is required. Following file extensions are on the blacklist: %extensionsBlackList%',
+                        null,
+                        ['%extensionsBlackList%' => implode(', ', $this->blackListedExtensions)],
+                        'fileExtensionBlackList'
+                    ),
+                ],
+            ],
+
+            // file is an image file but filename ends with .PHP (upper case)
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
+                            'maxFileSize' => 1,
+                        ],
+                    ],
+                ],
+                new BinaryFileValue(
+                    [
+                        'id' => 'phppng.PHP',
+                        'fileName' => 'phppng.PHP',
+                        'fileSize' => 'phppng.PHP',
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                    ]
+                ),
+                [
+                    new ValidationError(
+                        'A valid file is required. Following file extensions are on the blacklist: %extensionsBlackList%',
+                        null,
+                        ['%extensionsBlackList%' => implode(', ', $this->blackListedExtensions)],
+                        'fileExtensionBlackList'
+                    ),
+                ],
             ],
         ];
     }

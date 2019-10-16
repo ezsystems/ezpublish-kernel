@@ -13,6 +13,9 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\FieldType\Validator\FileExtensionBlackListValidator;
+use eZ\Publish\Core\FieldType\Validator\ImageValidator;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
  * @group fieldType
@@ -20,6 +23,16 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  */
 class ImageTest extends FieldTypeTest
 {
+    protected $blackListedExtensions = [
+        'php',
+        'php3',
+        'phar',
+        'phpt',
+        'pht',
+        'phtml',
+        'pgif',
+    ];
+
     public function getImageInputPath()
     {
         return __DIR__ . '/squirrel-developers.jpg';
@@ -50,10 +63,45 @@ class ImageTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new ImageType();
+        $fieldType = new ImageType([
+            $this->getBlackListValidatorMock(),
+            $this->getImageValidatorMock()
+        ]);
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
+    }
+
+    private function getBlackListValidatorMock()
+    {
+        return $this
+            ->getMockBuilder(FileExtensionBlackListValidator::class)
+            ->setConstructorArgs([
+                $this->getConfigResolverMock()
+            ])
+            ->setMethods(null)
+            ->getMock();
+    }
+
+    private function getImageValidatorMock()
+    {
+        return $this
+            ->getMockBuilder(ImageValidator::class)
+            ->setMethods(null)
+            ->getMock();
+    }
+
+    private function getConfigResolverMock()
+    {
+        $configResolver = $this
+            ->createMock(ConfigResolverInterface::class);
+
+        $configResolver
+            ->method('getParameter')
+            ->with('io.file_storage.file_type_blacklist')
+            ->willReturn($this->blackListedExtensions);
+
+        return $configResolver;
     }
 
     /**
@@ -653,7 +701,15 @@ class ImageTest extends FieldTypeTest
                     ]
                 ),
                 [
-                    new ValidationError('A valid image file is required.', null, [], 'id'),
+                    new ValidationError(
+                        'A valid file is required. Following file extensions are on the blacklist: %extensionsBlackList%',
+                        null,
+                        ['%extensionsBlackList%' => implode(', ', $this->blackListedExtensions)],
+                        'fileExtensionBlackList'
+                    ),
+                    new ValidationError(
+                        'A valid image file is required.', null, [], 'id'
+                    ),
                 ],
             ],
 
@@ -676,6 +732,12 @@ class ImageTest extends FieldTypeTest
                     ]
                 ),
                 [
+                    new ValidationError(
+                        'A valid file is required. Following file extensions are on the blacklist: %extensionsBlackList%',
+                        null,
+                        ['%extensionsBlackList%' => implode(', ', $this->blackListedExtensions)],
+                        'fileExtensionBlackList'
+                    ),
                     new ValidationError('A valid image file is required.', null, [], 'id'),
                     new ValidationError(
                         'The file size cannot exceed %size% byte.',
@@ -708,6 +770,12 @@ class ImageTest extends FieldTypeTest
                 ),
                 [
                     new ValidationError(
+                        'A valid file is required. Following file extensions are on the blacklist: %extensionsBlackList%',
+                        null,
+                        ['%extensionsBlackList%' => implode(', ', $this->blackListedExtensions)],
+                        'fileExtensionBlackList'
+                    ),
+                    new ValidationError(
                         'A valid image file is required.', null, [], 'id'
                     ),
                 ],
@@ -732,6 +800,12 @@ class ImageTest extends FieldTypeTest
                     ]
                 ),
                 [
+                    new ValidationError(
+                        'A valid file is required. Following file extensions are on the blacklist: %extensionsBlackList%',
+                        null,
+                        ['%extensionsBlackList%' => implode(', ', $this->blackListedExtensions)],
+                        'fileExtensionBlackList'
+                    ),
                     new ValidationError(
                         'A valid image file is required.', null, [], 'id'
                     ),
