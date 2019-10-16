@@ -1132,10 +1132,12 @@ class SearchServiceTest extends BaseTest
     /**
      * Create movie Content with subtitle field set to null.
      *
-     * @return Content
+     * @return Content[]
      */
     protected function createMovieContent()
     {
+        $movies = [];
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
@@ -1170,17 +1172,35 @@ class SearchServiceTest extends BaseTest
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
         $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
 
-        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
-        $createStruct->remoteId = 'movie-456';
-        $createStruct->alwaysAvailable = false;
-        $createStruct->setField('title','Rambo');
+        $createStructRambo = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStructRambo->remoteId = 'movie-456';
+        $createStructRambo->alwaysAvailable = false;
+        $createStructRambo->setField('title','Rambo');
 
-        $draft = $contentService->createContent($createStruct);
-        $content = $contentService->publishVersion($draft->getVersionInfo());
+        $ramboDraft = $contentService->createContent($createStructRambo);
+        $movies[] = $contentService->publishVersion($ramboDraft->getVersionInfo());
+        $this->refreshSearch($repository);
+        $createStructRobocop = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStructRobocop->remoteId = 'movie-789';
+        $createStructRobocop->alwaysAvailable = false;
+        $createStructRobocop->setField('title','Robocop');
+        $createStructRobocop->setField('subtitle','');
+
+        $robocopDraft = $contentService->createContent($createStructRobocop);
+        $movies[] = $contentService->publishVersion($robocopDraft->getVersionInfo());
+        $this->refreshSearch($repository);
+        $createStructLastHope = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStructLastHope->remoteId = 'movie-101112';
+        $createStructLastHope->alwaysAvailable = false;
+        $createStructLastHope->setField('title','Star Wars');
+        $createStructLastHope->setField('subtitle','Last Hope');
+
+        $lastHopeDraft = $contentService->createContent($createStructLastHope);
+        $movies[] = $contentService->publishVersion($lastHopeDraft->getVersionInfo());
 
         $this->refreshSearch($repository);
 
-        return $content;
+        return $movies;
     }
 
     /**
@@ -1230,6 +1250,36 @@ class SearchServiceTest extends BaseTest
         $this->refreshSearch($repository);
 
         return $content;
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFieldIsNull()
+    {
+        $testContents = $this->createMovieContent();
+
+        $query = new Query(
+            [
+                'query' => new Criterion\Field(
+                    'subtitle',
+                    Criterion\Operator::EQ,
+                    NULL
+                ),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent($query);
+
+        $this->assertEquals(2, $result->totalCount);
+        $this->assertEquals(
+            $testContents[0]->id,
+            $result->searchHits[0]->valueObject->id
+        );
     }
 
     /**
@@ -1379,30 +1429,48 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends \eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldIsNull
      */
-    public function testFieldIsNull()
+    public function testFieldIsEmpty()
     {
-        $testContent = $this->createMovieContent();
-
         $query = new Query(
             [
-                'query' => new Criterion\Field(
+                'query' => new Criterion\IsFieldEmpty(
                     'subtitle',
-                    Criterion\Operator::EQ,
-                    NULL
+                    Criterion\IsFieldEmpty::EMPTY
                 ),
             ]
         );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
+        $result = $searchService->findContent($query, ['eng-GB']);
+
+        $this->assertEquals(2, $result->totalCount);
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends \eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldIsNull
+     */
+    public function testFieldIsNotEmpty()
+    {
+        $query = new Query(
+            [
+                'query' => new Criterion\IsFieldEmpty(
+                    'subtitle',
+                    Criterion\IsFieldEmpty::NOT_EMPTY
+                ),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent($query, ['eng-GB']);
 
         $this->assertEquals(1, $result->totalCount);
-        $this->assertEquals(
-            $testContent->id,
-            $result->searchHits[0]->valueObject->id
-        );
     }
 
     /**
