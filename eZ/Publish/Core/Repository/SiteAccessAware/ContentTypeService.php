@@ -114,7 +114,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         return $this->service->loadContentTypeDraft($contentTypeId, $ignoreOwnership);
     }
 
-    public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = []): iterable
+    public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = null): iterable
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
