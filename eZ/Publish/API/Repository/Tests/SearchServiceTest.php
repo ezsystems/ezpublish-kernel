@@ -1206,7 +1206,7 @@ class SearchServiceTest extends BaseTest
     /**
      * Create test Content with ezcountry field having multiple countries selected.
      *
-     * @return Content
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      */
     protected function createMultipleCountriesContent()
     {
@@ -1255,29 +1255,65 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldIsNull()
+    public function testFieldIsEmpty()
     {
         $testContents = $this->createMovieContent();
 
         $query = new Query(
             [
-                'query' => new Criterion\Field(
+                'query' => new Criterion\IsFieldEmpty(
                     'subtitle',
-                    Criterion\Operator::EQ,
-                    null
+                    Criterion\IsFieldEmpty::EMPTY
                 ),
             ]
         );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
+        $result = $searchService->findContent($query, ['eng-GB']);
 
         $this->assertEquals(2, $result->totalCount);
+
         $this->assertEquals(
             $testContents[0]->id,
+            $result->searchHits[0]->valueObject->id
+        );
+        $this->assertEquals(
+            $testContents[1]->id,
+            $result->searchHits[1]->valueObject->id
+        );
+
+        return $testContents;
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content[]
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends \eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldIsEmpty
+     */
+    public function testFieldIsNotEmpty(array $testContents)
+    {
+        $query = new Query(
+            [
+                'query' => new Criterion\IsFieldEmpty(
+                    'subtitle',
+                    Criterion\IsFieldEmpty::NOT_EMPTY
+                ),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent($query, ['eng-GB']);
+
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $testContents[2]->id,
             $result->searchHits[0]->valueObject->id
         );
     }
@@ -1423,54 +1459,6 @@ class SearchServiceTest extends BaseTest
                 ]
             )
         );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends \eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldIsNull
-     */
-    public function testFieldIsEmpty()
-    {
-        $query = new Query(
-            [
-                'query' => new Criterion\IsFieldEmpty(
-                    'subtitle',
-                    Criterion\IsFieldEmpty::EMPTY
-                ),
-            ]
-        );
-
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query, ['eng-GB']);
-
-        $this->assertEquals(2, $result->totalCount);
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends \eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldIsNull
-     */
-    public function testFieldIsNotEmpty()
-    {
-        $query = new Query(
-            [
-                'query' => new Criterion\IsFieldEmpty(
-                    'subtitle',
-                    Criterion\IsFieldEmpty::NOT_EMPTY
-                ),
-            ]
-        );
-
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query, ['eng-GB']);
-
-        $this->assertEquals(1, $result->totalCount);
     }
 
     /**
