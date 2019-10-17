@@ -57,8 +57,6 @@ class ContentTypeServiceTest extends AbstractServiceTest
 
             ['loadContentTypeDraft', [22]],
 
-            ['loadContentTypeList', [[22]], [$contentType]],
-
             ['createContentTypeDraft', [$contentType]],
 
             ['updateContentTypeDraft', [$contentTypeDraft, $contentTypeUpdateStruct]],
@@ -102,6 +100,7 @@ class ContentTypeServiceTest extends AbstractServiceTest
 
     public function providerForLanguagesLookupMethods()
     {
+        $contentType = new ContentType();
         $contentTypeGroup = new ContentTypeGroup();
 
         // string $method, array $arguments, bool $return, int $languageArgumentIndex
@@ -113,6 +112,8 @@ class ContentTypeServiceTest extends AbstractServiceTest
             ['loadContentTypeGroups', [self::LANG_ARG], true, 0],
 
             ['loadContentType', [22, self::LANG_ARG], true, 1],
+
+            ['loadContentTypeList', [[22, self::LANG_ARG]], [$contentType], 1],
 
             ['loadContentTypeByIdentifier', ['article', self::LANG_ARG], true, 1],
 
