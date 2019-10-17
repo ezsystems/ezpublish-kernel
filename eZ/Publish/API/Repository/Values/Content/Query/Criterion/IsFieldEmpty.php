@@ -36,7 +36,7 @@ class IsFieldEmpty extends Criterion
     public function __construct($fieldDefinitionIdentifier, $value)
     {
         if ($value !== self::EMPTY && $value !== self::NOT_EMPTY) {
-            throw new InvalidArgumentException("Invalid is empty field value {$value}");
+            throw new InvalidArgumentException("Invalid IsFieldEmpty value {$value}");
         }
 
         parent::__construct($fieldDefinitionIdentifier, null, $value);

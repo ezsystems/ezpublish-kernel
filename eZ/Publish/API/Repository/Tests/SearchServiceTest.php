@@ -1167,8 +1167,8 @@ class SearchServiceTest extends BaseTest
         $fieldSubtitle->isRequired = false;
         $createStruct->addFieldDefinition($fieldSubtitle);
 
-        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
-        $contentTypeDraft = $contentTypeService->createContentType($createStruct, [$contentGroup]);
+        $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
+        $contentTypeDraft = $contentTypeService->createContentType($createStruct, [$contentTypeGroup]);
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
         $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
 

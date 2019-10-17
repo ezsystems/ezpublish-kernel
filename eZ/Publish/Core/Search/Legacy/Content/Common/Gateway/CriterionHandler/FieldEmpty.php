@@ -72,7 +72,7 @@ class FieldEmpty extends FieldBase
     /**
      * Returns relevant field information for the specified field.
      *
-     * The returned information is returned as an array of the attribute
+     * Returns an array of the attribute,
      * identifier and the sort column, which should be used.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
