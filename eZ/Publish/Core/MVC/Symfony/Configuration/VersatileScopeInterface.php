@@ -15,17 +15,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
  */
 interface VersatileScopeInterface extends ConfigResolverInterface
 {
-    /**
-     * Returns current default scope.
-     *
-     * @return string
-     */
-    public function getDefaultScope();
+    public function getDefaultScope(): string;
 
-    /**
-     * Sets a new default scope.
-     *
-     * @param string $scope
-     */
-    public function setDefaultScope($scope);
+    public function setDefaultScope(string $scope): void;
 }
