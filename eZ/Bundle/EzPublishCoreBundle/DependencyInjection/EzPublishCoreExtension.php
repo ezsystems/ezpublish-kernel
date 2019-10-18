@@ -16,6 +16,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\F
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PoliciesConfigBuilder;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PolicyProviderInterface;
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter;
+use eZ\Publish\Core\QueryType\QueryType;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -132,6 +133,9 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         $this->handleSiteAccessesRelation($container);
         $this->buildPolicyMap($container);
+
+        $container->registerForAutoconfiguration(QueryType::class)
+            ->addTag('ezpublish.query_type');
     }
 
     /**
