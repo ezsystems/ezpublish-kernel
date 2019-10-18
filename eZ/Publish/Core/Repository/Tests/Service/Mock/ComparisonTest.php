@@ -12,25 +12,26 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\DiffStatus;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff;
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextCompareResult;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineComparisonResult;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Comparison\Engine\Value\StringValueComparisonEngine;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Compare\CompareEngineRegistry;
-use eZ\Publish\Core\Compare\FieldRegistry;
-use eZ\Publish\Core\Compare\TextCompareEngine;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
+use eZ\Publish\Core\Comparison\FieldRegistry;
+use eZ\Publish\Core\Comparison\Engine\FieldType\TextLineComparisonEngine;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\FieldType\TextLine\Comparable as TextLineCompareField;
-use eZ\Publish\Core\Repository\CompareService;
+use eZ\Publish\Core\Repository\ContentComparisonService;
 use eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper;
-use eZ\Publish\SPI\Compare\Field\TextCompareField;
+use eZ\Publish\SPI\Comparison\Field\TextLine;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition;
 
-class CompareTest extends Base
+class ComparisonTest extends Base
 {
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $contentHandler;
@@ -38,10 +39,10 @@ class CompareTest extends Base
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $contentTypeHandler;
 
-    /** @var \eZ\Publish\Core\Compare\FieldRegistry */
+    /** @var \eZ\Publish\Core\Comparison\FieldRegistry */
     private $fieldRegistry;
 
-    /** @var \eZ\Publish\Core\Compare\CompareEngineRegistry */
+    /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistry */
     private $compareEngineRegistry;
 
     /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper|\PHPUnit\Framework\MockObject\MockObject */
@@ -57,8 +58,10 @@ class CompareTest extends Base
 
         $this->compareEngineRegistry = $this->buildCompareEngineRegistry();
         $this->compareEngineRegistry->registerEngine(
-            TextCompareField::class,
-            new TextCompareEngine()
+            TextLine::class,
+            new TextLineComparisonEngine(
+                new StringValueComparisonEngine()
+            )
         );
 
         $this->contentTypeDomainMapperMock = $this->buildContentTypeDomainMapperMock();
@@ -72,12 +75,12 @@ class CompareTest extends Base
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\CompareService|\PHPUnit\Framework\MockObject\MockObject
+     * @return \eZ\Publish\API\Repository\ContentComparisonService|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createCompareService(array $methods = [])
     {
         return $this
-            ->getMockBuilder(CompareService::class)
+            ->getMockBuilder(ContentComparisonService::class)
             ->setMethodsExcept($methods)
             ->setConstructorArgs([
                 $this->contentHandler,
@@ -95,9 +98,9 @@ class CompareTest extends Base
         return new FieldRegistry();
     }
 
-    private function buildCompareEngineRegistry(): CompareEngineRegistry
+    private function buildCompareEngineRegistry(): ComparisonEngineRegistry
     {
-        return new CompareEngineRegistry();
+        return new ComparisonEngineRegistry();
     }
 
     private function buildContentTypeDomainMapperMock()
@@ -188,7 +191,7 @@ class CompareTest extends Base
             $versionDiff
         );
 
-        $diffValue = new TextCompareResult([
+        $diffValue = new TextLineComparisonResult([
             new StringDiff('We', DiffStatus::UNCHANGED),
             new StringDiff('love', DiffStatus::UNCHANGED),
             new StringDiff('the', DiffStatus::REMOVED),
@@ -199,9 +202,7 @@ class CompareTest extends Base
 
         $expectedFieldDiff = new FieldDiff(
             $fieldDefinition,
-            [
-                'text' => $diffValue,
-            ]
+            $diffValue
         );
 
         $expectedVersionDiff = new VersionDiff([
@@ -231,6 +232,7 @@ class CompareTest extends Base
                 [
                     ['versionNo', $versionNo],
                     ['initialLanguageCode', 'eng-GB'],
+                    ['languageCodes', ['eng-GB', 'eng-US']],
                 ]
             );
 

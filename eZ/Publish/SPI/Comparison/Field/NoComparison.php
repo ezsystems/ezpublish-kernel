@@ -6,10 +6,10 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\SPI\Compare\Field;
+namespace eZ\Publish\SPI\Comparison\Field;
 
-use eZ\Publish\SPI\Compare\CompareField;
+use eZ\Publish\SPI\Comparison\ComparisonData;
 
-class TextCompareField extends CompareField
+class NoComparison extends ComparisonData
 {
 }

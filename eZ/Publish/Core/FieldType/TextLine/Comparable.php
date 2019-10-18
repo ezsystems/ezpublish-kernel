@@ -8,19 +8,20 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\FieldType\TextLine;
 
-use eZ\Publish\SPI\Compare\Field\TextCompareField;
+use eZ\Publish\SPI\Comparison\ComparisonData;
+use eZ\Publish\SPI\Comparison\Value\StringComparisonValue;
+use eZ\Publish\SPI\Comparison\Field\TextLine;
 use eZ\Publish\SPI\FieldType\Comparable as ComparableInterface;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 class Comparable implements ComparableInterface
 {
-    public function getDataToCompare(FieldValue $value): array
+    public function getDataToCompare(FieldValue $value): ComparisonData
     {
-        return [
-            'text' => new TextCompareField([
+        return new TextLine([
+            'textLine' => new StringComparisonValue([
                 'value' => $value->data,
-                'name' => 'text',
             ]),
-        ];
+        ]);
     }
 }

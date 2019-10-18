@@ -17,7 +17,6 @@ use eZ\Publish\SPI\Comparison\ComparisonValue;
 use eZ\Publish\SPI\Comparison\Field\TextLine;
 use eZ\Publish\SPI\Comparison\Value\StringComparisonValue;
 use PHPUnit\Framework\TestCase;
-use const eZ\Publish\SPI\Comparison\Field\TextLine;
 
 class TextLineComparisonEngineTest extends TestCase
 {

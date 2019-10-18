@@ -1,55 +1,20 @@
 services:
-    eZ\Publish\Core\Compare\TextCompareEngine:
-        tags:
-            - { name: ezplatform.field_type.comparable.engine, supported_type: eZ\Publish\SPI\Compare\Field\TextCompareField }
+    eZ\Publish\Core\Comparison\Engine\Value\StringValueComparisonEngine: ~
 
-    eZ\Publish\Core\Compare\NoCompareEngine:
+    eZ\Publish\Core\Comparison\Engine\FieldType\TextLineComparisonEngine:
+        arguments:
+            - '@eZ\Publish\Core\Comparison\Engine\Value\StringValueComparisonEngine'
         tags:
-            - { name: ezplatform.field_type.comparable.engine, supported_type: eZ\Publish\SPI\Compare\Field\NonCompareField }
+            - { name: ezplatform.field_type.comparable.engine, supported_type: eZ\Publish\SPI\Comparison\Field\TextLine }
+
+    eZ\Publish\Core\Comparison\Engine\NoComparisonValueEngine:
+        tags:
+            - { name: ezplatform.field_type.comparable.engine, supported_type: eZ\Publish\SPI\Comparison\Field\NoComparison }
+
+    eZ\Publish\Core\FieldType\NonComparable:
+        tags:
+            - { name: ezplatform.field_type.comparable, alias: eznoncomparable }
 
     eZ\Publish\Core\FieldType\TextLine\Comparable:
         tags:
             - { name: ezplatform.field_type.comparable, alias: ezstring }
-
-    eZ\Publish\Core\FieldType\NonComparable:
-        tags:
-            - { name: ezplatform.field_type.comparable, alias: ezauthor }
-            - { name: ezplatform.field_type.comparable, alias: ezbinaryfile }
-            - { name: ezplatform.field_type.comparable, alias: ezboolean }
-            - { name: ezplatform.field_type.comparable, alias: ezcountry }
-            - { name: ezplatform.field_type.comparable, alias: ezdate }
-            - { name: ezplatform.field_type.comparable, alias: ezdatetime }
-            - { name: ezplatform.field_type.comparable, alias: eztime }
-            - { name: ezplatform.field_type.comparable, alias: ezemail }
-            - { name: ezplatform.field_type.comparable, alias: ezfloat }
-            - { name: ezplatform.field_type.comparable, alias: ezinteger }
-            - { name: ezplatform.field_type.comparable, alias: ezimage }
-            - { name: ezplatform.field_type.comparable, alias: ezisbn }
-            - { name: ezplatform.field_type.comparable, alias: ezkeyword }
-            - { name: ezplatform.field_type.comparable, alias: ezmedia }
-            - { name: ezplatform.field_type.comparable, alias: ezobjectrelation }
-            - { name: ezplatform.field_type.comparable, alias: ezsrrating }
-            - { name: ezplatform.field_type.comparable, alias: ezselection }
-            - { name: ezplatform.field_type.comparable, alias: eztext }
-            - { name: ezplatform.field_type.comparable, alias: ezurl }
-            - { name: ezplatform.field_type.comparable, alias: ezgmaplocation }
-            - { name: ezplatform.field_type.comparable, alias: ezobjectrelationlist }
-            - { name: ezplatform.field_type.comparable, alias: ezuser }
-            - { name: ezplatform.field_type.comparable, alias: ezenum }
-            - { name: ezplatform.field_type.comparable, alias: ezidentifier }
-            - { name: ezplatform.field_type.comparable, alias: ezinisetting }
-            - { name: ezplatform.field_type.comparable, alias: ezmatrix }
-            - { name: ezplatform.field_type.comparable, alias: ezmultioption }
-            - { name: ezplatform.field_type.comparable, alias: ezmultioption2 }
-            - { name: ezplatform.field_type.comparable, alias: ezmultiprice }
-            - { name: ezplatform.field_type.comparable, alias: ezoption }
-            - { name: ezplatform.field_type.comparable, alias: ezpackage }
-            - { name: ezplatform.field_type.comparable, alias: ezproductcategory }
-            - { name: ezplatform.field_type.comparable, alias: ezrangeoption }
-            - { name: ezplatform.field_type.comparable, alias: ezsubtreesubscription }
-            - { name: ezplatform.field_type.comparable, alias: ezcomcomments }
-            - { name: ezplatform.field_type.comparable, alias: ezpaex }
-            - { name: ezplatform.field_type.comparable, alias: ezsurvey }
-            - { name: ezplatform.field_type.comparable, alias: eztags }
-            - { name: ezplatform.field_type.comparable, alias: ezrecommendation }
-            - { name: ezplatform.field_type.comparable, alias: ezimageasset }

@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\DiffStatus;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
+use OutOfBoundsException;
 
 class ContentComparisonServiceTest extends BaseContentServiceTest
 {
@@ -113,7 +114,7 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
 
         $versionDiff->getFieldDiffByIdentifier('name');
 
-        $this->expectException(\OutOfBoundsException::class);
+        $this->expectException(OutOfBoundsException::class);
         $versionDiff->getFieldDiffByIdentifier('short_name');
     }
 

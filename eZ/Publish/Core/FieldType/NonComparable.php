@@ -8,17 +8,17 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\FieldType;
 
-use eZ\Publish\SPI\Compare\Field\NonCompareField;
+use eZ\Publish\SPI\Comparison\ComparisonData;
+use eZ\Publish\SPI\Comparison\Field\NoComparison;
 use eZ\Publish\SPI\FieldType\Comparable;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 class NonComparable implements Comparable
 {
-    /** @return \eZ\Publish\SPI\Compare\CompareField[] */
-    public function getDataToCompare(FieldValue $value): array
+    public const FIELD_TYPE_ALIAS = 'eznoncomparable';
+
+    public function getDataToCompare(FieldValue $value): ComparisonData
     {
-        return [
-            new NonCompareField(),
-        ];
+        return new NoComparison();
     }
 }

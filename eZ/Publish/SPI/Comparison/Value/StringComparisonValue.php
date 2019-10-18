@@ -6,10 +6,12 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\SPI\Compare\Field;
+namespace eZ\Publish\SPI\Comparison\Value;
 
-use eZ\Publish\SPI\Compare\CompareField;
+use eZ\Publish\SPI\Comparison\ComparisonValue;
 
-class NonCompareField extends CompareField
+class StringComparisonValue extends ComparisonValue
 {
+    /** @var string|null */
+    public $value;
 }

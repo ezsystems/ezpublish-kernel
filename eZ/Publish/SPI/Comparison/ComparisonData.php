@@ -6,15 +6,14 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\SPI\Compare;
+namespace eZ\Publish\SPI\Comparison;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
-abstract class CompareField extends ValueObject
+abstract class ComparisonData extends ValueObject
 {
-    /** @var string */
-    public $name;
-
-    /** @var mixed */
-    public $value;
+    public function getType(): string
+    {
+        return static::class;
+    }
 }

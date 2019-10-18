@@ -6,13 +6,12 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\SPI\FieldType;
+namespace eZ\Publish\SPI\Comparison\Field;
 
 use eZ\Publish\SPI\Comparison\ComparisonData;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
-interface Comparable
+class TextLine extends ComparisonData
 {
-    /** @return \eZ\Publish\SPI\Comparison\ComparisonData */
-    public function getDataToCompare(FieldValue $value): ComparisonData;
+    /** @var \eZ\Publish\SPI\Comparison\Value\StringComparisonValue */
+    public $textLine;
 }

@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\CompareService as ComparingServiceInterface;
+use eZ\Publish\API\Repository\ContentComparisonService as ContentComparisonInterface;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Compare\CompareEngineRegistry;
-use eZ\Publish\Core\Compare\FieldRegistry;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
+use eZ\Publish\Core\Comparison\FieldRegistry;
 use eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -24,7 +24,7 @@ use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 
-class CompareService implements ComparingServiceInterface
+class ContentComparisonService implements ContentComparisonInterface
 {
     /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     private $contentHandler;
@@ -32,10 +32,10 @@ class CompareService implements ComparingServiceInterface
     /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     private $contentTypeHandler;
 
-    /** @var \eZ\Publish\Core\Compare\FieldRegistry */
+    /** @var \eZ\Publish\Core\Comparison\FieldRegistry */
     private $fieldRegistry;
 
-    /** @var \eZ\Publish\Core\Compare\CompareEngineRegistry */
+    /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistry */
     private $comparatorEngineRegistry;
 
     /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
@@ -48,7 +48,7 @@ class CompareService implements ComparingServiceInterface
         ContentHandler $contentHandler,
         ContentTypeHandler $contentTypeHandler,
         FieldRegistry $fieldRegistry,
-        CompareEngineRegistry $comparatorEngineRegistry,
+        ComparisonEngineRegistry $comparatorEngineRegistry,
         ContentTypeDomainMapper $contentTypeDomainMapper,
         PermissionResolver $permissionResolver
     ) {
@@ -71,12 +71,19 @@ class CompareService implements ComparingServiceInterface
                 'Version B is not version of the same content as $versionA'
             );
         }
+        $languageCode = $languageCode ?? $versionA->initialLanguageCode;
+
+        if (!in_array($languageCode, $versionA->languageCodes) || !in_array($languageCode, $versionB->languageCodes)) {
+            throw new InvalidArgumentException(
+                '$languageCode',
+                sprintf("Language '%s' must be present in both given Versions", $languageCode)
+            );
+        }
 
         if (!$this->permissionResolver->canUser('content', 'versionread', $versionA)) {
             throw new UnauthorizedException('content', 'versionread', ['contentId' => $versionA->getContentInfo()->id]);
         }
 
-        $languageCode = $languageCode ?? $versionA->initialLanguageCode;
         $content = $this->contentHandler->load($versionA->getContentInfo()->id, $versionA->versionNo, [$languageCode]);
         $contentToCompare = $this->contentHandler->load($versionB->getContentInfo()->id, $versionB->versionNo, [$languageCode]);
         $fieldsDiff = [];
@@ -90,18 +97,15 @@ class CompareService implements ComparingServiceInterface
             $dataB = $comparableField->getDataToCompare(
                 $matchingField->value
             );
-            $diffs = [];
-            foreach ($dataA as $name => $fieldAData) {
-                $engine = $this->comparatorEngineRegistry->getEngine(get_class($fieldAData));
+            $engine = $this->comparatorEngineRegistry->getEngine($dataA->getType());
 
-                $diffs[$name] = $engine->compareFieldsData($fieldAData, $dataB[$name]);
-            }
+            $diff = $engine->compareFieldsData($dataA, $dataB);
             $fieldsDiff[$fieldDefinition->identifier] = new FieldDiff(
                 $this->contentTypeDomainMapper->buildFieldDefinitionDomainObject(
                     $fieldDefinition,
                     $languageCode
                 ),
-                $diffs
+                $diff
             );
         }
 
@@ -117,5 +121,13 @@ class CompareService implements ComparingServiceInterface
                 return $fieldToCompare;
             }
         }
+
+        throw new InvalidArgumentException(
+            '$field',
+            sprintf("Field with id : '%d' was not found in content with id: '%d'",
+                $field->fieldDefinitionId,
+                $contentToCompare->versionInfo->contentInfo->id
+            )
+        );
     }
 }
