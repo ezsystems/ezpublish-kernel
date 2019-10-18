@@ -8,6 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Values\Content\VersionDiff;
 
-interface CompareResult
+interface ComparisonResult
 {
 }

@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\CompareService as CompareServiceInterface;
-use eZ\Publish\SPI\Repository\Decorator\CompareServiceDecorator;
+use eZ\Publish\API\Repository\ContentComparisonService as CompareServiceInterface;
+use eZ\Publish\SPI\Repository\Decorator\ContentComparisonServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class CompareService extends CompareServiceDecorator
+class ContentComparisonService extends ContentComparisonServiceDecorator
 {
     /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;

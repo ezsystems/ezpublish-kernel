@@ -18,7 +18,7 @@ parameters:
     ezpublish.api.service.bookmark.class: eZ\Publish\Core\Repository\BookmarkService
     ezpublish.api.service.notification.class: eZ\Publish\Core\Repository\NotificationService
     ezpublish.api.service.user_preference.class: eZ\Publish\Core\Repository\UserPreferenceService
-    ezpublish.api.service.compare.class: eZ\Publish\Core\Repository\CompareService
+    ezpublish.api.service.content_comparison.class: eZ\Publish\Core\Repository\ContentComparisonService
 
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
     ezpublish.api.search_engine.class: eZ\Publish\SPI\Search\Handler
@@ -43,8 +43,8 @@ services:
             - '@ezpublish.repository.relation_processor'
             - '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
             - '@eZ\Publish\Core\Repository\User\PasswordHashService'
-            - '@eZ\Publish\Core\Compare\FieldRegistry'
-            - '@eZ\Publish\Core\Compare\CompareEngineRegistry'
+            - '@eZ\Publish\Core\Comparison\FieldRegistry'
+            - '@eZ\Publish\Core\Comparison\ComparisonEngineRegistry'
         lazy: true
 
     ezpublish.api.service.inner_content:
@@ -134,9 +134,9 @@ services:
         factory: ["@ezpublish.api.inner_repository", getUserPreferenceService]
         lazy: true
 
-    ezpublish.api.service.inner_compare:
-        class: '%ezpublish.api.service.compare.class%'
-        factory: ["@ezpublish.api.inner_repository", getCompareService]
+    ezpublish.api.service.inner_content_comparison:
+        class: '%ezpublish.api.service.content_comparison.class%'
+        factory: ["@ezpublish.api.inner_repository", getContentComparisonService]
         lazy: true
 
     # Factories

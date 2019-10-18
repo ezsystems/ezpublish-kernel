@@ -8,8 +8,8 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\Core\Compare\CompareEngineRegistry;
-use eZ\Publish\Core\Compare\FieldRegistry;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
+use eZ\Publish\Core\Comparison\FieldRegistry;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
@@ -85,7 +85,7 @@ class RepositoryFactory implements ContainerAwareInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashService,
         FieldRegistry $fieldRegistry,
-        CompareEngineRegistry $compareEngineRegistry
+        ComparisonEngineRegistry $compareEngineRegistry
     ) {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 

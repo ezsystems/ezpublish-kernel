@@ -6,10 +6,10 @@
  */
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\CompareService as CompareServiceInterface;
+use eZ\Publish\API\Repository\ContentComparisonService as CompareServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\Core\Compare\CompareEngineRegistry;
-use eZ\Publish\Core\Compare\FieldRegistry;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
+use eZ\Publish\Core\Comparison\FieldRegistry;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
@@ -227,13 +227,13 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
     private $passwordHashService;
 
-    /** @var \eZ\Publish\Core\Repository\CompareService */
-    private $comparingService;
+    /** @var \eZ\Publish\Core\Repository\ContentComparisonService */
+    private $contentComparisonService;
 
-    /** @var \eZ\Publish\Core\Compare\FieldRegistry */
+    /** @var \eZ\Publish\Core\Comparison\FieldRegistry */
     private $comparableFieldRegistry;
 
-    /** @var \eZ\Publish\Core\Compare\CompareEngineRegistry */
+    /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistry */
     private $compareEngineRegistry;
 
     /**
@@ -256,7 +256,7 @@ class Repository implements RepositoryInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashGenerator,
         FieldRegistry $comparableFieldRegistry,
-        CompareEngineRegistry $compareEngineRegistry,
+        ComparisonEngineRegistry $compareEngineRegistry,
         array $serviceSettings = [],
         LoggerInterface $logger = null
     ) {
@@ -749,13 +749,13 @@ class Repository implements RepositoryInterface
         return $this->notificationService;
     }
 
-    public function getCompareService(): CompareServiceInterface
+    public function getContentComparisonService(): CompareServiceInterface
     {
-        if (null !== $this->comparingService) {
-            return $this->comparingService;
+        if (null !== $this->contentComparisonService) {
+            return $this->contentComparisonService;
         }
 
-        $this->comparingService = new CompareService(
+        $this->contentComparisonService = new ContentComparisonService(
             $this->persistenceHandler->contentHandler(),
             $this->persistenceHandler->contentTypeHandler(),
             $this->comparableFieldRegistry,
@@ -764,7 +764,7 @@ class Repository implements RepositoryInterface
             $this->getPermissionResolver()
         );
 
-        return $this->comparingService;
+        return $this->contentComparisonService;
     }
 
     /**

@@ -24,7 +24,7 @@ services:
             $urlWildcardService: '@eZ\Publish\Core\Event\URLWildcardService'
             $userPreferenceService: '@eZ\Publish\Core\Event\UserPreferenceService'
             $userService: '@eZ\Publish\Core\Event\UserService'
-            $compareService: '@eZ\Publish\Core\Event\CompareService'
+            $contentComparisonService: '@eZ\Publish\Core\Event\ContentComparisonService'
 
     eZ\Publish\Core\Event\BookmarkService:
         arguments:
@@ -94,6 +94,6 @@ services:
         arguments:
             $innerService: '@ezpublish.api.service.inner_user'
 
-    eZ\Publish\Core\Event\CompareService:
+    eZ\Publish\Core\Event\ContentComparisonService:
         arguments:
-            $innerService: '@ezpublish.api.service.inner_compare'
+            $innerService: '@ezpublish.api.service.inner_content_comparison'

@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType;
 
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\CompareResult;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult;
 
-class NoCompareResult implements CompareResult
+class NoComparisonResult implements ComparisonResult
 {
 }

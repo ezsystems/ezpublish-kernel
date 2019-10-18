@@ -8,27 +8,27 @@ declare(strict_types=1);
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
-use eZ\Publish\Core\Compare\CompareEngineRegistry;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-final class CompareEnginesRegistryPass implements CompilerPassInterface
+final class ComparisonEnginesRegistryPass implements CompilerPassInterface
 {
-    public const COMPARE_ENGINE_SERVICE_TAG = 'ezplatform.field_type.comparable.engine';
+    public const COMPARISON_ENGINE_SERVICE_TAG = 'ezplatform.field_type.comparable.engine';
 
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition(CompareEngineRegistry::class)) {
+        if (!$container->hasDefinition(ComparisonEngineRegistry::class)) {
             return;
         }
 
-        $compareEngineRegistryDefinition = $container->getDefinition(CompareEngineRegistry::class);
-        $comparableFieldTypeTags = $container->findTaggedServiceIds(self::COMPARE_ENGINE_SERVICE_TAG);
+        $comparisonEngineRegistryDefinition = $container->getDefinition(ComparisonEngineRegistry::class);
+        $comparableFieldTypeTags = $container->findTaggedServiceIds(self::COMPARISON_ENGINE_SERVICE_TAG);
 
         foreach ($comparableFieldTypeTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
-                $compareEngineRegistryDefinition->addMethodCall(
+                $comparisonEngineRegistryDefinition->addMethodCall(
                     'registerEngine',
                     [
                         $attribute['supported_type'],

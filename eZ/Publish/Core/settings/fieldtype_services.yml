@@ -61,6 +61,6 @@ services:
 
     eZ\Publish\Core\Repository\User\PasswordValidator: ~
 
-    eZ\Publish\Core\Compare\FieldRegistry: ~
+    eZ\Publish\Core\Comparison\FieldRegistry: ~
 
-    eZ\Publish\Core\Compare\CompareEngineRegistry: ~
+    eZ\Publish\Core\Comparison\ComparisonEngineRegistry: ~

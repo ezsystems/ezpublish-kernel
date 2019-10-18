@@ -8,16 +8,16 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
 
-use eZ\Publish\API\Repository\CompareService;
+use eZ\Publish\API\Repository\ContentComparisonService;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
-abstract class CompareServiceDecorator implements CompareService
+abstract class ContentComparisonServiceDecorator implements ContentComparisonService
 {
-    /** @var \eZ\Publish\API\Repository\CompareService */
+    /** @var \eZ\Publish\API\Repository\ContentComparisonService */
     protected $innerService;
 
-    public function __construct(CompareService $innerService)
+    public function __construct(ContentComparisonService $innerService)
     {
         $this->innerService = $innerService;
     }

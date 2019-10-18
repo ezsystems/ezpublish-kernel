@@ -68,8 +68,8 @@
     <testsuite name="eZ\Publish\API\Repository\Values\Content">
       <directory>eZ/Publish/API/Repository/Tests/Values/Content</directory>
     </testsuite>
-    <testsuite name="eZ\Publish\Core\Compare">
-      <directory>eZ/Publish/Core/Compare/Tests</directory>
+    <testsuite name="eZ\Publish\Core\Comparison">
+      <directory>eZ/Publish/Core/Comparison/Tests</directory>
     </testsuite>
   </testsuites>
   <filter>

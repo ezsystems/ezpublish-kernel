@@ -5,18 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Compare;
+namespace eZ\Publish\Core\Comparison;
 
-use eZ\Publish\API\Repository\CompareEngine;
-use OutOfBoundsException;
+use eZ\Publish\SPI\Comparison\ComparisonEngine;
+use eZ\Publish\SPI\Comparison\Field\NoComparison;
 
-final class CompareEngineRegistry
+final class ComparisonEngineRegistry
 {
-    /** @var \eZ\Publish\API\Repository\CompareEngine[] */
+    /** @var \eZ\Publish\SPI\Comparison\ComparisonEngine[] */
     private $engines = [];
 
     /**
-     * @param \eZ\Publish\API\Repository\CompareEngine[] $engines
+     * @param \eZ\Publish\SPI\Comparison\ComparisonEngine[] $engines
      */
     public function __construct(array $engines = [])
     {
@@ -25,20 +25,15 @@ final class CompareEngineRegistry
         }
     }
 
-    public function registerEngine(string $supportedType, CompareEngine $engine): void
+    public function registerEngine(string $supportedType, ComparisonEngine $engine): void
     {
         $this->engines[$supportedType] = $engine;
     }
 
-    public function getEngine(string $supportedType): CompareEngine
+    public function getEngine(string $supportedType): ComparisonEngine
     {
         if (!isset($this->engines[$supportedType])) {
-            throw new OutOfBoundsException(
-                sprintf(
-                    'There is no compare engine for type "%s".',
-                    $supportedType,
-                )
-            );
+            return $this->engines[NoComparison::class];
         }
 
         return $this->engines[$supportedType];

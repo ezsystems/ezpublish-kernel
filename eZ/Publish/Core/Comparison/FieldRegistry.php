@@ -6,10 +6,10 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Compare;
+namespace eZ\Publish\Core\Comparison;
 
+use eZ\Publish\Core\FieldType\NonComparable;
 use eZ\Publish\SPI\FieldType\Comparable;
-use OutOfBoundsException;
 
 final class FieldRegistry
 {
@@ -34,12 +34,7 @@ final class FieldRegistry
     public function getType(string $name): Comparable
     {
         if (!isset($this->types[$name])) {
-            throw new OutOfBoundsException(
-                sprintf(
-                    'Field type "%s" is not comparable.',
-                    $name,
-                )
-            );
+            return $this->types[NonComparable::FIELD_TYPE_ALIAS];
         }
 
         return $this->types[$name];

@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType;
 
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\CompareResult;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult;
 
-class TextCompareResult implements CompareResult
+class TextLineComparisonResult implements ComparisonResult
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff[] */
     private $stringDiffs;

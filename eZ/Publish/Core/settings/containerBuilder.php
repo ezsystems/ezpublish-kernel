@@ -86,7 +86,7 @@ $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\CriterionFieldValu
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\SortClauseConverterPass());
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\SortClauseConverterPass());
 $containerBuilder->addCompilerPass(new eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComparableFieldRegistryPass());
-$containerBuilder->addCompilerPass(new eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\CompareEnginesRegistryPass());
+$containerBuilder->addCompilerPass(new eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComparisonEnginesRegistryPass());
 
 //
 // Symfony 4 makes services private by default. Test cases are not prepared for this.

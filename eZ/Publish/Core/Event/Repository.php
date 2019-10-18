@@ -3,7 +3,7 @@
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
-use eZ\Publish\API\Repository\CompareService as CompareServiceInterface;
+use eZ\Publish\API\Repository\ContentComparisonService as CompareServiceInterface;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
@@ -79,8 +79,8 @@ final class Repository implements RepositoryInterface
     /** @var \eZ\Publish\API\Repository\UserService */
     private $userService;
 
-    /** @var \eZ\Publish\API\Repository\CompareService */
-    private $compareService;
+    /** @var \eZ\Publish\API\Repository\ContentComparisonService */
+    private $contentComparisonService;
 
     public function __construct(
         RepositoryInterface $repository,
@@ -101,7 +101,7 @@ final class Repository implements RepositoryInterface
         URLWildcardServiceInterface $urlWildcardService,
         UserPreferenceServiceInterface $userPreferenceService,
         UserServiceInterface $userService,
-        CompareServiceInterface $compareService
+        CompareServiceInterface $contentComparisonService
     ) {
         $this->repository = $repository;
         $this->bookmarkService = $bookmarkService;
@@ -121,7 +121,7 @@ final class Repository implements RepositoryInterface
         $this->urlWildcardService = $urlWildcardService;
         $this->userPreferenceService = $userPreferenceService;
         $this->userService = $userService;
-        $this->compareService = $compareService;
+        $this->contentComparisonService = $contentComparisonService;
     }
 
     public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
@@ -189,9 +189,9 @@ final class Repository implements RepositoryInterface
         return $this->objectStateService;
     }
 
-    public function getCompareService(): CompareServiceInterface
+    public function getContentComparisonService(): CompareServiceInterface
     {
-        return $this->compareService;
+        return $this->contentComparisonService;
     }
 
     public function getRoleService(): RoleServiceInterface
