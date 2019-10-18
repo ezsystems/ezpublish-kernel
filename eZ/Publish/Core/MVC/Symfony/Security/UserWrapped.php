@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
 use InvalidArgumentException;
@@ -40,26 +39,6 @@ class UserWrapped implements UserInterface, EquatableInterface
     public function __toString()
     {
         return $this->wrappedUser->getUsername();
-    }
-
-    public function isAccountNonExpired()
-    {
-        return $this->wrappedUser instanceof AdvancedUserInterface ? $this->wrappedUser->isAccountNonExpired() : true;
-    }
-
-    public function isAccountNonLocked()
-    {
-        return $this->wrappedUser instanceof AdvancedUserInterface ? $this->wrappedUser->isAccountNonLocked() : true;
-    }
-
-    public function isCredentialsNonExpired()
-    {
-        return $this->wrappedUser instanceof AdvancedUserInterface ? $this->wrappedUser->isCredentialsNonExpired() : true;
-    }
-
-    public function isEnabled()
-    {
-        return $this->wrappedUser instanceof AdvancedUserInterface ? $this->wrappedUser->isEnabled() : true;
     }
 
     /**

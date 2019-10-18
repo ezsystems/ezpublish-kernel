@@ -14,7 +14,6 @@ use eZ\Publish\Core\MVC\Symfony\Security\UserWrapped;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
-use Symfony\Component\Security\Core\User\User;
 
 class UserWrappedTest extends TestCase
 {
@@ -49,48 +48,11 @@ class UserWrappedTest extends TestCase
         $this->assertSame($newWrappedUser, $userWrapped->getWrappedUser());
     }
 
-    /**
-     * @dataProvider advancedUserProvider
-     */
-    public function testAdvancedUser($username, $password, $roles, $enabled, $userNonExpired, $credentialsNonExpired, $userNonLocked)
-    {
-        $originalUser = new User($username, $password, $roles, $enabled, $userNonExpired, $credentialsNonExpired, $userNonLocked);
-        $user = new UserWrapped($originalUser, $this->apiUser);
-        $this->assertSame($username, (string)$user);
-        $this->assertSame($username, $user->getUsername());
-        $this->assertSame($password, $user->getPassword());
-        $this->assertSame($roles, $user->getRoles());
-        $this->assertSame($enabled, $user->isEnabled());
-        $this->assertSame($userNonExpired, $user->isAccountNonExpired());
-        $this->assertSame($credentialsNonExpired, $user->isCredentialsNonExpired());
-        $this->assertSame($userNonLocked, $user->isAccountNonLocked());
-        $this->assertSame($originalUser->getSalt(), $user->getSalt());
-        $this->assertSame($originalUser->getUsername(), $user->getWrappedUser()->getUsername());
-        $this->assertSame($originalUser->isEnabled(), $user->getWrappedUser()->isEnabled());
-        $this->assertSame($originalUser, $user->getWrappedUser());
-    }
-
-    public function advancedUserProvider()
-    {
-        return [
-            ['foo', 'password', ['ROLE_USER'], true, true, true, true],
-            ['foo', 'password', ['ROLE_USER'], true, false, true, false],
-            ['foo', 'password', ['ROLE_USER'], false, true, false, true],
-            ['bar', 'secret', ['ROLE_TEST'], true, true, true, true],
-            ['bar', 'secret', ['ROLE_TEST'], false, false, false, false],
-            ['Jérôme', 'NoThisIsNotMyRealPassword', ['ROLE_ADMIN'], true, true, true, true],
-        ];
-    }
-
     public function testRegularUser()
     {
         $originalUser = $this->createMock(SymfonyUserInterface::class);
         $user = new UserWrapped($originalUser, $this->apiUser);
 
-        $this->assertTrue($user->isEnabled());
-        $this->assertTrue($user->isAccountNonExpired());
-        $this->assertTrue($user->isAccountNonLocked());
-        $this->assertTrue($user->isCredentialsNonExpired());
         $this->assertTrue($user->isEqualTo($this->createMock(SymfonyUserInterface::class)));
 
         $originalUser
