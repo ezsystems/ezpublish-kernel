@@ -83,7 +83,7 @@ class RoleService extends RoleServiceDecorator
         return $roleDraft;
     }
 
-    public function createRoleDraft(Role $role)
+    public function createRoleDraft(Role $role): RoleDraft
     {
         $eventData = [$role];
 
@@ -108,7 +108,7 @@ class RoleService extends RoleServiceDecorator
     public function updateRoleDraft(
         RoleDraft $roleDraft,
         RoleUpdateStruct $roleUpdateStruct
-    ) {
+    ): RoleDraft {
         $eventData = [
             $roleDraft,
             $roleUpdateStruct,
@@ -135,7 +135,7 @@ class RoleService extends RoleServiceDecorator
     public function addPolicyByRoleDraft(
         RoleDraft $roleDraft,
         PolicyCreateStruct $policyCreateStruct
-    ) {
+    ): RoleDraft {
         $eventData = [
             $roleDraft,
             $policyCreateStruct,
@@ -162,7 +162,7 @@ class RoleService extends RoleServiceDecorator
     public function removePolicyByRoleDraft(
         RoleDraft $roleDraft,
         PolicyDraft $policyDraft
-    ) {
+    ): RoleDraft {
         $eventData = [
             $roleDraft,
             $policyDraft,
@@ -190,7 +190,7 @@ class RoleService extends RoleServiceDecorator
         RoleDraft $roleDraft,
         PolicyDraft $policy,
         PolicyUpdateStruct $policyUpdateStruct
-    ) {
+    ): PolicyDraft {
         $eventData = [
             $roleDraft,
             $policy,
