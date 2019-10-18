@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
-use eZ\Publish\API\Repository\CompareService;
+use eZ\Publish\API\Repository\ContentComparisonService;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 
 /**
@@ -52,9 +52,6 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\NotificationService */
     protected $notificationService;
 
-    /** @var \eZ\Publish\API\Repository\CompareService */
-    private $compareService;
-
     /**
      * Construct repository object from aggregated repository.
      */
@@ -70,8 +67,7 @@ class Repository implements RepositoryInterface
         TrashService $trashService,
         LocationService $locationService,
         LanguageService $languageService,
-        NotificationService $notificationService,
-        CompareService $compareService
+        NotificationService $notificationService
     ) {
         $this->repository = $repository;
         $this->contentService = $contentService;
@@ -85,7 +81,6 @@ class Repository implements RepositoryInterface
         $this->locationService = $locationService;
         $this->languageService = $languageService;
         $this->notificationService = $notificationService;
-        $this->compareService = $compareService;
     }
 
     public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
@@ -183,9 +178,9 @@ class Repository implements RepositoryInterface
         return $this->repository->getUserPreferenceService();
     }
 
-    public function getCompareService(): CompareService
+    public function getContentComparisonService(): ContentComparisonService
     {
-        return $this->compareService;
+        return $this->repository->getContentComparisonService();
     }
 
     public function beginTransaction()
