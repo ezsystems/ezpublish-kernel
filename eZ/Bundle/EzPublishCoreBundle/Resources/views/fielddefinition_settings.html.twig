@@ -92,7 +92,7 @@
     {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting use-seconds">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.use-seconds.label'|trans|desc("Use seconds:")}}</div>
-        <div class="ez-fielddefinition-setting-value">{{ 'fielddefinition.use-seconds.yes_no'|transchoice(settings.useSeconds)|desc("{0} No|{1} Yes") }}</div>
+        <div class="ez-fielddefinition-setting-value">{{ settings.useSeconds ? 'fielddefinition.use-seconds.yes'|trans|desc("Yes") : 'fielddefinition.use-seconds.no'|trans|desc("No") }}</div>
     </li>
 </ul>
 {% endblock %}
@@ -118,7 +118,7 @@
     {{ block( 'settings_defaultvalue' ) }}
     <li class="ez-fielddefinition-setting use-seconds">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.use-seconds.label'|trans|desc("Use seconds:")}}</div>
-        <div class="ez-fielddefinition-setting-value">{{ 'fielddefinition.use-seconds.yes_no'|transchoice(settings.useSeconds)|desc("{0} No|{1} Yes") }}</div>
+        <div class="ez-fielddefinition-setting-value">{{ settings.useSeconds ? 'fielddefinition.use-seconds.yes'|trans|desc("Yes") : 'fielddefinition.use-seconds.no'|trans|desc("No") }}</div>
     </li>
 </ul>
 {% endblock %}
@@ -387,7 +387,7 @@
 {% block settings_allowmultiple %}
     <li class="ez-fielddefinition-setting multiple">
         <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.multiple.label'|trans|desc("Allow multiple choices:")}}</div>
-        <div class="ez-fielddefinition-setting-value">{{ 'fielddefinition.multiple.yes_no'|transchoice(isMultiple)|desc("{0} No|{1} Yes") }}</div>
+        <div class="ez-fielddefinition-setting-value">{{ isMultiple ? 'fielddefinition.multiple.yes'|trans|desc("Yes") : 'fielddefinition.multiple.no'|trans|desc("No") }}</div>
     </li>
 {% endblock %}
 
