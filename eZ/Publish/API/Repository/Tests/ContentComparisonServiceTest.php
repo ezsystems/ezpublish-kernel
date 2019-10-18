@@ -13,13 +13,13 @@ use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\DiffStatus;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 
-class CompareServiceTest extends BaseContentServiceTest
+class ContentComparisonServiceTest extends BaseContentServiceTest
 {
     /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /** @var \eZ\Publish\API\Repository\CompareService */
-    private $compareService;
+    /** @var \eZ\Publish\API\Repository\ContentComparisonService */
+    private $contentComparisonService;
 
     /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
@@ -30,7 +30,7 @@ class CompareServiceTest extends BaseContentServiceTest
 
         $repository = $this->getRepository();
         $this->contentService = $repository->getContentService();
-        $this->compareService = $repository->getCompareService();
+        $this->contentComparisonService = $repository->getContentComparisonService();
         $this->contentTypeService = $repository->getContentTypeService();
     }
 
@@ -43,7 +43,7 @@ class CompareServiceTest extends BaseContentServiceTest
 
         $this->assertCount(2, $versions);
 
-        $versionDiff = $this->compareService->compareVersions($versions[0], $versions[1], 'eng-US');
+        $versionDiff = $this->contentComparisonService->compareVersions($versions[0], $versions[1], 'eng-US');
 
         $this->assertInstanceOf(
             VersionDiff::class,
@@ -52,8 +52,8 @@ class CompareServiceTest extends BaseContentServiceTest
 
         $fieldDiff = $versionDiff->getFieldDiffByIdentifier('name');
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextCompareResult $textCompareResult */
-        $textCompareResult = $fieldDiff->getDiffValue()['text'];
+        /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineComparisonResult $textCompareResult */
+        $textCompareResult = $fieldDiff->getDiffValue();
 
         $expectedDiff = [
             new StringDiff('An', DiffStatus::UNCHANGED),
@@ -85,7 +85,7 @@ class CompareServiceTest extends BaseContentServiceTest
         $contentB = $this->contentService->publishVersion($draftB->versionInfo);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->compareService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
+        $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
     }
 
     public function testCompareVersionsWhenFieldRemovedFromContentType()
@@ -109,7 +109,7 @@ class CompareServiceTest extends BaseContentServiceTest
 
         $this->contentService->updateContent($draftB->versionInfo, $struct);
         $contentB = $this->contentService->publishVersion($draftB->versionInfo);
-        $versionDiff = $this->compareService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
+        $versionDiff = $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
 
         $versionDiff->getFieldDiffByIdentifier('name');
 
@@ -137,12 +137,12 @@ class CompareServiceTest extends BaseContentServiceTest
 
         $this->contentService->updateContent($draftB->versionInfo, $struct);
         $contentB = $this->contentService->publishVersion($draftB->versionInfo);
-        $versionDiff = $this->compareService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
+        $versionDiff = $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
 
         $fieldDiff = $versionDiff->getFieldDiffByIdentifier('new_name');
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextCompareResult $textCompareResult */
-        $textCompareResult = $fieldDiff->getDiffValue()['text'];
+        /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineComparisonResult $textCompareResult */
+        $textCompareResult = $fieldDiff->getDiffValue();
 
         $expectedDiff = [
             new StringDiff('content two new', DiffStatus::ADDED),

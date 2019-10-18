@@ -12,19 +12,19 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 class StringDiff extends ValueObject
 {
-    /** @var string */
+    /** @var string|null */
     private $token;
 
     /** @var string */
     private $status;
 
-    public function __construct(string $token, string $status)
+    public function __construct(?string $token, string $status)
     {
         $this->token = $token;
         $this->status = $status;
     }
 
-    public function getToken(): string
+    public function getToken(): ?string
     {
         return $this->token;
     }
