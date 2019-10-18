@@ -20,12 +20,12 @@ class IsFieldEmpty extends Criterion
     /**
      * Empty constant: empty.
      */
-    const EMPTY = 1;
+    public const EMPTY = 1;
 
     /**
      * Empty constant: not empty.
      */
-    const NOT_EMPTY = 0;
+    public const NOT_EMPTY = 0;
 
     /**
      * @param string $fieldDefinitionIdentifier

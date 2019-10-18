@@ -1132,7 +1132,7 @@ class SearchServiceTest extends BaseTest
     /**
      * Create movie Content with subtitle field set to null.
      *
-     * @return Content[]
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      */
     protected function createMovieContent()
     {
