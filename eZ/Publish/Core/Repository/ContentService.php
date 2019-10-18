@@ -382,12 +382,17 @@ class ContentService implements ContentServiceInterface
             );
         }
 
+        if ($languages === null) {
+            $languages = [];
+        }
+
         return $this->domainMapper->buildContentDomainObject(
             $spiContent,
             $this->repository->getContentTypeService()->loadContentType(
-                $spiContent->versionInfo->contentInfo->contentTypeId
+                $spiContent->versionInfo->contentInfo->contentTypeId,
+                $languages
             ),
-            $languages ?? [],
+            $languages,
             $alwaysAvailableLanguageCode
         );
     }

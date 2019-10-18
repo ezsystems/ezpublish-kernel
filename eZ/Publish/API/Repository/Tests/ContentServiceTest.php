@@ -2687,7 +2687,7 @@ XML
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages)
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
-    public function testLoadContentWithSecondParameter()
+    public function testLoadContentWithPrioritizedLanguages()
     {
         $draft = $this->createMultipleLanguageDraftVersion1();
 
@@ -2696,21 +2696,39 @@ XML
 
         $this->assertLocaleFieldsEquals($draftLocalized->getFields(), self::ENG_GB);
 
-        return $draft;
+        return $draftLocalized;
     }
 
     /**
      * Test for the loadContent() method using undefined translation.
      *
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithSecondParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithPrioritizedLanguages
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $contentDraft
      */
-    public function testLoadContentWithSecondParameterThrowsNotFoundException(Content $contentDraft)
+    public function testLoadContentWithPrioritizedLanguagesThrowsNotFoundException(Content $contentDraft)
     {
         $this->expectException(NotFoundException::class);
 
         $this->contentService->loadContent($contentDraft->id, [self::GER_DE], null, false);
+    }
+
+    /**
+     * Test for the loadContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::loadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithPrioritizedLanguages
+     */
+    public function testLoadContentPassTroughPrioritizedLanguagesToContentType(Content $content): void
+    {
+        $contentTypeService = $this->getRepository()->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentType(
+            $content->contentInfo->contentTypeId,
+            [self::ENG_GB]
+        );
+
+        $this->assertEquals($contentType, $content->getContentType());
     }
 
     /**
