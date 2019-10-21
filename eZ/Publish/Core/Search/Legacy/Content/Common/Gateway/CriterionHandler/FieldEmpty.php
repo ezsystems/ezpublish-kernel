@@ -153,10 +153,12 @@ class FieldEmpty extends FieldBase
                 continue;
             }
 
-            if ($criterion->value[0] == Criterion\IsFieldEmpty::EMPTY) {
+            $filter = '';
+
+            if ($criterion->value[0] === Criterion\IsFieldEmpty::EMPTY) {
                 $filter = sprintf('`%s` = :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
             }
-            if ($criterion->value[0] == Criterion\IsFieldEmpty::NOT_EMPTY) {
+            if ($criterion->value[0] === Criterion\IsFieldEmpty::NOT_EMPTY) {
                 $filter = sprintf('`%s` != :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
             }
 
