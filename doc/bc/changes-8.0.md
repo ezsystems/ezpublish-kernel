@@ -208,6 +208,11 @@ Changes affecting version compatibility with former or future versions.
 
   Use `DoctrineStorage` Gateways from the same namespace instead.
 
+* Query Types: Traversing bundles to automatically register a Query Type by the naming
+  convention `<Bundle>\QueryType\*QueryType` has been dropped.
+  Register your Query Type as a service and explicitly tag that service with `ezpublish.query`
+  or enable its automatic configuration (`autoconfigure: true`).
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.

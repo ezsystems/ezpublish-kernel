@@ -64,38 +64,6 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    public function testConventionQueryType()
-    {
-        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => QueryTypeBundle::class]);
-
-        $this->compile();
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.query_type.registry',
-            'addQueryTypes',
-            [['Test:Test' => new Reference('ezpublish.query_type.convention.querytypebundle_testquerytype')]]
-        );
-    }
-
-    public function testConventionSkippedIfTagged()
-    {
-        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => QueryTypeBundle::class]);
-
-        $def = new Definition();
-        $def->addTag('ezpublish.query_type');
-        $def->setClass(self::$queryTypeClass);
-        $serviceId = 'test.query_type';
-        $this->setDefinition($serviceId, $def);
-
-        $this->compile();
-
-        $this->assertContainerBuilderNotHasService('ezpublish.query_type.convention.querytypebundle_testquerytype');
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.query_type.registry',
-            'addQueryTypes',
-            [['Test:Test' => new Reference($serviceId)]]
-        );
-    }
-
     /**
      * Tests query type name override using the 'alias' tag attribute.
      *
@@ -118,7 +86,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
-        $this->assertContainerBuilderHasService('ezpublish.query_type.convention.querytypebundle_testquerytype');
+        $this->assertContainerBuilderHasService('test.query_type_override');
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.query_type.registry',
             'addQueryTypes',
@@ -126,7 +94,6 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
                 [
                     'overridden_type' => new Reference('test.query_type_override'),
                     'other_overridden_type' => new Reference('test.query_type_other_override'),
-                    'Test:Test' => new Reference('ezpublish.query_type.convention.querytypebundle_testquerytype'),
                 ],
             ]
         );
