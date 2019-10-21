@@ -156,10 +156,10 @@ class FieldEmpty extends FieldBase
             $filter = '';
 
             if ($criterion->value[0] === Criterion\IsFieldEmpty::EMPTY) {
-                $filter = sprintf('`%s` = :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
+                $filter = sprintf('%s = :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
             }
             if ($criterion->value[0] === Criterion\IsFieldEmpty::NOT_EMPTY) {
-                $filter = sprintf('`%s` != :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
+                $filter = sprintf('%s != :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
             }
 
             $subSelect->bindParam($fieldsInfo['empty_value'], $fieldTypeIdentifier);
