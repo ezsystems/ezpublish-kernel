@@ -34,7 +34,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
     public function testRegisterTaggedQueryType()
     {
         $def = new Definition();
-        $def->addTag('ezpublish.query_type');
+        $def->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG);
         $def->setClass(self::$queryTypeClass);
         $serviceId = 'test.query_type';
         $this->setDefinition($serviceId, $def);
@@ -51,7 +51,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
     {
         $this->setParameter('query_type_class', self::$queryTypeClass);
         $def = new Definition();
-        $def->addTag('ezpublish.query_type');
+        $def->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG);
         $def->setClass('%query_type_class%');
         $serviceId = 'test.query_type';
         $this->setDefinition($serviceId, $def);
@@ -75,12 +75,12 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
         $this->setParameter('kernel.bundles', ['QueryTypeBundle' => QueryTypeBundle::class]);
 
         $def = new Definition();
-        $def->addTag('ezpublish.query_type', ['alias' => 'overridden_type']);
+        $def->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG, ['alias' => 'overridden_type']);
         $def->setClass(self::$queryTypeClass);
         $this->setDefinition('test.query_type_override', $def);
 
         $def = new Definition();
-        $def->addTag('ezpublish.query_type', ['alias' => 'other_overridden_type']);
+        $def->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG, ['alias' => 'other_overridden_type']);
         $def->setClass(self::$queryTypeClass);
         $this->setDefinition('test.query_type_other_override', $def);
 

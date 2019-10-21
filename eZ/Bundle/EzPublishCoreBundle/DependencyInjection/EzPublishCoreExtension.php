@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
@@ -135,7 +136,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $this->buildPolicyMap($container);
 
         $container->registerForAutoconfiguration(QueryType::class)
-            ->addTag('ezpublish.query_type');
+            ->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG);
     }
 
     /**

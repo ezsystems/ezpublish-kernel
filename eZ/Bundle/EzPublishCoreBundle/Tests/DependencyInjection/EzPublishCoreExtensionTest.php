@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Common;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Content;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
@@ -879,7 +880,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
             TestQueryType::class,
-            'ezpublish.query_type'
+            QueryTypePass::QUERY_TYPE_SERVICE_TAG
         );
     }
 

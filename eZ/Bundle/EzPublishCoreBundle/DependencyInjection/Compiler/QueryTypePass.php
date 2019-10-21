@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class QueryTypePass implements CompilerPassInterface
 {
+    public const QUERY_TYPE_SERVICE_TAG = 'ezpublish.query_type';
+
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('ezpublish.query_type.registry')) {
@@ -23,7 +25,7 @@ class QueryTypePass implements CompilerPassInterface
         $queryTypesClasses = [];
 
         // tagged query types
-        $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.query_type');
+        $taggedServiceIds = $container->findTaggedServiceIds(self::QUERY_TYPE_SERVICE_TAG);
         foreach ($taggedServiceIds as $taggedServiceId => $tags) {
             $queryTypeDefinition = $container->getDefinition($taggedServiceId);
             $queryTypeClass = $container->getParameterBag()->resolveValue($queryTypeDefinition->getClass());
