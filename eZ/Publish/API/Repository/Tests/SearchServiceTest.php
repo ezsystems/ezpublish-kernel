@@ -1264,10 +1264,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new Query(
             [
-                'query' => new Criterion\IsFieldEmpty(
-                    'subtitle',
-                    Criterion\IsFieldEmpty::EMPTY
-                ),
+                'query' => new Criterion\IsFieldEmpty('subtitle'),
             ]
         );
 
@@ -1302,7 +1299,7 @@ class SearchServiceTest extends BaseTest
             [
                 'query' => new Criterion\IsFieldEmpty(
                     'subtitle',
-                    Criterion\IsFieldEmpty::NOT_EMPTY
+                    false
                 ),
             ]
         );

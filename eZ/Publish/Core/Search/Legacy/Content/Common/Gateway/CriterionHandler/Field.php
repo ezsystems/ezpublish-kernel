@@ -46,16 +46,6 @@ class Field extends FieldBase
      */
     protected $transformationProcessor;
 
-    /**
-     * Construct from handler handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter $fieldValueConverter
-     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
-     */
     public function __construct(
         DatabaseHandler $dbHandler,
         ContentTypeHandler $contentTypeHandler,
@@ -89,7 +79,7 @@ class Field extends FieldBase
      * The returned information is returned as an array of the attribute
      * identifier and the sort column, which should be used.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      * @throws \RuntimeException if no converter is found
      *
      * @param string $fieldIdentifier
@@ -140,7 +130,7 @@ class Field extends FieldBase
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
     public function handle(

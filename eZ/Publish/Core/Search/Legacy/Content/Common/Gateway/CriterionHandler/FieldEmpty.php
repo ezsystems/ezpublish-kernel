@@ -6,6 +6,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\API\Repository\FieldTypeService;
@@ -153,12 +155,9 @@ class FieldEmpty extends FieldBase
                 continue;
             }
 
-            $filter = '';
-
-            if ($criterion->value[0] === Criterion\IsFieldEmpty::EMPTY) {
+            if ($criterion->value[0]) {
                 $filter = sprintf('%s = :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
-            }
-            if ($criterion->value[0] === Criterion\IsFieldEmpty::NOT_EMPTY) {
+            } else {
                 $filter = sprintf('%s != :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
             }
 
