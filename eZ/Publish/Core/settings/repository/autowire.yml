@@ -18,6 +18,7 @@ services:
     eZ\Publish\API\Repository\URLWildcardService: '@ezpublish.api.service.url_wildcard'
     eZ\Publish\API\Repository\URLAliasService: '@ezpublish.api.service.url_alias'
     eZ\Publish\API\Repository\TrashService: '@ezpublish.api.service.trash'
+    eZ\Publish\API\Repository\ContentComparisonService: '@ezpublish.api.service.content_comparison'
 
     eZ\Publish\API\Repository\PermissionResolver:
         factory: ['@eZ\Publish\API\Repository\Repository', 'getPermissionResolver']

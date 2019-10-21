@@ -71,3 +71,7 @@ services:
     ezpublish.api.service.user_preference:
         alias: eZ\Publish\Core\Event\UserPreferenceService
         public: true
+
+    ezpublish.api.service.content_comparison:
+        alias: eZ\Publish\Core\Event\ContentComparisonService
+        public: true
