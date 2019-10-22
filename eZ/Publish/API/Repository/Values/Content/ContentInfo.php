@@ -145,14 +145,14 @@ class ContentInfo extends ValueObject
     /** @var bool */
     protected $isHidden;
 
-    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
-    protected $contentType;
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeLazyValue */
+    private $contentType;
 
-    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
-    protected $section;
+    /** @var \eZ\Publish\API\Repository\Values\Content\SectionLazyValue */
+    private $section;
 
-    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
-    protected $mainLanguage;
+    /** @var \eZ\Publish\API\Repository\Values\Content\LanguageLazyValue */
+    private $mainLanguage;
 
     /**
      * @return bool
@@ -180,16 +180,16 @@ class ContentInfo extends ValueObject
 
     public function getContentType(): ContentType
     {
-        return $this->contentType;
+        return $this->contentType->getValue();
     }
 
     public function getSection(): Section
     {
-        return $this->section;
+        return $this->section->getValue();
     }
 
     public function getMainLanguage(): Language
     {
-        return $this->mainLanguage;
+        return $this->mainLanguage->getValue();
     }
 }

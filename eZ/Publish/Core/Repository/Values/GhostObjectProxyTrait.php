@@ -112,4 +112,9 @@ trait GhostObjectProxyTrait
         $this->initializer->next();
         $this->initializer = null;
     }
+
+    public function setInitializer(Generator $initializer): void
+    {
+        $this->initializer = $initializer;
+    }
 }
