@@ -243,21 +243,19 @@ class DoctrineDatabase extends Gateway
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    protected function createSelectQuery()
+    protected function createSelectQuery(): SelectQuery
     {
-        $query = $this->handler->createSelectQuery();
-        $query->select(
-            $this->handler->quoteColumn(self::COLUMN_ID),
-            $this->handler->quoteColumn(self::COLUMN_URL),
-            $this->handler->quoteColumn(self::COLUMN_ORIGINAL_URL_MD5),
-            $this->handler->quoteColumn(self::COLUMN_IS_VALID),
-            $this->handler->quoteColumn(self::COLUMN_LAST_CHECKED),
-            $this->handler->quoteColumn(self::COLUMN_CREATED),
-            $this->handler->quoteColumn(self::COLUMN_MODIFIED)
-        )->from(
-            $this->handler->quoteTable(self::URL_TABLE)
-        );
-
-        return $query;
+        return $this->handler->createSelectQuery()
+            ->select(
+                $this->handler->quoteColumn(self::COLUMN_ID, self::URL_TABLE),
+                $this->handler->quoteColumn(self::COLUMN_URL, self::URL_TABLE),
+                $this->handler->quoteColumn(self::COLUMN_ORIGINAL_URL_MD5, self::URL_TABLE),
+                $this->handler->quoteColumn(self::COLUMN_IS_VALID, self::URL_TABLE),
+                $this->handler->quoteColumn(self::COLUMN_LAST_CHECKED, self::URL_TABLE),
+                $this->handler->quoteColumn(self::COLUMN_CREATED, self::URL_TABLE),
+                $this->handler->quoteColumn(self::COLUMN_MODIFIED, self::URL_TABLE)
+            )->from(
+                $this->handler->quoteTable(self::URL_TABLE)
+            );
     }
 }
