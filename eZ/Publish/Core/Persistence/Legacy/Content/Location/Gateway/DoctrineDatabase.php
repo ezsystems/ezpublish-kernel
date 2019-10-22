@@ -1658,7 +1658,7 @@ class DoctrineDatabase extends Gateway
                 $expr->eq('t.contentobject_id', 'c.id')
             );
 
-            $queryBuilder->andWhere(
+            $queryBuilder->where(
                 $expr->orX(
                     $expr->gt(
                         $dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
