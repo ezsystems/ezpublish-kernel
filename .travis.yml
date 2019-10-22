@@ -62,7 +62,7 @@ before_install:
   # Disable memory_limit for composer
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   # Disable XDebug for all jobs as we don't generate test coverge on travis
-  - phpenv config-rm xdebug.ini
+  - if [ $(phpenv version-name) = "7.3" ]; then phpenv config-rm xdebug.ini; fi
   # make sure we use UTF-8 encoding
   - echo "default_charset=UTF-8" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   # Install igbinary & lzf PHP extensions if necessary
