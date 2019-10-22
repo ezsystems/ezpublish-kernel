@@ -3,7 +3,6 @@ Feature: Query controller
     As a developer
     I want to run repository queries from content views
 
-@broken
 Scenario: A content view can be configured to run and render a query
     Given a content item that matches the view configuration block below
       And the following content view configuration block:
@@ -16,10 +15,10 @@ Scenario: A content view can be configured to run and render a query
                   parentLocationId: 2
               assign_results_to: 'children'
       """
-      And a LocationChildren QueryType defined in "src/AppBundle/QueryType/LocationChildrenQueryType.php":
+      And a LocationChildren QueryType defined in "src/QueryType/LocationChildrenQueryType.php":
       """
       <?php
-      namespace AppBundle\QueryType;
+      namespace App\QueryType;
 
       use eZ\Publish\API\Repository\Values\Content\LocationQuery;
       use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId;

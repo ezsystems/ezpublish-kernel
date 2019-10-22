@@ -34,7 +34,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
     public function testRegisterTaggedQueryType()
     {
         $def = new Definition();
-        $def->addTag('ezpublish.query_type');
+        $def->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG);
         $def->setClass(self::$queryTypeClass);
         $serviceId = 'test.query_type';
         $this->setDefinition($serviceId, $def);
@@ -51,44 +51,12 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
     {
         $this->setParameter('query_type_class', self::$queryTypeClass);
         $def = new Definition();
-        $def->addTag('ezpublish.query_type');
+        $def->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG);
         $def->setClass('%query_type_class%');
         $serviceId = 'test.query_type';
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.query_type.registry',
-            'addQueryTypes',
-            [['Test:Test' => new Reference($serviceId)]]
-        );
-    }
-
-    public function testConventionQueryType()
-    {
-        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => QueryTypeBundle::class]);
-
-        $this->compile();
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.query_type.registry',
-            'addQueryTypes',
-            [['Test:Test' => new Reference('ezpublish.query_type.convention.querytypebundle_testquerytype')]]
-        );
-    }
-
-    public function testConventionSkippedIfTagged()
-    {
-        $this->setParameter('kernel.bundles', ['QueryTypeBundle' => QueryTypeBundle::class]);
-
-        $def = new Definition();
-        $def->addTag('ezpublish.query_type');
-        $def->setClass(self::$queryTypeClass);
-        $serviceId = 'test.query_type';
-        $this->setDefinition($serviceId, $def);
-
-        $this->compile();
-
-        $this->assertContainerBuilderNotHasService('ezpublish.query_type.convention.querytypebundle_testquerytype');
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.query_type.registry',
             'addQueryTypes',
@@ -107,18 +75,18 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
         $this->setParameter('kernel.bundles', ['QueryTypeBundle' => QueryTypeBundle::class]);
 
         $def = new Definition();
-        $def->addTag('ezpublish.query_type', ['alias' => 'overridden_type']);
+        $def->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG, ['alias' => 'overridden_type']);
         $def->setClass(self::$queryTypeClass);
         $this->setDefinition('test.query_type_override', $def);
 
         $def = new Definition();
-        $def->addTag('ezpublish.query_type', ['alias' => 'other_overridden_type']);
+        $def->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG, ['alias' => 'other_overridden_type']);
         $def->setClass(self::$queryTypeClass);
         $this->setDefinition('test.query_type_other_override', $def);
 
         $this->compile();
 
-        $this->assertContainerBuilderHasService('ezpublish.query_type.convention.querytypebundle_testquerytype');
+        $this->assertContainerBuilderHasService('test.query_type_override');
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.query_type.registry',
             'addQueryTypes',
@@ -126,7 +94,6 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
                 [
                     'overridden_type' => new Reference('test.query_type_override'),
                     'other_overridden_type' => new Reference('test.query_type_other_override'),
-                    'Test:Test' => new Reference('ezpublish.query_type.convention.querytypebundle_testquerytype'),
                 ],
             ]
         );

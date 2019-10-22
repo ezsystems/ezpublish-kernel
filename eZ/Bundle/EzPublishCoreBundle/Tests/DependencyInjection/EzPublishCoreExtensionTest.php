@@ -8,9 +8,11 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\QueryTypePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Common;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Content;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
+use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryType\TestQueryType;
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubPolicyProvider;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\DependencyInjection\Definition;
@@ -859,5 +861,37 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $configuration,
             $parsedConfig
         );
+    }
+
+    /**
+     * Test automatic configuration of services implementing QueryType interface.
+     *
+     * @see \eZ\Publish\Core\QueryType\QueryType
+     */
+    public function testQueryTypeAutomaticConfiguration(): void
+    {
+        $definition = new Definition(TestQueryType::class);
+        $definition->setAutoconfigured(true);
+        $this->container->setDefinition(TestQueryType::class, $definition);
+
+        $this->load();
+
+        $this->compileCoreContainer();
+
+        $this->assertContainerBuilderHasServiceDefinitionWithTag(
+            TestQueryType::class,
+            QueryTypePass::QUERY_TYPE_SERVICE_TAG
+        );
+    }
+
+    /**
+     * Prepare Core Container for compilation by mocking required parameters and compile it.
+     */
+    private function compileCoreContainer(): void
+    {
+        $this->container->setParameter('webroot_dir', __DIR__);
+        $this->container->setParameter('kernel.root_dir', __DIR__);
+        $this->container->setParameter('kernel.debug', false);
+        $this->compile();
     }
 }

@@ -54,7 +54,7 @@ class QueryControllerContext extends RawMinkContext implements Context
         $configurationBlock = array_merge(
             Yaml::parse($string),
             [
-                'template' => 'eZBehatBundle:tests:dump.html.twig',
+                'template' => '@eZBehat/tests/dump.html.twig',
                 'match' => [
                     'Id\Content' => $this->matchedContent->id,
                 ],
