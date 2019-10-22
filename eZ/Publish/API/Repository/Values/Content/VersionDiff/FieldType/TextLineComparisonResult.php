@@ -26,7 +26,7 @@ class TextLineComparisonResult implements ComparisonResult
     /**
      * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff[]
      */
-    public function getStringDiffs()
+    public function getStringDiffs(): array
     {
         return $this->stringDiffs;
     }
