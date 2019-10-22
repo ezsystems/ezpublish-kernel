@@ -51,10 +51,10 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
             $versionDiff
         );
 
-        $fieldDiff = $versionDiff->getFieldDiffByIdentifier('name');
+        $fieldDiff = $versionDiff->getFieldValueDiffByIdentifier('name');
 
         /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineComparisonResult $textCompareResult */
-        $textCompareResult = $fieldDiff->getDiffValue();
+        $textCompareResult = $fieldDiff->getComparisonResult();
 
         $expectedDiff = [
             new StringDiff('An', DiffStatus::UNCHANGED),
@@ -113,10 +113,10 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
 
         $versionDiff = $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
 
-        $versionDiff->getFieldDiffByIdentifier('name');
+        $versionDiff->getFieldValueDiffByIdentifier('name');
 
         $this->expectException(OutOfBoundsException::class);
-        $versionDiff->getFieldDiffByIdentifier('short_name');
+        $versionDiff->getFieldValueDiffByIdentifier('short_name');
     }
 
     public function testCompareVersionsWhenFieldAddedToContentType(): void
@@ -142,10 +142,10 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
 
         $versionDiff = $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
 
-        $fieldDiff = $versionDiff->getFieldDiffByIdentifier('new_name');
+        $fieldDiff = $versionDiff->getFieldValueDiffByIdentifier('new_name');
 
         /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineComparisonResult $textCompareResult */
-        $textCompareResult = $fieldDiff->getDiffValue();
+        $textCompareResult = $fieldDiff->getComparisonResult();
 
         $expectedDiff = [
             new StringDiff('content two new', DiffStatus::ADDED),

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\DiffStatus;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff;
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldValueDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineComparisonResult;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -200,7 +200,7 @@ class ComparisonTest extends Base
             new StringDiff('NY', DiffStatus::ADDED),
         ]);
 
-        $expectedFieldDiff = new FieldDiff(
+        $expectedFieldDiff = new FieldValueDiff(
             $fieldDefinition,
             $diffValue,
             true

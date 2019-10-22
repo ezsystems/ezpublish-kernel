@@ -16,17 +16,17 @@ use OutOfBoundsException;
 
 class VersionDiff extends ValueObject implements IteratorAggregate
 {
-    /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff[] */
-    private $fieldDiffs;
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldValueDiff[] */
+    private $fieldValueDiffs;
 
     public function __construct(array $fieldDiffs = [])
     {
-        $this->fieldDiffs = $fieldDiffs;
+        $this->fieldValueDiffs = $fieldDiffs;
     }
 
-    public function getFieldDiffByIdentifier(string $fieldIdentifier): FieldDiff
+    public function getFieldValueDiffByIdentifier(string $fieldIdentifier): FieldValueDiff
     {
-        if (!isset($this->fieldDiffs[$fieldIdentifier])) {
+        if (!isset($this->fieldValueDiffs[$fieldIdentifier])) {
             throw new OutOfBoundsException(
                 sprintf(
                     'There is no diff for field with "%s" identifier.',
@@ -35,12 +35,12 @@ class VersionDiff extends ValueObject implements IteratorAggregate
             );
         }
 
-        return $this->fieldDiffs[$fieldIdentifier];
+        return $this->fieldValueDiffs[$fieldIdentifier];
     }
 
     public function isChanged(): bool
     {
-        foreach ($this->fieldDiffs as $fieldDiff) {
+        foreach ($this->fieldValueDiffs as $fieldDiff) {
             if ($fieldDiff->isChanged()) {
                 return true;
             }
@@ -50,15 +50,15 @@ class VersionDiff extends ValueObject implements IteratorAggregate
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff[]
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldValueDiff[]
      */
-    public function getFieldDiffs(): array
+    public function getFieldValueDiffs(): array
     {
-        return $this->fieldDiffs;
+        return $this->fieldValueDiffs;
     }
 
     public function getIterator(): Iterator
     {
-        return new ArrayIterator($this->fieldDiffs);
+        return new ArrayIterator($this->fieldValueDiffs);
     }
 }

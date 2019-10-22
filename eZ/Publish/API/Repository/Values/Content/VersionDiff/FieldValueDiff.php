@@ -11,33 +11,30 @@ namespace eZ\Publish\API\Repository\Values\Content\VersionDiff;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
-class FieldDiff extends ValueObject
+class FieldValueDiff extends ValueObject
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition */
     private $fieldDef;
 
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult */
-    private $diffValue;
+    private $comparisonResult;
 
     /** @var bool */
     private $isChanged;
 
     public function __construct(
         FieldDefinition $fieldDef,
-        ComparisonResult $diffValue,
+        ComparisonResult $comparisonResult,
         bool $isChanged
     ) {
         $this->fieldDef = $fieldDef;
-        $this->diffValue = $diffValue;
+        $this->comparisonResult = $comparisonResult;
         $this->isChanged = $isChanged;
     }
 
-    /**
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult
-     */
-    public function getDiffValue(): ComparisonResult
+    public function getComparisonResult(): ComparisonResult
     {
-        return $this->diffValue;
+        return $this->comparisonResult;
     }
 
     public function getFieldDef(): FieldDefinition
