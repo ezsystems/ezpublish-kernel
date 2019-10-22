@@ -12,6 +12,4 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 abstract class ComparisonValue extends ValueObject
 {
-    /** @var mixed */
-    public $value;
 }
