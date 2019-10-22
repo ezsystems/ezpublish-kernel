@@ -384,7 +384,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      * Test for the loadContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages)
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithSecondParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithPrioritizedLanguages
      */
     public function testLoadContentThrowsUnauthorizedExceptionWithSecondParameter()
     {
