@@ -610,6 +610,124 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         $contentService->updateContent($newVersion->versionInfo, $updateStruct);
     }
 
+    /**
+     * @see https://jira.ez.no/browse/EZP-30857
+     */
+    public function testThatRemovingVersionsRemovesAlsoReferencedImages()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('image');
+
+        // Create initial version
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $imageFieldData = $this->getValidCreationFieldData();
+        $imageFieldData->fileName = 'image.jpg';
+        $createStruct->setField('name', __METHOD__);
+        $createStruct->setField(
+            'image',
+            $imageFieldData
+        );
+
+        $content = $contentService->createContent(
+            $createStruct,
+            [$locationService->newLocationCreateStruct(2)]
+        );
+        $content = $contentService->publishVersion($content->getVersionInfo());
+
+        // Check whether referenced image exists on IO
+        $firstVersionImageField = $content->getFieldValue('image');
+
+        $this->assertTrue(
+            $this->uriExistsOnIO($firstVersionImageField->uri),
+            "Asserting that {$firstVersionImageField->uri} exists."
+        );
+
+        // Create second version
+        $imageFieldData->fileName = 'image-for-second-version.jpg';
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField(
+            'image',
+            $imageFieldData
+        );
+
+        $newVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentSecondVersion = $contentService->updateContent($newVersion->versionInfo, $updateStruct);
+        $contentSecondVersion = $contentService->publishVersion($contentSecondVersion->getVersionInfo());
+
+        // Check whether referenced image exists on IO
+        $secondVersionImageField = $contentSecondVersion->getFieldValue('image');
+
+        $this->assertTrue(
+            $this->uriExistsOnIO($secondVersionImageField->uri),
+            "Asserting that {$secondVersionImageField->uri} exists."
+        );
+
+        // Create third version
+        $imageFieldData->fileName = 'image-for-third-version.jpg';
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField(
+            'image',
+            $imageFieldData
+        );
+
+        $newVersion = $contentService->createContentDraft($contentSecondVersion->contentInfo);
+        $contentThirdVersion = $contentService->updateContent($newVersion->versionInfo, $updateStruct);
+        $contentThirdVersion = $contentService->publishVersion($contentThirdVersion->getVersionInfo());
+
+        // Check whether referenced image exists on IO
+        $thirdVersionImageField = $contentThirdVersion->getFieldValue('image');
+
+        $this->assertTrue(
+            $this->uriExistsOnIO($thirdVersionImageField->uri),
+            "Asserting that {$thirdVersionImageField->uri} exists."
+        );
+
+        // Create fourth version with the *same* file as for third version
+        $contentFourthVersion = $contentService->createContentDraft($contentThirdVersion->contentInfo);
+
+        // Check whether referenced image exists on IO
+        $fourthVersionImageField = $contentFourthVersion->getFieldValue('image');
+
+        $this->assertTrue(
+            $this->uriExistsOnIO($fourthVersionImageField->uri),
+            "Asserting that {$fourthVersionImageField->uri} exists."
+        );
+
+        // Remove first version & check whether the referenced file no longer exists on IO
+        $firstVersion = $contentService->loadVersionInfoById($content->id, 1);
+        $contentService->deleteVersion($firstVersion);
+
+        $this->assertFalse(
+            $this->uriExistsOnIO($firstVersionImageField->uri),
+            "Asserting that {$firstVersionImageField->uri} does not exists."
+        );
+
+        // Remove second version & check whether the referenced file no longer exists on IO
+        $secondVersion = $contentService->loadVersionInfoById($content->id, 2);
+        $contentService->deleteVersion($secondVersion);
+
+        $this->assertFalse(
+            $this->uriExistsOnIO($secondVersionImageField->uri),
+            "Asserting that {$secondVersionImageField->uri} does not exists."
+        );
+
+        // Remove fourth version & check whether the referenced image still exists on IO.
+        // It should be there as it's still referenced by three four
+        $fourthVersion = $contentService->loadVersionInfoById($content->id, 4);
+        $contentService->deleteVersion($fourthVersion);
+
+        // Check whether third version's referenced file still exists on IO
+        $this->assertTrue(
+            $this->uriExistsOnIO($fourthVersionImageField->uri),
+            "Asserting that {$fourthVersionImageField->uri} exists."
+        );
+    }
+
     protected function getValidSearchValueOne()
     {
         return new ImageValue(
