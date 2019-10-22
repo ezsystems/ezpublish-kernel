@@ -14,9 +14,11 @@ CREATE TABLE ezimagefile (
   contentobject_attribute_id int(11) NOT NULL DEFAULT 0,
   filepath longtext NOT NULL,
   id int(11) NOT NULL AUTO_INCREMENT,
+  version int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   KEY ezimagefile_coid (contentobject_attribute_id),
-  KEY ezimagefile_file (filepath(200))
+  KEY ezimagefile_file (filepath(200)),
+  KEY ezimagefile_version (version)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezmedia;

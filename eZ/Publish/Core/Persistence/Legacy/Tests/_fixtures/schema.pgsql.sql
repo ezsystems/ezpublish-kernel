@@ -30,7 +30,8 @@ DROP TABLE IF EXISTS ezimagefile;
 CREATE TABLE ezimagefile (
     contentobject_attribute_id integer DEFAULT 0 NOT NULL,
     filepath text NOT NULL,
-    id SERIAL
+    id SERIAL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 DROP TABLE IF EXISTS ezgmaplocation;
