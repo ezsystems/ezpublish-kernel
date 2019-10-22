@@ -335,7 +335,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function findProvider()
     {
-        $additionalFields = $this->getAdditionallyIndexedFieldData();
+        $additionalFields = $this->getAdditionallyIndexedFieldData() ?? [];
         $additionalFields[] = [
             null,
             $this->getSearchTargetValueOne(),
@@ -1226,7 +1226,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
     public function sortProvider()
     {
-        $additionalFields = $this->getAdditionallyIndexedFieldData();
+        $additionalFields = $this->getAdditionallyIndexedFieldData() ?? [];
         $additionalFields[] = null;
         $templates = [
             [true, true],
