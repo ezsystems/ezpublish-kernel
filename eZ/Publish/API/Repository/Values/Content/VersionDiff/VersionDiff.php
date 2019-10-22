@@ -10,9 +10,9 @@ namespace eZ\Publish\API\Repository\Values\Content\VersionDiff;
 
 use ArrayIterator;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
-use OutOfBoundsException;
 
 class VersionDiff extends ValueObject implements IteratorAggregate
 {
@@ -27,7 +27,8 @@ class VersionDiff extends ValueObject implements IteratorAggregate
     public function getFieldValueDiffByIdentifier(string $fieldIdentifier): FieldValueDiff
     {
         if (!isset($this->fieldValueDiffs[$fieldIdentifier])) {
-            throw new OutOfBoundsException(
+            throw new InvalidArgumentException(
+                '$fieldIdentifier',
                 sprintf(
                     'There is no diff for field with "%s" identifier.',
                     $fieldIdentifier,
