@@ -69,7 +69,11 @@ class ContentComparisonService implements ContentComparisonInterface
         if ($versionA->getContentInfo()->id !== $versionB->getContentInfo()->id) {
             throw new InvalidArgumentException(
                 '$versionB',
-                'Version B is not version of the same content as $versionA'
+                sprintf(
+                    'Version B (id: %d) is not version of the same content as $versionA (id: %d)',
+                    $versionA->id,
+                    $versionB->id
+                )
             );
         }
         $languageCode = $languageCode ?? $versionA->initialLanguageCode;
@@ -133,7 +137,7 @@ class ContentComparisonService implements ContentComparisonInterface
 
         throw new InvalidArgumentException(
             '$field',
-            sprintf("Field with id : '%d' was not found in content with id: '%d'",
+            sprintf("Field with id: '%d' was not found in content with id: '%d'",
                 $field->fieldDefinitionId,
                 $contentToCompare->versionInfo->contentInfo->id
             )
