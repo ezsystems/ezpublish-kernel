@@ -136,7 +136,7 @@ services:
 
     ezpublish.api.service.inner_content_comparison:
         class: '%ezpublish.api.service.content_comparison.class%'
-        factory: ["@ezpublish.api.inner_repository", getContentComparisonService]
+        factory: ['@ezpublish.api.inner_repository', getContentComparisonService]
         lazy: true
 
     # Factories
