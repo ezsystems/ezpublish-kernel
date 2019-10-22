@@ -24,6 +24,11 @@ env:
 matrix:
   fast_finish: true
   include:
+# 7.4
+    - php: 7.4snapshot
+      env: TEST_CONFIG="phpunit.xml"
+    - php: 7.4snapshot
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
 # 7.3
     - php: 7.3
       env: TEST_CONFIG="phpunit.xml"
