@@ -8,10 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Values\Content\VersionDiff;
 
+use ArrayIterator;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use Iterator;
+use IteratorAggregate;
 use OutOfBoundsException;
 
-class VersionDiff extends ValueObject
+class VersionDiff extends ValueObject implements IteratorAggregate
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff[] */
     private $fieldDiffs;
@@ -41,5 +44,10 @@ class VersionDiff extends ValueObject
     public function getFieldDiffs(): array
     {
         return $this->fieldDiffs;
+    }
+
+    public function getIterator(): Iterator
+    {
+        return new ArrayIterator($this->fieldDiffs);
     }
 }
