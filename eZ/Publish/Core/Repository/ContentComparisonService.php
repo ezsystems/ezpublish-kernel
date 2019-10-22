@@ -81,7 +81,7 @@ class ContentComparisonService implements ContentComparisonInterface
             );
         }
 
-        if (!$this->permissionResolver->canUser('content', 'versionread', $versionA)) {
+        if (!$this->permissionResolver->canUser('content', 'versionread', $versionA->getContentInfo())) {
             throw new UnauthorizedException('content', 'versionread', ['contentId' => $versionA->getContentInfo()->id]);
         }
 
