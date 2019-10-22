@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Comparison\Engine\FieldType;
 use eZ\Publish\Core\Comparison\Engine\Value\StringValueComparisonEngine;
 use eZ\Publish\SPI\Comparison\ComparisonData;
 use eZ\Publish\SPI\Comparison\ComparisonEngine;
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult;
+use eZ\Publish\SPI\Comparison\ComparisonResult;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineComparisonResult;
 
 final class TextLineComparisonEngine implements ComparisonEngine

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Comparison\Engine;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\NoComparisonResult;
 use eZ\Publish\SPI\Comparison\ComparisonData;
 use eZ\Publish\SPI\Comparison\ComparisonEngine;
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult;
+use eZ\Publish\SPI\Comparison\ComparisonResult;
 
 final class NoComparisonValueEngine implements ComparisonEngine
 {

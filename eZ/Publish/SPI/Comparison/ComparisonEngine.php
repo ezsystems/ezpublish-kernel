@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Comparison;
 
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult;
-
 interface ComparisonEngine
 {
     public function compareFieldsData(ComparisonData $fieldA, ComparisonData $fieldB): ComparisonResult;

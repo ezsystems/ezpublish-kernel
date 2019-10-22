@@ -10,13 +10,14 @@ namespace eZ\Publish\API\Repository\Values\Content\VersionDiff;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\SPI\Comparison\ComparisonResult;
 
 class FieldValueDiff extends ValueObject
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition */
     private $fieldDef;
 
-    /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult */
+    /** @var \eZ\Publish\SPI\Comparison\ComparisonResult */
     private $comparisonResult;
 
     /** @var bool */

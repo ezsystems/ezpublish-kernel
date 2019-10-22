@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType;
 
-use eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult;
+use eZ\Publish\SPI\Comparison\ComparisonResult;
 
 class TextLineComparisonResult implements ComparisonResult
 {
