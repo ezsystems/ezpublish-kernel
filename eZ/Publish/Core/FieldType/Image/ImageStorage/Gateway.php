@@ -28,8 +28,9 @@ abstract class Gateway extends StorageGateway
      *
      * @param string $uri File IO uri
      * @param mixed $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      */
-    abstract public function storeImageReference($uri, $fieldId);
+    abstract public function storeImageReference($uri, $fieldId, VersionInfo $versionInfo);
 
     /**
      * Returns a the XML content stored for the given $fieldIds.

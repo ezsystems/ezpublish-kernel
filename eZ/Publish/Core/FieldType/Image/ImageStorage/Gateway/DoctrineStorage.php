@@ -88,11 +88,18 @@ class DoctrineStorage extends Gateway
      *
      * @param string $uri File IO uri (not legacy)
      * @param int $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     *
+     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException
      */
-    public function storeImageReference($uri, $fieldId)
+    public function storeImageReference($uri, $fieldId, VersionInfo $versionInfo)
     {
         // legacy stores the path to the image without a leading /
         $path = $this->redecorator->redecorateFromSource($uri);
+
+        if ($this->imageReferenceExistsForVersion($fieldId, $versionInfo)) {
+            return $this->updateImageReferenceForVersion($path, $fieldId, $versionInfo);
+        }
 
         $insertQuery = $this->connection->createQueryBuilder();
         $insertQuery
@@ -101,10 +108,12 @@ class DoctrineStorage extends Gateway
                 [
                     $this->connection->quoteIdentifier('contentobject_attribute_id') => ':fieldId',
                     $this->connection->quoteIdentifier('filepath') => ':path',
+                    $this->connection->quoteIdentifier('version') => ':version',
                 ]
             )
             ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
             ->setParameter(':path', $path)
+            ->setParameter(':version', $versionInfo->versionNo, PDO::PARAM_INT)
         ;
 
         $insertQuery->execute();
@@ -164,10 +173,6 @@ class DoctrineStorage extends Gateway
     {
         $path = $this->redecorator->redecorateFromSource($uri);
 
-        if (!$this->canRemoveImageReference($path, $versionNo, $fieldId)) {
-            return;
-        }
-
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
             ->delete($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
@@ -177,6 +182,10 @@ class DoctrineStorage extends Gateway
                         $this->connection->quoteIdentifier('contentobject_attribute_id'),
                         ':fieldId'
                     ),
+                    $deleteQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('version'),
+                        ':versionNo'
+                    ),
                     $deleteQuery->expr()->like(
                         $this->connection->quoteIdentifier('filepath'),
                         ':likePath'
@@ -184,6 +193,7 @@ class DoctrineStorage extends Gateway
                 )
             )
             ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
+            ->setParameter(':versionNo', $versionNo, PDO::PARAM_INT)
             ->setParameter(':likePath', $path . '%')
         ;
 
@@ -217,56 +227,6 @@ class DoctrineStorage extends Gateway
         $statement = $selectQuery->execute();
 
         return (int) $statement->fetchColumn();
-    }
-
-    /**
-     * Check if image $path can be removed when deleting $versionNo and $fieldId.
-     *
-     * @param string $path legacy image path (var/storage/images...)
-     * @param int $versionNo
-     * @param int $fieldId
-     *
-     * @return bool
-     */
-    protected function canRemoveImageReference($path, $versionNo, $fieldId)
-    {
-        $selectQuery = $this->connection->createQueryBuilder();
-        $selectQuery
-            ->select('COUNT(' . $this->connection->quoteIdentifier('attr.id') . ')')
-            ->from($this->connection->quoteIdentifier('ezcontentobject_attribute'), 'attr')
-            ->innerJoin(
-                'attr',
-                $this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE),
-                'img',
-                $selectQuery->expr()->eq(
-                    $this->connection->quoteIdentifier('img.contentobject_attribute_id'),
-                    $this->connection->quoteIdentifier('attr.id')
-                )
-            )
-            ->where(
-                $selectQuery->expr()->andX(
-                    $selectQuery->expr()->eq(
-                        $this->connection->quoteIdentifier('contentobject_attribute_id'),
-                        ':fieldId'
-                    ),
-                    $selectQuery->expr()->neq(
-                        $this->connection->quoteIdentifier('version'),
-                        ':versionNo'
-                    ),
-                    $selectQuery->expr()->like(
-                        $this->connection->quoteIdentifier('filepath'),
-                        ':likePath'
-                    )
-                )
-            )
-            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
-            ->setParameter(':versionNo', $versionNo, PDO::PARAM_INT)
-            ->setParameter(':likePath', $path . '%')
-        ;
-
-        $statement = $selectQuery->execute();
-
-        return (int) $statement->fetchColumn() === 0;
     }
 
     /**
@@ -309,5 +269,71 @@ class DoctrineStorage extends Gateway
         }
 
         return null;
+    }
+
+    /**
+     * Checks whether image reference for given version already exists.
+     *
+     * @param int $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     *
+     * @return bool
+     */
+    private function imageReferenceExistsForVersion(int $fieldId, VersionInfo $versionInfo): bool
+    {
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select($this->connection->quoteIdentifier('id'))
+            ->from($this->connection->quoteIdentifier('ezimagefile'))
+            ->where(
+                $selectQuery->expr()->andX(
+                    $selectQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('contentobject_attribute_id'),
+                        ':fieldId'
+                    ),
+                    $selectQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('version'),
+                        ':versionNo'
+                    )
+                )
+            )
+            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
+            ->setParameter(':versionNo', $versionInfo->versionNo, PDO::PARAM_INT);
+
+        $statement = $selectQuery->execute();
+
+        return (int) $statement->fetchColumn() !== 0;
+    }
+
+    /**
+     * Updates existing image reference for given version.
+     *
+     * @param string $uri
+     * @param int $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     */
+    private function updateImageReferenceForVersion(string $uri, int $fieldId, VersionInfo $versionInfo): void
+    {
+        $updateQuery = $this->connection->createQueryBuilder();
+        $updateQuery
+            ->update($this->connection->quoteIdentifier('ezimagefile'))
+            ->set($this->connection->quoteIdentifier('filepath'), ':filepath')
+            ->where(
+                $updateQuery->expr()->andX(
+                    $updateQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('contentobject_attribute_id'),
+                        ':fieldId'
+                    ),
+                    $updateQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('version'),
+                        ':versionNo'
+                    )
+                )
+            )
+            ->setParameter(':filepath', $uri, PDO::PARAM_STR)
+            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
+            ->setParameter(':versionNo', $versionInfo->versionNo, PDO::PARAM_INT);
+
+        $updateQuery->execute();
     }
 }

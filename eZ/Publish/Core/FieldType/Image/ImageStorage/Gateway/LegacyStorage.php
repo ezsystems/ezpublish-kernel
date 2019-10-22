@@ -96,11 +96,18 @@ class LegacyStorage extends Gateway
      *
      * @param string $uri File IO uri (not legacy)
      * @param mixed $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     *
+     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException
      */
-    public function storeImageReference($uri, $fieldId)
+    public function storeImageReference($uri, $fieldId, VersionInfo $versionInfo)
     {
         // legacy stores the path to the image without a leading /
         $path = $this->redecorator->redecorateFromSource($uri);
+
+        if ($this->imageReferenceExistsForVersion($fieldId, $versionInfo)) {
+            return $this->updateImageReferenceForVersion($path, $fieldId, $versionInfo);
+        }
 
         $connection = $this->getConnection();
 
@@ -112,6 +119,9 @@ class LegacyStorage extends Gateway
             )->set(
                 $connection->quoteColumn('filepath'),
                 $insertQuery->bindValue($path)
+            )->set(
+                $connection->quoteColumn('version'),
+                $insertQuery->bindValue($versionInfo->versionNo, \PDO::PARAM_INT)
             );
 
         $statement = $insertQuery->prepare();
@@ -171,10 +181,6 @@ class LegacyStorage extends Gateway
     {
         $path = $this->redecorator->redecorateFromSource($uri);
 
-        if (!$this->canRemoveImageReference($path, $versionNo, $fieldId)) {
-            return;
-        }
-
         $connection = $this->getConnection();
 
         $deleteQuery = $connection->createDeleteQuery();
@@ -185,6 +191,10 @@ class LegacyStorage extends Gateway
                 $deleteQuery->expr->eq(
                     $connection->quoteColumn('contentobject_attribute_id'),
                     $deleteQuery->bindValue($fieldId, null, \PDO::PARAM_INT)
+                ),
+                $deleteQuery->expr->eq(
+                    $connection->quoteColumn('version'),
+                    $deleteQuery->bindValue($versionNo, null, \PDO::PARAM_INT)
                 ),
                 $deleteQuery->expr->like(
                     $connection->quoteColumn('filepath'),
@@ -230,55 +240,6 @@ class LegacyStorage extends Gateway
         return (int)$statement->fetchColumn();
     }
 
-    /**
-     * Checks if image $path can be removed when deleting $versionNo and $fieldId.
-     *
-     * @param string $path legacy image path (var/storage/images...)
-     * @param int $versionNo
-     * @param mixed $fieldId
-     *
-     * @return bool
-     */
-    protected function canRemoveImageReference($path, $versionNo, $fieldId)
-    {
-        $connection = $this->getConnection();
-
-        $selectQuery = $connection->createSelectQuery();
-        $selectQuery->select(
-            $selectQuery->expr->count(
-                $connection->quoteColumn('id', 'ezcontentobject_attribute')
-            )
-        )->from(
-            $connection->quoteTable('ezcontentobject_attribute')
-        )->innerJoin(
-            $connection->quoteTable('ezimagefile'),
-            $selectQuery->expr->eq(
-                $connection->quoteColumn('contentobject_attribute_id', 'ezimagefile'),
-                $connection->quoteColumn('id', 'ezcontentobject_attribute')
-            )
-        )->where(
-            $selectQuery->expr->lAnd(
-                $selectQuery->expr->eq(
-                    $connection->quoteColumn('contentobject_attribute_id'),
-                    $selectQuery->bindValue($fieldId, null, \PDO::PARAM_INT)
-                ),
-                $selectQuery->expr->neq(
-                    $connection->quoteColumn('version'),
-                    $selectQuery->bindValue($versionNo, null, \PDO::PARAM_INT)
-                ),
-                $selectQuery->expr->like(
-                    $connection->quoteColumn('filepath'),
-                    $selectQuery->bindValue($path . '%')
-                )
-            )
-        );
-
-        $statement = $selectQuery->prepare();
-        $statement->execute();
-
-        return (int)$statement->fetchColumn() === 0;
-    }
-
     public function extractFilesFromXml($xml)
     {
         if (empty($xml)) {
@@ -312,5 +273,77 @@ class LegacyStorage extends Gateway
         }
 
         return null;
+    }
+
+    /**
+     * Checks whether image reference for given version already exists.
+     *
+     * @param int $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     *
+     * @return bool
+     */
+    private function imageReferenceExistsForVersion(int $fieldId, VersionInfo $versionInfo): bool
+    {
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery
+            ->select(
+                $connection->quoteIdentifier('id')
+            )->from(
+                $connection->quoteTable('ezimagefile')
+            )->where(
+                $selectQuery->expr->lAnd(
+                    $selectQuery->expr->eq(
+                        $connection->quoteIdentifier('contentobject_attribute_id'),
+                        $selectQuery->bindValue($fieldId, null, \PDO::PARAM_INT)
+                    ),
+                    $selectQuery->expr->eq(
+                        $connection->quoteIdentifier('version'),
+                        $selectQuery->bindValue($versionInfo->versionNo, null, \PDO::PARAM_INT)
+                    )
+                )
+            );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        return (int) $statement->fetchColumn() !== 0;
+    }
+
+    /**
+     * Updates existing image reference for given version.
+     *
+     * @param string $uri
+     * @param int $fieldId
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     */
+    private function updateImageReferenceForVersion(string $uri, int $fieldId, VersionInfo $versionInfo): void
+    {
+        $connection = $this->getConnection();
+
+        $updateQuery = $connection->createUpdateQuery();
+        $updateQuery
+            ->update(
+                $connection->quoteIdentifier('ezimagefile')
+            )->set(
+                $connection->quoteIdentifier('filepath'),
+                $updateQuery->bindValue($uri, null)
+            )->where(
+                $updateQuery->expr->lAnd(
+                    $updateQuery->expr->eq(
+                        $connection->quoteIdentifier('contentobject_attribute_id'),
+                        $updateQuery->bindValue($fieldId, null, \PDO::PARAM_INT)
+                    ),
+                    $updateQuery->expr->eq(
+                        $connection->quoteIdentifier('version'),
+                        $updateQuery->bindValue($versionInfo->versionNo, null, \PDO::PARAM_INT)
+                    )
+                )
+            );
+
+        $statement = $updateQuery->prepare();
+        $statement->execute();
     }
 }
