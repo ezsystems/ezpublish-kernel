@@ -38,6 +38,17 @@ class VersionDiff extends ValueObject implements IteratorAggregate
         return $this->fieldDiffs[$fieldIdentifier];
     }
 
+    public function isChanged(): bool
+    {
+        foreach ($this->fieldDiffs as $fieldDiff) {
+            if ($fieldDiff->isChanged()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff[]
      */
