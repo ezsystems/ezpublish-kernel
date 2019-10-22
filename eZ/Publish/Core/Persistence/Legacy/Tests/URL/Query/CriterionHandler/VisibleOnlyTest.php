@@ -31,33 +31,114 @@ class VisibleOnlyTest extends CriterionHandlerTest
      */
     public function testHandle()
     {
-        $criterion = new VisibleOnly();
-        $expected = 'ezurl.id IN (SUBQUERY)';
+        $expected = 'ezcontentobject_tree.is_invisible = 0';
 
-        $expr = $this->createMock(Expression::class);
-        $expr
-            ->expects($this->once())
-            ->method('in')
-            ->with('ezurl.id', '(SUBQUERY)')
-            ->willReturn($expected);
-
-        $query = $this->createMock(SelectQuery::class);
-        $query->expr = $expr;
+        $basicQuery = $this->createMock(SelectQuery::class);
+        $basicQuery->method('bindValue')->with(0, null, \PDO::PARAM_INT)->willReturn('0');
 
         $converter = $this->createMock(CriteriaConverter::class);
+        $handler = new VisibleOnlyHandler();
+        $criterion = new VisibleOnly();
 
-        $handler = $this
-            ->getMockBuilder(VisibleOnlyHandler::class)
-            ->setMethods(['getVisibleOnlySubQuery'])
-            ->getMock();
-        $handler
-            ->expects($this->once())
-            ->method('getVisibleOnlySubQuery')
-            ->with($query)
-            ->willReturn('(SUBQUERY)');
-
+        // tables not joined yet - handle should join them
+        $query = clone $basicQuery;
+        $query->expr = $this->getMockExpression(true, true, true);
+        $query->method('getQuery')->willReturn('SELECT');
         $actual = $handler->handle($converter, $query, $criterion);
-
         $this->assertEquals($expected, $actual);
+
+        // table link already joined, should not join again
+        $query = clone $basicQuery;
+        $query->expr = $this->getMockExpression(false, true, true);
+        $query->method('getQuery')->willReturn('(SELECT) INNER JOIN ezurl_object_link (ON)');
+        $actual = $handler->handle($converter, $query, $criterion);
+        $this->assertEquals($expected, $actual);
+
+        // table link and attribute already joined, should not join again
+        $query = clone $basicQuery;
+        $query->expr = $this->getMockExpression(false, false, true);
+        $query->method('getQuery')->willReturn(
+            '(SELECT) INNER JOIN ezurl_object_link (ON) '
+            . 'INNER JOIN ezcontentobject_attribute (ON)'
+        );
+        $actual = $handler->handle($converter, $query, $criterion);
+        $this->assertEquals($expected, $actual);
+
+        // table link, attribute, and tree already joined, should not join again
+        $query = clone $basicQuery;
+        $query->expr = $this->getMockExpression(false, false, false);
+        $query->method('getQuery')->willReturn(
+            '(SELECT) INNER JOIN ezurl_object_link (ON) ' .
+            'INNER JOIN ezcontentobject_attribute (ON) ' .
+            'INNER JOIN ezcontentobject_tree (ON)'
+        );
+        $actual = $handler->handle($converter, $query, $criterion);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @param bool $includeLinkJoin
+     * @param bool $includeAttributeJoin
+     * @param bool $includeTreeJoin
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     */
+    private function getMockExpression(bool $includeLinkJoin, bool $includeAttributeJoin, bool $includeTreeJoin)
+    {
+        $execAt = 0;
+        $expr = $this->createMock(Expression::class);
+        if ($includeLinkJoin) {
+            $expr
+                ->expects($this->at($execAt++))
+                ->method('eq')
+                ->with('ezurl.id', 'ezurl_object_link.url_id')
+                ->willReturn('ezurl.id=ezurl_object_link.url_id');
+        }
+        if ($includeAttributeJoin) {
+            $expr
+                ->expects($this->at($execAt++))
+                ->method('eq')
+                ->with('ezurl_object_link.contentobject_attribute_id', 'ezcontentobject_attribute.id')
+                ->willReturn('ezurl_object_link.contentobject_attribute_id = ezcontentobject_attribute.id');
+            $expr
+                ->expects($this->at($execAt++))
+                ->method('eq')
+                ->with('ezurl_object_link.contentobject_attribute_version', 'ezcontentobject_attribute.version')
+                ->willReturn('ezurl_object_link.contentobject_attribute_version = ezcontentobject_attribute.version');
+            $expr
+                ->expects($this->at($execAt++))
+                ->method('lAnd')
+                ->with(
+                    'ezurl_object_link.contentobject_attribute_id = ezcontentobject_attribute.id',
+                    'ezurl_object_link.contentobject_attribute_version = ezcontentobject_attribute.version'
+                )->willReturn('ezurl_object_link.contentobject_attribute_id = ezcontentobject_attribute.id AND ezurl_object_link.contentobject_attribute_version = ezcontentobject_attribute.version');
+        }
+
+        if ($includeTreeJoin) {
+            $expr
+                ->expects($this->at($execAt++))
+                ->method('eq')
+                ->with('ezcontentobject_tree.contentobject_id', 'ezcontentobject_attribute.contentobject_id')
+                ->willReturn('ezcontentobject_tree.contentobject_id = ezcontentobject_attribute.contentobject_id');
+            $expr
+                ->expects($this->at($execAt++))
+                ->method('eq')
+                ->with('ezcontentobject_tree.contentobject_version', 'ezcontentobject_attribute.version')
+                ->willReturn('ezcontentobject_tree.contentobject_version = ezcontentobject_attribute.version');
+            $expr
+                ->expects($this->at($execAt++))
+                ->method('lAnd')
+                ->with(
+                    'ezcontentobject_tree.contentobject_id = ezcontentobject_attribute.contentobject_id',
+                    'ezcontentobject_tree.contentobject_version = ezcontentobject_attribute.version'
+                )->willReturn('ezcontentobject_tree.contentobject_id = ezcontentobject_attribute.contentobject_id AND ezcontentobject_tree.contentobject_version = ezcontentobject_attribute.version');
+        }
+
+        $expr
+            ->expects($this->at($execAt))
+            ->method('eq')
+            ->with('ezcontentobject_tree.is_invisible', '0')
+            ->willReturn('ezcontentobject_tree.is_invisible = 0');
+
+        return $expr;
     }
 }
