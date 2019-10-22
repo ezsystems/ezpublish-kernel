@@ -21,9 +21,6 @@ class VersionDiff extends ValueObject
         $this->fieldDiffs = $fieldDiffs;
     }
 
-    /**
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff
-     */
     public function getFieldDiffByIdentifier(string $fieldIdentifier): FieldDiff
     {
         if (!isset($this->fieldDiffs[$fieldIdentifier])) {
@@ -36,5 +33,13 @@ class VersionDiff extends ValueObject
         }
 
         return $this->fieldDiffs[$fieldIdentifier];
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff[]
+     */
+    public function getFieldDiffs(): array
+    {
+        return $this->fieldDiffs;
     }
 }
