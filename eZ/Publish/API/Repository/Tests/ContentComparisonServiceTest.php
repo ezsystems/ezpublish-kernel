@@ -35,7 +35,7 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $this->contentTypeService = $repository->getContentTypeService();
     }
 
-    public function testCompareVersions()
+    public function testCompareVersions(): void
     {
         $draft2 = $this->createUpdatedDraftVersion2();
         $content = $this->contentService->publishVersion($draft2->versionInfo);
@@ -66,7 +66,7 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $this->assertEquals($expectedDiff, $textCompareResult->getStringDiffs());
     }
 
-    public function testCompareVersionsFromDifferentContent()
+    public function testCompareVersionsFromDifferentContent(): void
     {
         $draftA = $this->createContentDraft(
             'forum',
@@ -89,7 +89,7 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
     }
 
-    public function testCompareVersionsWhenFieldRemovedFromContentType()
+    public function testCompareVersionsWhenFieldRemovedFromContentType(): void
     {
         $draftA = $this->createContentDraft(
             'folder',
@@ -110,6 +110,7 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
 
         $this->contentService->updateContent($draftB->versionInfo, $struct);
         $contentB = $this->contentService->publishVersion($draftB->versionInfo);
+
         $versionDiff = $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
 
         $versionDiff->getFieldDiffByIdentifier('name');
@@ -118,7 +119,7 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $versionDiff->getFieldDiffByIdentifier('short_name');
     }
 
-    public function testCompareVersionsWhenFieldAddedToContentType()
+    public function testCompareVersionsWhenFieldAddedToContentType(): void
     {
         $draftA = $this->createContentDraft(
             'folder',
@@ -138,6 +139,7 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
 
         $this->contentService->updateContent($draftB->versionInfo, $struct);
         $contentB = $this->contentService->publishVersion($draftB->versionInfo);
+
         $versionDiff = $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
 
         $fieldDiff = $versionDiff->getFieldDiffByIdentifier('new_name');
@@ -152,10 +154,14 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $this->assertEquals($expectedDiff, $textCompareResult->getStringDiffs());
     }
 
-    public function addFieldToContentType(string $contentTypeIdentifier, string $fieldIdentifier, string $fieldTypeIdentifier)
-    {
+    public function addFieldToContentType(
+        string $contentTypeIdentifier,
+        string $fieldIdentifier,
+        string $fieldTypeIdentifier
+    ): void {
         $contentType = $this->contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
         $contentTypeDraft = $this->contentTypeService->createContentTypeDraft($contentType);
+
         $fieldDefCreate = $this->contentTypeService->newFieldDefinitionCreateStruct(
             $fieldIdentifier,
             $fieldTypeIdentifier
@@ -165,14 +171,18 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $this->contentTypeService->publishContentTypeDraft($contentTypeDraft);
     }
 
-    protected function removeFieldFromContentType(string $contentTypeIdentifier, string $fieldDefinitionIdentifier): void
-    {
+    protected function removeFieldFromContentType(
+        string $contentTypeIdentifier,
+        string $fieldDefinitionIdentifier
+    ): void {
         $contentType = $this->contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
         $contentTypeDraft = $this->contentTypeService->createContentTypeDraft($contentType);
+
         $this->contentTypeService->removeFieldDefinition(
             $contentTypeDraft,
             $contentType->getFieldDefinition($fieldDefinitionIdentifier)
         );
+
         $this->contentTypeService->publishContentTypeDraft($contentTypeDraft);
     }
 }
