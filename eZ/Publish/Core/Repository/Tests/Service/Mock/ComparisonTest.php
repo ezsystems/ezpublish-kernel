@@ -202,7 +202,8 @@ class ComparisonTest extends Base
 
         $expectedFieldDiff = new FieldDiff(
             $fieldDefinition,
-            $diffValue
+            $diffValue,
+            true
         );
 
         $expectedVersionDiff = new VersionDiff([

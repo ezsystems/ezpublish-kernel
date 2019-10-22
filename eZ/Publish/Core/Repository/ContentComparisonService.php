@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentComparisonService as ContentComparisonInterface;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldDiff;
+use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\NoDiffResult;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -105,7 +106,8 @@ class ContentComparisonService implements ContentComparisonInterface
                     $fieldDefinition,
                     $languageCode
                 ),
-                $diff
+                $diff,
+                !$diff instanceof NoDiffResult
             );
         }
 

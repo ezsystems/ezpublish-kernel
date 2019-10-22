@@ -19,12 +19,17 @@ class FieldDiff extends ValueObject
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionDiff\ComparisonResult */
     private $diffValue;
 
+    /** @var bool */
+    private $isChanged;
+
     public function __construct(
         FieldDefinition $fieldDef,
-        ComparisonResult $diffValue
+        ComparisonResult $diffValue,
+        bool $isChanged
     ) {
         $this->fieldDef = $fieldDef;
         $this->diffValue = $diffValue;
+        $this->isChanged = $isChanged;
     }
 
     /**
@@ -38,5 +43,10 @@ class FieldDiff extends ValueObject
     public function getFieldDef(): FieldDefinition
     {
         return $this->fieldDef;
+    }
+
+    public function isChanged(): bool
+    {
+        return $this->isChanged;
     }
 }
