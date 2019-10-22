@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineCompa
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Comparison\Engine\Value\StringValueComparisonEngine;
+use eZ\Publish\Core\FieldType\TextLine\Type as TextLineFieldType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
 use eZ\Publish\Core\Comparison\FieldRegistry;
@@ -118,14 +119,14 @@ class ComparisonTest extends Base
     private function buildFieldTypeRegistry(): FieldTypeRegistry
     {
         $fieldTypeRegistry = new FieldTypeRegistry();
-        $textTypeFieldType = new \eZ\Publish\Core\FieldType\TextLine\Type();
+        $textTypeFieldType = new TextLineFieldType();
 
         $fieldTypeRegistry->registerFieldType('ezstring', $textTypeFieldType);
 
         return $fieldTypeRegistry;
     }
 
-    public function testCompareTwoVersions()
+    public function testCompareTwoVersions(): void
     {
         $versionOne = $this->getVersionMock(77, 1);
         $versionTwo = $this->getVersionMock(77, 2);
