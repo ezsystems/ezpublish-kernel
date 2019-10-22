@@ -9,8 +9,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BinaryContentDownloadPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComparableFieldRegistryPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComparisonEnginesRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConsoleCacheWarmupPass;
@@ -96,8 +94,6 @@ class EzPublishCoreBundle extends Bundle
         $securityExtension->addSecurityListenerFactory(new HttpBasicFactory());
         $container->addCompilerPass(new TranslationCollectorPass());
         $container->addCompilerPass(new SlugConverterConfigurationPass());
-        $container->addCompilerPass(new ComparableFieldRegistryPass());
-        $container->addCompilerPass(new ComparisonEnginesRegistryPass());
     }
 
     public function getContainerExtension()

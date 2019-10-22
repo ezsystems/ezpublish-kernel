@@ -16,10 +16,7 @@ final class FieldRegistry
     /** @var \eZ\Publish\SPI\FieldType\Comparable[] */
     private $types = [];
 
-    /**
-     * @param \eZ\Publish\SPI\FieldType\Comparable[] $types
-     */
-    public function __construct(array $types = [])
+    public function __construct(iterable $types)
     {
         foreach ($types as $name => $type) {
             $this->registerType($name, $type);

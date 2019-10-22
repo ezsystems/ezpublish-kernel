@@ -15,10 +15,7 @@ final class ComparisonEngineRegistry
     /** @var \eZ\Publish\SPI\Comparison\ComparisonEngine[] */
     private $engines = [];
 
-    /**
-     * @param \eZ\Publish\SPI\Comparison\ComparisonEngine[] $engines
-     */
-    public function __construct(array $engines = [])
+    public function __construct(iterable $engines = [])
     {
         foreach ($engines as $supportedType => $engine) {
             $this->registerEngine($supportedType, $engine);

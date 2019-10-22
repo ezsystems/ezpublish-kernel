@@ -61,6 +61,8 @@ services:
 
     eZ\Publish\Core\Repository\User\PasswordValidator: ~
 
-    eZ\Publish\Core\Comparison\FieldRegistry: ~
+    eZ\Publish\Core\Comparison\FieldRegistry:
+        arguments: [!tagged { tag: 'ezplatform.field_type.comparable', index_by: 'alias' }]
 
-    eZ\Publish\Core\Comparison\ComparisonEngineRegistry: ~
+    eZ\Publish\Core\Comparison\ComparisonEngineRegistry:
+        arguments: [!tagged { tag: 'ezplatform.field_type.comparable.engine', index_by: 'supported_type' }]
