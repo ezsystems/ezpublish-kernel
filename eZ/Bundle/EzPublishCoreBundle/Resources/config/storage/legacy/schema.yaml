@@ -609,11 +609,13 @@ tables:
         indexes:
             ezimagefile_file: { fields: [filepath], options: { lengths: ['191'] } }
             ezimagefile_coid: { fields: [contentobject_attribute_id] }
+            ezimagefile_version: { fields: [version]}
         id:
             id: { type: integer, nullable: false, options: { autoincrement: true } }
         fields:
             contentobject_attribute_id: { type: integer, nullable: false, options: { default: '0' } }
             filepath: { type: text, nullable: false, length: 0 }
+            version: { type: integer, nullable: false, options: { default: '0' } }
     ezinfocollection:
         indexes:
             ezinfocollection_co_id_created: { fields: [contentobject_id, created] }
