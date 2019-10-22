@@ -98,9 +98,16 @@ class ContentComparisonService implements ContentComparisonInterface
             $dataB = $comparableField->getDataToCompare(
                 $matchingField->value
             );
-            $engine = $this->comparatorEngineRegistry->getEngine($dataA->getType());
 
-            $diff = $engine->compareFieldsData($dataA, $dataB);
+            $diff = new NoDiffResult();
+
+            // No strict on purpose, as we care about values not objects.
+            if ($dataA != $dataB) {
+                $engine = $this->comparatorEngineRegistry->getEngine($dataA->getType());
+
+                $diff = $engine->compareFieldsData($dataA, $dataB);
+            }
+
             $fieldsDiff[$fieldDefinition->identifier] = new FieldDiff(
                 $this->contentTypeDomainMapper->buildFieldDefinitionDomainObject(
                     $fieldDefinition,
