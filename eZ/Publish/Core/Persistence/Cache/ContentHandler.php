@@ -61,7 +61,6 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $this->getContentTags = function (Content $content) {
             $versionInfo = $content->versionInfo;
             $tags = [
-                'content-fields-' . $versionInfo->contentInfo->id,
                 'content-fields-type-' . $versionInfo->contentInfo->contentTypeId,
             ];
 
@@ -142,7 +141,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
             },
             $this->getContentTags,
             static function (Content $content) use ($keySuffix) {
-                // Version number & translations is part of keySuffix here and depends on what user asked for
+                // Translations is part of keySuffix here and depends on what user asked for
                 return ['ez-content-' . $content->versionInfo->contentInfo->id . $keySuffix];
             },
             $keySuffix,
@@ -313,7 +312,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
             $tags = \array_map(
                 static function ($relation) {
                     // only the full content object *with* fields is affected by this
-                    return 'content-fields-' . $relation->sourceContentId;
+                    return 'content-' . $relation->sourceContentId;
                 },
                 $reverseRelations
             );
@@ -520,16 +519,5 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $getContentInfoTagsFn = $this->getContentInfoTags;
 
         return $getContentInfoTagsFn($contentInfo, $tags);
-    }
-
-    private function getCacheTagsForContent(Content $content): array
-    {
-        $versionInfo = $content->versionInfo;
-        $tags = [
-            'content-fields-' . $versionInfo->contentInfo->id,
-            'content-fields-type-' . $versionInfo->contentInfo->contentTypeId,
-        ];
-
-        return $this->getCacheTagsForVersion($versionInfo, $tags);
     }
 }

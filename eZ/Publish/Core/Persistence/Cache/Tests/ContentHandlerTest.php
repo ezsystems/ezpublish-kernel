@@ -125,7 +125,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
         $this->cacheMock
             ->expects($this->once())
             ->method('invalidateTags')
-            ->with(['content-fields-42', 'content-2']);
+            ->with(['content-42', 'content-2']);
 
         $handler = $this->persistenceCacheHandler->contentHandler();
         $handler->deleteContent(2);

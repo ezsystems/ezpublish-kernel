@@ -41,17 +41,17 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, array? $tags, array? $key
         return [
-            ['create', [$user], ['content-fields-14'], [
+            ['create', [$user], ['content-14'], [
                 'ez-user-14',
                 'ez-user-' . str_replace('@', '_A', $user->login) . '-by-login',
                 'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
             ]],
-            ['update', [$user], ['content-fields-14', 'user-14'], [
+            ['update', [$user], ['content-14', 'user-14'], [
                 'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
             ]],
             ['updateUserToken', [$userToken], ['user-14-account-key'], ['ez-user-4irj8t43r-by-account-key']],
             ['expireUserToken', ['4irj8t43r'], null, ['ez-user-4irj8t43r-by-account-key']],
-            ['delete', [14], ['content-fields-14', 'user-14']],
+            ['delete', [14], ['content-14', 'user-14']],
             ['createRole', [new RoleCreateStruct()]],
             ['createRoleDraft', [new RoleCreateStruct()]],
             ['loadRole', [9, 1]],
