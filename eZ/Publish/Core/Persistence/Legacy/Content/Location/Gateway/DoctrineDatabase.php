@@ -73,7 +73,7 @@ class DoctrineDatabase extends Gateway
     public function getBasicNodeData($nodeId, array $translations = null, bool $useAlwaysAvailable = true)
     {
         $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
-        $q->where(
+        $q->andWhere(
             $q->expr()->eq('t.node_id', $q->createNamedParameter($nodeId, PDO::PARAM_INT))
         );
 
@@ -90,7 +90,7 @@ class DoctrineDatabase extends Gateway
     public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
     {
         $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
-        $q->where(
+        $q->andWhere(
             $q->expr()->in(
                 't.node_id',
                 $q->createNamedParameter($locationIds, Connection::PARAM_INT_ARRAY)
@@ -106,7 +106,7 @@ class DoctrineDatabase extends Gateway
     public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
         $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
-        $q->where(
+        $q->andWhere(
             $q->expr()->eq('t.remote_id', $q->createNamedParameter($remoteId, PDO::PARAM_STR))
         );
 
@@ -1651,15 +1651,22 @@ class DoctrineDatabase extends Gateway
                 $useAlwaysAvailable
             );
 
-            $queryBuilder->innerJoin(
+            $queryBuilder->leftJoin(
                 't',
                 'ezcontentobject',
                 'c',
-                $expr->andX(
-                    $expr->eq('t.contentobject_id', 'c.id'),
+                $expr->eq('t.contentobject_id', 'c.id')
+            );
+
+            $queryBuilder->where(
+                $expr->orX(
                     $expr->gt(
                         $dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
                         0
+                    ),
+                    // Root location doesn't have language mask
+                    $expr->eq(
+                        't.node_id', 't.parent_node_id'
                     )
                 )
             );
