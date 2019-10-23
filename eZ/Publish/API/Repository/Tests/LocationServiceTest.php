@@ -396,10 +396,32 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
         $location = $locationService->loadLocation($this->generateId('location', 1));
 
+        $this->assertRootLocationStructValues($location);
+    }
+
+    public function testLoadLocationRootStructValuesWithPrioritizedLanguages(): void
+    {
+        $repository = $this->getRepository();
+
+        $rootLocation = $repository
+            ->getLocationService()
+            ->loadLocation(
+                $this->generateId('location', 1),
+                [
+                    'eng-GB',
+                    'ger-DE',
+                ]
+            );
+
+        $this->assertRootLocationStructValues($rootLocation);
+    }
+
+    private function assertRootLocationStructValues(Location $location): void
+    {
         $legacyDateTime = new \DateTime();
         $legacyDateTime->setTimestamp(1030968000);
 
-        // $location
+        $this->assertInstanceOf(Location::class, $location);
         $this->assertPropertiesCorrect(
             [
                 'id' => $this->generateId('location', 1),
@@ -417,8 +439,7 @@ class LocationServiceTest extends BaseTest
             $location
         );
 
-        // $location->contentInfo
-        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo', $location->contentInfo);
+        $this->assertInstanceOf(ContentInfo::class, $location->contentInfo);
         $this->assertPropertiesCorrect(
             [
                 'id' => $this->generateId('content', 0),
