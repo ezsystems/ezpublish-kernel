@@ -87,7 +87,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         $this->logger->logCall(__METHOD__, ['content' => $contentId, 'version' => $srcVersion, 'user' => $userId]);
         $draft = $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId, $languageCode);
-        $this->cache->invalidateTags(["content-{$contentId}-version-list"]);
+        $this->cache->deleteItems(["ez-content-${contentId}-version-list"]);
 
         return $draft;
     }
@@ -343,18 +343,24 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
      */
     public function listVersions($contentId, $status = null, $limit = -1)
     {
-        $cacheItem = $this->cache->getItem("ez-content-${contentId}-version-list" . ($status !== null ? "-byStatus-${status}" : '') . "-limit-{$limit}");
+        // Don't cache non typical lookups to avoid filling up cache and tags.
+        if ($status !== null || $limit !== -1) {
+            $this->logger->logCall(__METHOD__, ['content' => $contentId, 'status' => $status]);
+            return $this->persistenceHandler->contentHandler()->listVersions($contentId, $status, $limit);
+        }
 
+        // Cache default lookups
+        $cacheItem = $this->cache->getItem("ez-content-${contentId}-version-list");
         if ($cacheItem->isHit()) {
-            $this->logger->logCacheHit(['content' => $contentId, 'status' => $status]);
+            $this->logger->logCacheHit(['content' => $contentId]);
 
             return $cacheItem->get();
         }
 
-        $this->logger->logCacheMiss(['content' => $contentId, 'status' => $status]);
-        $versions = $this->persistenceHandler->contentHandler()->listVersions($contentId, $status, $limit);
+        $this->logger->logCacheMiss(['content' => $contentId]);
+        $versions = $this->persistenceHandler->contentHandler()->listVersions($contentId);
         $cacheItem->set($versions);
-        $tags = ["content-{$contentId}", "content-{$contentId}-version-list"];
+        $tags = ["content-{$contentId}"];
         foreach ($versions as $version) {
             $tags = $this->getCacheTagsForVersion($version, $tags);
         }
