@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineComparisonResult;
 use eZ\Publish\Core\Comparison\Engine\FieldType\TextLineComparisonEngine;
 use eZ\Publish\Core\Comparison\Engine\Value\StringValueComparisonEngine;
+use eZ\Publish\SPI\Comparison\ComparisonResult;
 use eZ\Publish\SPI\Comparison\ComparisonValue;
 use eZ\Publish\SPI\Comparison\Field\TextLine;
 use eZ\Publish\SPI\Comparison\Value\StringComparisonValue;
@@ -97,7 +98,7 @@ class TextLineComparisonEngineTest extends TestCase
     /**
      * @dataProvider fieldsAndResultProvider
      */
-    public function testCompareFieldsData(ComparisonValue $fieldA, ComparisonValue $fieldB, TextLineComparisonResult $expected)
+    public function testCompareFieldsData(ComparisonValue $fieldA, ComparisonValue $fieldB, ComparisonResult $expected)
     {
         $this->assertEquals(
             $expected,

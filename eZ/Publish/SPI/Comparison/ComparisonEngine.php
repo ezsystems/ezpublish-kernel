@@ -10,5 +10,7 @@ namespace eZ\Publish\SPI\Comparison;
 
 interface ComparisonEngine
 {
-    public function compareFieldsData(ComparisonData $fieldA, ComparisonData $fieldB): ComparisonResult;
+    public function compareFieldsData(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): ComparisonResult;
+
+    public function areEqual(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): bool;
 }
