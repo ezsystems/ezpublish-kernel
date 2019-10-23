@@ -266,6 +266,8 @@ interface ContentService
      *
      * If no user is given the drafts for the authenticated user are returned
      *
+     * @deprecated Please use {@see loadContentDraftList()} instead to avoid risking loading too much data.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to load the draft list
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user The user to load drafts for, if defined, otherwise drafts for current-user
@@ -279,9 +281,11 @@ interface ContentService
      *
      * If no user is given the drafts for the authenticated user are returned
      *
+     * @since 7.5.5
+     *
      * @param \eZ\Publish\API\Repository\Values\User\User|null $user The user to load drafts for, if defined, otherwise drafts for current-user
-     * @param int $limit
      * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentDraftList
      */
@@ -404,8 +408,8 @@ interface ContentService
      * {@link \eZ\Publish\API\Repository\Values\Content\RelationList\Item\UnauthorizedRelationListItem}
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param int $limit
      * @param int $offset
+     * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\RelationList
      */
