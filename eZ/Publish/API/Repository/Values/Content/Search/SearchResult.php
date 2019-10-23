@@ -8,12 +8,15 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content\Search;
 
+use ArrayIterator;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use IteratorAggregate;
+use Traversable;
 
 /**
  * This class represents a search result.
  */
-class SearchResult extends ValueObject
+class SearchResult extends ValueObject implements IteratorAggregate
 {
     /**
      * The facets for this search.
@@ -66,4 +69,9 @@ class SearchResult extends ValueObject
      * @var int|null
      */
     public $totalCount;
+
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->searchHits);
+    }
 }
