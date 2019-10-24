@@ -81,6 +81,40 @@ class QueryControllerContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Given /^the following content view configuration block with paging action:$/
+     */
+    public function addContentViewConfigurationBlockWithPagingAction(PyStringNode $string)
+    {
+        $configurationBlock = array_merge(
+            Yaml::parse($string),
+            [
+                'template' => '@eZBehat/tests/dump.html.twig',
+                'match' => [
+                    'Id\Content' => $this->matchedContent->id,
+                ],
+            ]
+        );
+
+        $configurationBlockName = 'behat_paging_query_controller_' . $this->matchedContent->id;
+
+        $configuration = [
+            'ezpublish' => [
+                'system' => [
+                    'default' => [
+                        'content_view' => [
+                            'full' => [
+                                $configurationBlockName => $configurationBlock,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->configurationContext->addConfiguration($configuration);
+    }
+
+    /**
      * @Given /^a content item that matches the view configuration block below$/
      */
     public function aContentItemThatMatchesTheViewConfigurationBlockBelow()
@@ -88,6 +122,18 @@ class QueryControllerContext extends RawMinkContext implements Context
         $this->matchedContent = $this->repository->sudo(function (Repository $repository) {
             return $this->createFolder($repository);
         });
+    }
+
+    /**
+     * @Given :arg1 contents are created to test paging
+     */
+    public function contentsAreCreatedToTestPaging2($numberOfContents)
+    {
+        for ($i = 0; $i < $numberOfContents; ++$i) {
+            $this->repository->sudo(function (Repository $repository) {
+                return $this->createFolder($repository);
+            });
+        }
     }
 
     /**
@@ -121,7 +167,7 @@ class QueryControllerContext extends RawMinkContext implements Context
     public function createPhpFile($phpFilePath, PyStringNode $phpFileContents)
     {
         $fs = new Filesystem();
-        $fs->mkdir(dirname($phpFilePath));
+        $fs->mkdir(\dirname($phpFilePath));
         $fs->dumpFile($phpFilePath, $phpFileContents);
         shell_exec('php bin/console --env=behat cache:clear');
     }
@@ -144,7 +190,7 @@ class QueryControllerContext extends RawMinkContext implements Context
             $page = $this->getSession()->getPage();
             $exceptionElements = $page->findAll('xpath', "//div[@class='text-exception']/h1");
             $exceptionStackTraceItems = $page->findAll('xpath', "//ol[@id='traces-0']/li");
-            if (count($exceptionElements) > 0) {
+            if (\count($exceptionElements) > 0) {
                 $exceptionElement = $exceptionElements[0];
                 $exceptionLines = [$exceptionElement->getText(), ''];
 
@@ -208,6 +254,161 @@ class QueryControllerContext extends RawMinkContext implements Context
         Assert::assertTrue(
             $variableFound,
             "The $twigVariableName twig variable was not set"
+        );
+    }
+
+    /**
+     * @Then the Query results assigned to the :arg1 twig variable is a :arg2 object
+     */
+    public function theQueryResultsAssignedToTheTwigVariableIsAObject($twigVariableName, $className)
+    {
+        $variableFound = false;
+        $classNameFound = false;
+
+        $page = $this->getSession()->getPage();
+        $variableNodes = $page->findAll('css', 'pre.sf-dump > samp > span.sf-dump-key');
+        $valueNodes = $page->findAll('css', 'pre.sf-dump > samp > abbr.sf-dump-note');
+
+        /** @var NodeElement $variableNode */
+        foreach ($variableNodes as $variableNode) {
+            if ($variableNode->getText() === $twigVariableName) {
+                $variableFound = true;
+            }
+        }
+
+        /** @var NodeElement $valueNodes */
+        foreach ($valueNodes as $valueNode) {
+            if ($valueNode->getText() === $className) {
+                $classNameFound = true;
+            }
+        }
+
+        Assert::assertTrue(
+            $variableFound,
+            "The $twigVariableName twig variable was not set"
+        );
+
+        Assert::assertTrue(
+            $classNameFound,
+            "The $className twig variable object was not set"
+        );
+    }
+
+    /**
+     * @Given /^the following template defined in "([^"]*)":$/
+     */
+    public function createTemplateFile($tplFilePath, PyStringNode $tplFileContents)
+    {
+        $fs = new Filesystem();
+        $fs->mkdir(\dirname($tplFilePath));
+        $fs->dumpFile($tplFilePath, $tplFileContents);
+    }
+
+    /**
+     * @Given the following content view configuration block with paging action and the template set above:
+     */
+    public function theFollowingContentViewConfigurationBlockWithPagingActionAndTheTemplateSetAbove(PyStringNode $string)
+    {
+        $configurationBlock = array_merge(
+            Yaml::parse($string),
+            [
+                'match' => [
+                    'Id\Content' => $this->matchedContent->id,
+                ],
+            ]
+        );
+
+        $configurationBlockName = 'behat_paging_query_controller_' . $this->matchedContent->id;
+
+        $configuration = [
+            'ezpublish' => [
+                'system' => [
+                    'default' => [
+                        'content_view' => [
+                            'full' => [
+                                $configurationBlockName => $configurationBlock,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->configurationContext->addConfiguration($configuration);
+    }
+
+    /**
+     * @When I view a content matched by the view configuration above on page :arg1 with the :arg2 parameter
+     */
+    public function iViewAContentMatchedByTheViewConfigurationAboveOnPageWithTheParameter($pageNumber, $pageParam)
+    {
+        $urlAliasService = $this->repository->getURLAliasService();
+        $urlAlias = $urlAliasService->reverseLookup(
+            $this->repository->getLocationService()->loadLocation(
+                $this->matchedContent->contentInfo->mainLocationId
+            )
+        );
+
+        $this->visitPath($urlAlias->path . "?$pageParam=$pageNumber");
+
+        if ($this->getSession()->getStatusCode() !== 200) {
+            $page = $this->getSession()->getPage();
+            $exceptionElements = $page->findAll('xpath', "//div[@class='text-exception']/h1");
+            $exceptionStackTraceItems = $page->findAll('xpath', "//ol[@id='traces-0']/li");
+            if (\count($exceptionElements) > 0) {
+                $exceptionElement = $exceptionElements[0];
+                $exceptionLines = [$exceptionElement->getText(), ''];
+
+                foreach ($exceptionStackTraceItems as $stackTraceItem) {
+                    $html = $stackTraceItem->getHtml();
+                    $html = substr($html, 0, strpos($html, '<a href', 1));
+                    $html = htmlspecialchars_decode(strip_tags($html));
+                    $html = preg_replace('/\s+/', ' ', $html);
+                    $html = str_replace('  (', '(', $html);
+                    $html = str_replace(' ->', '->', $html);
+                    $exceptionLines[] = trim($html);
+                }
+                $message = 'An exception occurred during rendering:' . implode("\n", $exceptionLines);
+                Assert::assertTrue(false, $message);
+            }
+        }
+        $this->assertSession()->statusCodeEquals(200);
+    }
+
+    /**
+     * @Then the Query results assigned to the twig variable is a Pagerfanta object and has limit :arg1 and selected page :arg2
+     */
+    public function theQueryResultsAssignedToTheTwigVariableIsAObjectAndHasLimitAndCountParams($pageLimit, $pageValue)
+    {
+        $pageLimitFound = false;
+        $currentPageFound = false;
+
+        $page = $this->getSession()->getPage();
+        $maxPerPage = $page->findAll('css', 'div#maxPerPage');
+        $currentPage = $page->findAll('css', 'div#currentPage');
+
+        /** @var NodeElement $variableNode */
+        foreach ($maxPerPage as $variableNode) {
+            if ($variableNode->getText() === $pageLimit) {
+                $pageLimitFound = true;
+            }
+        }
+
+        /** @var NodeElement $valueNodes */
+        foreach ($currentPage as $valueNode) {
+            if ($valueNode->getText() === $pageValue) {
+                $currentPageFound = true;
+            }
+        }
+
+        Assert::assertTrue(
+            $pageLimitFound,
+            "The maxPerPage $pageLimit twig variable was not set"
+        );
+
+        Assert::assertTrue(
+            $currentPageFound,
+            "The currentPage $pageValue twig variable  was not set"
         );
     }
 }
