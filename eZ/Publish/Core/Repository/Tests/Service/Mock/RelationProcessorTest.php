@@ -354,7 +354,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     {
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
         $contentHandlerMock = $this->getPersistenceMockHandler('Content\\Handler');
-        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
+        $contentTypeMock = $this->createMock(ContentType::class);
 
         $contentTypeMock->expects($this->at(0))
             ->method('getFieldDefinition')
@@ -426,7 +426,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     {
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
         $contentHandlerMock = $this->getPersistenceMockHandler('Content\\Handler');
-        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
+        $contentTypeMock = $this->createMock(ContentType::class);
 
         $existingRelations = [
             $this->getStubbedRelation(1, Relation::COMMON, null, 10),
@@ -536,7 +536,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     {
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
         $contentHandlerMock = $this->getPersistenceMockHandler('Content\\Handler');
-        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
+        $contentTypeMock = $this->createMock(ContentType::class);
 
         $existingRelations = [
             $this->getStubbedRelation(1, Relation::COMMON, null, 10),
@@ -636,7 +636,7 @@ class RelationProcessorTest extends BaseServiceMockTest
             $this->getStubbedRelation(2, Relation::ASSET, 44, 18),
         ];
 
-        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
+        $contentTypeMock = $this->createMock(ContentType::class);
         $contentTypeMock
             ->expects($this->at(0))
             ->method('getFieldDefinition')

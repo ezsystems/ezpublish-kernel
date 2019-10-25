@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
  * this class represents a content type value.
  *
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups calls getContentTypeGroups
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
  * @property-read mixed $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
@@ -175,16 +175,67 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
     /**
      * This method returns the content type field definitions from this type.
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection
      */
-    abstract public function getFieldDefinitions();
+    abstract public function getFieldDefinitions(): FieldDefinitionCollection;
 
     /**
      * This method returns the field definition for the given identifier.
      *
      * @param string $fieldDefinitionIdentifier
      *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|null
+     */
+    public function getFieldDefinition($fieldDefinitionIdentifier): ?FieldDefinition
+    {
+        return $this->getFieldDefinitions()->get($fieldDefinitionIdentifier);
+    }
+
+    /**
+     * This method returns true if the field definition for the given identifier exists.
+     *
+     * @param string $fieldDefinitionIdentifier
+     *
+     * @return bool
+     */
+    public function hasFieldDefinition(string $fieldDefinitionIdentifier): bool
+    {
+        return $this->getFieldDefinitions()->has($fieldDefinitionIdentifier);
+    }
+
+    /**
+     * Returns true if field definition with given field type identifier exists.
+     *
+     * @param string $fieldTypeIdentifier
+     *
+     * @return bool
+     */
+    public function hasFieldDefinitionOfType(string $fieldTypeIdentifier): bool
+    {
+        return $this->getFieldDefinitions()->anyOfType($fieldTypeIdentifier);
+    }
+
+    /**
+     * Returns collection of the field definition for the given field type identifier.
+     *
+     * @param string $fieldTypeIdentifier
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection
+     */
+    public function getFieldDefinitionsOfType(string $fieldTypeIdentifier): FieldDefinitionCollection
+    {
+        return $this->getFieldDefinitions()->filterByType($fieldTypeIdentifier);
+    }
+
+    /**
+     * Returns true if field definition with given field type identifier or null.
+     *
+     * @param string $fieldTypeIdentifier
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
-    abstract public function getFieldDefinition($fieldDefinitionIdentifier);
+    public function getFirstFieldDefinitionOfType(string $fieldTypeIdentifier): ?FieldDefinition
+    {
+        return $this->getFieldDefinitions()->filterByType($fieldTypeIdentifier)->first();
+    }
 }

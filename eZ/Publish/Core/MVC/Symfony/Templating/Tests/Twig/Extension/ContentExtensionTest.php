@@ -21,6 +21,7 @@ use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -186,7 +187,9 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
                             [
                                 'identifier' => $contentTypeId,
                                 'mainLanguageCode' => 'fre-FR',
-                                'fieldDefinitions' => $this->fieldDefinitions[$contentTypeId],
+                                'fieldDefinitions' => new FieldDefinitionCollection(
+                                    $this->fieldDefinitions[$contentTypeId]
+                                ),
                             ]
                         );
                     }

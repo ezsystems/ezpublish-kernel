@@ -573,12 +573,12 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     private function getUserFieldDefinition(ContentType $contentType): FieldDefinition
     {
-        foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
-            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
-                return $fieldDefinition;
-            }
+        $fieldDefinition = $contentType->getFirstFieldDefinitionOfType('ezuser');
+
+        if ($fieldDefinition === null) {
+            $this->fail("'ezuser' field definition was not found");
         }
 
-        $this->fail("'ezuser' field definition was not found");
+        return $fieldDefinition;
     }
 }

@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection as APIFieldDefinitionCollection;
 use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
 use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
 use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
@@ -17,7 +18,7 @@ use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
  * this class represents a content type value.
  *
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups calls getContentTypeGroups
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
  * @property-read mixed $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
@@ -53,32 +54,15 @@ class ContentType extends APIContentType
     /**
      * Contains the content type field definitions from this type.
      *
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection
      */
-    protected $fieldDefinitions = [];
-
-    /**
-     * Field definitions indexed by identifier.
-     *
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
-     */
-    protected $fieldDefinitionsByIdentifier = [];
-
-    /**
-     * Field definitions indexed by id.
-     *
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
-     */
-    protected $fieldDefinitionsById = [];
+    protected $fieldDefinitions;
 
     public function __construct(array $data = [])
     {
+        $this->fieldDefinitions = new FieldDefinitionCollection();
+
         parent::__construct($data);
-        // fieldDefinitions property comes from $data and is set in the ValueObject constructor
-        foreach ($this->fieldDefinitions as $fieldDefinition) {
-            $this->fieldDefinitionsByIdentifier[$fieldDefinition->identifier] = $fieldDefinition;
-            $this->fieldDefinitionsById[$fieldDefinition->id] = $fieldDefinition;
-        }
     }
 
     /**
@@ -94,42 +78,10 @@ class ContentType extends APIContentType
     /**
      * This method returns the content type field definitions from this type.
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection
      */
-    public function getFieldDefinitions()
+    public function getFieldDefinitions(): APIFieldDefinitionCollection
     {
         return $this->fieldDefinitions;
-    }
-
-    /**
-     * This method returns the field definition for the given identifier.
-     *
-     * @param string $fieldDefinitionIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
-     */
-    public function getFieldDefinition($fieldDefinitionIdentifier)
-    {
-        if (isset($this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier])) {
-            return $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier];
-        }
-
-        return null;
-    }
-
-    /**
-     * This method returns the field definition for the given id.
-     *
-     * @param mixed $fieldDefinitionId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
-     */
-    public function getFieldDefinitionById($fieldDefinitionId)
-    {
-        if (isset($this->fieldDefinitionsById[$fieldDefinitionId])) {
-            return $this->fieldDefinitionsById[$fieldDefinitionId];
-        }
-
-        return null;
     }
 }

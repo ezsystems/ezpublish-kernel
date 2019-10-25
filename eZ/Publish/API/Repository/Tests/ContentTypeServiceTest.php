@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection;
 use eZ\Publish\API\Repository\Values\Translation\Message;
 use Exception;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
@@ -823,7 +824,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 case 'fieldDefinitions':
                     $this->assertFieldDefinitionsCorrect(
                         $typeCreate->fieldDefinitions,
-                        $contentType->fieldDefinitions
+                        $contentType->fieldDefinitions->toArray()
                     );
                     break;
 
@@ -2744,7 +2745,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeStructValues
      */
-    public function testLoadContentTypeFieldDefinitions(array $fieldDefinitions)
+    public function testLoadContentTypeFieldDefinitions(FieldDefinitionCollection $fieldDefinitions)
     {
         $expectedFieldDefinitions = [
             'name' => [
@@ -2779,6 +2780,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             ],
         ];
 
+        $fieldDefinitions = $fieldDefinitions->toArray();
         foreach ($fieldDefinitions as $index => $fieldDefinition) {
             $this->assertInstanceOf(
                 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
