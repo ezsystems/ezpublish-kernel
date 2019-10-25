@@ -8,7 +8,10 @@
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
+use ArrayIterator;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use IteratorAggregate;
+use Traversable;
 
 /**
  * This class represents a queried location list holding a totalCount and a partial list of locations
@@ -17,7 +20,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read int $totalCount - the total count of found locations (filtered by permissions)
  * @property-read \eZ\Publish\API\Repository\Values\Content\Location[] $locations - the partial list of locations controlled by offset/limit
  **/
-class LocationList extends ValueObject
+class LocationList extends ValueObject implements IteratorAggregate
 {
     /**
      * the total count of found locations (filtered by permissions).
@@ -32,4 +35,9 @@ class LocationList extends ValueObject
      * @var \eZ\Publish\API\Repository\Values\Content\Location[]
      */
     protected $locations;
+
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->locations);
+    }
 }
