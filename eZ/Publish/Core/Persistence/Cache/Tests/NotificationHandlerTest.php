@@ -55,11 +55,11 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     new CreateStruct(['ownerId' => $ownerId]),
                 ],
-                [
-                    'notification-count-' . $ownerId,
-                    'notification-pending-count-' . $ownerId,
-                ],
                 null,
+                [
+                    'ez-notification-count-' . $ownerId,
+                    'ez-notification-pending-count-' . $ownerId,
+                ],
                 new SPINotification(),
             ],
             [
@@ -68,11 +68,11 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $notification,
                     new UpdateStruct(['isPending' => false]),
                 ],
-                [
-                    'notification-' . $notificationId,
-                    'notification-pending-count-' . $ownerId,
-                ],
                 null,
+                [
+                    'ez-notification-' . $notificationId,
+                    'ez-notification-pending-count-' . $ownerId,
+                ],
                 new SPINotification(),
             ],
             [
@@ -80,10 +80,11 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $notification,
                 ],
+                null,
                 [
-                    'notification-' . $notificationId,
-                    'notification-count-' . $ownerId,
-                    'notification-pending-count-' . $ownerId,
+                    'ez-notification-' . $notificationId,
+                    'ez-notification-count-' . $ownerId,
+                    'ez-notification-pending-count-' . $ownerId,
                 ],
             ],
             [
