@@ -345,6 +345,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         // Don't cache non typical lookups to avoid filling up cache and tags.
         if ($status !== null || $limit !== -1) {
             $this->logger->logCall(__METHOD__, ['content' => $contentId, 'status' => $status]);
+
             return $this->persistenceHandler->contentHandler()->listVersions($contentId, $status, $limit);
         }
 

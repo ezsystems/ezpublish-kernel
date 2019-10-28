@@ -52,7 +52,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         $this->getTypeTags = static function (Type $type) {
             return [
-                'type',// For use by deleteByUserAndStatus() as it currently lacks return value for affected type ids
+                'type', // For use by deleteByUserAndStatus() as it currently lacks return value for affected type ids
                 'type-' . $type->id,
             ];
         };
