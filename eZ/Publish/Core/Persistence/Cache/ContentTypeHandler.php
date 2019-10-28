@@ -54,6 +54,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             return [
                 'type',
                 'type-' . $type->id,
+                // @todo Nuke these from orbit, better to stop caching drafts in the first place here then adding cache logic for this
                 'type-modifierId-' . $type->modifierId,
                 'type-creatorId-' . $type->creatorId,
             ];
