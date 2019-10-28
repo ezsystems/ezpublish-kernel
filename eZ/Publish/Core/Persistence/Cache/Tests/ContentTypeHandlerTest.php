@@ -68,6 +68,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['updateFieldDefinition', [5, 0, new SPITypeFieldDefinition()], ['type-5', 'type-map', 'content-fields-type-5']],
             ['updateFieldDefinition', [5, 1, new SPITypeFieldDefinition()], null, ['ez-content-type-5-1']],
             ['removeContentTypeTranslation', [5, 'eng-GB'], ['type-5', 'type-map', 'content-fields-type-5'], null, new SPIType()],
+            ['deleteByUserAndStatus', [12, 1], ['type']],
         ];
     }
 

@@ -52,11 +52,8 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         $this->getTypeTags = static function (Type $type) {
             return [
-                'type',
+                'type',// For use by deleteByUserAndStatus() as it currently lacks return value for affected type ids
                 'type-' . $type->id,
-                // @todo Nuke these from orbit, better to stop caching drafts in the first place here then adding cache logic for this
-                'type-modifierId-' . $type->modifierId,
-                'type-creatorId-' . $type->creatorId,
             ];
         };
         $this->getTypeKeys = static function (Type $type, int $status = Type::STATUS_DEFINED) {
@@ -520,7 +517,10 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
     public function deleteByUserAndStatus(int $userId, int $status): void
     {
+        $this->logger->logCall(__METHOD__, ['user' => $userId, 'status' => $status]);
+
         $this->persistenceHandler->contentTypeHandler()->deleteByUserAndStatus($userId, $status);
-        $this->cache->invalidateTags(['type-modifierId-' . $userId, 'type-creatorId-' . $userId]);
+        // As we don't have indication of affected type id's yet here, we need to clear all type cache for now.
+        $this->cache->invalidateTags(['type']);
     }
 }
