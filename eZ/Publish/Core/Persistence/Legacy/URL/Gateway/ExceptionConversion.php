@@ -7,18 +7,18 @@
 namespace eZ\Publish\Core\Persistence\Legacy\URL\Gateway;
 
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
+use eZ\Publish\Core\Base\Exceptions\DatabaseException;
 use eZ\Publish\Core\Persistence\Legacy\URL\Gateway;
 use eZ\Publish\SPI\Persistence\URL\URL;
 use Doctrine\DBAL\DBALException;
 use PDOException;
-use RuntimeException;
 
 class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway.
      *
-     * @var Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\URL\Gateway
      */
     protected $innerGateway;
 
@@ -32,73 +32,48 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function updateUrl(URL $url)
     {
         try {
             return $this->innerGateway->updateUrl($url);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find(Criterion $criterion, $offset, $limit, array $sortClauses = [], $doCount = true)
     {
         try {
             return $this->innerGateway->find($criterion, $offset, $limit, $sortClauses, $doCount);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findUsages($id)
     {
         try {
             return $this->innerGateway->findUsages($id);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadUrlData($id)
     {
         try {
             return $this->innerGateway->loadUrlData($id);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadUrlDataByUrl($url)
     {
         try {
             return $this->innerGateway->loadUrlDataByUrl($url);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 }
