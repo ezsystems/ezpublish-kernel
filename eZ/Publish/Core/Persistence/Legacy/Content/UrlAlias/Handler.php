@@ -441,6 +441,15 @@ class Handler implements UrlAliasHandlerInterface
                 $topElementMD5,
                 $data
             );
+        // adding existing alias to diffrent laquage version
+        } elseif ($row['action'] == $action && !((int)$row['lang_mask'] & $languageId)) {
+            $data['link'] = $id = $row['id'];
+            $data['lang_mask'] = $row['lang_mask'] | $languageId | (int)$alwaysAvailable;
+            $this->gateway->updateRow(
+                $parentId,
+                $topElementMD5,
+                $data
+            );
         } else {
             throw new ForbiddenException("Path '%path%' already exists for the given language", ['%path%' => $path]);
         }
