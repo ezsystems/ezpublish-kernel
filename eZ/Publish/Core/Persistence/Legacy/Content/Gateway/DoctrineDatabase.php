@@ -742,7 +742,7 @@ HEREDOC;
             $q->bindValue($value->sortKeyInt, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('sort_key_string'),
-            $q->bindValue(mb_substr($value->sortKeyString, 0, 255))
+            $q->bindValue(mb_substr((string)$value->sortKeyString, 0, 255))
         )->set(
             $this->dbHandler->quoteColumn('language_id'),
             $q->bindValue(
@@ -823,7 +823,7 @@ HEREDOC;
             $q->bindValue($value->sortKeyInt, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('sort_key_string'),
-            $q->bindValue(mb_substr($value->sortKeyString, 0, 255))
+            $q->bindValue(mb_substr((string)$value->sortKeyString, 0, 255))
         );
     }
 
@@ -1310,7 +1310,7 @@ HEREDOC;
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return array_map('intval', $statement->fetchAll(\PDO::FETCH_COLUMN));
     }
 
     /**
