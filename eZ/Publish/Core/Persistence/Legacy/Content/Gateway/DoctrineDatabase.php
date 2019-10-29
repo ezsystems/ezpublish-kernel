@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase Content Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -37,8 +35,12 @@ use PDO;
 
 /**
  * Doctrine database based content gateway.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence Content Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * The native Doctrine connection.
@@ -682,14 +684,9 @@ HEREDOC;
     }
 
     /**
-     * Checks if $languageCode is always available in $content.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param string $languageCode
-     *
-     * @return bool
+     * Check if $languageCode is always available in $content.
      */
-    protected function isLanguageAlwaysAvailable(Content $content, $languageCode)
+    private function isLanguageAlwaysAvailable(Content $content, string $languageCode): bool
     {
         return
             $content->versionInfo->contentInfo->alwaysAvailable &&
@@ -757,33 +754,29 @@ HEREDOC;
         $query->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load($contentId, $version = null, array $translations = null)
+    public function load(int $contentId, ?int $version = null, ?array $translations = null): array
     {
         return $this->internalLoadContent([$contentId], $version, $translations);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentList(array $contentIds, array $translations = null): array
+    public function loadContentList(array $contentIds, ?array $translations = null): array
     {
         return $this->internalLoadContent($contentIds, null, $translations);
     }
 
     /**
+     * Build query for the <code>load</code> and <code>loadContentList</code> methods.
+     *
+     * @param int[] $contentIds
+     * @param string[]|null $translations a list of language codes
+     *
      * @see load(), loadContentList()
-     *
-     * @param array $contentIds
-     * @param int|null $version
-     * @param string[]|null $translations
-     *
-     * @return array
      */
-    private function internalLoadContent(array $contentIds, int $version = null, array $translations = null): array
-    {
+    private function internalLoadContent(
+        array $contentIds,
+        ?int $version = null,
+        ?array $translations = null
+    ): array {
         $queryBuilder = $this->connection->createQueryBuilder();
         $expr = $queryBuilder->expr();
         $queryBuilder
@@ -873,10 +866,6 @@ HEREDOC;
      * Get query builder to load Content Info data.
      *
      * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoList(), loadContentInfoByLocationId()
-     *
-     * @param bool $joinMainLocation
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function createLoadContentInfoQueryBuilder(bool $joinMainLocation = true): DoctrineQueryBuilder
     {
@@ -905,19 +894,7 @@ HEREDOC;
         return $queryBuilder;
     }
 
-    /**
-     * Loads info for content identified by $contentId.
-     * Will basically return a hash containing all field values for ezcontentobject table plus some additional keys:
-     *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
-     *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB".
-     *
-     * @param int $contentId
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return array
-     */
-    public function loadContentInfo($contentId)
+    public function loadContentInfo(int $contentId): array
     {
         $queryBuilder = $this->createLoadContentInfoQueryBuilder();
         $queryBuilder
@@ -932,7 +909,7 @@ HEREDOC;
         return $results[0];
     }
 
-    public function loadContentInfoList(array $contentIds)
+    public function loadContentInfoList(array $contentIds): array
     {
         $queryBuilder = $this->createLoadContentInfoQueryBuilder();
         $queryBuilder
@@ -942,18 +919,7 @@ HEREDOC;
         return $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads info for a content object identified by its remote ID.
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param mixed $remoteId
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return array
-     */
-    public function loadContentInfoByRemoteId($remoteId)
+    public function loadContentInfoByRemoteId(string $remoteId): array
     {
         $queryBuilder = $this->createLoadContentInfoQueryBuilder();
         $queryBuilder
@@ -968,18 +934,7 @@ HEREDOC;
         return $results[0];
     }
 
-    /**
-     * Loads info for a content object identified by its location ID (node ID).
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param int $locationId
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return array
-     */
-    public function loadContentInfoByLocationId($locationId)
+    public function loadContentInfoByLocationId(int $locationId): array
     {
         $queryBuilder = $this->createLoadContentInfoQueryBuilder(false);
         $queryBuilder
@@ -994,19 +949,7 @@ HEREDOC;
         return $results[0];
     }
 
-    /**
-     * Loads version info for content identified by $contentId and $versionNo.
-     * Will basically return a hash containing all field values from ezcontentobject_version table plus following keys:
-     *  - names => Hash of content object names. Key is the language code, value is the name.
-     *  - languages => Hash of language ids. Key is the language code (e.g. "eng-GB"), value is the language numeric id without the always available bit.
-     *  - initial_language_code => Language code for initial language in this version.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
-     *
-     * @return array
-     */
-    public function loadVersionInfo($contentId, $versionNo = null)
+    public function loadVersionInfo(int $contentId, ?int $versionNo = null): array
     {
         $queryBuilder = $this->queryBuilder->createVersionInfoQueryBuilder($versionNo);
         $queryBuilder->where(
@@ -1019,14 +962,6 @@ HEREDOC;
         return $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Returns the number of all versions with given status created by the given $userId for content which is not in Trash.
-     *
-     * @param int $userId
-     * @param int $status
-     *
-     * @return int
-     */
     public function countVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): int
     {
         $query = $this->connection->createQueryBuilder();
@@ -1073,11 +1008,12 @@ HEREDOC;
         return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function loadVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1): array
-    {
+    public function loadVersionsForUser(
+        int $userId,
+        int $status = VersionInfo::STATUS_DRAFT,
+        int $offset = 0,
+        int $limit = -1
+    ): array {
         $query = $this->queryBuilder->createVersionInfoFindQueryBuilder();
         $expr = $query->expr();
         $query->where(
@@ -1631,11 +1567,12 @@ HEREDOC;
         return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function listReverseRelations(int $toContentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array
-    {
+    public function listReverseRelations(
+        int $toContentId,
+        int $offset = 0,
+        int $limit = -1,
+        ?int $relationType = null
+    ): array {
         $query = $this->queryBuilder->createRelationFindQueryBuilder();
         $expr = $query->expr();
         $query
@@ -1855,13 +1792,12 @@ HEREDOC;
     }
 
     /**
-     * Remove the specified translation from the Content Object Version.
+     * {@inheritdoc}
      *
-     * @param int $contentId
-     * @param string $languageCode language code of the translation
+     * @throws \Doctrine\DBAL\ConnectionException
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function deleteTranslationFromContent($contentId, $languageCode)
+    public function deleteTranslationFromContent(int $contentId, string $languageCode): void
     {
         $language = $this->languageHandler->loadByLanguageCode($languageCode);
 
@@ -1878,16 +1814,11 @@ HEREDOC;
         }
     }
 
-    /**
-     * Delete Content fields (attributes) for the given Translation.
-     * If $versionNo is given, fields for that Version only will be deleted.
-     *
-     * @param string $languageCode
-     * @param int $contentId
-     * @param int $versionNo (optional) filter by versionNo
-     */
-    public function deleteTranslatedFields($languageCode, $contentId, $versionNo = null)
-    {
+    public function deleteTranslatedFields(
+        string $languageCode,
+        int $contentId,
+        ?int $versionNo = null
+    ): void {
         $query = $this->connection->createQueryBuilder();
         $query
             ->delete('ezcontentobject_attribute')
@@ -1912,15 +1843,15 @@ HEREDOC;
     }
 
     /**
-     * Delete the specified Translation from the given Version.
+     * {@inheritdoc}
      *
-     * @param int $contentId
-     * @param int $versionNo
-     * @param string $languageCode
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function deleteTranslationFromVersion($contentId, $versionNo, $languageCode)
-    {
+    public function deleteTranslationFromVersion(
+        int $contentId,
+        int $versionNo,
+        string $languageCode
+    ): void {
         $language = $this->languageHandler->loadByLanguageCode($languageCode);
 
         $this->connection->beginTransaction();
@@ -1938,12 +1869,13 @@ HEREDOC;
     /**
      * Delete translation from the ezcontentobject_name table.
      *
-     * @param int $contentId
-     * @param string $languageCode
      * @param int $versionNo optional, if specified, apply to this Version only.
      */
-    private function deleteTranslationFromContentNames($contentId, $languageCode, $versionNo = null)
-    {
+    private function deleteTranslationFromContentNames(
+        int $contentId,
+        string $languageCode,
+        ?int $versionNo = null
+    ) {
         $query = $this->connection->createQueryBuilder();
         $query
             ->delete('ezcontentobject_name')
@@ -2008,13 +1940,15 @@ HEREDOC;
      * Remove language from language_mask of ezcontentobject_version and update initialLanguageId
      * if it matches the removed one.
      *
-     * @param int $contentId
-     * @param int $languageId
-     * @param int $versionNo optional, if specified, apply to this Version only.
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     * @param int|null $versionNo optional, if specified, apply to this Version only.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
-    private function deleteTranslationFromContentVersions($contentId, $languageId, $versionNo = null)
-    {
+    private function deleteTranslationFromContentVersions(
+        int $contentId,
+        int $languageId,
+        ?int $versionNo = null
+    ) {
         $query = $this->connection->createQueryBuilder();
         $query->update('ezcontentobject_version')
             // parameter for bitwise operation has to be placed verbatim (w/o binding) for this to work cross-DBMS
