@@ -145,43 +145,40 @@ class QueryBuilder
 
     /**
      * Create select query to query content name data.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    public function createNamesQuery()
+    public function createNamesQuery(): DoctrineQueryBuilder
     {
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query
             ->select(
-                $this->dbHandler->aliasedColumn($query, 'contentobject_id', 'ezcontentobject_name'),
-                $this->dbHandler->aliasedColumn($query, 'content_version', 'ezcontentobject_name'),
-                $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject_name'),
-                $this->dbHandler->aliasedColumn($query, 'content_translation', 'ezcontentobject_name')
+                'contentobject_id AS ezcontentobject_name_contentobject_id',
+                'content_version AS ezcontentobject_name_content_version',
+                'name AS ezcontentobject_name_name',
+                'content_translation AS ezcontentobject_name_content_translation'
             )
-            ->from($this->dbHandler->quoteTable('ezcontentobject_name'));
+            ->from(Gateway::CONTENT_NAME_TABLE);
 
         return $query;
     }
 
     /**
-     * Creates a select query for content relations.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     * Create a select query for content relations.
      */
-    public function createRelationFindQuery()
+    public function createRelationFindQueryBuilder(): DoctrineQueryBuilder
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'contentclassattribute_id', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'from_contentobject_id', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'from_contentobject_version', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'relation_type', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'to_contentobject_id', 'ezcontentobject_link')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject_link')
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(
+                'l.id AS ezcontentobject_link_id',
+                'l.contentclassattribute_id AS ezcontentobject_link_contentclassattribute_id',
+                'l.from_contentobject_id AS ezcontentobject_link_from_contentobject_id',
+                'l.from_contentobject_version AS ezcontentobject_link_from_contentobject_version',
+                'l.relation_type AS ezcontentobject_link_relation_type',
+                'l.to_contentobject_id AS ezcontentobject_link_to_contentobject_id'
+            )
+            ->from(
+                'ezcontentobject_link', 'l'
+            );
 
         return $query;
     }

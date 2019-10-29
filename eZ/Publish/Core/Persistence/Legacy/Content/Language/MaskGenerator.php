@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Language MaskGenerator class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -228,5 +226,32 @@ class MaskGenerator
         }
 
         return $mask;
+    }
+
+    /**
+     * Collect all translations of the given Persistence Fields and generate language mask.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function generateLanguageMaskForFields(
+        array $fields,
+        string $initialLanguageCode,
+        bool $isAlwaysAvailable
+    ): int {
+        $languages = [$initialLanguageCode => true];
+        foreach ($fields as $field) {
+            if (isset($languages[$field->languageCode])) {
+                continue;
+            }
+
+            $languages[$field->languageCode] = true;
+        }
+
+        return $this->generateLanguageMaskFromLanguageCodes(
+            array_keys($languages),
+            $isAlwaysAvailable
+        );
     }
 }
