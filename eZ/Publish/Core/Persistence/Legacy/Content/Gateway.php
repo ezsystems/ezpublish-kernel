@@ -21,6 +21,17 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
  */
 abstract class Gateway
 {
+    public const CONTENT_ITEM_TABLE = 'ezcontentobject';
+    public const CONTENT_NAME_TABLE = 'ezcontentobject_name';
+    public const CONTENT_FIELD_TABLE = 'ezcontentobject_attribute';
+    public const CONTENT_VERSION_TABLE = 'ezcontentobject_version';
+    public const CONTENT_RELATION_TABLE = 'ezcontentobject_link';
+
+    public const CONTENT_ITEM_SEQ = 'ezcontentobject_id_seq';
+    public const CONTENT_VERSION_SEQ = 'ezcontentobject_version_id_seq';
+    public const CONTENT_FIELD_SEQ = 'ezcontentobject_attribute_id_seq';
+    public const CONTENT_RELATION_SEQ = 'ezcontentobject_link_id_seq';
+
     /**
      * Inserts a new content object.
      *
@@ -29,60 +40,56 @@ abstract class Gateway
      *
      * @return int ID
      */
-    abstract public function insertContentObject(CreateStruct $struct, $currentVersionNo = 1);
+    abstract public function insertContentObject(
+        CreateStruct $struct,
+        int $currentVersionNo = 1
+    ): int;
 
     /**
-     * Inserts a new version.
+     * Insert a new Version.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      *
      * @return int ID
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function insertVersion(VersionInfo $versionInfo, array $fields);
+    abstract public function insertVersion(VersionInfo $versionInfo, array $fields): int;
 
     /**
-     * Updates an existing content identified by $contentId in respect to $struct.
+     * Update an existing content identified by $contentId based on $struct.
      *
-     * @param int $contentId
-     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $prePublishVersionInfo Provided on publish
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     abstract public function updateContent(
-        $contentId,
+        int $contentId,
         MetadataUpdateStruct $struct,
-        VersionInfo $prePublishVersionInfo = null
-    );
+        ?VersionInfo $prePublishVersionInfo = null
+    ): void;
 
     /**
      * Updates version $versionNo for content identified by $contentId, in respect to $struct.
-     *
-     * @param int $contentId
-     * @param int $versionNo
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $struct
      */
-    abstract public function updateVersion($contentId, $versionNo, UpdateStruct $struct);
+    abstract public function updateVersion(int $contentId, int $versionNo, UpdateStruct $struct): void;
 
     /**
-     * Updates "always available" flag for content identified by $contentId, in respect to $alwaysAvailable.
+     * Update "always available" flag for content identified by $contentId based on $alwaysAvailable.
      *
-     * @param int $contentId
-     * @param bool $newAlwaysAvailable New "always available" value
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function updateAlwaysAvailableFlag($contentId, $newAlwaysAvailable);
+    abstract public function updateAlwaysAvailableFlag(
+        int $contentId,
+        ?bool $newAlwaysAvailable = null
+    ): void;
 
     /**
-     * Sets the state of object identified by $contentId and $version to $state.
+     * Set the state of object identified by $contentId and $version to $state.
      *
-     * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
+     * @param int $status the one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
      *
-     * @param int $contentId
-     * @param int $version
-     * @param int $status
-     *
-     * @return bool
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
-    abstract public function setStatus($contentId, $version, $status);
+    abstract public function setStatus(int $contentId, int $version, int $status): bool;
 
     /**
      * Dedicated operation which sets Version status as published, similar to setStatus, but checking
@@ -97,51 +104,46 @@ abstract class Gateway
     abstract public function setPublishedStatus(int $contentId, int $status): void;
 
     /**
-     * Inserts a new field.
+     * Insert a new field.
      *
      * Only used when a new field is created (i.e. a new object or a field in a
      * new language!). After that, field IDs need to stay the same, only the
      * version number changes.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
-     *
      * @return int ID
      */
-    abstract public function insertNewField(Content $content, Field $field, StorageFieldValue $value);
+    abstract public function insertNewField(
+        Content $content,
+        Field $field,
+        StorageFieldValue $value
+    ): int;
 
     /**
-     * Inserts an existing field.
+     * Insert an existing field.
      *
      * Used to insert a field with an existing ID but a new version number.
      *
-     * @param Content $content
-     * @param Field $field
-     * @param StorageFieldValue $value
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function insertExistingField(Content $content, Field $field, StorageFieldValue $value);
+    abstract public function insertExistingField(
+        Content $content,
+        Field $field,
+        StorageFieldValue $value
+    ): void;
 
     /**
-     * Updates an existing field.
-     *
-     * @param Field $field
-     * @param StorageFieldValue $value
+     * Update an existing field.
      */
-    abstract public function updateField(Field $field, StorageFieldValue $value);
+    abstract public function updateField(Field $field, StorageFieldValue $value): void;
 
     /**
-     * Updates an existing, non-translatable field.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
-     * @param int $contentId
+     * Update an existing, non-translatable field.
      */
     abstract public function updateNonTranslatableField(
         Field $field,
         StorageFieldValue $value,
-        $contentId
-    );
+        int $contentId
+    ): void;
 
     /**
      * Loads data for a content object.
@@ -243,12 +245,12 @@ abstract class Gateway
     /**
      * Returns data for all versions with given status created by the given $userId.
      *
-     * @param int $userId
-     * @param int $status
-     *
      * @return string[][]
      */
-    abstract public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT);
+    abstract public function listVersionsForUser(
+        int $userId,
+        int $status = VersionInfo::STATUS_DRAFT
+    );
 
     /**
      * Returns data for all versions with given status created by the given $userId when content is not in the trash.
@@ -267,13 +269,16 @@ abstract class Gateway
      *
      * Result is returned with oldest version first (using version id as it has index and is auto increment).
      *
-     * @param mixed $contentId
-     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
      * @param int $limit Limit for items returned, -1 means none.
      *
      * @return string[][]
      */
-    abstract public function listVersions($contentId, $status = null, $limit = -1);
+    abstract public function listVersions(
+        int $contentId,
+        ?int $status = null,
+        int $limit = -1
+    ): array;
 
     /**
      * Returns all version numbers for the given $contentId.
@@ -282,7 +287,7 @@ abstract class Gateway
      *
      * @return int[]
      */
-    abstract public function listVersionNumbers($contentId);
+    abstract public function listVersionNumbers(int $contentId): array;
 
     /**
      * Returns last version number for content identified by $contentId.
@@ -291,127 +296,104 @@ abstract class Gateway
      *
      * @return int
      */
-    abstract public function getLastVersionNumber($contentId);
+    abstract public function getLastVersionNumber(int $contentId): int;
 
     /**
      * Returns all IDs for locations that refer to $contentId.
      *
-     * @param int $contentId
-     *
      * @return int[]
      */
-    abstract public function getAllLocationIds($contentId);
+    abstract public function getAllLocationIds(int $contentId): array;
 
     /**
      * Returns all field IDs of $contentId grouped by their type.
      * If $versionNo is set only field IDs for that version are returned.
      * If $languageCode is set, only field IDs for that language are returned.
      *
-     * @param int $contentId
-     * @param int|null $versionNo
-     * @param string|null $languageCode
-     *
      * @return int[][]
      */
-    abstract public function getFieldIdsByType($contentId, $versionNo = null, $languageCode = null);
+    abstract public function getFieldIdsByType(
+        int $contentId,
+        ?int $versionNo = null,
+        ?string $languageCode = null
+    ): array;
 
     /**
      * Deletes relations to and from $contentId.
      * If $versionNo is set only relations for that version are deleted.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
      */
-    abstract public function deleteRelations($contentId, $versionNo = null);
+    abstract public function deleteRelations(int $contentId, ?int $versionNo = null): void;
 
     /**
-     * Removes relations to Content with $contentId from Relation and RelationList field type fields.
-     *
-     * @param int $contentId
+     * Remove relations to Content with $contentId from Relation and RelationList field type fields.
      */
-    abstract public function removeReverseFieldRelations($contentId);
+    abstract public function removeReverseFieldRelations(int $contentId): void;
 
     /**
-     * Deletes the field with the given $fieldId.
-     *
-     * @param int $fieldId
+     * Delete the field with the given $fieldId.
      */
-    abstract public function deleteField($fieldId);
+    abstract public function deleteField(int $fieldId): void;
 
     /**
-     * Deletes all fields of $contentId in all versions.
+     * Delete all fields of $contentId in all versions.
+     *
      * If $versionNo is set only fields for that version are deleted.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
      */
-    abstract public function deleteFields($contentId, $versionNo = null);
+    abstract public function deleteFields(int $contentId, ?int $versionNo = null): void;
 
     /**
-     * Deletes all versions of $contentId.
+     * Delete all versions of $contentId.
+     *
      * If $versionNo is set only that version is deleted.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
      */
-    abstract public function deleteVersions($contentId, $versionNo = null);
+    abstract public function deleteVersions(int $contentId, ?int $versionNo = null): void;
 
     /**
-     * Deletes all names of $contentId.
+     * Delete all names of $contentId.
+     *
      * If $versionNo is set only names for that version are deleted.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
      */
-    abstract public function deleteNames($contentId, $versionNo = null);
+    abstract public function deleteNames(int $contentId, ?int $versionNo = null): void;
 
     /**
-     * Sets the content object name.
+     * Set the content object name.
      *
-     * @param int $contentId
-     * @param int $version
-     * @param string $name
-     * @param string $language
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function setName($contentId, $version, $name, $language);
+    abstract public function setName(
+        int $contentId,
+        int $version,
+        string $name,
+        string $languageCode
+    ): void;
 
     /**
-     * Deletes the actual content object referred to by $contentId.
-     *
-     * @param int $contentId
+     * Delete the actual content object referred to by $contentId.
      */
-    abstract public function deleteContent($contentId);
+    abstract public function deleteContent(int $contentId): void;
 
     /**
-     * Loads data of related to/from $contentId.
+     * Load data of related to/from $contentId.
      *
-     * @param int $contentId
-     * @param int $contentVersionNo
-     * @param int $relationType
-     *
-     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
+     * @return array Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
      */
-    abstract public function loadRelations($contentId, $contentVersionNo = null, $relationType = null);
+    abstract public function loadRelations(
+        int $contentId,
+        ?int $contentVersionNo = null,
+        ?int $relationType = null
+    ): array;
 
     /**
-     * Counts number of related to/from $contentId.
-     *
-     * @param int $contentId
-     * @param int|null $relationType
-     *
-     * @return int
+     * Count number of related to/from $contentId.
      */
     abstract public function countReverseRelations(int $contentId, ?int $relationType = null): int;
 
     /**
-     * Loads data of related to/from $contentId.
+     * Load data of related to/from $contentId.
      *
-     * @param int $contentId
-     * @param int $relationType
-     *
-     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
+     * @return array Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
      */
-    abstract public function loadReverseRelations($contentId, $relationType = null);
+    abstract public function loadReverseRelations(int $contentId, ?int $relationType = null): array;
 
     /**
      * Loads paginated data of related to/from $contentId.
@@ -426,45 +408,37 @@ abstract class Gateway
     abstract public function listReverseRelations(int $contentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array;
 
     /**
-     * Deletes the relation with the given $relationId.
+     * Delete the relation with the given $relationId.
      *
-     * @param int $relationId
-     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     * @param int $type one of Relation type constants.
+     *
+     * @see \eZ\Publish\API\Repository\Values\Content\Relation
      */
-    abstract public function deleteRelation($relationId, $type);
+    abstract public function deleteRelation(int $relationId, int $type): void;
 
     /**
-     * Inserts a new relation database record.
+     * Insert a new content relation.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
-     *
-     * @return int ID the inserted ID
+     * @return int the inserted ID
      */
-    abstract public function insertRelation(RelationCreateStruct $createStruct);
+    abstract public function insertRelation(RelationCreateStruct $createStruct): int;
 
     /**
-     * Returns all Content IDs for a given $contentTypeId.
-     *
-     * @param int $contentTypeId
+     * Return all Content IDs for the given $contentTypeId.
      *
      * @return int[]
      */
-    abstract public function getContentIdsByContentTypeId($contentTypeId);
+    abstract public function getContentIdsByContentTypeId(int $contentTypeId): array;
 
     /**
      * Load name data for set of content id's and corresponding version number.
      *
      * @param array[] $rows array of hashes with 'id' and 'version' to load names for
-     *
-     * @return array
      */
-    abstract public function loadVersionedNameData($rows);
+    abstract public function loadVersionedNameData(array $rows): array;
 
     /**
-     * Batch method for copying all relation meta data for copied Content object.
+     * Bulk-copy all relations meta data for a copied Content item.
      *
      * Is meant to be used during content copy, so assumes the following:
      * - version number is the same
@@ -472,11 +446,13 @@ abstract class Gateway
      * - relation type is the same
      * - target relation is the same
      *
-     * @param int $originalContentId
-     * @param int $copiedContentId
      * @param int|null $versionNo If specified only copy for a given version number, otherwise all.
      */
-    abstract public function copyRelations($originalContentId, $copiedContentId, $versionNo = null);
+    abstract public function copyRelations(
+        int $originalContentId,
+        int $copiedContentId,
+        ?int $versionNo = null
+    ): void;
 
     /**
      * Remove the specified translation from all the Versions of a Content Object.
