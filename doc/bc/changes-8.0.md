@@ -242,6 +242,15 @@ Changes affecting version compatibility with former or future versions.
   ```php
   public function supports(int $capabilityFlag): bool;
   ```
+* The signature of the `\eZ\Publish\API\Repository\Values\ValueObject\SiteAccess::__construct` method was changed to make `name` property required:
+  ```php
+  public function __construct(
+      string $name,
+      string $matchingType = self::DEFAULT_MATCHING_TYPE,
+      $matcher = null,
+      ?string $provider = null
+  );
+  ```  
 
 ## Removed services
 

@@ -1,74 +1,19 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\RouterSpecialPortsTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
-use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port as PortMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 use Psr\Log\LoggerInterface;
 
-class RouterSpecialPortsTest extends TestCase
+class RouterSpecialPortsTest extends RouterBaseTest
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder */
-    private $matcherBuilder;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->matcherBuilder = new MatcherBuilder();
-    }
-
-    public function testConstruct()
-    {
-        return new Router(
-            $this->matcherBuilder,
-            $this->createMock(LoggerInterface::class),
-            'default_sa',
-            [
-                'Map\\URI' => [
-                    'first_sa' => 'first_sa',
-                    'second_sa' => 'second_sa',
-                ],
-                'Map\\Host' => [
-                    'first_sa' => 'first_sa',
-                    'first_siteaccess' => 'first_sa',
-                    'third_siteaccess' => 'third_sa',
-                ],
-                'Map\\Port' => [
-                    80 => 'fifth_sa',
-                    81 => 'third_sa',
-                    82 => 'fourth_sa',
-                    83 => 'first_sa',
-                    85 => 'first_sa',
-                    443 => 'fourth_sa',
-                ],
-            ],
-            ['first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'fifth_sa']
-        );
-    }
-
-    /**
-     * @depends testConstruct
-     * @dataProvider matchProvider
-     */
-    public function testMatch($request, $siteAccess, $router)
-    {
-        $sa = $router->match($request);
-        $this->assertInstanceOf(SiteAccess::class, $sa);
-        $this->assertSame($siteAccess, $sa->name);
-        $router->setSiteAccess();
-    }
-
-    public function matchProvider()
+    public function matchProvider(): array
     {
         return [
             [SimplifiedRequest::fromUrl('http://example.com'), 'fifth_sa'],
@@ -133,5 +78,48 @@ class RouterSpecialPortsTest extends TestCase
     {
         $matcher = new PortMatcher(['port' => '8080', 'scheme' => 'http'], []);
         $this->assertSame('port', $matcher->getName());
+    }
+
+    protected function createRouter(): Router
+    {
+        return new Router(
+            $this->matcherBuilder,
+            $this->createMock(LoggerInterface::class),
+            'default_sa',
+            [
+                'Map\\URI' => [
+                    'first_sa' => 'first_sa',
+                    'second_sa' => 'second_sa',
+                ],
+                'Map\\Host' => [
+                    'first_sa' => 'first_sa',
+                    'first_siteaccess' => 'first_sa',
+                    'third_siteaccess' => 'third_sa',
+                ],
+                'Map\\Port' => [
+                    80 => 'fifth_sa',
+                    81 => 'third_sa',
+                    82 => 'fourth_sa',
+                    83 => 'first_sa',
+                    85 => 'first_sa',
+                    443 => 'fourth_sa',
+                ],
+            ],
+            $this->siteAccessProvider
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\SiteAccessSetting[]
+     */
+    public function getSiteAccessProviderSettings(): array
+    {
+        return [
+            new SiteAccessSetting('first_sa', true),
+            new SiteAccessSetting('second_sa', true),
+            new SiteAccessSetting('third_sa', true),
+            new SiteAccessSetting('fourth_sa', true),
+            new SiteAccessSetting('fifth_sa', true),
+        ];
     }
 }

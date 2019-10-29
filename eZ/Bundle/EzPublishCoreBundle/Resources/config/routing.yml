@@ -76,6 +76,21 @@ services:
         arguments:
             - '@eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistry'
 
+    ezpublish.siteaccess.provider.static:
+        class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider\StaticSiteAccessProvider
+        arguments:
+            - "%ezpublish.siteaccess.list%"
+        tags:
+            - { name: ezplatform.siteaccess.provider, priority: 10 }
+
+    ezpublish.siteaccess.provider.chain:
+        class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider\ChainSiteAccessProvider
+        arguments:
+            $providers: !tagged ezplatform.siteaccess.provider
+
+    ezpublish.siteaccess.provider:
+        alias: ezpublish.siteaccess.provider.chain
+
     ezpublish.siteaccess_router:
         class: "%ezpublish.siteaccess_router.class%"
         arguments:
@@ -83,7 +98,7 @@ services:
             - "@logger"
             - "%ezpublish.siteaccess.default%"
             - "%ezpublish.siteaccess.match_config%"
-            - "%ezpublish.siteaccess.list%"
+            - "@ezpublish.siteaccess.provider"
             - "%ezpublish.siteaccess.class%"
             - "%kernel.debug%"
 

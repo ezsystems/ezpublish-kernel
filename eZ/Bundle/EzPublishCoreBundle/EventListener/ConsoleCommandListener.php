@@ -17,35 +17,31 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-/**
- * ConsoleCommandListener event listener.
- */
 class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAware
 {
     /** @var string */
     private $defaultSiteAccessName;
 
-    /** @var array */
-    private $siteAccessList;
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessProviderInterface */
+    private $siteAccessProvider;
 
-    /** @var EventDispatcherInterface */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     private $eventDispatcher;
 
-    /**
-     * @var
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess|null */
     private $siteAccess;
 
     /** @var bool */
     private $debug;
 
-    /**
-     * ConsoleCommandListener constructor.
-     */
-    public function __construct($defaultSiteAccessName, array $siteAccessList, EventDispatcherInterface $eventDispatcher, $debug = false)
-    {
+    public function __construct(
+        string $defaultSiteAccessName,
+        SiteAccess\SiteAccessProviderInterface $siteAccessProvider,
+        EventDispatcherInterface $eventDispatcher,
+        bool $debug = false
+    ) {
         $this->defaultSiteAccessName = $defaultSiteAccessName;
-        $this->siteAccessList = $siteAccessList;
+        $this->siteAccessProvider = $siteAccessProvider;
         $this->eventDispatcher = $eventDispatcher;
         $this->debug = $debug;
     }
@@ -64,8 +60,13 @@ class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAwar
         $this->siteAccess->name = $event->getInput()->getParameterOption('--siteaccess', $this->defaultSiteAccessName);
         $this->siteAccess->matchingType = 'cli';
 
-        if (!in_array($this->siteAccess->name, $this->siteAccessList)) {
-            throw new InvalidSiteAccessException($this->siteAccess->name, $this->siteAccessList, $this->siteAccess->matchingType, $this->debug);
+        if (!$this->siteAccessProvider->isDefined($this->siteAccess->name)) {
+            throw new InvalidSiteAccessException(
+                $this->siteAccess->name,
+                $this->siteAccessProvider,
+                $this->siteAccess->matchingType,
+                $this->debug
+            );
         }
 
         $this->eventDispatcher->dispatch(new ScopeChangeEvent($this->siteAccess), MVCEvents::CONFIG_SCOPE_CHANGE);

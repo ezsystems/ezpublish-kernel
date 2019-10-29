@@ -44,14 +44,14 @@ class SessionInitByPostListenerTest extends TestCase
 
     public function testOnSiteAccessMatchNoSessionService()
     {
-        $event = new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $event = new PostSiteAccessMatchEvent(new SiteAccess('test'), new Request(), HttpKernelInterface::MASTER_REQUEST);
         $listener = new SessionInitByPostListener(null);
         $this->assertNull($listener->onSiteAccessMatch($event));
     }
 
     public function testOnSiteAccessMatchSubRequest()
     {
-        $event = new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST);
+        $event = new PostSiteAccessMatchEvent(new SiteAccess('test'), new Request(), HttpKernelInterface::SUB_REQUEST);
         $this->session
             ->expects($this->never())
             ->method('getName');
@@ -61,7 +61,7 @@ class SessionInitByPostListenerTest extends TestCase
     public function testOnSiteAccessMatchRequestNoSessionName()
     {
         $sessionName = 'eZSESSID';
-        $event = new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $event = new PostSiteAccessMatchEvent(new SiteAccess('test'), new Request(), HttpKernelInterface::MASTER_REQUEST);
 
         $this->session
             ->expects($this->once())
@@ -87,7 +87,7 @@ class SessionInitByPostListenerTest extends TestCase
         $sessionId = 'foobar123';
         $request = new Request();
         $request->request->set($sessionName, $sessionId);
-        $event = new PostSiteAccessMatchEvent(new SiteAccess(), $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new PostSiteAccessMatchEvent(new SiteAccess('test'), $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->session
             ->expects($this->once())

@@ -132,7 +132,7 @@ class RequestEventListenerTest extends TestCase
         $semanticPathinfo = '/foo/something';
         $request->attributes->set('semanticPathinfo', $semanticPathinfo);
         $request->attributes->set('needsRedirect', true);
-        $request->attributes->set('siteaccess', new SiteAccess());
+        $request->attributes->set('siteaccess', new SiteAccess('test'));
 
         $event = new RequestEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
         $this->requestEventListener->onKernelRequestRedirect($event);
@@ -154,7 +154,7 @@ class RequestEventListenerTest extends TestCase
         $request->attributes->set('semanticPathinfo', $semanticPathinfo);
         $request->attributes->set('needsRedirect', true);
         $request->attributes->set('locationId', 123);
-        $request->attributes->set('siteaccess', new SiteAccess());
+        $request->attributes->set('siteaccess', new SiteAccess('test'));
 
         $event = new RequestEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
         $this->requestEventListener->onKernelRequestRedirect($event);

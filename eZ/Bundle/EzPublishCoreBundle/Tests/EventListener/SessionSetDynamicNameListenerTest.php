@@ -62,7 +62,7 @@ class SessionSetDynamicNameListenerTest extends TestCase
             ->expects($this->never())
             ->method('setOptions');
         $listener = new SessionSetDynamicNameListener($this->configResolver, null, $this->sessionStorage);
-        $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST));
+        $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess('test'), new Request(), HttpKernelInterface::MASTER_REQUEST));
     }
 
     public function testOnSiteAccessMatchSubRequest()
@@ -71,7 +71,7 @@ class SessionSetDynamicNameListenerTest extends TestCase
             ->expects($this->never())
             ->method('setOptions');
         $listener = new SessionSetDynamicNameListener($this->configResolver, $this->session, $this->sessionStorage);
-        $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST));
+        $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess('test'), new Request(), HttpKernelInterface::SUB_REQUEST));
     }
 
     public function testOnSiteAccessMatchNonNativeSessionStorage()
@@ -84,7 +84,7 @@ class SessionSetDynamicNameListenerTest extends TestCase
             $this->session,
             $this->createMock(SessionStorageInterface::class)
         );
-        $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST));
+        $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess('test'), new Request(), HttpKernelInterface::SUB_REQUEST));
     }
 
     /**
@@ -165,6 +165,6 @@ class SessionSetDynamicNameListenerTest extends TestCase
             ->will($this->returnValue($configuredSessionStorageOptions));
 
         $listener = new SessionSetDynamicNameListener($this->configResolver, $this->session, $this->sessionStorage);
-        $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST));
+        $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess('test'), new Request(), HttpKernelInterface::MASTER_REQUEST));
     }
 }

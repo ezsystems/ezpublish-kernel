@@ -80,7 +80,7 @@ class RoutingListenerTest extends TestCase
             ->method('setExcludedUriPrefixes')
             ->with($excludedUriPrefixes);
 
-        $event = new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $event = new PostSiteAccessMatchEvent(new SiteAccess('test'), new Request(), HttpKernelInterface::MASTER_REQUEST);
         $listener = new RoutingListener($this->configResolver, $this->urlAliasRouter, $this->urlAliasGenerator);
         $listener->onSiteAccessMatch($event);
     }
