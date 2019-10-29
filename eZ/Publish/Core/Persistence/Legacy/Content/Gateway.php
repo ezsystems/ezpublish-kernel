@@ -22,13 +22,6 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 abstract class Gateway
 {
     /**
-     * Get context definition for external storage layers.
-     *
-     * @return array
-     */
-    abstract public function getContext();
-
-    /**
      * Inserts a new content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct

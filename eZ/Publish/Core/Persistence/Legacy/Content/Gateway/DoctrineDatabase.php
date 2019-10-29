@@ -104,19 +104,6 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Get context definition for external storage layers.
-     *
-     * @return array
-     */
-    public function getContext()
-    {
-        return [
-            'identifier' => 'LegacyStorage',
-            'connection' => $this->dbHandler,
-        ];
-    }
-
-    /**
      * Inserts a new content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
