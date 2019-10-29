@@ -44,20 +44,6 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Get context definition for external storage layers.
-     *
-     * @return array
-     */
-    public function getContext()
-    {
-        try {
-            return $this->innerGateway->getContext();
-        } catch (DBALException | PDOException $e) {
-            throw DatabaseException::wrap($e);
-        }
-    }
-
-    /**
      * Inserts a new content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
