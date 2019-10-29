@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Content Gateway base class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -22,9 +20,9 @@ use Doctrine\DBAL\DBALException;
 use PDOException;
 
 /**
- * Base class for content gateways.
+ * @internal Internal exception conversion layer.
  */
-class ExceptionConversion extends Gateway
+final class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway.
@@ -156,10 +154,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load($contentId, $version = null, array $translations = null)
+    public function load(int $contentId, ?int $version = null, ?array $translations = null): array
     {
         try {
             return $this->innerGateway->load($contentId, $version, $translations);
@@ -168,10 +163,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentList(array $contentIds, array $translations = null): array
+    public function loadContentList(array $contentIds, ?array $translations = null): array
     {
         try {
             return $this->innerGateway->loadContentList($contentIds, $translations);
@@ -180,16 +172,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Loads data for a content object identified by its remote ID.
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param mixed $remoteId
-     *
-     * @return array
-     */
-    public function loadContentInfoByRemoteId($remoteId)
+    public function loadContentInfoByRemoteId(string $remoteId): array
     {
         try {
             return $this->innerGateway->loadContentInfoByRemoteId($remoteId);
@@ -198,18 +181,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Loads info for a content object identified by its location ID (node ID).
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param int $locationId
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return array
-     */
-    public function loadContentInfoByLocationId($locationId)
+    public function loadContentInfoByLocationId(int $locationId): array
     {
         try {
             return $this->innerGateway->loadContentInfoByLocationId($locationId);
@@ -218,19 +190,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Loads info for content identified by $contentId.
-     * Will basically return a hash containing all field values for ezcontentobject table plus following keys:
-     *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
-     *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB".
-     *
-     * @param int $contentId
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return array
-     */
-    public function loadContentInfo($contentId)
+    public function loadContentInfo(int $contentId): array
     {
         try {
             return $this->innerGateway->loadContentInfo($contentId);
@@ -239,7 +199,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadContentInfoList(array $contentIds)
+    public function loadContentInfoList(array $contentIds): array
     {
         try {
             return $this->innerGateway->loadContentInfoList($contentIds);
@@ -248,19 +208,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Loads version info for content identified by $contentId and $versionNo.
-     * Will basically return a hash containing all field values from ezcontentobject_version table plus following keys:
-     *  - names => Hash of content object names. Key is the language code, value is the name.
-     *  - languages => Hash of language ids. Key is the language code (e.g. "eng-GB"), value is the language numeric id without the always available bit.
-     *  - initial_language_code => Language code for initial language in this version.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
-     *
-     * @return array
-     */
-    public function loadVersionInfo($contentId, $versionNo = null)
+    public function loadVersionInfo(int $contentId, ?int $versionNo = null): array
     {
         try {
             return $this->innerGateway->loadVersionInfo($contentId, $versionNo);
@@ -269,14 +217,6 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns the number of all versions with given status created by the given $userId.
-     *
-     * @param int $userId
-     * @param int $status
-     *
-     * @return int
-     */
     public function countVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): int
     {
         try {
@@ -298,11 +238,12 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function loadVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1): array
-    {
+    public function loadVersionsForUser(
+        int $userId,
+        int $status = VersionInfo::STATUS_DRAFT,
+        int $offset = 0,
+        int $limit = -1
+    ): array {
         try {
             return $this->innerGateway->loadVersionsForUser($userId, $status, $offset, $limit);
         } catch (DBALException | PDOException $e) {
@@ -328,13 +269,6 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns last version number for content identified by $contentId.
-     *
-     * @param int $contentId
-     *
-     * @return int
-     */
     public function getLastVersionNumber(int $contentId): int
     {
         try {
@@ -467,15 +401,21 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function listReverseRelations(int $contentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array
-    {
+    public function listReverseRelations(
+        int $contentId,
+        int $offset = 0,
+        int $limit = -1,
+        ?int $relationType = null
+    ): array {
         try {
-            return $this->innerGateway->listReverseRelations($contentId, $offset, $limit, $relationType);
+            return $this->innerGateway->listReverseRelations(
+                $contentId,
+                $offset,
+                $limit,
+                $relationType
+            );
         } catch (DBALException | PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -527,49 +467,42 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Remove the specified translation from all the Versions of a Content Object.
-     *
-     * @param int $contentId
-     * @param string $languageCode language code of the translation
-     */
-    public function deleteTranslationFromContent($contentId, $languageCode)
+    public function deleteTranslationFromContent(int $contentId, string $languageCode): void
     {
         try {
-            return $this->innerGateway->deleteTranslationFromContent($contentId, $languageCode);
+            $this->innerGateway->deleteTranslationFromContent($contentId, $languageCode);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Delete Content fields (attributes) for the given Translation.
-     * If $versionNo is given, fields for that Version only will be deleted.
-     *
-     * @param string $languageCode
-     * @param int $contentId
-     * @param int $versionNo (optional) filter by versionNo
-     */
-    public function deleteTranslatedFields($languageCode, $contentId, $versionNo = null)
-    {
+    public function deleteTranslatedFields(
+        string $languageCode,
+        int $contentId,
+        ?int $versionNo = null
+    ): void {
         try {
-            return $this->innerGateway->deleteTranslatedFields($languageCode, $contentId, $versionNo);
+            $this->innerGateway->deleteTranslatedFields(
+                $languageCode,
+                $contentId,
+                $versionNo
+            );
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Delete the specified Translation from the given Version.
-     *
-     * @param int $contentId
-     * @param int $versionNo
-     * @param string $languageCode
-     */
-    public function deleteTranslationFromVersion($contentId, $versionNo, $languageCode)
-    {
+    public function deleteTranslationFromVersion(
+        int $contentId,
+        int $versionNo,
+        string $languageCode
+    ): void {
         try {
-            return $this->innerGateway->deleteTranslationFromVersion($contentId, $versionNo, $languageCode);
+            $this->innerGateway->deleteTranslationFromVersion(
+                $contentId,
+                $versionNo,
+                $languageCode
+            );
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }

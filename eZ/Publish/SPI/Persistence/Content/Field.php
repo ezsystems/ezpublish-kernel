@@ -15,14 +15,14 @@ class Field extends ValueObject
     /**
      * Field ID.
      *
-     * @var mixed
+     * @var int
      */
     public $id;
 
     /**
      * Corresponding field definition.
      *
-     * @var mixed
+     * @var int
      */
     public $fieldDefinitionId;
 

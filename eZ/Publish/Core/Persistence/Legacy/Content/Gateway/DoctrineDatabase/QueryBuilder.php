@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase query builder class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -12,10 +10,13 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
-class QueryBuilder
+/**
+ * @internal For internal use by the Content gateway.
+ */
+final class QueryBuilder
 {
     /** @var \Doctrine\DBAL\Connection */
-    protected $connection;
+    private $connection;
 
     public function __construct(Connection $connection)
     {
@@ -56,7 +57,7 @@ class QueryBuilder
                 'l.to_contentobject_id AS ezcontentobject_link_to_contentobject_id'
             )
             ->from(
-                'ezcontentobject_link', 'l'
+                Gateway::CONTENT_RELATION_TABLE, 'l'
             );
 
         return $query;
@@ -65,11 +66,9 @@ class QueryBuilder
     /**
      * Create a doctrine query builder with db fields needed to populate VersionInfo.
      *
-     * @param int|null $versionNo Selects current version number if left undefined as null.
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @param int|null $versionNo Selects current version number if left undefined as null
      */
-    public function createVersionInfoQueryBuilder($versionNo = null)
+    public function createVersionInfoQueryBuilder(?int $versionNo = null): DoctrineQueryBuilder
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $expr = $queryBuilder->expr();

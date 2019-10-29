@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Content Gateway base class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -33,12 +31,11 @@ abstract class Gateway
     public const CONTENT_RELATION_SEQ = 'ezcontentobject_link_id_seq';
 
     /**
-     * Inserts a new content object.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
-     * @param mixed $currentVersionNo
+     * Insert a new Content item.
      *
      * @return int ID
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     abstract public function insertContentObject(
         CreateStruct $struct,
@@ -146,65 +143,56 @@ abstract class Gateway
     ): void;
 
     /**
-     * Loads data for a content object.
+     * Load data for a content object.
      *
      * Returns an array with the relevant data.
      *
-     * @param mixed $contentId
      * @param int|null $version Current version on null value.
-     * @param string[] $translations
-     *
-     * @return array
+     * @param string[]|null $translations
      */
-    abstract public function load($contentId, $version = null, array $translations = null);
+    abstract public function load(
+        int $contentId,
+        ?int $version = null,
+        ?array $translations = null
+    ): array;
 
     /**
-     * Loads current version for a list of content objects.
+     * Load current versions for a list of content item numeric IDs.
      *
      * @param int[] $contentIds
      * @param string[]|null $translations If languages is not set, ALL will be loaded.
      *
      * @return array[]
      */
-    abstract public function loadContentList(array $contentIds, array $translations = null): array;
+    abstract public function loadContentList(array $contentIds, ?array $translations = null): array;
 
     /**
-     * Loads info for a content object identified by its remote ID.
+     * Load info for a content object identified by its remote ID.
      *
      * Returns an array with the relevant data.
      *
-     * @param mixed $remoteId
-     *
-     * @return array
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function loadContentInfoByRemoteId($remoteId);
+    abstract public function loadContentInfoByRemoteId(string $remoteId): array;
 
     /**
-     * Loads info for a content object identified by its location ID (node ID).
+     * Load info for a content object identified by its location ID (node ID).
      *
      * Returns an array with the relevant data.
      *
-     * @param int $locationId
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return array
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function loadContentInfoByLocationId($locationId);
+    abstract public function loadContentInfoByLocationId(int $locationId): array;
 
     /**
-     * Loads info for content identified by $contentId.
+     * Load info for content identified by $contentId.
      * Will basically return a hash containing all field values for ezcontentobject table plus following keys:
      *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
      *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB".
      *
-     * @param int $contentId
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return array
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function loadContentInfo($contentId);
+    abstract public function loadContentInfo(int $contentId): array;
 
     /**
      * Loads rows of info for content identified by $contentIds.
@@ -212,35 +200,28 @@ abstract class Gateway
      * @see loadContentInfo For the returned structure.
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadContentInfoList For how this will only return items found and not throw.
      *
-     * @param array $contentIds
-     *
-     * @return array[]
+     * @param int[] $contentIds
      */
-    abstract public function loadContentInfoList(array $contentIds);
+    abstract public function loadContentInfoList(array $contentIds): array;
 
     /**
-     * Loads version info for content identified by $contentId and $versionNo.
+     * Load version info for content identified by $contentId and $versionNo.
      * Will basically return a hash containing all field values from ezcontentobject_version table plus following keys:
      *  - names => Hash of content object names. Key is the language code, value is the name.
      *  - languages => Hash of language ids. Key is the language code (e.g. "eng-GB"), value is the language numeric id without the always available bit.
      *  - initial_language_code => Language code for initial language in this version.
      *
-     * @param int $contentId
      * @param int|null $versionNo Load current version if null.
-     *
-     * @return array
      */
-    abstract public function loadVersionInfo($contentId, $versionNo = null);
+    abstract public function loadVersionInfo(int $contentId, ?int $versionNo = null): array;
 
     /**
-     * Returns the number of all versions with given status created by the given $userId.
-     *
-     * @param int $userId
-     * @param int $status
-     *
-     * @return int
+     * Return the number of all versions with given status created by the given $userId.
      */
-    abstract public function countVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): int;
+    abstract public function countVersionsForUser(
+        int $userId,
+        int $status = VersionInfo::STATUS_DRAFT
+    ): int;
 
     /**
      * Returns data for all versions with given status created by the given $userId.
@@ -253,16 +234,16 @@ abstract class Gateway
     );
 
     /**
-     * Returns data for all versions with given status created by the given $userId when content is not in the trash.
+     * Return data for all versions with given status created by the given $userId when content is not in the trash.
      *
      * The list is sorted by modification date.
-     *
-     * @param int $userId
-     * @param int $status
-     *
-     * @return string[][]
      */
-    abstract public function loadVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1): array;
+    abstract public function loadVersionsForUser(
+        int $userId,
+        int $status = VersionInfo::STATUS_DRAFT,
+        int $offset = 0,
+        int $limit = -1
+    ): array;
 
     /**
      * Returns all version data for the given $contentId.
@@ -281,20 +262,14 @@ abstract class Gateway
     ): array;
 
     /**
-     * Returns all version numbers for the given $contentId.
-     *
-     * @param mixed $contentId
+     * Return all version numbers for the given $contentId.
      *
      * @return int[]
      */
     abstract public function listVersionNumbers(int $contentId): array;
 
     /**
-     * Returns last version number for content identified by $contentId.
-     *
-     * @param int $contentId
-     *
-     * @return int
+     * Return last version number for content identified by $contentId.
      */
     abstract public function getLastVersionNumber(int $contentId): int;
 
@@ -396,16 +371,14 @@ abstract class Gateway
     abstract public function loadReverseRelations(int $contentId, ?int $relationType = null): array;
 
     /**
-     * Loads paginated data of related to/from $contentId.
-     *
-     * @param int $contentId
-     * @param int $offset
-     * @param int $limit
-     * @param int|null $relationType
-     *
-     * @return array
+     * Load paginated data of related to/from $contentId.
      */
-    abstract public function listReverseRelations(int $contentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array;
+    abstract public function listReverseRelations(
+        int $contentId,
+        int $offset = 0,
+        int $limit = -1,
+        ?int $relationType = null
+    ): array;
 
     /**
      * Delete the relation with the given $relationId.
@@ -455,29 +428,36 @@ abstract class Gateway
     ): void;
 
     /**
-     * Remove the specified translation from all the Versions of a Content Object.
+     * Remove the specified translation from the Content Object Version.
      *
-     * @param int $contentId
-     * @param string $languageCode language code of the translation
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
-    abstract public function deleteTranslationFromContent($contentId, $languageCode);
+    abstract public function deleteTranslationFromContent(
+        int $contentId,
+        string $languageCode
+    ): void;
 
     /**
      * Delete Content fields (attributes) for the given Translation.
-     * If $versionNo is given, fields for that Version only will be deleted.
      *
-     * @param string $languageCode
-     * @param int $contentId
-     * @param int $versionNo (optional) filter by versionNo
+     * If $versionNo is given, fields for that Version only will be deleted.
      */
-    abstract public function deleteTranslatedFields($languageCode, $contentId, $versionNo = null);
+    abstract public function deleteTranslatedFields(
+        string $languageCode,
+        int $contentId,
+        ?int $versionNo = null
+    ): void;
 
     /**
      * Delete the specified Translation from the given Version.
      *
-     * @param int $contentId
-     * @param int $versionNo
-     * @param string $languageCode
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
-    abstract public function deleteTranslationFromVersion($contentId, $versionNo, $languageCode);
+    abstract public function deleteTranslationFromVersion(
+        int $contentId,
+        int $versionNo,
+        string $languageCode
+    ): void;
 }
