@@ -2260,6 +2260,57 @@ class UrlAliasHandlerTest extends TestCase
      * @group create
      * @group custom
      */
+    public function testCreateCustomUrlAliasAddLanguage()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/publish_base.php');
+
+        $countBeforeReusing = $this->countRows();
+        $handler->createCustomUrlAlias(
+            314,
+            'path314',
+            false,
+            'eng-GB',
+            true
+        );
+
+        self::assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+        self::assertEquals(
+            new UrlAlias(
+                [
+                    'id' => '0-fdbbfa1e24e78ef56cb16ba4482c7771',
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => '314',
+                    'languageCodes' => ['cro-HR', 'eng-GB'],
+                    'pathData' => [
+                        [
+                            'always-available' => true,
+                            'translations' => [
+                                'cro-HR' => 'path314',
+                                'eng-GB' => 'path314',
+                            ],
+                        ],
+                    ],
+                    'alwaysAvailable' => true,
+                    'isHistory' => false,
+                    'isCustom' => true,
+                    'forward' => false,
+                ]
+            ),
+            $handler->lookup('path314')
+        );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @group create
+     * @group custom
+     */
     public function testCreateCustomUrlAliasReusesHistoryOfDifferentLanguage()
     {
         $handler = $this->getHandler();

@@ -95,6 +95,34 @@ class URLAliasServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\API\Repository\URLAliasService::createUrlAlias
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCreateSameAliasForDifferentLanguage()
+    {
+        $repository = $this->getRepository();
+        $locationId = $this->generateId('location', 5);
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+        $location = $locationService->loadLocation($locationId);
+
+        $urlAliasService->createUrlAlias($location, '/alias', 'eng-US');
+        $updatedAlias = $urlAliasService->createUrlAlias($location, '/alias', 'eng-GB');
+
+        $this->assertPropertiesCorrect(
+            [
+                'languageCodes' => ['eng-US', 'eng-GB'],
+            ],
+            $updatedAlias
+        );
+    }
+
+    /**
      * @param array $testData
      *
      * @depends testCreateUrlAlias
