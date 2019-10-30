@@ -202,10 +202,12 @@ class Handler implements BaseTrashHandler
     public function emptyTrash()
     {
         $resultList = new TrashItemDeleteResultList();
-        $trashedItems = $this->findTrashItems();// TODO: This won't work on large trash basket, we'll need to page it.
-        foreach ($trashedItems as $item) {
-            $resultList->items[] = $this->delete($item);
-        }
+        do {
+            $trashedItems = $this->findTrashItems(null, 0, 100);
+            foreach ($trashedItems as $item) {
+                $resultList->items[] = $this->delete($item);
+            }
+        } while ($trashedItems->totalCount > 100);
 
         $this->locationGateway->cleanupTrash();
 

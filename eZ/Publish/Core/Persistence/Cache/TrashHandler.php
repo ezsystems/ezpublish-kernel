@@ -112,25 +112,27 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
 
         // We can not use the return value of emptyTrash method because, in the next step, we are not able
         // to fetch the reverse relations of deleted content.
-        $trashedItems = $this->persistenceHandler->trashHandler()->findTrashItems();// TODO: This won't work on large trash basket, we'll need to page it.
-
         $tags = [];
-        foreach ($trashedItems as $trashedItem) {
-            $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashedItem->contentId);
 
-            foreach ($reverseRelations as $relation) {
-                $tags[] = 'content-fields-' . $relation->sourceContentId;
+        do {
+            $trashedItems = $this->persistenceHandler->trashHandler()->findTrashItems(null, 0, 100);
+            foreach ($trashedItems as $trashedItem) {
+                $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashedItem->contentId);
+
+                foreach ($reverseRelations as $relation) {
+                    $tags['content-fields-' . $relation->sourceContentId] = true;
+                }
+                $tags['content-' . $trashedItem->contentId] = true;
+                $tags['content-fields-' . $trashedItem->contentId] = true;
+                $tags['location-' . $trashedItem->id] = true;
+                $tags['location-path-' . $trashedItem->id] = true;
             }
-            $tags[] = 'content-' . $trashedItem->contentId;
-            $tags[] = 'content-fields-' . $trashedItem->contentId;
-            $tags[] = 'location-' . $trashedItem->id;
-            $tags[] = 'location-path-' . $trashedItem->id;
-        }
+        } while ($trashedItems->totalCount > 100);
 
         $return = $this->persistenceHandler->trashHandler()->emptyTrash();
 
         if (!empty($tags)) {
-            $this->cache->invalidateTags(array_values(array_unique($tags)));
+            $this->cache->invalidateTags(array_keys($tags));
         }
 
         return $return;
