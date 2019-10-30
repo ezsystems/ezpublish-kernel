@@ -20,6 +20,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Persistence\Database\Expression;
 
 /**
  * Field criterion handler.
@@ -38,14 +39,6 @@ class FieldEmpty extends FieldBase
      */
     protected $fieldTypeService;
 
-    /**
-     * Construct from handler handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
-     */
     public function __construct(
         DatabaseHandler $dbHandler,
         ContentTypeHandler $contentTypeHandler,
@@ -61,12 +54,8 @@ class FieldEmpty extends FieldBase
 
     /**
      * Check if this criterion handler accepts to handle the given criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     *
-     * @return bool
      */
-    public function accept(Criterion $criterion)
+    public function accept(Criterion $criterion): bool
     {
         return $criterion instanceof Criterion\IsFieldEmpty;
     }
@@ -77,16 +66,11 @@ class FieldEmpty extends FieldBase
      * Returns an array of the attribute,
      * identifier and the sort column, which should be used.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      * @throws \RuntimeException if no converter is found
-     *
-     * @param string $fieldIdentifier
-     *
-     * @return array
-     *
-     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    protected function getFieldsInformation($fieldIdentifier)
+    protected function getFieldsInformation(string $fieldIdentifier): array
     {
         $fieldMapArray = [];
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
@@ -122,23 +106,15 @@ class FieldEmpty extends FieldBase
      * accept() must be called before calling this method.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If no searchable fields are found for the given criterion target.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
         Criterion $criterion,
         array $languageSettings
-    ) {
+    ): Expression {
         $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
         $subSelect = $query->subSelect();
