@@ -18,7 +18,7 @@ CREATE TABLE ezimagefile (
   PRIMARY KEY (id),
   KEY ezimagefile_coid (contentobject_attribute_id),
   KEY ezimagefile_file (filepath(200)),
-  KEY ezimagefile_version (version)
+  KEY ezimagefile_version (version, contentobject_attribute_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS ezmedia;

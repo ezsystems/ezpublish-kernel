@@ -19,7 +19,7 @@ CREATE TABLE ezimagefile (
 );
 CREATE INDEX ezimagefile_coid ON ezimagefile (contentobject_attribute_id);
 CREATE INDEX ezimagefile_file ON ezimagefile (filepath);
-CREATE INDEX ezimagefile_version ON ezimagefile (version);
+CREATE INDEX ezimagefile_version ON ezimagefile (version, contentobject_attribute_id);
 
 CREATE TABLE ezmedia (
   contentobject_attribute_id integer NOT NULL DEFAULT 0,

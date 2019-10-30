@@ -979,7 +979,7 @@ CREATE TABLE `ezimagefile` (
   PRIMARY KEY (`id`),
   KEY `ezimagefile_coid` (`contentobject_attribute_id`),
   KEY `ezimagefile_file` (`filepath` (191)),
-  KEY `ezimagefile_version` (`version`)
+  KEY `ezimagefile_version` (`version`, `contentobject_attribute_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

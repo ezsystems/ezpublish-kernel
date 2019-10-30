@@ -609,7 +609,7 @@ tables:
         indexes:
             ezimagefile_file: { fields: [filepath], options: { lengths: ['191'] } }
             ezimagefile_coid: { fields: [contentobject_attribute_id] }
-            ezimagefile_version: { fields: [version]}
+            ezimagefile_version: { fields: [version, contentobject_attribute_id]}
         id:
             id: { type: integer, nullable: false, options: { autoincrement: true } }
         fields:

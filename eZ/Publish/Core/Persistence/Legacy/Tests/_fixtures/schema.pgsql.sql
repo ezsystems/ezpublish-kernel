@@ -520,6 +520,8 @@ CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribut
 
 CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
 
+CREATE INDEX ezimagefile_version ON ezimagefile USING btree (version, contentobject_attribute_id)
+
 CREATE INDEX ezgmaplocation_file ON ezgmaplocation USING btree (latitude,longitude);
 
 CREATE UNIQUE INDEX ezcobj_state_identifier ON ezcobj_state USING btree (group_id, identifier);
