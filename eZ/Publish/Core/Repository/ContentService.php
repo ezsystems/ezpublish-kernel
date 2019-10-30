@@ -1602,19 +1602,6 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo
         );
 
-        $fromContent = null;
-        if ($content->contentInfo->currentVersionNo !== $versionInfo->versionNo) {
-            $fromContent = $this->internalLoadContent(
-                $content->contentInfo->id,
-                null,
-                $content->contentInfo->currentVersionNo
-            );
-            // should not occur now, might occur in case of un-publish
-            if (!$fromContent->contentInfo->isPublished()) {
-                $fromContent = null;
-            }
-        }
-
         $targets = [];
         if (!empty($translations)) {
             $targets[] = (new Target\Builder\VersionBuilder())
