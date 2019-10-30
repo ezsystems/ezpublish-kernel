@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
-use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter as FieldValueConverter;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -171,30 +170,12 @@ class Field extends FieldBase
             );
         }
 
-        if (empty($whereExpressions)) {
-            throw new NotImplementedException(
-                sprintf(
-                    'Following fieldtypes are not searchable in the legacy search engine: %s',
-                    implode(', ', array_keys($fieldsInformation))
-                )
-            );
-        }
-
-        $subSelect->where(
-            $subSelect->expr->lAnd(
-                $subSelect->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_attribute'),
-                    $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
-                ),
-                // Join conditions with a logical OR if several conditions exist
-                count($whereExpressions) > 1 ? $subSelect->expr->lOr($whereExpressions) : $whereExpressions[0],
-                $this->getFieldCondition($subSelect, $languageSettings)
-            )
-        );
-
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-            $subSelect
+        return $this->getInExpressionWithFieldConditions(
+            $query,
+            $subSelect,
+            $languageSettings,
+            $whereExpressions,
+            $fieldsInformation
         );
     }
 }

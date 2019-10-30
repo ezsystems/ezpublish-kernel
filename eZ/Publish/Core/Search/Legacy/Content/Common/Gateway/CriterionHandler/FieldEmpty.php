@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase field criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -12,7 +10,6 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
-use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
@@ -114,7 +111,7 @@ class FieldEmpty extends FieldBase
         SelectQuery $query,
         Criterion $criterion,
         array $languageSettings
-    ): Expression {
+    ): string {
         $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
         $subSelect = $query->subSelect();
@@ -131,13 +128,13 @@ class FieldEmpty extends FieldBase
                 continue;
             }
 
-            if ($criterion->value[0]) {
-                $filter = sprintf('%s = :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
-            } else {
-                $filter = sprintf('%s != :%s', $fieldsInfo['column'], $fieldTypeIdentifier);
-            }
-
-            $subSelect->bindParam($fieldsInfo['empty_value'], $fieldTypeIdentifier);
+            $filterPlaceholder = $subSelect->bindValue(
+                $fieldsInfo['empty_value'],
+                ':fieldTypeIdentifier'
+            );
+            $filter = $criterion->value[0]
+                ? $subSelect->expr->eq($fieldsInfo['column'], $filterPlaceholder)
+                : $subSelect->expr->neq($fieldsInfo['column'], $filterPlaceholder);
 
             $whereExpressions[] = $subSelect->expr->lAnd(
                 $subSelect->expr->in(
@@ -148,29 +145,12 @@ class FieldEmpty extends FieldBase
             );
         }
 
-        if (empty($whereExpressions)) {
-            throw new NotImplementedException(
-                sprintf(
-                    'Following fieldtypes are not searchable in the legacy search engine: %s',
-                    implode(', ', array_keys($fieldsInformation))
-                )
-            );
-        }
-
-        $subSelect->where(
-            $subSelect->expr->lAnd(
-                $subSelect->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_attribute'),
-                    $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
-                ),
-                count($whereExpressions) > 1 ? $subSelect->expr->lOr($whereExpressions) : $whereExpressions[0],
-                $this->getFieldCondition($subSelect, $languageSettings)
-            )
-        );
-
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-            $subSelect
+        return $this->getInExpressionWithFieldConditions(
+            $query,
+            $subSelect,
+            $languageSettings,
+            $whereExpressions,
+            $fieldsInformation
         );
     }
 }
