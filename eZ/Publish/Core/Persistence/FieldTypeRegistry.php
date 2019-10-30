@@ -60,7 +60,7 @@ class FieldTypeRegistry
     public function getFieldType($identifier)
     {
         if (!isset($this->fieldTypeMap[$identifier])) {
-            $this->fieldTypeMap[$identifier] = new IsEmptyFieldType($this->getCoreFieldType($identifier));
+            $this->fieldTypeMap[$identifier] = new FieldType($this->getCoreFieldType($identifier));
         }
 
         return $this->fieldTypeMap[$identifier];
