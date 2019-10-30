@@ -29,6 +29,8 @@ abstract class Gateway extends StorageGateway
      * @param string $uri File IO uri
      * @param mixed $fieldId
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     abstract public function storeImageReference($uri, $fieldId, VersionInfo $versionInfo);
 

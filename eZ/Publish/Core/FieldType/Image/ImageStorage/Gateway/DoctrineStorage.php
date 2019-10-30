@@ -91,7 +91,7 @@ class DoctrineStorage extends Gateway
      * @param int $fieldId
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      *
-     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function storeImageReference($uri, $fieldId, VersionInfo $versionInfo)
     {
