@@ -217,6 +217,27 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::countTrashed
+     */
+    public function testCountTrashed()
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
+        $handler = $this->getLocationGateway();
+
+        $this->assertEquals(
+            0,
+            $handler->countTrashed()
+        );
+
+        $this->trashSubtree();
+
+        $this->assertEquals(
+            8,
+            $handler->countTrashed()
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::listTrashed
      */
     public function testListEmptyTrash()

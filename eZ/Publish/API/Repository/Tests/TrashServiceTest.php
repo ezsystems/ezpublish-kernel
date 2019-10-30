@@ -685,7 +685,42 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
+     * Test for the findTrashItems() method for it's result structure.
+     *
+     * @see \eZ\Publish\API\Repository\TrashService::findTrashItems()
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     */
+    public function testFindTrashItemsLimits()
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+
+        /* BEGIN: Use Case */
+        $this->createTrashItem();
+
+        // Create a search query for all trashed items
+        $query = new Query();
+        $query->limit = 2;
+
+        // Load all trashed locations
+        $searchResult = $trashService->findTrashItems($query);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            SearchResult::class,
+            $searchResult
+        );
+
+        // 4 trashed locations from the sub tree, but only 2 in results
+        $this->assertCount(2, $searchResult->items);
+        $this->assertEquals(4, $searchResult->count);
+        $this->assertEquals(4, $searchResult->totalCount);
+    }
+
+    /**
      * Test for the findTrashItems() method.
+     *
+     * @todo Should probably be on TrashServiceAuthorizationTest.
      *
      * @see \eZ\Publish\API\Repository\TrashService::findTrashItems()
      * @depends \eZ\Publish\API\Repository\Tests\TrashServiceTest::testFindTrashItems

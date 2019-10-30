@@ -1364,6 +1364,15 @@ class DoctrineDatabase extends Gateway
         return $rows;
     }
 
+    public function countTrashed(): int
+    {
+        $query = $this->connection->createQueryBuilder()
+            ->select('COUNT(node_id) as count')
+            ->from('ezcontentobject_trash');
+
+        return $query->execute()->fetchColumn();
+    }
+
     /**
      * Removes every entries in the trash.
      * Will NOT remove associated content objects nor attributes.

@@ -59,16 +59,19 @@ interface Handler
     public function recover($trashedId, $newParentId);
 
     /**
-     * Returns an array of all trashed locations satisfying the $criterion (if provided),
-     * sorted with SortClause objects contained in $sort (if any).
+     * Returns all trashed locations satisfying the $criterion (if provided), sorted with $sort (if any).
+     *
      * If no criterion is provided (null), no filter is applied.
+     *
+     * TrashResult->totalCount will ignore limit and offset and representing the total amount of trashed items
+     * matching the criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param int $offset Offset to start listing from, 0 by default
      * @param int $limit Limit for the listing. Null by default (no limit)
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]|\eZ\Publish\SPI\Persistence\Content\Location\Trash\TrashResult
      */
     public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null);
 
