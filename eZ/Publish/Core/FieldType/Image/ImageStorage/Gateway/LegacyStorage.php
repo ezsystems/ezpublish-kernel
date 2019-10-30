@@ -106,7 +106,9 @@ class LegacyStorage extends Gateway
         $path = $this->redecorator->redecorateFromSource($uri);
 
         if ($this->imageReferenceExistsForVersion($fieldId, $versionInfo)) {
-            return $this->updateImageReferenceForVersion($path, $fieldId, $versionInfo);
+            $this->updateImageReferenceForVersion($path, $fieldId, $versionInfo);
+
+            return;
         }
 
         $connection = $this->getConnection();

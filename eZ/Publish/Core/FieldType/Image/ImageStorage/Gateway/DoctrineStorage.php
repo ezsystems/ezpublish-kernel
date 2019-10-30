@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use DOMDocument;
 use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -98,7 +99,9 @@ class DoctrineStorage extends Gateway
         $path = $this->redecorator->redecorateFromSource($uri);
 
         if ($this->imageReferenceExistsForVersion($fieldId, $versionInfo)) {
-            return $this->updateImageReferenceForVersion($path, $fieldId, $versionInfo);
+            $this->updateImageReferenceForVersion($path, $fieldId, $versionInfo);
+
+            return;
         }
 
         $insertQuery = $this->connection->createQueryBuilder();
@@ -297,12 +300,12 @@ class DoctrineStorage extends Gateway
                     )
                 )
             )
-            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
-            ->setParameter(':versionNo', $versionInfo->versionNo, PDO::PARAM_INT);
+            ->setParameter(':fieldId', $fieldId, ParameterType::INTEGER)
+            ->setParameter(':versionNo', $versionInfo->versionNo, ParameterType::INTEGER);
 
         $statement = $selectQuery->execute();
 
-        return (int) $statement->fetchColumn() !== 0;
+        return ((int)$statement->fetchColumn()) !== 0;
     }
 
     /**
@@ -319,20 +322,20 @@ class DoctrineStorage extends Gateway
             ->update($this->connection->quoteIdentifier('ezimagefile'))
             ->set($this->connection->quoteIdentifier('filepath'), ':filepath')
             ->where(
-                $updateQuery->expr()->andX(
-                    $updateQuery->expr()->eq(
-                        $this->connection->quoteIdentifier('contentobject_attribute_id'),
-                        ':fieldId'
-                    ),
-                    $updateQuery->expr()->eq(
-                        $this->connection->quoteIdentifier('version'),
-                        ':versionNo'
-                    )
+                $updateQuery->expr()->eq(
+                    $this->connection->quoteIdentifier('contentobject_attribute_id'),
+                    ':fieldId'
                 )
             )
-            ->setParameter(':filepath', $uri, PDO::PARAM_STR)
-            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
-            ->setParameter(':versionNo', $versionInfo->versionNo, PDO::PARAM_INT);
+            ->andWhere(
+                $updateQuery->expr()->eq(
+                    $this->connection->quoteIdentifier('version'),
+                    ':versionNo'
+                )
+            )
+            ->setParameter(':filepath', $uri, ParameterType::STRING)
+            ->setParameter(':fieldId', $fieldId, ParameterType::INTEGER)
+            ->setParameter(':versionNo', $versionInfo->versionNo, ParameterType::INTEGER);
 
         $updateQuery->execute();
     }
