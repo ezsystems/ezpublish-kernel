@@ -2164,6 +2164,31 @@ XML
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\ContentService::updateContentMetadata
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdateContentAlwaysAvailable()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $folder = $this->createFolder(['eng-GB' => 'Folder'], 2);
+
+        $contentMetadataUpdate = $contentService->newContentMetadataUpdateStruct();
+        $contentMetadataUpdate->alwaysAvailable = !$folder->contentInfo->alwaysAvailable;
+        $contentService->updateContentMetadata($folder->contentInfo, $contentMetadataUpdate);
+
+        $reloadedFolder = $contentService->loadContent($folder->id);
+        self::assertEquals(
+            $contentMetadataUpdate->alwaysAvailable,
+            $reloadedFolder->contentInfo->alwaysAvailable
+        );
+    }
+
+    /**
      * Test for the deleteContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteContent()

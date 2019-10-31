@@ -336,7 +336,10 @@ class DoctrineDatabase extends Gateway
                 $query->createNamedParameter($contentId, PDO::PARAM_INT, ':contentId')
             )
         );
-        $query->execute();
+
+        if (!empty($query->getQueryPart('set'))) {
+            $query->execute();
+        }
 
         // Handle alwaysAvailable flag update separately as it's a more complex task and has impact on several tables
         if (isset($struct->alwaysAvailable) || isset($struct->mainLanguageId)) {
