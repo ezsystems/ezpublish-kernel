@@ -410,7 +410,7 @@ class DoctrineDatabase extends Gateway
         // everywhere needed
         $contentInfoRow = $this->loadContentInfo($contentId);
         if (!isset($alwaysAvailable)) {
-            $alwaysAvailable = (bool)$contentInfoRow['language_mask'] & 1;
+            $alwaysAvailable = 1 === ($contentInfoRow['language_mask'] & 1);
         }
 
         /** @var $q \eZ\Publish\Core\Persistence\Database\UpdateQuery */
