@@ -322,6 +322,8 @@ class DomainMapper
                 'names' => $spiVersionInfo->names,
                 'contentInfo' => $this->buildContentInfoDomainObject($spiVersionInfo->contentInfo),
                 'prioritizedNameLanguageCode' => $prioritizedNameLanguageCode,
+                'creator' => $this->proxyFactory->createUserProxy($spiVersionInfo->creatorId, $prioritizedLanguages),
+                'initialLanguage' => $this->proxyFactory->createLanguageProxy($spiVersionInfo->initialLanguageCode),
             ]
         );
     }

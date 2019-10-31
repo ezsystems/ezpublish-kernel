@@ -8,7 +8,10 @@
  */
 namespace eZ\Publish\Core\Repository\Values\Content;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * This class holds version information data. It also contains the corresponding {@link Content} to
@@ -35,6 +38,12 @@ class VersionInfo extends APIVersionInfo
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     protected $contentInfo;
 
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
+    protected $creator;
+
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
+    protected $initialLanguage;
+
     /**
      * The first matched name language among user provided prioritized languages.
      *
@@ -49,9 +58,25 @@ class VersionInfo extends APIVersionInfo
     /**
      * {@inheritdoc}
      */
-    public function getContentInfo()
+    public function getContentInfo(): ContentInfo
     {
         return $this->contentInfo;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreator(): User
+    {
+        return $this->creator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInitialLanguage(): Language
+    {
+        return $this->initialLanguage;
     }
 
     /**
