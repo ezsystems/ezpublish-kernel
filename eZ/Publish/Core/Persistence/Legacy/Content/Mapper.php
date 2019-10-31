@@ -254,7 +254,7 @@ class Mapper
         $contentInfo->ownerId = (int)$row["{$prefix}owner_id"];
         $contentInfo->publicationDate = (int)$row["{$prefix}published"];
         $contentInfo->modificationDate = (int)$row["{$prefix}modified"];
-        $contentInfo->alwaysAvailable = (int)$row["{$prefix}language_mask"] & 1;
+        $contentInfo->alwaysAvailable = 1 === ($row["{$prefix}language_mask"] & 1);
         $contentInfo->mainLanguageCode = $this->languageHandler->load($row["{$prefix}initial_language_id"])->languageCode;
         $contentInfo->remoteId = $row["{$prefix}remote_id"];
         $contentInfo->mainLocationId = ($row["{$treePrefix}main_node_id"] !== null ? (int)$row["{$treePrefix}main_node_id"] : null);
