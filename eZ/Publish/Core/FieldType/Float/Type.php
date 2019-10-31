@@ -247,7 +247,7 @@ class Type extends FieldType
             return $this->getEmptyValue();
         }
 
-        return new Value($hash);
+        return new Value((float)$hash);
     }
 
     /**
