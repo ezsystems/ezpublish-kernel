@@ -1,15 +1,16 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\SearchService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\PermissionCriterionResolver;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator;
@@ -91,7 +92,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $languageFilter = [], $filterOnUserPermissions = true)
+    public function findContent(Query $query, array $languageFilter = [], bool $filterOnUserPermissions = true): SearchResult
     {
         $result = $this->internalFindContentInfo($query, $languageFilter, $filterOnUserPermissions);
         $missingContentList = $this->domainMapper->buildContentDomainObjectsOnSearchResult($result, $languageFilter);
@@ -118,7 +119,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContentInfo(Query $query, array $languageFilter = [], $filterOnUserPermissions = true)
+    public function findContentInfo(Query $query, array $languageFilter = [], bool $filterOnUserPermissions = true): SearchResult
     {
         $result = $this->internalFindContentInfo($query, $languageFilter, $filterOnUserPermissions);
         foreach ($result->searchHits as $hit) {
@@ -231,7 +232,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = [], $filterOnUserPermissions = true)
+    public function findSingle(Criterion $filter, array $languageFilter = [], bool $filterOnUserPermissions = true): Content
     {
         $this->validateContentCriteria([$filter], '$filter');
 
@@ -258,7 +259,7 @@ class SearchService implements SearchServiceInterface
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
+    public function suggest(string $prefix, array $fieldPaths = [], int $limit = 10, Criterion $filter = null)
     {
     }
 
@@ -275,7 +276,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $languageFilter = [], $filterOnUserPermissions = true)
+    public function findLocations(LocationQuery $query, array $languageFilter = [], bool $filterOnUserPermissions = true): SearchResult
     {
         if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
