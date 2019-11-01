@@ -10,6 +10,7 @@ namespace eZ\Publish\SPI\Repository\Decorator;
 
 use eZ\Publish\API\Repository\URLWildcardService;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
 abstract class URLWildcardServiceDecorator implements URLWildcardService
 {
@@ -22,31 +23,31 @@ abstract class URLWildcardServiceDecorator implements URLWildcardService
     }
 
     public function create(
-        $sourceUrl,
-        $destinationUrl,
-        $forward = false
-    ) {
+        string $sourceUrl,
+        string $destinationUrl,
+        bool $forward = false
+    ): UrlWildcard {
         return $this->innerService->create($sourceUrl, $destinationUrl, $forward);
     }
 
-    public function remove(URLWildcard $urlWildcard)
+    public function remove(URLWildcard $urlWildcard): void
     {
-        return $this->innerService->remove($urlWildcard);
+        $this->innerService->remove($urlWildcard);
     }
 
-    public function load($id)
+    public function load(int $id): UrlWildcard
     {
         return $this->innerService->load($id);
     }
 
     public function loadAll(
-        $offset = 0,
-        $limit = -1
-    ) {
+        int $offset = 0,
+        int $limit = -1
+    ): iterable {
         return $this->innerService->loadAll($offset, $limit);
     }
 
-    public function translate($url)
+    public function translate(string $url): URLWildcardTranslationResult
     {
         return $this->innerService->translate($url);
     }

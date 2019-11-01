@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\UrlWildcardTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use Exception;
@@ -24,6 +24,8 @@ use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
  */
 class UrlWildcardTest extends BaseServiceMockTest
 {
+    private const EXAMPLE_URL_WILDCARD_ID = 1;
+
     /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionResolver;
 
@@ -44,7 +46,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     public function testCreateThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+        $this->expectException(UnauthorizedException::class);
 
         $mockedService = $this->getPartlyMockedURLWildcardService();
 
@@ -283,7 +285,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     public function testRemoveThrowsUnauthorizedException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+        $this->expectException(UnauthorizedException::class);
 
         $wildcard = new URLWildcard(['id' => 'McBoom']);
 
@@ -407,14 +409,14 @@ class UrlWildcardTest extends BaseServiceMockTest
         )->method(
             'load'
         )->with(
-            $this->equalTo('Luigi')
+            $this->equalTo(self::EXAMPLE_URL_WILDCARD_ID)
         )->will(
             $this->throwException(new Exception())
         );
 
         $this->expectException(Exception::class);
 
-        $mockedService->load('Luigi');
+        $mockedService->load(self::EXAMPLE_URL_WILDCARD_ID);
     }
 
     /**
@@ -431,12 +433,12 @@ class UrlWildcardTest extends BaseServiceMockTest
         )->method(
             'load'
         )->with(
-            $this->equalTo('Luigi')
+            $this->equalTo(self::EXAMPLE_URL_WILDCARD_ID)
         )->will(
             $this->returnValue(
                 new SPIURLWildcard(
                     [
-                        'id' => 'Luigi',
+                        'id' => self::EXAMPLE_URL_WILDCARD_ID,
                         'sourceUrl' => 'this',
                         'destinationUrl' => 'that',
                         'forward' => true,
@@ -445,12 +447,12 @@ class UrlWildcardTest extends BaseServiceMockTest
             )
         );
 
-        $urlWildcard = $mockedService->load('Luigi');
+        $urlWildcard = $mockedService->load(self::EXAMPLE_URL_WILDCARD_ID);
 
         $this->assertEquals(
             new URLWildcard(
                 [
-                    'id' => 'Luigi',
+                    'id' => self::EXAMPLE_URL_WILDCARD_ID,
                     'sourceUrl' => 'this',
                     'destinationUrl' => 'that',
                     'forward' => true,
@@ -504,7 +506,7 @@ class UrlWildcardTest extends BaseServiceMockTest
                 [
                     new SPIURLWildcard(
                         [
-                            'id' => 'Luigi',
+                            'id' => self::EXAMPLE_URL_WILDCARD_ID,
                             'sourceUrl' => 'this',
                             'destinationUrl' => 'that',
                             'forward' => true,
@@ -520,7 +522,7 @@ class UrlWildcardTest extends BaseServiceMockTest
             [
                 new URLWildcard(
                     [
-                        'id' => 'Luigi',
+                        'id' => self::EXAMPLE_URL_WILDCARD_ID,
                         'sourceUrl' => 'this',
                         'destinationUrl' => 'that',
                         'forward' => true,
