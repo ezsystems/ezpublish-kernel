@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Event;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
 use eZ\Publish\API\Repository\Events\Trash\BeforeDeleteTrashItemEvent;
 use eZ\Publish\API\Repository\Events\Trash\BeforeEmptyTrashEvent;
 use eZ\Publish\API\Repository\Events\Trash\BeforeRecoverEvent;
@@ -36,7 +38,7 @@ class TrashService extends TrashServiceDecorator
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function trash(Location $location)
+    public function trash(Location $location): ?TrashItem
     {
         $eventData = [$location];
 
@@ -61,7 +63,7 @@ class TrashService extends TrashServiceDecorator
     public function recover(
         TrashItem $trashItem,
         ?Location $newParentLocation = null
-    ) {
+    ): Location {
         $eventData = [
             $trashItem,
             $newParentLocation,
@@ -85,7 +87,7 @@ class TrashService extends TrashServiceDecorator
         return $location;
     }
 
-    public function emptyTrash()
+    public function emptyTrash(): TrashItemDeleteResultList
     {
         $beforeEvent = new BeforeEmptyTrashEvent();
 
@@ -105,7 +107,7 @@ class TrashService extends TrashServiceDecorator
         return $resultList;
     }
 
-    public function deleteTrashItem(TrashItem $trashItem)
+    public function deleteTrashItem(TrashItem $trashItem): TrashItemDeleteResult
     {
         $eventData = [$trashItem];
 

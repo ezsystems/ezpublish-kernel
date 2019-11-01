@@ -12,6 +12,9 @@ use eZ\Publish\API\Repository\TrashService;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
+use eZ\Publish\API\Repository\Values\Content\Trash\SearchResult;
 
 abstract class TrashServiceDecorator implements TrashService
 {
@@ -23,12 +26,12 @@ abstract class TrashServiceDecorator implements TrashService
         $this->innerService = $innerService;
     }
 
-    public function loadTrashItem($trashItemId)
+    public function loadTrashItem(int $trashItemId): TrashItem
     {
         return $this->innerService->loadTrashItem($trashItemId);
     }
 
-    public function trash(Location $location)
+    public function trash(Location $location): ?TrashItem
     {
         return $this->innerService->trash($location);
     }
@@ -36,21 +39,21 @@ abstract class TrashServiceDecorator implements TrashService
     public function recover(
         TrashItem $trashItem,
         Location $newParentLocation = null
-    ) {
+    ): Location {
         return $this->innerService->recover($trashItem, $newParentLocation);
     }
 
-    public function emptyTrash()
+    public function emptyTrash(): TrashItemDeleteResultList
     {
         return $this->innerService->emptyTrash();
     }
 
-    public function deleteTrashItem(TrashItem $trashItem)
+    public function deleteTrashItem(TrashItem $trashItem): TrashItemDeleteResult
     {
         return $this->innerService->deleteTrashItem($trashItem);
     }
 
-    public function findTrashItems(Query $query)
+    public function findTrashItems(Query $query): SearchResult
     {
         return $this->innerService->findTrashItems($query);
     }
