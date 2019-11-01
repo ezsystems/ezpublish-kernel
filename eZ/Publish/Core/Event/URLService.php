@@ -33,7 +33,7 @@ class URLService extends URLServiceDecorator
     public function updateUrl(
         URL $url,
         URLUpdateStruct $struct
-    ) {
+    ): URL {
         $eventData = [
             $url,
             $struct,

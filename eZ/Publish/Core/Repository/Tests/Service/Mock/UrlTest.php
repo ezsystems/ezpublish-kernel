@@ -213,11 +213,6 @@ class UrlTest extends BaseServiceMockTest
         ]);
 
         $urlService = $this->createUrlService(['isUnique']);
-        $urlService
-            ->expects($this->once())
-            ->method('isUnique')
-            ->with($apiUrl->id, $apiStruct->url)
-            ->willReturn(true);
 
         $this->urlHandler
             ->expects($this->once())
