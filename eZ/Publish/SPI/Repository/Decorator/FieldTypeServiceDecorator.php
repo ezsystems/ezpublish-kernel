@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\SPI\Repository\Decorator;
 
 use eZ\Publish\API\Repository\FieldTypeService;
+use eZ\Publish\API\Repository\FieldType;
 
 abstract class FieldTypeServiceDecorator implements FieldTypeService
 {
@@ -20,17 +21,17 @@ abstract class FieldTypeServiceDecorator implements FieldTypeService
         $this->innerService = $innerService;
     }
 
-    public function getFieldTypes()
+    public function getFieldTypes(): iterable
     {
         return $this->innerService->getFieldTypes();
     }
 
-    public function getFieldType($identifier)
+    public function getFieldType(string $identifier): FieldType
     {
         return $this->innerService->getFieldType($identifier);
     }
 
-    public function hasFieldType($identifier)
+    public function hasFieldType(string $identifier): bool
     {
         return $this->innerService->hasFieldType($identifier);
     }

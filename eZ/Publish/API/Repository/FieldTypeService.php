@@ -1,17 +1,17 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\FieldTypeService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
 /**
  * An implementation of this class provides access to FieldTypes.
  *
- * @see eZ\Publish\API\Repository\FieldType
+ * @see \eZ\Publish\API\Repository\FieldType
  */
 interface FieldTypeService
 {
@@ -20,7 +20,7 @@ interface FieldTypeService
      *
      * @return \eZ\Publish\API\Repository\FieldType[]
      */
-    public function getFieldTypes();
+    public function getFieldTypes(): iterable;
 
     /**
      * Returns the FieldType registered with the given identifier.
@@ -29,10 +29,9 @@ interface FieldTypeService
      *
      * @return \eZ\Publish\API\Repository\FieldType
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *         if there is no FieldType registered with $identifier
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no FieldType registered with $identifier
      */
-    public function getFieldType($identifier);
+    public function getFieldType(string $identifier): FieldType;
 
     /**
      * Returns if there is a FieldType registered under $identifier.
@@ -41,5 +40,5 @@ interface FieldTypeService
      *
      * @return bool
      */
-    public function hasFieldType($identifier);
+    public function hasFieldType(string $identifier): bool;
 }

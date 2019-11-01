@@ -1,21 +1,22 @@
 <?php
 
 /**
- * File containing FieldTypeService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
+use eZ\Publish\API\Repository\FieldType as APIFieldType;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
 
 /**
  * An implementation of this class provides access to FieldTypes.
  *
- * @see eZ\Publish\API\Repository\FieldType
+ * @see \eZ\Publish\API\Repository\FieldType
  */
 class FieldTypeService implements FieldTypeServiceInterface
 {
@@ -44,7 +45,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\FieldType[]
      */
-    public function getFieldTypes()
+    public function getFieldTypes(): iterable
     {
         foreach ($this->fieldTypeRegistry->getFieldTypes() as $identifier => $spiFieldType) {
             if (isset($this->fieldTypes[$identifier])) {
@@ -64,10 +65,9 @@ class FieldTypeService implements FieldTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\FieldType
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *         if there is no FieldType registered with $identifier
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no FieldType registered with $identifier
      */
-    public function getFieldType($identifier)
+    public function getFieldType(string $identifier): APIFieldType
     {
         if (isset($this->fieldTypes[$identifier])) {
             return $this->fieldTypes[$identifier];
@@ -83,7 +83,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      *
      * @return bool
      */
-    public function hasFieldType($identifier)
+    public function hasFieldType(string $identifier): bool
     {
         return $this->fieldTypeRegistry->hasFieldType($identifier);
     }
