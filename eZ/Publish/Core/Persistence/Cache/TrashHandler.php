@@ -17,6 +17,8 @@ use eZ\Publish\SPI\Persistence\Content\Relation;
  */
 class TrashHandler extends AbstractHandler implements TrashHandlerInterface
 {
+    private const EMPTY_TRASH_BULK_SIZE = 100;
+
     /**
      * {@inheritdoc}
      */
@@ -115,7 +117,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
         $tags = [];
 
         do {
-            $trashedItems = $this->persistenceHandler->trashHandler()->findTrashItems(null, 0, 100);
+            $trashedItems = $this->persistenceHandler->trashHandler()->findTrashItems(null, 0, self::EMPTY_TRASH_BULK_SIZE);
             foreach ($trashedItems as $trashedItem) {
                 $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashedItem->contentId);
 
@@ -127,7 +129,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
                 $tags['location-' . $trashedItem->id] = true;
                 $tags['location-path-' . $trashedItem->id] = true;
             }
-        } while ($trashedItems->totalCount > 100);
+        } while ($trashedItems->totalCount > self::EMPTY_TRASH_BULK_SIZE);
 
         $return = $this->persistenceHandler->trashHandler()->emptyTrash();
 

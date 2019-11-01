@@ -24,6 +24,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper
  */
 class Handler implements BaseTrashHandler
 {
+    private const EMPTY_TRASH_BULK_SIZE = 100;
+
     /**
      * Location handler.
      *
@@ -203,11 +205,11 @@ class Handler implements BaseTrashHandler
     {
         $resultList = new TrashItemDeleteResultList();
         do {
-            $trashedItems = $this->findTrashItems(null, 0, 100);
+            $trashedItems = $this->findTrashItems(null, 0, self::EMPTY_TRASH_BULK_SIZE);
             foreach ($trashedItems as $item) {
                 $resultList->items[] = $this->delete($item);
             }
-        } while ($trashedItems->totalCount > 100);
+        } while ($trashedItems->totalCount > self::EMPTY_TRASH_BULK_SIZE);
 
         $this->locationGateway->cleanupTrash();
 
