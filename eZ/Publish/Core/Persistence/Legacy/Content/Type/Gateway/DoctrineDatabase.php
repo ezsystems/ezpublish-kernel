@@ -130,7 +130,7 @@ class DoctrineDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $group
      *
-     * @return mixed Group ID
+     * @return int Group ID
      */
     public function insertGroup(Group $group)
     {
@@ -158,7 +158,7 @@ class DoctrineDatabase extends Gateway
         );
         $q->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId(
+        return (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName('ezcontentclassgroup', 'id')
         );
     }
@@ -353,7 +353,7 @@ class DoctrineDatabase extends Gateway
         $q->prepare()->execute();
 
         if (empty($typeId)) {
-            $typeId = $this->dbHandler->lastInsertId(
+            $typeId = (int)$this->dbHandler->lastInsertId(
                 $this->dbHandler->getSequenceName('ezcontentclass', 'id')
             );
         }

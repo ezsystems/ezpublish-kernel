@@ -67,7 +67,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct)
+    public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct): ContentTypeGroup
     {
         $eventData = [$contentTypeGroupCreateStruct];
 
@@ -133,7 +133,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
     public function createContentType(
         ContentTypeCreateStruct $contentTypeCreateStruct,
         array $contentTypeGroups
-    ) {
+    ): ContentTypeDraft {
         $eventData = [
             $contentTypeCreateStruct,
             $contentTypeGroups,
@@ -157,7 +157,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         return $contentTypeDraft;
     }
 
-    public function createContentTypeDraft(ContentType $contentType)
+    public function createContentTypeDraft(ContentType $contentType): ContentTypeDraft
     {
         $eventData = [$contentType];
 
@@ -223,7 +223,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
     public function copyContentType(
         ContentType $contentType,
         User $creator = null
-    ) {
+    ): ContentType {
         $eventData = [
             $contentType,
             $creator,

@@ -55,8 +55,8 @@ class ContentTypeServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce0ffda1.73499446',
-            ['random_value_5ced05ce0ffde5.37998562'],
+            1,
+            ['prioritized_language_value'],
         ];
 
         $serviceMock->expects($this->once())->method('loadContentTypeGroup')->with(...$parameters);
@@ -70,8 +70,8 @@ class ContentTypeServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce0ffe39.59526434',
-            ['random_value_5ced05ce0ffe45.95635954'],
+            'content_group_type_identifier',
+            ['prioritized_language_value'],
         ];
 
         $serviceMock->expects($this->once())->method('loadContentTypeGroupByIdentifier')->with(...$parameters);
@@ -84,7 +84,7 @@ class ContentTypeServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [['random_value_5ced05ce0ffe73.64294893']];
+        $parameters = [['prioritized_language_value']];
 
         $serviceMock->expects($this->once())->method('loadContentTypeGroups')->with(...$parameters);
 
@@ -125,7 +125,7 @@ class ContentTypeServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(ContentTypeCreateStruct::class),
-            ['random_value_5ced05ce102210.02830368'],
+            ['content_type_group_identifier'],
         ];
 
         $serviceMock->expects($this->once())->method('createContentType')->with(...$parameters);
@@ -139,8 +139,8 @@ class ContentTypeServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce102297.95671709',
-            ['random_value_5ced05ce1022b3.56541050'],
+            1,
+            ['prioritized_language_value'],
         ];
 
         $serviceMock->expects($this->once())->method('loadContentType')->with(...$parameters);
@@ -154,8 +154,8 @@ class ContentTypeServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce1022f0.22217017',
-            ['random_value_5ced05ce102306.63870627'],
+            'content_type_identifier',
+            ['prioritized_language_value'],
         ];
 
         $serviceMock->expects($this->once())->method('loadContentTypeByIdentifier')->with(...$parameters);
@@ -183,7 +183,7 @@ class ContentTypeServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce102353.24566517'];
+        $parameters = [1, true];
 
         $serviceMock->expects($this->once())->method('loadContentTypeDraft')->with(...$parameters);
 

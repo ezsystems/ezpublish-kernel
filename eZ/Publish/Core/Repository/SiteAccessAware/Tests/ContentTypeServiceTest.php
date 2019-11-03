@@ -47,50 +47,50 @@ class ContentTypeServiceTest extends AbstractServiceTest
 
         // string $method, array $arguments, bool $return = true
         return [
-            ['createContentTypeGroup', [$contentTypeGroupCreateStruct]],
+            ['createContentTypeGroup', [$contentTypeGroupCreateStruct], $contentTypeGroup],
 
-            ['updateContentTypeGroup', [$contentTypeGroup, $contentTypeGroupUpdateStruct]],
+            ['updateContentTypeGroup', [$contentTypeGroup, $contentTypeGroupUpdateStruct], null],
 
-            ['deleteContentTypeGroup', [$contentTypeGroup]],
+            ['deleteContentTypeGroup', [$contentTypeGroup], null],
 
-            ['createContentType', [$contentTypeCreateStruct, [$contentTypeGroup]]],
+            ['createContentType', [$contentTypeCreateStruct, [$contentTypeGroup]], $contentTypeDraft],
 
-            ['loadContentTypeDraft', [22]],
+            ['loadContentTypeDraft', [22], $contentTypeDraft],
 
-            ['createContentTypeDraft', [$contentType]],
+            ['createContentTypeDraft', [$contentType], $contentTypeDraft],
 
-            ['updateContentTypeDraft', [$contentTypeDraft, $contentTypeUpdateStruct]],
+            ['updateContentTypeDraft', [$contentTypeDraft, $contentTypeUpdateStruct], null],
 
-            ['deleteContentType', [$contentType]],
+            ['deleteContentType', [$contentType], null],
 
-            ['copyContentType', [$contentType]],
-            ['copyContentType', [$contentType, $user]],
+            ['copyContentType', [$contentType], $contentType],
+            ['copyContentType', [$contentType, $user], $contentType],
 
-            ['assignContentTypeGroup', [$contentType, $contentTypeGroup]],
+            ['assignContentTypeGroup', [$contentType, $contentTypeGroup], null],
 
-            ['unassignContentTypeGroup', [$contentType, $contentTypeGroup]],
+            ['unassignContentTypeGroup', [$contentType, $contentTypeGroup], null],
 
-            ['addFieldDefinition', [$contentTypeDraft, $fieldDefinitionCreateStruct]],
+            ['addFieldDefinition', [$contentTypeDraft, $fieldDefinitionCreateStruct], null],
 
-            ['removeFieldDefinition', [$contentTypeDraft, $fieldDefinition]],
+            ['removeFieldDefinition', [$contentTypeDraft, $fieldDefinition], null],
 
-            ['updateFieldDefinition', [$contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct]],
+            ['updateFieldDefinition', [$contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct], null],
 
-            ['publishContentTypeDraft', [$contentTypeDraft]],
+            ['publishContentTypeDraft', [$contentTypeDraft], null],
 
-            ['newContentTypeGroupCreateStruct', ['media']],
+            ['newContentTypeGroupCreateStruct', ['media'], $contentTypeGroupCreateStruct],
 
-            ['newContentTypeCreateStruct', ['blog']],
+            ['newContentTypeCreateStruct', ['blog'], $contentTypeCreateStruct],
 
-            ['newContentTypeUpdateStruct', []],
+            ['newContentTypeUpdateStruct', [], $contentTypeUpdateStruct],
 
-            ['newContentTypeGroupUpdateStruct', []],
+            ['newContentTypeGroupUpdateStruct', [], $contentTypeGroupUpdateStruct],
 
-            ['newFieldDefinitionCreateStruct', ['body', 'ezstring']],
+            ['newFieldDefinitionCreateStruct', ['body', 'ezstring'], $fieldDefinitionCreateStruct],
 
-            ['newFieldDefinitionUpdateStruct', []],
+            ['newFieldDefinitionUpdateStruct', [], $fieldDefinitionUpdateStruct],
 
-            ['isContentTypeUsed', [$contentType]],
+            ['isContentTypeUsed', [$contentType], true],
 
             ['removeContentTypeTranslation', [$contentTypeDraft, 'ger-DE'], $contentTypeDraft],
 
@@ -105,21 +105,21 @@ class ContentTypeServiceTest extends AbstractServiceTest
 
         // string $method, array $arguments, bool $return, int $languageArgumentIndex
         return [
-            ['loadContentTypeGroup', [33, self::LANG_ARG], true, 1],
+            ['loadContentTypeGroup', [33, self::LANG_ARG], $contentTypeGroup, 1],
 
-            ['loadContentTypeGroupByIdentifier', ['content', self::LANG_ARG], true, 1],
+            ['loadContentTypeGroupByIdentifier', ['content', self::LANG_ARG], $contentTypeGroup, 1],
 
-            ['loadContentTypeGroups', [self::LANG_ARG], true, 0],
+            ['loadContentTypeGroups', [self::LANG_ARG], [$contentTypeGroup], 0],
 
-            ['loadContentType', [22, self::LANG_ARG], true, 1],
+            ['loadContentType', [22, self::LANG_ARG], $contentType, 1],
 
             ['loadContentTypeList', [[22, self::LANG_ARG]], [$contentType], 1],
 
-            ['loadContentTypeByIdentifier', ['article', self::LANG_ARG], true, 1],
+            ['loadContentTypeByIdentifier', ['article', self::LANG_ARG], $contentType, 1],
 
-            ['loadContentTypeByRemoteId', ['w4ini3tn4f', self::LANG_ARG], true, 1],
+            ['loadContentTypeByRemoteId', ['w4ini3tn4f', self::LANG_ARG], $contentType, 1],
 
-            ['loadContentTypes', [$contentTypeGroup, self::LANG_ARG], true, 1],
+            ['loadContentTypes', [$contentTypeGroup, self::LANG_ARG], [$contentType], 1],
         ];
     }
 }

@@ -33,7 +33,11 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
     /** @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit\Framework\MockObject\MockObject */
     private $fieldHelperMock;
 
+    /** @var \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition[] */
     private $fieldDefinitions = [];
+
+    /** @var int[] */
+    private $identityMap = [];
 
     public function getExtensions()
     {
@@ -68,14 +72,20 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
      *
      * @return Content
      */
-    protected function getContent($contentTypeIdentifier, array $fieldsData, array $namesData = [])
+    protected function getContent(string $contentTypeIdentifier, array $fieldsData, array $namesData = [])
     {
+        if (!array_key_exists($contentTypeIdentifier, $this->identityMap)) {
+            $this->identityMap[$contentTypeIdentifier] = count($this->identityMap) + 1;
+        }
+
+        $contentTypeId = $this->identityMap[$contentTypeIdentifier];
+
         $fields = [];
         foreach ($fieldsData as $fieldTypeIdentifier => $fieldsArray) {
             $fieldsArray = isset($fieldsArray['id']) ? [$fieldsArray] : $fieldsArray;
             foreach ($fieldsArray as $fieldInfo) {
                 // Save field definitions in property for mocking purposes
-                $this->fieldDefinitions[$contentTypeIdentifier][$fieldInfo['fieldDefIdentifier']] = new FieldDefinition(
+                $this->fieldDefinitions[$contentTypeId][$fieldInfo['fieldDefIdentifier']] = new FieldDefinition(
                     [
                         'identifier' => $fieldInfo['fieldDefIdentifier'],
                         'id' => $fieldInfo['id'],
@@ -101,7 +111,7 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
                                 'id' => 42,
                                 'mainLanguageCode' => 'fre-FR',
                                 // Using as id as we don't really care to test the service here
-                                'contentTypeId' => $contentTypeIdentifier,
+                                'contentTypeId' => $contentTypeId,
                             ]
                         ),
                     ]
