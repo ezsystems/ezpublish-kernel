@@ -139,7 +139,11 @@ EOT
 
         $status = $input->getOption('status');
 
-        $excludedContentTypeIdentifiers = explode(',', $input->getOption('excluded-content-types'));
+        $excludedContentTypes = (string) $input->getOption('excluded-content-types');
+        if ($excludedContentTypes === '') {
+            $excludedContentTypes = self::DEFAULT_EXCLUDED_CONTENT_TYPES;
+        }
+        $excludedContentTypeIdentifiers = explode(',', $excludedContentTypes);
         $contentIds = $this->getObjectsIds($keep, $status, $excludedContentTypeIdentifiers);
         $contentIdsCount = count($contentIds);
 
