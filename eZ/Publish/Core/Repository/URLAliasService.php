@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\URLAliasService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\PermissionResolver;
@@ -23,8 +23,6 @@ use Exception;
 
 /**
  * URLAlias service.
- *
- * @example Examples/urlalias.php
  */
 class URLAliasService implements URLAliasServiceInterface
 {
@@ -80,8 +78,8 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $path
-     * @param bool $forwarding if true a redirect is performed
      * @param string $languageCode the languageCode for which this alias is valid
+     * @param bool $forwarding if true a redirect is performed
      * @param bool $alwaysAvailable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url alias
@@ -89,7 +87,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createUrlAlias(Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
+    public function createUrlAlias(Location $location, string $path, string $languageCode, bool $forwarding = false, bool $alwaysAvailable = false): URLAlias
     {
         if (!$this->permissionResolver->canUser('content', 'urltranslator', $location)) {
             throw new UnauthorizedException('content', 'urltranslator');
@@ -145,7 +143,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createGlobalUrlAlias($resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
+    public function createGlobalUrlAlias(string $resource, string $path, string $languageCode, bool $forwarding = false, bool $alwaysAvailable = false): URLAlias
     {
         if ($this->permissionResolver->hasAccess('content', 'urltranslator') === false) {
             throw new UnauthorizedException('content', 'urltranslator');
@@ -211,14 +209,16 @@ class URLAliasService implements URLAliasServiceInterface
      * @param string[]|null $prioritizedLanguageList If set used as prioritized language codes, returning first match.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function listLocationAliases(
         Location $location,
-        $custom = true,
-        $languageCode = null,
-        $showAllTranslations = null,
+        bool $custom = true,
+        ?string $languageCode = null,
+        bool $showAllTranslations = null,
         array $prioritizedLanguageList = null
-    ) {
+    ): iterable {
         $spiUrlAliasList = $this->urlAliasHandler->listURLAliasesForLocation(
             $location->id,
             $custom
@@ -555,7 +555,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
-    public function listGlobalAliases($languageCode = null, $offset = 0, $limit = -1)
+    public function listGlobalAliases(?string $languageCode = null, int $offset = 0, int $limit = -1): iterable
     {
         $urlAliasList = [];
         $spiUrlAliasList = $this->urlAliasHandler->listGlobalURLAliases(
@@ -593,7 +593,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLAlias[] $aliasList
      */
-    public function removeAliases(array $aliasList)
+    public function removeAliases(array $aliasList): void
     {
         if ($this->permissionResolver->hasAccess('content', 'urltranslator') === false) {
             throw new UnauthorizedException('content', 'urltranslator');
@@ -650,7 +650,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function lookup($url, $languageCode = null)
+    public function lookup(string $url, ?string $languageCode = null): URLAlias
     {
         $url = $this->cleanUrl($url);
 
@@ -672,18 +672,18 @@ class URLAliasService implements URLAliasServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if no url alias exist for the given language
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param string $languageCode
-     * @param null|bool $showAllTranslations
-     * @param null|string[] $prioritizedLanguageList
+     * @param string|null $languageCode
+     * @param bool|null $showAllTranslations
+     * @param string[]|null $prioritizedLanguageList
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
     public function reverseLookup(
         Location $location,
-        $languageCode = null,
+        ?string $languageCode = null,
         bool $showAllTranslations = null,
         array $prioritizedLanguageList = null
-    ) {
+    ): URLAlias {
         if ($showAllTranslations === null) {
             $showAllTranslations = $this->settings['showAllTranslations'];
         }
@@ -728,7 +728,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function load($id)
+    public function load(string $id): URLAlias
     {
         $spiUrlAlias = $this->urlAliasHandler->loadUrlAlias($id);
         $path = $this->extractPath(
@@ -811,7 +811,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return string
      */
-    protected function cleanUrl(string $url)
+    protected function cleanUrl(string $url): string
     {
         return trim($url, '/ ');
     }
@@ -824,7 +824,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    protected function buildUrlAliasDomainObject(SPIURLAlias $spiUrlAlias, string $path)
+    protected function buildUrlAliasDomainObject(SPIURLAlias $spiUrlAlias, string $path): URLAlias
     {
         return new URLAlias(
             [
