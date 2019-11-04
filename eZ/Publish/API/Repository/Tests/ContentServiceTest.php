@@ -22,6 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\DraftList\Item\UnauthorizedContentD
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
@@ -6423,5 +6424,48 @@ XML
         }
 
         return $contentWithReverseRelations;
+    }
+
+    public function testPublishVersionWithLanguageLimitation()
+    {
+        $publishedContent = $this->createFolder(
+            [
+                self::ENG_US => 'Published US',
+                self::GER_DE => 'Published DE',
+            ],
+            $this->generateId('location', 2)
+        );
+
+        $draft = $this->contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => self::ENG_US,
+        ]);
+        $contentUpdateStruct->setField('name', 'Draft 1 US', self::ENG_US);
+        $contentUpdateStruct->setField('name', 'Draft 1 DE', self::GER_DE);
+
+        $this->contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
+
+        $user = $this->createUserWithPolicies(
+            'user',
+            [
+                [
+                    'module' => 'content',
+                    'function' => 'publish',
+                    'limitations' => [new LanguageLimitation(['limitationValues' => [self::GER_DE]])],
+                ],
+            ]
+        );
+
+        $this->permissionResolver->setCurrentUserReference($user);
+
+        $this->contentService->publishVersion($draft->versionInfo, [self::GER_DE]);
+        $content = $this->contentService->loadContent($draft->contentInfo->id);
+        $this->assertEquals(
+            [
+                self::ENG_US => 'Published US',
+                self::GER_DE => 'Draft 1 DE',
+            ],
+            $content->fields['name']
+        );
     }
 }
