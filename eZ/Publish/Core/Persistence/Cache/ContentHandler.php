@@ -343,7 +343,8 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
      */
     public function listVersions($contentId, $status = null, $limit = -1)
     {
-        $cacheItem = $this->cache->getItem("ez-content-${contentId}-version-list" . ($status ? "-byStatus-${status}" : '') . "-limit-{$limit}");
+        $cacheItem = $this->cache->getItem("ez-content-${contentId}-version-list" . ($status !== null ? "-byStatus-${status}" : '') . "-limit-{$limit}");
+
         if ($cacheItem->isHit()) {
             $this->logger->logCacheHit(['content' => $contentId, 'status' => $status]);
 
