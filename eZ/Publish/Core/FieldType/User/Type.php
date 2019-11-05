@@ -138,6 +138,11 @@ class Type extends FieldType
         return new Value();
     }
 
+    public function isSearchable()
+    {
+        return true;
+    }
+
     /**
      * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *

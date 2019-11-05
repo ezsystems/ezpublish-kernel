@@ -141,11 +141,13 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezimageasset}
 
+    eZ\Publish\Core\FieldType\User\SearchField:
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezuser}
 
     ezpublish.fieldType.indexable.unindexed:
         class: "%ezpublish.fieldType.indexable.unindexed.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezuser}
             - {name: ezpublish.fieldType.indexable, alias: ezenum}
             - {name: ezpublish.fieldType.indexable, alias: ezidentifier}
             - {name: ezpublish.fieldType.indexable, alias: ezinisetting}
