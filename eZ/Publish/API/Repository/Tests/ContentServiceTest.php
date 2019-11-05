@@ -6426,7 +6426,7 @@ XML
         return $contentWithReverseRelations;
     }
 
-    public function testPublishVersionWithLanguageLimitation()
+    public function testPublishVersionByUserWithLanguageLimitation()
     {
         $publishedContent = $this->createFolder(
             [
@@ -6438,9 +6438,8 @@ XML
 
         $draft = $this->contentService->createContentDraft($publishedContent->contentInfo);
         $contentUpdateStruct = new ContentUpdateStruct([
-            'initialLanguageCode' => self::ENG_US,
+            'initialLanguageCode' => self::GER_DE,
         ]);
-        $contentUpdateStruct->setField('name', 'Draft 1 US', self::ENG_US);
         $contentUpdateStruct->setField('name', 'Draft 1 DE', self::GER_DE);
 
         $this->contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
@@ -6448,6 +6447,14 @@ XML
         $user = $this->createUserWithPolicies(
             'user',
             [
+                [
+                    'module' => 'content',
+                    'function' => 'read',
+                ],
+                [
+                    'module' => 'content',
+                    'function' => 'versionread',
+                ],
                 [
                     'module' => 'content',
                     'function' => 'publish',
@@ -6467,5 +6474,55 @@ XML
             ],
             $content->fields['name']
         );
+    }
+
+    public function testPublishOneLanguageOfMultiLanguageDraft()
+    {
+        $publishedContent = $this->createFolder(
+            [
+                self::ENG_US => 'Published US',
+                self::GER_DE => 'Published DE',
+            ],
+            $this->generateId('location', 2)
+        );
+
+        $draft = $this->contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => self::GER_DE,
+        ]);
+        $contentUpdateStruct->setField('name', 'Draft 1 DE', self::GER_DE);
+        $contentUpdateStruct->setField('name', 'Draft 1 ENG', self::ENG_US);
+
+        $this->contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
+
+        $user = $this->createUserWithPolicies(
+            'user',
+            [
+                [
+                    'module' => 'content',
+                    'function' => 'read',
+                ],
+                [
+                    'module' => 'content',
+                    'function' => 'versionread',
+                ],
+                [
+                    'module' => 'content',
+                    'function' => 'edit',
+                ],
+                [
+                    'module' => 'content',
+                    'function' => 'publish',
+                    'limitations' => [new LanguageLimitation(['limitationValues' => [self::GER_DE, self::ENG_US]])],
+                ],
+            ]
+        );
+
+        $this->permissionResolver->setCurrentUserReference($user);
+
+        $this->contentService->publishVersion($draft->versionInfo, [self::GER_DE]);
+        $content = $this->contentService->loadContent($draft->contentInfo->id);
+
+        $this->expectException(APIInvalidArgumentException::class);
     }
 }
