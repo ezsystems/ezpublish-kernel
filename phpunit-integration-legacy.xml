@@ -59,6 +59,7 @@
             <file>eZ/Publish/API/Repository/Tests/BookmarkServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/NotificationServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/UserPreferenceServiceTest.php</file>
+            <directory>eZ/Publish/API/Repository/Tests/SearchService</directory>
         </testsuite>
         <testsuite name="eZ\Publish\API\Repository\Tests\Regression">
             <directory>eZ/Publish/API/Repository/Tests/Regression/</directory>
