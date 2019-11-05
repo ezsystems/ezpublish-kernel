@@ -695,7 +695,6 @@ class TrashServiceTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
-        /* BEGIN: Use Case */
         $this->createTrashItem();
 
         // Create a search query for all trashed items
@@ -704,7 +703,6 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // Load all trashed locations
         $searchResult = $trashService->findTrashItems($query);
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             SearchResult::class,
@@ -719,8 +717,6 @@ class TrashServiceTest extends BaseTrashServiceTest
 
     /**
      * Test for the findTrashItems() method.
-     *
-     * @todo Should probably be on TrashServiceAuthorizationTest.
      *
      * @see \eZ\Publish\API\Repository\TrashService::findTrashItems()
      * @depends \eZ\Publish\API\Repository\Tests\TrashServiceTest::testFindTrashItems

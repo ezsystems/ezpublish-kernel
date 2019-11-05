@@ -1366,8 +1366,9 @@ class DoctrineDatabase extends Gateway
 
     public function countTrashed(): int
     {
+        $dbPlatform = $this->connection->getDatabasePlatform();
         $query = $this->connection->createQueryBuilder()
-            ->select('COUNT(node_id) as count')
+            ->select($dbPlatform->getCountExpression('node_id'))
             ->from('ezcontentobject_trash');
 
         return $query->execute()->fetchColumn();

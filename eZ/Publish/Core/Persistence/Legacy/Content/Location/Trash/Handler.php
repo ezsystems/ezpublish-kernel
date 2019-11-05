@@ -179,7 +179,7 @@ class Handler implements BaseTrashHandler
         // @TODO: This only works for direct SPI usage, any API/UI usage needs criteria to be taken into account so we
         //        respect user rights here.
         $totalCount = $this->locationGateway->countTrashed();
-        if (!$totalCount) {
+        if ($totalCount === 0) {
             return new TrashResult();
         }
 
