@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as P
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\User\User;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
@@ -441,15 +442,17 @@ abstract class BaseTest extends TestCase
     /**
      * Create a user using given data.
      *
-     * @param string $login
-     * @param string $firstName
-     * @param string $lastName
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup|null $userGroup optional user group, Editor by default
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    protected function createUser($login, $firstName, $lastName, UserGroup $userGroup = null)
-    {
+    protected function createUser(
+        string $login,
+        string $firstName,
+        string $lastName,
+        UserGroup $userGroup = null,
+        ?string $email = null
+    ): User {
         $repository = $this->getRepository();
 
         $userService = $repository->getUserService();
@@ -458,9 +461,10 @@ abstract class BaseTest extends TestCase
         }
 
         // Instantiate a create struct with mandatory properties
+        $email = $email ?? "{$login}@example.com";
         $userCreate = $userService->newUserCreateStruct(
             $login,
-            "{$login}@example.com",
+            $email,
             'secret',
             'eng-US'
         );
