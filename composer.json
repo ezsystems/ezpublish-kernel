@@ -36,6 +36,7 @@
         "twig/twig": "~1.35|~2.4"
     },
     "require-dev": {
+        "doctrine/dbal": "<2.10.0",
         "friendsofphp/php-cs-fixer": "2.15.3",
         "phpunit/phpunit": "^4.8.35",
         "matthiasnoback/symfony-dependency-injection-test": "~0.7.6",
