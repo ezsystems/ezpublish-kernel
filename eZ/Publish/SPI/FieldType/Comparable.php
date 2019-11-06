@@ -13,6 +13,5 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 interface Comparable
 {
-    /** @return \eZ\Publish\SPI\Comparison\ComparisonData */
     public function getDataToCompare(FieldValue $value): ComparisonData;
 }

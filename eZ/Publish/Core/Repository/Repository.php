@@ -245,6 +245,8 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
+     * @param \eZ\Publish\Core\Comparison\FieldRegistry $comparableFieldRegistry
+     * @param \eZ\Publish\Core\Comparison\ComparisonEngineRegistry $compareEngineRegistry
      * @param array $serviceSettings
      * @param \Psr\Log\LoggerInterface|null $logger
      */
