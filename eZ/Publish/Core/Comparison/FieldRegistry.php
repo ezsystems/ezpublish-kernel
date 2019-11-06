@@ -14,7 +14,7 @@ use eZ\Publish\SPI\FieldType\Comparable;
 final class FieldRegistry
 {
     /** @var \eZ\Publish\SPI\FieldType\Comparable[] */
-    private $types = [];
+    private $types;
 
     public function __construct(iterable $types = [])
     {
