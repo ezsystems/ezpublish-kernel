@@ -154,7 +154,7 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $this->assertEquals($expectedDiff, $textCompareResult->getStringDiffs());
     }
 
-    public function addFieldToContentType(
+    private function addFieldToContentType(
         string $contentTypeIdentifier,
         string $fieldIdentifier,
         string $fieldTypeIdentifier
@@ -171,7 +171,7 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $this->contentTypeService->publishContentTypeDraft($contentTypeDraft);
     }
 
-    protected function removeFieldFromContentType(
+    private function removeFieldFromContentType(
         string $contentTypeIdentifier,
         string $fieldDefinitionIdentifier
     ): void {
