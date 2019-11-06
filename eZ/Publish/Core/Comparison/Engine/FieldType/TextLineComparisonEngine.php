@@ -24,10 +24,12 @@ final class TextLineComparisonEngine implements ComparisonEngine
         $this->stringValueComparisonEngine = $stringValueComparisonEngine;
     }
 
+    /**
+     * @param \eZ\Publish\SPI\Comparison\Field\TextLine $comparisonDataA
+     * @param \eZ\Publish\SPI\Comparison\Field\TextLine $comparisonDataB
+     */
     public function compareFieldsData(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): ComparisonResult
     {
-        /** @var \eZ\Publish\SPI\Comparison\Field\TextLine $comparisonDataA */
-        /** @var \eZ\Publish\SPI\Comparison\Field\TextLine $comparisonDataB */
         return new TextLineComparisonResult(
             $this->stringValueComparisonEngine->compareValues($comparisonDataA->textLine, $comparisonDataB->textLine)
         );
