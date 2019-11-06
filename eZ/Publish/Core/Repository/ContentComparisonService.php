@@ -66,7 +66,9 @@ class ContentComparisonService implements ContentComparisonInterface
         VersionInfo $versionB,
         ?string $languageCode = null
     ): VersionDiff {
-        if ($versionA->getContentInfo()->id !== $versionB->getContentInfo()->id) {
+        $contentAId = $versionA->getContentInfo()->id;
+        $contentBId = $versionB->getContentInfo()->id;
+        if ($contentAId !== $contentBId) {
             throw new InvalidArgumentException(
                 '$versionB',
                 sprintf(
@@ -86,11 +88,11 @@ class ContentComparisonService implements ContentComparisonInterface
         }
 
         if (!$this->permissionResolver->canUser('content', 'versionread', $versionA->getContentInfo())) {
-            throw new UnauthorizedException('content', 'versionread', ['contentId' => $versionA->getContentInfo()->id]);
+            throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentAId]);
         }
 
-        $content = $this->contentHandler->load($versionA->getContentInfo()->id, $versionA->versionNo, [$languageCode]);
-        $contentToCompare = $this->contentHandler->load($versionB->getContentInfo()->id, $versionB->versionNo, [$languageCode]);
+        $content = $this->contentHandler->load($contentAId, $versionA->versionNo, [$languageCode]);
+        $contentToCompare = $this->contentHandler->load($contentBId, $versionB->versionNo, [$languageCode]);
         $fieldsDiff = [];
         foreach ($content->fields as $field) {
             $comparableField = $this->fieldRegistry->getType($field->type);
