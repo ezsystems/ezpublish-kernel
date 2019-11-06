@@ -10,6 +10,9 @@ namespace eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType;
 
 use eZ\Publish\SPI\Comparison\ComparisonResult;
 
+/**
+ * Returned when there is no difference between VersionA and VersionB for given FieldType.
+ */
 class NoDiffResult implements ComparisonResult
 {
 }
