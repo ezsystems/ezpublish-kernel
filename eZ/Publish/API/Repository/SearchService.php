@@ -110,6 +110,8 @@ interface SearchService
     /**
      * Finds content objects for the given query.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Also used to define which field languages are loaded for the returned content.
