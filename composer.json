@@ -37,7 +37,7 @@
     "require-dev": {
         "brianium/paratest": "^2.2",
         "jenner/simple_fork": "^1.2",
-        "friendsofphp/php-cs-fixer": "~2.15.0",
+        "friendsofphp/php-cs-fixer": "2.15.3",
         "phpunit/phpunit": "^7.0",
         "matthiasnoback/symfony-dependency-injection-test": "~3.0",
         "symfony/assetic-bundle": "~2.8.2",
