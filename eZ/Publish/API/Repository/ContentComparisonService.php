@@ -24,12 +24,6 @@ interface ContentComparisonService
      *
      * Only Versions in same language can be compared,
      * if no $languageCode provided, initialLanguageCode ov $versionA is used.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionA
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionB
-     * @param string|null $languageCode
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff
      */
     public function compareVersions(
         VersionInfo $versionA,

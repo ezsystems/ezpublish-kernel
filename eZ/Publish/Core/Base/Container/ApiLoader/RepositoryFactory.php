@@ -56,15 +56,6 @@ class RepositoryFactory implements ContainerAwareInterface
      *
      * This always returns the true inner Repository, please depend on ezpublish.api.repository and not this method
      * directly to make sure you get an instance wrapped inside Event / Cache / * functionality.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
-     * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
-     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
-     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashService
-     *
-     * @return \eZ\Publish\API\Repository\Repository
      */
     public function buildRepository(
         PersistenceHandler $persistenceHandler,
@@ -75,7 +66,7 @@ class RepositoryFactory implements ContainerAwareInterface
         PasswordHashServiceInterface $passwordHashService,
         FieldRegistry $fieldRegistry,
         ComparisonEngineRegistry $compareEngineRegistry
-    ) {
+    ): Repository {
         $repository = new $this->repositoryClass(
             $persistenceHandler,
             $searchHandler,
