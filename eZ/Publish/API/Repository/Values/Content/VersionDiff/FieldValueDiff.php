@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Comparison\ComparisonResult;
 class FieldValueDiff extends ValueObject
 {
     /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition */
-    private $fieldDef;
+    private $fieldDefinition;
 
     /** @var \eZ\Publish\SPI\Comparison\ComparisonResult */
     private $comparisonResult;
@@ -24,11 +24,11 @@ class FieldValueDiff extends ValueObject
     private $isChanged;
 
     public function __construct(
-        FieldDefinition $fieldDef,
+        FieldDefinition $fieldDefinition,
         ComparisonResult $comparisonResult,
         bool $isChanged
     ) {
-        $this->fieldDef = $fieldDef;
+        $this->fieldDefinition = $fieldDefinition;
         $this->comparisonResult = $comparisonResult;
         $this->isChanged = $isChanged;
     }
@@ -38,9 +38,9 @@ class FieldValueDiff extends ValueObject
         return $this->comparisonResult;
     }
 
-    public function getFieldDef(): FieldDefinition
+    public function getFieldDefinition(): FieldDefinition
     {
-        return $this->fieldDef;
+        return $this->fieldDefinition;
     }
 
     public function isChanged(): bool
