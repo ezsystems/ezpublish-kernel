@@ -31,10 +31,10 @@ class TextLineComparisonEngineTest extends TestCase
         );
     }
 
-    public function fieldsAndResultProvider()
+    public function fieldsAndResultProvider(): array
     {
         return [
-            [
+            'value_did_not_change' => [
                 new StringComparisonValue(['value' => 'No Change Value']),
                 new StringComparisonValue(['value' => 'No Change Value']),
                 new TextLineComparisonResult([
@@ -44,7 +44,7 @@ class TextLineComparisonEngineTest extends TestCase
                     ),
                 ]),
             ],
-            [
+            'value_was_added' => [
                 new StringComparisonValue(['value' => null]),
                 new StringComparisonValue(['value' => 'Added Value']),
                 new TextLineComparisonResult([
@@ -54,7 +54,7 @@ class TextLineComparisonEngineTest extends TestCase
                     ),
                 ]),
             ],
-            [
+            'value_was_removed' => [
                 new StringComparisonValue(['value' => 'Removed Value']),
                 new StringComparisonValue(['value' => null]),
                 new TextLineComparisonResult([
@@ -64,7 +64,7 @@ class TextLineComparisonEngineTest extends TestCase
                     ),
                 ]),
             ],
-            [
+            'empty_value_not_changed' => [
                 new StringComparisonValue(['value' => null]),
                 new StringComparisonValue(['value' => null]),
                 new TextLineComparisonResult([
@@ -74,7 +74,7 @@ class TextLineComparisonEngineTest extends TestCase
                     ),
                 ]),
             ],
-            [
+            'value_was_changed' => [
                 new StringComparisonValue(['value' => 'unchanged removed']),
                 new StringComparisonValue(['value' => 'unchanged added']),
                 new TextLineComparisonResult([
