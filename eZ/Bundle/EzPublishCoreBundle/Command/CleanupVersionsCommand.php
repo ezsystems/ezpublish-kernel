@@ -139,7 +139,11 @@ EOT
 
         $status = $input->getOption('status');
 
-        $excludedContentTypeIdentifiers = explode(',', $input->getOption('excluded-content-types'));
+        $excludedContentTypes = (string) $input->getOption('excluded-content-types');
+        if ($excludedContentTypes === '') {
+            $excludedContentTypes = self::DEFAULT_EXCLUDED_CONTENT_TYPES;
+        }
+        $excludedContentTypeIdentifiers = explode(',', $excludedContentTypes);
         $contentIds = $this->getObjectsIds($keep, $status, $excludedContentTypeIdentifiers);
         $contentIdsCount = count($contentIds);
 
@@ -167,13 +171,14 @@ EOT
         $removedVersionsCounter = 0;
 
         $removeAll = $status === self::VERSION_ALL;
-        $removeDrafts = $status === self::VERSION_DRAFT;
-        $removeArchived = $status === self::VERSION_ARCHIVED;
 
         foreach ($contentIds as $contentId) {
             try {
                 $contentInfo = $contentService->loadContentInfo((int) $contentId);
-                $versions = $contentService->loadVersions($contentInfo);
+                $versions = $contentService->loadVersions(
+                    $contentInfo,
+                    $removeAll ? null : $this->mapStatusToVersionInfoStatus($status)
+                );
                 $versionsCount = count($versions);
 
                 $output->writeln(sprintf(
@@ -182,15 +187,11 @@ EOT
                     $versionsCount
                 ), OutputInterface::VERBOSITY_VERBOSE);
 
-                $versions = array_filter($versions, function ($version) use ($removeAll, $removeDrafts, $removeArchived) {
-                    if (
-                        ($removeAll && $version->status !== VersionInfo::STATUS_PUBLISHED) ||
-                        ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
-                        ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
-                    ) {
-                        return true;
-                    }
-                });
+                if ($removeAll) {
+                    $versions = array_filter($versions, static function (VersionInfo $version) {
+                        return $version->status !== VersionInfo::STATUS_PUBLISHED;
+                    });
+                }
 
                 if ($keep > 0) {
                     $versions = array_slice($versions, 0, -$keep);

@@ -9,14 +9,14 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
-use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
-use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Handler
@@ -337,7 +337,8 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
      */
     public function listVersions($contentId, $status = null, $limit = -1)
     {
-        $cacheItem = $this->cache->getItem("ez-content-${contentId}-version-list" . ($status ? "-byStatus-${status}" : '') . "-limit-{$limit}");
+        $cacheItem = $this->cache->getItem("ez-content-${contentId}-version-list" . ($status !== null ? "-byStatus-${status}" : '') . "-limit-{$limit}");
+
         if ($cacheItem->isHit()) {
             $this->logger->logCacheHit(['content' => $contentId, 'status' => $status]);
 
@@ -498,10 +499,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
      *
      * For use when generating cache, not on invalidation.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param array $tags Optional, can be used to specify other tags.
-     *
-     * @return array
      */
     private function getCacheTagsForVersion(VersionInfo $versionInfo, array $tags = []): array
     {
