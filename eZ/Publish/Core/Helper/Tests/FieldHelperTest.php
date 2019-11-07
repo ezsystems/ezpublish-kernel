@@ -19,6 +19,7 @@ use eZ\Publish\Core\FieldType\TextLine\Type as TextLineType;
 use eZ\Publish\Core\FieldType\TextLine\Value;
 use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
 use PHPUnit\Framework\TestCase;
 
 class FieldHelperTest extends TestCase
@@ -85,7 +86,7 @@ class FieldHelperTest extends TestCase
             ->expects($this->any())
             ->method('getFieldType')
             ->with('ezstring')
-            ->will($this->returnValue($textLineFT));
+            ->will($this->returnValue(new FieldType($textLineFT)));
 
         $this->assertTrue($this->fieldHelper->isFieldEmpty($content, $fieldDefIdentifier));
     }
@@ -131,7 +132,7 @@ class FieldHelperTest extends TestCase
             ->expects($this->any())
             ->method('getFieldType')
             ->with('ezstring')
-            ->will($this->returnValue($textLineFT));
+            ->will($this->returnValue(new FieldType($textLineFT)));
 
         $this->assertFalse($this->fieldHelper->isFieldEmpty($content, $fieldDefIdentifier));
     }
