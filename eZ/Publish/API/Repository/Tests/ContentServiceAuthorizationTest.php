@@ -698,8 +698,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $contentUpdate->initialLanguageCode = 'eng-US';
 
         $this->expectException(UnauthorizedException::class);
-        /* TODO - the `content/edit` policy should be probably needed */
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageRegExp('/\'edit\' \'content\'/');
 
         $this->contentService->updateContent($versionInfo, $contentUpdate);
     }
