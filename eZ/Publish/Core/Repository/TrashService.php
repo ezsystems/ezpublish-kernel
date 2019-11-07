@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\TrashService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\PermissionResolver;
@@ -29,6 +29,8 @@ use eZ\Publish\API\Repository\PermissionCriterionResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
 use DateTime;
 use Exception;
 
@@ -88,14 +90,14 @@ class TrashService implements TrashServiceInterface
      *
      * Note that $id is identical to original location, which has been previously trashed
      *
+     * @param mixed $trashItemId
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
-     * @param mixed $trashItemId
-     *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function loadTrashItem($trashItemId)
+    public function loadTrashItem(int $trashItemId): APITrashItem
     {
         $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem($trashItemId);
         $trash = $this->buildDomainTrashItemObject(
@@ -119,13 +121,13 @@ class TrashService implements TrashServiceInterface
      * The current user may not have access to the returned trash item, check before using it.
      * Content is left untouched.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return null|\eZ\Publish\API\Repository\Values\Content\TrashItem null if location was deleted, otherwise TrashItem
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem|null null if location was deleted, otherwise TrashItem
      */
-    public function trash(Location $location)
+    public function trash(Location $location): ?APITrashItem
     {
         if (empty($location->id)) {
             throw new InvalidArgumentValue('id', $location->id, 'Location');
@@ -161,16 +163,14 @@ class TrashService implements TrashServiceInterface
     /**
      * Recovers the $trashedLocation at its original place if possible.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to recover the trash item at the parent location location
-     *
-     * If $newParentLocation is provided, $trashedLocation will be restored under it.
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to recover the trash item at the parent location location
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover(APITrashItem $trashItem, Location $newParentLocation = null)
+    public function recover(APITrashItem $trashItem, Location $newParentLocation = null): Location
     {
         if (!is_numeric($trashItem->id)) {
             throw new InvalidArgumentValue('id', $trashItem->id, 'TrashItem');
@@ -231,8 +231,10 @@ class TrashService implements TrashServiceInterface
      * if all locations of the content are gone.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to empty the trash
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList
      */
-    public function emptyTrash()
+    public function emptyTrash(): TrashItemDeleteResultList
     {
         if ($this->permissionResolver->hasAccess('content', 'cleantrash') === false) {
             throw new UnauthorizedException('content', 'cleantrash');
@@ -256,13 +258,13 @@ class TrashService implements TrashServiceInterface
      *
      * The corresponding content object will be removed
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete this trash item
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete this trash item
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult
      */
-    public function deleteTrashItem(APITrashItem $trashItem)
+    public function deleteTrashItem(APITrashItem $trashItem): TrashItemDeleteResult
     {
         if (!$this->permissionResolver->canUser('content', 'cleantrash', $trashItem->getContentInfo())) {
             throw new UnauthorizedException('content', 'cleantrash');
@@ -293,7 +295,7 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Trash\SearchResult
      */
-    public function findTrashItems(Query $query)
+    public function findTrashItems(Query $query): SearchResult
     {
         if ($query->filter !== null && !$query->filter instanceof Criterion) {
             throw new InvalidArgumentValue('query->filter', $query->filter, 'Query');

@@ -34,7 +34,7 @@ class TrashServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce15c270.43306350'];
+        $parameters = [1];
 
         $serviceMock->expects($this->once())->method('loadTrashItem')->with(...$parameters);
 
