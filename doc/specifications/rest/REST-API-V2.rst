@@ -307,6 +307,7 @@ XML Example
                         <mainLanguageCode>eng-GB</mainLanguageCode>
                         <currentVersionNo>9</currentVersionNo>
                         <alwaysAvailable>true</alwaysAvailable>
+                        <isHidden>false</isHidden>
                         <status>PUBLISHED</status>
                         <ObjectStates media-type="application/vnd.ez.api.ContentObjectStates+xml" href="/api/ezp/v2/content/objects/1/objectstates"/>
                     </Content>

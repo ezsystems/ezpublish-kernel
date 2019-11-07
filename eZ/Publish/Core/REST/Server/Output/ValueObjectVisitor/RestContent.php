@@ -180,6 +180,12 @@ class RestContent extends ValueObjectVisitor
         $generator->endValueElement('alwaysAvailable');
 
         $generator->startValueElement(
+            'isHidden',
+            $this->serializeBool($generator, $contentInfo->isHidden)
+        );
+        $generator->endValueElement('isHidden');
+
+        $generator->startValueElement(
             'status',
             $this->getStatusString($contentInfo->status)
         );
