@@ -63,10 +63,10 @@ class InstallPlatformCommand extends Command
             'The type of install. Available options: ' . implode(', ', array_keys($this->installers))
         );
         $this->addOption(
-            'disable-index',
+            'skip-indexing',
             null,
             InputOption::VALUE_NONE,
-            'Disable index'
+            'Skip indexing (ezplaform:reindex)'
         );
     }
 
@@ -94,7 +94,7 @@ class InstallPlatformCommand extends Command
         $installer->importBinaries();
         $this->cacheClear($output);
 
-        if (!$input->getOption('disable-index')) {
+        if (!$input->getOption('skip-indexing')) {
             $this->indexData($output);
         }
     }
