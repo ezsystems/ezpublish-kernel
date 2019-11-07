@@ -9,7 +9,9 @@ declare(strict_types=1);
 namespace eZ\Publish\SPI\Repository\Decorator;
 
 use eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
@@ -26,31 +28,31 @@ abstract class SearchServiceDecorator implements SearchService
     public function findContent(
         Query $query,
         array $languageFilter = [],
-        $filterOnUserPermissions = true
-    ) {
+        bool $filterOnUserPermissions = true
+    ): SearchResult {
         return $this->innerService->findContent($query, $languageFilter, $filterOnUserPermissions);
     }
 
     public function findContentInfo(
         Query $query,
         array $languageFilter = [],
-        $filterOnUserPermissions = true
-    ) {
+        bool $filterOnUserPermissions = true
+    ): SearchResult {
         return $this->innerService->findContentInfo($query, $languageFilter, $filterOnUserPermissions);
     }
 
     public function findSingle(
         Criterion $filter,
         array $languageFilter = [],
-        $filterOnUserPermissions = true
-    ) {
+        bool $filterOnUserPermissions = true
+    ): Content {
         return $this->innerService->findSingle($filter, $languageFilter, $filterOnUserPermissions);
     }
 
     public function suggest(
-        $prefix,
-        $fieldPaths = [],
-        $limit = 10,
+        string $prefix,
+        array $fieldPaths = [],
+        int $limit = 10,
         Criterion $filter = null
     ) {
         return $this->innerService->suggest($prefix, $fieldPaths, $limit, $filter);
@@ -59,8 +61,8 @@ abstract class SearchServiceDecorator implements SearchService
     public function findLocations(
         LocationQuery $query,
         array $languageFilter = [],
-        $filterOnUserPermissions = true
-    ) {
+        bool $filterOnUserPermissions = true
+    ): SearchResult {
         return $this->innerService->findLocations($query, $languageFilter, $filterOnUserPermissions);
     }
 

@@ -1,16 +1,18 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\SearchService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 /**
  * Search service.
@@ -26,7 +28,7 @@ interface SearchService
      *
      * @since 6.12 (constant added in 6.7.6 and up)
      */
-    const CAPABILITY_SCORING = 1;
+    public const CAPABILITY_SCORING = 1;
 
     /**
      * Capability flag for facets feature for use with {@see ::supports()}.
@@ -40,7 +42,7 @@ interface SearchService
      *
      * @since 6.12 (constant added in 6.7.6 and up)
      */
-    const CAPABILITY_FACETS = 2;
+    public const CAPABILITY_FACETS = 2;
 
     /**
      * Capability flag for custom fields feature for use with {@see ::supports()}.
@@ -52,7 +54,7 @@ interface SearchService
      *
      * @since 6.12 (constant added in 6.7.6 and up)
      */
-    const CAPABILITY_CUSTOM_FIELDS = 4;
+    public const CAPABILITY_CUSTOM_FIELDS = 4;
 
     /**
      * Capability flag for spellcheck feature for use with {@see ::supports()}.
@@ -65,7 +67,7 @@ interface SearchService
      *
      * @since 6.12 (constant added in 6.7.6 and up)
      */
-    const CAPABILITY_SPELLCHECK = 8;
+    public const CAPABILITY_SPELLCHECK = 8;
 
     /**
      * Capability flag for highlight feature for use with {@see ::supports()}.
@@ -83,7 +85,7 @@ interface SearchService
      *
      * @since 6.12 (constant added in 6.7.6 and up)
      */
-    const CAPABILITY_HIGHLIGHT = 16;
+    public const CAPABILITY_HIGHLIGHT = 16;
 
     /**
      * Capability flag for suggest feature for use with {@see ::supports()}.
@@ -93,7 +95,7 @@ interface SearchService
      *
      * @since 6.12 (constant added in 6.7.6 and up)
      */
-    const CAPABILITY_SUGGEST = 32;
+    public const CAPABILITY_SUGGEST = 32;
 
     /**
      * Capability flag for advanced fulltext feature for use with {@see ::supports()}.
@@ -103,7 +105,7 @@ interface SearchService
      * @since 6.12 (constant added in 6.7.6 and up)
      * @see \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText
      */
-    const CAPABILITY_ADVANCED_FULLTEXT = 64;
+    public const CAPABILITY_ADVANCED_FULLTEXT = 64;
 
     /**
      * Finds content objects for the given query.
@@ -119,7 +121,7 @@ interface SearchService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $languageFilter = [], $filterOnUserPermissions = true);
+    public function findContent(Query $query, array $languageFilter = [], bool $filterOnUserPermissions = true): SearchResult;
 
     /**
      * Finds contentInfo objects for the given query.
@@ -139,7 +141,7 @@ interface SearchService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContentInfo(Query $query, array $languageFilter = [], $filterOnUserPermissions = true);
+    public function findContentInfo(Query $query, array $languageFilter = [], bool $filterOnUserPermissions = true): SearchResult;
 
     /**
      * Performs a query for a single content object.
@@ -156,7 +158,7 @@ interface SearchService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = [], $filterOnUserPermissions = true);
+    public function findSingle(Criterion $filter, array $languageFilter = [], bool $filterOnUserPermissions = true): Content;
 
     /**
      * Suggests a list of values for the given prefix.
@@ -166,7 +168,7 @@ interface SearchService
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null);
+    public function suggest(string $prefix, array $fieldPaths = [], int $limit = 10, Criterion $filter = null);
 
     /**
      * Finds Locations for the given query.
@@ -181,12 +183,12 @@ interface SearchService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $languageFilter = [], $filterOnUserPermissions = true);
+    public function findLocations(LocationQuery $query, array $languageFilter = [], bool $filterOnUserPermissions = true): SearchResult;
 
     /**
      * Query for supported capability of currently configured search engine.
      *
-     * Will return false if search engine does not implement {@see eZ\Publish\SPI\Search\Capable}.
+     * Will return false if search engine does not implement {@see \eZ\Publish\SPI\Search\Capable}.
      *
      * @since 6.12
      *

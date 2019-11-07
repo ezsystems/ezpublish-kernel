@@ -37,7 +37,7 @@ class SearchServiceDecoratorTest extends TestCase
         $parameters = [
             $this->createMock(Query::class),
             ['random_value_5ced05ce17d631.27870175'],
-            'random_value_5ced05ce17d666.62764500',
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('findContent')->with(...$parameters);
@@ -53,7 +53,7 @@ class SearchServiceDecoratorTest extends TestCase
         $parameters = [
             $this->createMock(Query::class),
             ['random_value_5ced05ce17d6d9.76060657'],
-            'random_value_5ced05ce17d6e8.25334516',
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('findContentInfo')->with(...$parameters);
@@ -69,7 +69,7 @@ class SearchServiceDecoratorTest extends TestCase
         $parameters = [
             $this->createMock(Criterion::class),
             ['random_value_5ced05ce17ef80.90204500'],
-            'random_value_5ced05ce17efb1.72362623',
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('findSingle')->with(...$parameters);
@@ -84,8 +84,8 @@ class SearchServiceDecoratorTest extends TestCase
 
         $parameters = [
             'random_value_5ced05ce17f030.62511430',
-            'random_value_5ced05ce17f044.48777415',
-            'random_value_5ced05ce17f050.86508399',
+            ['random_value_5ced05ce17f044.48777415'],
+            10,
             $this->createMock(Criterion::class),
         ];
 
@@ -102,7 +102,7 @@ class SearchServiceDecoratorTest extends TestCase
         $parameters = [
             $this->createMock(LocationQuery::class),
             ['random_value_5ced05ce17f647.36429312'],
-            'random_value_5ced05ce17f678.24389953',
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('findLocations')->with(...$parameters);

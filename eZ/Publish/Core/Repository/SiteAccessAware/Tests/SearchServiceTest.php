@@ -5,7 +5,9 @@ namespace eZ\Publish\Core\Repository\SiteAccessAware\Tests;
 use eZ\Publish\API\Repository\SearchService as APIService;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Repository\SiteAccessAware\SearchService;
+use eZ\Publish\Core\Repository\Values\Content\Content;
 
 class SearchServiceTest extends AbstractServiceTest
 {
@@ -33,6 +35,8 @@ class SearchServiceTest extends AbstractServiceTest
         $query = new Query();
         $locationQuery = new LocationQuery();
         $criterion = new Query\Criterion\ContentId(44);
+        $content = new Content();
+        $searchResults = new SearchResult();
 
         $callback = function ($languageLookup) {
             $this->languageResolverMock
@@ -44,10 +48,10 @@ class SearchServiceTest extends AbstractServiceTest
 
         // string $method, array $arguments, bool $return, int $languageArgumentIndex, callable $callback
         return [
-            ['findContent', [$query, self::LANG_ARG, false], true, 1, $callback],
-            ['findContentInfo', [$query, self::LANG_ARG, false], true, 1, $callback],
-            ['findSingle', [$criterion, self::LANG_ARG, false], true, 1, $callback],
-            ['findLocations', [$locationQuery, self::LANG_ARG, false], true, 1, $callback],
+            ['findContent', [$query, self::LANG_ARG, false], $searchResults, 1, $callback],
+            ['findContentInfo', [$query, self::LANG_ARG, false], $searchResults, 1, $callback],
+            ['findSingle', [$criterion, self::LANG_ARG, false], $content, 1, $callback],
+            ['findLocations', [$locationQuery, self::LANG_ARG, false], $searchResults, 1, $callback],
         ];
     }
 
