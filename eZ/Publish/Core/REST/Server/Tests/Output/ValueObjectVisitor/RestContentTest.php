@@ -114,6 +114,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => 'location23',
                     'contentTypeId' => 'contentType23',
+                    'isHidden' => true,
                 ]
             ),
             new Values\Content\Location(
@@ -353,6 +354,16 @@ class RestContentTest extends ValueObjectVisitorBaseTest
     public function testAlwaysAvailableCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/Content/alwaysAvailable[text()="true"]');
+    }
+
+    /**
+     * @param \DOMDocument $dom
+     *
+     * @depends testVisitWithoutEmbeddedVersion
+     */
+    public function testIsHiddenCorrect(\DOMDocument $dom)
+    {
+        $this->assertXPath($dom, '/Content/isHidden[text()="true"]');
     }
 
     /**
