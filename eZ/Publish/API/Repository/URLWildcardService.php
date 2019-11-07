@@ -1,14 +1,15 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\URLWildcardService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
 /**
  * URLAlias service.
@@ -32,7 +33,7 @@ interface URLWildcardService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create($sourceUrl, $destinationUrl, $forward = false);
+    public function create(string $sourceUrl, string $destinationUrl, bool $forward = false): UrlWildcard;
 
     /**
      * Removes an url wildcard.
@@ -41,18 +42,18 @@ interface URLWildcardService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
      */
-    public function remove(URLWildcard $urlWildcard);
+    public function remove(URLWildcard $urlWildcard): void;
 
     /**
      * Loads a url wild card.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
-     * @param mixed $id
+     * @param int $id
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function load($id);
+    public function load(int $id): UrlWildcard;
 
     /**
      * Loads all url wild card (paged).
@@ -62,7 +63,7 @@ interface URLWildcardService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
      */
-    public function loadAll($offset = 0, $limit = -1);
+    public function loadAll(int $offset = 0, int $limit = -1): iterable;
 
     /**
      * Translates an url to an existing uri resource based on the
@@ -70,9 +71,9 @@ interface URLWildcardService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url could not be translated
      *
-     * @param mixed $url
+     * @param string $url
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      */
-    public function translate($url);
+    public function translate(string $url): URLWildcardTranslationResult;
 }

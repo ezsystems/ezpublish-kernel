@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeTranslateEvent;
@@ -34,10 +35,10 @@ class URLWildcardService extends URLWildcardServiceDecorator
     }
 
     public function create(
-        $sourceUrl,
-        $destinationUrl,
-        $forward = false
-    ) {
+        string $sourceUrl,
+        string $destinationUrl,
+        bool $forward = false
+    ): UrlWildcard {
         $eventData = [
             $sourceUrl,
             $destinationUrl,
@@ -80,7 +81,7 @@ class URLWildcardService extends URLWildcardServiceDecorator
         );
     }
 
-    public function translate($url)
+    public function translate(string $url): URLWildcardTranslationResult
     {
         $eventData = [$url];
 

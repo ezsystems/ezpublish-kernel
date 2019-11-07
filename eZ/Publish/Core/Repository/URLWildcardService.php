@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\URLWildcardService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\PermissionResolver;
@@ -73,7 +73,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create($sourceUrl, $destinationUrl, $forward = false): URLWildcard
+    public function create(string $sourceUrl, string $destinationUrl, bool $forward = false): UrlWildcard
     {
         if ($this->permissionResolver->hasAccess('content', 'urltranslator') === false) {
             throw new UnauthorizedException('content', 'urltranslator');
@@ -145,11 +145,11 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
-     * @param mixed $id
+     * @param int $id
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function load($id): URLWildcard
+    public function load(int $id): UrlWildcard
     {
         return $this->buildUrlWildcardDomainObject(
             $this->urlWildcardHandler->load($id)
@@ -164,7 +164,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
      */
-    public function loadAll($offset = 0, $limit = -1): array
+    public function loadAll(int $offset = 0, int $limit = -1): iterable
     {
         $spiUrlWildcards = $this->urlWildcardHandler->loadAll(
             $offset,
@@ -185,11 +185,11 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url could not be translated
      *
-     * @param mixed $url
+     * @param string $url
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      */
-    public function translate($url): URLWildcardTranslationResult
+    public function translate(string $url): URLWildcardTranslationResult
     {
         $spiWildcard = $this->urlWildcardHandler->translate($this->cleanPath($url));
 

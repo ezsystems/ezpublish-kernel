@@ -33,9 +33,9 @@ class URLWildcardServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce0f76d9.50834569',
-            'random_value_5ced05ce0f7709.88573575',
-            'random_value_5ced05ce0f7713.40900633',
+            'source_url_value',
+            'destination_url_value',
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('create')->with(...$parameters);
@@ -60,7 +60,7 @@ class URLWildcardServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce0f7e67.73670278'];
+        $parameters = [1];
 
         $serviceMock->expects($this->once())->method('load')->with(...$parameters);
 
@@ -73,8 +73,8 @@ class URLWildcardServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce0f7ea4.77940790',
-            'random_value_5ced05ce0f7eb2.19026311',
+            10,
+            100,
         ];
 
         $serviceMock->expects($this->once())->method('loadAll')->with(...$parameters);
@@ -87,7 +87,7 @@ class URLWildcardServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce0f7ee7.19290474'];
+        $parameters = ['ez.no'];
 
         $serviceMock->expects($this->once())->method('translate')->with(...$parameters);
 
