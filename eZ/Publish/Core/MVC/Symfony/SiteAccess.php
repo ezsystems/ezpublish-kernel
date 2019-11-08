@@ -22,6 +22,9 @@ class SiteAccess extends ValueObject
      */
     public $name;
 
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccessGroup[] */
+    public $groups = [];
+
     /**
      * The matching type that has been used to discover the siteaccess.
      * Contains the matcher class FQN, or 'default' if fell back to the default siteaccess.

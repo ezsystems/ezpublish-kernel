@@ -63,6 +63,7 @@ services:
         class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider\StaticSiteAccessProvider
         arguments:
             - "%ezpublish.siteaccess.list%"
+            - "%ezpublish.siteaccess.groups_by_siteaccess%"
         tags:
             - { name: ezplatform.siteaccess.provider, priority: 10 }
 
