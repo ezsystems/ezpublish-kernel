@@ -12,6 +12,7 @@ use Doctrine\DBAL\Connection;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -61,6 +62,12 @@ class InstallPlatformCommand extends Command
             InputArgument::REQUIRED,
             'The type of install. Available options: ' . implode(', ', array_keys($this->installers))
         );
+        $this->addOption(
+            'skip-indexing',
+            null,
+            InputOption::VALUE_NONE,
+            'Skip indexing (ezplaform:reindex)'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -86,7 +93,10 @@ class InstallPlatformCommand extends Command
         $installer->importData();
         $installer->importBinaries();
         $this->cacheClear($output);
-        $this->indexData($output);
+
+        if (!$input->getOption('skip-indexing')) {
+            $this->indexData($output);
+        }
     }
 
     private function checkPermissions()
