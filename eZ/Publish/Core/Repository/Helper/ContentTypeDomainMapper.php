@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
@@ -48,7 +49,7 @@ class ContentTypeDomainMapper
     /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\ProxyFactory */
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper */
     protected $proxyFactory;
 
     /**
@@ -57,13 +58,13 @@ class ContentTypeDomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\Core\Repository\Helper\ProxyFactory $proxyFactory
+     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper $proxyFactory
      */
     public function __construct(
         SPITypeHandler $contentTypeHandler,
         SPILanguageHandler $contentLanguageHandler,
         FieldTypeRegistry $fieldTypeRegistry,
-        ProxyFactory $proxyFactory
+        ProxyDomainMapperInterface $proxyFactory
     ) {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->contentLanguageHandler = $contentLanguageHandler;

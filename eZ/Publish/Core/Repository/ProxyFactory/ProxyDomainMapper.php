@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Repository\Helper;
+namespace eZ\Publish\Core\Repository\ProxyFactory;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -23,7 +23,7 @@ use ProxyManager\Proxy\LazyLoadingInterface;
 /**
  * @internal
  */
-final class ProxyFactory implements ProxyFactoryInterface
+final class ProxyDomainMapper implements ProxyDomainMapperInterface
 {
     /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
@@ -31,10 +31,10 @@ final class ProxyFactory implements ProxyFactoryInterface
     /** @var \ProxyManager\Factory\LazyLoadingValueHolderFactory */
     private $factory;
 
-    public function __construct(Repository $repository)
+    public function __construct(Repository $repository, LazyLoadingValueHolderFactory $lazyLoadingValueHolderFactory)
     {
         $this->repository = $repository;
-        $this->factory = new LazyLoadingValueHolderFactory();
+        $this->factory = $lazyLoadingValueHolderFactory;
     }
 
     public function createContentProxy(
@@ -66,8 +66,8 @@ final class ProxyFactory implements ProxyFactoryInterface
         ) use ($contentId): bool {
             $initializer = null;
             $wrappedObject = $this->repository->getContentService()->loadContentInfo(
-                $contentId,
-                );
+                $contentId
+            );
 
             return true;
         };

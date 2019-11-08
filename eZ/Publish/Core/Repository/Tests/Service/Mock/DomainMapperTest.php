@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
-use eZ\Publish\Core\Repository\Helper\ProxyFactoryInterface;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Helper\DomainMapper;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -230,8 +230,8 @@ class DomainMapperTest extends BaseServiceMockTest
         return $this->getPersistenceMockHandler('Content\\Type\\Handler');
     }
 
-    protected function getProxyFactoryMock(): ProxyFactoryInterface
+    protected function getProxyFactoryMock(): ProxyDomainMapperInterface
     {
-        return $this->createMock(ProxyFactoryInterface::class);
+        return $this->createMock(ProxyDomainMapperInterface::class);
     }
 }

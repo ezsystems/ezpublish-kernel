@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Repository\Helper;
+namespace eZ\Publish\Core\Repository\ProxyFactory;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\User\User;
 /**
  * @internal
  */
-interface ProxyFactoryInterface
+interface ProxyDomainMapperInterface
 {
     public function createContentProxy(int $contentId, array $prioritizedLanguages = Language::ALL, bool $useAlwaysAvailable = true): Content;
 

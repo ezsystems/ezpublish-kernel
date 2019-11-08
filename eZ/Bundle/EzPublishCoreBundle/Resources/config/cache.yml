@@ -19,3 +19,9 @@ services:
             - [setContainer, ["@service_container"]]
         tags:
             - { name: kernel.cache_warmer }
+
+    eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ProxyCacheWarmer:
+        arguments:
+            - '@eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory'
+        tags:
+            - { name: kernel.cache_warmer }

@@ -42,6 +42,7 @@ services:
             - '@ezpublish.repository.relation_processor'
             - '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
             - '@eZ\Publish\Core\Repository\User\PasswordHashService'
+            - '@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory'
         lazy: true
 
     ezpublish.api.service.inner_content:
@@ -141,3 +142,13 @@ services:
             - '@ezpublish.api.persistence_handler'
         calls:
             - ['setLogger', ['@?logger']]
+
+    eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory:
+        public: true
+        factory: ['eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory', 'create']
+        arguments:
+            $proxyCacheDir: '%kernel.cache_dir%/repository/proxy'
+
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory:
+        arguments:
+            $lazyLoadingValueHolderFactory: '@eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory'

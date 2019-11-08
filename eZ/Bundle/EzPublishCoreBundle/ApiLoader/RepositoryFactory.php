@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
@@ -72,6 +73,7 @@ class RepositoryFactory implements ContainerAwareInterface
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashService
+     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory $proxyDomainMapperFactory
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
@@ -81,7 +83,8 @@ class RepositoryFactory implements ContainerAwareInterface
         BackgroundIndexer $backgroundIndexer,
         RelationProcessor $relationProcessor,
         FieldTypeRegistry $fieldTypeRegistry,
-        PasswordHashServiceInterface $passwordHashService
+        PasswordHashServiceInterface $passwordHashService,
+        ProxyDomainMapperFactory $proxyDomainMapperFactory
     ) {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 
@@ -92,6 +95,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $relationProcessor,
             $fieldTypeRegistry,
             $passwordHashService,
+            $proxyDomainMapperFactory,
             [
                 'role' => [
                     'limitationTypes' => $this->roleLimitations,
