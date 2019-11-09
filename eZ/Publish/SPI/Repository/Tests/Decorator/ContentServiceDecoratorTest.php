@@ -25,6 +25,11 @@ use eZ\Publish\SPI\Repository\Decorator\ContentServiceDecorator;
 
 class ContentServiceDecoratorTest extends TestCase
 {
+    private const EXAMPLE_CONTENT_ID = 1;
+    private const EXAMPLE_LANGUAGE_CODE = 'eng-GB';
+    private const EXAMPLE_CONTENT_REMOTE_ID = 'example';
+    private const EXAMPLE_VERSION_NO = 1;
+
     protected function createDecorator(MockObject $service): ContentService
     {
         return new class($service) extends ContentServiceDecorator {
@@ -41,7 +46,7 @@ class ContentServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce154118.08177784'];
+        $parameters = [self::EXAMPLE_CONTENT_ID];
 
         $serviceMock->expects($this->once())->method('loadContentInfo')->with(...$parameters)->willReturn($this->createMock(ContentInfo::class));
 
@@ -79,7 +84,7 @@ class ContentServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(ContentInfo::class),
-            'random_value_5ced05ce1541e5.29503590',
+            self::EXAMPLE_VERSION_NO,
         ];
 
         $serviceMock->expects($this->once())->method('loadVersionInfo')->with(...$parameters)->willReturn($this->createMock(VersionInfo::class));
@@ -93,8 +98,8 @@ class ContentServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce154212.71705283',
-            'random_value_5ced05ce154226.14877654',
+            self::EXAMPLE_CONTENT_ID,
+            self::EXAMPLE_VERSION_NO,
         ];
 
         $serviceMock->expects($this->once())->method('loadVersionInfoById')->with(...$parameters)->willReturn($this->createMock(VersionInfo::class));
@@ -109,9 +114,9 @@ class ContentServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(ContentInfo::class),
-            ['random_value_5ced05ce154263.26527866'],
-            'random_value_5ced05ce154274.48633738',
-            'random_value_5ced05ce154288.12181629',
+            [self::EXAMPLE_LANGUAGE_CODE],
+            self::EXAMPLE_VERSION_NO,
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('loadContentByContentInfo')->with(...$parameters)->willReturn($this->createMock(Content::class));
@@ -126,8 +131,8 @@ class ContentServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(VersionInfo::class),
-            ['random_value_5ced05ce154b93.03098248'],
-            'random_value_5ced05ce154bc5.33425740',
+            [self::EXAMPLE_LANGUAGE_CODE],
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('loadContentByVersionInfo')->with(...$parameters)->willReturn($this->createMock(Content::class));
@@ -141,10 +146,10 @@ class ContentServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce154c25.68443488',
-            ['random_value_5ced05ce154c34.23275680'],
-            'random_value_5ced05ce154c41.25945372',
-            'random_value_5ced05ce154c55.22828466',
+            self::EXAMPLE_CONTENT_ID,
+            [self::EXAMPLE_LANGUAGE_CODE],
+            self::EXAMPLE_VERSION_NO,
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('loadContent')->with(...$parameters)->willReturn($this->createMock(Content::class));
@@ -158,10 +163,10 @@ class ContentServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce154c88.14138266',
-            ['random_value_5ced05ce154c96.62330223'],
-            'random_value_5ced05ce154ca4.47689455',
-            'random_value_5ced05ce154cb6.74747836',
+            self::EXAMPLE_CONTENT_REMOTE_ID,
+            [self::EXAMPLE_LANGUAGE_CODE],
+            self::EXAMPLE_VERSION_NO,
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('loadContentByRemoteId')->with(...$parameters)->willReturn($this->createMock(Content::class));
@@ -175,9 +180,9 @@ class ContentServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            ['random_value_5ced05ce154ce0.53430215'],
-            ['random_value_5ced05ce154cf5.73360157'],
-            'random_value_5ced05ce154d01.47432661',
+            [$this->createMock(ContentInfo::class)],
+            [self::EXAMPLE_LANGUAGE_CODE],
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('loadContentListByContentInfo')->with(...$parameters)->willReturn([]);
@@ -289,7 +294,7 @@ class ContentServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(VersionInfo::class)];
 
-        $serviceMock->expects($this->once())->method('deleteVersion')->with(...$parameters)->willReturn($this->createMock(Content::class));
+        $serviceMock->expects($this->once())->method('deleteVersion')->with(...$parameters);
 
         $decoratedService->deleteVersion(...$parameters);
     }
@@ -371,7 +376,7 @@ class ContentServiceDecoratorTest extends TestCase
             $this->createMock(ContentInfo::class),
         ];
 
-        $serviceMock->expects($this->once())->method('deleteRelation')->with(...$parameters)->willReturn($this->createMock(Content::class));
+        $serviceMock->expects($this->once())->method('deleteRelation')->with(...$parameters);
 
         $decoratedService->deleteRelation(...$parameters);
     }
@@ -383,10 +388,10 @@ class ContentServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(ContentInfo::class),
-            'random_value_5ced05ce156ca0.26332407',
+            self::EXAMPLE_LANGUAGE_CODE,
         ];
 
-        $serviceMock->expects($this->once())->method('removeTranslation')->with(...$parameters)->willReturn($this->createMock(Content::class));
+        $serviceMock->expects($this->once())->method('removeTranslation')->with(...$parameters);
 
         $decoratedService->removeTranslation(...$parameters);
     }
@@ -398,10 +403,10 @@ class ContentServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(ContentInfo::class),
-            'random_value_5ced05ce156d02.84155908',
+            self::EXAMPLE_LANGUAGE_CODE,
         ];
 
-        $serviceMock->expects($this->once())->method('deleteTranslation')->with(...$parameters)->willReturn($this->createMock(Content::class));
+        $serviceMock->expects($this->once())->method('deleteTranslation')->with(...$parameters);
 
         $decoratedService->deleteTranslation(...$parameters);
     }

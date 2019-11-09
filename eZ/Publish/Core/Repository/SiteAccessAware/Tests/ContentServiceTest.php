@@ -9,6 +9,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\User\User;
@@ -34,6 +35,7 @@ class ContentServiceTest extends AbstractServiceTest
         $contentInfo = new ContentInfo();
         $versionInfo = new VersionInfo();
         $content = $this->createMock(Content::class);
+        $relation = $this->createMock(Relation::class);
         $relationList = new RelationList();
         $contentCreateStruct = new ContentCreateStruct();
         $contentUpdateStruct = new ContentUpdateStruct();
@@ -45,95 +47,96 @@ class ContentServiceTest extends AbstractServiceTest
 
         // string $method, array $arguments, bool $return = true
         return [
-            ['loadContentInfo', [42]],
+            ['loadContentInfo', [42], $contentInfo],
             ['loadContentInfoList', [[42]], [$contentInfo]],
 
-            ['loadContentInfoByRemoteId', ['f348tj4gorgji4']],
+            ['loadContentInfoByRemoteId', ['f348tj4gorgji4'], $contentInfo],
 
-            ['loadVersionInfo', [$contentInfo]],
-            ['loadVersionInfo', [$contentInfo, 3]],
+            ['loadVersionInfo', [$contentInfo], $versionInfo],
+            ['loadVersionInfo', [$contentInfo, 3], $versionInfo],
 
-            ['loadVersionInfoById', [42]],
-            ['loadVersionInfoById', [42, 3]],
+            ['loadVersionInfoById', [42], $versionInfo],
+            ['loadVersionInfoById', [42, 3], $versionInfo],
 
-            ['createContent', [$contentCreateStruct]],
-            ['createContent', [$contentCreateStruct, [44]]],
+            ['createContent', [$contentCreateStruct], $content],
+            ['createContent', [$contentCreateStruct, [44]], $content],
 
-            ['updateContentMetadata', [$contentInfo, $contentMetaStruct]],
+            ['updateContentMetadata', [$contentInfo, $contentMetaStruct], $content],
 
-            ['deleteContent', [$contentInfo]],
+            ['deleteContent', [$contentInfo], null],
 
-            ['createContentDraft', [$contentInfo]],
-            ['createContentDraft', [$contentInfo, $versionInfo]],
-            ['createContentDraft', [$contentInfo, $versionInfo, $user]],
-            ['createContentDraft', [$contentInfo, $versionInfo, $user, $language]],
+            ['createContentDraft', [$contentInfo], $content],
+            ['createContentDraft', [$contentInfo, $versionInfo], $content],
+            ['createContentDraft', [$contentInfo, $versionInfo, $user], $content],
+            ['createContentDraft', [$contentInfo, $versionInfo, $user, $language], $content],
 
             ['countContentDrafts', [], 0],
             ['countContentDrafts', [$user], 0],
 
-            ['loadContentDrafts', []],
-            ['loadContentDrafts', [$user]],
+            ['loadContentDrafts', [], [$content]],
+            ['loadContentDrafts', [$user], [$content]],
 
             ['loadContentDraftList', [], new ContentDraftList()],
             ['loadContentDraftList', [$user], new ContentDraftList()],
             ['loadContentDraftList', [$user, 1], new ContentDraftList()],
             ['loadContentDraftList', [$user, 1, 25], new ContentDraftList()],
 
-            ['updateContent', [$versionInfo, $contentUpdateStruct]],
+            ['updateContent', [$versionInfo, $contentUpdateStruct], $content],
 
-            ['publishVersion', [$versionInfo]],
+            ['publishVersion', [$versionInfo], $content],
 
-            ['deleteVersion', [$versionInfo]],
+            ['deleteVersion', [$versionInfo], null],
 
-            ['loadVersions', [$contentInfo]],
+            ['loadVersions', [$contentInfo], [$versionInfo]],
 
-            ['copyContent', [$contentInfo, $locationCreateStruct]],
-            ['copyContent', [$contentInfo, $locationCreateStruct, $versionInfo]],
+            ['copyContent', [$contentInfo, $locationCreateStruct], $content],
+            ['copyContent', [$contentInfo, $locationCreateStruct, $versionInfo], $content],
 
-            ['loadRelations', [$versionInfo]],
+            ['loadRelations', [$versionInfo], [$relation]],
 
             ['countReverseRelations', [$contentInfo], 0],
 
             ['loadReverseRelations', [$contentInfo], $relationList],
             ['loadReverseRelationList', [$contentInfo], $relationList],
 
-            ['addRelation', [$versionInfo, $contentInfo]],
+            ['addRelation', [$versionInfo, $contentInfo], null],
 
-            ['deleteRelation', [$versionInfo, $contentInfo]],
+            ['deleteRelation', [$versionInfo, $contentInfo], null],
 
-            ['removeTranslation', [$contentInfo, 'eng-GB']],
+            ['removeTranslation', [$contentInfo, 'eng-GB'], null],
 
-            ['deleteTranslation', [$contentInfo, 'eng-GB']],
+            ['deleteTranslation', [$contentInfo, 'eng-GB'], null],
 
-            ['deleteTranslationFromDraft', [$versionInfo, 'eng-GB']],
+            ['deleteTranslationFromDraft', [$versionInfo, 'eng-GB'], $content],
 
             ['hideContent', [$contentInfo], null],
             ['revealContent', [$contentInfo], null],
 
-            ['newContentCreateStruct', [$contentType, 'eng-GB']],
-            ['newContentMetadataUpdateStruct', []],
-            ['newContentUpdateStruct', []],
+            ['newContentCreateStruct', [$contentType, 'eng-GB'], $contentCreateStruct],
+            ['newContentMetadataUpdateStruct', [], $contentMetaStruct],
+            ['newContentUpdateStruct', [], $contentUpdateStruct],
         ];
     }
 
     public function providerForLanguagesLookupMethods()
     {
+        $content = $this->createMock(Content::class);
         $contentInfo = new ContentInfo();
         $versionInfo = new VersionInfo();
 
         // string $method, array $arguments, bool $return, int $languageArgumentIndex
         return [
-            ['loadContentByContentInfo', [$contentInfo], true, 1],
-            ['loadContentByContentInfo', [$contentInfo, self::LANG_ARG, 4, false], true, 1],
+            ['loadContentByContentInfo', [$contentInfo], $content, 1],
+            ['loadContentByContentInfo', [$contentInfo, self::LANG_ARG, 4, false], $content, 1],
 
-            ['loadContentByVersionInfo', [$versionInfo], true, 1],
-            ['loadContentByVersionInfo', [$versionInfo, self::LANG_ARG, false], true, 1],
+            ['loadContentByVersionInfo', [$versionInfo], $content, 1],
+            ['loadContentByVersionInfo', [$versionInfo, self::LANG_ARG, false], $content, 1],
 
-            ['loadContent', [42], true, 1],
-            ['loadContent', [42, self::LANG_ARG, 4, false], true, 1],
+            ['loadContent', [42], $content, 1],
+            ['loadContent', [42, self::LANG_ARG, 4, false], $content, 1],
 
-            ['loadContentByRemoteId', ['f348tj4gorgji4'], true, 1],
-            ['loadContentByRemoteId', ['f348tj4gorgji4', self::LANG_ARG, 4, false], true, 1],
+            ['loadContentByRemoteId', ['f348tj4gorgji4'], $content, 1],
+            ['loadContentByRemoteId', ['f348tj4gorgji4', self::LANG_ARG, 4, false], $content, 1],
 
             ['loadContentListByContentInfo', [[$contentInfo]], [], 1],
             ['loadContentListByContentInfo', [[$contentInfo], self::LANG_ARG, false], [], 1],

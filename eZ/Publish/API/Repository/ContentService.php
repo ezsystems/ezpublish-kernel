@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\ContentService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
@@ -15,15 +15,15 @@ use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 
 /**
  * This class provides service methods for managing content.
- *
- * @example Examples/content.php
  */
 interface ContentService
 {
@@ -39,7 +39,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function loadContentInfo($contentId);
+    public function loadContentInfo(int $contentId): ContentInfo;
 
     /**
      * Bulk-load ContentInfo items by id's.
@@ -64,7 +64,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function loadContentInfoByRemoteId($remoteId);
+    public function loadContentInfoByRemoteId(string $remoteId): ContentInfo;
 
     /**
      * Loads a version info of the given content object.
@@ -75,11 +75,11 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int|null $versionNo the version number. If not given the current version is returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    public function loadVersionInfo(ContentInfo $contentInfo, $versionNo = null);
+    public function loadVersionInfo(ContentInfo $contentInfo, ?int $versionNo = null): VersionInfo;
 
     /**
      * Loads a version info of the given content object id.
@@ -89,12 +89,12 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the version with the given number does not exist
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
-     * @param mixed $contentId
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $contentId
+     * @param int|null $versionNo the version number. If not given the current version is returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    public function loadVersionInfoById($contentId, $versionNo = null);
+    public function loadVersionInfoById(int $contentId, ?int $versionNo = null): VersionInfo;
 
     /**
      * Loads content in a version for the given content info object.
@@ -107,12 +107,12 @@ interface ContentService
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
      *                         returned value object. If not given all languages are returned.
-     * @param int $versionNo the version number. If not given the current version is returned from $contentInfo
+     * @param int|null $versionNo the version number. If not given the current version is returned from $contentInfo
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByContentInfo(ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = true);
+    public function loadContentByContentInfo(ContentInfo $contentInfo, array $languages = null, ?int $versionNo = null, bool $useAlwaysAvailable = true): Content;
 
     /**
      * Loads content in the version given by version info.
@@ -120,13 +120,13 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     * @param string[] $languages A language priority, filters returned fields and is used as prioritized language code on
      *                         returned value object. If not given all languages are returned.
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByVersionInfo(VersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = true);
+    public function loadContentByVersionInfo(VersionInfo $versionInfo, array $languages = null, bool $useAlwaysAvailable = true): Content;
 
     /**
      * Loads content in a version of the given content object.
@@ -137,14 +137,14 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the user has no access to read content and in case of un-published content: read versions
      *
      * @param mixed $contentId
-     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     * @param string[] $languages A language priority, filters returned fields and is used as prioritized language code on
      *                         returned value object. If not given all languages are returned.
-     * @param int $versionNo the version number. If not given the current version is returned
+     * @param int|null $versionNo the version number. If not given the current version is returned
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContent($contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true);
+    public function loadContent(int $contentId, array $languages = null, ?int $versionNo = null, bool $useAlwaysAvailable = true): Content;
 
     /**
      * Loads content in a version for the content object reference by the given remote id.
@@ -155,14 +155,14 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the user has no access to read content and in case of un-published content: read versions
      *
      * @param string $remoteId
-     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     * @param string[] $languages A language priority, filters returned fields and is used as prioritized language code on
      *                         returned value object. If not given all languages are returned.
-     * @param int $versionNo the version number. If not given the current version is returned
+     * @param int|null $versionNo the version number. If not given the current version is returned
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByRemoteId($remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true);
+    public function loadContentByRemoteId(string $remoteId, array $languages = null, ?int $versionNo = null, bool $useAlwaysAvailable = true): Content;
 
     /**
      * Bulk-load Content items by the list of ContentInfo Value Objects.
@@ -179,7 +179,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content[] list of Content items with Content Ids as keys
      */
-    public function loadContentListByContentInfo(array $contentInfoList, array $languages = [], $useAlwaysAvailable = true);
+    public function loadContentListByContentInfo(array $contentInfoList, array $languages = [], bool $useAlwaysAvailable = true): iterable;
 
     /**
      * Creates a new content draft assigned to the authenticated user.
@@ -203,7 +203,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = []);
+    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = []): Content;
 
     /**
      * Updates the metadata.
@@ -218,7 +218,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata(ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct);
+    public function updateContentMetadata(ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct): Content;
 
     /**
      * Deletes a content object including all its versions and locations including their subtrees.
@@ -227,9 +227,9 @@ interface ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return mixed[] Affected Location Id's (List of Locations of the Content that was deleted)
+     * @return int[] Affected Location Id's (List of Locations of the Content that was deleted)
      */
-    public function deleteContent(ContentInfo $contentInfo);
+    public function deleteContent(ContentInfo $contentInfo): iterable;
 
     /**
      * Creates a draft from a published or archived version.
@@ -241,18 +241,18 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to create the draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\API\Repository\Values\User\User $creator Used as creator of the draft if given - otherwise uses current-user
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo|null $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\User\User|null $creator Used as creator of the draft if given - otherwise uses current-user
      * @param \eZ\Publish\API\Repository\Values\Content\Language|null if not set the draft is created with the initialLanguage code of the source version or if not present with the main language.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
     public function createContentDraft(
         ContentInfo $contentInfo,
-        VersionInfo $versionInfo = null,
-        User $creator = null,
+        ?VersionInfo $versionInfo = null,
+        ?User $creator = null,
         ?Language $language = null
-    );
+    ): Content;
 
     /**
      * Counts drafts for a user.
@@ -280,7 +280,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
      */
-    public function loadContentDrafts(User $user = null);
+    public function loadContentDrafts(?User $user = null): iterable;
 
     /**
      * Loads drafts for a user when content is not in the trash. The list is sorted by modification date.
@@ -311,7 +311,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the updated fields
      */
-    public function updateContent(VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct);
+    public function updateContent(VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct): Content;
 
     /**
      * Publishes a content version.
@@ -333,7 +333,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion(VersionInfo $versionInfo, array $translations = Language::ALL);
+    public function publishVersion(VersionInfo $versionInfo, array $translations = Language::ALL): Content;
 
     /**
      * Removes the given version.
@@ -344,7 +344,7 @@ interface ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      */
-    public function deleteVersion(VersionInfo $versionInfo);
+    public function deleteVersion(VersionInfo $versionInfo): void;
 
     /**
      * Loads all versions for the given content.
@@ -357,7 +357,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] an array of {@link \eZ\Publish\API\Repository\Values\Content\VersionInfo} sorted by creation date
      */
-    public function loadVersions(ContentInfo $contentInfo, ?int $status = null);
+    public function loadVersions(ContentInfo $contentInfo, ?int $status = null): iterable;
 
     /**
      * Copies the content to a new location. If no version is given,
@@ -371,7 +371,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function copyContent(ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null);
+    public function copyContent(ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, ?VersionInfo $versionInfo = null): Content;
 
     /**
      * Loads all outgoing relations for the given version.
@@ -382,7 +382,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function loadRelations(VersionInfo $versionInfo);
+    public function loadRelations(VersionInfo $versionInfo): iterable;
 
     /**
      * Counts all incoming relations for the given content object.
@@ -404,7 +404,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function loadReverseRelations(ContentInfo $contentInfo);
+    public function loadReverseRelations(ContentInfo $contentInfo): iterable;
 
     /**
      * Loads all incoming relations for a content object.
@@ -435,7 +435,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation the newly created relation
      */
-    public function addRelation(VersionInfo $sourceVersion, ContentInfo $destinationContent);
+    public function addRelation(VersionInfo $sourceVersion, ContentInfo $destinationContent): Relation;
 
     /**
      * Removes a relation of type COMMON from a draft.
@@ -447,7 +447,7 @@ interface ContentService
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
      */
-    public function deleteRelation(VersionInfo $sourceVersion, ContentInfo $destinationContent);
+    public function deleteRelation(VersionInfo $sourceVersion, ContentInfo $destinationContent): void;
 
     /**
      * Remove Content Object translation from all Versions (including archived ones) of a Content Object.
@@ -469,7 +469,7 @@ interface ContentService
      *
      * @since 6.11
      */
-    public function removeTranslation(ContentInfo $contentInfo, $languageCode);
+    public function removeTranslation(ContentInfo $contentInfo, string $languageCode): void;
 
     /**
      * Delete Content item Translation from all Versions (including archived ones) of a Content Object.
@@ -488,7 +488,7 @@ interface ContentService
      *
      * @since 6.13
      */
-    public function deleteTranslation(ContentInfo $contentInfo, $languageCode);
+    public function deleteTranslation(ContentInfo $contentInfo, string $languageCode): void;
 
     /**
      * Delete specified Translation from a Content Draft.
@@ -511,7 +511,7 @@ interface ContentService
      *
      * @since 6.12
      */
-    public function deleteTranslationFromDraft(VersionInfo $versionInfo, $languageCode);
+    public function deleteTranslationFromDraft(VersionInfo $versionInfo, string $languageCode): Content;
 
     /**
      * Hides Content by making all the Locations appear hidden.
@@ -545,19 +545,19 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
      */
-    public function newContentCreateStruct(ContentType $contentType, $mainLanguageCode);
+    public function newContentCreateStruct(ContentType $contentType, string $mainLanguageCode): ContentCreateStruct;
 
     /**
      * Instantiates a new content meta data update struct.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct
      */
-    public function newContentMetadataUpdateStruct();
+    public function newContentMetadataUpdateStruct(): ContentMetadataUpdateStruct;
 
     /**
      * Instantiates a new content update struct.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
-    public function newContentUpdateStruct();
+    public function newContentUpdateStruct(): ContentUpdateStruct;
 }

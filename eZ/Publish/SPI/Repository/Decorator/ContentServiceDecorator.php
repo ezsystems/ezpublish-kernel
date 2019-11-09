@@ -33,7 +33,7 @@ abstract class ContentServiceDecorator implements ContentService
         $this->innerService = $innerService;
     }
 
-    public function loadContentInfo($contentId): ContentInfo
+    public function loadContentInfo(int $contentId): ContentInfo
     {
         return $this->innerService->loadContentInfo($contentId);
     }
@@ -43,21 +43,21 @@ abstract class ContentServiceDecorator implements ContentService
         return $this->innerService->loadContentInfoList($contentIds);
     }
 
-    public function loadContentInfoByRemoteId($remoteId): ContentInfo
+    public function loadContentInfoByRemoteId(string $remoteId): ContentInfo
     {
         return $this->innerService->loadContentInfoByRemoteId($remoteId);
     }
 
     public function loadVersionInfo(
         ContentInfo $contentInfo,
-        $versionNo = null
+        ?int $versionNo = null
     ): VersionInfo {
         return $this->innerService->loadVersionInfo($contentInfo, $versionNo);
     }
 
     public function loadVersionInfoById(
-        $contentId,
-        $versionNo = null
+        int $contentId,
+        ?int $versionNo = null
     ): VersionInfo {
         return $this->innerService->loadVersionInfoById($contentId, $versionNo);
     }
@@ -65,8 +65,8 @@ abstract class ContentServiceDecorator implements ContentService
     public function loadContentByContentInfo(
         ContentInfo $contentInfo,
         array $languages = null,
-        $versionNo = null,
-        $useAlwaysAvailable = true
+        ?int $versionNo = null,
+        bool $useAlwaysAvailable = true
     ): Content {
         return $this->innerService->loadContentByContentInfo($contentInfo, $languages, $versionNo, $useAlwaysAvailable);
     }
@@ -74,25 +74,25 @@ abstract class ContentServiceDecorator implements ContentService
     public function loadContentByVersionInfo(
         VersionInfo $versionInfo,
         array $languages = null,
-        $useAlwaysAvailable = true
+        bool $useAlwaysAvailable = true
     ): Content {
         return $this->innerService->loadContentByVersionInfo($versionInfo, $languages, $useAlwaysAvailable);
     }
 
     public function loadContent(
-        $contentId,
+        int $contentId,
         array $languages = null,
-        $versionNo = null,
-        $useAlwaysAvailable = true
+        ?int $versionNo = null,
+        bool $useAlwaysAvailable = true
     ): Content {
         return $this->innerService->loadContent($contentId, $languages, $versionNo, $useAlwaysAvailable);
     }
 
     public function loadContentByRemoteId(
-        $remoteId,
+        string $remoteId,
         array $languages = null,
-        $versionNo = null,
-        $useAlwaysAvailable = true
+        ?int $versionNo = null,
+        bool $useAlwaysAvailable = true
     ): Content {
         return $this->innerService->loadContentByRemoteId($remoteId, $languages, $versionNo, $useAlwaysAvailable);
     }
@@ -100,8 +100,8 @@ abstract class ContentServiceDecorator implements ContentService
     public function loadContentListByContentInfo(
         array $contentInfoList,
         array $languages = [],
-        $useAlwaysAvailable = true
-    ): array {
+        bool $useAlwaysAvailable = true
+    ): iterable {
         return $this->innerService->loadContentListByContentInfo($contentInfoList, $languages, $useAlwaysAvailable);
     }
 
@@ -119,15 +119,15 @@ abstract class ContentServiceDecorator implements ContentService
         return $this->innerService->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
     }
 
-    public function deleteContent(ContentInfo $contentInfo): array
+    public function deleteContent(ContentInfo $contentInfo): iterable
     {
         return $this->innerService->deleteContent($contentInfo);
     }
 
     public function createContentDraft(
         ContentInfo $contentInfo,
-        VersionInfo $versionInfo = null,
-        User $creator = null,
+        ?VersionInfo $versionInfo = null,
+        ?User $creator = null,
         ?Language $language = null
     ): Content {
         return $this->innerService->createContentDraft($contentInfo, $versionInfo, $creator, $language);
@@ -138,7 +138,7 @@ abstract class ContentServiceDecorator implements ContentService
         return $this->innerService->countContentDrafts($user);
     }
 
-    public function loadContentDrafts(User $user = null): array
+    public function loadContentDrafts(?User $user = null): iterable
     {
         return $this->innerService->loadContentDrafts($user);
     }
@@ -160,12 +160,12 @@ abstract class ContentServiceDecorator implements ContentService
         return $this->innerService->publishVersion($versionInfo, $translations);
     }
 
-    public function deleteVersion(VersionInfo $versionInfo)
+    public function deleteVersion(VersionInfo $versionInfo): void
     {
-        return $this->innerService->deleteVersion($versionInfo);
+        $this->innerService->deleteVersion($versionInfo);
     }
 
-    public function loadVersions(ContentInfo $contentInfo, ?int $status = null): array
+    public function loadVersions(ContentInfo $contentInfo, ?int $status = null): iterable
     {
         return $this->innerService->loadVersions($contentInfo, $status);
     }
@@ -173,12 +173,12 @@ abstract class ContentServiceDecorator implements ContentService
     public function copyContent(
         ContentInfo $contentInfo,
         LocationCreateStruct $destinationLocationCreateStruct,
-        VersionInfo $versionInfo = null
+        ?VersionInfo $versionInfo = null
     ): Content {
         return $this->innerService->copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo);
     }
 
-    public function loadRelations(VersionInfo $versionInfo): array
+    public function loadRelations(VersionInfo $versionInfo): iterable
     {
         return $this->innerService->loadRelations($versionInfo);
     }
@@ -188,7 +188,7 @@ abstract class ContentServiceDecorator implements ContentService
         return $this->innerService->countReverseRelations($contentInfo);
     }
 
-    public function loadReverseRelations(ContentInfo $contentInfo): array
+    public function loadReverseRelations(ContentInfo $contentInfo): iterable
     {
         return $this->innerService->loadReverseRelations($contentInfo);
     }
@@ -208,27 +208,27 @@ abstract class ContentServiceDecorator implements ContentService
     public function deleteRelation(
         VersionInfo $sourceVersion,
         ContentInfo $destinationContent
-    ) {
-        return $this->innerService->deleteRelation($sourceVersion, $destinationContent);
+    ): void {
+        $this->innerService->deleteRelation($sourceVersion, $destinationContent);
     }
 
     public function removeTranslation(
         ContentInfo $contentInfo,
-        $languageCode
-    ) {
-        return $this->innerService->removeTranslation($contentInfo, $languageCode);
+        string $languageCode
+    ): void {
+        $this->innerService->removeTranslation($contentInfo, $languageCode);
     }
 
     public function deleteTranslation(
         ContentInfo $contentInfo,
-        $languageCode
-    ) {
-        return $this->innerService->deleteTranslation($contentInfo, $languageCode);
+        string $languageCode
+    ): void {
+        $this->innerService->deleteTranslation($contentInfo, $languageCode);
     }
 
     public function deleteTranslationFromDraft(
         VersionInfo $versionInfo,
-        $languageCode
+        string $languageCode
     ): Content {
         return $this->innerService->deleteTranslationFromDraft($versionInfo, $languageCode);
     }
@@ -245,7 +245,7 @@ abstract class ContentServiceDecorator implements ContentService
 
     public function newContentCreateStruct(
         ContentType $contentType,
-        $mainLanguageCode
+        string $mainLanguageCode
     ): ContentCreateStruct {
         return $this->innerService->newContentCreateStruct($contentType, $mainLanguageCode);
     }
