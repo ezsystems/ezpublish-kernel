@@ -316,6 +316,15 @@ class ExceptionConversion extends Gateway
         }
     }
 
+    public function countTrashed(): int
+    {
+        try {
+            return $this->innerGateway->countTrashed();
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
+        }
+    }
+
     public function removeElementFromTrash($id)
     {
         try {

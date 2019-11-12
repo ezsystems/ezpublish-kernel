@@ -17,6 +17,8 @@ use eZ\Publish\SPI\Persistence\Content\Relation;
  */
 class TrashHandler extends AbstractHandler implements TrashHandlerInterface
 {
+    private const EMPTY_TRASH_BULK_SIZE = 100;
+
     /**
      * {@inheritdoc}
      */
@@ -112,25 +114,27 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
 
         // We can not use the return value of emptyTrash method because, in the next step, we are not able
         // to fetch the reverse relations of deleted content.
-        $trashedItems = $this->persistenceHandler->trashHandler()->findTrashItems();
-
         $tags = [];
-        foreach ($trashedItems as $trashedItem) {
-            $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashedItem->contentId);
 
-            foreach ($reverseRelations as $relation) {
-                $tags[] = 'content-fields-' . $relation->sourceContentId;
+        do {
+            $trashedItems = $this->persistenceHandler->trashHandler()->findTrashItems(null, 0, self::EMPTY_TRASH_BULK_SIZE);
+            foreach ($trashedItems as $trashedItem) {
+                $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashedItem->contentId);
+
+                foreach ($reverseRelations as $relation) {
+                    $tags['content-fields-' . $relation->sourceContentId] = true;
+                }
+                $tags['content-' . $trashedItem->contentId] = true;
+                $tags['content-fields-' . $trashedItem->contentId] = true;
+                $tags['location-' . $trashedItem->id] = true;
+                $tags['location-path-' . $trashedItem->id] = true;
             }
-            $tags[] = 'content-' . $trashedItem->contentId;
-            $tags[] = 'content-fields-' . $trashedItem->contentId;
-            $tags[] = 'location-' . $trashedItem->id;
-            $tags[] = 'location-path-' . $trashedItem->id;
-        }
+        } while ($trashedItems->totalCount > self::EMPTY_TRASH_BULK_SIZE);
 
         $return = $this->persistenceHandler->trashHandler()->emptyTrash();
 
         if (!empty($tags)) {
-            $this->cache->invalidateTags(array_values(array_unique($tags)));
+            $this->cache->invalidateTags(array_keys($tags));
         }
 
         return $return;
