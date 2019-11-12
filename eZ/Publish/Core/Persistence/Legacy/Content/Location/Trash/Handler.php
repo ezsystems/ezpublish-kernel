@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
 
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\TrashResult;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
@@ -23,6 +24,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper
  */
 class Handler implements BaseTrashHandler
 {
+    private const EMPTY_TRASH_BULK_SIZE = 100;
+
     /**
      * Location handler.
      *
@@ -169,20 +172,19 @@ class Handler implements BaseTrashHandler
     }
 
     /**
-     * Returns an array of all trashed locations satisfying the $criterion (if provided),
-     * sorted with SortClause objects contained in $sort (if any).
-     * If no criterion is provided (null), no filter is applied.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset Offset to start listing from, 0 by default
-     * @param int $limit Limit for the listing. Null by default (no limit)
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
+     * {@inheritdoc}.
      */
     public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
+        // @TODO: This only works for direct SPI usage, any API/UI usage needs criteria to be taken into account so we
+        //        respect user rights here.
+        $totalCount = $this->locationGateway->countTrashed();
+        if ($totalCount === 0) {
+            return new TrashResult();
+        }
+
         // CBA: Ignore criterion for now.
+        // TODO: Refactor Legacy Search engine visitor code to be able to reuse for this as well as location/content fetching needs in persistence handlers.
         $rows = $this->locationGateway->listTrashed($offset, $limit, $sort);
         $items = [];
 
@@ -190,7 +192,10 @@ class Handler implements BaseTrashHandler
             $items[] = $this->locationMapper->createLocationFromRow($row, null, new Trashed());
         }
 
-        return $items;
+        return new TrashResult([
+            'items' => $items,
+            'totalCount' => $totalCount,
+        ]);
     }
 
     /**
@@ -199,10 +204,12 @@ class Handler implements BaseTrashHandler
     public function emptyTrash()
     {
         $resultList = new TrashItemDeleteResultList();
-        $trashedItems = $this->findTrashItems();
-        foreach ($trashedItems as $item) {
-            $resultList->items[] = $this->delete($item);
-        }
+        do {
+            $trashedItems = $this->findTrashItems(null, 0, self::EMPTY_TRASH_BULK_SIZE);
+            foreach ($trashedItems as $item) {
+                $resultList->items[] = $this->delete($item);
+            }
+        } while ($trashedItems->totalCount > self::EMPTY_TRASH_BULK_SIZE);
 
         $this->locationGateway->cleanupTrash();
 

@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\TrashResult;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\Core\Persistence\Legacy\Content as CoreContent;
 
@@ -355,6 +356,12 @@ class TrashHandlerTest extends TestCase
         $iContent = 0;
         // Index for locationMapper calls
         $iLocation = 0;
+
+        $this->locationGateway
+            ->expects($this->at($i++))
+            ->method('countTrashed')
+            ->willReturn(2);
+
         $this->locationGateway
             ->expects($this->at($i++))
             ->method('listTrashed')
@@ -532,5 +539,69 @@ class TrashHandlerTest extends TestCase
         $this->assertEquals($trashItemId, $trashItemDeleteResult->trashItemId);
         $this->assertEquals($contentId, $trashItemDeleteResult->contentId);
         $this->assertFalse($trashItemDeleteResult->contentRemoved);
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::findTrashItems
+     */
+    public function testFindTrashItemsWhenEmpty()
+    {
+        $handler = $this->getTrashHandler();
+
+        $this->locationGateway
+            ->expects($this->once())
+            ->method('countTrashed')
+            ->willReturn(0);
+
+        $this->locationGateway
+            ->expects($this->never())
+            ->method('listTrashed');
+
+        $this->locationMapper
+            ->expects($this->never())
+            ->method($this->anything());
+
+        $trashResult = $handler->findTrashItems();
+
+        $this->assertInstanceOf(TrashResult::class, $trashResult);
+        $this->assertEquals(0, $trashResult->totalCount);
+        $this->assertIsArray($trashResult->items);
+        $this->assertEmpty($trashResult->items);
+        $this->assertIsIterable($trashResult);
+        $this->assertCount(0, $trashResult);// Can't assert as empty, however we can count it.
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::findTrashItems
+     */
+    public function testFindTrashItemsWithLimits()
+    {
+        $handler = $this->getTrashHandler();
+
+        $this->locationGateway
+            ->expects($this->once())
+            ->method('countTrashed')
+            ->willReturn(2);
+
+        $this->locationGateway
+            ->expects($this->once())
+            ->method('listTrashed')
+            ->with(1, 1, null)
+            ->willReturn([['fake data']]);
+
+        $this->locationMapper
+            ->expects($this->once())
+            ->method('createLocationFromRow')
+            ->with(['fake data'])
+            ->willReturn(new \stdClass());
+
+        $trashResult = $handler->findTrashItems(null, 1, 1);
+
+        $this->assertInstanceOf(TrashResult::class, $trashResult);
+        $this->assertEquals(2, $trashResult->totalCount);
+        $this->assertIsArray($trashResult->items);
+        $this->assertCount(1, $trashResult->items);
+        $this->assertIsIterable($trashResult);
+        $this->assertCount(1, $trashResult);
     }
 }

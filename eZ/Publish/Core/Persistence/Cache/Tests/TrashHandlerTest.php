@@ -220,7 +220,10 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
         $innerHandler
             ->expects($this->once())
             ->method('findTrashItems')
-            ->will($this->returnValue([new Trashed(['id' => $trashedId, 'contentId' => $contentId])]));
+            ->willReturn(new Location\Trash\TrashResult([
+                'items' => [new Trashed(['id' => $trashedId, 'contentId' => $contentId])],
+                'totalCount' => 1,
+            ]));
 
         $this->persistenceHandlerMock
             ->method($handlerMethodName)

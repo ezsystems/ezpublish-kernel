@@ -310,17 +310,15 @@ class TrashService implements TrashServiceInterface
             throw new InvalidArgumentValue('query->limit', $query->limit, 'Query');
         }
 
-        $spiTrashItems = $this->persistenceHandler->trashHandler()->findTrashItems(
+        $spiTrashResult = $this->persistenceHandler->trashHandler()->findTrashItems(
             $query->filter,
             $query->offset !== null && $query->offset > 0 ? (int)$query->offset : 0,
-            $query->limit !== null && $query->limit >= 1 ? (int)$query->limit : null,
+            $query->limit !== null && $query->limit >= 0 ? (int)$query->limit : null,
             $query->sortClauses
         );
 
-        $trashItems = $this->buildDomainTrashItems($spiTrashItems);
-        $searchResult = new SearchResult();
-        $searchResult->totalCount = $searchResult->count = count($trashItems);
-        $searchResult->items = $trashItems;
+        $trashItems = $this->buildDomainTrashItems($spiTrashResult->items);
+        $searchResult = new SearchResult(['items' => $trashItems, 'totalCount' => $spiTrashResult->totalCount]);
 
         return $searchResult;
     }

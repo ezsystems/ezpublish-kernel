@@ -122,6 +122,8 @@ abstract class Gateway
     /**
      * Updated subtree modification time for all nodes on path.
      *
+     * @deprecated Not supposed to be in use anymore.
+     *
      * @param string $pathString
      * @param int|null $timestamp
      */
@@ -324,6 +326,11 @@ abstract class Gateway
      * @return array
      */
     abstract public function listTrashed($offset, $limit, array $sort = null);
+
+    /**
+     * Count trashed items.
+     */
+    abstract public function countTrashed(): int;
 
     /**
      * Removes trashed element identified by $id from trash.
