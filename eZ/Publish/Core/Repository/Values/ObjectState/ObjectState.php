@@ -22,6 +22,7 @@ use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
  * @property-read string $mainLanguageCode the default language of the object state names and descriptions used for fallback.
  * @property-read string $defaultLanguageCode deprecated, use $mainLanguageCode
  * @property-read string[] $languageCodes the available languages
+ * @property-read string[] $prioritizedLanguages
  *
  * @internal Meant for internal use by Repository, type hint against API object instead.
  */

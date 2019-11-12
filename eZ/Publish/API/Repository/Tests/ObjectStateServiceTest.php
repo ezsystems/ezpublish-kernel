@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
@@ -787,7 +788,7 @@ class ObjectStateServiceTest extends BaseTest
 
         $loadedObjectStateGroup = $objectStateService->loadObjectStateGroup(
             $objectStateGroupId,
-            []
+            Language::ALL
         );
 
         $objectStateCreateStruct = $objectStateService->newObjectStateCreateStruct(

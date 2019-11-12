@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
@@ -902,7 +903,7 @@ class UserServiceTest extends BaseTest
             'ez-user-Domain\username-by-login',
             'username-by-login@ez-user-Domain.com'
         );
-        $loadedUser = $userService->loadUserByLogin('ez-user-Domain\username-by-login', []);
+        $loadedUser = $userService->loadUserByLogin('ez-user-Domain\username-by-login', Language::ALL);
 
         $this->assertEquals($createdUser, $loadedUser);
     }
@@ -1218,7 +1219,7 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Load the newly created user
-        $userReloaded = $userService->loadUser($user->id, []);
+        $userReloaded = $userService->loadUser($user->id, Language::ALL);
         /* END: Use Case */
 
         $this->assertEquals($user, $userReloaded);
@@ -1266,7 +1267,7 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Load the newly created user
-        $userReloaded = $userService->loadUserByCredentials('user', 'secret', []);
+        $userReloaded = $userService->loadUserByCredentials('user', 'secret', Language::ALL);
         /* END: Use Case */
 
         $this->assertEquals($user, $userReloaded);
@@ -1499,7 +1500,7 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Load the newly created user
-        $usersReloaded = $userService->loadUsersByEmail('user@example.com', []);
+        $usersReloaded = $userService->loadUsersByEmail('user@example.com', Language::ALL);
         /* END: Use Case */
 
         $this->assertEquals([$user], $usersReloaded);
@@ -2775,7 +2776,7 @@ class UserServiceTest extends BaseTest
 
         $userService->updateUserToken($user, $userTokenUpdateStruct);
 
-        $loadedUser = $userService->loadUserByToken($userTokenUpdateStruct->hashKey, []);
+        $loadedUser = $userService->loadUserByToken($userTokenUpdateStruct->hashKey, Language::ALL);
         self::assertEquals($user, $loadedUser);
 
         return $userTokenUpdateStruct->hashKey;
