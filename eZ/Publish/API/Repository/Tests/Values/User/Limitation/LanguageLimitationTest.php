@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\API\Repository\Tests\Limitation;
+namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Tests\BaseTest;

@@ -1647,7 +1647,6 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     protected function copyTranslationsFromPublishedVersion(APIVersionInfo $versionInfo, array $translations = []): void
     {
@@ -1961,7 +1960,7 @@ class ContentService implements ContentServiceInterface
     /**
      * Loads all outgoing relations for the given version without checking the permissions.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
