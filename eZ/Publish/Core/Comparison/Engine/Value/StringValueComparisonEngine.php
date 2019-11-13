@@ -29,24 +29,30 @@ final class StringValueComparisonEngine
     public function compareValues(StringComparisonValue $stringA, StringComparisonValue $stringB): array
     {
         if ($stringA->value === $stringB->value) {
-            return [new StringDiff(
-                $stringA->value,
-                DiffStatus::UNCHANGED
-            )];
+            return [
+                new StringDiff(
+                    $stringA->value,
+                    DiffStatus::UNCHANGED
+                ),
+            ];
         }
 
         if ($stringA->value === null && $stringB->value !== null) {
-            return [new StringDiff(
-                $stringB->value,
-                DiffStatus::ADDED
-            )];
+            return [
+                new StringDiff(
+                    $stringB->value,
+                    DiffStatus::ADDED
+                ),
+            ];
         }
 
         if ($stringA->value !== null && $stringB->value === null) {
-            return [new StringDiff(
-                $stringA->value,
-                DiffStatus::REMOVED
-            )];
+            return [
+                new StringDiff(
+                    $stringA->value,
+                    DiffStatus::REMOVED
+                ),
+            ];
         }
 
         $rawDiff = $this->innerEngine->diffToArray(
