@@ -111,7 +111,10 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $this->contentService->updateContent($draftB->versionInfo, $struct);
         $contentB = $this->contentService->publishVersion($draftB->versionInfo);
 
-        $versionDiff = $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
+        $versionDiff = $this->contentComparisonService->compareVersions(
+            $contentA->versionInfo,
+            $contentB->versionInfo
+        );
 
         $versionDiff->getFieldValueDiffByIdentifier('name');
 
@@ -129,7 +132,11 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
             ]
         );
         $this->contentService->publishVersion($draftA->versionInfo);
-        $this->addFieldToContentType('folder', 'new_name', 'ezstring');
+        $this->addFieldToContentType(
+            'folder',
+            'new_name',
+            'ezstring'
+        );
 
         $contentA = $this->contentService->loadContent($draftA->id, null, 1);
 
@@ -140,7 +147,10 @@ class ContentComparisonServiceTest extends BaseContentServiceTest
         $this->contentService->updateContent($draftB->versionInfo, $struct);
         $contentB = $this->contentService->publishVersion($draftB->versionInfo);
 
-        $versionDiff = $this->contentComparisonService->compareVersions($contentA->versionInfo, $contentB->versionInfo);
+        $versionDiff = $this->contentComparisonService->compareVersions(
+            $contentA->versionInfo,
+            $contentB->versionInfo
+        );
 
         $fieldDiff = $versionDiff->getFieldValueDiffByIdentifier('new_name');
 
