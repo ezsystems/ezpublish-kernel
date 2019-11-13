@@ -20,7 +20,7 @@ final class NoComparisonValueEngine implements ComparisonEngine
         return new NoComparisonResult();
     }
 
-    public function areEqual(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): bool
+    public function areFieldsDataEqual(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): bool
     {
         // No strict on purpose, as we care about values not objects.
         // Notice, that this could return false, and you will not get detailed DiffInfo from compareFieldsData().

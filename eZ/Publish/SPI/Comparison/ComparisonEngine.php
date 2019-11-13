@@ -12,5 +12,5 @@ interface ComparisonEngine
 {
     public function compareFieldsData(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): ComparisonResult;
 
-    public function areEqual(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): bool;
+    public function areFieldsDataEqual(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): bool;
 }

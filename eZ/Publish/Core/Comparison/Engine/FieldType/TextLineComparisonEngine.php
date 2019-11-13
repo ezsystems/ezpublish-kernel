@@ -35,7 +35,7 @@ final class TextLineComparisonEngine implements ComparisonEngine
         );
     }
 
-    public function areEqual(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): bool
+    public function areFieldsDataEqual(ComparisonData $comparisonDataA, ComparisonData $comparisonDataB): bool
     {
         return $comparisonDataA->textLine->value === $comparisonDataB->textLine->value;
     }
