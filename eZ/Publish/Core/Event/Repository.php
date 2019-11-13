@@ -3,7 +3,7 @@
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
-use eZ\Publish\API\Repository\ContentComparisonService as CompareServiceInterface;
+use eZ\Publish\API\Repository\ContentComparisonService as ContentComparisonServiceInterface;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
@@ -101,7 +101,7 @@ final class Repository implements RepositoryInterface
         URLWildcardServiceInterface $urlWildcardService,
         UserPreferenceServiceInterface $userPreferenceService,
         UserServiceInterface $userService,
-        CompareServiceInterface $contentComparisonService
+        ContentComparisonServiceInterface $contentComparisonService
     ) {
         $this->repository = $repository;
         $this->bookmarkService = $bookmarkService;
@@ -189,7 +189,7 @@ final class Repository implements RepositoryInterface
         return $this->objectStateService;
     }
 
-    public function getContentComparisonService(): CompareServiceInterface
+    public function getContentComparisonService(): ContentComparisonServiceInterface
     {
         return $this->contentComparisonService;
     }

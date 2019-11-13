@@ -37,7 +37,7 @@ class ContentComparisonService implements ContentComparisonInterface
     private $fieldRegistry;
 
     /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface */
-    private $comparatorEngineRegistry;
+    private $comparisonEngineRegistry;
 
     /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
     private $contentTypeDomainMapper;
@@ -49,14 +49,14 @@ class ContentComparisonService implements ContentComparisonInterface
         ContentHandler $contentHandler,
         ContentTypeHandler $contentTypeHandler,
         FieldRegistryInterface $fieldRegistry,
-        ComparisonEngineRegistryInterface $comparatorEngineRegistry,
+        ComparisonEngineRegistryInterface $comparisonEngineRegistry,
         ContentTypeDomainMapper $contentTypeDomainMapper,
         PermissionResolver $permissionResolver
     ) {
         $this->contentHandler = $contentHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->fieldRegistry = $fieldRegistry;
-        $this->comparatorEngineRegistry = $comparatorEngineRegistry;
+        $this->comparisonEngineRegistry = $comparisonEngineRegistry;
         $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->permissionResolver = $permissionResolver;
     }
@@ -97,7 +97,10 @@ class ContentComparisonService implements ContentComparisonInterface
         foreach ($content->fields as $field) {
             $comparableField = $this->fieldRegistry->getType($field->type);
             $matchingField = $this->getMatchingField($field, $contentToCompare);
-            $fieldDefinition = $this->contentTypeHandler->getFieldDefinition($field->fieldDefinitionId, Type::STATUS_DEFINED);
+            $fieldDefinition = $this->contentTypeHandler->getFieldDefinition(
+                $field->fieldDefinitionId,
+                Type::STATUS_DEFINED
+            );
             $dataA = $comparableField->getDataToCompare(
                 $field->value
             );
@@ -105,7 +108,7 @@ class ContentComparisonService implements ContentComparisonInterface
                 $matchingField->value
             );
 
-            $engine = $this->comparatorEngineRegistry->getEngine($dataA->getType());
+            $engine = $this->comparisonEngineRegistry->getEngine($dataA->getType());
 
             $diff = new NoDiffResult();
             if (!$engine->areFieldsDataEqual($dataA, $dataB)) {

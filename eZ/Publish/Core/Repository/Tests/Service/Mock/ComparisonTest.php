@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\ContentComparisonService as ContentComparisonServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\DiffStatus;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\DataDiff\StringDiff;
@@ -80,7 +81,7 @@ class ComparisonTest extends Base
     /**
      * @return \eZ\Publish\API\Repository\ContentComparisonService|\PHPUnit\Framework\MockObject\MockObject
      */
-    private function createCompareService(array $methods = [])
+    private function createContentComparisonService(array $methods = []): ContentComparisonServiceInterface
     {
         return $this
             ->getMockBuilder(ContentComparisonService::class)
@@ -106,7 +107,10 @@ class ComparisonTest extends Base
         return new ComparisonEngineRegistry();
     }
 
-    private function buildContentTypeDomainMapperMock()
+    /**
+     * @return \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private function buildContentTypeDomainMapperMock(): ContentTypeDomainMapper
     {
         return $this
             ->getMockBuilder(ContentTypeDomainMapper::class)
@@ -185,7 +189,7 @@ class ComparisonTest extends Base
             ->method('buildFieldDefinitionDomainObject')
             ->willReturn($fieldDefinition);
 
-        $service = $this->createCompareService(['compareVersions']);
+        $service = $this->createContentComparisonService(['compareVersions']);
 
         $versionDiff = $service->compareVersions($versionOne, $versionTwo);
 

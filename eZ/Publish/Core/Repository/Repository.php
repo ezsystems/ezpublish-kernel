@@ -6,7 +6,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\ContentComparisonService as CompareServiceInterface;
+use eZ\Publish\API\Repository\ContentComparisonService as ContentComparisonServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface;
 use eZ\Publish\Core\Comparison\FieldRegistryInterface;
@@ -227,14 +227,14 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
     private $passwordHashService;
 
-    /** @var \eZ\Publish\Core\Repository\ContentComparisonService */
+    /** @var \eZ\Publish\API\Repository\ContentComparisonService */
     private $contentComparisonService;
 
     /** @var \eZ\Publish\Core\Comparison\FieldRegistryInterface */
     private $comparableFieldRegistry;
 
     /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface */
-    private $compareEngineRegistry;
+    private $comparisonEngineRegistry;
 
     /**
      * Construct repository object with provided storage engine.
@@ -246,7 +246,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
      * @param \eZ\Publish\Core\Comparison\FieldRegistryInterface $comparableFieldRegistry
-     * @param \eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface $compareEngineRegistry
+     * @param \eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface $comparisonEngineRegistry
      * @param array $serviceSettings
      * @param \Psr\Log\LoggerInterface|null $logger
      */
@@ -258,7 +258,7 @@ class Repository implements RepositoryInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashGenerator,
         FieldRegistryInterface $comparableFieldRegistry,
-        ComparisonEngineRegistryInterface $compareEngineRegistry,
+        ComparisonEngineRegistryInterface $comparisonEngineRegistry,
         array $serviceSettings = [],
         LoggerInterface $logger = null
     ) {
@@ -269,7 +269,7 @@ class Repository implements RepositoryInterface
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->passwordHashService = $passwordHashGenerator;
         $this->comparableFieldRegistry = $comparableFieldRegistry;
-        $this->compareEngineRegistry = $compareEngineRegistry;
+        $this->comparisonEngineRegistry = $comparisonEngineRegistry;
 
         $this->serviceSettings = $serviceSettings + [
             'content' => [],
@@ -751,7 +751,7 @@ class Repository implements RepositoryInterface
         return $this->notificationService;
     }
 
-    public function getContentComparisonService(): CompareServiceInterface
+    public function getContentComparisonService(): ContentComparisonServiceInterface
     {
         if (null !== $this->contentComparisonService) {
             return $this->contentComparisonService;
@@ -761,7 +761,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->contentHandler(),
             $this->persistenceHandler->contentTypeHandler(),
             $this->comparableFieldRegistry,
-            $this->compareEngineRegistry,
+            $this->comparisonEngineRegistry,
             $this->getContentTypeDomainMapper(),
             $this->getPermissionResolver()
         );

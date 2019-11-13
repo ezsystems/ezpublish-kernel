@@ -98,8 +98,11 @@ class TextLineComparisonEngineTest extends TestCase
     /**
      * @dataProvider fieldsAndResultProvider
      */
-    public function testCompareFieldsData(ComparisonValue $fieldA, ComparisonValue $fieldB, ComparisonResult $expected)
-    {
+    public function testCompareFieldsData(
+        ComparisonValue $fieldA,
+        ComparisonValue $fieldB,
+        ComparisonResult $expected
+    ): void {
         $this->assertEquals(
             $expected,
             $this->engine->compareFieldsData(

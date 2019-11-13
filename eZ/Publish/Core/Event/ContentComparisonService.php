@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\API\Repository\ContentComparisonService as CompareServiceInterface;
+use eZ\Publish\API\Repository\ContentComparisonService as ContentComparisonServiceInterface;
 use eZ\Publish\SPI\Repository\Decorator\ContentComparisonServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -18,7 +18,7 @@ class ContentComparisonService extends ContentComparisonServiceDecorator
     protected $eventDispatcher;
 
     public function __construct(
-        CompareServiceInterface $innerService,
+        ContentComparisonServiceInterface $innerService,
         EventDispatcherInterface $eventDispatcher
     ) {
         parent::__construct($innerService);

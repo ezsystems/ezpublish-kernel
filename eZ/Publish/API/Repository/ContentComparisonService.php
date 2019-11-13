@@ -22,8 +22,9 @@ interface ContentComparisonService
      * Engines should implement \eZ\Publish\SPI\Comparison\ComparisonEngine
      * and be registered with `ezplatform.field_type.comparable.engine`.
      *
-     * Only Versions in same language can be compared,
-     * if no $languageCode provided, initialLanguageCode ov $versionA is used.
+     * Only Versions in same language can be compared.
+     *
+     * @param string|null $languageCode if not provided, initialLanguageCode of $versionA is used.
      */
     public function compareVersions(
         VersionInfo $versionA,

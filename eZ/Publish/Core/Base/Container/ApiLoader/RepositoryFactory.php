@@ -65,7 +65,7 @@ class RepositoryFactory implements ContainerAwareInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashService,
         FieldRegistryInterface $fieldRegistry,
-        ComparisonEngineRegistryInterface $compareEngineRegistry
+        ComparisonEngineRegistryInterface $comparisonEngineRegistry
     ): Repository {
         $repository = new $this->repositoryClass(
             $persistenceHandler,
@@ -75,7 +75,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $fieldTypeRegistry,
             $passwordHashService,
             $fieldRegistry,
-            $compareEngineRegistry,
+            $comparisonEngineRegistry,
             [
                 'role' => [
                     'limitationTypes' => $this->roleLimitations,
