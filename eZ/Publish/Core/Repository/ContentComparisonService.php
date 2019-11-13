@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface;
 use eZ\Publish\Core\Comparison\FieldRegistryInterface;
 use eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper;
 use eZ\Publish\SPI\Persistence\Content;
@@ -36,7 +36,7 @@ class ContentComparisonService implements ContentComparisonInterface
     /** @var \eZ\Publish\Core\Comparison\FieldRegistryInterface */
     private $fieldRegistry;
 
-    /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistry */
+    /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface */
     private $comparatorEngineRegistry;
 
     /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
@@ -49,7 +49,7 @@ class ContentComparisonService implements ContentComparisonInterface
         ContentHandler $contentHandler,
         ContentTypeHandler $contentTypeHandler,
         FieldRegistryInterface $fieldRegistry,
-        ComparisonEngineRegistry $comparatorEngineRegistry,
+        ComparisonEngineRegistryInterface $comparatorEngineRegistry,
         ContentTypeDomainMapper $contentTypeDomainMapper,
         PermissionResolver $permissionResolver
     ) {

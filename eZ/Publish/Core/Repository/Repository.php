@@ -8,7 +8,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentComparisonService as CompareServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface;
 use eZ\Publish\Core\Comparison\FieldRegistryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
@@ -233,7 +233,7 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Comparison\FieldRegistryInterface */
     private $comparableFieldRegistry;
 
-    /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistry */
+    /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface */
     private $compareEngineRegistry;
 
     /**
@@ -246,7 +246,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
      * @param \eZ\Publish\Core\Comparison\FieldRegistryInterface $comparableFieldRegistry
-     * @param \eZ\Publish\Core\Comparison\ComparisonEngineRegistry $compareEngineRegistry
+     * @param \eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface $compareEngineRegistry
      * @param array $serviceSettings
      * @param \Psr\Log\LoggerInterface|null $logger
      */
@@ -258,7 +258,7 @@ class Repository implements RepositoryInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashGenerator,
         FieldRegistryInterface $comparableFieldRegistry,
-        ComparisonEngineRegistry $compareEngineRegistry,
+        ComparisonEngineRegistryInterface $compareEngineRegistry,
         array $serviceSettings = [],
         LoggerInterface $logger = null
     ) {

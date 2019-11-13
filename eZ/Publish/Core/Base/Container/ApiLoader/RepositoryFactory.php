@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
-use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface;
 use eZ\Publish\Core\Comparison\FieldRegistryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
@@ -65,7 +65,7 @@ class RepositoryFactory implements ContainerAwareInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashService,
         FieldRegistryInterface $fieldRegistry,
-        ComparisonEngineRegistry $compareEngineRegistry
+        ComparisonEngineRegistryInterface $compareEngineRegistry
     ): Repository {
         $repository = new $this->repositoryClass(
             $persistenceHandler,

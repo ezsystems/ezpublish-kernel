@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Comparison;
 use eZ\Publish\SPI\Comparison\ComparisonEngine;
 use eZ\Publish\SPI\Comparison\Field\NoComparison;
 
-final class ComparisonEngineRegistry
+final class ComparisonEngineRegistry implements ComparisonEngineRegistryInterface
 {
     /** @var \eZ\Publish\SPI\Comparison\ComparisonEngine[] */
     private $engines = [];

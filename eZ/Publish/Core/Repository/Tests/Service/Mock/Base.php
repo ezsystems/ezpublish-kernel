@@ -7,7 +7,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface;
 use eZ\Publish\Core\Comparison\FieldRegistryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
@@ -71,7 +71,7 @@ abstract class Base extends TestCase
                 $this->getFieldTypeRegistryMock(),
                 $this->createMock(PasswordHashServiceInterface::class),
                 $this->createMock(FieldRegistryInterface::class),
-                new ComparisonEngineRegistry(),
+                $this->createMock(ComparisonEngineRegistryInterface::class),
                 $serviceSettings
             );
 

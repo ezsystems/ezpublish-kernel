@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldValueDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineComparisonResult;
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface;
 use eZ\Publish\Core\Comparison\Engine\Value\StringValueComparisonEngine;
 use eZ\Publish\Core\Comparison\FieldRegistry;
 use eZ\Publish\Core\Comparison\FieldRegistryInterface;
@@ -44,8 +45,8 @@ class ComparisonTest extends Base
     /** @var \eZ\Publish\Core\Comparison\FieldRegistryInterface */
     private $fieldRegistry;
 
-    /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistry */
-    private $compareEngineRegistry;
+    /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistryInterface */
+    private $comparisonEngineRegistry;
 
     /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $contentTypeDomainMapperMock;
@@ -58,8 +59,8 @@ class ComparisonTest extends Base
         $this->fieldRegistry = $this->buildFieldRegistry();
         $this->fieldRegistry->registerType('ezstring', new TextLineCompareField());
 
-        $this->compareEngineRegistry = $this->buildCompareEngineRegistry();
-        $this->compareEngineRegistry->registerEngine(
+        $this->comparisonEngineRegistry = $this->buildComparisonEngineRegistry();
+        $this->comparisonEngineRegistry->registerEngine(
             TextLine::class,
             new TextLineComparisonEngine(
                 new StringValueComparisonEngine()
@@ -88,7 +89,7 @@ class ComparisonTest extends Base
                 $this->contentHandler,
                 $this->contentTypeHandler,
                 $this->fieldRegistry,
-                $this->compareEngineRegistry,
+                $this->comparisonEngineRegistry,
                 $this->contentTypeDomainMapperMock,
                 $this->getPermissionResolverMock(),
             ])
@@ -100,7 +101,7 @@ class ComparisonTest extends Base
         return new FieldRegistry();
     }
 
-    private function buildCompareEngineRegistry(): ComparisonEngineRegistry
+    private function buildComparisonEngineRegistry(): ComparisonEngineRegistryInterface
     {
         return new ComparisonEngineRegistry();
     }
