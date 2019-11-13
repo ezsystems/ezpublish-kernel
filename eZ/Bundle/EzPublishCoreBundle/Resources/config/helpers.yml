@@ -26,8 +26,8 @@ services:
     ezpublish.config_scope_listener:
         class: eZ\Bundle\EzPublishCoreBundle\EventListener\ConfigScopeListener
         arguments:
-            - "@ezpublish.config.resolver.core"
-            - "@ezpublish.view_manager"
+            $configResolvers: !tagged ezpublish.config.resolver
+            $viewManager: '@ezpublish.view_manager'
         tags:
             - { name: kernel.event_subscriber }
 

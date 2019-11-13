@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the ConfigScopeListener class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -17,8 +15,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ConfigScopeListener implements EventSubscriberInterface
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface */
-    private $configResolver;
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
+    private $configResolvers;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface|\eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware */
     private $viewManager;
@@ -27,10 +25,10 @@ class ConfigScopeListener implements EventSubscriberInterface
     private $viewProviders;
 
     public function __construct(
-        VersatileScopeInterface $configResolver,
+        iterable $configResolvers,
         ViewManagerInterface $viewManager
     ) {
-        $this->configResolver = $configResolver;
+        $this->configResolvers = $configResolvers;
         $this->viewManager = $viewManager;
     }
 
@@ -45,7 +43,13 @@ class ConfigScopeListener implements EventSubscriberInterface
     public function onConfigScopeChange(ScopeChangeEvent $event)
     {
         $siteAccess = $event->getSiteAccess();
-        $this->configResolver->setDefaultScope($siteAccess->name);
+
+        foreach ($this->configResolvers as $configResolver) {
+            if ($configResolver instanceof VersatileScopeInterface) {
+                $configResolver->setDefaultScope($siteAccess->name);
+            }
+        }
+
         if ($this->viewManager instanceof SiteAccessAware) {
             $this->viewManager->setSiteAccess($siteAccess);
         }
@@ -59,8 +63,6 @@ class ConfigScopeListener implements EventSubscriberInterface
 
     /**
      * Sets the complete list of view providers.
-     *
-     * @param array $viewProviders
      */
     public function setViewProviders(array $viewProviders)
     {

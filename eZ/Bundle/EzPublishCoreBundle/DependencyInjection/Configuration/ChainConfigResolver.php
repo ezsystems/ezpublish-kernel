@@ -83,7 +83,7 @@ class ChainConfigResolver implements ConfigResolverInterface
         }
 
         // Finally throw a ParameterNotFoundException since the chain resolver couldn't find any valid resolver for demanded parameter
-        throw new ParameterNotFoundException($paramName, $namespace);
+        throw new ParameterNotFoundException($paramName, $namespace, [$scope]);
     }
 
     public function hasParameter(string $paramName, ?string $namespace = null, ?string $scope = null): bool
