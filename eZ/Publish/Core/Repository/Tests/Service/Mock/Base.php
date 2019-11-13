@@ -8,7 +8,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
-use eZ\Publish\Core\Comparison\FieldRegistry;
+use eZ\Publish\Core\Comparison\FieldRegistryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
@@ -70,7 +70,7 @@ abstract class Base extends TestCase
                 $this->getRelationProcessorMock(),
                 $this->getFieldTypeRegistryMock(),
                 $this->createMock(PasswordHashServiceInterface::class),
-                new FieldRegistry(),
+                $this->createMock(FieldRegistryInterface::class),
                 new ComparisonEngineRegistry(),
                 $serviceSettings
             );

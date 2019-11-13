@@ -9,7 +9,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentComparisonService as CompareServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
-use eZ\Publish\Core\Comparison\FieldRegistry;
+use eZ\Publish\Core\Comparison\FieldRegistryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
@@ -230,7 +230,7 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\ContentComparisonService */
     private $contentComparisonService;
 
-    /** @var \eZ\Publish\Core\Comparison\FieldRegistry */
+    /** @var \eZ\Publish\Core\Comparison\FieldRegistryInterface */
     private $comparableFieldRegistry;
 
     /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistry */
@@ -245,7 +245,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
-     * @param \eZ\Publish\Core\Comparison\FieldRegistry $comparableFieldRegistry
+     * @param \eZ\Publish\Core\Comparison\FieldRegistryInterface $comparableFieldRegistry
      * @param \eZ\Publish\Core\Comparison\ComparisonEngineRegistry $compareEngineRegistry
      * @param array $serviceSettings
      * @param \Psr\Log\LoggerInterface|null $logger
@@ -257,7 +257,7 @@ class Repository implements RepositoryInterface
         RelationProcessor $relationProcessor,
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashGenerator,
-        FieldRegistry $comparableFieldRegistry,
+        FieldRegistryInterface $comparableFieldRegistry,
         ComparisonEngineRegistry $compareEngineRegistry,
         array $serviceSettings = [],
         LoggerInterface $logger = null

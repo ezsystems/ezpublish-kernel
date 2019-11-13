@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Comparison;
 use eZ\Publish\Core\FieldType\NonComparable;
 use eZ\Publish\SPI\FieldType\Comparable;
 
-final class FieldRegistry
+final class FieldRegistry implements FieldRegistryInterface
 {
     /** @var \eZ\Publish\SPI\FieldType\Comparable[] */
     private $types;

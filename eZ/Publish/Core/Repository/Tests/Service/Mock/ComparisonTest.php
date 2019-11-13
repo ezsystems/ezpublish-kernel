@@ -16,10 +16,11 @@ use eZ\Publish\API\Repository\Values\Content\VersionDiff\FieldType\TextLineCompa
 use eZ\Publish\API\Repository\Values\Content\VersionDiff\VersionDiff;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Comparison\Engine\Value\StringValueComparisonEngine;
+use eZ\Publish\Core\Comparison\FieldRegistry;
+use eZ\Publish\Core\Comparison\FieldRegistryInterface;
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLineFieldType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Comparison\ComparisonEngineRegistry;
-use eZ\Publish\Core\Comparison\FieldRegistry;
 use eZ\Publish\Core\Comparison\Engine\FieldType\TextLineComparisonEngine;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\FieldType\TextLine\Comparable as TextLineCompareField;
@@ -40,7 +41,7 @@ class ComparisonTest extends Base
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $contentTypeHandler;
 
-    /** @var \eZ\Publish\Core\Comparison\FieldRegistry */
+    /** @var \eZ\Publish\Core\Comparison\FieldRegistryInterface */
     private $fieldRegistry;
 
     /** @var \eZ\Publish\Core\Comparison\ComparisonEngineRegistry */
@@ -94,7 +95,7 @@ class ComparisonTest extends Base
             ->getMock();
     }
 
-    private function buildFieldRegistry(): FieldRegistry
+    private function buildFieldRegistry(): FieldRegistryInterface
     {
         return new FieldRegistry();
     }
