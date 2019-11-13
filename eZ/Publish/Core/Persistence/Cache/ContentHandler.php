@@ -358,7 +358,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         }
 
         $this->logger->logCacheMiss(['content' => $contentId]);
-        $versions = $this->persistenceHandler->contentHandler()->listVersions($contentId);
+        $versions = $this->persistenceHandler->contentHandler()->listVersions($contentId, $status, $limit);
         $cacheItem->set($versions);
         $tags = ["content-{$contentId}"];
         foreach ($versions as $version) {
