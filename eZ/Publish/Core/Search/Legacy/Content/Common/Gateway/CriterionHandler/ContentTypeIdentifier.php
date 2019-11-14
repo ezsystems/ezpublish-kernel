@@ -13,7 +13,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-eZ\Publish\Core\Persistence\Legacy\Exception\TypeNotFound;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 
 /**
@@ -78,7 +78,7 @@ class ContentTypeIdentifier extends CriterionHandler
         foreach ($criterion->value as $identifier) {
             try {
                 $idList[] = $this->contentTypeHandler->loadByIdentifier($identifier)->id;
-            } catch (TypeNotFound $e) {
+            } catch (NotFoundException $e) {
                 // Skip non-existing content types
             }
         }
