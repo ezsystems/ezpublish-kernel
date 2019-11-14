@@ -218,11 +218,12 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
         $innerHandler = $this->createMock($this->getHandlerClassName());
 
         $innerHandler
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('findTrashItems')
             ->willReturn(new Location\Trash\TrashResult([
                 'items' => [new Trashed(['id' => $trashedId, 'contentId' => $contentId])],
-                'totalCount' => 1,
+                // trigger the bulk loading several times to have some minimal coverage on the loop exit logic
+                'totalCount' => 101,
             ]));
 
         $this->persistenceHandlerMock
@@ -232,7 +233,7 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
         $contentHandlerMock = $this->createMock(ContentHandler::class);
 
         $contentHandlerMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('loadReverseRelations')
             ->with($contentId)
             ->will($this->returnValue([new Relation(['sourceContentId' => $relationSourceContentId])]));

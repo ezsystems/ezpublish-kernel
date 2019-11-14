@@ -115,9 +115,9 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
         // We can not use the return value of emptyTrash method because, in the next step, we are not able
         // to fetch the reverse relations of deleted content.
         $tags = [];
-
+        $offset = 0;
         do {
-            $trashedItems = $this->persistenceHandler->trashHandler()->findTrashItems(null, 0, self::EMPTY_TRASH_BULK_SIZE);
+            $trashedItems = $this->persistenceHandler->trashHandler()->findTrashItems(null, $offset, self::EMPTY_TRASH_BULK_SIZE);
             foreach ($trashedItems as $trashedItem) {
                 $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashedItem->contentId);
 
@@ -129,7 +129,9 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
                 $tags['location-' . $trashedItem->id] = true;
                 $tags['location-path-' . $trashedItem->id] = true;
             }
-        } while ($trashedItems->totalCount > self::EMPTY_TRASH_BULK_SIZE);
+            $offset += self::EMPTY_TRASH_BULK_SIZE;
+            // Once offset is larger then total count we can exit
+        } while ($trashedItems->totalCount > $offset);
 
         $return = $this->persistenceHandler->trashHandler()->emptyTrash();
 
