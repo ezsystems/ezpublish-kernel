@@ -85,6 +85,8 @@ class CheckURLsCommand extends Command
             throw new RuntimeException("'--iteration-count' option should be > 0, got '{$limit}'");
         }
 
+        $limit = (int)$limit;
+
         $query = new URLQuery();
         $query->filter = new Criterion\VisibleOnly();
         $query->sortClauses = [
