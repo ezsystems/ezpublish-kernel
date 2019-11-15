@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\ContentTypeService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
@@ -118,7 +118,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct)
+    public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct): APIContentTypeGroup
     {
         if (!$this->permissionResolver->canUser('class', 'create', $contentTypeGroupCreateStruct)) {
             throw new UnauthorizedException('ContentType', 'create');
@@ -174,7 +174,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadContentTypeGroup($contentTypeGroupId, array $prioritizedLanguages = [])
+    public function loadContentTypeGroup(int $contentTypeGroupId, array $prioritizedLanguages = []): APIContentTypeGroup
     {
         $spiGroup = $this->contentTypeHandler->loadGroup(
             $contentTypeGroupId
@@ -186,7 +186,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, array $prioritizedLanguages = [])
+    public function loadContentTypeGroupByIdentifier(string $contentTypeGroupIdentifier, array $prioritizedLanguages = []): APIContentTypeGroup
     {
         $groups = $this->loadContentTypeGroups($prioritizedLanguages);
 
@@ -202,7 +202,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadContentTypeGroups(array $prioritizedLanguages = [])
+    public function loadContentTypeGroups(array $prioritizedLanguages = []): iterable
     {
         $spiGroups = $this->contentTypeHandler->loadAllGroups();
 
@@ -223,7 +223,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup the content type group to be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
      */
-    public function updateContentTypeGroup(APIContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct)
+    public function updateContentTypeGroup(APIContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct): void
     {
         if (!$this->permissionResolver->canUser('class', 'update', $contentTypeGroup)) {
             throw new UnauthorizedException('ContentType', 'update');
@@ -283,10 +283,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function deleteContentTypeGroup(APIContentTypeGroup $contentTypeGroup)
+    public function deleteContentTypeGroup(APIContentTypeGroup $contentTypeGroup): void
     {
         if (!$this->permissionResolver->canUser('class', 'delete', $contentTypeGroup)) {
             throw new UnauthorizedException('ContentType', 'delete');
@@ -322,7 +320,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      */
-    protected function validateInputContentTypeCreateStruct(APIContentTypeCreateStruct $contentTypeCreateStruct)
+    protected function validateInputContentTypeCreateStruct(APIContentTypeCreateStruct $contentTypeCreateStruct): void
     {
         // Required properties
 
@@ -479,7 +477,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups
      */
-    protected function validateInputContentTypeGroups(array $contentTypeGroups)
+    protected function validateInputContentTypeGroups(array $contentTypeGroups): void
     {
         if (empty($contentTypeGroups)) {
             throw new InvalidArgumentException(
@@ -511,8 +509,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     protected function validateInputFieldDefinitionCreateStruct(
         FieldDefinitionCreateStruct $fieldDefinitionCreateStruct,
-        $argumentName = '$fieldDefinitionCreateStruct'
-    ) {
+        string $argumentName = '$fieldDefinitionCreateStruct'
+    ): void {
         // Required properties
 
         if ($fieldDefinitionCreateStruct->fieldTypeIdentifier === null) {
@@ -643,7 +641,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentType(APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups)
+    public function createContentType(APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups): APIContentTypeDraft
     {
         if (!$this->permissionResolver->canUser('class', 'create', $contentTypeCreateStruct, $contentTypeGroups)) {
             throw new UnauthorizedException('ContentType', 'create');
@@ -831,7 +829,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    protected function validateFieldDefinitionCreateStruct(FieldDefinitionCreateStruct $fieldDefinitionCreateStruct, SPIFieldType $fieldType)
+    protected function validateFieldDefinitionCreateStruct(FieldDefinitionCreateStruct $fieldDefinitionCreateStruct, SPIFieldType $fieldType): array
     {
         $validationErrors = [];
 
@@ -851,7 +849,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadContentType($contentTypeId, array $prioritizedLanguages = [])
+    public function loadContentType(int $contentTypeId, array $prioritizedLanguages = []): ContentType
     {
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
@@ -867,12 +865,8 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadContentTypeByIdentifier($identifier, array $prioritizedLanguages = [])
+    public function loadContentTypeByIdentifier(string $identifier, array $prioritizedLanguages = []): ContentType
     {
-        if (!is_string($identifier)) {
-            throw new InvalidArgumentValue('$identifier', $identifier);
-        }
-
         $spiContentType = $this->contentTypeHandler->loadByIdentifier(
             $identifier
         );
@@ -886,7 +880,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadContentTypeByRemoteId($remoteId, array $prioritizedLanguages = [])
+    public function loadContentTypeByRemoteId(string $remoteId, array $prioritizedLanguages = []): ContentType
     {
         $spiContentType = $this->contentTypeHandler->loadByRemoteId($remoteId);
 
@@ -908,7 +902,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function loadContentTypeDraft($contentTypeId, bool $ignoreOwnership = false)
+    public function loadContentTypeDraft(int $contentTypeId, bool $ignoreOwnership = false): APIContentTypeDraft
     {
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
@@ -944,7 +938,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadContentTypes(APIContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
+    public function loadContentTypes(APIContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = []): iterable
     {
         $spiContentTypes = $this->contentTypeHandler->loadContentTypes(
             $contentTypeGroup->id,
@@ -975,7 +969,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentTypeDraft(APIContentType $contentType)
+    public function createContentTypeDraft(APIContentType $contentType): APIContentTypeDraft
     {
         if (!$this->permissionResolver->canUser('class', 'create', $contentType)) {
             throw new UnauthorizedException('ContentType', 'create');
@@ -1020,7 +1014,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
      */
-    public function updateContentTypeDraft(APIContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct)
+    public function updateContentTypeDraft(APIContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct): void
     {
         if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
@@ -1098,7 +1092,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      */
-    public function deleteContentType(APIContentType $contentType)
+    public function deleteContentType(APIContentType $contentType): void
     {
         if (!$this->permissionResolver->canUser('class', 'delete', $contentType)) {
             throw new UnauthorizedException('ContentType', 'delete');
@@ -1138,7 +1132,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function copyContentType(APIContentType $contentType, User $creator = null)
+    public function copyContentType(APIContentType $contentType, User $creator = null): ContentType
     {
         if (!$this->permissionResolver->canUser('class', 'create', $contentType)) {
             throw new UnauthorizedException('ContentType', 'create');
@@ -1173,7 +1167,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function assignContentTypeGroup(APIContentType $contentType, APIContentTypeGroup $contentTypeGroup)
+    public function assignContentTypeGroup(APIContentType $contentType, APIContentTypeGroup $contentTypeGroup): void
     {
         if (!$this->permissionResolver->canUser('class', 'update', $contentType)) {
             throw new UnauthorizedException('ContentType', 'update');
@@ -1215,7 +1209,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function unassignContentTypeGroup(APIContentType $contentType, APIContentTypeGroup $contentTypeGroup)
+    public function unassignContentTypeGroup(APIContentType $contentType, APIContentTypeGroup $contentTypeGroup): void
     {
         if (!$this->permissionResolver->canUser('class', 'update', $contentType, [$contentTypeGroup])) {
             throw new UnauthorizedException('ContentType', 'update');
@@ -1271,7 +1265,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      */
-    public function addFieldDefinition(APIContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct)
+    public function addFieldDefinition(APIContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct): void
     {
         if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
@@ -1356,7 +1350,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      */
-    public function removeFieldDefinition(APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition)
+    public function removeFieldDefinition(APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition): void
     {
         if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
@@ -1400,7 +1394,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      */
-    public function updateFieldDefinition(APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct)
+    public function updateFieldDefinition(APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct): void
     {
         if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
@@ -1456,7 +1450,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      */
-    public function publishContentTypeDraft(APIContentTypeDraft $contentTypeDraft)
+    public function publishContentTypeDraft(APIContentTypeDraft $contentTypeDraft): void
     {
         if (!$this->permissionResolver->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
@@ -1517,12 +1511,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
      */
-    public function newContentTypeGroupCreateStruct($identifier)
+    public function newContentTypeGroupCreateStruct(string $identifier): ContentTypeGroupCreateStruct
     {
-        if (!is_string($identifier)) {
-            throw new InvalidArgumentValue('$identifier', $identifier);
-        }
-
         return new ContentTypeGroupCreateStruct(
             [
                 'identifier' => $identifier,
@@ -1539,7 +1529,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
      */
-    public function newContentTypeCreateStruct($identifier)
+    public function newContentTypeCreateStruct(string $identifier): APIContentTypeCreateStruct
     {
         if (!is_string($identifier)) {
             throw new InvalidArgumentValue('$identifier', $identifier);
@@ -1557,7 +1547,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
-    public function newContentTypeUpdateStruct()
+    public function newContentTypeUpdateStruct(): ContentTypeUpdateStruct
     {
         return new ContentTypeUpdateStruct();
     }
@@ -1567,7 +1557,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
-    public function newContentTypeGroupUpdateStruct()
+    public function newContentTypeGroupUpdateStruct(): ContentTypeGroupUpdateStruct
     {
         return new ContentTypeGroupUpdateStruct();
     }
@@ -1583,16 +1573,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
      */
-    public function newFieldDefinitionCreateStruct($identifier, $fieldTypeIdentifier)
+    public function newFieldDefinitionCreateStruct(string $identifier, string $fieldTypeIdentifier): FieldDefinitionCreateStruct
     {
-        if (!is_string($identifier)) {
-            throw new InvalidArgumentValue('$identifier', $identifier);
-        }
-
-        if (!is_string($fieldTypeIdentifier)) {
-            throw new InvalidArgumentValue('$fieldTypeIdentifier', $fieldTypeIdentifier);
-        }
-
         return new FieldDefinitionCreateStruct(
             [
                 'identifier' => $identifier,
@@ -1606,7 +1588,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
-    public function newFieldDefinitionUpdateStruct()
+    public function newFieldDefinitionUpdateStruct(): FieldDefinitionUpdateStruct
     {
         return new FieldDefinitionUpdateStruct();
     }
@@ -1620,7 +1602,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return bool
      */
-    public function isContentTypeUsed(APIContentType $contentType)
+    public function isContentTypeUsed(APIContentType $contentType): bool
     {
         return $this->contentTypeHandler->getContentCount($contentType->id) > 0;
     }

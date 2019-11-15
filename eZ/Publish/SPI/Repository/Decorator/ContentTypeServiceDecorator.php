@@ -31,26 +31,26 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         $this->innerService = $innerService;
     }
 
-    public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct)
+    public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct): ContentTypeGroup
     {
         return $this->innerService->createContentTypeGroup($contentTypeGroupCreateStruct);
     }
 
     public function loadContentTypeGroup(
-        $contentTypeGroupId,
+        int $contentTypeGroupId,
         array $prioritizedLanguages = []
-    ) {
+    ): ContentTypeGroup {
         return $this->innerService->loadContentTypeGroup($contentTypeGroupId, $prioritizedLanguages);
     }
 
     public function loadContentTypeGroupByIdentifier(
-        $contentTypeGroupIdentifier,
+        string $contentTypeGroupIdentifier,
         array $prioritizedLanguages = []
-    ) {
+    ): ContentTypeGroup {
         return $this->innerService->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, $prioritizedLanguages);
     }
 
-    public function loadContentTypeGroups(array $prioritizedLanguages = [])
+    public function loadContentTypeGroups(array $prioritizedLanguages = []): iterable
     {
         return $this->innerService->loadContentTypeGroups($prioritizedLanguages);
     }
@@ -58,44 +58,44 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
     public function updateContentTypeGroup(
         ContentTypeGroup $contentTypeGroup,
         ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
-    ) {
-        return $this->innerService->updateContentTypeGroup($contentTypeGroup, $contentTypeGroupUpdateStruct);
+    ): void {
+        $this->innerService->updateContentTypeGroup($contentTypeGroup, $contentTypeGroupUpdateStruct);
     }
 
-    public function deleteContentTypeGroup(ContentTypeGroup $contentTypeGroup)
+    public function deleteContentTypeGroup(ContentTypeGroup $contentTypeGroup): void
     {
-        return $this->innerService->deleteContentTypeGroup($contentTypeGroup);
+        $this->innerService->deleteContentTypeGroup($contentTypeGroup);
     }
 
     public function createContentType(
         ContentTypeCreateStruct $contentTypeCreateStruct,
         array $contentTypeGroups
-    ) {
+    ): ContentTypeDraft {
         return $this->innerService->createContentType($contentTypeCreateStruct, $contentTypeGroups);
     }
 
     public function loadContentType(
-        $contentTypeId,
+        int $contentTypeId,
         array $prioritizedLanguages = []
-    ) {
+    ): ContentType {
         return $this->innerService->loadContentType($contentTypeId, $prioritizedLanguages);
     }
 
     public function loadContentTypeByIdentifier(
-        $identifier,
+        string $identifier,
         array $prioritizedLanguages = []
-    ) {
+    ): ContentType {
         return $this->innerService->loadContentTypeByIdentifier($identifier, $prioritizedLanguages);
     }
 
     public function loadContentTypeByRemoteId(
-        $remoteId,
+        string $remoteId,
         array $prioritizedLanguages = []
-    ) {
+    ): ContentType {
         return $this->innerService->loadContentTypeByRemoteId($remoteId, $prioritizedLanguages);
     }
 
-    public function loadContentTypeDraft($contentTypeId, bool $ignoreOwnership = false)
+    public function loadContentTypeDraft(int $contentTypeId, bool $ignoreOwnership = false): ContentTypeDraft
     {
         return $this->innerService->loadContentTypeDraft($contentTypeId, $ignoreOwnership);
     }
@@ -110,11 +110,11 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
     public function loadContentTypes(
         ContentTypeGroup $contentTypeGroup,
         array $prioritizedLanguages = []
-    ) {
+    ): iterable {
         return $this->innerService->loadContentTypes($contentTypeGroup, $prioritizedLanguages);
     }
 
-    public function createContentTypeDraft(ContentType $contentType)
+    public function createContentTypeDraft(ContentType $contentType): ContentTypeDraft
     {
         return $this->innerService->createContentTypeDraft($contentType);
     }
@@ -122,96 +122,96 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
     public function updateContentTypeDraft(
         ContentTypeDraft $contentTypeDraft,
         ContentTypeUpdateStruct $contentTypeUpdateStruct
-    ) {
-        return $this->innerService->updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
+    ): void {
+        $this->innerService->updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
     }
 
-    public function deleteContentType(ContentType $contentType)
+    public function deleteContentType(ContentType $contentType): void
     {
-        return $this->innerService->deleteContentType($contentType);
+        $this->innerService->deleteContentType($contentType);
     }
 
     public function copyContentType(
         ContentType $contentType,
         User $creator = null
-    ) {
+    ): ContentType {
         return $this->innerService->copyContentType($contentType, $creator);
     }
 
     public function assignContentTypeGroup(
         ContentType $contentType,
         ContentTypeGroup $contentTypeGroup
-    ) {
-        return $this->innerService->assignContentTypeGroup($contentType, $contentTypeGroup);
+    ): void {
+        $this->innerService->assignContentTypeGroup($contentType, $contentTypeGroup);
     }
 
     public function unassignContentTypeGroup(
         ContentType $contentType,
         ContentTypeGroup $contentTypeGroup
-    ) {
-        return $this->innerService->unassignContentTypeGroup($contentType, $contentTypeGroup);
+    ): void {
+        $this->innerService->unassignContentTypeGroup($contentType, $contentTypeGroup);
     }
 
     public function addFieldDefinition(
         ContentTypeDraft $contentTypeDraft,
         FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
-    ) {
-        return $this->innerService->addFieldDefinition($contentTypeDraft, $fieldDefinitionCreateStruct);
+    ): void {
+        $this->innerService->addFieldDefinition($contentTypeDraft, $fieldDefinitionCreateStruct);
     }
 
     public function removeFieldDefinition(
         ContentTypeDraft $contentTypeDraft,
         FieldDefinition $fieldDefinition
-    ) {
-        return $this->innerService->removeFieldDefinition($contentTypeDraft, $fieldDefinition);
+    ): void {
+        $this->innerService->removeFieldDefinition($contentTypeDraft, $fieldDefinition);
     }
 
     public function updateFieldDefinition(
         ContentTypeDraft $contentTypeDraft,
         FieldDefinition $fieldDefinition,
         FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
-    ) {
-        return $this->innerService->updateFieldDefinition($contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct);
+    ): void {
+        $this->innerService->updateFieldDefinition($contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct);
     }
 
-    public function publishContentTypeDraft(ContentTypeDraft $contentTypeDraft)
+    public function publishContentTypeDraft(ContentTypeDraft $contentTypeDraft): void
     {
-        return $this->innerService->publishContentTypeDraft($contentTypeDraft);
+        $this->innerService->publishContentTypeDraft($contentTypeDraft);
     }
 
-    public function newContentTypeGroupCreateStruct($identifier)
+    public function newContentTypeGroupCreateStruct(string $identifier): ContentTypeGroupCreateStruct
     {
         return $this->innerService->newContentTypeGroupCreateStruct($identifier);
     }
 
-    public function newContentTypeCreateStruct($identifier)
+    public function newContentTypeCreateStruct(string $identifier): ContentTypeCreateStruct
     {
         return $this->innerService->newContentTypeCreateStruct($identifier);
     }
 
-    public function newContentTypeUpdateStruct()
+    public function newContentTypeUpdateStruct(): ContentTypeUpdateStruct
     {
         return $this->innerService->newContentTypeUpdateStruct();
     }
 
-    public function newContentTypeGroupUpdateStruct()
+    public function newContentTypeGroupUpdateStruct(): ContentTypeGroupUpdateStruct
     {
         return $this->innerService->newContentTypeGroupUpdateStruct();
     }
 
     public function newFieldDefinitionCreateStruct(
-        $identifier,
-        $fieldTypeIdentifier
-    ) {
+        string $identifier,
+        string $fieldTypeIdentifier
+    ): FieldDefinitionCreateStruct {
         return $this->innerService->newFieldDefinitionCreateStruct($identifier, $fieldTypeIdentifier);
     }
 
-    public function newFieldDefinitionUpdateStruct()
+    public function newFieldDefinitionUpdateStruct(): FieldDefinitionUpdateStruct
     {
         return $this->innerService->newFieldDefinitionUpdateStruct();
     }
 
-    public function isContentTypeUsed(ContentType $contentType)
+    public function isContentTypeUsed(ContentType $contentType): bool
     {
         return $this->innerService->isContentTypeUsed($contentType);
     }

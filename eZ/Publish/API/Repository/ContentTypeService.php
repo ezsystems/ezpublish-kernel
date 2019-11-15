@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\ContentTypeService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
@@ -20,9 +20,6 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
-/**
- * @example Examples/contenttype.php
- */
 interface ContentTypeService
 {
     /**
@@ -35,19 +32,19 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct);
+    public function createContentTypeGroup(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct): ContentTypeGroup;
 
     /**
      * Get a Content Type Group object by id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
      *
-     * @param mixed $contentTypeGroupId
+     * @param int $contentTypeGroupId
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroup($contentTypeGroupId, array $prioritizedLanguages = []);
+    public function loadContentTypeGroup(int $contentTypeGroupId, array $prioritizedLanguages = []): ContentTypeGroup;
 
     /**
      * Get a Content Type Group object by identifier.
@@ -59,7 +56,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, array $prioritizedLanguages = []);
+    public function loadContentTypeGroupByIdentifier(string $contentTypeGroupIdentifier, array $prioritizedLanguages = []): ContentTypeGroup;
 
     /**
      * Get all Content Type Groups.
@@ -68,7 +65,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
-    public function loadContentTypeGroups(array $prioritizedLanguages = []);
+    public function loadContentTypeGroups(array $prioritizedLanguages = []): iterable;
 
     /**
      * Update a Content Type Group object.
@@ -79,7 +76,7 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup the content type group to be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
      */
-    public function updateContentTypeGroup(ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct);
+    public function updateContentTypeGroup(ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct): void;
 
     /**
      * Delete a Content Type Group.
@@ -91,7 +88,7 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function deleteContentTypeGroup(ContentTypeGroup $contentTypeGroup);
+    public function deleteContentTypeGroup(ContentTypeGroup $contentTypeGroup): void;
 
     /**
      * Create a Content Type object.
@@ -112,19 +109,19 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentType(ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups);
+    public function createContentType(ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups): ContentTypeDraft;
 
     /**
      * Get a Content Type object by id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
      *
-     * @param mixed $contentTypeId
+     * @param int $contentTypeId
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentType($contentTypeId, array $prioritizedLanguages = []);
+    public function loadContentType(int $contentTypeId, array $prioritizedLanguages = []): ContentType;
 
     /**
      * Get a Content Type object by identifier.
@@ -136,7 +133,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByIdentifier($identifier, array $prioritizedLanguages = []);
+    public function loadContentTypeByIdentifier(string $identifier, array $prioritizedLanguages = []): ContentType;
 
     /**
      * Get a Content Type object by id.
@@ -148,7 +145,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByRemoteId($remoteId, array $prioritizedLanguages = []);
+    public function loadContentTypeByRemoteId(string $remoteId, array $prioritizedLanguages = []): ContentType;
 
     /**
      * Get a Content Type object draft by id.
@@ -160,7 +157,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function loadContentTypeDraft($contentTypeId, bool $ignoreOwnership = false);
+    public function loadContentTypeDraft(int $contentTypeId, bool $ignoreOwnership = false): ContentTypeDraft;
 
     /**
      * Bulk-load Content Type objects by ids.
@@ -169,7 +166,7 @@ interface ContentTypeService
      *
      * @since 7.3
      *
-     * @param mixed[] $contentTypeIds
+     * @param int[] $contentTypeIds
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[]|iterable
@@ -184,7 +181,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
      */
-    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = []);
+    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = []): iterable;
 
     /**
      * Creates a draft from an existing content type.
@@ -199,7 +196,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentTypeDraft(ContentType $contentType);
+    public function createContentTypeDraft(ContentType $contentType): ContentTypeDraft;
 
     /**
      * Update a Content Type object.
@@ -212,7 +209,7 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
      */
-    public function updateContentTypeDraft(ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct);
+    public function updateContentTypeDraft(ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct): void;
 
     /**
      * Delete a Content Type object.
@@ -226,7 +223,7 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      */
-    public function deleteContentType(ContentType $contentType);
+    public function deleteContentType(ContentType $contentType): void;
 
     /**
      * Copy Type incl fields and groupIds to a new Type object.
@@ -241,7 +238,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function copyContentType(ContentType $contentType, User $creator = null);
+    public function copyContentType(ContentType $contentType, User $creator = null): ContentType;
 
     /**
      * Assigns a content type to a content type group.
@@ -252,7 +249,7 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function assignContentTypeGroup(ContentType $contentType, ContentTypeGroup $contentTypeGroup);
+    public function assignContentTypeGroup(ContentType $contentType, ContentTypeGroup $contentTypeGroup): void;
 
     /**
      * Unassign a content type from a group.
@@ -264,7 +261,7 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function unassignContentTypeGroup(ContentType $contentType, ContentTypeGroup $contentTypeGroup);
+    public function unassignContentTypeGroup(ContentType $contentType, ContentTypeGroup $contentTypeGroup): void;
 
     /**
      * Adds a new field definition to an existing content type.
@@ -283,7 +280,7 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      */
-    public function addFieldDefinition(ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct);
+    public function addFieldDefinition(ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct): void;
 
     /**
      * Remove a field definition from an existing Type.
@@ -294,7 +291,7 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      */
-    public function removeFieldDefinition(ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition);
+    public function removeFieldDefinition(ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition): void;
 
     /**
      * Update a field definition.
@@ -307,7 +304,7 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      */
-    public function updateFieldDefinition(ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct);
+    public function updateFieldDefinition(ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct): void;
 
     /**
      * Publish the content type and update content objects.
@@ -320,7 +317,7 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      */
-    public function publishContentTypeDraft(ContentTypeDraft $contentTypeDraft);
+    public function publishContentTypeDraft(ContentTypeDraft $contentTypeDraft): void;
 
     /**
      * Instantiates a new content type group create class.
@@ -329,7 +326,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
      */
-    public function newContentTypeGroupCreateStruct($identifier);
+    public function newContentTypeGroupCreateStruct(string $identifier): ContentTypeGroupCreateStruct;
 
     /**
      * Instantiates a new content type create class.
@@ -338,21 +335,21 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
      */
-    public function newContentTypeCreateStruct($identifier);
+    public function newContentTypeCreateStruct(string $identifier): ContentTypeCreateStruct;
 
     /**
      * Instantiates a new content type update struct.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
-    public function newContentTypeUpdateStruct();
+    public function newContentTypeUpdateStruct(): ContentTypeUpdateStruct;
 
     /**
      * Instantiates a new content type update struct.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
-    public function newContentTypeGroupUpdateStruct();
+    public function newContentTypeGroupUpdateStruct(): ContentTypeGroupUpdateStruct;
 
     /**
      * Instantiates a field definition create struct.
@@ -362,14 +359,14 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
      */
-    public function newFieldDefinitionCreateStruct($identifier, $fieldTypeIdentifier);
+    public function newFieldDefinitionCreateStruct(string $identifier, string $fieldTypeIdentifier): FieldDefinitionCreateStruct;
 
     /**
      * Instantiates a field definition update class.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
-    public function newFieldDefinitionUpdateStruct();
+    public function newFieldDefinitionUpdateStruct(): FieldDefinitionUpdateStruct;
 
     /**
      * Returns true if the given content type $contentType has content instances.
@@ -380,7 +377,7 @@ interface ContentTypeService
      *
      * @return bool
      */
-    public function isContentTypeUsed(ContentType $contentType);
+    public function isContentTypeUsed(ContentType $contentType): bool;
 
     /**
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
