@@ -176,7 +176,7 @@ class SecurityListener implements EventSubscriberInterface
             return;
         }
 
-        if (!$this->hasAccess($siteAccess, $originalUser->getUsername())) {
+        if (!$this->hasAccess($siteAccess)) {
             throw new UnauthorizedSiteAccessException($siteAccess, $originalUser->getUsername());
         }
     }
@@ -209,7 +209,7 @@ class SecurityListener implements EventSubscriberInterface
         if (
             // Leave access to login route, so that user can attempt re-authentication.
             $request->attributes->get('_route') !== 'login'
-            && !$this->hasAccess($siteAccess, $token->getUsername())
+            && !$this->hasAccess($siteAccess)
         ) {
             throw new UnauthorizedSiteAccessException($siteAccess, $token->getUsername());
         }
