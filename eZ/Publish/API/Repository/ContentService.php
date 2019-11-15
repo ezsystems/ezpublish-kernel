@@ -243,10 +243,16 @@ interface ContentService
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\API\Repository\Values\User\User $creator Used as creator of the draft if given - otherwise uses current-user
+     * @param \eZ\Publish\API\Repository\Values\Content\Language|null if not set the draft is created with the initialLanguage code of the source version or if not present with the main language.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft(ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $creator = null);
+    public function createContentDraft(
+        ContentInfo $contentInfo,
+        VersionInfo $versionInfo = null,
+        User $creator = null,
+        ?Language $language = null
+    );
 
     /**
      * Counts drafts for a user.

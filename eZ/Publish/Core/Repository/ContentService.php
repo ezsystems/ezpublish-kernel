@@ -1065,12 +1065,11 @@ class ContentService implements ContentServiceInterface
      * Creates a draft from a published or archived version.
      *
      * If no version is given, the current published version is used.
-     * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
-     * It can be changed on updating the version.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\API\Repository\Values\User\User $creator if set given user is used to create the draft - otherwise the current-user is used
+     * @param \eZ\Publish\API\Repository\Values\Content\Language|null if not set the draft is created with the initialLanguage code of the source version or if not present with the main language.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      *
@@ -1078,8 +1077,12 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the current-user is not allowed to create the draft
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to create the draft
      */
-    public function createContentDraft(ContentInfo $contentInfo, APIVersionInfo $versionInfo = null, User $creator = null)
-    {
+    public function createContentDraft(
+        ContentInfo $contentInfo,
+        APIVersionInfo $versionInfo = null,
+        User $creator = null,
+        ?Language $language = null
+    ) {
         $contentInfo = $this->loadContentInfo($contentInfo->id);
 
         if ($versionInfo !== null) {
@@ -1121,6 +1124,9 @@ class ContentService implements ContentServiceInterface
             $creator = $this->repository->getCurrentUserReference();
         }
 
+        $fallbackLanguageCode = $versionInfo ? $versionInfo->initialLanguageCode : $contentInfo->mainLanguageCode;
+        $languageCode = $language ? $language->languageCode : $fallbackLanguageCode;
+
         if (!$this->repository->getPermissionResolver()->canUser(
             'content',
             'edit',
@@ -1143,7 +1149,8 @@ class ContentService implements ContentServiceInterface
             $spiContent = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
                 $contentInfo->id,
                 $versionNo,
-                $creator->getUserId()
+                $creator->getUserId(),
+                $languageCode
             );
             $this->repository->commit();
         } catch (Exception $e) {

@@ -127,10 +127,11 @@ class Mapper
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param mixed $versionNo
      * @param mixed $userId
+     * @param string|null $languageCode
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
-    public function createVersionInfoForContent(Content $content, $versionNo, $userId)
+    public function createVersionInfoForContent(Content $content, $versionNo, $userId, ?string $languageCode = null)
     {
         $versionInfo = new VersionInfo();
 
@@ -138,7 +139,7 @@ class Mapper
         $versionInfo->versionNo = $versionNo;
         $versionInfo->creatorId = $userId;
         $versionInfo->status = VersionInfo::STATUS_DRAFT;
-        $versionInfo->initialLanguageCode = $content->versionInfo->initialLanguageCode;
+        $versionInfo->initialLanguageCode = $languageCode ?? $content->versionInfo->initialLanguageCode;
         $versionInfo->creationDate = time();
         $versionInfo->modificationDate = $versionInfo->creationDate;
         $versionInfo->names = is_object($content->versionInfo) ? $content->versionInfo->names : [];

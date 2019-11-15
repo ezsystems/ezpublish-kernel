@@ -1140,6 +1140,31 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the createContentDraft() method with given language for new draft.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @group user
+     */
+    public function testCreateContentDraftInOtherLanguage()
+    {
+        $content = $this->createContentVersion1();
+
+        $language = $this->getRepository()->getContentLanguageService()->loadLanguage('eng-GB');
+
+        // Now we create a new draft from the published content
+        $draftedContent = $this->contentService->createContentDraft(
+            $content->contentInfo,
+            null,
+            null,
+            $language
+        );
+
+        $this->assertEquals('eng-US', $content->versionInfo->initialLanguageCode);
+        $this->assertEquals('eng-GB', $draftedContent->versionInfo->initialLanguageCode);
+    }
+
+    /**
      * Test for the createContentDraft() method.
      *
      * Test that editor has access to edit own draft.

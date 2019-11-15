@@ -129,9 +129,13 @@ class ContentService implements ContentServiceInterface
         return $this->service->deleteContent($contentInfo);
     }
 
-    public function createContentDraft(ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null)
-    {
-        return $this->service->createContentDraft($contentInfo, $versionInfo, $user);
+    public function createContentDraft(
+        ContentInfo $contentInfo,
+        VersionInfo $versionInfo = null,
+        User $creator = null,
+        ?Language $language = null
+    ) {
+        return $this->service->createContentDraft($contentInfo, $versionInfo, $creator, $language);
     }
 
     public function countContentDrafts(?User $user = null): int
