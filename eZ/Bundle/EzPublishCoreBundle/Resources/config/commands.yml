@@ -15,3 +15,13 @@ services:
             - "@ezpublish.siteaccess"
         tags:
             - { name: console.command }
+
+    ezplatform.core.command.check_urls:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\CheckURLsCommand
+        arguments:
+            - '@eZ\Publish\API\Repository\UserService'
+            - '@eZ\Publish\API\Repository\PermissionResolver'
+            - '@eZ\Publish\API\Repository\URLService'
+            - '@ezpublish.url_checker'
+        tags:
+            - { name: console.command }

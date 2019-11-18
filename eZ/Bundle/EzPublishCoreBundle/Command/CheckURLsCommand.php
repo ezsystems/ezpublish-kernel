@@ -4,31 +4,59 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
+use eZ\Bundle\EzPublishCoreBundle\URLChecker\URLCheckerInterface;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\URLService;
+use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\API\Repository\Values\URL\Query\SortClause;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CheckURLsCommand extends ContainerAwareCommand
+class CheckURLsCommand extends Command
 {
-    const DEFAULT_ITERATION_COUNT = 50;
-    const DEFAULT_REPOSITORY_USER = 'admin';
+    private const DEFAULT_ITERATION_COUNT = 50;
+    private const DEFAULT_REPOSITORY_USER = 'admin';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configure()
+    /** @var \eZ\Publish\API\Repository\UserService */
+    private $userService;
+
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
+    /** @var \eZ\Publish\API\Repository\URLService */
+    private $urlService;
+
+    /** @var \eZ\Bundle\EzPublishCoreBundle\URLChecker\URLCheckerInterface */
+    private $urlChecker;
+
+    public function __construct(
+        UserService $userService,
+        PermissionResolver $permissionResolver,
+        URLService $urlService,
+        URLCheckerInterface $urlChecker
+    ) {
+        parent::__construct('ezplatform:check-urls');
+
+        $this->userService = $userService;
+        $this->permissionResolver = $permissionResolver;
+        $this->urlService = $urlService;
+        $this->urlChecker = $urlChecker;
+    }
+
+    public function configure(): void
     {
-        $this->setName('ezplatform:check-urls');
         $this->setDescription('Checks validity of external URLs');
+
         $this->addOption(
             'iteration-count',
             'c',
@@ -36,6 +64,7 @@ class CheckURLsCommand extends ContainerAwareCommand
             'Number of urls to be checked in a single iteration, for avoiding using too much memory',
             self::DEFAULT_ITERATION_COUNT
         );
+
         $this->addOption(
             'user',
             'u',
@@ -45,20 +74,18 @@ class CheckURLsCommand extends ContainerAwareCommand
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $repository = $this->getContainer()->get('ezpublish.api.repository');
-        $repository->getPermissionResolver()->setCurrentUserReference(
-            $repository->getUserService()->loadUserByLogin($input->getOption('user'))
+        $this->permissionResolver->setCurrentUserReference(
+            $this->userService->loadUserByLogin($input->getOption('user'))
         );
 
         $limit = $input->getOption('iteration-count');
-        if (!is_numeric($limit) || (int)$limit < 1) {
+        if (!ctype_digit($limit) || (int)$limit < 1) {
             throw new RuntimeException("'--iteration-count' option should be > 0, got '{$limit}'");
         }
+
+        $limit = (int)$limit;
 
         $query = new URLQuery();
         $query->filter = new Criterion\VisibleOnly();
@@ -68,12 +95,12 @@ class CheckURLsCommand extends ContainerAwareCommand
         $query->offset = 0;
         $query->limit = $limit;
 
-        $totalCount = $this->getTotalCount(clone $query);
+        $totalCount = $this->getTotalCount();
 
         $progress = new ProgressBar($output, $totalCount);
         $progress->start();
         while ($query->offset < $totalCount) {
-            $this->getUrlHandler()->check($query);
+            $this->urlChecker->check($query);
 
             $progress->advance(min($limit, $totalCount - $query->offset));
             $query->offset += $limit;
@@ -81,22 +108,12 @@ class CheckURLsCommand extends ContainerAwareCommand
         $progress->finish();
     }
 
-    private function getTotalCount(URLQuery $query)
+    private function getTotalCount(): int
     {
-        $repository = $this->getContainer()->get('ezpublish.api.repository');
-        /** @var URLService $urlService */
-        $urlService = $repository->getURLService();
-
+        $query = new URLQuery();
+        $query->filter = new Criterion\VisibleOnly();
         $query->limit = 0;
 
-        return $urlService->findUrls($query)->totalCount;
-    }
-
-    /**
-     * @return \eZ\Bundle\EzPublishCoreBundle\URLChecker\URLCheckerInterface
-     */
-    private function getUrlHandler()
-    {
-        return $this->getContainer()->get('ezpublish.url_checker');
+        return $this->urlService->findUrls($query)->totalCount;
     }
 }
