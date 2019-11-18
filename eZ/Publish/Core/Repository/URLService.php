@@ -4,9 +4,12 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use DateTime;
+use DateTimeInterface;
 use Exception;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\PermissionResolver;
@@ -55,7 +58,7 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findUrls(URLQuery $query)
+    public function findUrls(URLQuery $query): SearchResult
     {
         if ($this->permissionResolver->hasAccess('url', 'view') === false) {
             throw new UnauthorizedException('url', 'view');
@@ -85,13 +88,13 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function updateUrl(URL $url, URLUpdateStruct $struct)
+    public function updateUrl(URL $url, URLUpdateStruct $struct): URL
     {
         if (!$this->permissionResolver->canUser('url', 'update', $url)) {
             throw new UnauthorizedException('url', 'update');
         }
 
-        if (!$this->isUnique($url->id, $struct->url)) {
+        if ($struct->url !== null && !$this->isUnique($url->id, $struct->url)) {
             throw new InvalidArgumentException('struct', 'url already exists');
         }
 
@@ -112,7 +115,7 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadById($id)
+    public function loadById(int $id): URL
     {
         $url = $this->buildDomainObject(
             $this->urlHandler->loadById($id)
@@ -128,7 +131,7 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadByUrl($url)
+    public function loadByUrl(string $url): URL
     {
         $apiUrl = $this->buildDomainObject(
             $this->urlHandler->loadByUrl($url)
@@ -144,7 +147,7 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function createUpdateStruct()
+    public function createUpdateStruct(): URLUpdateStruct
     {
         return new URLUpdateStruct();
     }
@@ -152,7 +155,7 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findUsages(URL $url, $offset = 0, $limit = -1)
+    public function findUsages(URL $url, int $offset = 0, int $limit = -1): UsageSearchResult
     {
         $contentIds = $this->urlHandler->findUsages($url->id);
         if (empty($contentIds)) {
@@ -188,7 +191,7 @@ class URLService implements URLServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\URL\URL
      */
-    protected function buildDomainObject(SPIUrl $data)
+    protected function buildDomainObject(SPIUrl $data): URL
     {
         return new URL([
             'id' => $data->id,
@@ -208,7 +211,7 @@ class URLService implements URLServiceInterface
      *
      * @return \eZ\Publish\SPI\Persistence\URL\URLUpdateStruct
      */
-    protected function buildUpdateStruct(URL $url, URLUpdateStruct $data)
+    protected function buildUpdateStruct(URL $url, URLUpdateStruct $data): SPIUrlUpdateStruct
     {
         $updateStruct = new SPIUrlUpdateStruct();
 
@@ -245,9 +248,10 @@ class URLService implements URLServiceInterface
      * @param string $url
      *
      * @return bool
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    protected function isUnique($id, $url)
+    protected function isUnique(int $id, string $url): bool
     {
         try {
             return $this->loadByUrl($url)->id === $id;
@@ -256,7 +260,7 @@ class URLService implements URLServiceInterface
         }
     }
 
-    private function createDateTime($timestamp)
+    private function createDateTime(?int $timestamp): ?DateTimeInterface
     {
         if ($timestamp > 0) {
             return new DateTime("@{$timestamp}");

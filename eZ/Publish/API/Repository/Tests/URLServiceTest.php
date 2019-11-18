@@ -646,6 +646,7 @@ class URLServiceTest extends BaseURLServiceTest
         $urlService = $repository->getURLService();
 
         $urlBeforeUpdate = $urlService->loadById($id);
+
         $updateStruct = $urlService->createUpdateStruct();
         $updateStruct->isValid = false;
         $updateStruct->lastChecked = $checked;

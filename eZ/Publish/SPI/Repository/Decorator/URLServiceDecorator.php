@@ -9,9 +9,11 @@ declare(strict_types=1);
 namespace eZ\Publish\SPI\Repository\Decorator;
 
 use eZ\Publish\API\Repository\URLService;
+use eZ\Publish\API\Repository\Values\URL\SearchResult;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
+use eZ\Publish\API\Repository\Values\URL\UsageSearchResult;
 
 abstract class URLServiceDecorator implements URLService
 {
@@ -23,30 +25,30 @@ abstract class URLServiceDecorator implements URLService
         $this->innerService = $innerService;
     }
 
-    public function createUpdateStruct()
+    public function createUpdateStruct(): URLUpdateStruct
     {
         return $this->innerService->createUpdateStruct();
     }
 
-    public function findUrls(URLQuery $query)
+    public function findUrls(URLQuery $query): SearchResult
     {
         return $this->innerService->findUrls($query);
     }
 
     public function findUsages(
         URL $url,
-        $offset = 0,
-        $limit = -1
-    ) {
+        int $offset = 0,
+        int $limit = -1
+    ): UsageSearchResult {
         return $this->innerService->findUsages($url, $offset, $limit);
     }
 
-    public function loadById($id)
+    public function loadById(int $id): URL
     {
         return $this->innerService->loadById($id);
     }
 
-    public function loadByUrl($url)
+    public function loadByUrl(string $url): URL
     {
         return $this->innerService->loadByUrl($url);
     }
@@ -54,7 +56,7 @@ abstract class URLServiceDecorator implements URLService
     public function updateUrl(
         URL $url,
         URLUpdateStruct $struct
-    ) {
+    ): URL {
         return $this->innerService->updateUrl($url, $struct);
     }
 }

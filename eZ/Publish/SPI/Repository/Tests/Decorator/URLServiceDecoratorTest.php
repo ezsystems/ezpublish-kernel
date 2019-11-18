@@ -60,8 +60,8 @@ class URLServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(URL::class),
-            'random_value_5ced05ce172579.87753442',
-            'random_value_5ced05ce1725a8.96796907',
+            10,
+            100,
         ];
 
         $serviceMock->expects($this->once())->method('findUsages')->with(...$parameters);
@@ -74,7 +74,7 @@ class URLServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce172600.22330806'];
+        $parameters = [1];
 
         $serviceMock->expects($this->once())->method('loadById')->with(...$parameters);
 
