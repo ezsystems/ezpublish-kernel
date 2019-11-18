@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\SectionService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -29,7 +29,7 @@ interface SectionService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section The newly create section
      */
-    public function createSection(SectionCreateStruct $sectionCreateStruct);
+    public function createSection(SectionCreateStruct $sectionCreateStruct): Section;
 
     /**
      * Updates the given in the content repository.
@@ -42,7 +42,7 @@ interface SectionService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection(Section $section, SectionUpdateStruct $sectionUpdateStruct);
+    public function updateSection(Section $section, SectionUpdateStruct $sectionUpdateStruct): Section;
 
     /**
      * Loads a Section from its id ($sectionId).
@@ -50,18 +50,18 @@ interface SectionService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
-     * @param mixed $sectionId
+     * @param int $sectionId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSection($sectionId);
+    public function loadSection(int $sectionId): Section;
 
     /**
      * Loads all sections, excluding the ones the current user is not allowed to read.
      *
-     * @return array of {@link \eZ\Publish\API\Repository\Values\Content\Section}
+     * @return \eZ\Publish\API\Repository\Values\Content\Section[]
      */
-    public function loadSections();
+    public function loadSections(): iterable;
 
     /**
      * Loads a Section from its identifier ($sectionIdentifier).
@@ -73,7 +73,7 @@ interface SectionService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSectionByIdentifier($sectionIdentifier);
+    public function loadSectionByIdentifier(string $sectionIdentifier): Section;
 
     /**
      * Counts the contents which $section is assigned to.
@@ -84,7 +84,7 @@ interface SectionService
      *
      * @deprecated since 6.0
      */
-    public function countAssignedContents(Section $section);
+    public function countAssignedContents(Section $section): int;
 
     /**
      * Returns true if the given section is assigned to contents, or used in role policies, or in role assignments.
@@ -97,22 +97,20 @@ interface SectionService
      *
      * @return bool
      */
-    public function isSectionUsed(Section $section);
+    public function isSectionUsed(Section $section): bool;
 
     /**
-     * Assigns the content to the given section
-     * this method overrides the current assigned section.
+     * Assigns the content to the given section this method overrides the current assigned section.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to view provided object
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function assignSection(ContentInfo $contentInfo, Section $section);
+    public function assignSection(ContentInfo $contentInfo, Section $section): void;
 
     /**
-     * Assigns the subtree to the given section
-     * this method overrides the current assigned section.
+     * Assigns the subtree to the given section this method overrides the current assigned section.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
@@ -129,19 +127,19 @@ interface SectionService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function deleteSection(Section $section);
+    public function deleteSection(Section $section): void;
 
     /**
      * Instantiates a new SectionCreateStruct.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
-    public function newSectionCreateStruct();
+    public function newSectionCreateStruct(): SectionCreateStruct;
 
     /**
      * Instantiates a new SectionUpdateStruct.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
-    public function newSectionUpdateStruct();
+    public function newSectionUpdateStruct(): SectionUpdateStruct;
 }

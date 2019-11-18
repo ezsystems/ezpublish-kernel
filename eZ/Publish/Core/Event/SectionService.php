@@ -41,7 +41,7 @@ class SectionService extends SectionServiceDecorator
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function createSection(SectionCreateStruct $sectionCreateStruct)
+    public function createSection(SectionCreateStruct $sectionCreateStruct): Section
     {
         $eventData = [$sectionCreateStruct];
 
@@ -66,7 +66,7 @@ class SectionService extends SectionServiceDecorator
     public function updateSection(
         Section $section,
         SectionUpdateStruct $sectionUpdateStruct
-    ) {
+    ): Section {
         $eventData = [
             $section,
             $sectionUpdateStruct,

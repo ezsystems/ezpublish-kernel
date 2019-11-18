@@ -1,11 +1,11 @@
 <?php
 
 /**
- * SectionService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
@@ -36,44 +36,44 @@ class SectionService implements SectionServiceInterface
         $this->service = $service;
     }
 
-    public function createSection(SectionCreateStruct $sectionCreateStruct)
+    public function createSection(SectionCreateStruct $sectionCreateStruct): Section
     {
         return $this->service->createSection($sectionCreateStruct);
     }
 
-    public function updateSection(Section $section, SectionUpdateStruct $sectionUpdateStruct)
+    public function updateSection(Section $section, SectionUpdateStruct $sectionUpdateStruct): Section
     {
         return $this->service->updateSection($section, $sectionUpdateStruct);
     }
 
-    public function loadSection($sectionId)
+    public function loadSection(int $sectionId): Section
     {
         return $this->service->loadSection($sectionId);
     }
 
-    public function loadSections()
+    public function loadSections(): iterable
     {
         return $this->service->loadSections();
     }
 
-    public function loadSectionByIdentifier($sectionIdentifier)
+    public function loadSectionByIdentifier(string $sectionIdentifier): Section
     {
         return $this->service->loadSectionByIdentifier($sectionIdentifier);
     }
 
-    public function countAssignedContents(Section $section)
+    public function countAssignedContents(Section $section): int
     {
         return $this->service->countAssignedContents($section);
     }
 
-    public function isSectionUsed(Section $section)
+    public function isSectionUsed(Section $section): bool
     {
         return $this->service->isSectionUsed($section);
     }
 
-    public function assignSection(ContentInfo $contentInfo, Section $section)
+    public function assignSection(ContentInfo $contentInfo, Section $section): void
     {
-        return $this->service->assignSection($contentInfo, $section);
+        $this->service->assignSection($contentInfo, $section);
     }
 
     public function assignSectionToSubtree(Location $location, Section $section): void
@@ -81,17 +81,17 @@ class SectionService implements SectionServiceInterface
         $this->service->assignSectionToSubtree($location, $section);
     }
 
-    public function deleteSection(Section $section)
+    public function deleteSection(Section $section): void
     {
-        return $this->service->deleteSection($section);
+        $this->service->deleteSection($section);
     }
 
-    public function newSectionCreateStruct()
+    public function newSectionCreateStruct(): SectionCreateStruct
     {
         return $this->service->newSectionCreateStruct();
     }
 
-    public function newSectionUpdateStruct()
+    public function newSectionUpdateStruct(): SectionUpdateStruct
     {
         return $this->service->newSectionUpdateStruct();
     }
