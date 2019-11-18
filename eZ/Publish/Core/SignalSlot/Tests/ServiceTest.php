@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -193,6 +194,15 @@ abstract class ServiceTest extends TestCase
                         $groupVersioNo
                     )
                 ),
+            ]
+        );
+    }
+
+    protected function getLanguage(string $languageCode)
+    {
+        return new Language(
+            [
+                'languageCode' => $languageCode,
             ]
         );
     }

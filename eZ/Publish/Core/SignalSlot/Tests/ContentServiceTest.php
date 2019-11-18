@@ -38,7 +38,7 @@ class ContentServiceTest extends ServiceTest
         $contentId = 42;
         $versionNo = 2;
         $remoteId = md5('One Ring to rule them all');
-        $language = 'fre-FR';
+        $languageCode = 'fre-FR';
         $userId = 14;
         $userVersionNo = 5;
         $copiedContentId = 43;
@@ -62,6 +62,7 @@ class ContentServiceTest extends ServiceTest
         $contentInfo = $this->getContentInfo($contentId, $remoteId);
         $versionInfo = $this->getVersionInfo($contentInfo, $versionNo);
         $content = $this->getContent($versionInfo);
+        $language = $this->getLanguage($languageCode);
 
         $user = $this->getUser($userId, md5('Sauron'), $userVersionNo);
         $usersDraft = [$versionInfo];
@@ -113,25 +114,25 @@ class ContentServiceTest extends ServiceTest
             ],
             [
                 'loadContentByContentInfo',
-                [$contentInfo, [$language], $versionNo, true],
+                [$contentInfo, [$languageCode], $versionNo, true],
                 $content,
                 0,
             ],
             [
                 'loadContentByVersionInfo',
-                [$versionInfo, [$language], true],
+                [$versionInfo, [$languageCode], true],
                 $content,
                 0,
             ],
             [
                 'loadContent',
-                [$contentId, [$language], $versionNo, true],
+                [$contentId, [$languageCode], $versionNo, true],
                 $content,
                 0,
             ],
             [
                 'loadContentByRemoteId',
-                [$remoteId, [$language], $versionNo, true],
+                [$remoteId, [$languageCode], $versionNo, true],
                 $content,
                 0,
             ],
@@ -164,7 +165,7 @@ class ContentServiceTest extends ServiceTest
             ],
             [
                 'createContentDraft',
-                [$contentInfo, $versionInfo, $user],
+                [$contentInfo, $versionInfo, $user, $language],
                 $content,
                 1,
                 ContentServiceSignals\CreateContentDraftSignal::class,
@@ -290,15 +291,15 @@ class ContentServiceTest extends ServiceTest
             ],
             [
                 'deleteTranslation',
-                [$contentInfo, $language],
+                [$contentInfo, $languageCode],
                 null,
                 2,
                 DeleteTranslationSignal::class,
-                ['contentId' => $contentId, 'languageCode' => $language],
+                ['contentId' => $contentId, 'languageCode' => $languageCode],
             ],
             [
                 'newContentCreateStruct',
-                [$contentType, $language],
+                [$contentType, $languageCode],
                 [$contentCreateStruct],
                 0,
             ],
