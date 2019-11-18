@@ -153,7 +153,7 @@ abstract class BaseURLServiceTest extends BaseTest
         $urlFieldCreate->isTranslatable = false;
         $urlFieldCreate->isRequired = true;
         $urlFieldCreate->isInfoCollector = false;
-        $nameFieldCreate->validatorConfiguration = [];
+        $urlFieldCreate->validatorConfiguration = [];
         $urlFieldCreate->fieldSettings = [];
         $urlFieldCreate->isSearchable = false;
         $urlFieldCreate->defaultValue = '';
