@@ -60,7 +60,7 @@ class ContentServiceTest extends ServiceTest
             ]
         );
         $contentInfo = $this->getContentInfo($contentId, $remoteId);
-        $versionInfo = $this->getVersionInfo($contentInfo, $versionNo);
+        $versionInfo = $this->getVersionInfo($contentInfo, $versionNo, $languageCode);
         $content = $this->getContent($versionInfo);
         $language = $this->getLanguage($languageCode);
 
@@ -174,6 +174,7 @@ class ContentServiceTest extends ServiceTest
                     'versionNo' => $versionNo,
                     'newVersionNo' => $content->getVersionInfo()->versionNo,
                     'userId' => $userId,
+                    'languageCode' => $language->languageCode,
                 ],
             ],
             [

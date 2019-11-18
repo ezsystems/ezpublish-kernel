@@ -341,6 +341,7 @@ class ContentService implements ContentServiceInterface
                     'versionNo' => ($versionInfo !== null ? $versionInfo->versionNo : null),
                     'newVersionNo' => $returnValue->getVersionInfo()->versionNo,
                     'userId' => ($creator !== null ? $creator->id : null),
+                    'languageCode' => $returnValue->getVersionInfo()->initialLanguageCode,
                 ]
             )
         );

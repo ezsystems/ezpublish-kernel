@@ -122,15 +122,17 @@ abstract class ServiceTest extends TestCase
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param int $versionNo
+     * @param string|null $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    protected function getVersionInfo(ContentInfo $contentInfo, $versionNo)
+    protected function getVersionInfo(ContentInfo $contentInfo, int $versionNo, ?string $languageCode = null): VersionInfo
     {
         return new VersionInfo(
             [
                 'contentInfo' => $contentInfo,
                 'versionNo' => $versionNo,
+                'initialLanguageCode' => $languageCode,
             ]
         );
     }

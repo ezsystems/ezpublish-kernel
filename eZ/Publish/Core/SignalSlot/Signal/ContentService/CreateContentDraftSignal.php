@@ -42,4 +42,11 @@ class CreateContentDraftSignal extends Signal
      * @var int
      */
     public $newVersionNo;
+
+    /**
+     * Language Code of created draft.
+     *
+     * @var string
+     */
+    public $languageCode;
 }
