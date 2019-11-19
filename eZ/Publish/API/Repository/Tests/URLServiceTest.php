@@ -523,7 +523,7 @@ class URLServiceTest extends BaseURLServiceTest
         $query = new URLQuery();
         $query->filter = new Criterion\MatchAll();
         $query->offset = 10;
-        $query->sortClauses = [ new SortClause\Id() ];
+        $query->sortClauses = [new SortClause\Id()];
 
         $this->doTestFindUrls($query, $expectedUrls, 20);
     }
@@ -546,7 +546,7 @@ class URLServiceTest extends BaseURLServiceTest
         $query->filter = new Criterion\MatchAll();
         $query->offset = 10;
         $query->limit = 3;
-        $query->sortClauses = [ new SortClause\Id() ];
+        $query->sortClauses = [new SortClause\Id()];
 
         $this->doTestFindUrls($query, $expectedUrls, 20);
     }
