@@ -25,3 +25,11 @@ services:
             - '@ezpublish.url_checker'
         tags:
             - { name: console.command }
+
+    JMS\TranslationBundle\Command\ExtractTranslationCommand:
+        tags:
+            - { name: console.command }
+
+    JMS\TranslationBundle\Command\ResourcesListCommand:
+        tags:
+            - { name: console.command }
