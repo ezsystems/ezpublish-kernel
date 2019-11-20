@@ -333,20 +333,20 @@ class ContentService implements ContentServiceInterface
         User $creator = null,
         ?Language $language = null
     ) {
-        $returnValue = $this->service->createContentDraft($contentInfo, $versionInfo, $creator, $language);
+        $contentDraft = $this->service->createContentDraft($contentInfo, $versionInfo, $creator, $language);
         $this->signalDispatcher->emit(
             new CreateContentDraftSignal(
                 [
                     'contentId' => $contentInfo->id,
                     'versionNo' => ($versionInfo !== null ? $versionInfo->versionNo : null),
-                    'newVersionNo' => $returnValue->getVersionInfo()->versionNo,
+                    'newVersionNo' => $contentDraft->getVersionInfo()->versionNo,
                     'userId' => ($creator !== null ? $creator->id : null),
-                    'languageCode' => $returnValue->getVersionInfo()->initialLanguageCode,
+                    'languageCode' => $contentDraft->getVersionInfo()->initialLanguageCode,
                 ]
             )
         );
 
-        return $returnValue;
+        return $contentDraft;
     }
 
     /**

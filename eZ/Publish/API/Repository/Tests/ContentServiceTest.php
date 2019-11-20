@@ -1142,8 +1142,7 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the createContentDraft() method with given language for new draft.
      *
-     * @covers \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @group user
+     * @covers \eZ\Publish\API\Repository\ContentService::createContentDraft
      */
     public function testCreateContentDraftInOtherLanguage()
     {

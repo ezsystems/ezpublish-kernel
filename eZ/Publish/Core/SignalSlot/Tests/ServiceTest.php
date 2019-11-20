@@ -200,7 +200,7 @@ abstract class ServiceTest extends TestCase
         );
     }
 
-    protected function getLanguage(string $languageCode)
+    protected function getLanguage(string $languageCode): Language
     {
         return new Language(
             [

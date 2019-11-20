@@ -1124,8 +1124,8 @@ class ContentService implements ContentServiceInterface
             $creator = $this->repository->getCurrentUserReference();
         }
 
-        $fallbackLanguageCode = $versionInfo ? $versionInfo->initialLanguageCode : $contentInfo->mainLanguageCode;
-        $languageCode = $language ? $language->languageCode : $fallbackLanguageCode;
+        $fallbackLanguageCode = $versionInfo->initialLanguageCode ?? $contentInfo->mainLanguageCode;
+        $languageCode = $language->languageCode ?? $fallbackLanguageCode;
 
         if (!$this->repository->getPermissionResolver()->canUser(
             'content',
