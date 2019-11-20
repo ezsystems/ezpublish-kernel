@@ -6,9 +6,11 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\URL\SearchResult;
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
 use eZ\Publish\API\Repository\Values\URL\UsageSearchResult;
@@ -73,8 +75,11 @@ abstract class BaseURLServiceTest extends BaseTest
         }
     }
 
-    protected function createContentWithLink(string $name, string $url, string $languageCode = 'eng-GB', int $parentLocationId = 2): Content
-    {
+    protected function createContentWithLink(
+        string $name, string $url,
+        string $languageCode = 'eng-GB',
+        int $parentLocationId = 2
+    ): Content {
         $repository = $this->getRepository(false);
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -117,6 +122,19 @@ abstract class BaseURLServiceTest extends BaseTest
         $typeCreate->creatorId = $this->generateId('user', $repository->getPermissionResolver()->getCurrentUserReference()->getUserId());
         $typeCreate->creationDate = $this->createDateTime();
 
+        $typeCreate->addFieldDefinition($this->createNameFieldDefinitionCreateStruct($contentTypeService));
+        $typeCreate->addFieldDefinition($this->createUrlFieldDefinitionCreateStruct($contentTypeService));
+
+        $contentTypeDraft = $contentTypeService->createContentType($typeCreate, [
+            $contentTypeService->loadContentTypeGroupByIdentifier('Content'),
+        ]);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        return $contentTypeService->loadContentTypeByIdentifier(self::URL_CONTENT_TYPE_IDENTIFIER);
+    }
+
+    private function createNameFieldDefinitionCreateStruct(ContentTypeService $contentTypeService): FieldDefinitionCreateStruct
+    {
         $nameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('name', 'ezstring');
         $nameFieldCreate->names = [
             'eng-GB' => 'Name',
@@ -139,8 +157,11 @@ abstract class BaseURLServiceTest extends BaseTest
         $nameFieldCreate->isSearchable = true;
         $nameFieldCreate->defaultValue = '';
 
-        $typeCreate->addFieldDefinition($nameFieldCreate);
+        return $nameFieldCreate;
+    }
 
+    private function createUrlFieldDefinitionCreateStruct(ContentTypeService $contentTypeService): FieldDefinitionCreateStruct
+    {
         $urlFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('url', 'ezurl');
         $urlFieldCreate->names = [
             'eng-GB' => 'URL',
@@ -158,13 +179,6 @@ abstract class BaseURLServiceTest extends BaseTest
         $urlFieldCreate->isSearchable = false;
         $urlFieldCreate->defaultValue = '';
 
-        $typeCreate->addFieldDefinition($urlFieldCreate);
-
-        $contentTypeDraft = $contentTypeService->createContentType($typeCreate, [
-            $contentTypeService->loadContentTypeGroupByIdentifier('Content'),
-        ]);
-        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
-
-        return $contentTypeService->loadContentTypeByIdentifier(self::URL_CONTENT_TYPE_IDENTIFIER);
+        return $urlFieldCreate;
     }
 }
