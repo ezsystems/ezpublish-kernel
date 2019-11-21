@@ -1669,12 +1669,38 @@ class ContentService implements ContentServiceInterface
         $updateStruct = $this->newContentUpdateStruct();
         $updateStruct->initialLanguageCode = $versionInfo->initialLanguageCode;
 
+        $contentToPublish = $this->internalLoadContent($contendId, null, $versionInfo->versionNo);
         foreach ($currentContent->getFields() as $field) {
             $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
 
-            if ($fieldDefinition->isTranslatable && in_array($field->languageCode, $languagesToCopy)) {
+            $newValue = $contentToPublish->getFieldValue(
+                $fieldDefinition->identifier,
+                $field->languageCode
+            );
+
+            if ($newValue == $field->value) {
+                continue;
+            }
+
+            $fieldType = $this->fieldTypeRegistry->getFieldType(
+                $fieldDefinition->fieldTypeIdentifier
+            );
+
+            if ($fieldDefinition->isRequired && $fieldType->isEmptyValue($field->value)) {
+                if (!$fieldType->isEmptyValue($fieldDefinition->defaultValue)) {
+                    $updateStruct->setField($field->fieldDefIdentifier, $fieldDefinition->defaultValue, $field->languageCode);
+                }
+                continue;
+            }
+
+            if ($fieldDefinition->isTranslatable && \in_array($field->languageCode, $languagesToCopy)) {
                 $updateStruct->setField($field->fieldDefIdentifier, $field->value, $field->languageCode);
             }
+        }
+
+        // Nothing to copy, skip update
+        if (empty($updateStruct->fields)) {
+            return;
         }
 
         $this->updateContent($versionInfo, $updateStruct);
