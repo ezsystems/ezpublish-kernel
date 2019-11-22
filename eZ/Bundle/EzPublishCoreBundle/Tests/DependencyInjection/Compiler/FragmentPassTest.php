@@ -40,6 +40,7 @@ class FragmentPassTest extends AbstractCompilerPassTestCase
         $this->setDefinition('fragment.renderer.esi', $esiRendererDef);
         $this->setDefinition('fragment.renderer.hinclude', $hincludeRendererDef);
         $this->setDefinition('ezpublish.decorated_fragment_renderer', $decoratedFragmentRendererDef);
+        $this->setDefinition('ezpublish.fragment_listener.factory', new Definition());
 
         $this->compile();
 

@@ -15,6 +15,8 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryType\TestQueryType;
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubPolicyProvider;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use Symfony\Component\DependencyInjection\Compiler\CheckExceptionOnInvalidReferenceBehaviorPass;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Yaml\Yaml;
 use ReflectionObject;
@@ -872,7 +874,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
     {
         $definition = new Definition(TestQueryType::class);
         $definition->setAutoconfigured(true);
-        $this->container->setDefinition(TestQueryType::class, $definition);
+        $this->setDefinition(TestQueryType::class, $definition);
 
         $this->load();
 
@@ -889,9 +891,23 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
      */
     private function compileCoreContainer(): void
     {
+        $this->disableCheckExceptionOnInvalidReferenceBehaviorPass();
         $this->container->setParameter('webroot_dir', __DIR__);
         $this->container->setParameter('kernel.root_dir', __DIR__);
         $this->container->setParameter('kernel.debug', false);
         $this->compile();
+    }
+
+    final public function disableCheckExceptionOnInvalidReferenceBehaviorPass(): void
+    {
+        $compilerPassConfig = $this->container->getCompilerPassConfig();
+        $compilerPassConfig->setAfterRemovingPasses(
+            array_filter(
+                $compilerPassConfig->getAfterRemovingPasses(),
+                static function (CompilerPassInterface $pass) {
+                    return !($pass instanceof CheckExceptionOnInvalidReferenceBehaviorPass);
+                }
+            )
+        );
     }
 }

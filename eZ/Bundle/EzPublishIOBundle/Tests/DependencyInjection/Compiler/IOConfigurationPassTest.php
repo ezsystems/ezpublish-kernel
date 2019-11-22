@@ -32,6 +32,8 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
 
         $this->container->setDefinition('ezpublish.core.io.binarydata_handler.registry', new Definition());
         $this->container->setDefinition('ezpublish.core.io.metadata_handler.registry', new Definition());
+        $this->container->setDefinition('ezpublish.core.io.binarydata_handler.flysystem.default', new Definition());
+        $this->container->setDefinition('ezpublish.core.io.metadata_handler.flysystem.default', new Definition());
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void

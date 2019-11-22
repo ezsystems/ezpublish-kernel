@@ -24,6 +24,10 @@ class SecurityPassTest extends AbstractCompilerPassTestCase
         $this->setDefinition('security.authentication.provider.anonymous', new Definition());
         $this->setDefinition('security.http_utils', new Definition());
         $this->setDefinition('security.authentication.success_handler', new Definition());
+        $this->setDefinition('ezpublish.config.resolver', new Definition());
+        $this->setDefinition('ezpublish.siteaccess', new Definition());
+        $this->setDefinition('eZ\Publish\API\Repository\PermissionResolver', new Definition());
+        $this->setDefinition('eZ\Publish\API\Repository\UserService', new Definition());
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void
