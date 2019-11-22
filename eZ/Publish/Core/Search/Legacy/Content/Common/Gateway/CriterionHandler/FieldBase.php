@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
@@ -135,6 +136,52 @@ abstract class FieldBase extends CriterionHandler
                 $query->bindValue(0, null, PDO::PARAM_INT)
             ),
             $query->expr->lt($leftSide, $rightSide)
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $subSelect
+     * @param array $languageSettings
+     * @param array $fieldWhereExpressions
+     * @param array $fieldsInformation
+     *
+     * @return string
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     */
+    protected function getInExpressionWithFieldConditions(
+        SelectQuery $query,
+        SelectQuery $subSelect,
+        array $languageSettings,
+        array $fieldWhereExpressions,
+        array $fieldsInformation
+    ): string {
+        if (empty($fieldWhereExpressions)) {
+            throw new NotImplementedException(
+                sprintf(
+                    'Following fieldtypes are not searchable in the legacy search engine: %s',
+                    implode(', ', array_keys($fieldsInformation))
+                )
+            );
+        }
+
+        $subSelect->where(
+            $subSelect->expr->lAnd(
+                $subSelect->expr->eq(
+                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_attribute'),
+                    $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
+                ),
+                count($fieldWhereExpressions) > 1 ? $subSelect->expr->lOr(
+                    $fieldWhereExpressions
+                ) : $fieldWhereExpressions[0],
+                $this->getFieldCondition($subSelect, $languageSettings)
+            )
+        );
+
+        return $query->expr->in(
+            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
+            $subSelect
         );
     }
 }
