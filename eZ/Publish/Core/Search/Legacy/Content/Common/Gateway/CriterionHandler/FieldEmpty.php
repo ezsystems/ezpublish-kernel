@@ -1,28 +1,28 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase field criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
-use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter as FieldValueConverter;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Persistence\Database\Expression;
 
 /**
  * Field criterion handler.
  */
-class Field extends FieldBase
+class FieldEmpty extends FieldBase
 {
     /**
      * Field converter registry.
@@ -32,68 +32,47 @@ class Field extends FieldBase
     protected $fieldConverterRegistry;
 
     /**
-     * Field value converter.
-     *
-     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter
+     * @var \eZ\Publish\API\Repository\FieldTypeService
      */
-    protected $fieldValueConverter;
-
-    /**
-     * Transformation processor.
-     *
-     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
-     */
-    protected $transformationProcessor;
+    protected $fieldTypeService;
 
     public function __construct(
         DatabaseHandler $dbHandler,
         ContentTypeHandler $contentTypeHandler,
         LanguageHandler $languageHandler,
         Registry $fieldConverterRegistry,
-        FieldValueConverter $fieldValueConverter,
-        TransformationProcessor $transformationProcessor
+        FieldTypeService $fieldTypeService
     ) {
         parent::__construct($dbHandler, $contentTypeHandler, $languageHandler);
 
         $this->fieldConverterRegistry = $fieldConverterRegistry;
-        $this->fieldValueConverter = $fieldValueConverter;
-        $this->transformationProcessor = $transformationProcessor;
+        $this->fieldTypeService = $fieldTypeService;
     }
 
     /**
      * Check if this criterion handler accepts to handle the given criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     *
-     * @return bool
      */
-    public function accept(Criterion $criterion)
+    public function accept(Criterion $criterion): bool
     {
-        return $criterion instanceof Criterion\Field;
+        return $criterion instanceof Criterion\IsFieldEmpty;
     }
 
     /**
      * Returns relevant field information for the specified field.
      *
-     * The returned information is returned as an array of the attribute
+     * Returns an array of the attribute,
      * identifier and the sort column, which should be used.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      * @throws \RuntimeException if no converter is found
-     *
-     * @param string $fieldIdentifier
-     *
-     * @return array
-     *
-     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    protected function getFieldsInformation($fieldIdentifier)
+    protected function getFieldsInformation(string $fieldIdentifier): array
     {
         $fieldMapArray = [];
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
 
         foreach ($fieldMap as $contentTypeIdentifier => $fieldIdentifierMap) {
-            // First check if field exists in the current ContentType, there is nothing to do if it doesn't
             if (!isset($fieldIdentifierMap[$fieldIdentifier])) {
                 continue;
             }
@@ -103,6 +82,9 @@ class Field extends FieldBase
             if (!isset($fieldMapArray[$fieldTypeIdentifier]['column'])) {
                 $fieldMapArray[$fieldTypeIdentifier]['column'] = $this->fieldConverterRegistry->getConverter($fieldTypeIdentifier)->getIndexColumn();
             }
+
+            $fieldType = $this->fieldTypeService->getFieldType($fieldTypeIdentifier);
+            $fieldMapArray[$fieldTypeIdentifier]['empty_value'] = $fieldType->getEmptyValue();
         }
 
         if (empty($fieldMapArray)) {
@@ -121,23 +103,15 @@ class Field extends FieldBase
      * accept() must be called before calling this method.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If no searchable fields are found for the given criterion target.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
         Criterion $criterion,
         array $languageSettings
-    ) {
+    ): string {
         $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
         $subSelect = $query->subSelect();
@@ -154,12 +128,13 @@ class Field extends FieldBase
                 continue;
             }
 
-            $filter = $this->fieldValueConverter->convertCriteria(
-                $fieldTypeIdentifier,
-                $subSelect,
-                $criterion,
-                $fieldsInfo['column']
+            $filterPlaceholder = $subSelect->bindValue(
+                $fieldsInfo['empty_value'],
+                ':fieldTypeIdentifier'
             );
+            $filter = $criterion->value[0]
+                ? $subSelect->expr->eq($fieldsInfo['column'], $filterPlaceholder)
+                : $subSelect->expr->neq($fieldsInfo['column'], $filterPlaceholder);
 
             $whereExpressions[] = $subSelect->expr->lAnd(
                 $subSelect->expr->in(

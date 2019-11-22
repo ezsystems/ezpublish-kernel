@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence;
 
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\FieldType as FieldTypeInterface;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 
@@ -16,7 +17,7 @@ use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
  *
  * @see \eZ\Publish\SPI\FieldType\FieldType
  */
-class FieldType implements FieldTypeInterface
+class FieldType implements FieldTypeInterface, FieldTypeInterface\IsEmptyValue
 {
     /**
      * Holds internal FieldType object.
@@ -44,6 +45,13 @@ class FieldType implements FieldTypeInterface
     {
         return $this->internalFieldType->toPersistenceValue(
             $this->internalFieldType->getEmptyValue()
+        );
+    }
+
+    public function isEmptyValue(FieldValue $fieldValue): bool
+    {
+        return $this->internalFieldType->isEmptyValue(
+            $this->internalFieldType->fromPersistenceValue($fieldValue)
         );
     }
 }

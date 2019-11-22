@@ -7,6 +7,7 @@ parameters:
     ezpublish.search.legacy.gateway.criterion_handler.common.content_type_identifier.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier
     ezpublish.search.legacy.gateway.criterion_handler.common.date_metadata.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\DateMetadata
     ezpublish.search.legacy.gateway.criterion_handler.common.field.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\Field
+    ezpublish.search.legacy.gateway.criterion_handler.common.field_empty.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldEmpty
     ezpublish.search.legacy.gateway.criterion_handler.common.full_text.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FullText
     ezpublish.search.legacy.gateway.criterion_handler.common.language_code.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\LanguageCode
     ezpublish.search.legacy.gateway.criterion_handler.common.logical_and.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\LogicalAnd
@@ -131,6 +132,18 @@ services:
             - "@ezpublish.persistence.legacy.field_value_converter.registry"
             - "@ezpublish.search.legacy.gateway.criterion_field_value_converter"
             - "@ezpublish.api.storage_engine.transformation_processor"
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.field_empty:
+        class: "%ezpublish.search.legacy.gateway.criterion_handler.common.field_empty.class%"
+        arguments:
+            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "@ezpublish.spi.persistence.language_handler"
+            - "@ezpublish.persistence.legacy.field_value_converter.registry"
+            - "@ezpublish.api.service.field_type"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
