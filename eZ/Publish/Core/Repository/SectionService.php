@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\SectionService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use Exception;
@@ -86,7 +86,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section The newly created section
      */
-    public function createSection(SectionCreateStruct $sectionCreateStruct)
+    public function createSection(SectionCreateStruct $sectionCreateStruct): Section
     {
         if (!is_string($sectionCreateStruct->name) || empty($sectionCreateStruct->name)) {
             throw new InvalidArgumentValue('name', $sectionCreateStruct->name, 'SectionCreateStruct');
@@ -135,7 +135,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection(Section $section, SectionUpdateStruct $sectionUpdateStruct)
+    public function updateSection(Section $section, SectionUpdateStruct $sectionUpdateStruct): Section
     {
         if ($sectionUpdateStruct->name !== null && !is_string($sectionUpdateStruct->name)) {
             throw new InvalidArgumentValue('name', $section->name, 'Section');
@@ -186,11 +186,11 @@ class SectionService implements SectionServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
-     * @param mixed $sectionId
+     * @param int $sectionId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSection($sectionId)
+    public function loadSection(int $sectionId): Section
     {
         $section = $this->buildDomainSectionObject(
             $this->sectionHandler->load($sectionId)
@@ -208,7 +208,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section[]
      */
-    public function loadSections()
+    public function loadSections(): iterable
     {
         $sections = array_map(function ($spiSection) {
             return $this->buildDomainSectionObject($spiSection);
@@ -229,9 +229,9 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSectionByIdentifier($sectionIdentifier)
+    public function loadSectionByIdentifier(string $sectionIdentifier): Section
     {
-        if (!is_string($sectionIdentifier) || empty($sectionIdentifier)) {
+        if (empty($sectionIdentifier)) {
             throw new InvalidArgumentValue('sectionIdentifier', $sectionIdentifier);
         }
 
@@ -255,7 +255,7 @@ class SectionService implements SectionServiceInterface
      *
      * @deprecated since 6.0
      */
-    public function countAssignedContents(Section $section)
+    public function countAssignedContents(Section $section): int
     {
         return $this->sectionHandler->assignmentsCount($section->id);
     }
@@ -271,7 +271,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return bool
      */
-    public function isSectionUsed(Section $section)
+    public function isSectionUsed(Section $section): bool
     {
         return $this->sectionHandler->assignmentsCount($section->id) > 0 ||
                $this->sectionHandler->policiesCount($section->id) > 0 ||
@@ -287,7 +287,7 @@ class SectionService implements SectionServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function assignSection(ContentInfo $contentInfo, Section $section)
+    public function assignSection(ContentInfo $contentInfo, Section $section): void
     {
         $loadedContentInfo = $this->repository->getContentService()->loadContentInfo($contentInfo->id);
         $loadedSection = $this->loadSection($section->id);
@@ -390,7 +390,7 @@ class SectionService implements SectionServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function deleteSection(Section $section)
+    public function deleteSection(Section $section): void
     {
         $loadedSection = $this->loadSection($section->id);
 
@@ -421,7 +421,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
-    public function newSectionCreateStruct()
+    public function newSectionCreateStruct(): SectionCreateStruct
     {
         return new SectionCreateStruct();
     }
@@ -431,7 +431,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
-    public function newSectionUpdateStruct()
+    public function newSectionUpdateStruct(): SectionUpdateStruct
     {
         return new SectionUpdateStruct();
     }

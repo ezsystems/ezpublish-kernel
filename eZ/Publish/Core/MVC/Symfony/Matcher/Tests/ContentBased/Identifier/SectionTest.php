@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the SectionTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Identifier;
 
 use eZ\Publish\API\Repository\SectionService;
@@ -77,15 +77,17 @@ class SectionTest extends BaseTest
     {
         $this->matcher->setRepository($repository);
         $this->matcher->setMatchingConfig($matchingConfig);
+
         $location = $this->getLocationMock();
         $location
             ->expects($this->once())
             ->method('getContentInfo')
             ->will(
                 $this->returnValue(
-                    $this->getContentInfoMock()
+                    $this->getContentInfoMock(['sectionId' => 1])
                 )
             );
+
         $this->assertSame(
             $expectedResult,
             $this->matcher->matchLocation($location)
@@ -134,7 +136,7 @@ class SectionTest extends BaseTest
         $this->matcher->setMatchingConfig($matchingConfig);
         $this->assertSame(
             $expectedResult,
-            $this->matcher->matchContentInfo($this->getContentInfoMock())
+            $this->matcher->matchContentInfo($this->getContentInfoMock(['sectionId' => 1]))
         );
     }
 }

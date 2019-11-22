@@ -25,7 +25,7 @@ abstract class SectionServiceDecorator implements SectionService
         $this->innerService = $innerService;
     }
 
-    public function createSection(SectionCreateStruct $sectionCreateStruct)
+    public function createSection(SectionCreateStruct $sectionCreateStruct): Section
     {
         return $this->innerService->createSection($sectionCreateStruct);
     }
@@ -33,31 +33,31 @@ abstract class SectionServiceDecorator implements SectionService
     public function updateSection(
         Section $section,
         SectionUpdateStruct $sectionUpdateStruct
-    ) {
+    ): Section {
         return $this->innerService->updateSection($section, $sectionUpdateStruct);
     }
 
-    public function loadSection($sectionId)
+    public function loadSection(int $sectionId): Section
     {
         return $this->innerService->loadSection($sectionId);
     }
 
-    public function loadSections()
+    public function loadSections(): iterable
     {
         return $this->innerService->loadSections();
     }
 
-    public function loadSectionByIdentifier($sectionIdentifier)
+    public function loadSectionByIdentifier(string $sectionIdentifier): Section
     {
         return $this->innerService->loadSectionByIdentifier($sectionIdentifier);
     }
 
-    public function countAssignedContents(Section $section)
+    public function countAssignedContents(Section $section): int
     {
         return $this->innerService->countAssignedContents($section);
     }
 
-    public function isSectionUsed(Section $section)
+    public function isSectionUsed(Section $section): bool
     {
         return $this->innerService->isSectionUsed($section);
     }
@@ -65,8 +65,8 @@ abstract class SectionServiceDecorator implements SectionService
     public function assignSection(
         ContentInfo $contentInfo,
         Section $section
-    ) {
-        return $this->innerService->assignSection($contentInfo, $section);
+    ): void {
+        $this->innerService->assignSection($contentInfo, $section);
     }
 
     public function assignSectionToSubtree(
@@ -76,17 +76,17 @@ abstract class SectionServiceDecorator implements SectionService
         $this->innerService->assignSectionToSubtree($location, $section);
     }
 
-    public function deleteSection(Section $section)
+    public function deleteSection(Section $section): void
     {
-        return $this->innerService->deleteSection($section);
+        $this->innerService->deleteSection($section);
     }
 
-    public function newSectionCreateStruct()
+    public function newSectionCreateStruct(): SectionCreateStruct
     {
         return $this->innerService->newSectionCreateStruct();
     }
 
-    public function newSectionUpdateStruct()
+    public function newSectionUpdateStruct(): SectionUpdateStruct
     {
         return $this->innerService->newSectionUpdateStruct();
     }

@@ -20,6 +20,8 @@ use eZ\Publish\SPI\Repository\Decorator\SectionServiceDecorator;
 
 class SectionServiceDecoratorTest extends TestCase
 {
+    private const EXAMPLE_SECTION_ID = 1;
+
     protected function createDecorator(MockObject $service): SectionService
     {
         return new class($service) extends SectionServiceDecorator {
@@ -63,7 +65,7 @@ class SectionServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce10cd25.80094030'];
+        $parameters = [self::EXAMPLE_SECTION_ID];
 
         $serviceMock->expects($this->once())->method('loadSection')->with(...$parameters);
 
