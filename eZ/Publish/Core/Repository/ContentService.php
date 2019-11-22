@@ -1670,15 +1670,12 @@ class ContentService implements ContentServiceInterface
         $updateStruct->initialLanguageCode = $versionInfo->initialLanguageCode;
 
         $contentToPublish = $this->internalLoadContent($contendId, null, $versionInfo->versionNo);
+        $fallback = [];
+
         foreach ($currentContent->getFields() as $field) {
             $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
 
-            $newValue = $contentToPublish->getFieldValue(
-                $fieldDefinition->identifier,
-                $field->languageCode
-            );
-
-            if ($newValue == $field->value) {
+            if (!$fieldDefinition->isTranslatable || !\in_array($field->languageCode, $languagesToCopy)) {
                 continue;
             }
 
@@ -1686,21 +1683,41 @@ class ContentService implements ContentServiceInterface
                 $fieldDefinition->fieldTypeIdentifier
             );
 
-            if ($fieldDefinition->isRequired && $fieldType->isEmptyValue($field->value)) {
+            $newValue = $contentToPublish->getFieldValue(
+                $fieldDefinition->identifier,
+                $field->languageCode
+            );
+
+            $value = $field->value;
+            if ($fieldDefinition->isRequired && $fieldType->isEmptyValue($value)) {
                 if (!$fieldType->isEmptyValue($fieldDefinition->defaultValue)) {
-                    $updateStruct->setField($field->fieldDefIdentifier, $fieldDefinition->defaultValue, $field->languageCode);
+                    $value = $fieldDefinition->defaultValue;
+                } else {
+                    $value = $contentToPublish->getFieldValue($field->fieldDefIdentifier, $versionInfo->initialLanguageCode);
                 }
+                $fallback[] = [
+                    'fieldDefIdentifier' => $field->fieldDefIdentifier,
+                    'value' => $value,
+                    'languageCode' => $field->languageCode,
+                ];
                 continue;
             }
 
-            if ($fieldDefinition->isTranslatable && \in_array($field->languageCode, $languagesToCopy)) {
-                $updateStruct->setField($field->fieldDefIdentifier, $field->value, $field->languageCode);
+            if ($newValue == $field->value) {
+                continue;
             }
+
+            $updateStruct->setField($field->fieldDefIdentifier, $value, $field->languageCode);
         }
 
         // Nothing to copy, skip update
         if (empty($updateStruct->fields)) {
             return;
+        }
+
+        // Do fallback only if content needs to be updated
+        foreach ($fallback as $fallbackStruct) {
+            $updateStruct->setField($fallbackStruct['fieldDefIdentifier'], $fallbackStruct['value'], $fallbackStruct['languageCode']);
         }
 
         $this->updateContent($versionInfo, $updateStruct);
