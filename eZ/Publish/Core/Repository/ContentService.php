@@ -1670,7 +1670,7 @@ class ContentService implements ContentServiceInterface
         $updateStruct->initialLanguageCode = $versionInfo->initialLanguageCode;
 
         $contentToPublish = $this->internalLoadContent($contendId, null, $versionInfo->versionNo);
-        $fallback = [];
+        $fallbackUpdateStruct = $this->newContentUpdateStruct();
 
         foreach ($currentContent->getFields() as $field) {
             $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
@@ -1695,11 +1695,11 @@ class ContentService implements ContentServiceInterface
                 } else {
                     $value = $contentToPublish->getFieldValue($field->fieldDefIdentifier, $versionInfo->initialLanguageCode);
                 }
-                $fallback[] = [
-                    'fieldDefIdentifier' => $field->fieldDefIdentifier,
-                    'value' => $value,
-                    'languageCode' => $field->languageCode,
-                ];
+                $fallbackUpdateStruct->setField(
+                    $field->fieldDefIdentifier,
+                    $value,
+                    $field->languageCode
+                );
                 continue;
             }
 
@@ -1716,8 +1716,8 @@ class ContentService implements ContentServiceInterface
         }
 
         // Do fallback only if content needs to be updated
-        foreach ($fallback as $fallbackStruct) {
-            $updateStruct->setField($fallbackStruct['fieldDefIdentifier'], $fallbackStruct['value'], $fallbackStruct['languageCode']);
+        foreach ($fallbackUpdateStruct->fields as $fallbackField) {
+            $updateStruct->setField($fallbackField->fieldDefIdentifier, $fallbackField->value, $fallbackField->languageCode);
         }
 
         $this->updateContent($versionInfo, $updateStruct);
