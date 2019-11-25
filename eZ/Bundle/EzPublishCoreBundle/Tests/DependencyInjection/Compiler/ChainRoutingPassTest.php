@@ -71,6 +71,9 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
     {
         $defaultRouter = new Definition();
         $this->setDefinition('router.default', $defaultRouter);
+        $this->setDefinition('ezpublish.siteaccess', new Definition());
+        $this->setDefinition('ezpublish.config.resolver', new Definition());
+        $this->setDefinition('ezpublish.siteaccess_router', new Definition());
 
         $resolverDef = new Definition();
         $serviceId = 'some_service_id';

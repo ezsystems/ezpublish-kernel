@@ -26,6 +26,7 @@ class GenericFieldTypeConverterPassTest extends AbstractCompilerPassTestCase
         parent::setUp();
 
         $this->setDefinition(FieldValueConverterRegistryPass::CONVERTER_REGISTRY_SERVICE_ID, new Definition());
+        $this->setDefinition(GenericFieldTypeConverterPass::GENERIC_CONVERTER_SERVICE_ID, new Definition());
     }
 
     protected function registerCompilerPass(ContainerBuilder $container): void
