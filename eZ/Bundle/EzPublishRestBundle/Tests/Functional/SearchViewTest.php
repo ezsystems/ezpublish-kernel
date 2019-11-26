@@ -57,6 +57,7 @@ class SearchViewTest extends RESTFunctionalTestCase
      */
     public function testSimpleXmlContentQuery(string $xmlQueryBody, int $expectedCount): void
     {
+        $format = 'xml';
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ViewInput>
@@ -71,18 +72,8 @@ class SearchViewTest extends RESTFunctionalTestCase
 </ContentQuery>
 </ViewInput>
 XML;
-        $request = $this->createHttpRequest(
-            'POST',
-            '/api/ezp/v2/views',
-            'ViewInput+xml; version=1.1',
-            'View+json',
-            $body
-        );
-        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals($response, 200);
-        $jsonResponse = json_decode($response->getBody()->getContents());
-        self::assertEquals($expectedCount, $jsonResponse->View->Result->count);
+        self::assertEquals($expectedCount, $this->getQueryResultsCount($format, $body));
     }
 
     /**
@@ -94,7 +85,8 @@ XML;
      */
     public function testSimpleJsonContentQuery(string $jsonQueryBody, int $expectedCount): void
     {
-        $body =<<< JSON
+        $format = 'json';
+        $body = <<< JSON
 {
     "ViewInput": {
         "identifier": "your-query-id",
@@ -109,18 +101,8 @@ XML;
     }
 }
 JSON;
-        $request = $this->createHttpRequest(
-            'POST',
-            '/api/ezp/v2/views',
-            'ViewInput+json; version=1.1',
-            'View+json',
-            $body
-        );
-        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals($response, 200);
-        $jsonResponse = json_decode($response->getBody()->getContents());
-        self::assertEquals($expectedCount, $jsonResponse->View->Result->count);
+        self::assertEquals($expectedCount, $this->getQueryResultsCount($format, $body));
     }
 
     /**
@@ -338,7 +320,7 @@ JSON,
     ]
 }
 JSON,
-            2
+            2,
             ],
             [
                 <<< JSON
@@ -352,7 +334,7 @@ JSON,
     "ContentRemoteIdCriterion": "test-name"
 }
 JSON,
-                1
+                1,
             ],
         ];
     }
@@ -462,5 +444,33 @@ XML;
         self::assertHttpResponseHasHeader($response, 'Location');
 
         return $response->getHeader('Location')[0];
+    }
+
+    /**
+     * Perform search View Query providing payload ($body) in a given $format.
+     *
+     * @param string $format xml or json
+     *
+     * @throws \Psr\Http\Client\ClientException
+     */
+    private function getQueryResultsCount(string $format, string $body): int
+    {
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/views',
+            "ViewInput+{$format}; version=1.1",
+            'View+json',
+            $body
+        );
+        $response = $this->sendHttpRequest($request);
+
+        self::assertHttpResponseCodeEquals($response, 200);
+        $jsonResponse = json_decode($response->getBody()->getContents());
+
+        if (isset($jsonResponse->ErrorMessage)) {
+            self::fail(var_export($jsonResponse));
+        }
+
+        return $jsonResponse->View->Result->count;
     }
 }
