@@ -9,6 +9,7 @@
     "require": {
         "php": "^7.1",
         "ext-ctype": "*",
+        "ext-dom": "*",
         "ext-fileinfo": "*",
         "ext-intl": "*",
         "ext-json": "*",
