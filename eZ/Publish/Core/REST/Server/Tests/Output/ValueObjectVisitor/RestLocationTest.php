@@ -36,6 +36,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
                     'priority' => 0,
                     'hidden' => false,
                     'invisible' => true,
+                    'explicitlyHidden' => true,
                     'remoteId' => 'remote-id',
                     'parentLocationId' => 21,
                     'pathString' => '/1/2/21/42/',
@@ -266,6 +267,25 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
             $result,
             'Invalid or non-existing <Location> invisible value element.',
             false
+        );
+    }
+
+    /**
+     * Test if result contains explicitlyHidden value element.
+     *
+     * @param string $result
+     *
+     * @depends testVisit
+     */
+    public function testResultContainsExplicitlyHiddenValueElement($result)
+    {
+        $this->assertXMLTag(
+            [
+                'tag' => 'explicitlyHidden',
+                'content' => 'true',
+            ],
+            $result,
+            'Invalid or non-existing <Location> explicitlyHidden value element.'
         );
     }
 

@@ -61,6 +61,12 @@ class RestLocation extends ValueObjectVisitor
         );
         $generator->endValueElement('invisible');
 
+        $generator->startValueElement(
+            'explicitlyHidden',
+            $this->serializeBool($generator, $location->explicitlyHidden)
+        );
+        $generator->endValueElement('explicitlyHidden');
+
         $generator->startObjectElement('ParentLocation', 'Location');
         if (trim($location->pathString, '/') !== '1') {
             $generator->startAttribute(
