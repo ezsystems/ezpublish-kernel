@@ -40,6 +40,10 @@ class ViewTest extends TestCase
         $response = $this->sendHttpRequest($request);
         $responseData = json_decode($response->getContent(), true);
 
+        if (isset($responseData['ErrorMessage'])) {
+            self::fail(var_export($responseData, true));
+        }
+
         self::assertEquals($expectedResultsCount, $responseData['View']['Result']['count']);
     }
 
@@ -126,6 +130,35 @@ JSON,
 XML,
                 'xml',
                 1,
+                [$foo, $bar],
+            ],
+            [
+                <<< JSON
+{
+  "ViewInput": {
+    "identifier": "TitleView",
+    "public": true,
+    "Query": {
+      "Filter": {
+        "OR": [
+          {
+            "ContentRemoteIdCriterion": "{$foo->remoteId}"
+          },
+          {
+            "ContentRemoteIdCriterion": "{$bar->remoteId}"
+          }
+        ]
+      },
+      "FacetBuilders": {},
+      "SortClauses": {},
+      "limit": 1000,
+      "offset": 0
+    }
+  }
+}
+JSON,
+                'json',
+                2,
                 [$foo, $bar],
             ],
         ];
