@@ -49,13 +49,13 @@ class SearchViewTest extends RESTFunctionalTestCase
     }
 
     /**
-     * Covers POST with ContentQuery Logic on /api/ezp/v2/views.
+     * Covers POST with ContentQuery Logic on /api/ezp/v2/views using payload in the XML format.
      *
      * @dataProvider xmlProvider
      *
      * @throws \Psr\Http\Client\ClientException
      */
-    public function testSimpleContentQuery(string $xmlQueryBody, int $expectedCount): void
+    public function testSimpleXmlContentQuery(string $xmlQueryBody, int $expectedCount): void
     {
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -75,7 +75,45 @@ XML;
             'POST',
             '/api/ezp/v2/views',
             'ViewInput+xml; version=1.1',
-            'ContentInfo+json',
+            'View+json',
+            $body
+        );
+        $response = $this->sendHttpRequest($request);
+
+        self::assertHttpResponseCodeEquals($response, 200);
+        $jsonResponse = json_decode($response->getBody()->getContents());
+        self::assertEquals($expectedCount, $jsonResponse->View->Result->count);
+    }
+
+    /**
+     * Covers POST with LocationQuery Logic on /api/ezp/v2/views using payload in the JSON format.
+     *
+     * @dataProvider jsonProvider
+     *
+     * @throws \Psr\Http\Client\ClientException
+     */
+    public function testSimpleJsonContentQuery(string $jsonQueryBody, int $expectedCount): void
+    {
+        $body =<<< JSON
+{
+    "ViewInput": {
+        "identifier": "your-query-id",
+        "public": "false",
+        "LocationQuery": {
+            "Filter": {
+                $jsonQueryBody
+            },
+            "limit": "10",
+            "offset": "0"
+        }
+    }
+}
+JSON;
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/views',
+            'ViewInput+json; version=1.1',
+            'View+json',
             $body
         );
         $response = $this->sendHttpRequest($request);
@@ -271,6 +309,50 @@ XML;
             [
                 $this->getXmlString($fooAndBarInTag),
                 2,
+            ],
+        ];
+    }
+
+    public function jsonProvider(): array
+    {
+        return [
+            [
+                <<< JSON
+"OR": [
+    {
+        "ContentRemoteIdCriterion": "test-name"
+    },
+    {
+        "ContentRemoteIdCriterion": "fancy-name"
+    }
+]
+JSON,
+                2,
+            ],
+            [
+                <<< JSON
+"OR": {
+    "ContentRemoteIdCriterion": [
+        "test-name",
+        "fancy-name"
+    ]
+}
+JSON,
+            2
+            ],
+            [
+                <<< JSON
+"AND": {
+    "OR": {
+        "ContentRemoteIdCriterion": [
+            "test-name",
+            "fancy-name"
+        ]
+    },
+    "ContentRemoteIdCriterion": "test-name"
+}
+JSON,
+                1
             ],
         ];
     }
