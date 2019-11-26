@@ -50,7 +50,7 @@ class SiteAccessMatchListenerTest extends TestCase
 
     public function testOnKernelRequestSerializedSA()
     {
-        $siteAccess = new SiteAccess();
+        $siteAccess = new SiteAccess('test');
         $request = new Request();
         $request->attributes->set('serialized_siteaccess', serialize($siteAccess));
         $event = new RequestEvent(
@@ -76,7 +76,7 @@ class SiteAccessMatchListenerTest extends TestCase
 
     public function testOnKernelRequestSiteAccessPresent()
     {
-        $siteAccess = new SiteAccess();
+        $siteAccess = new SiteAccess('test');
         $request = new Request();
         $request->attributes->set('siteaccess', $siteAccess);
         $event = new RequestEvent(
@@ -101,7 +101,7 @@ class SiteAccessMatchListenerTest extends TestCase
 
     public function testOnKernelRequest()
     {
-        $siteAccess = new SiteAccess();
+        $siteAccess = new SiteAccess('test');
         $scheme = 'https';
         $host = 'phoenix-rises.fm';
         $port = 1234;
@@ -143,7 +143,7 @@ class SiteAccessMatchListenerTest extends TestCase
 
     public function testOnKernelRequestUserHashWithOriginalRequest()
     {
-        $siteAccess = new SiteAccess();
+        $siteAccess = new SiteAccess('test');
         $scheme = 'https';
         $host = 'phoenix-rises.fm';
         $port = 1234;

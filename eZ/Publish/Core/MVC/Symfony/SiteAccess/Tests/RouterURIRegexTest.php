@@ -9,60 +9,14 @@
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex\URI as RegexMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 use Psr\Log\LoggerInterface;
 
-class RouterURIRegexTest extends TestCase
+class RouterURIRegexTest extends RouterBaseTest
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder */
-    private $matcherBuilder;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->matcherBuilder = new MatcherBuilder();
-    }
-
-    public function testConstruct()
-    {
-        return new Router(
-            $this->matcherBuilder,
-            $this->createMock(LoggerInterface::class),
-            'default_sa',
-            [
-                'Regex\\URI' => [
-                    'regex' => '^/foo(\\w+)bar',
-                ],
-                'Map\\URI' => [
-                    'first_sa' => 'first_sa',
-                    'second_sa' => 'second_sa',
-                ],
-                'Map\\Host' => [
-                    'first_sa' => 'first_sa',
-                    'first_siteaccess' => 'first_sa',
-                ],
-            ],
-            ['first_sa', 'second_sa', 'foowoobar', 'test']
-        );
-    }
-
-    /**
-     * @depends testConstruct
-     * @dataProvider matchProvider
-     */
-    public function testMatch($request, $siteAccess, $router)
-    {
-        $sa = $router->match($request);
-        $this->assertInstanceOf(SiteAccess::class, $sa);
-        $this->assertSame($siteAccess, $sa->name);
-        $router->setSiteAccess();
-    }
-
-    public function matchProvider()
+    public function matchProvider(): array
     {
         return [
             [SimplifiedRequest::fromUrl('http://example.com'), 'default_sa'],
@@ -142,5 +96,43 @@ class RouterURIRegexTest extends TestCase
         $serializedSA2 = serialize($sa);
 
         $this->assertSame($serializedSA1, $serializedSA2);
+    }
+
+    protected function createRouter(): Router
+    {
+        return new Router(
+            $this->matcherBuilder,
+            $this->createMock(LoggerInterface::class),
+            'default_sa',
+            [
+                'Regex\\URI' => [
+                    'regex' => '^/foo(\\w+)bar',
+                ],
+                'Map\\URI' => [
+                    'first_sa' => 'first_sa',
+                    'second_sa' => 'second_sa',
+                ],
+                'Map\\Host' => [
+                    'first_sa' => 'first_sa',
+                    'first_siteaccess' => 'first_sa',
+                ],
+            ],
+            $this->siteAccessProvider
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\SiteAccessSetting[]
+     */
+    public function getSiteAccessProviderSettings(): array
+    {
+        return [
+            new SiteAccessSetting('first_sa', true),
+            new SiteAccessSetting('second_sa', true),
+            new SiteAccessSetting('third_sa', true),
+            new SiteAccessSetting('fourth_sa', true),
+            new SiteAccessSetting('fifth_sa', true),
+            new SiteAccessSetting('test', true),
+        ];
     }
 }

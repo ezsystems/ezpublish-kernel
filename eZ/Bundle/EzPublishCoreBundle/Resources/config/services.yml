@@ -67,7 +67,7 @@ services:
         class: "%ezpublish.console_event_listener.class%"
         arguments:
             - "%ezpublish.siteaccess.default%"
-            - "%ezpublish.siteaccess.list%"
+            - '@ezpublish.siteaccess.provider'
             - "@event_dispatcher"
             - "%kernel.debug%"
         calls:

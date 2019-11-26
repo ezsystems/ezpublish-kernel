@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\RouterURIElementTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -10,60 +8,14 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement;
-use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement as URIElementMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 use Psr\Log\LoggerInterface;
 
-class RouterURIElementTest extends TestCase
+class RouterURIElementTest extends RouterBaseTest
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder */
-    private $matcherBuilder;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->matcherBuilder = new MatcherBuilder();
-    }
-
-    public function testConstruct()
-    {
-        return new Router(
-            $this->matcherBuilder,
-            $this->createMock(LoggerInterface::class),
-            'default_sa',
-            [
-                'URIElement' => [
-                    'value' => 1,
-                ],
-                'Map\\URI' => [
-                    'first_sa' => 'first_sa',
-                    'second_sa' => 'second_sa',
-                ],
-                'Map\\Host' => [
-                    'first_sa' => 'first_sa',
-                    'first_siteaccess' => 'first_sa',
-                ],
-            ],
-            ['first_sa', 'second_sa', 'first_siteaccess', 'first_salt', 'first_sa.foo', 'test', 'foo']
-        );
-    }
-
-    /**
-     * @depends testConstruct
-     * @dataProvider matchProvider
-     */
-    public function testMatch(SimplifiedRequest $request, $siteAccess, Router $router)
-    {
-        $sa = $router->match($request);
-        $this->assertInstanceOf(SiteAccess::class, $sa);
-        $this->assertSame($siteAccess, $sa->name);
-        $router->setSiteAccess();
-    }
-
-    public function matchProvider()
+    public function matchProvider(): array
     {
         return [
             [SimplifiedRequest::fromUrl('http://example.com'), 'default_sa'],
@@ -194,5 +146,45 @@ class RouterURIElementTest extends TestCase
         $serializedSA2 = serialize($sa);
 
         $this->assertSame($serializedSA1, $serializedSA2);
+    }
+
+    protected function createRouter(): Router
+    {
+        return new Router(
+            $this->matcherBuilder,
+            $this->createMock(LoggerInterface::class),
+            'default_sa',
+            [
+                'URIElement' => [
+                    'value' => 1,
+                ],
+                'Map\\URI' => [
+                    'first_sa' => 'first_sa',
+                    'second_sa' => 'second_sa',
+                ],
+                'Map\\Host' => [
+                    'first_sa' => 'first_sa',
+                    'first_siteaccess' => 'first_sa',
+                ],
+            ],
+            $this->siteAccessProvider
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\SiteAccessSetting[]
+     */
+    public function getSiteAccessProviderSettings(): array
+    {
+        return [
+            new SiteAccessSetting('first_sa', true),
+            new SiteAccessSetting('second_sa', true),
+            new SiteAccessSetting('first_siteaccess', true),
+            new SiteAccessSetting('first_salt', true),
+            new SiteAccessSetting('first_sa.foo', true),
+            new SiteAccessSetting('test', true),
+            new SiteAccessSetting('foo', true),
+            new SiteAccessSetting('default_sa', true),
+        ];
     }
 }

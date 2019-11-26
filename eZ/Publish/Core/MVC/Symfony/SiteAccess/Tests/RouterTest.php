@@ -1,35 +1,23 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\RouterTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
+use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class RouterTest extends TestCase
+class RouterTest extends RouterBaseTest
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder */
-    private $matcherBuilder;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->matcherBuilder = new MatcherBuilder();
-    }
-
     protected function tearDown(): void
     {
         putenv('EZPUBLISH_SITEACCESS');
@@ -38,119 +26,65 @@ class RouterTest extends TestCase
 
     public function testConstructDebug()
     {
-        return $this->testConstruct(true);
-    }
-
-    public function testConstruct($debug = false)
-    {
-        return new Router(
-            $this->matcherBuilder,
-            $this->createMock(LoggerInterface::class),
-            'default_sa',
-            [
-                'Map\\URI' => [
-                    'first_sa' => 'first_sa',
-                    'second_sa' => 'second_sa',
-                ],
-                'Map\\Host' => [
-                    'first_sa' => 'first_sa',
-                    'first_siteaccess' => 'first_sa',
-                    'third_siteaccess' => 'third_sa',
-                ],
-                'Map\\Port' => [
-                    81 => 'third_sa',
-                    82 => 'fourth_sa',
-                    83 => 'first_sa',
-                    85 => 'first_sa',
-                ],
-                'Compound\\LogicalAnd' => [
-                    [
-                        'matchers' => [
-                            'Map\\URI' => ['eng' => true],
-                            'Map\\Host' => ['fr.ezpublish.dev' => true],
-                        ],
-                        'match' => 'fr_eng',
-                    ],
-                    [
-                        'matchers' => [
-                            'Map\\URI' => ['fre' => true],
-                            'Map\\Host' => ['us.ezpublish.dev' => true],
-                        ],
-                        'match' => 'fr_us',
-                    ],
-                ],
-            ],
-            ['first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'headerbased_sa', 'fr_eng', 'fr_us'],
-            null,
-            $debug
-        );
+        return $this->createRouter(true);
     }
 
     /**
-     * @depends testConstruct
      * @dataProvider matchProvider
      */
-    public function testMatch(SimplifiedRequest $request, $siteAccess, Router $router)
+    public function testMatch(SimplifiedRequest $request, $siteAccess)
     {
+        $router = $this->createRouter();
         $sa = $router->match($request);
         $this->assertInstanceOf(SiteAccess::class, $sa);
         $this->assertSame($siteAccess, $sa->name);
-        // SiteAccess must be serializable as a whole
-        // See https://jira.ez.no/browse/EZP-21613
+        // SiteAccess must be serializable as a whole. See https://jira.ez.no/browse/EZP-21613
         $this->assertIsString(serialize($sa));
         $router->setSiteAccess();
     }
 
-    /**
-     * @depends testConstructDebug
-     */
-    public function testMatchWithDevEnvFail(Router $router)
+    public function testMatchWithDevEnvFail()
     {
-        $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);
-        $this->expectExceptionMessageRegExp('/^Invalid siteaccess \'foobar_sa\', matched by .+\\. Valid siteaccesses are/');
+        $router = $this->createRouter(true);
+        putenv('EZPUBLISH_SITEACCESS=' . self::UNDEFINED_SA_NAME);
 
-        $saName = 'foobar_sa';
-        putenv("EZPUBLISH_SITEACCESS=$saName");
+        $this->expectException(InvalidSiteAccessException::class);
+        $this->expectExceptionMessageRegExp(
+            '/^Invalid SiteAccess \'' . self::UNDEFINED_SA_NAME . '\', matched by .+\\. Valid SiteAccesses are/'
+        );
+
         $router->match(new SimplifiedRequest());
     }
 
-    /**
-     * @depends testConstruct
-     */
-    public function testMatchWithProdEnvFail(Router $router)
+    public function testMatchWithProdEnvFail()
     {
-        $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);
-        $this->expectExceptionMessageRegExp('/^Invalid siteaccess \'foobar_sa\', matched by .+\\.$/');
+        $router = $this->createRouter();
+        putenv('EZPUBLISH_SITEACCESS=' . self::UNDEFINED_SA_NAME);
 
-        $saName = 'foobar_sa';
-        putenv("EZPUBLISH_SITEACCESS=$saName");
+        $this->expectException(InvalidSiteAccessException::class);
+        $this->expectExceptionMessageRegExp(
+            '/^Invalid SiteAccess \'' . self::UNDEFINED_SA_NAME . '\', matched by .+\\.$/'
+        );
+
         $router->match(new SimplifiedRequest());
     }
 
-    /**
-     * @depends testConstruct
-     */
-    public function testMatchWithEnv(Router $router)
+    public function testMatchWithEnv()
     {
-        $saName = 'first_sa';
-        putenv("EZPUBLISH_SITEACCESS=$saName");
+        $router = $this->createRouter();
+        putenv('EZPUBLISH_SITEACCESS=' . self::ENV_SA_NAME);
         $sa = $router->match(new SimplifiedRequest());
         $this->assertInstanceOf(SiteAccess::class, $sa);
-        $this->assertSame($saName, $sa->name);
+        $this->assertSame(self::ENV_SA_NAME, $sa->name);
         $this->assertSame('env', $sa->matchingType);
         $router->setSiteAccess();
     }
 
-    /**
-     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router $router
-     *
-     * @depends testConstruct
-     */
-    public function testMatchWithRequestHeader(Router $router)
+    public function testMatchWithRequestHeader(): void
     {
-        $saName = 'headerbased_sa';
+        $router = $this->createRouter();
         $request = Request::create('/foo/bar');
-        $request->headers->set('X-Siteaccess', $saName);
+        $request->headers->set('X-Siteaccess', self::HEADERBASED_SA_NAME);
         $sa = $router->match(
             new SimplifiedRequest(
                 [
@@ -159,12 +93,12 @@ class RouterTest extends TestCase
             )
         );
         $this->assertInstanceOf(SiteAccess::class, $sa);
-        $this->assertSame($saName, $sa->name);
+        $this->assertSame(self::HEADERBASED_SA_NAME, $sa->name);
         $this->assertSame('header', $sa->matchingType);
         $router->setSiteAccess();
     }
 
-    public function matchProvider()
+    public function matchProvider(): array
     {
         return [
             [SimplifiedRequest::fromUrl('http://example.com'), 'default_sa'],
@@ -234,7 +168,12 @@ class RouterTest extends TestCase
 
         $matcherBuilder = $this->createMock(MatcherBuilderInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
-        $router = new Router($matcherBuilder, $logger, 'default_sa', [], ['foo', 'default_sa']);
+        $siteAccessProvider = $this->createMock(SiteAccess\SiteAccessProviderInterface::class);
+        $siteAccessProvider
+            ->method('isDefined')
+            ->with('bar')
+            ->willReturn(false);
+        $router = new Router($matcherBuilder, $logger, 'default_sa', [], $siteAccessProvider);
         $router->matchByName('bar');
     }
 
@@ -251,8 +190,14 @@ class RouterTest extends TestCase
             'Map\URI' => ['default' => 'default_sa'],
             $matcherClass => $matcherConfig,
         ];
-
-        $router = new Router($matcherBuilder, $logger, 'default_sa', $config, [$matchedSiteAccess, 'default_sa']);
+        $siteAccessProvider = $this->createMock(SiteAccess\SiteAccessProviderInterface::class);
+        $siteAccessProvider
+            ->method('isDefined')
+            ->willReturnMap([
+                [$matchedSiteAccess, true],
+                ['default_sa', true],
+            ]);
+        $router = new Router($matcherBuilder, $logger, 'default_sa', $config, $siteAccessProvider);
         $matcherInitialSA = $this->createMock(SiteAccess\URILexer::class);
         $router->setSiteAccess(new SiteAccess('test', 'test', $matcherInitialSA));
         $matcherInitialSA
@@ -293,8 +238,14 @@ class RouterTest extends TestCase
             'phoenix-rises.fm' => 'foo',
         ];
         $config = [$matcherClass => $matcherConfig];
-
-        $router = new Router($matcherBuilder, $logger, $defaultSiteAccess, $config, [$defaultSiteAccess, 'foo']);
+        $siteAccessProvider = $this->createMock(SiteAccess\SiteAccessProviderInterface::class);
+        $siteAccessProvider
+            ->method('isDefined')
+            ->willReturnMap([
+                [$defaultSiteAccess, true],
+                ['foo', true],
+            ]);
+        $router = new Router($matcherBuilder, $logger, $defaultSiteAccess, $config, $siteAccessProvider);
         $router->setSiteAccess(new SiteAccess('test', 'test'));
         $request = $router->getRequest();
         $matcherBuilder
@@ -307,5 +258,68 @@ class RouterTest extends TestCase
             ->expects($this->once())
             ->method('notice');
         $this->assertEquals(new SiteAccess($defaultSiteAccess, 'default'), $router->matchByName($defaultSiteAccess));
+    }
+
+    protected function createRouter($debug = false): Router
+    {
+        return new Router(
+            $this->matcherBuilder,
+            $this->createMock(LoggerInterface::class),
+            'default_sa',
+            [
+                'Map\\URI' => [
+                    'first_sa' => 'first_sa',
+                    'second_sa' => 'second_sa',
+                ],
+                'Map\\Host' => [
+                    'first_sa' => 'first_sa',
+                    'first_siteaccess' => 'first_sa',
+                    'third_siteaccess' => 'third_sa',
+                ],
+                'Map\\Port' => [
+                    81 => 'third_sa',
+                    82 => 'fourth_sa',
+                    83 => 'first_sa',
+                    85 => 'first_sa',
+                ],
+                'Compound\\LogicalAnd' => [
+                    [
+                        'matchers' => [
+                            'Map\\URI' => ['eng' => true],
+                            'Map\\Host' => ['fr.ezpublish.dev' => true],
+                        ],
+                        'match' => 'fr_eng',
+                    ],
+                    [
+                        'matchers' => [
+                            'Map\\URI' => ['fre' => true],
+                            'Map\\Host' => ['us.ezpublish.dev' => true],
+                        ],
+                        'match' => 'fr_us',
+                    ],
+                ],
+            ],
+            $this->siteAccessProvider,
+            null,
+            $debug
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\SiteAccessSetting[]
+     */
+    public function getSiteAccessProviderSettings(): array
+    {
+        return [
+            new SiteAccessSetting('first_sa', true),
+            new SiteAccessSetting('second_sa', true),
+            new SiteAccessSetting('third_sa', true),
+            new SiteAccessSetting('fourth_sa', true),
+            new SiteAccessSetting('fr_eng', true),
+            new SiteAccessSetting('fr_us', true),
+            new SiteAccessSetting(self::HEADERBASED_SA_NAME, true),
+            new SiteAccessSetting(self::ENV_SA_NAME, true),
+            new SiteAccessSetting(self::UNDEFINED_SA_NAME, false),
+        ];
     }
 }

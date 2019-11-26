@@ -23,7 +23,7 @@ class HttpUtilsTest extends TestCase
     {
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $httpUtils = new HttpUtils($urlGenerator);
-        $httpUtils->setSiteAccess(new SiteAccess());
+        $httpUtils->setSiteAccess(new SiteAccess('test'));
         $request = Request::create('http://ezpublish.dev/');
         $request->attributes->set('siteaccess', new SiteAccess('test'));
         $requestAttributes = ['foo' => 'bar', 'some' => 'thing'];
@@ -101,7 +101,7 @@ class HttpUtilsTest extends TestCase
     public function testCheckRequestPathStandard()
     {
         $httpUtils = new HttpUtils();
-        $httpUtils->setSiteAccess(new SiteAccess());
+        $httpUtils->setSiteAccess(new SiteAccess('test'));
         $request = Request::create('http://ezpublish.dev/foo/bar');
         $this->assertTrue($httpUtils->checkRequestPath($request, '/foo/bar'));
     }

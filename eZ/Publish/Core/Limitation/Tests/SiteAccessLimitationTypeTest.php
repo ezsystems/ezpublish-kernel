@@ -231,7 +231,7 @@ class SiteAccessLimitationTypeTest extends Base
             // invalid limitation
             [
                 'limitation' => new ObjectStateLimitation(),
-                'object' => new SiteAccess(),
+                'object' => new SiteAccess('test'),
             ],
             // invalid object
             [

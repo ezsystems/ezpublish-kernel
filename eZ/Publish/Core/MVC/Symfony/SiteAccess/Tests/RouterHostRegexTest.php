@@ -1,68 +1,19 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\RouterHostRegexTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
-use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex\Host as HostRegexMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 use Psr\Log\LoggerInterface;
 
-class RouterHostRegexTest extends TestCase
+class RouterHostRegexTest extends RouterBaseTest
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder */
-    private $matcherBuilder;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->matcherBuilder = new MatcherBuilder();
-    }
-
-    public function testConstruct()
-    {
-        return new Router(
-            $this->matcherBuilder,
-            $this->createMock(LoggerInterface::class),
-            'default_sa',
-            [
-                'Regex\\Host' => [
-                    'regex' => '^(\\w+_sa)$',
-                ],
-                'Map\\URI' => [
-                    'first_sa' => 'first_sa',
-                    'second_sa' => 'second_sa',
-                ],
-                'Map\\Host' => [
-                    'first_sa' => 'first_sa',
-                    'first_siteaccess' => 'first_sa',
-                ],
-            ],
-            ['first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'fifth_sa']
-        );
-    }
-
-    /**
-     * @depends testConstruct
-     * @dataProvider matchProvider
-     */
-    public function testMatch($request, $siteAccess, $router)
-    {
-        $sa = $router->match($request);
-        $this->assertInstanceOf(SiteAccess::class, $sa);
-        $this->assertSame($siteAccess, $sa->name);
-        $router->setSiteAccess();
-    }
-
-    public function matchProvider()
+    public function matchProvider(): array
     {
         return [
             [SimplifiedRequest::fromUrl('http://example.com'), 'default_sa'],
@@ -124,5 +75,46 @@ class RouterHostRegexTest extends TestCase
     {
         $matcher = new HostRegexMatcher(['host' => 'foo'], []);
         $this->assertSame('host:regexp', $matcher->getName());
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
+     */
+    protected function createRouter(): Router
+    {
+        return new Router(
+            $this->matcherBuilder,
+            $this->createMock(LoggerInterface::class),
+            'default_sa',
+            [
+                'Regex\\Host' => [
+                    'regex' => '^(\\w+_sa)$',
+                ],
+                'Map\\URI' => [
+                    'first_sa' => 'first_sa',
+                    'second_sa' => 'second_sa',
+                ],
+                'Map\\Host' => [
+                    'first_sa' => 'first_sa',
+                    'first_siteaccess' => 'first_sa',
+                ],
+            ],
+            $this->siteAccessProvider
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\SiteAccessSetting[]
+     */
+    public function getSiteAccessProviderSettings(): array
+    {
+        return [
+            new SiteAccessSetting('first_sa', true),
+            new SiteAccessSetting('second_sa', true),
+            new SiteAccessSetting('third_sa', true),
+            new SiteAccessSetting('fourth_sa', true),
+            new SiteAccessSetting('fifth_sa', true),
+            new SiteAccessSetting('example', true),
+        ];
     }
 }

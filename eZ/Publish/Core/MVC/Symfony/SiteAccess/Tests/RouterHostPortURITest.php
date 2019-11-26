@@ -10,66 +10,13 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
 use Psr\Log\LoggerInterface;
 
-class RouterHostPortURITest extends TestCase
+class RouterHostPortURITest extends RouterBaseTest
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder */
-    private $matcherBuilder;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->matcherBuilder = new MatcherBuilder();
-    }
-
-    public function testConstruct()
-    {
-        return new Router(
-            $this->matcherBuilder,
-            $this->createMock(LoggerInterface::class),
-            'default_sa',
-            [
-                'Map\\Host' => [
-                    'first_sa' => 'first_sa',
-                    'first_siteaccess' => 'first_sa',
-                    'third_siteaccess' => 'third_sa',
-                ],
-                'Map\\Port' => [
-                    80 => 'fifth_sa',
-                    81 => 'third_sa',
-                    82 => 'fourth_sa',
-                    83 => 'first_sa',
-                    85 => 'first_sa',
-                    443 => 'fourth_sa',
-                ],
-                'Map\\URI' => [
-                    'first_sa' => 'first_sa',
-                    'second_sa' => 'second_sa',
-                ],
-            ],
-            ['first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'fifth_sa']
-        );
-    }
-
-    /**
-     * @depends testConstruct
-     * @dataProvider matchProvider
-     */
-    public function testMatch(SimplifiedRequest $request, $siteAccess, Router $router)
-    {
-        $sa = $router->match($request);
-        $this->assertInstanceOf(SiteAccess::class, $sa);
-        $this->assertSame($siteAccess, $sa->name);
-        $router->setSiteAccess();
-    }
-
-    public function matchProvider()
+    public function matchProvider(): array
     {
         return [
             [SimplifiedRequest::fromUrl('http://example.com'), 'fifth_sa'],
@@ -208,5 +155,48 @@ class RouterHostPortURITest extends TestCase
         $this->assertSame(8000, $result->getMapKey());
         $this->assertSame(8000, $result->getRequest()->port);
         $this->assertSame('http', $result->getRequest()->scheme);
+    }
+
+    protected function createRouter(): Router
+    {
+        return new Router(
+            $this->matcherBuilder,
+            $this->createMock(LoggerInterface::class),
+            'default_sa',
+            [
+                'Map\\Host' => [
+                    'first_sa' => 'first_sa',
+                    'first_siteaccess' => 'first_sa',
+                    'third_siteaccess' => 'third_sa',
+                ],
+                'Map\\Port' => [
+                    80 => 'fifth_sa',
+                    81 => 'third_sa',
+                    82 => 'fourth_sa',
+                    83 => 'first_sa',
+                    85 => 'first_sa',
+                    443 => 'fourth_sa',
+                ],
+                'Map\\URI' => [
+                    'first_sa' => 'first_sa',
+                    'second_sa' => 'second_sa',
+                ],
+            ],
+            $this->siteAccessProvider
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\SiteAccessSetting[]
+     */
+    public function getSiteAccessProviderSettings(): array
+    {
+        return [
+            new SiteAccessSetting('first_sa', true),
+            new SiteAccessSetting('second_sa', true),
+            new SiteAccessSetting('third_sa', true),
+            new SiteAccessSetting('fourth_sa', true),
+            new SiteAccessSetting('fifth_sa', true),
+        ];
     }
 }

@@ -184,7 +184,7 @@ class SecurityListenerTest extends TestCase
             ->will($this->returnValue($user));
 
         $request = new Request();
-        $siteAccess = new SiteAccess();
+        $siteAccess = new SiteAccess('test');
         $request->attributes->set('siteaccess', $siteAccess);
 
         $this->authChecker
@@ -206,7 +206,7 @@ class SecurityListenerTest extends TestCase
             ->will($this->returnValue($user));
 
         $request = new Request();
-        $siteAccess = new SiteAccess();
+        $siteAccess = new SiteAccess('test');
         $request->attributes->set('siteaccess', $siteAccess);
 
         $this->authChecker
@@ -229,7 +229,7 @@ class SecurityListenerTest extends TestCase
             ->will($this->returnValue($user));
 
         $request = new Request();
-        $siteAccess = new SiteAccess();
+        $siteAccess = new SiteAccess('test');
         $request->attributes->set('siteaccess', $siteAccess);
 
         $this->authChecker
@@ -315,7 +315,7 @@ class SecurityListenerTest extends TestCase
     public function testOnKernelRequestNullToken()
     {
         $request = new Request();
-        $request->attributes->set('siteaccess', new SiteAccess());
+        $request->attributes->set('siteaccess', new SiteAccess('test'));
         $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
@@ -336,7 +336,7 @@ class SecurityListenerTest extends TestCase
     public function testOnKernelRequestLoginRoute()
     {
         $request = new Request();
-        $request->attributes->set('siteaccess', new SiteAccess());
+        $request->attributes->set('siteaccess', new SiteAccess('test'));
         $request->attributes->set('_route', 'login');
         $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
@@ -360,7 +360,7 @@ class SecurityListenerTest extends TestCase
         $this->expectException(UnauthorizedSiteAccessException::class);
 
         $request = new Request();
-        $request->attributes->set('siteaccess', new SiteAccess());
+        $request->attributes->set('siteaccess', new SiteAccess('test'));
         $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
@@ -388,7 +388,7 @@ class SecurityListenerTest extends TestCase
     public function testOnKernelRequestAccessGranted()
     {
         $request = new Request();
-        $request->attributes->set('siteaccess', new SiteAccess());
+        $request->attributes->set('siteaccess', new SiteAccess('test'));
         $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
