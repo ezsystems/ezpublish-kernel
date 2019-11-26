@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Search\Common\Slot;
 
-use eZ\Publish\Core\Search\Common\Slot;
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionToSubtreeSignal;
 
