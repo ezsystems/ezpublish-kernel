@@ -1703,7 +1703,9 @@ class ContentService implements ContentServiceInterface
                 continue;
             }
 
-            if ($fieldType->toHash($newValue) === $fieldType->toHash($field->value)) {
+            if ($newValue !== null
+                && $field->value !== null
+                && $fieldType->toHash($newValue) === $fieldType->toHash($field->value)) {
                 continue;
             }
 
