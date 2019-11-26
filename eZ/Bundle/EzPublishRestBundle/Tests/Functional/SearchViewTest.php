@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the Functional\SearchViewTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use DOMDocument;
@@ -24,7 +24,10 @@ class SearchViewTest extends RESTFunctionalTestCase
     /** @var string */
     private $nonSearchableContentHref;
 
-    protected function setUp()
+    /**
+     * @throws \Psr\Http\Client\ClientException
+     */
+    protected function setUp(): void
     {
         parent::setUp();
         $this->contentTypeHref = $this->createTestContentType();
@@ -34,7 +37,10 @@ class SearchViewTest extends RESTFunctionalTestCase
         $this->contentHrefList[] = $this->createTestContentWithTags('even-fancier', ['bar', 'bazfoo']);
     }
 
-    protected function tearDown()
+    /**
+     * @throws \Psr\Http\Client\ClientException
+     */
+    protected function tearDown(): void
     {
         parent::tearDown();
         array_map([$this, 'deleteContent'], $this->contentHrefList);
@@ -43,13 +49,13 @@ class SearchViewTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @dataProvider xmlProvider
      * Covers POST with ContentQuery Logic on /api/ezp/v2/views.
      *
-     * @param string $xmlQueryBody
-     * @param int $expectedCount
+     * @dataProvider xmlProvider
+     *
+     * @throws \Psr\Http\Client\ClientException
      */
-    public function testSimpleContentQuery(string $xmlQueryBody, int $expectedCount)
+    public function testSimpleContentQuery(string $xmlQueryBody, int $expectedCount): void
     {
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -75,10 +81,13 @@ XML;
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
-        $jsonResponse = json_decode($response->getBody());
+        $jsonResponse = json_decode($response->getBody()->getContents());
         self::assertEquals($expectedCount, $jsonResponse->View->Result->count);
     }
 
+    /**
+     * @throws \Psr\Http\Client\ClientException
+     */
     private function createTestContentType(): string
     {
         $body = <<< XML
@@ -148,6 +157,11 @@ XML;
         return $response->getHeader('Location')[0];
     }
 
+    /**
+     * @param string[] $tags
+     *
+     * @throws \Psr\Http\Client\ClientException
+     */
     private function createTestContentWithTags(string $name, array $tags): string
     {
         $tagsString = implode(',', $tags);
@@ -200,14 +214,17 @@ XML;
         return $href;
     }
 
-    private function deleteContent($href)
+    /**
+     * @throws \Psr\Http\Client\ClientException
+     */
+    private function deleteContent(string $href): void
     {
         $this->sendHttpRequest(
             $this->createHttpRequest('DELETE', $href)
         );
     }
 
-    public function xmlProvider()
+    public function xmlProvider(): array
     {
         $fooTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'foo');
         $barTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'bar');
@@ -278,7 +295,7 @@ XML;
                 $valueWrapper->appendChild(new DOMElement('value', $value[0]));
                 $element->appendChild($valueWrapper);
             } else {
-                foreach ($value as $key => $singleValue) {
+                foreach ($value as $singleValue) {
                     $element->appendChild(new DOMElement('value', $singleValue));
                 }
             }
@@ -294,7 +311,7 @@ XML;
         $xml = new DOMDocument();
         $wrapper = $xml->createElement($logicalOperator);
 
-        foreach ($toWrap as $key => $field) {
+        foreach ($toWrap as $field) {
             $innerWrapper = $xml->createElement($logicalOperator);
             $innerWrapper->appendChild($xml->importNode($field, true));
             $wrapper->appendChild($innerWrapper);
@@ -311,6 +328,8 @@ XML;
     /**
      * This is just to assure that field with same name but without legacy search engine implementation
      * does not block search in different content type.
+     *
+     * @throws \Psr\Http\Client\ClientException
      */
     private function createContentWithUrlField(): string
     {
