@@ -38,7 +38,16 @@ class LogicalOperator extends Criterion
     protected function getFlattenedCriteriaData(array $criteriaByType)
     {
         if ($this->isZeroBasedArray($criteriaByType)) {
+            $oldFormat = $criteriaByType;
             $criteriaByType = $this->normalizeCriteriaByType($criteriaByType);
+            @trigger_error(
+                sprintf(
+                    'REST View: Passing criteria as a list of objects to a logical operator is deprecated and will cause Bad Request error in eZ Platform 3.0. Instead of "%s" provide "%s"',
+                    json_encode($oldFormat),
+                    json_encode($criteriaByType)
+                ),
+                E_USER_DEPRECATED
+            );
         }
 
         $criteria = [];
