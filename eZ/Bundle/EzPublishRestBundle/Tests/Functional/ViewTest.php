@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the Functional\ViewTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use stdClass;
@@ -20,13 +20,15 @@ class ViewTest extends TestCase
      *
      * @dataProvider providerForTestViewRequest
      *
-     * @param string $body
-     * @param string $format
-     * @param int $expectedResultsCount
      * @param \stdClass[] $contentDataList list of items containing name and remoteId properties
+     * @throws \Psr\Http\Client\ClientException
      */
-    public function testViewRequest($body, $format, $expectedResultsCount, array $contentDataList)
-    {
+    public function testViewRequest(
+        string $body,
+        string $format,
+        int $expectedResultsCount,
+        array $contentDataList
+    ): void {
         $this->createTestContentItems($contentDataList);
 
         // search for Content
@@ -34,11 +36,11 @@ class ViewTest extends TestCase
             'POST',
             '/api/ezp/v2/views',
             "ViewInput+{$format}",
-            'View+json'
+            'View+json',
+            $body
         );
-        $request->setContent($body);
         $response = $this->sendHttpRequest($request);
-        $responseData = json_decode($response->getContent(), true);
+        $responseData = json_decode($response->getBody()->getContents(), true);
 
         if (isset($responseData['ErrorMessage'])) {
             self::fail(var_export($responseData, true));
@@ -52,7 +54,7 @@ class ViewTest extends TestCase
      *
      * @return array
      */
-    public function providerForTestViewRequest()
+    public function providerForTestViewRequest(): array
     {
         $foo = new stdClass();
         $foo->name = uniqid('View test content foo');
@@ -211,7 +213,7 @@ JSON,
     /**
      * @param \stdClass[] $contentDataList
      */
-    private function createTestContentItems(array $contentDataList)
+    private function createTestContentItems(array $contentDataList): void
     {
         foreach ($contentDataList as $contentData) {
             // skip creating already created items
