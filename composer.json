@@ -18,7 +18,7 @@
         "ext-xsl": "*",
         "ext-curl": "*",
         "zetacomponents/mail": "^1.8.3",
-        "symfony/symfony": "^2.8.51 | ^3.4.26",
+        "symfony/symfony": "^2.8.52 | ^3.4.34",
         "symfony-cmf/routing": "~1.4 | ^2.0",
         "qafoo/rmf": "1.0.*",
         "kriswallsmith/buzz": "~0.16.1",

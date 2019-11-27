@@ -8,6 +8,7 @@ export BRANCH_BUILD_DIR=$TRAVIS_BUILD_DIR TRAVIS_BUILD_DIR="$HOME/build/ezplatfo
 
 # Checkout meta repo, use the branch indicated in composer.json under extra._ezplatform_branch_for_behat_tests
 EZPLATFORM_BRANCH=`php -r 'echo json_decode(file_get_contents("./composer.json"))->extra->_ezplatform_branch_for_behat_tests;'`
+BRANCH_ALIAS=`php -r "echo json_decode(file_get_contents('./composer.json'))->extra->{'branch-alias'}->{'dev-tmp_ci_branch'};"`
 
 cd "$HOME/build"
 
@@ -24,4 +25,4 @@ cd ezplatform
 #fi
 
 # Install everything needed for behat testing, using our local branch of this repo
-./bin/.travis/trusty/setup_from_external_repo.sh $BRANCH_BUILD_DIR "ezsystems/ezpublish-kernel:dev-tmp_ci_branch"
+./bin/.travis/trusty/setup_from_external_repo.sh $BRANCH_BUILD_DIR "ezsystems/ezpublish-kernel:dev-tmp_ci_branch as ${BRANCH_ALIAS}"
