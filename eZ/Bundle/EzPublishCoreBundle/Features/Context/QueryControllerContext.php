@@ -239,22 +239,9 @@ class QueryControllerContext extends RawMinkContext implements Context
      */
     public function theQueryResultsAreAssignedToTheTwigVariable($twigVariableName)
     {
-        $variableFound = false;
+        $variableTypes = $this->getVariableTypesFromTemplate();
 
-        $page = $this->getSession()->getPage();
-        $variableNodes = $page->findAll('css', 'pre.sf-dump > samp > span.sf-dump-key');
-
-        /** @var NodeElement $variableNode */
-        foreach ($variableNodes as $variableNode) {
-            if ($variableNode->getText() === $twigVariableName) {
-                $variableFound = true;
-            }
-        }
-
-        Assert::assertTrue(
-            $variableFound,
-            "The $twigVariableName twig variable was not set"
-        );
+        Assert::assertArrayHasKey($twigVariableName, $variableTypes, "The $twigVariableName twig variable was not set");
     }
 
     /**
@@ -262,36 +249,10 @@ class QueryControllerContext extends RawMinkContext implements Context
      */
     public function theQueryResultsAssignedToTheTwigVariableIsAObject($twigVariableName, $className)
     {
-        $variableFound = false;
-        $classNameFound = false;
+        $variableTypes = $this->getVariableTypesFromTemplate();
 
-        $page = $this->getSession()->getPage();
-        $variableNodes = $page->findAll('css', 'pre.sf-dump > samp > span.sf-dump-key');
-        $valueNodes = $page->findAll('css', 'pre.sf-dump > samp > abbr.sf-dump-note');
-
-        /** @var NodeElement $variableNode */
-        foreach ($variableNodes as $variableNode) {
-            if ($variableNode->getText() === $twigVariableName) {
-                $variableFound = true;
-            }
-        }
-
-        /** @var NodeElement $valueNodes */
-        foreach ($valueNodes as $valueNode) {
-            if ($valueNode->getText() === $className) {
-                $classNameFound = true;
-            }
-        }
-
-        Assert::assertTrue(
-            $variableFound,
-            "The $twigVariableName twig variable was not set"
-        );
-
-        Assert::assertTrue(
-            $classNameFound,
-            "The $className twig variable object was not set"
-        );
+        Assert::assertArrayHasKey($twigVariableName, $variableTypes, "The $twigVariableName twig variable was not set");
+        Assert::assertEquals($className, $variableTypes[$twigVariableName], "The $twigVariableName twig variable does not have $className type");
     }
 
     /**
@@ -410,5 +371,26 @@ class QueryControllerContext extends RawMinkContext implements Context
             $currentPageFound,
             "The currentPage $pageValue twig variable  was not set"
         );
+    }
+
+    /**
+     * Returns an associative array with Twig variables as keys and their types as values.
+     *
+     * @return array
+     */
+    private function getVariableTypesFromTemplate(): array
+    {
+        $variableRows = $this->getSession()->getPage()->findAll('css', '.dump .item');
+
+        $items = [];
+
+        foreach ($variableRows as $row) {
+            $variable = $row->find('css', '.variable')->getText();
+            $type = $row->find('css', '.type')->getText();
+
+            $items[$variable] = $type;
+        }
+
+        return $items;
     }
 }
