@@ -92,7 +92,7 @@ Scenario: A content view can be configured to run and render a query and return 
       }
       """
     When I view a content matched by the view configuration above
-    Then the Query results assigned to the "children" twig variable is a "Pagerfanta" object
+    Then the Query results assigned to the "children" twig variable is a "Pagerfanta\Pagerfanta" object
 
 Scenario: A content view can be configured to run and render a query return a PagerFanta Object and set limit and page name
     Given a content item that matches the view configuration block below
