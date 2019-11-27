@@ -12,7 +12,7 @@ use stdClass;
 
 class ViewTest extends TestCase
 {
-    /** @var array */
+    /** @var string[] */
     private static $createdContentRemoteIds = [];
 
     /**
