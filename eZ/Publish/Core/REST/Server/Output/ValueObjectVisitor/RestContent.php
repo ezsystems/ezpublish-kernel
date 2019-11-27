@@ -40,7 +40,7 @@ class RestContent extends ValueObjectVisitor
     {
         $restContent = $data;
         $contentInfo = $restContent->contentInfo;
-        $contentName = $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo);
+        $translatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo);
         $contentType = $restContent->contentType;
         $mainLocation = $restContent->mainLocation;
         $currentVersion = $restContent->currentVersion;
@@ -79,7 +79,7 @@ class RestContent extends ValueObjectVisitor
         $generator->startValueElement('Name', $contentInfo->name);
         $generator->endValueElement('Name');
 
-        $generator->startValueElement('TranslatedName', $contentName);
+        $generator->startValueElement('TranslatedName', $translatedContentName);
         $generator->endValueElement('TranslatedName');
 
         $generator->startObjectElement('Versions', 'VersionList');
