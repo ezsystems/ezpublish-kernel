@@ -31,7 +31,7 @@ env:
     # In order to specify extra flags like ignoring platform reqs, using only stable packages and so on-
     - COMPOSER_FLAGS=""
     # By default test with Symfony 2.8, some test are done against 3.4 for forward compat testing.
-    - SYMFONY_VERSION="~2.8.51"
+    - SYMFONY_VERSION="~2.8.52"
 
 matrix:
   fast_finish: true
@@ -42,7 +42,7 @@ matrix:
     - php: 5.6
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
     - php: 5.6
-      env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1
+      env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1 COMPOSER_MEMORY_LIMIT=-1
 # 7.0
     - php: 7.0
       env: REST_TEST_CONFIG="phpunit-functional-rest.xml" RUN_INSTALL=1 SYMFONY_ENV=dev SYMFONY_DEBUG=1
@@ -55,7 +55,7 @@ matrix:
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb" CUSTOM_CACHE_POOL="singleredis" REDIS_ENABLE_LZF="true" REDIS_ENABLE_IGBINARY="true" SYMFONY_VERSION="~3.4.26"
 # 7.2
     - php: 7.2
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~3.4.26"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~3.4.34"
 # 7.3
     - php: 7.3
       env: TEST_CONFIG="phpunit.xml"
