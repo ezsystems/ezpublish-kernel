@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\REST\Common\Input\Parser as InputParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Server\Input\Parser;
 use eZ\Publish\Core\REST\Server\Tests\Input\Parser\BaseTest;
@@ -17,6 +19,8 @@ class LogicalAndTest extends BaseTest
 {
     /**
      * Logical parsing of AND statement.
+     *
+     * @dataProvider getPayloads
      *
      * Notice regarding multiple criteria of same type:
      *
@@ -36,35 +40,57 @@ class LogicalAndTest extends BaseTest
      *   </Field>
      * </AND>
      * ```
+     * @param $expectedNumberOfCriteria
+     * @param array $payload
      */
-    public function testParseLogicalAnd()
+    public function testParseLogicalAnd($payload, $expectedNumberOfCriteria)
     {
-        $logicalAndParsedFromXml = [
-            'AND' => [
-                'ContentTypeIdentifierCriterion' => [
-                    0 => 'author',
-                    1 => 'book',
-                ],
-                'Field' => [
-                    'name' => 'title',
-                    'operator' => 'EQ',
-                    'value' => 'Contributing to projects',
-                ],
-            ],
-        ];
+        $criterionMock = $this->createMock(Criterion::class);
 
-        $criterionMock = $this->getMock(Content\Query\Criterion::class, [], [], '', false);
-
-        $parserMock = $this->getMock(\eZ\Publish\Core\REST\Common\Input\Parser::class);
+        $parserMock = $this->createMock(InputParser::class);
         $parserMock->method('parse')->willReturn($criterionMock);
 
-        $result = $this->internalGetParser()->parse($logicalAndParsedFromXml, new ParsingDispatcher([
-            'application/vnd.ez.api.internal.criterion.ContentTypeIdentifier' => $parserMock,
-            'application/vnd.ez.api.internal.criterion.Field' => $parserMock,
-        ]));
+        $result = $this->internalGetParser()->parse(
+            $payload,
+            new ParsingDispatcher(
+                [
+                    'application/vnd.ez.api.internal.criterion.ContentTypeIdentifier' => $parserMock,
+                    'application/vnd.ez.api.internal.criterion.Field' => $parserMock,
+                ]
+            )
+        );
 
         self::assertInstanceOf(Content\Query\Criterion\LogicalAnd::class, $result);
-        self::assertCount(3, (array)$result->criteria);
+        self::assertCount($expectedNumberOfCriteria, (array)$result->criteria);
+    }
+
+    /**
+     * Data provider for testParseLogicalAnd.
+     *
+     * @see testParseLogicalAnd
+     *
+     * @return array
+     */
+    public function getPayloads()
+    {
+        return [
+            'Simple AND Criterion' => [
+                [
+                    'AND' => [
+                        'ContentTypeIdentifierCriterion' => [
+                            0 => 'author',
+                            1 => 'book',
+                        ],
+                        'Field' => [
+                            'name' => 'title',
+                            'operator' => 'EQ',
+                            'value' => 'Contributing to projects',
+                        ],
+                    ],
+                ],
+                3,
+            ],
+        ];
     }
 
     /**
