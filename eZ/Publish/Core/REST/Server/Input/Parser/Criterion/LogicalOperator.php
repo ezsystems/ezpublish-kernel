@@ -114,10 +114,7 @@ class LogicalOperator extends Criterion
                     $criteriaByType[$criterionType] = [];
                 }
 
-                $criteriaByType[$criterionType] = array_merge(
-                    $criteriaByType[$criterionType],
-                    !is_array($value) ? [$value] : $value
-                );
+                $criteriaByType[$criterionType][] = $value;
             }
         }
 
