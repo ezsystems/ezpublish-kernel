@@ -120,7 +120,7 @@ abstract class BaseTest extends ParentBaseTest
     /**
      * Must return the tested parser object.
      *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\Base
+     * @return \eZ\Publish\Core\REST\Common\Input\Parser
      */
     abstract protected function internalGetParser();
 }
