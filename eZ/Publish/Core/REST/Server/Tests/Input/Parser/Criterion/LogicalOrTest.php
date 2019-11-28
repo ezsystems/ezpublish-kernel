@@ -18,6 +18,8 @@ class LogicalOrTest extends BaseTest
     /**
      * Test parsing of OR statement.
      *
+     * @dataProvider getPayloads
+     *
      * Notice regarding multiple criteria of same type:
      *
      * The XML decoder of EZ is not creating numeric arrays, instead using the tag as the array key. See
@@ -41,42 +43,54 @@ class LogicalOrTest extends BaseTest
      *   </Field>
      * </OR>
      * ```
+     *
+     * @param array $payload
+     * @param int $expectedNumberOfCriteria
      */
-    public function testParseLogicalOr()
+    public function testParseLogicalOr($payload, $expectedNumberOfCriteria)
     {
-        $logicalOrParsedFromXml = [
-            'OR' => [
-                'ContentTypeIdentifierCriterion' => [
-                    0 => 'author',
-                    1 => 'book',
-                ],
-                'Field' => [
-                    0 => [
-                        'name' => 'title',
-                        'operator' => 'EQ',
-                        'value' => 'Contributing to projects',
-                    ],
-                    1 => [
-                        'name' => 'title',
-                        'operator' => 'EQ',
-                        'value' => 'Contributing to projects',
-                    ],
-                ],
-            ],
-        ];
+        $criterionMock = $this->createMock(Content\Query\Criterion::class);
 
-        $criterionMock = $this->getMock(Content\Query\Criterion::class, [], [], '', false);
-
-        $parserMock = $this->getMock(\eZ\Publish\Core\REST\Common\Input\Parser::class);
+        $parserMock = $this->createMock(\eZ\Publish\Core\REST\Common\Input\Parser::class);
         $parserMock->method('parse')->willReturn($criterionMock);
 
-        $result = $this->internalGetParser()->parse($logicalOrParsedFromXml, new ParsingDispatcher([
+        $result = $this->internalGetParser()->parse($payload, new ParsingDispatcher([
             'application/vnd.ez.api.internal.criterion.ContentTypeIdentifier' => $parserMock,
             'application/vnd.ez.api.internal.criterion.Field' => $parserMock,
+            'application/vnd.ez.api.internal.criterion.ContentRemoteIdCriterion' => $parserMock,
         ]));
 
         self::assertInstanceOf(Content\Query\Criterion\LogicalOr::class, $result);
-        self::assertCount(4, (array)$result->criteria);
+        self::assertCount($expectedNumberOfCriteria, (array)$result->criteria);
+    }
+
+    public function getPayloads()
+    {
+        return [
+            'Simple OR with Field and ContentTypeIdentifierCriterion' => [
+                [
+                    'OR' => [
+                        'ContentTypeIdentifierCriterion' => [
+                            0 => 'author',
+                            1 => 'book',
+                        ],
+                        'Field' => [
+                            0 => [
+                                'name' => 'title',
+                                'operator' => 'EQ',
+                                'value' => 'Contributing to projects',
+                            ],
+                            1 => [
+                                'name' => 'title',
+                                'operator' => 'EQ',
+                                'value' => 'Contributing to projects',
+                            ],
+                        ],
+                    ],
+                ],
+                4,
+            ],
+        ];
     }
 
     /**
