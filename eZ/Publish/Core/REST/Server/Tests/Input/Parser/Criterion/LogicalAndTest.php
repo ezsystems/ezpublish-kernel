@@ -56,6 +56,8 @@ class LogicalAndTest extends BaseTest
                 [
                     'application/vnd.ez.api.internal.criterion.ContentTypeIdentifier' => $parserMock,
                     'application/vnd.ez.api.internal.criterion.Field' => $parserMock,
+                    // to test parsing nested combined logical criteria
+                    'application/vnd.ez.api.internal.criterion.LogicalOr' => new Parser\Criterion\LogicalOr(),
                 ]
             )
         );
@@ -89,6 +91,54 @@ class LogicalAndTest extends BaseTest
                     ],
                 ],
                 3,
+            ],
+            'Combined AND with nested OR Criterion' => [
+                [
+                    'AND' => [
+                        [
+                            'OR' => [
+                                'ContentTypeIdentifierCriterion' => [
+                                    'article',
+                                    'folder',
+                                ],
+                            ],
+                        ],
+                        [
+                            'OR' => [
+                                'ContentTypeIdentifierCriterion' => [
+                                    'forum',
+                                    'board',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                2,
+            ],
+            'Combined AND with nested OR Criterion using old format' => [
+                [
+                    'AND' => [
+                        [
+                            'OR' => [
+                                [
+                                    'ContentTypeIdentifierCriterion' => [
+                                        'article',
+                                        'folder',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'OR' => [
+                                'ContentTypeIdentifierCriterion' => [
+                                    'forum',
+                                    'board',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                2,
             ],
         ];
     }

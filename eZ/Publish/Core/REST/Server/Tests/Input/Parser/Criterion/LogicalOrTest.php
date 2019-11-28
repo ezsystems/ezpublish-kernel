@@ -57,7 +57,7 @@ class LogicalOrTest extends BaseTest
         $result = $this->internalGetParser()->parse($payload, new ParsingDispatcher([
             'application/vnd.ez.api.internal.criterion.ContentTypeIdentifier' => $parserMock,
             'application/vnd.ez.api.internal.criterion.Field' => $parserMock,
-            'application/vnd.ez.api.internal.criterion.ContentRemoteIdCriterion' => $parserMock,
+            'application/vnd.ez.api.internal.criterion.ContentRemoteId' => new Parser\Criterion\ContentRemoteId(),
         ]));
 
         self::assertInstanceOf(Content\Query\Criterion\LogicalOr::class, $result);
@@ -89,6 +89,19 @@ class LogicalOrTest extends BaseTest
                     ],
                 ],
                 4,
+            ],
+            'Simple OR with ContentRemoteIdCriterion' => [
+                [
+                    'OR' => [
+                        [
+                            'ContentRemoteIdCriterion' => 'remote_id1',
+                        ],
+                        [
+                            'ContentRemoteIdCriterion' => 'remote_id2',
+                        ],
+                    ],
+                ],
+                2,
             ],
         ];
     }
