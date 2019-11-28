@@ -161,6 +161,50 @@ JSON,
                 2,
                 [$foo, $bar],
             ],
+            [
+                <<< JSON
+{
+  "ViewInput": {
+    "identifier": "udw-locations-by-parent-location-id-1",
+    "public": false,
+    "Query": {
+      "Criteria": {},
+      "FacetBuilders": {},
+      "SortClauses": {},
+      "Filter": {
+        "AND": [
+          {
+            "OR": [
+              {
+                "ContentTypeIdentifierCriterion": "folder"
+              },
+              {
+                "ContentTypeIdentifierCriterion": "article"
+              }
+            ]
+          },
+          {
+            "OR": [
+              {
+                "ContentRemoteIdCriterion": "{$foo->remoteId}"
+              },
+              {
+                "ContentRemoteIdCriterion": "{$bar->remoteId}"
+              }
+            ]
+          }
+        ]
+      },
+      "limit": 50,
+      "offset": 0
+    }
+  }
+}
+JSON,
+                'json',
+                2,
+                [$foo, $bar],
+            ],
         ];
     }
 
