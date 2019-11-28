@@ -254,10 +254,11 @@ class Handler implements BaseContentHandler
      * @param mixed $contentId
      * @param mixed $srcVersion
      * @param mixed $userId
+     * @param string|null $languageCode
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function createDraftFromVersion($contentId, $srcVersion, $userId)
+    public function createDraftFromVersion($contentId, $srcVersion, $userId, ?string $languageCode = null)
     {
         $content = $this->load($contentId, $srcVersion);
 
@@ -265,7 +266,8 @@ class Handler implements BaseContentHandler
         $content->versionInfo = $this->mapper->createVersionInfoForContent(
             $content,
             $this->contentGateway->getLastVersionNumber($contentId) + 1,
-            $userId
+            $userId,
+            $languageCode
         );
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,

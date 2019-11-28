@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Events\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\SPI\Repository\Event\BeforeEvent;
@@ -26,14 +27,22 @@ final class BeforeCreateContentDraftEvent extends BeforeEvent
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $creator;
 
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language|null */
+    private $language;
+
     /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
     private $contentDraft;
 
-    public function __construct(ContentInfo $contentInfo, ?VersionInfo $versionInfo = null, ?User $creator = null)
-    {
+    public function __construct(
+        ContentInfo $contentInfo,
+        ?VersionInfo $versionInfo = null,
+        ?User $creator = null,
+        ?Language $language = null
+    ) {
         $this->contentInfo = $contentInfo;
         $this->versionInfo = $versionInfo;
         $this->creator = $creator;
+        $this->language = $language;
     }
 
     public function getContentInfo(): ContentInfo
@@ -49,6 +58,11 @@ final class BeforeCreateContentDraftEvent extends BeforeEvent
     public function getCreator(): ?User
     {
         return $this->creator;
+    }
+
+    public function getLanguage(): ?Language
+    {
+        return $this->language;
     }
 
     public function getContentDraft(): Content

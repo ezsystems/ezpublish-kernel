@@ -7,6 +7,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
@@ -40,6 +41,7 @@ class ContentServiceTest extends AbstractServiceTest
         $locationCreateStruct = new LocationCreateStruct();
         $user = new User();
         $contentType = new ContentType();
+        $language = new Language();
 
         // string $method, array $arguments, bool $return = true
         return [
@@ -64,6 +66,7 @@ class ContentServiceTest extends AbstractServiceTest
             ['createContentDraft', [$contentInfo]],
             ['createContentDraft', [$contentInfo, $versionInfo]],
             ['createContentDraft', [$contentInfo, $versionInfo, $user]],
+            ['createContentDraft', [$contentInfo, $versionInfo, $user, $language]],
 
             ['countContentDrafts', [], 0],
             ['countContentDrafts', [$user], 0],

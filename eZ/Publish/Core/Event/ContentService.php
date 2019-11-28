@@ -141,12 +141,14 @@ class ContentService extends ContentServiceDecorator
     public function createContentDraft(
         ContentInfo $contentInfo,
         VersionInfo $versionInfo = null,
-        User $creator = null
+        User $creator = null,
+        ?Language $language = null
     ): Content {
         $eventData = [
             $contentInfo,
             $versionInfo,
             $creator,
+            $language,
         ];
 
         $beforeEvent = new BeforeCreateContentDraftEvent(...$eventData);
@@ -158,7 +160,7 @@ class ContentService extends ContentServiceDecorator
 
         $contentDraft = $beforeEvent->hasContentDraft()
             ? $beforeEvent->getContentDraft()
-            : $this->innerService->createContentDraft($contentInfo, $versionInfo, $creator);
+            : $this->innerService->createContentDraft($contentInfo, $versionInfo, $creator, $language);
 
         $this->eventDispatcher->dispatch(
             new CreateContentDraftEvent($contentDraft, ...$eventData)

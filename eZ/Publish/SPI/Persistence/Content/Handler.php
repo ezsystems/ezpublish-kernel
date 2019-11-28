@@ -43,10 +43,11 @@ interface Handler
      * @param mixed $contentId
      * @param mixed $srcVersion
      * @param mixed $userId
+     * @param string|null $languageCode
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function createDraftFromVersion($contentId, $srcVersion, $userId);
+    public function createDraftFromVersion($contentId, $srcVersion, $userId, ?string $languageCode = null);
 
     /**
      * Returns the raw data of a content object identified by $id, in a struct.

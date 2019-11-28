@@ -127,9 +127,10 @@ abstract class ContentServiceDecorator implements ContentService
     public function createContentDraft(
         ContentInfo $contentInfo,
         VersionInfo $versionInfo = null,
-        User $creator = null
+        User $creator = null,
+        ?Language $language = null
     ): Content {
-        return $this->innerService->createContentDraft($contentInfo, $versionInfo, $creator);
+        return $this->innerService->createContentDraft($contentInfo, $versionInfo, $creator, $language);
     }
 
     public function countContentDrafts(User $user = null): int
