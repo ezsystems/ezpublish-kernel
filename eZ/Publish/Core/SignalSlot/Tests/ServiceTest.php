@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -121,15 +122,17 @@ abstract class ServiceTest extends TestCase
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param int $versionNo
+     * @param string|null $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    protected function getVersionInfo(ContentInfo $contentInfo, $versionNo)
+    protected function getVersionInfo(ContentInfo $contentInfo, int $versionNo, ?string $languageCode = null): VersionInfo
     {
         return new VersionInfo(
             [
                 'contentInfo' => $contentInfo,
                 'versionNo' => $versionNo,
+                'initialLanguageCode' => $languageCode,
             ]
         );
     }
@@ -193,6 +196,15 @@ abstract class ServiceTest extends TestCase
                         $groupVersioNo
                     )
                 ),
+            ]
+        );
+    }
+
+    protected function getLanguage(string $languageCode): Language
+    {
+        return new Language(
+            [
+                'languageCode' => $languageCode,
             ]
         );
     }

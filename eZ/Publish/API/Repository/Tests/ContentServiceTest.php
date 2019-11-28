@@ -1140,6 +1140,29 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the createContentDraft() method with given language for new draft.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::createContentDraft
+     */
+    public function testCreateContentDraftInOtherLanguage()
+    {
+        $content = $this->createContentVersion1();
+
+        $language = $this->getRepository()->getContentLanguageService()->loadLanguage('eng-GB');
+
+        // Now we create a new draft from the published content
+        $draftedContent = $this->contentService->createContentDraft(
+            $content->contentInfo,
+            null,
+            null,
+            $language
+        );
+
+        $this->assertEquals('eng-US', $content->versionInfo->initialLanguageCode);
+        $this->assertEquals('eng-GB', $draftedContent->versionInfo->initialLanguageCode);
+    }
+
+    /**
      * Test for the createContentDraft() method.
      *
      * Test that editor has access to edit own draft.
@@ -6260,6 +6283,92 @@ XML
                 self::ENG_GB => 'Folder GB',
             ],
             $dePublished->fields['name']
+        );
+    }
+
+    public function testCopyTranslationsFromInvalidPublishedContentToDraft()
+    {
+        $contentTypeService = $this->getRepository()->getContentTypeService();
+
+        // Create content type for testing
+        $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct('test_copy_translation');
+        $contentTypeCreateStruct->mainLanguageCode = 'eng-US';
+        $contentTypeCreateStruct->names = ['eng-US' => 'Test Content Type for Copy Translations'];
+        $fieldDefinition = $contentTypeService->newFieldDefinitionCreateStruct('name', 'ezstring');
+        $fieldDefinition->position = 1;
+        $contentTypeCreateStruct->addFieldDefinition($fieldDefinition);
+        $contentTypeService->publishContentTypeDraft(
+            $contentTypeService->createContentType(
+                $contentTypeCreateStruct,
+                [$contentTypeService->loadContentTypeGroupByIdentifier('Content')]
+            )
+        );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('test_copy_translation');
+
+        // Create entry content
+        $contentDraft = $this->createContentDraft(
+            'test_copy_translation',
+            $this->generateId('location', 2),
+            [
+                'name' => 'Folder US',
+            ]
+        );
+        $publishedContent = $this->contentService->publishVersion($contentDraft->versionInfo);
+
+        // Create translation draft that would act as an OLD version
+        $deDraft = $this->contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => self::GER_DE,
+            'fields' => $contentDraft->getFields(),
+        ]);
+
+        $contentUpdateStruct->setField('name', 'Folder GER', self::GER_DE);
+        $deContent = $this->contentService->updateContent($deDraft->versionInfo, $contentUpdateStruct);
+
+        // Update published version, as copying is only done when there is a diff between published and draft
+        $gbDraft = $this->contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => self::ENG_US,
+        ]);
+        $contentUpdateStruct->setField('name', 'Folder US 2', self::ENG_US);
+
+        $gbContent = $this->contentService->updateContent($gbDraft->versionInfo, $contentUpdateStruct);
+        $this->contentService->publishVersion($gbContent->versionInfo);
+
+        // Update content type with new required field
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+        $fieldDefinition = $contentTypeService->newFieldDefinitionCreateStruct('req_field', 'ezstring');
+        $fieldDefinition->position = 2;
+        $fieldDefinition->isRequired = true;
+        $contentTypeService->addFieldDefinition($contentTypeDraft, $fieldDefinition);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        // Reload previous german draft, it is now in invalid state for both ENG_US and GER_DE
+        $invalidContentDraft = $this->contentService->loadContent($deContent->id, null, $deContent->versionInfo->versionNo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => self::GER_DE,
+        ]);
+        $contentUpdateStruct->setField('req_field', 'Required field DE', self::GER_DE);
+
+        $this->contentService->updateContent($invalidContentDraft->versionInfo, $contentUpdateStruct);
+        $this->contentService->publishVersion($invalidContentDraft->versionInfo, [self::GER_DE]);
+
+        $publishedContent = $this->contentService->loadContent($deContent->id, null, $deContent->versionInfo->versionNo);
+
+        $this->assertEquals(
+            [
+                self::GER_DE => 'Folder GER',
+                self::ENG_US => 'Folder US 2',
+            ],
+            $publishedContent->fields['name']
+        );
+        // Missing values were copied from last updated draft
+        $this->assertEquals(
+            [
+                self::GER_DE => 'Required field DE',
+                self::ENG_US => 'Required field DE',
+            ],
+            $publishedContent->fields['req_field']
         );
     }
 

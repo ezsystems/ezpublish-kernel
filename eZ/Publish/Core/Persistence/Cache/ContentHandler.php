@@ -83,10 +83,10 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     /**
      * {@inheritdoc}
      */
-    public function createDraftFromVersion($contentId, $srcVersion, $userId)
+    public function createDraftFromVersion($contentId, $srcVersion, $userId, ?string $languageCode = null)
     {
         $this->logger->logCall(__METHOD__, ['content' => $contentId, 'version' => $srcVersion, 'user' => $userId]);
-        $draft = $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId);
+        $draft = $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId, $languageCode);
         $this->cache->invalidateTags(["content-{$contentId}-version-list"]);
 
         return $draft;

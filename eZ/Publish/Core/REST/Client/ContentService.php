@@ -442,11 +442,16 @@ class ContentService implements APIContentService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\API\Repository\Values\User\User $user if set given user is used to create the draft - otherwise the current user is used
+     * @param \eZ\Publish\API\Repository\Values\Content\Language|null if not set the draft is created with the initialLanguage code of the source version or if not present with the main language.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft(ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null)
-    {
+    public function createContentDraft(
+        ContentInfo $contentInfo,
+        VersionInfo $versionInfo = null,
+        User $creator = null,
+        ?Language $language = null
+    ) {
         throw new \Exception('@todo: Implement.');
     }
 

@@ -1065,12 +1065,11 @@ class ContentService implements ContentServiceInterface
      * Creates a draft from a published or archived version.
      *
      * If no version is given, the current published version is used.
-     * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
-     * It can be changed on updating the version.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\API\Repository\Values\User\User $creator if set given user is used to create the draft - otherwise the current-user is used
+     * @param \eZ\Publish\API\Repository\Values\Content\Language|null if not set the draft is created with the initialLanguage code of the source version or if not present with the main language.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      *
@@ -1078,8 +1077,12 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the current-user is not allowed to create the draft
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to create the draft
      */
-    public function createContentDraft(ContentInfo $contentInfo, APIVersionInfo $versionInfo = null, User $creator = null)
-    {
+    public function createContentDraft(
+        ContentInfo $contentInfo,
+        APIVersionInfo $versionInfo = null,
+        User $creator = null,
+        ?Language $language = null
+    ) {
         $contentInfo = $this->loadContentInfo($contentInfo->id);
 
         if ($versionInfo !== null) {
@@ -1121,6 +1124,9 @@ class ContentService implements ContentServiceInterface
             $creator = $this->repository->getCurrentUserReference();
         }
 
+        $fallbackLanguageCode = $versionInfo->initialLanguageCode ?? $contentInfo->mainLanguageCode;
+        $languageCode = $language->languageCode ?? $fallbackLanguageCode;
+
         if (!$this->repository->getPermissionResolver()->canUser(
             'content',
             'edit',
@@ -1143,7 +1149,8 @@ class ContentService implements ContentServiceInterface
             $spiContent = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
                 $contentInfo->id,
                 $versionNo,
-                $creator->getUserId()
+                $creator->getUserId(),
+                $languageCode
             );
             $this->repository->commit();
         } catch (Exception $e) {
@@ -1662,12 +1669,57 @@ class ContentService implements ContentServiceInterface
         $updateStruct = $this->newContentUpdateStruct();
         $updateStruct->initialLanguageCode = $versionInfo->initialLanguageCode;
 
+        $contentToPublish = $this->internalLoadContent($contendId, null, $versionInfo->versionNo);
+        $fallbackUpdateStruct = $this->newContentUpdateStruct();
+
         foreach ($currentContent->getFields() as $field) {
             $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
 
-            if ($fieldDefinition->isTranslatable && in_array($field->languageCode, $languagesToCopy)) {
-                $updateStruct->setField($field->fieldDefIdentifier, $field->value, $field->languageCode);
+            if (!$fieldDefinition->isTranslatable || !\in_array($field->languageCode, $languagesToCopy)) {
+                continue;
             }
+
+            $fieldType = $this->fieldTypeRegistry->getFieldType(
+                $fieldDefinition->fieldTypeIdentifier
+            );
+
+            $newValue = $contentToPublish->getFieldValue(
+                $fieldDefinition->identifier,
+                $field->languageCode
+            );
+
+            $value = $field->value;
+            if ($fieldDefinition->isRequired && $fieldType->isEmptyValue($value)) {
+                if (!$fieldType->isEmptyValue($fieldDefinition->defaultValue)) {
+                    $value = $fieldDefinition->defaultValue;
+                } else {
+                    $value = $contentToPublish->getFieldValue($field->fieldDefIdentifier, $versionInfo->initialLanguageCode);
+                }
+                $fallbackUpdateStruct->setField(
+                    $field->fieldDefIdentifier,
+                    $value,
+                    $field->languageCode
+                );
+                continue;
+            }
+
+            if ($newValue !== null
+                && $field->value !== null
+                && $fieldType->toHash($newValue) === $fieldType->toHash($field->value)) {
+                continue;
+            }
+
+            $updateStruct->setField($field->fieldDefIdentifier, $value, $field->languageCode);
+        }
+
+        // Nothing to copy, skip update
+        if (empty($updateStruct->fields)) {
+            return;
+        }
+
+        // Do fallback only if content needs to be updated
+        foreach ($fallbackUpdateStruct->fields as $fallbackField) {
+            $updateStruct->setField($fallbackField->fieldDefIdentifier, $fallbackField->value, $fallbackField->languageCode);
         }
 
         $this->updateContent($versionInfo, $updateStruct);

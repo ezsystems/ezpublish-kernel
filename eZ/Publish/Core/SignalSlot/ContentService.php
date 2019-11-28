@@ -323,24 +323,30 @@ class ContentService implements ContentServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\API\Repository\Values\User\User $user if set given user is used to create the draft - otherwise the current user is used
+     * @param \eZ\Publish\API\Repository\Values\Content\Language|null if not set the draft is created with the initialLanguage code of the source version or if not present with the main language.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft(ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null)
-    {
-        $returnValue = $this->service->createContentDraft($contentInfo, $versionInfo, $user);
+    public function createContentDraft(
+        ContentInfo $contentInfo,
+        VersionInfo $versionInfo = null,
+        User $creator = null,
+        ?Language $language = null
+    ) {
+        $contentDraft = $this->service->createContentDraft($contentInfo, $versionInfo, $creator, $language);
         $this->signalDispatcher->emit(
             new CreateContentDraftSignal(
                 [
                     'contentId' => $contentInfo->id,
                     'versionNo' => ($versionInfo !== null ? $versionInfo->versionNo : null),
-                    'newVersionNo' => $returnValue->getVersionInfo()->versionNo,
-                    'userId' => ($user !== null ? $user->id : null),
+                    'newVersionNo' => $contentDraft->getVersionInfo()->versionNo,
+                    'userId' => ($creator !== null ? $creator->id : null),
+                    'languageCode' => $contentDraft->getVersionInfo()->initialLanguageCode,
                 ]
             )
         );
 
-        return $returnValue;
+        return $contentDraft;
     }
 
     /**
