@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Tests\BaseTest;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\User;
 
@@ -24,10 +26,20 @@ use eZ\Publish\API\Repository\Values\User\User;
  */
 class LanguageLimitationTest extends BaseTest
 {
+    /** @var string */
+    private const ENG_US = 'eng-US';
+
+    /** @var string */
+    private const ENG_GB = 'eng-GB';
+
+    /** @var string */
+    private const GER_DE = 'ger-DE';
+
     /**
      * Create editor who is allowed to modify only specific translations of a Content item.
      *
      * @param array $allowedTranslationsList list of translations (language codes) which editor can modify.
+     * @param string $login
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
@@ -35,15 +47,17 @@ class LanguageLimitationTest extends BaseTest
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    private function createEditorUserWithLanguageLimitation(array $allowedTranslationsList): User
-    {
+    private function createEditorUserWithLanguageLimitation(
+        array $allowedTranslationsList,
+        string $login = 'editor'
+    ): User {
         $limitations = [
             // limitation for specific translations
             new LanguageLimitation(['limitationValues' => $allowedTranslationsList]),
         ];
 
         return $this->createUserWithPolicies(
-            'editor',
+            $login,
             [
                 ['module' => 'content', 'function' => 'read'],
                 ['module' => 'content', 'function' => 'versionread'],
@@ -234,5 +248,137 @@ class LanguageLimitationTest extends BaseTest
 
         $this->expectException(UnauthorizedException::class);
         $contentService->publishVersion($folderDraft->getVersionInfo());
+    }
+
+    public function testPublishVersionTranslation(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $permissionResolver = $repository->getPermissionResolver();
+
+        $draft = $this->createMultilingualFolderDraft($contentService);
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+
+        $contentUpdateStruct->setField('name', 'Draft 1 DE', self::GER_DE);
+
+        $contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
+
+        $admin = $permissionResolver->getCurrentUserReference();
+        $permissionResolver->setCurrentUserReference($this->createEditorUserWithLanguageLimitation(['ger-DE']));
+
+        $contentService->publishVersion($draft->versionInfo, [self::GER_DE]);
+
+        $permissionResolver->setCurrentUserReference($admin);
+        $content = $contentService->loadContent($draft->contentInfo->id);
+        $this->assertEquals(
+            [
+                self::ENG_US => 'Published US',
+                self::GER_DE => 'Draft 1 DE',
+            ],
+            $content->fields['name']
+        );
+    }
+
+    public function testPublishVersionTranslationIsNotAllowed(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $permissionResolver = $repository->getPermissionResolver();
+
+        $draft = $this->createMultilingualFolderDraft($contentService);
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+
+        $contentUpdateStruct->setField('name', 'Draft 1 EN', self::ENG_US);
+
+        $contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
+
+        $permissionResolver->setCurrentUserReference($this->createEditorUserWithLanguageLimitation(['ger-DE']));
+
+        $this->expectException(UnauthorizedException::class);
+        $contentService->publishVersion($draft->versionInfo, [self::ENG_US]);
+    }
+
+    public function testPublishVersionTranslationIsNotAllowedWithTwoEditors(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $permissionResolver = $repository->getPermissionResolver();
+
+        $editorDE = $this->createEditorUserWithLanguageLimitation(['ger-DE'], 'editor-de');
+        $editorUS = $this->createEditorUserWithLanguageLimitation(['eng-US'], 'editor-us');
+
+        // German editor publishes content in German language
+        $permissionResolver->setCurrentUserReference($editorDE);
+
+        $folder = $this->createFolder(['ger-DE' => 'German Folder'], 2);
+
+        // American editor creates and saves English draft
+        $permissionResolver->setCurrentUserReference($editorUS);
+
+        $folder = $contentService->loadContent($folder->id);
+        $folderDraft = $contentService->createContentDraft($folder->contentInfo);
+        $folderUpdateStruct = $contentService->newContentUpdateStruct();
+        $folderUpdateStruct->setField('name', 'English Folder', 'eng-US');
+        $folderDraft = $contentService->updateContent(
+            $folderDraft->versionInfo,
+            $folderUpdateStruct
+        );
+
+        // German editor tries to publish English translation
+        $permissionResolver->setCurrentUserReference($editorDE);
+        $folderDraftVersionInfo = $contentService->loadVersionInfo(
+            $folderDraft->contentInfo,
+            $folderDraft->versionInfo->versionNo
+        );
+        self::assertTrue($folderDraftVersionInfo->isDraft());
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessage("User does not have access to 'publish' 'content'");
+        $contentService->publishVersion($folderDraftVersionInfo, [self::ENG_US]);
+    }
+
+    public function testPublishVersionTranslationWhenUserHasNoAccessToAllLanguages(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $permissionResolver = $repository->getPermissionResolver();
+
+        $draft = $this->createMultilingualFolderDraft($contentService);
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+
+        $contentUpdateStruct->setField('name', 'Draft 1 DE', self::GER_DE);
+        $contentUpdateStruct->setField('name', 'Draft 1 GB', self::ENG_GB);
+
+        $contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
+
+        $permissionResolver->setCurrentUserReference(
+            $this->createEditorUserWithLanguageLimitation([self::GER_DE])
+        );
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessage("User does not have access to 'publish' 'content'");
+        $contentService->publishVersion($draft->versionInfo, [self::GER_DE, self::ENG_GB]);
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function createMultilingualFolderDraft(ContentService $contentService): Content
+    {
+        $publishedContent = $this->createFolder(
+            [
+                self::ENG_US => 'Published US',
+                self::GER_DE => 'Published DE',
+            ],
+            $this->generateId('location', 2)
+        );
+
+        return $contentService->createContentDraft($publishedContent->contentInfo);
     }
 }

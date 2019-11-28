@@ -1615,10 +1615,18 @@ class ContentService implements ContentServiceInterface
             }
         }
 
+        $targets = [];
+        if (!empty($translations)) {
+            $targets[] = (new Target\Builder\VersionBuilder())
+                ->publishLanguages($translations)
+                ->build();
+        }
+
         if (!$this->repository->getPermissionResolver()->canUser(
             'content',
             'publish',
-            $content
+            $content,
+            $targets
         )) {
             throw new UnauthorizedException(
                 'content', 'publish', ['contentId' => $content->id]
