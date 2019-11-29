@@ -250,6 +250,11 @@ class LanguageLimitationTest extends BaseTest
         $contentService->publishVersion($folderDraft->getVersionInfo());
     }
 
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
     public function testPublishVersionTranslation(): void
     {
         $repository = $this->getRepository();
@@ -280,6 +285,11 @@ class LanguageLimitationTest extends BaseTest
         );
     }
 
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
     public function testPublishVersionTranslationIsNotAllowed(): void
     {
         $repository = $this->getRepository();
@@ -300,6 +310,11 @@ class LanguageLimitationTest extends BaseTest
         $contentService->publishVersion($draft->versionInfo, [self::ENG_US]);
     }
 
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
     public function testPublishVersionTranslationIsNotAllowedWithTwoEditors(): void
     {
         $repository = $this->getRepository();
@@ -338,6 +353,11 @@ class LanguageLimitationTest extends BaseTest
         $contentService->publishVersion($folderDraftVersionInfo, [self::ENG_US]);
     }
 
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
     public function testPublishVersionTranslationWhenUserHasNoAccessToAllLanguages(): void
     {
         $repository = $this->getRepository();
