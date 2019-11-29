@@ -45,7 +45,7 @@ final class ChainSiteAccessProviderTest extends TestCase
         ];
     }
 
-    public function isDefinedProvider(): array
+    public function siteAccessNamesProvider(): array
     {
         return [
             'existing_sa' => [self::EXISTING_SA_NAME],
@@ -54,7 +54,7 @@ final class ChainSiteAccessProviderTest extends TestCase
     }
 
     /**
-     * @dataProvider isDefinedProvider
+     * @dataProvider siteAccessNamesProvider
      */
     public function testIsDefined(string $siteAccessName): void
     {
