@@ -69,7 +69,7 @@ final class StaticSiteAccessProvider implements SiteAccessProviderInterface
             static function ($groupName) {
                 return new SiteAccessGroup($groupName);
             },
-            $this->groupsBySiteAccess[$name]
+            $this->groupsBySiteAccess[$name] ?? []
         );
 
         return $siteAccess;
