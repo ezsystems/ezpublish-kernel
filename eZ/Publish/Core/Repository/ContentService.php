@@ -1605,7 +1605,7 @@ class ContentService implements ContentServiceInterface
         $targets = [];
         if (!empty($translations)) {
             $targets[] = (new Target\Builder\VersionBuilder())
-                ->publishLanguages($translations)
+                ->publishTranslations($translations)
                 ->build();
         }
 

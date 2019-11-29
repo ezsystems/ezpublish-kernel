@@ -128,7 +128,7 @@ final class VersionBuilder
     }
 
     /**
-     * Set intent to publish, to specified languages, all from the given list.
+     * Set intent to publish, to specified translations, all from the given list.
      *
      * @param array $languageCodes
      *
@@ -136,7 +136,7 @@ final class VersionBuilder
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function publishLanguages(array $languageCodes): self
+    public function publishTranslations(array $languageCodes): self
     {
         foreach ($languageCodes as $languageCode) {
             if (!is_string($languageCode) || empty($languageCode)) {

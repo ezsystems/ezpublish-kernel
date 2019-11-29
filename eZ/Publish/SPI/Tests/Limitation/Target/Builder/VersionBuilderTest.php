@@ -129,7 +129,7 @@ class VersionBuilderTest extends TestCase
             ->updateFieldsTo($initialLanguageCode, $newFields)
             ->translateToAnyLanguageOf($languagesList)
             ->createFromAnyContentTypeOf($contentTypeIdsList)
-            ->publishLanguages($publishLanguageCodes)
+            ->publishTranslations($publishLanguageCodes)
         ;
 
         self::assertInstanceOf(VersionBuilder::class, $versionBuilder);
