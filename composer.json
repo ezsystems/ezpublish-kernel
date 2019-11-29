@@ -28,6 +28,7 @@
         "symfony/translation": "^4.3",
         "symfony/yaml": "^4.3",
         "symfony/security": "^4.3",
+        "symfony/security-bundle": "^4.3",
         "symfony/serializer": "^4.3",
         "symfony/http-kernel": "^4.3",
         "symfony/console": "^4.3",
