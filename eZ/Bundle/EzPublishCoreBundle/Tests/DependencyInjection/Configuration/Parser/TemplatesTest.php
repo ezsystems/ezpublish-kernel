@@ -11,6 +11,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\FieldDefinitionSettingsTemplates;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\FieldTemplates;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider\StaticSiteAccessProvider;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessProviderInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class TemplatesTest extends AbstractParserTestCase
@@ -64,6 +66,27 @@ class TemplatesTest extends AbstractParserTestCase
             'ezdemo_site_admin',
             false
         );
+    }
+
+    protected function getSiteAccessProviderMock(): SiteAccessProviderInterface
+    {
+        $siteAccessProvider = $this->createMock(SiteAccessProviderInterface::class);
+        $siteAccessProvider
+            ->method('isDefined')
+            ->willReturnMap([
+                ['ezdemo_site', true],
+                ['fre', true],
+                ['ezdemo_site_admin', true],
+            ]);
+        $siteAccessProvider
+            ->method('getSiteAccess')
+            ->willReturnMap([
+                ['ezdemo_site', $this->getSiteAccess('ezdemo_site', StaticSiteAccessProvider::class, ['ezdemo_group', 'ezdemo_frontend_group'])],
+                ['fre', $this->getSiteAccess('fre', StaticSiteAccessProvider::class, ['ezdemo_group', 'ezdemo_frontend_group'])],
+                ['ezdemo_site_admin', $this->getSiteAccess('ezdemo_site_admin', StaticSiteAccessProvider::class, ['ezdemo_group'])],
+            ]);
+
+        return $siteAccessProvider;
     }
 
     /**
