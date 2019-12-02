@@ -29,9 +29,9 @@ class InvalidArgumentValue extends InvalidArgumentException
     {
         $valueStr = is_string($value) ? $value : var_export($value, true);
         $parameters = ['%actualValue%' => $valueStr];
-        $this->setMessageTemplate("'%actualValue%' is wrong value");
+        $this->setMessageTemplate("'%actualValue%' is incorrect value");
         if ($className) {
-            $this->setMessageTemplate("'%actualValue%' is wrong value in class '%className%'");
+            $this->setMessageTemplate("'%actualValue%' is incorrect value in class '%className%'");
             $parameters['%className%'] = $className;
         }
         $whatIsWrong = $this->getMessageTemplate();

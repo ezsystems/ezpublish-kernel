@@ -97,6 +97,6 @@ class UserMetadata extends CriterionHandler
                 );
         }
 
-        throw new RuntimeException("Invalid target criterion encountered:'" . $criterion->target . "'");
+        throw new RuntimeException("Invalid target Criterion: '" . $criterion->target . "'");
     }
 }

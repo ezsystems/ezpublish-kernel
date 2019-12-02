@@ -68,11 +68,11 @@ class SearchTest extends BaseServiceMockTest
         return [
             [
                 new Query(['filter' => new Criterion\Location\Depth(Criterion\Operator::LT, 2)]),
-                "Argument '\$query' is invalid: Location criterions cannot be used in Content search",
+                "Argument '\$query' is invalid: Location Criteria cannot be used in Content search",
             ],
             [
                 new Query(['query' => new Criterion\Location\Depth(Criterion\Operator::LT, 2)]),
-                "Argument '\$query' is invalid: Location criterions cannot be used in Content search",
+                "Argument '\$query' is invalid: Location Criteria cannot be used in Content search",
             ],
             [
                 new Query(
@@ -84,11 +84,11 @@ class SearchTest extends BaseServiceMockTest
                         ),
                     ]
                 ),
-                "Argument '\$query' is invalid: Location criterions cannot be used in Content search",
+                "Argument '\$query' is invalid: Location Criteria cannot be used in Content search",
             ],
             [
                 new Query(['sortClauses' => [new SortClause\Location\Id()]]),
-                "Argument '\$query' is invalid: Location sort clauses cannot be used in Content search",
+                "Argument '\$query' is invalid: Location Sort Clauses cannot be used in Content search",
             ],
         ];
     }
@@ -129,7 +129,7 @@ class SearchTest extends BaseServiceMockTest
         return [
             [
                 new Criterion\Location\Depth(Criterion\Operator::LT, 2),
-                "Argument '\$filter' is invalid: Location criterions cannot be used in Content search",
+                "Argument '\$filter' is invalid: Location Criteria cannot be used in Content search",
             ],
             [
                 new Criterion\LogicalAnd(
@@ -137,7 +137,7 @@ class SearchTest extends BaseServiceMockTest
                         new Criterion\Location\Depth(Criterion\Operator::LT, 2),
                     ]
                 ),
-                "Argument '\$filter' is invalid: Location criterions cannot be used in Content search",
+                "Argument '\$filter' is invalid: Location Criteria cannot be used in Content search",
             ],
         ];
     }

@@ -75,7 +75,7 @@ class SearchEngineIndexerFactory
         ) {
             throw new InvalidSearchEngineIndexer(
                 "Invalid search engine '{$repositoryConfig['search']['engine']}'. " .
-                "Could not find a service tagged as 'ezpublish.searchEngineIndexer' " .
+                "Could not find any service tagged with 'ezpublish.searchEngineIndexer' " .
                 "with alias '{$repositoryConfig['search']['engine']}'."
             );
         }

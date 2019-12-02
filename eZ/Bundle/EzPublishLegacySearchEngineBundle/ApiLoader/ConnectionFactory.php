@@ -47,8 +47,8 @@ class ConnectionFactory implements ContainerAwareInterface
 
         if (!$this->container->has($doctrineConnectionId)) {
             throw new InvalidArgumentException(
-                "Invalid Doctrine connection '{$repositoryConfig['search']['connection']}' for repository '{$repositoryConfig['alias']}'." .
-                'Valid connections are ' . implode(', ', array_keys($this->container->getParameter('doctrine.connections')))
+                "Invalid Doctrine connection '{$repositoryConfig['search']['connection']}' for Repository '{$repositoryConfig['alias']}'." .
+                'Valid connections are: ' . implode(', ', array_keys($this->container->getParameter('doctrine.connections')))
             );
         }
 

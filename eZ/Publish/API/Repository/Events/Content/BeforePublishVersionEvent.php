@@ -43,7 +43,7 @@ final class BeforePublishVersionEvent extends BeforeEvent
     public function getContent(): Content
     {
         if (!$this->hasContent()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContent() or set it by setContent() before you call getter.', Content::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasContent() or set it using setContent() before you call the getter.', Content::class));
         }
 
         return $this->content;

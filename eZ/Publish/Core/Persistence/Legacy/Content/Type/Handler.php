@@ -296,7 +296,7 @@ class Handler implements BaseContentTypeHandler
                 throw new InvalidArgumentException(
                     'position',
                     "'" . var_export($fieldDef->position, true) .
-                    "' is wrong value in class FieldDefinition, an integer is required."
+                    "' is incorrect value in class FieldDefinition, an integer is required."
                 );
             }
         }
@@ -363,7 +363,7 @@ class Handler implements BaseContentTypeHandler
         if (Type::STATUS_DEFINED === $status && $this->contentTypeGateway->countInstancesOfType($contentTypeId)) {
             throw new BadStateException(
                 '$contentTypeId',
-                "ContentType with given id still has content instances and therefore can't be deleted"
+                'Content Type with the given ID still has Content items and cannot be deleted'
             );
         }
 

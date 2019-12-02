@@ -245,7 +245,7 @@ class NameSchemaService
                 } elseif ($contentType instanceof ContentType) {
                     $fieldDefinition = $contentType->getFieldDefinition($fieldDefinitionIdentifier);
                 } else {
-                    throw new InvalidArgumentType('$contentType', 'API or SPI variant of ContentType');
+                    throw new InvalidArgumentType('$contentType', 'API or SPI variant of a Content Type');
                 }
 
                 $fieldTypeService = $this->fieldTypeRegistry->getFieldType(

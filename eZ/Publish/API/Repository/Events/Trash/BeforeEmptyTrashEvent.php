@@ -24,7 +24,7 @@ final class BeforeEmptyTrashEvent extends BeforeEvent
     public function getResultList(): TrashItemDeleteResultList
     {
         if (!$this->hasResultList()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasResultList() or set it by setResultList() before you call getter.', TrashItemDeleteResultList::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasResultList() or set it using setResultList() before you call the getter.', TrashItemDeleteResultList::class));
         }
 
         return $this->resultList;

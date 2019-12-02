@@ -35,7 +35,7 @@ class InstallerTagPass implements CompilerPassInterface
                 if (!isset($tag['type'])) {
                     throw new LogicException(
                         sprintf(
-                            '%s service tag needs a "type" attribute to identify the installer. None given for %s.',
+                            'Service tag %s needs a "type" attribute to identify the installer. You need to provide a tag for %s.',
                             self::INSTALLER_TAG,
                             $id
                         )

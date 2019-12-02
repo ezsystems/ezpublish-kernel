@@ -35,7 +35,7 @@ class RegisterLimitationTypePass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('ezpublish.limitationType') as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
-                    throw new \LogicException('ezpublish.limitationType service tag needs an "alias" attribute to identify the limitation type. None given.');
+                    throw new \LogicException('ezpublish.limitationType service tag needs an "alias" attribute to identify the Limitation type.');
                 }
 
                 $repositoryFactoryDef->addMethodCall(

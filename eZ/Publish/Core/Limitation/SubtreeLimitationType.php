@@ -221,7 +221,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         if (false === $hasLocationCreateStruct) {
             throw new InvalidArgumentException(
                 '$targets',
-                'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+                'If $object is ContentCreateStruct, it must contain LocationCreateStruct objects'
             );
         }
 
@@ -239,8 +239,8 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
         if (empty($value->limitationValues)) {
-            // no limitation values
-            throw new \RuntimeException('$value->limitationValues is empty, it should not have been stored in the first place');
+            // A Policy should not have empty limitationValues store
+            throw new \RuntimeException('$value->limitationValues is empty');
         }
 
         if (!isset($value->limitationValues[1])) {

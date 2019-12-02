@@ -99,7 +99,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             $this->objectStateHandler->loadGroupByIdentifier($inputStruct->identifier);
             throw new InvalidArgumentException(
                 'objectStateGroupCreateStruct',
-                'Object state group with provided identifier already exists'
+                'An Object state group with the provided identifier already exists'
             );
         } catch (APINotFoundException $e) {
             // Do nothing
@@ -204,7 +204,7 @@ class ObjectStateService implements ObjectStateServiceInterface
                 if ($existingObjectStateGroup->id != $loadedObjectStateGroup->id) {
                     throw new InvalidArgumentException(
                         'objectStateGroupUpdateStruct',
-                        'Object state group with provided identifier already exists'
+                        'An Object state group with the provided identifier already exists'
                     );
                 }
             } catch (APINotFoundException $e) {
@@ -283,7 +283,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             $this->objectStateHandler->loadByIdentifier($inputStruct->identifier, $objectStateGroup->id);
             throw new InvalidArgumentException(
                 'objectStateCreateStruct',
-                'Object state with provided identifier already exists in provided object state group'
+                'An Object state with the provided identifier already exists in the provided Object state group'
             );
         } catch (APINotFoundException $e) {
             // Do nothing
@@ -360,7 +360,7 @@ class ObjectStateService implements ObjectStateServiceInterface
                 if ($existingObjectState->id != $loadedObjectState->id) {
                     throw new InvalidArgumentException(
                         'objectStateUpdateStruct',
-                        'Object state with provided identifier already exists in provided object state group'
+                        'An Object state with the provided identifier already exists in provided Object state group'
                     );
                 }
             } catch (APINotFoundException $e) {

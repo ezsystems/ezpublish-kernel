@@ -29,9 +29,9 @@ class InvalidArgumentType extends InvalidArgumentException
     {
         if ($value !== null) {
             $actualType = is_object($value) ? get_class($value) : gettype($value);
-            $whatIsWrong = sprintf("expected value to be of type '%s', got '%s'", $expectedType, $actualType);
+            $whatIsWrong = sprintf("Received '%s' instead of expected value of type '%s'", $actualType, $expectedType);
         } else {
-            $whatIsWrong = sprintf("expected value to be of type '%s'", $expectedType);
+            $whatIsWrong = sprintf("Expected value is of type '%s'", $expectedType);
         }
 
         parent::__construct($argumentName, $whatIsWrong, $previous);

@@ -34,7 +34,7 @@ final class BeforeCreateSectionEvent extends BeforeEvent
     public function getSection(): Section
     {
         if (!$this->hasSection()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasSection() or set it by setSection() before you call getter.', Section::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasSection() or set it using setSection() before you call the getter.', Section::class));
         }
 
         return $this->section;

@@ -42,7 +42,7 @@ final class BeforeRemoveContentTypeTranslationEvent extends BeforeEvent
     public function getNewContentTypeDraft(): ContentTypeDraft
     {
         if (!$this->hasNewContentTypeDraft()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasNewContentTypeDraft() or set it by setNewContentTypeDraft() before you call getter.', ContentTypeDraft::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasNewContentTypeDraft() or set it using setNewContentTypeDraft() before you call the getter.', ContentTypeDraft::class));
         }
 
         return $this->newContentTypeDraft;

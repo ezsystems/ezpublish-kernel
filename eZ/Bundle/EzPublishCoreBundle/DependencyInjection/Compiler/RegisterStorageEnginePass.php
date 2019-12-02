@@ -38,7 +38,7 @@ class RegisterStorageEnginePass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('ezpublish.storageEngine') as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
-                    throw new LogicException('ezpublish.storageEngine service tag needs an "alias" attribute to identify the storage engine. None given.');
+                    throw new LogicException('ezpublish.storageEngine service tag needs an "alias" attribute to identify the storage engine.');
                 }
 
                 // Register the storage engine on the main storage engine factory

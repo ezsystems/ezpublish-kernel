@@ -565,7 +565,7 @@ class Handler implements UrlAliasHandlerInterface
 
         $pathDepth = count($urlHashes);
         if ($pathDepth > self::MAX_URL_ALIAS_DEPTH_LEVEL) {
-            throw new InvalidArgumentException('$urlHashes', 'Exceeded maximum depth level of content url alias.');
+            throw new InvalidArgumentException('$urlHashes', 'Exceeded maximum depth level for content URL alias.');
         }
 
         $data = $this->gateway->loadUrlAliasData($urlHashes);

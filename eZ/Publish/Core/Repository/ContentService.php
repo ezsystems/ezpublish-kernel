@@ -511,11 +511,11 @@ class ContentService implements ContentServiceInterface
     public function createContent(APIContentCreateStruct $contentCreateStruct, array $locationCreateStructs = [])
     {
         if ($contentCreateStruct->mainLanguageCode === null) {
-            throw new InvalidArgumentException('$contentCreateStruct', "'mainLanguageCode' property must be set");
+            throw new InvalidArgumentException('$contentCreateStruct', "the 'mainLanguageCode' property must be set");
         }
 
         if ($contentCreateStruct->contentType === null) {
-            throw new InvalidArgumentException('$contentCreateStruct', "'contentType' property must be set");
+            throw new InvalidArgumentException('$contentCreateStruct', "the 'contentType' property must be set");
         }
 
         $contentCreateStruct = clone $contentCreateStruct;
@@ -562,7 +562,7 @@ class ContentService implements ContentServiceInterface
 
                 throw new InvalidArgumentException(
                     '$contentCreateStruct',
-                    "Another content with remoteId '{$contentCreateStruct->remoteId}' exists"
+                    "Another Content item with remoteId '{$contentCreateStruct->remoteId}' exists"
                 );
             } catch (APINotFoundException $e) {
                 // Do nothing
@@ -786,7 +786,7 @@ class ContentService implements ContentServiceInterface
 
             if ($fieldDefinition === null) {
                 throw new ContentValidationException(
-                    "Field definition '%identifier%' does not exist in given ContentType",
+                    "Field definition '%identifier%' does not exist in the given Content Type",
                     ['%identifier%' => $field->fieldDefIdentifier]
                 );
             }
@@ -800,7 +800,7 @@ class ContentService implements ContentServiceInterface
 
             if (!$fieldDefinition->isTranslatable && ($field->languageCode != $contentCreateStruct->mainLanguageCode)) {
                 throw new ContentValidationException(
-                    "A value is set for non translatable field definition '%identifier%' with language '%languageCode%'",
+                    "You cannot set a value for the non-translatable Field definition '%identifier%' in language '%languageCode%'",
                     ['%identifier%' => $field->fieldDefIdentifier, '%languageCode%' => $field->languageCode]
                 );
             }
@@ -852,7 +852,7 @@ class ContentService implements ContentServiceInterface
             if (isset($parentLocationIdSet[$locationCreateStruct->parentLocationId])) {
                 throw new InvalidArgumentException(
                     '$locationCreateStructs',
-                    "Multiple LocationCreateStructs with the same parent Location '{$locationCreateStruct->parentLocationId}' are given"
+                    "You provided multiple LocationCreateStructs with the same parent Location '{$locationCreateStruct->parentLocationId}'"
                 );
             }
 
@@ -926,7 +926,7 @@ class ContentService implements ContentServiceInterface
                 if ($existingContentInfo->id !== $loadedContentInfo->id) {
                     throw new InvalidArgumentException(
                         '$contentMetadataUpdateStruct',
-                        "Another content with remoteId '{$contentMetadataUpdateStruct->remoteId}' exists"
+                        "Another Content item with remoteId '{$contentMetadataUpdateStruct->remoteId}' exists"
                     );
                 }
             } catch (APINotFoundException $e) {
@@ -1086,7 +1086,7 @@ class ContentService implements ContentServiceInterface
             if ($versionInfo->getContentInfo()->id != $contentInfo->id) {
                 throw new InvalidArgumentException(
                     '$versionInfo',
-                    'VersionInfo does not belong to the same content as given ContentInfo'
+                    'VersionInfo does not belong to the same Content item as the given ContentInfo'
                 );
             }
 
@@ -1101,7 +1101,7 @@ class ContentService implements ContentServiceInterface
                     // @todo: throw an exception here, to be defined
                     throw new BadStateException(
                         '$versionInfo',
-                        'Draft can not be created from a draft version'
+                        'Cannot create a draft from a draft version'
                     );
             }
 
@@ -1112,7 +1112,7 @@ class ContentService implements ContentServiceInterface
             // @todo: throw an exception here, to be defined
             throw new BadStateException(
                 '$contentInfo',
-                'Content is not published, draft can be created only from published or archived version'
+                'Content is not published. A draft can be created only from a published or archived version.'
             );
         }
 
@@ -1275,7 +1275,7 @@ class ContentService implements ContentServiceInterface
         if (!$content->versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
-                'Version is not a draft and can not be updated'
+                'The version is not a draft and cannot be updated'
             );
         }
 
@@ -1522,7 +1522,7 @@ class ContentService implements ContentServiceInterface
 
             if ($fieldDefinition === null) {
                 throw new ContentValidationException(
-                    "Field definition '%identifier%' does not exist in given ContentType",
+                    "Field definition '%identifier%' does not exist in given Content Type",
                     ['%identifier%' => $field->fieldDefIdentifier]
                 );
             }
@@ -1538,7 +1538,7 @@ class ContentService implements ContentServiceInterface
 
             if (!$fieldDefinition->isTranslatable && ($field->languageCode != $mainLanguageCode)) {
                 throw new ContentValidationException(
-                    "A value is set for non translatable field definition '%identifier%' with language '%languageCode%'",
+                    "You cannot set a value for the non-translatable Field definition '%identifier%' in language '%languageCode%'",
                     ['%identifier%' => $field->fieldDefIdentifier, '%languageCode%' => $field->languageCode]
                 );
             }
@@ -1803,7 +1803,7 @@ class ContentService implements ContentServiceInterface
         if ($versionInfo->isPublished()) {
             throw new BadStateException(
                 '$versionInfo',
-                'Version is published and can not be removed'
+                'The Version is published and cannot be removed'
             );
         }
 
@@ -1824,7 +1824,7 @@ class ContentService implements ContentServiceInterface
         if (count($versionList) === 1 && !$versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
-                'Version is the last version of the Content and can not be removed'
+                'The Version is the last version of the Content item and cannot be removed'
             );
         }
 
@@ -1862,7 +1862,7 @@ class ContentService implements ContentServiceInterface
             throw new InvalidArgumentException(
                 'status',
                 sprintf(
-                    'it can be one of %d (draft), %d (published), %d (archived), %d given',
+                    'available statuses are: %d (draft), %d (published), %d (archived), %d given',
                     VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED, $status
                 ));
         }
@@ -2112,7 +2112,7 @@ class ContentService implements ContentServiceInterface
         if (!$sourceVersion->isDraft()) {
             throw new BadStateException(
                 '$sourceVersion',
-                'Relations of type common can only be added to versions of status draft'
+                'Relations of type common can only be added to draft versions'
             );
         }
 
@@ -2164,7 +2164,7 @@ class ContentService implements ContentServiceInterface
         if (!$sourceVersion->isDraft()) {
             throw new BadStateException(
                 '$sourceVersion',
-                'Relations of type common can only be removed from versions of status draft'
+                'Relations of type common can only be added to draft versions'
             );
         }
 
@@ -2181,7 +2181,7 @@ class ContentService implements ContentServiceInterface
         if (empty($spiRelations)) {
             throw new InvalidArgumentException(
                 '$sourceVersion',
-                'There are no relations of type COMMON for the given destination'
+                'There are no Relations of type COMMON for the given destination'
             );
         }
 
@@ -2239,7 +2239,7 @@ class ContentService implements ContentServiceInterface
         if ($contentInfo->mainLanguageCode === $languageCode) {
             throw new BadStateException(
                 '$languageCode',
-                'Specified translation is the main translation of the Content Object'
+                'The provided translation is the main translation of the Content item'
             );
         }
 
@@ -2335,14 +2335,14 @@ class ContentService implements ContentServiceInterface
         if (!$versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
-                'Version is not a draft, so Translations cannot be modified. Create a Draft before proceeding'
+                'The version is not a draft, so translations cannot be modified. Create a draft before proceeding'
             );
         }
 
         if ($versionInfo->contentInfo->mainLanguageCode === $languageCode) {
             throw new BadStateException(
                 '$languageCode',
-                'Specified Translation is the main Translation of the Content Object. Change it before proceeding.'
+                'the specified translation is the main translation of the Content item. Change it before proceeding.'
             );
         }
 
@@ -2356,7 +2356,7 @@ class ContentService implements ContentServiceInterface
             throw new InvalidArgumentException(
                 '$languageCode',
                 sprintf(
-                    'The Version (ContentId=%d, VersionNo=%d) is not translated into %s',
+                    'The version (ContentId=%d, VersionNo=%d) is not translated into %s',
                     $versionInfo->contentInfo->id,
                     $versionInfo->versionNo,
                     $languageCode
@@ -2367,7 +2367,7 @@ class ContentService implements ContentServiceInterface
         if (count($versionInfo->languageCodes) === 1) {
             throw new BadStateException(
                 '$languageCode',
-                'Specified Translation is the only one Content Object Version has'
+                'The provided translation is the only translation in this version'
             );
         }
 
@@ -2393,7 +2393,7 @@ class ContentService implements ContentServiceInterface
         } catch (Exception $e) {
             $this->repository->rollback();
             // cover generic unexpected exception to fulfill API promise on @throws
-            throw new BadStateException('$contentInfo', 'Translation removal failed', $e);
+            throw new BadStateException('$contentInfo', 'Could not remove the translation', $e);
         }
     }
 

@@ -82,7 +82,7 @@ class DateMetadata extends CriterionHandler
 
             default:
                 throw new RuntimeException(
-                    "Unknown operator '{$criterion->operator}' for DateMetadata criterion handler."
+                    "Unknown operator '{$criterion->operator}' for DateMetadata Criterion handler."
                 );
         }
     }

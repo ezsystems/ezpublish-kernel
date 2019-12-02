@@ -44,7 +44,7 @@ final class BeforeAddRelationEvent extends BeforeEvent
     public function getRelation(): Relation
     {
         if (!$this->hasRelation()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasRelation() or set it by setRelation() before you call getter.', Relation::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasRelation() or set it using setRelation() before you call the getter.', Relation::class));
         }
 
         return $this->relation;

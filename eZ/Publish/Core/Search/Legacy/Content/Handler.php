@@ -245,9 +245,9 @@ class Handler implements SearchHandlerInterface
         $result = $this->findContent($searchQuery, $languageFilter);
 
         if (empty($result->searchHits)) {
-            throw new NotFoundException('Content', 'findSingle() found no content for given $criterion');
+            throw new NotFoundException('Content', 'findSingle() found no content for the given $criterion');
         } elseif (isset($result->searchHits[1])) {
-            throw new InvalidArgumentException('totalCount', 'findSingle() found more then one item for given $criterion');
+            throw new InvalidArgumentException('totalCount', 'findSingle() found more then one item for the given $criterion');
         }
 
         $first = reset($result->searchHits);
@@ -314,7 +314,7 @@ class Handler implements SearchHandlerInterface
      */
     public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
     {
-        throw new NotImplementedException('Suggestions are not supported by legacy search engine.');
+        throw new NotImplementedException('Suggestions are not supported by Legacy search engine.');
     }
 
     /**

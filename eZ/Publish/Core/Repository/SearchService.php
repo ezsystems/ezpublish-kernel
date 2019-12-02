@@ -192,7 +192,7 @@ class SearchService implements SearchServiceInterface
             if ($criterion instanceof LocationCriterion) {
                 throw new InvalidArgumentException(
                     $argumentName,
-                    'Location criterions cannot be used in Content search'
+                    'Location Criteria cannot be used in Content search'
                 );
             }
             if ($criterion instanceof LogicalOperator) {
@@ -212,7 +212,7 @@ class SearchService implements SearchServiceInterface
     {
         foreach ($query->sortClauses as $sortClause) {
             if ($sortClause instanceof LocationSortClause) {
-                throw new InvalidArgumentException('$query', 'Location sort clauses cannot be used in Content search');
+                throw new InvalidArgumentException('$query', 'Location Sort Clauses cannot be used in Content search');
             }
         }
     }

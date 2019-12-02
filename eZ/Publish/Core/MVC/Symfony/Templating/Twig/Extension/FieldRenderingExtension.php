@@ -109,7 +109,7 @@ class FieldRenderingExtension extends AbstractExtension
         if (!$field instanceof Field) {
             throw new InvalidArgumentException(
                 '$fieldIdentifier',
-                "'{$fieldIdentifier}' field not present on content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
+                "'{$fieldIdentifier}' Field does not exist in Content item {$content->contentInfo->id} '{$content->contentInfo->name}'"
             );
         }
 

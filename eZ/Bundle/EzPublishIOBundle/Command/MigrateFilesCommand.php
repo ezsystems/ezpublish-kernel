@@ -71,17 +71,17 @@ final class MigrateFilesCommand extends Command
                 <<<EOT
 The command <info>%command.name%</info> migrates files from one IO repository
 to another. It can for example be used to migrate local files from the default
-IO configuration to a new IO configuration, like a clustered setup.
+IO configuration to a new IO configuration, such as a clustered setup.
 
-<fg=red>NB: This command is experimental. Use with caution!</>
+<fg=red>Note: This command is experimental. Use with caution!</>
 
 The <info>--from</info> and <info>--to</info> values must be specified as <info><metadata_handler>,<binarydata_handler></info>.
 If <info>--from</info> is omitted, the default IO configuration will be used.
 If <info>--to</info> is omitted, the first non-default IO configuration will be used.
 
-<fg=red>During the script execution the files should not be modified. To avoid
-surprises you are advised to create a backup and/or execute a dry run before
-proceeding with actual update.</>
+<fg=red>The database should not be modified while the script is being executed.
+You are advised to create a backup or execute a dry run before 
+proceeding with the actual update.</>
 
 Since this script can potentially run for a very long time, to avoid memory
 exhaustion run it in production environment using <info>--env=prod</info> switch.
@@ -149,7 +149,7 @@ EOT
 
         $output->writeln([
             'Total number of files to migrate: ' . ($totalCount === null ? 'unknown' : $totalCount),
-            'This number does not include image aliases, but they will also be migrated.',
+            'This number does not include image variations, but they will also be migrated.',
             '',
         ]);
 
@@ -189,7 +189,7 @@ EOT
     protected function outputConfiguredHandlers(OutputInterface $output)
     {
         $output->writeln(
-            'Configured meta data handlers: ' . implode(', ', array_keys($this->configuredMetadataHandlers))
+            'Configured metadata handlers: ' . implode(', ', array_keys($this->configuredMetadataHandlers))
         );
         $output->writeln(
             'Configured binary data handlers: ' . implode(', ', array_keys($this->configuredBinarydataHandlers))
@@ -213,7 +213,7 @@ EOT
             $lowerDirection = strtolower($direction);
             if (count($handlers) !== 2) {
                 $output->writeln(
-                    "Enter two comma separated values for the --$lowerDirection option: " .
+                    "Enter two comma-separated values for the --$lowerDirection option: " .
                     "<{$lowerDirection}_metadata_handler>,<{$lowerDirection}_binarydata_handler>"
                 );
 
@@ -233,7 +233,7 @@ EOT
         }
 
         if ($fromHandlers === $toHandlers) {
-            $output->writeln('From and to handlers are the same. Nothing to do.');
+            $output->writeln('From and to handlers are the same. No action to perform.');
 
             return false;
         }

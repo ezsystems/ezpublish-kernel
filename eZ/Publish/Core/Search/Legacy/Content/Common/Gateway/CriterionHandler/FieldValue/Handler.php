@@ -133,7 +133,7 @@ abstract class Handler
                 break;
 
             default:
-                throw new RuntimeException("Unknown operator '{$criterion->operator}' for Field criterion handler.");
+                throw new RuntimeException("Unknown operator '{$criterion->operator}' for Field Criterion handler.");
         }
 
         return $filter;

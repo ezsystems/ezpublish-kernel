@@ -52,7 +52,7 @@ class UrlAlias extends MultipleValued
      */
     public function matchContentInfo(ContentInfo $contentInfo)
     {
-        throw new \RuntimeException('matchContentInfo() is not supported by UrlAlias matcher');
+        throw new \RuntimeException('matchContentInfo() is not supported by the UrlAlias matcher');
     }
 
     public function setMatchingConfig($matchingConfig)

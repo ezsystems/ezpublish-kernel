@@ -32,7 +32,7 @@ final class BeforeTranslateEvent extends BeforeEvent
     public function getResult(): URLWildcardTranslationResult
     {
         if (!$this->hasResult()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasResult() or set it by setResult() before you call getter.', URLWildcardTranslationResult::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasResult() or set it using setResult() before you call the getter.', URLWildcardTranslationResult::class));
         }
 
         return $this->result;

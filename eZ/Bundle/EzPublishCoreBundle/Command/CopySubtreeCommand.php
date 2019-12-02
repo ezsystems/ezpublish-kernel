@@ -71,21 +71,21 @@ class CopySubtreeCommand extends Command
             ->addArgument(
                 'source-location-id',
                 InputArgument::REQUIRED,
-                'Id of subtree root location'
+                'ID of source Location'
             )
             ->addArgument(
                 'target-location-id',
                 InputArgument::REQUIRED,
-                'Id of target location'
+                'ID of target Location'
             )
             ->addOption(
                 'user',
                 'u',
                 InputOption::VALUE_OPTIONAL,
-                'eZ Platform username (with Role containing at least Content policies: create, read)',
+                'eZ Platform username (with Role containing at least content policies: create, read)',
                 'admin'
             )
-            ->setDescription('Copy subtree from one location to another');
+            ->setDescription('Copies a subtree from one Location to another');
     }
 
     /**
@@ -123,7 +123,7 @@ class CopySubtreeCommand extends Command
         if (stripos($targetLocation->pathString, $sourceLocation->pathString) !== false) {
             throw new InvalidArgumentException(
                 'target-location-id',
-                'Target parent location is a sub location of the source subtree'
+                'Cannot copy subtree to its own descendant Location'
             );
         }
 
@@ -134,13 +134,13 @@ class CopySubtreeCommand extends Command
         if (!$targetContentType->isContainer) {
             throw new InvalidArgumentException(
                 'target-location-id',
-                'Cannot copy location to a parent that is not a container'
+                'The selected Location cannot contain children'
             );
         }
         $questionHelper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
             sprintf(
-                'Are you sure you want to copy `%s` subtree (no. of children: %d) into `%s`? This make take a while for big number of nested children [Y/n]? ',
+                'Are you sure you want to copy `%s` subtree (no. of children: %d) into `%s`? This may take a while for a big number of nested children [Y/n]? ',
                 $sourceLocation->contentInfo->name,
                 $this->getAllChildrenCount($sourceLocation),
                 $targetLocation->contentInfo->name

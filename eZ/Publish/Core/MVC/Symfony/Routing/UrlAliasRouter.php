@@ -315,7 +315,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                 // Check if location is a valid Location object
                 if (isset($parameters['location']) && !$parameters['location'] instanceof Location) {
                     throw new LogicException(
-                        "When generating an UrlAlias route, 'location' parameter must be a valid eZ\\Publish\\API\\Repository\\Values\\Content\\Location."
+                        "When generating a UrlAlias route, the 'location' parameter must be a valid " . Location::class . '.'
                     );
                 }
 
@@ -330,7 +330,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                 unset($parameters['contentId'], $parameters['viewType'], $parameters['layout']);
 
                 if (empty($contentInfo->mainLocationId)) {
-                    throw new LogicException('Cannot generate an UrlAlias route for content without main location.');
+                    throw new LogicException('Cannot generate a UrlAlias route for content without main Location.');
                 }
 
                 return $this->generator->generate(
@@ -341,7 +341,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
             }
 
             throw new InvalidArgumentException(
-                "When generating an UrlAlias route, either 'location', 'locationId' or 'contentId' must be provided."
+                "When generating a UrlAlias route, either 'location', 'locationId', or 'contentId' must be provided."
             );
         }
 
@@ -368,7 +368,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      */
     public function match($pathinfo)
     {
-        throw new \RuntimeException("The UrlAliasRouter doesn't support the match() method. Please use matchRequest() instead.");
+        throw new \RuntimeException("The UrlAliasRouter doesn't support the match() method. Use matchRequest() instead.");
     }
 
     /**

@@ -62,7 +62,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
     public function testTrashThrowsUnauthorizedException()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
-        $this->expectExceptionMessage('User does not have access to \'remove\' \'content\'');
+        $this->expectExceptionMessage('The User does not have the \'remove\' \'content\' permission');
 
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();

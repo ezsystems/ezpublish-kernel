@@ -43,7 +43,7 @@ final class BeforeUpdateObjectStateEvent extends BeforeEvent
     public function getUpdatedObjectState(): ObjectState
     {
         if (!$this->hasUpdatedObjectState()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedObjectState() or set it by setUpdatedObjectState() before you call getter.', ObjectState::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUpdatedObjectState() or set it using setUpdatedObjectState() before you call the getter.', ObjectState::class));
         }
 
         return $this->updatedObjectState;

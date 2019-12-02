@@ -28,9 +28,9 @@ class InvalidArgumentType extends InvalidArgumentException
     public function __construct($argumentName, $expectedType, $value = null, Exception $previous = null)
     {
         $parameters = ['%argumentName%' => $argumentName, '%expectedType%' => $expectedType];
-        $this->setMessageTemplate("Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%'");
+        $this->setMessageTemplate("Argument '%argumentName%' is invalid: value must be of type '%expectedType%'");
         if ($value) {
-            $this->setMessageTemplate("Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%', got '%actualType%'");
+            $this->setMessageTemplate("Argument '%argumentName%' is invalid: value must be of type '%expectedType%', not '%actualType%'");
             $actualType = is_object($value) ? get_class($value) : gettype($value);
             $parameters['%actualType%'] = $actualType;
         }

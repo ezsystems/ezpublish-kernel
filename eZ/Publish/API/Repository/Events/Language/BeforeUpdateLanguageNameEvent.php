@@ -42,7 +42,7 @@ final class BeforeUpdateLanguageNameEvent extends BeforeEvent
     public function getUpdatedLanguage(): Language
     {
         if (!$this->hasUpdatedLanguage()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedLanguage() or set it by setUpdatedLanguage() before you call getter.', Language::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUpdatedLanguage() or set it using setUpdatedLanguage() before you call the getter.', Language::class));
         }
 
         return $this->updatedLanguage;

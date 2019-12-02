@@ -34,7 +34,7 @@ final class BeforeCreateRoleEvent extends BeforeEvent
     public function getRoleDraft(): RoleDraft
     {
         if (!$this->hasRoleDraft()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasRoleDraft() or set it by setRoleDraft() before you call getter.', RoleDraft::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasRoleDraft() or set it using setRoleDraft() before you call the getter.', RoleDraft::class));
         }
 
         return $this->roleDraft;

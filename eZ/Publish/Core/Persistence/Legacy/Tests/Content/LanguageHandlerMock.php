@@ -47,7 +47,7 @@ class LanguageHandlerMock implements LanguageHandler
      */
     public function create(CreateStruct $struct)
     {
-        throw new \RuntimeException('Not implemented, yet.');
+        throw new \RuntimeException('Not implemented yet.');
     }
 
     /**
@@ -57,7 +57,7 @@ class LanguageHandlerMock implements LanguageHandler
      */
     public function update(Language $struct)
     {
-        throw new \RuntimeException('Not implemented, yet.');
+        throw new \RuntimeException('Not implemented yet.');
     }
 
     /**
@@ -119,7 +119,7 @@ class LanguageHandlerMock implements LanguageHandler
      */
     public function delete($id)
     {
-        throw new \RuntimeException('Not implemented, yet.');
+        throw new \RuntimeException('Not implemented yet.');
     }
 
     /**

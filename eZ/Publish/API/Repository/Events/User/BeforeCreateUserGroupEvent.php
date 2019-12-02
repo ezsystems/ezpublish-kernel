@@ -43,7 +43,7 @@ final class BeforeCreateUserGroupEvent extends BeforeEvent
     public function getUserGroup(): UserGroup
     {
         if (!$this->hasUserGroup()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUserGroup() or set it by setUserGroup() before you call getter.', UserGroup::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUserGroup() or set it using setUserGroup() before you call the getter.', UserGroup::class));
         }
 
         return $this->userGroup;

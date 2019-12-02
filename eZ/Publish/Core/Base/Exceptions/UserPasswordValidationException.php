@@ -26,6 +26,6 @@ class UserPasswordValidationException extends InvalidArgumentException
             return (string) $error->getTranslatableMessage();
         }, $errors);
 
-        parent::__construct($argumentName, "Password doesn't match the following rules: " . implode(', ', $rules), $previous);
+        parent::__construct($argumentName, 'The password does not match the following rules: ' . implode(', ', $rules), $previous);
     }
 }

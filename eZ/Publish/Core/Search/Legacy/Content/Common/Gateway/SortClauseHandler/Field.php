@@ -145,7 +145,7 @@ class Field extends SortClauseHandler
         if (!isset($fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier]['field_definition_id'])) {
             throw new InvalidArgumentException(
                 '$sortClause->targetData',
-                'No searchable fields found for the given sort clause target ' .
+                'No searchable Fields found for the provided Sort Clause target ' .
                 "'{$fieldTarget->fieldIdentifier}' on '{$fieldTarget->typeIdentifier}'."
             );
         }

@@ -33,7 +33,7 @@ final class BeforeEnableLanguageEvent extends BeforeEvent
     public function getEnabledLanguage(): Language
     {
         if (!$this->hasEnabledLanguage()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasEnabledLanguage() or set it by setEnabledLanguage() before you call getter.', Language::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasEnabledLanguage() or set it using setEnabledLanguage() before you call the getter.', Language::class));
         }
 
         return $this->enabledLanguage;

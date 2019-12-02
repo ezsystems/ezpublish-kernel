@@ -156,8 +156,8 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
         if (empty($value->limitationValues)) {
-            // no limitation values
-            throw new \RuntimeException('$value->limitationValues is empty, it should not have been stored in the first place');
+            // A Policy should not have empty limitationValues stored
+            throw new \RuntimeException('$value->limitationValues is empty');
         }
 
         if (!isset($value->limitationValues[1])) {

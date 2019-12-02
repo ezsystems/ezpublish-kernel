@@ -450,7 +450,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         if (isset($config['image_placeholder'])) {
             foreach ($config['image_placeholder'] as $name => $value) {
                 if (isset($providers[$name])) {
-                    throw new InvalidConfigurationException("A image_placeholder named $name already exists");
+                    throw new InvalidConfigurationException("An image_placeholder called $name already exists");
                 }
 
                 $providers[$name] = $value;

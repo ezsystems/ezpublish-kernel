@@ -72,7 +72,7 @@ class Priority extends CriterionHandler
 
             default:
                 throw new RuntimeException(
-                    "Unknown operator '{$criterion->operator}' for Priority criterion handler."
+                    "Unknown operator '{$criterion->operator}' for Priority Criterion handler."
                 );
         }
     }

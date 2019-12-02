@@ -61,7 +61,7 @@ class PlaceholderAliasGenerator implements VariationHandler
             /** @var \eZ\Publish\Core\FieldType\Image\Value $imageValue */
             $imageValue = $field->value;
             if (!$this->supportsValue($imageValue)) {
-                throw new InvalidArgumentException("Value for field #{$field->id} ($field->fieldDefIdentifier) cannot be used for image placeholder generation.");
+                throw new InvalidArgumentException("Value of Field with ID {$field->id} ($field->fieldDefIdentifier) cannot be used for generating an image placeholder.");
             }
 
             try {

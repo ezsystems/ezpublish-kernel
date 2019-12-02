@@ -41,7 +41,7 @@ final class VersionBuilder
     {
         foreach ($languageCodes as $languageCode) {
             if (!is_string($languageCode) || empty($languageCode)) {
-                throw new InvalidArgumentException('$languageCodes', 'All language codes should be non-empty strings');
+                throw new InvalidArgumentException('$languageCodes', 'All language codes must be non-empty strings');
             }
         }
 
@@ -63,7 +63,7 @@ final class VersionBuilder
     {
         foreach ($contentTypeIds as $contentTypeId) {
             if (!\is_int($contentTypeId)) {
-                throw new InvalidArgumentException('$contentTypeIds', 'All contentType ids should be integers');
+                throw new InvalidArgumentException('$contentTypeIds', 'All Content Type IDs must be integers');
             }
         }
 
@@ -93,7 +93,7 @@ final class VersionBuilder
         )) {
             throw new InvalidArgumentException(
                 '$status',
-                'Status should be one of the following: STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED'
+                'Available statuses are: STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED'
             );
         }
 

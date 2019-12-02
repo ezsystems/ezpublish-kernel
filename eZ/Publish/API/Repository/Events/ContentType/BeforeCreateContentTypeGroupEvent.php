@@ -34,7 +34,7 @@ final class BeforeCreateContentTypeGroupEvent extends BeforeEvent
     public function getContentTypeGroup(): ContentTypeGroup
     {
         if (!$this->hasContentTypeGroup()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContentTypeGroup() or set it by setContentTypeGroup() before you call getter.', ContentTypeGroup::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasContentTypeGroup() or set it using setContentTypeGroup() before you call the getter.', ContentTypeGroup::class));
         }
 
         return $this->contentTypeGroup;

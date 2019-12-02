@@ -879,7 +879,7 @@ class ContentTest extends BaseServiceMockTest
     public function testCreateContentThrowsInvalidArgumentExceptionMainLanguageCodeNotSet()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'$contentCreateStruct\' is invalid: \'mainLanguageCode\' property must be set');
+        $this->expectExceptionMessage('Argument \'$contentCreateStruct\' is invalid: the \'mainLanguageCode\' property must be set');
 
         $mockedService = $this->getPartlyMockedContentService();
         $mockedService->createContent(new ContentCreateStruct(), []);
@@ -893,7 +893,7 @@ class ContentTest extends BaseServiceMockTest
     public function testCreateContentThrowsInvalidArgumentExceptionContentTypeNotSet()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'$contentCreateStruct\' is invalid: \'contentType\' property must be set');
+        $this->expectExceptionMessage('Argument \'$contentCreateStruct\' is invalid: the \'contentType\' property must be set');
 
         $mockedService = $this->getPartlyMockedContentService();
         $mockedService->createContent(
@@ -1965,7 +1965,7 @@ class ContentTest extends BaseServiceMockTest
     public function testCreateContentThrowsContentValidationExceptionFieldDefinition($mainLanguageCode, $structFields)
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
-        $this->expectExceptionMessage('Field definition \'identifier\' does not exist in given ContentType');
+        $this->expectExceptionMessage('Field definition \'identifier\' does not exist in the given Content Type');
 
         $this->assertForCreateContentContentValidationException(
             $mainLanguageCode,
@@ -2003,7 +2003,7 @@ class ContentTest extends BaseServiceMockTest
     public function testCreateContentThrowsContentValidationExceptionTranslation($mainLanguageCode, $structFields)
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
-        $this->expectExceptionMessage('A value is set for non translatable field definition \'identifier\' with language \'eng-US\'');
+        $this->expectExceptionMessage('You cannot set a value for the non-translatable Field definition \'identifier\' in language \'eng-US\'');
 
         $fieldDefinitions = [
             new FieldDefinition(
@@ -2393,7 +2393,7 @@ class ContentTest extends BaseServiceMockTest
     public function testCreateContentThrowsContentFieldValidationException($mainLanguageCode, $structFields)
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
-        $this->expectExceptionMessage('Content fields did not validate');
+        $this->expectExceptionMessage('Content Fields did not validate');
 
         $fieldDefinitions = $this->fixturesForTestCreateContentNonRedundantFieldSetComplex();
         list($contentCreateStruct, $allFieldErrors) =
@@ -2560,7 +2560,7 @@ class ContentTest extends BaseServiceMockTest
     public function testCreateContentWithLocationsDuplicateUnderParent()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Multiple LocationCreateStructs with the same parent Location \'321\' are given');
+        $this->expectExceptionMessage('You provided multiple LocationCreateStructs with the same parent Location \'321\'');
 
         $fieldDefinitions = [
             new FieldDefinition(
@@ -4780,7 +4780,7 @@ class ContentTest extends BaseServiceMockTest
     public function testUpdateContentThrowsContentValidationExceptionFieldDefinition($initialLanguageCode, $structFields)
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
-        $this->expectExceptionMessage('Field definition \'identifier\' does not exist in given ContentType');
+        $this->expectExceptionMessage('Field definition \'identifier\' does not exist in given Content Type');
 
         $this->assertForUpdateContentContentValidationException(
             $initialLanguageCode,
@@ -4818,7 +4818,7 @@ class ContentTest extends BaseServiceMockTest
     public function testUpdateContentThrowsContentValidationExceptionTranslation($initialLanguageCode, $structFields)
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
-        $this->expectExceptionMessage('A value is set for non translatable field definition \'identifier\' with language \'eng-US\'');
+        $this->expectExceptionMessage('You cannot set a value for the non-translatable Field definition \'identifier\' in language \'eng-US\'');
 
         $fieldDefinitions = [
             new FieldDefinition(
@@ -5307,7 +5307,7 @@ class ContentTest extends BaseServiceMockTest
     public function testUpdateContentThrowsContentFieldValidationException($initialLanguageCode, $structFields, $spiField, $allFieldErrors)
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
-        $this->expectExceptionMessage('Content fields did not validate');
+        $this->expectExceptionMessage('Content Fields did not validate');
 
         list($existingFields, $fieldDefinitions) = $this->fixturesForTestUpdateContentNonRedundantFieldSetComplex();
         list($versionInfo, $contentUpdateStruct) =

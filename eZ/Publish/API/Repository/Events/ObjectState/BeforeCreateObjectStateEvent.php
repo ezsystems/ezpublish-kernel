@@ -44,7 +44,7 @@ final class BeforeCreateObjectStateEvent extends BeforeEvent
     public function getObjectState(): ObjectState
     {
         if (!$this->hasObjectState()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasObjectState() or set it by setObjectState() before you call getter.', ObjectState::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasObjectState() or set it using setObjectState() before you call the getter.', ObjectState::class));
         }
 
         return $this->objectState;

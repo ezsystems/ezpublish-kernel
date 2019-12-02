@@ -96,7 +96,7 @@ class URLWildcardService implements URLWildcardServiceInterface
         $placeholders = array_map('intval', $placeholders[1]);
 
         if (!empty($placeholders) && max($placeholders) > count($patterns)) {
-            throw new ContentValidationException('Placeholders are not matching with wildcards.');
+            throw new ContentValidationException('Placeholders do not match the wildcards.');
         }
 
         $this->repository->beginTransaction();

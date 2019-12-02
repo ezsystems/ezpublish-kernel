@@ -224,7 +224,7 @@ abstract class Location extends ValueObject
         $map = self::SORT_FIELD_MAP;
         if (!isset($map[$this->sortField])) {
             throw new NotImplementedException(
-                "Sort clause not implemented for Location sort field with value {$this->sortField}"
+                "Sort Clause not implemented for Location sort Field {$this->sortField}"
             );
         }
 

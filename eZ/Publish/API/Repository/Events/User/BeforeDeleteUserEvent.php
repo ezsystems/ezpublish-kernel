@@ -33,7 +33,7 @@ final class BeforeDeleteUserEvent extends BeforeEvent
     public function getLocations(): array
     {
         if (!$this->hasLocations()) {
-            throw new UnexpectedValueException('You must set proper event return value of array type by setLocations() method if you use stopPropagation()');
+            throw new UnexpectedValueException('If you use stopPropagation(), you must set the event return value to be an array using setLocations()');
         }
 
         return $this->locations;

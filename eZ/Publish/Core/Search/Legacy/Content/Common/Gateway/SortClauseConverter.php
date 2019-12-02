@@ -78,7 +78,7 @@ class SortClauseConverter
                 }
             }
 
-            throw new RuntimeException('No handler available for sort clause: ' . get_class($sortClause));
+            throw new RuntimeException('No handler available for Sort Clause: ' . get_class($sortClause));
         }
     }
 
@@ -101,7 +101,7 @@ class SortClauseConverter
                 }
             }
 
-            throw new RuntimeException('No handler available for sort clause: ' . get_class($sortClause));
+            throw new RuntimeException('No handler available for Sort Clause: ' . get_class($sortClause));
         }
     }
 

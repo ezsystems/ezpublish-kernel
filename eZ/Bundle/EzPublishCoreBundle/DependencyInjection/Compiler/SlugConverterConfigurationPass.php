@@ -57,7 +57,7 @@ class SlugConverterConfigurationPass implements CompilerPassInterface
         if (isset($mergedConfiguration['transformation']) &&
             !array_key_exists($mergedConfiguration['transformation'], $mergedConfiguration['transformationGroups'])) {
             throw new InvalidConfigurationException(sprintf(
-                "Unknown transformation group selected: '%s'.\nAvailable ones: '%s'",
+                "Unknown transformation group selected: '%s'.\nAvailable groups: '%s'",
                 $mergedConfiguration['transformation'],
                 implode(', ', array_keys($mergedConfiguration['transformationGroups']))
             ));

@@ -622,7 +622,7 @@ HEREDOC;
         $query->andWhere($notExistPublishedVersion);
         if (0 === $query->execute()) {
             throw new BadStateException(
-                '$contentId', "Someone just published another Version of the Content item {$contentId}"
+                '$contentId', "Someone just published another version of Content item {$contentId}"
             );
         }
         $this->markContentAsPublished($contentId, $versionNo);
@@ -2422,7 +2422,7 @@ HEREDOC;
         if ($rowCount === 0) {
             throw new BadStateException(
                 '$languageCode',
-                'Specified translation is the only one Content Object Version has'
+                'The provided translation is the only translation in this version'
             );
         }
     }
@@ -2476,7 +2476,7 @@ HEREDOC;
         if ($rowCount === 0) {
             throw new BadStateException(
                 '$languageCode',
-                'Specified translation is the only one Content Object Version has'
+                'The provided translation is the only translation in this version'
             );
         }
     }

@@ -43,7 +43,7 @@ final class BeforeUpdateObjectStateGroupEvent extends BeforeEvent
     public function getUpdatedObjectStateGroup(): ObjectStateGroup
     {
         if (!$this->hasUpdatedObjectStateGroup()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedObjectStateGroup() or set it by setUpdatedObjectStateGroup() before you call getter.', ObjectStateGroup::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUpdatedObjectStateGroup() or set it using setUpdatedObjectStateGroup() before you call the getter.', ObjectStateGroup::class));
         }
 
         return $this->updatedObjectStateGroup;

@@ -126,7 +126,7 @@ class IOService implements IOServiceInterface
         try {
             $this->binarydataHandler->create($spiBinaryCreateStruct);
         } catch (Exception $e) {
-            throw new IOException('An error occured creating binarydata', $e);
+            throw new IOException('An error occured when creating binary data', $e);
         }
 
         $spiBinaryFile = $this->metadataHandler->create($spiBinaryCreateStruct);

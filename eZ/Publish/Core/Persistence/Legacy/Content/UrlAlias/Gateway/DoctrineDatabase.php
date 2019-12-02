@@ -658,7 +658,7 @@ class DoctrineDatabase extends Gateway
         foreach ($values as $column => $value) {
             // @todo remove after testing
             if (!in_array($column, $this->columns['ezurlalias_ml'])) {
-                throw new \Exception("unknown column '$column' for table 'ezurlalias_ml'");
+                throw new \Exception("unknown column '$column' in table 'ezurlalias_ml'");
             }
             switch ($column) {
                 case 'text':
@@ -914,7 +914,7 @@ class DoctrineDatabase extends Gateway
                 $path = implode('/', $pathDataArray);
                 throw new BadStateException(
                     'id',
-                    "Unable to load path data, the path ...'{$path}' is broken, alias id '{$id}' not found. " .
+                    "Unable to load path data, path '{$path}' is broken, alias with ID '{$id}' not found. " .
                     'To fix all broken paths run the ezplatform:urls:regenerate-aliases command'
                 );
             }

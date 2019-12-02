@@ -43,7 +43,7 @@ final class BeforeUpdateUserGroupEvent extends BeforeEvent
     public function getUpdatedUserGroup(): UserGroup
     {
         if (!$this->hasUpdatedUserGroup()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedUserGroup() or set it by setUpdatedUserGroup() before you call getter.', UserGroup::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUpdatedUserGroup() or set it using setUpdatedUserGroup() before you call the getter.', UserGroup::class));
         }
 
         return $this->updatedUserGroup;

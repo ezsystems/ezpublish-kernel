@@ -33,7 +33,7 @@ final class BeforeUnhideLocationEvent extends BeforeEvent
     public function getRevealedLocation(): Location
     {
         if (!$this->hasRevealedLocation()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasRevealedLocation() or set it by setRevealedLocation() before you call getter.', Location::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasRevealedLocation() or set it using setRevealedLocation() before you call the getter.', Location::class));
         }
 
         return $this->revealedLocation;

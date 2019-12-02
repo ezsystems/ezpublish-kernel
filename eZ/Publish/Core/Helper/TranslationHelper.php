@@ -153,13 +153,13 @@ class TranslationHelper
         if (!$fieldDefinition instanceof FieldDefinition) {
             throw new InvalidArgumentException(
                 '$fieldDefIdentifier',
-                "Field '{$fieldDefIdentifier}' not found on {$contentType->identifier}"
+                "Field '{$fieldDefIdentifier}' not found in {$contentType->identifier}"
             );
         }
 
         $method = 'get' . $property;
         if (!method_exists($fieldDefinition, $method)) {
-            throw new InvalidArgumentException('$property', "Method get'{$property}'() not found on FieldDefinition");
+            throw new InvalidArgumentException('$property', "Method {$method}() not found in the FieldDefinition");
         }
 
         // Loop over prioritized languages to get the appropriate translated field definition name
@@ -190,7 +190,7 @@ class TranslationHelper
     public function getTranslatedByProperty(ValueObject $object, $property, $forcedLanguage = null)
     {
         if (!isset($object->$property)) {
-            throw new InvalidArgumentException('$property', "Property '{$property}' not found on " . get_class($object));
+            throw new InvalidArgumentException('$property', "Property '{$property}' not found in " . get_class($object));
         }
 
         // Always force main language as fallback, if defined and if either alwaysAvailable is true or not defined
@@ -229,7 +229,7 @@ class TranslationHelper
     public function getTranslatedByMethod(ValueObject $object, $method, $forcedLanguage = null)
     {
         if (!method_exists($object, $method)) {
-            throw new InvalidArgumentException('$method', "Method '{$method}' not found on " . get_class($object));
+            throw new InvalidArgumentException('$method', "Method '{$method}' not found in " . get_class($object));
         }
 
         foreach ($this->getLanguages($forcedLanguage) as $lang) {

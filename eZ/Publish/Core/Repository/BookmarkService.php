@@ -46,7 +46,7 @@ class BookmarkService implements BookmarkServiceInterface
         $loadedLocation = $this->repository->getLocationService()->loadLocation($location->id);
 
         if ($this->isBookmarked($loadedLocation)) {
-            throw new InvalidArgumentException('$location', 'location is already bookmarked.');
+            throw new InvalidArgumentException('$location', 'Location is already bookmarked.');
         }
 
         $createStruct = new CreateStruct();
@@ -76,7 +76,7 @@ class BookmarkService implements BookmarkServiceInterface
         );
 
         if (empty($bookmarks)) {
-            throw new InvalidArgumentException('$location', 'location is not bookmarked.');
+            throw new InvalidArgumentException('$location', 'Location is not bookmarked.');
         }
 
         $this->repository->beginTransaction();

@@ -308,7 +308,7 @@ class TrashService implements TrashServiceInterface
 
             foreach ($query->sortClauses as $sortClause) {
                 if (!$sortClause instanceof SortClause) {
-                    throw new InvalidArgumentValue('query->sortClauses', 'only instances of SortClause class are allowed');
+                    throw new InvalidArgumentValue('query->sortClauses', 'only instances of the SortClause class are allowed');
                 }
             }
         }

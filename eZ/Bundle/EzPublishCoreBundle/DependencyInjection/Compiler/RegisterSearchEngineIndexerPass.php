@@ -46,7 +46,7 @@ class RegisterSearchEngineIndexerPass implements CompilerPassInterface
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         'ezpublish.searchEngineIndexer service tag needs an "alias" attribute to ' .
-                        'identify the search engine. None given.'
+                        'identify the search engine.'
                     );
                 }
 

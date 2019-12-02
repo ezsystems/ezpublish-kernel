@@ -18,6 +18,6 @@ class UnsupportedFilter extends AbstractFilter
      */
     public function apply(ImageInterface $image)
     {
-        throw new NotSupportedException('Filter is not supported by your current configuration.');
+        throw new NotSupportedException('The filter is not supported by your current configuration.');
     }
 }

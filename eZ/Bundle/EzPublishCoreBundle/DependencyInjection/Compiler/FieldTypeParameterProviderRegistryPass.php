@@ -37,7 +37,7 @@ class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
         foreach ($deprecatedFieldTypeParameterProviderTags as $deprecatedFieldTypeParameterProviderTag) {
             @trigger_error(
                 sprintf(
-                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
+                    'Service tag `%s` is deprecated and will be removed in eZ Platform 4.0. Use `%s` instead.',
                     self::DEPRECATED_FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG,
                     self::FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG
                 ),
@@ -51,7 +51,7 @@ class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
                 if (!isset($attribute['alias'])) {
                     throw new \LogicException(
                         sprintf(
-                            '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                            '%s or %s service tag needs an "alias" attribute to identify the Field Type.',
                             self::DEPRECATED_FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG,
                             self::FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG
                         )

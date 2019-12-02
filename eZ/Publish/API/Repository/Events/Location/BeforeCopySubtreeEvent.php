@@ -42,7 +42,7 @@ final class BeforeCopySubtreeEvent extends BeforeEvent
     public function getLocation(): Location
     {
         if (!$this->hasLocation()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasLocation() or set it by setLocation() before you call getter.', Location::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasLocation() or set it using setLocation() before you call the getter.', Location::class));
         }
 
         return $this->location;

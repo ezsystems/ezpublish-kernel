@@ -84,6 +84,6 @@ class DownloadRedirectionController extends Controller
                 return $field;
             }
         }
-        throw new InvalidArgumentException("Field with id $fieldId not found in Content with id {$content->id}");
+        throw new InvalidArgumentException("Could not find any Field with ID $fieldId in Content item with ID {$content->id}");
     }
 }

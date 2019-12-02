@@ -34,7 +34,7 @@ final class BeforeCreateNotificationEvent extends BeforeEvent
     public function getNotification(): Notification
     {
         if (!$this->hasNotification()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasNotification() or set it by setNotification() before you call getter.', Notification::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasNotification() or set it using setNotification() before you call the getter.', Notification::class));
         }
 
         return $this->notification;

@@ -59,7 +59,7 @@ class HandlerRegistry
     public function get($fieldTypeIdentifier)
     {
         if (!isset($this->map[$fieldTypeIdentifier])) {
-            throw new OutOfBoundsException("No handler registered for field type '{$fieldTypeIdentifier}'.");
+            throw new OutOfBoundsException("No handler registered for Field Type '{$fieldTypeIdentifier}'.");
         }
 
         return $this->map[$fieldTypeIdentifier];

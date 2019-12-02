@@ -151,7 +151,7 @@ class UserService implements UserServiceInterface
         $loadedParentGroup = $this->loadUserGroup($parentGroup->id);
 
         if ($loadedParentGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            throw new InvalidArgumentException('parentGroup', 'parent user group has no main location');
+            throw new InvalidArgumentException('parentGroup', 'parent User Group has no main Location');
         }
 
         $locationCreateStruct = $locationService->newLocationCreateStruct(
@@ -304,11 +304,11 @@ class UserService implements UserServiceInterface
         $locationService = $this->repository->getLocationService();
 
         if ($loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            throw new BadStateException('userGroup', 'existing user group is not stored and/or does not have any location yet');
+            throw new BadStateException('userGroup', 'existing User Group is not stored and/or does not have any Location yet');
         }
 
         if ($loadedNewParent->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            throw new BadStateException('newParent', 'new user group is not stored and/or does not have any location yet');
+            throw new BadStateException('newParent', 'new User Group is not stored and/or does not have any Location yet');
         }
 
         $userGroupMainLocation = $locationService->loadLocation(
@@ -423,7 +423,7 @@ class UserService implements UserServiceInterface
         }
 
         if ($userFieldDefinition === null) {
-            throw new ContentValidationException('Provided content type does not contain ezuser field type');
+            throw new ContentValidationException('the provided Content Type does not contain the ezuser Field Type');
         }
 
         $this->repository->beginTransaction();
@@ -704,7 +704,7 @@ class UserService implements UserServiceInterface
         }
 
         if ($userFieldDefinition === null) {
-            throw new ContentValidationException('Provided content type does not contain ezuser field type');
+            throw new ContentValidationException('The provided Content Type does not contain the ezuser Field Type');
         }
 
         $userUpdateStruct->contentUpdateStruct = $userUpdateStruct->contentUpdateStruct ?? $contentService->newContentUpdateStruct();
@@ -864,12 +864,12 @@ class UserService implements UserServiceInterface
         }
 
         if ($loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            throw new BadStateException('userGroup', 'user group has no main location or no locations');
+            throw new BadStateException('userGroup', 'User Group has no main Location or no Locations');
         }
 
         if (in_array($loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId, $existingGroupIds)) {
             // user is already assigned to the user group
-            throw new InvalidArgumentException('user', 'user is already in the given user group');
+            throw new InvalidArgumentException('user', 'User is already in the given User Group');
         }
 
         $locationCreateStruct = $locationService->newLocationCreateStruct(
@@ -907,18 +907,18 @@ class UserService implements UserServiceInterface
 
         $userLocations = $locationService->loadLocations($loadedUser->getVersionInfo()->getContentInfo());
         if (empty($userLocations)) {
-            throw new BadStateException('user', 'user has no locations, cannot unassign from group');
+            throw new BadStateException('user', 'User has no Locations, cannot unassign from group');
         }
 
         if ($loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            throw new BadStateException('userGroup', 'user group has no main location or no locations, cannot unassign');
+            throw new BadStateException('userGroup', 'User Group has no main Location or no Locations, cannot unassign');
         }
 
         foreach ($userLocations as $userLocation) {
             if ($userLocation->parentLocationId == $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId) {
                 // Throw this specific BadState when we know argument is valid
                 if (count($userLocations) === 1) {
-                    throw new BadStateException('user', 'user only has one user group, cannot unassign from last group');
+                    throw new BadStateException('user', 'User only has one User Group, cannot unassign from last group');
                 }
 
                 $this->repository->beginTransaction();
@@ -934,7 +934,7 @@ class UserService implements UserServiceInterface
             }
         }
 
-        throw new InvalidArgumentException('userGroup', 'user is not in the given user group');
+        throw new InvalidArgumentException('userGroup', 'User is not in the given User Group');
     }
 
     /**
@@ -1208,7 +1208,7 @@ class UserService implements UserServiceInterface
         }
 
         if ($userFieldDefinition === null) {
-            throw new ContentValidationException('Provided content type does not contain ezuser field type');
+            throw new ContentValidationException('The provided Content Type does not contain the ezuser Field Type');
         }
 
         $configuration = $userFieldDefinition->getValidatorConfiguration();

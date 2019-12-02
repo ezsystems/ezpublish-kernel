@@ -107,7 +107,7 @@ class ConsoleContext implements Context
     {
         $phpFinder = new PhpExecutableFinder();
         if (!$phpPath = $phpFinder->find(false)) {
-            throw new \RuntimeException('The php executable could not be found, add it to your PATH environment variable and try again');
+            throw new \RuntimeException('The php executable could not be found. Add it to your PATH environment variable and try again');
         }
         $arguments = $phpFinder->findArguments();
         if (false !== ($ini = php_ini_loaded_file())) {

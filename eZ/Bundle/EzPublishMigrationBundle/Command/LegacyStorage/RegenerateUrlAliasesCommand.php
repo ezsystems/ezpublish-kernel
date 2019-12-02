@@ -74,7 +74,7 @@ class RegenerateUrlAliasesCommand extends ContainerAwareCommand
             ->addArgument(
                 'action',
                 InputArgument::REQUIRED,
-                'Action to perform, one of: full, autogenerate, backup-custom, restore-custom, backup-global, restore-global'
+                'Action to perform: full, autogenerate, backup-custom, restore-custom, backup-global, restore-global'
             )
             ->addArgument(
                 'bulk-count',
@@ -86,25 +86,24 @@ class RegenerateUrlAliasesCommand extends ContainerAwareCommand
                 <<<EOT
 <error>This command is deprecated, use the ezplatform:urls:regenerate-aliases command instead.</error>
 The command <info>%command.name%</info> regenerates URL aliases for Locations
-and migrates existing custom Location and global URL aliases to a separate database table. Separate
+and migrates existing custom Location and global URL aliases to a separate database table. The separate
 table must be named '__migration_ezurlalias_ml' and should be created manually to be identical (but
-empty) as the existing table 'ezurlalias_ml' before the command is executed.
+empty) to the existing table 'ezurlalias_ml' before the command is executed.
 
-After the script finishes, to complete migration the table should be renamed to 'ezurlalias_ml'
-manually.
+After the script finishes, to complete migration, the table must be manually renamed to 'ezurlalias_ml'.
 
-Using available options for 'action' argument, you can backup custom Location and global URL aliases
+Using available options for the 'action' argument, you can back up custom Location and global URL aliases
 separately and inspect them before restoring them to the migration table. They will be stored in
 backup tables named '__migration_backup_custom_alias' and '__migration_backup_global_alias' (created
 automatically).
 
 It is also possible to skip custom Location and global URL aliases altogether and regenerate only
-automatically created URL aliases for Locations (use 'autogenerate' action to achieve this).
+automatically created URL aliases for Locations (use the 'autogenerate' action to achieve this).
 
-<error>During the script execution the database should not be modified.</error>
+<error>The database should not be modified while the script is being executed.</error>
 
-Since this script can potentially run for a very long time, to avoid memory exhaustion run it in
-production environment using <info>--env=prod</info> switch.
+Since this script can potentially run for a very long time, to avoid memory
+exhaustion, run it in production environment using <info>--env=prod</info> switch.
 
 EOT
             );
@@ -128,7 +127,7 @@ EOT
 
         if (!isset($this->actionSet[$action])) {
             throw new RuntimeException(
-                "Action '{$action}' is not supported, use one of: " .
+                "Action '{$action}' is not supported. Choose one of the following actions: " .
                 implode(', ', array_keys($this->actionSet))
             );
         }
@@ -187,7 +186,7 @@ EOT
 
         if (!$storageEngine instanceof LegacyStorageEngine) {
             throw new RuntimeException(
-                'Expected to find Legacy Storage Engine but found something else.'
+                'Did not find Legacy Storage Engine.'
             );
         }
     }
@@ -226,7 +225,7 @@ EOT
         if (!$this->isTableEmpty($table)) {
             throw new RuntimeException(
                 "Table '{$table}' contains data. " .
-                "Ensure it's empty or non-existent (it will be automatically created)."
+                'Truncate (empty) the table or remove it, it will then be re-created automatically.'
             );
         }
 
@@ -246,7 +245,7 @@ EOT
         $customAliasPathCount = 0;
 
         if ($totalCount === 0) {
-            $this->output->writeln('Could not find any Locations, nothing to backup.');
+            $this->output->writeln('Could not find any Locations, nothing to back up.');
             $this->output->writeln('');
 
             return;
@@ -302,14 +301,14 @@ EOT
         if (!$this->tableExists($mainTable)) {
             throw new RuntimeException(
                 "Could not find main URL alias migration table '{$mainTable}'. " .
-                'Ensure that table exists (you will have to create it manually).'
+                'Create the table manually.'
             );
         }
 
         if (!$this->tableExists($backupTable)) {
             throw new RuntimeException(
                 "Could not find custom Location URL alias backup table '{$backupTable}'. " .
-                "Ensure that table is created by 'backup-custom' action."
+                "Make sure that table is created by the 'backup-custom' action."
             );
         }
 
@@ -549,7 +548,7 @@ EOT
         if (!$this->tableExists($tableName)) {
             throw new RuntimeException(
                 "Could not find main URL alias migration table '{$tableName}'. " .
-                'Ensure that table exists (you will have to create it manually).'
+                'Create the table manually.'
             );
         }
 
@@ -630,7 +629,7 @@ EOT
         if (!$this->isTableEmpty($table)) {
             throw new RuntimeException(
                 "Table '{$table}' contains data. " .
-                "Ensure it's empty or non-existent (it will be automatically created)."
+                'Truncate (empty) the table or remove it, it will then be re-created automatically'
             );
         }
 
@@ -649,7 +648,7 @@ EOT
         $pathCount = 0;
 
         if ($totalCount === 0) {
-            $this->output->writeln('Could not find any global URL aliases, nothing to backup.');
+            $this->output->writeln('Could not find any global URL aliases, nothing to back up.');
             $this->output->writeln('');
 
             return;
@@ -749,14 +748,14 @@ EOT
         if (!$this->tableExists($table)) {
             throw new RuntimeException(
                 "Could not find main URL alias migration table '{$table}'. " .
-                'Ensure that table exists (you will have to create it manually).'
+                'Create the table manually.'
             );
         }
 
         if (!$this->tableExists($backupTable)) {
             throw new RuntimeException(
                 "Could not find global URL alias backup table '$backupTable'. " .
-                "Ensure that table is created by 'backup-global' action."
+                "Make sure that the table is created by the 'backup-global' action."
             );
         }
 

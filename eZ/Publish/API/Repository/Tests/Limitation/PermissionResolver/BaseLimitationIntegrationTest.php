@@ -92,7 +92,7 @@ abstract class BaseLimitationIntegrationTest extends BaseTest
             $expectedResult,
             $this->permissionResolver->canUser($module, $function, $object, $targets),
             sprintf(
-                'Failure for %s/%s with limitations: %s',
+                'Failure for %s/%s with Limitations: %s',
                 $module,
                 $function,
                 $this->getLimitationsListAsString($limitations)

@@ -30,8 +30,8 @@ class RegenerateUrlAliasesCommand extends Command
     const BEFORE_RUNNING_HINTS = <<<EOT
 <error>Before you continue:</error>
 - Make sure to back up your database.
-- If you are regenerating URL aliases for all Locations, take installation offline, during the script execution the database should not be modified.
-- Run this command without memory limit, i.e. processing of 300k Locations can take up to 1 GB of RAM.
+- If you are regenerating URL aliases for all Locations, take the installation offline. The database should not be modified while the script is being executed.
+- Run this command without memory limit, because processing large numbers of Locations (e.g. 300k) can take up to 1 GB of RAM.
 - Run this command in production environment using <info>--env=prod</info>
 - Manually clear HTTP cache after running this command.
 EOT;
@@ -76,7 +76,7 @@ EOT;
                 'location-id',
                 null,
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Only Locations with provided id\'s will have URL aliases regenerated',
+                'Only Locations with provided ID\'s will have URL aliases regenerated',
                 []
             )->setHelp(
                 <<<EOT
@@ -90,7 +90,7 @@ Note: This script can potentially run for a very long time.
 
 Due to performance issues the command does not send any Events.
 
-<comment>HTTP cache needs to be cleared manually after executing this command.</comment>
+<comment>You need to clear HTTP cache manually after executing this command.</comment>
 
 EOT
             );
@@ -145,7 +145,7 @@ EOT
             }
         );
         $output->writeln("<info>Done. Deleted {$corruptedAliasesCount} entries.</info>");
-        $output->writeln('<comment>Make sure to clear HTTP cache afterwards.</comment>');
+        $output->writeln('<comment>Make sure to clear HTTP cache.</comment>');
     }
 
     /**

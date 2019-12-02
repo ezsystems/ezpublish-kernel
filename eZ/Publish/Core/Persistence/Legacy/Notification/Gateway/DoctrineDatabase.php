@@ -84,7 +84,7 @@ class DoctrineDatabase extends Gateway
     public function updateNotification(Notification $notification): void
     {
         if (!isset($notification->id) || !is_numeric($notification->id)) {
-            throw new InvalidArgumentException(self::COLUMN_ID, 'Cannot update Notification');
+            throw new InvalidArgumentException(self::COLUMN_ID, 'Cannot update the notification');
         }
 
         $query = $this->connection->createQueryBuilder();

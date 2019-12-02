@@ -107,7 +107,7 @@ class ContentDownloadRouteReferenceListener implements EventSubscriberInterface
                 if (!$field instanceof Field) {
                     throw new InvalidArgumentException(
                         sprintf(
-                            "The '%s' parameter did not match a known Field",
+                            "Parameter '%s' did not match a known Field",
                             self::OPT_FIELD_IDENTIFIER
                         )
                     );

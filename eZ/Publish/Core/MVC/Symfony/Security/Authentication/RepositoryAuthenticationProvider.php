@@ -46,7 +46,7 @@ class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
         $currentUser = $token->getUser();
         if ($currentUser instanceof UserInterface) {
             if ($currentUser->getAPIUser()->passwordHash !== $user->getAPIUser()->passwordHash) {
-                throw new BadCredentialsException('The credentials were changed from another session.');
+                throw new BadCredentialsException('The credentials were changed in another session.');
             }
 
             $apiUser = $currentUser->getAPIUser();

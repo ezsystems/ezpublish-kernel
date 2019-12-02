@@ -112,7 +112,7 @@ class User implements ReferenceUserInterface, EquatableInterface
     {
         if (!$this->user instanceof APIUser) {
             throw new \LogicException(
-                'Attempts to get APIUser before it has been set by UserProvider, APIUser is not serialized to session'
+                'Attempted to get APIUser before it has been set by UserProvider, APIUser is not serialized to session'
             );
         }
 

@@ -41,7 +41,7 @@ class FieldRegistry
         if (!isset($this->types[$name])) {
             throw new OutOfBoundsException(
                 sprintf(
-                    'Field type "%s" is not indexable. Please provide %s implementation and register it with "%s" tag.',
+                    'Field Type "%s" is not indexable. Provide %s implementation and register it with the "%s" tag.',
                     $name,
                     Indexable::class,
                     self::INDEXABLE_FIELD_TYPE_TAG

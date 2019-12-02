@@ -64,7 +64,7 @@ final class BeforeCreateGlobalUrlAliasEvent extends BeforeEvent
     public function getUrlAlias(): URLAlias
     {
         if (!$this->hasUrlAlias()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUrlAlias() or set it by setUrlAlias() before you call getter.', URLAlias::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUrlAlias() or set it using setUrlAlias() before you call the getter.', URLAlias::class));
         }
 
         return $this->urlAlias;

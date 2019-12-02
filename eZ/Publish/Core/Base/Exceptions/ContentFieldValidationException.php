@@ -42,7 +42,7 @@ class ContentFieldValidationException extends APIContentFieldValidationException
     public function __construct(array $errors)
     {
         $this->errors = $errors;
-        $this->setMessageTemplate('Content fields did not validate');
+        $this->setMessageTemplate('Content Fields did not validate');
         parent::__construct($this->getBaseTranslation());
     }
 

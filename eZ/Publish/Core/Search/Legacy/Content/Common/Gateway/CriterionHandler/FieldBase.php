@@ -160,7 +160,7 @@ abstract class FieldBase extends CriterionHandler
         if (empty($fieldWhereExpressions)) {
             throw new NotImplementedException(
                 sprintf(
-                    'Following fieldtypes are not searchable in the legacy search engine: %s',
+                    'The following Field Types are not searchable in the Legacy search engine: %s',
                     implode(', ', array_keys($fieldsInformation))
                 )
             );

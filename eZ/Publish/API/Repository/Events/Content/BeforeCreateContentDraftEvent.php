@@ -68,7 +68,7 @@ final class BeforeCreateContentDraftEvent extends BeforeEvent
     public function getContentDraft(): Content
     {
         if (!$this->hasContentDraft()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContentDraft() or set it by setContentDraft() before you call getter.', Content::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasContentDraft() or set it using setContentDraft() before you call the getter.', Content::class));
         }
 
         return $this->contentDraft;

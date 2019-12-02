@@ -122,7 +122,7 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
         if ($value->limitationValues[0] != 1) {
             throw new BadStateException(
                 'Parent User Group limitation',
-                'expected limitation value to be 1 but got:' . $value->limitationValues[0]
+                'Expected Limitation value to be 1 instead of' . $value->limitationValues[0]
             );
         }
 
@@ -179,14 +179,14 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
         if (empty($value->limitationValues)) {
-            // no limitation values
-            throw new \RuntimeException('$value->limitationValues is empty, it should not have been stored in the first place');
+            // A Policy should not have empty limitationValues stored
+            throw new \RuntimeException('$value->limitationValues is empty');
         }
 
         if ($value->limitationValues[0] != 1) {
             throw new BadStateException(
                 'Parent User Group limitation',
-                'expected limitation value to be 1 but got:' . $value->limitationValues[0]
+                'Expected Limitation value to be 1 instead of' . $value->limitationValues[0]
             );
         }
 
