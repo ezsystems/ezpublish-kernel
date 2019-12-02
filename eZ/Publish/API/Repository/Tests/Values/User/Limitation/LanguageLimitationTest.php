@@ -270,7 +270,7 @@ class LanguageLimitationTest extends BaseTest
         $contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
 
         $admin = $permissionResolver->getCurrentUserReference();
-        $permissionResolver->setCurrentUserReference($this->createEditorUserWithLanguageLimitation(['ger-DE']));
+        $permissionResolver->setCurrentUserReference($this->createEditorUserWithLanguageLimitation([self::GER_DE]));
 
         $contentService->publishVersion($draft->versionInfo, [self::GER_DE]);
 
@@ -304,7 +304,7 @@ class LanguageLimitationTest extends BaseTest
 
         $contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
 
-        $permissionResolver->setCurrentUserReference($this->createEditorUserWithLanguageLimitation(['ger-DE']));
+        $permissionResolver->setCurrentUserReference($this->createEditorUserWithLanguageLimitation([self::GER_DE]));
 
         $this->expectException(UnauthorizedException::class);
         $contentService->publishVersion($draft->versionInfo, [self::ENG_US]);
@@ -321,13 +321,13 @@ class LanguageLimitationTest extends BaseTest
         $contentService = $repository->getContentService();
         $permissionResolver = $repository->getPermissionResolver();
 
-        $editorDE = $this->createEditorUserWithLanguageLimitation(['ger-DE'], 'editor-de');
-        $editorUS = $this->createEditorUserWithLanguageLimitation(['eng-US'], 'editor-us');
+        $editorDE = $this->createEditorUserWithLanguageLimitation([self::GER_DE], 'editor-de');
+        $editorUS = $this->createEditorUserWithLanguageLimitation([self::ENG_US], 'editor-us');
 
         // German editor publishes content in German language
         $permissionResolver->setCurrentUserReference($editorDE);
 
-        $folder = $this->createFolder(['ger-DE' => 'German Folder'], 2);
+        $folder = $this->createFolder([self::GER_DE => 'German Folder'], 2);
 
         // American editor creates and saves English draft
         $permissionResolver->setCurrentUserReference($editorUS);
@@ -335,7 +335,7 @@ class LanguageLimitationTest extends BaseTest
         $folder = $contentService->loadContent($folder->id);
         $folderDraft = $contentService->createContentDraft($folder->contentInfo);
         $folderUpdateStruct = $contentService->newContentUpdateStruct();
-        $folderUpdateStruct->setField('name', 'English Folder', 'eng-US');
+        $folderUpdateStruct->setField('name', 'English Folder', self::ENG_US);
         $folderDraft = $contentService->updateContent(
             $folderDraft->versionInfo,
             $folderUpdateStruct
@@ -385,6 +385,7 @@ class LanguageLimitationTest extends BaseTest
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException

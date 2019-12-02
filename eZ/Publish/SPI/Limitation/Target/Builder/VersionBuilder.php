@@ -130,7 +130,7 @@ final class VersionBuilder
     /**
      * Set intent to publish, to specified translations, all from the given list.
      *
-     * @param array $languageCodes
+     * @param string[] $languageCodes
      *
      * @return self
      *
