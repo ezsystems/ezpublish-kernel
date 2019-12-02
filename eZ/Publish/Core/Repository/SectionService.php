@@ -103,7 +103,7 @@ class SectionService implements SectionServiceInterface
         try {
             $existingSection = $this->sectionHandler->loadByIdentifier($sectionCreateStruct->identifier);
             if ($existingSection !== null) {
-                throw new InvalidArgumentException('sectionCreateStruct', 'section with specified identifier already exists');
+                throw new InvalidArgumentException('sectionCreateStruct', 'A Section with the specified identifier already exists');
             }
         } catch (APINotFoundException $e) {
             // Do nothing
@@ -155,7 +155,7 @@ class SectionService implements SectionServiceInterface
 
                 // Allowing identifier update only for the same section
                 if ($existingSection->id != $section->id) {
-                    throw new InvalidArgumentException('sectionUpdateStruct', 'section with specified identifier already exists');
+                    throw new InvalidArgumentException('sectionUpdateStruct', 'A Section with the specified identifier already exists');
                 }
             } catch (APINotFoundException $e) {
                 // Do nothing
@@ -399,11 +399,11 @@ class SectionService implements SectionServiceInterface
         }
 
         if ($this->sectionHandler->assignmentsCount($loadedSection->id) > 0) {
-            throw new BadStateException('section', 'section is still assigned to content');
+            throw new BadStateException('section', 'The Section still has content assigned');
         }
 
         if ($this->sectionHandler->policiesCount($loadedSection->id) > 0) {
-            throw new BadStateException('section', 'section is still being used in policy limitations');
+            throw new BadStateException('section', 'the Section is still being used in Policy Limitations');
         }
 
         $this->repository->beginTransaction();

@@ -43,7 +43,7 @@ final class BeforeCreateUserEvent extends BeforeEvent
     public function getUser(): User
     {
         if (!$this->hasUser()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUser() or set it by setUser() before you call getter.', User::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUser() or set it using setUser() before you call the getter.', User::class));
         }
 
         return $this->user;

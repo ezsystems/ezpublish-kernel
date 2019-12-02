@@ -101,7 +101,7 @@ class Type extends FieldType
                 case 'selectionMethod':
                     if (!$this->isValidSelectionMethod($value)) {
                         $validationErrors[] = new ValidationError(
-                            "Setting '%setting%' must be one of %selection_browse%, %selection_dropdown%, %selection_list_with_radio_buttons%, %selection_list_with_checkboxes%, %selection_multiple_selection_list%, %selection_template_based_multiple%, %selection_template_based_single%",
+                            "The following options are available for setting '%setting%': %selection_browse%, %selection_dropdown%, %selection_list_with_radio_buttons%, %selection_list_with_checkboxes%, %selection_multiple_selection_list%, %selection_template_based_multiple%, %selection_template_based_single%",
                             null,
                             [
                                 '%setting%' => $name,

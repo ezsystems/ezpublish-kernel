@@ -103,7 +103,7 @@ class ReindexCommand extends Command
         if (!$this->searchIndexer instanceof Indexer) {
             throw new RuntimeException(
                 sprintf(
-                    'Expected to find Search Engine Indexer but found "%s" instead',
+                    'Found "%s" instead of Search Engine Indexer',
                     get_parent_class($this->searchIndexer)
                 )
             );
@@ -117,12 +117,12 @@ class ReindexCommand extends Command
     {
         $this
             ->setName('ezplatform:reindex')
-            ->setDescription('Recreate or Refresh search engine index')
+            ->setDescription('Recreates or refreshes the search engine index')
             ->addOption(
                 'iteration-count',
                 'c',
                 InputOption::VALUE_OPTIONAL,
-                'Number of objects to be indexed in a single iteration, for avoiding using too much memory',
+                'Number of objects to be indexed in a single iteration set to avoid using too much memory',
                 50
             )->addOption(
                 'no-commit',
@@ -138,17 +138,17 @@ class ReindexCommand extends Command
                 'since',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Refresh changes since a given time, any format understood by DateTime. Implies "no-purge", can not be combined with "content-ids" or "subtree"'
+                'Refresh changes since a time provided in any format understood by DateTime. Implies "no-purge", cannot be combined with "content-ids" or "subtree"'
             )->addOption(
                 'content-ids',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Comma separated list of content id\'s to refresh (deleted/updated/added). Implies "no-purge", can not be combined with "since" or "subtree"'
+                'Comma-separated list of content ID\'s to refresh (deleted/updated/added). Implies "no-purge", cannot be combined with "since" or "subtree"'
             )->addOption(
                 'subtree',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Location Id to index subtree of (incl self). Implies "no-purge", can not be combined with "since" or "content-ids"'
+                'Location ID whose subtree will be indexed (including the Location itself). Implies "no-purge", cannot be combined with "since" or "content-ids"'
             )->addOption(
                 'processes',
                 null,
@@ -157,7 +157,7 @@ class ReindexCommand extends Command
                 'auto'
             )->setHelp(
                 <<<EOT
-The command <info>%command.name%</info> indexes current configured database in configured search engine index.
+The command <info>%command.name%</info> indexes the current configured database in the configured search engine index.
 
 
 Example usage:
@@ -165,14 +165,14 @@ Example usage:
   <comment>ezplatform:reindex --since=yesterday</comment>
   See: http://php.net/manual/en/datetime.formats.php
 
-- Refresh (add/update/remove) index on a set of content id's:
+- Refresh (add/update/remove) index on a set of content ID's:
   <comment>ezplatform:reindex --content-ids=2,34,68</comment>
 
 - Refresh (add/update) index of a subtree:
   <comment>ezplatform:reindex --subtree=45</comment>
 
-- Refresh (add/update) index disabling use of child proccesses and initial purging,
-  & let search engine handle commits using auto commit:
+- Refresh (add/update) index, disabling the use of child proccesses and initial purging,
+  and let search engine handle commits using auto commit:
   <comment>ezplatform:reindex --no-purge --no-commit --processes=0</comment>
 
 EOT
@@ -188,7 +188,7 @@ EOT
         $iterationCount = $input->getOption('iteration-count');
         $this->siteaccess = $input->getOption('siteaccess');
         if (!is_numeric($iterationCount) || (int) $iterationCount < 1) {
-            throw new InvalidArgumentException('--iteration-count', "Option should be > 0, got '{$iterationCount}'");
+            throw new InvalidArgumentException('--iteration-count', "The value must be > 0, you provided '{$iterationCount}'");
         }
 
         if (!$this->searchIndexer instanceof IncrementalIndexer) {
@@ -223,7 +223,7 @@ EOT
         if ($contentIds = $input->getOption('content-ids')) {
             $contentIds = explode(',', $contentIds);
             $output->writeln(sprintf(
-                'Indexing list of content id\'s (%s)' . ($commit ? ', with commit' : ''),
+                'Indexing list of content ID\'s (%s)' . ($commit ? ', with commit' : ''),
                 \count($contentIds)
             ));
 
@@ -254,14 +254,14 @@ EOT
         $processes = $input->getOption('processes');
         $processCount = $processes === 'auto' ? $this->getNumberOfCPUCores() - 1 : (int) $processes;
         $processCount = min($iterations, $processCount);
-        $processMessage = $processCount > 1 ? "using $processCount parallel child processes" : 'using single (current) process';
+        $processMessage = $processCount > 1 ? "using $processCount parallel child processes" : 'using a single (current) process';
 
         if ($purge) {
             $output->writeln('Purging index...');
             $this->searchIndexer->purge();
 
             $output->writeln(
-                "<info>Re-Creating index for {$count} items across $iterations iteration(s), $processMessage:</info>"
+                "<info>Re-creating index for {$count} items across $iterations iteration(s), $processMessage:</info>"
             );
         } else {
             $output->writeln(
@@ -410,7 +410,7 @@ EOT
     private function getPhpProcess(array $contentIds, $commit)
     {
         if (empty($contentIds)) {
-            throw new InvalidArgumentException('--content-ids', '$contentIds can not be empty');
+            throw new InvalidArgumentException('--content-ids', '$contentIds cannot be empty');
         }
 
         $consolePath = file_exists('bin/console') ? 'bin/console' : 'app/console';
@@ -450,7 +450,7 @@ EOT
         $this->phpPath = $phpFinder->find();
         if (!$this->phpPath) {
             throw new RuntimeException(
-                'The php executable could not be found, it\'s needed for executing parable sub processes, so add it to your PATH environment variable and try again'
+                'The php executable could not be found. It is needed for executing parallel subprocesses, so add it to your PATH environment variable and try again'
             );
         }
 

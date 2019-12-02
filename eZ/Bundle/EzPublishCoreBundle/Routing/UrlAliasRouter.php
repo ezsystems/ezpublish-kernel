@@ -31,7 +31,7 @@ class UrlAliasRouter extends BaseUrlAliasRouter
         // UrlAliasRouter might be disabled from configuration.
         // An example is for running the admin interface: it needs to be entirely run through the legacy kernel.
         if ($this->configResolver->getParameter('url_alias_router') === false) {
-            throw new ResourceNotFoundException('Config says to bypass UrlAliasRouter');
+            throw new ResourceNotFoundException('Config requires bypassing UrlAliasRouter');
         }
 
         return parent::matchRequest($request);

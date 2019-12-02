@@ -30,7 +30,7 @@ abstract class IncrementalIndexer extends Indexer
      */
     final public function createSearchIndex(OutputInterface $output, $iterationCount, $commit)
     {
-        $output->writeln('Re-creating Search index for: ' . $this->getName());
+        $output->writeln('Re-creating search index for: ' . $this->getName());
         $output->writeln('Purging Index...');
         $this->searchHandler->purgeIndex();
 
@@ -38,7 +38,7 @@ abstract class IncrementalIndexer extends Indexer
         $totalCount = (int) ($stmt->fetchColumn());
         $stmt = $this->getContentDbFieldsStmt(['id']);
 
-        $output->writeln("Re-Creating Search Engine Index for {$totalCount} content items...");
+        $output->writeln("Re-creating search engine index for {$totalCount} content items...");
         $progress = new ProgressBar($output);
         $progress->start($totalCount);
 

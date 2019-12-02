@@ -268,7 +268,7 @@ class FieldNameResolver
         // Should only happen by mistake, so let's throw if it does
         if (!isset($indexDefinition[$name])) {
             throw new RuntimeException(
-                "Could not find '{$name}' field in '{$fieldTypeIdentifier}' field type's index definition"
+                "Could not find Field '{$name}' in '{$fieldTypeIdentifier}' Field Type's index definition"
             );
         }
 

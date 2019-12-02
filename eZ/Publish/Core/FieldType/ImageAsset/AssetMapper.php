@@ -91,7 +91,7 @@ class AssetMapper
     public function getAssetField(Content $content): Field
     {
         if (!$this->isAsset($content)) {
-            throw new InvalidArgumentException('contentId', "Content {$content->id} is not a image asset!");
+            throw new InvalidArgumentException('contentId', "Content {$content->id} is not an image asset.");
         }
 
         return $content->getField($this->mappings['content_field_identifier']);
@@ -126,7 +126,7 @@ class AssetMapper
     public function getAssetValue(Content $content): ImageValue
     {
         if (!$this->isAsset($content)) {
-            throw new InvalidArgumentException('contentId', "Content {$content->id} is not a image asset!");
+            throw new InvalidArgumentException('contentId', "Content {$content->id} is not an image asset.");
         }
 
         return $content->getFieldValue($this->mappings['content_field_identifier']);

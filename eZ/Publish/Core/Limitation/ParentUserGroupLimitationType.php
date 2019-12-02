@@ -121,7 +121,7 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
         if ($value->limitationValues[0] != 1) {
             throw new BadStateException(
                 'Parent User Group limitation',
-                'expected limitation value to be 1 but got:' . $value->limitationValues[0]
+                'Expected Limitation value to be 1 instead of' . $value->limitationValues[0]
             );
         }
 
@@ -183,7 +183,7 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
         if (false === $hasMandatoryTarget) {
             throw new InvalidArgumentException(
                 '$targets',
-                'Must contain objects of type: Location or LocationCreateStruct'
+                'Must contain Location or LocationCreateStruct objects'
             );
         }
 

@@ -123,7 +123,7 @@ class LocationService implements LocationServiceInterface
         $loadedTargetLocation = $this->loadLocation($targetParentLocation->id);
 
         if (stripos($loadedTargetLocation->pathString, $loadedSubtree->pathString) !== false) {
-            throw new InvalidArgumentException('targetParentLocation', 'target parent location is a sub location of the given subtree');
+            throw new InvalidArgumentException('targetParentLocation', 'Cannot copy subtree to its own descendant Location');
         }
 
         // check create permission on target
@@ -275,7 +275,7 @@ class LocationService implements LocationServiceInterface
     public function loadLocations(ContentInfo $contentInfo, APILocation $rootLocation = null, array $prioritizedLanguages = null)
     {
         if (!$contentInfo->published) {
-            throw new BadStateException('$contentInfo', 'ContentInfo has no published versions');
+            throw new BadStateException('$contentInfo', 'The Content item has no published versions');
         }
 
         $spiLocations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
@@ -340,7 +340,7 @@ class LocationService implements LocationServiceInterface
             throw new BadStateException(
                 '$contentInfo',
                 sprintf(
-                    'Content [%d] %s has been already published. Use LocationService::loadLocations instead.',
+                    'Content item [%d] %s is already published. Use LocationService::loadLocations instead.',
                     $versionInfo->contentInfo->id,
                     $versionInfo->contentInfo->name
                 )
@@ -453,7 +453,7 @@ class LocationService implements LocationServiceInterface
                 if (stripos($parentLocation->pathString, $existingContentLocation->pathString) !== false) {
                     throw new InvalidArgumentException(
                         '$locationCreateStruct',
-                        'Specified parent is a sub location of one of the existing content locations.'
+                        'Specified parent is a descendant of one of the existing Locations of this content.'
                     );
                 }
                 if ($parentLocation->id == $existingContentLocation->parentLocationId) {
@@ -533,7 +533,7 @@ class LocationService implements LocationServiceInterface
             try {
                 $existingLocation = $this->loadLocationByRemoteId($locationUpdateStruct->remoteId);
                 if ($existingLocation !== null && $existingLocation->id !== $loadedLocation->id) {
-                    throw new InvalidArgumentException('locationUpdateStruct', 'location with provided remote ID already exists');
+                    throw new InvalidArgumentException('locationUpdateStruct', 'Location with the provided remote ID already exists');
                 }
             } catch (APINotFoundException $e) {
             }
@@ -706,7 +706,7 @@ class LocationService implements LocationServiceInterface
         if (strpos($newParentLocation->pathString, $location->pathString) === 0) {
             throw new InvalidArgumentException(
                 '$newParentLocation',
-                'new parent location is in a subtree of the given $location'
+                'new parent Location is a descendant of the given $location'
             );
         }
 
@@ -876,7 +876,7 @@ class LocationService implements LocationServiceInterface
             if (!isset($spiContentInfoList[$spiLocation->contentId], $contentList[$spiLocation->contentId])) {
                 $this->logger->warning(
                     sprintf(
-                        'Location %d has missing Content %d',
+                        'Location %d has missing content %d',
                         $spiLocation->id,
                         $spiLocation->contentId
                     )

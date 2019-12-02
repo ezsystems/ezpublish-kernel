@@ -228,7 +228,7 @@ class ServiceContainer implements Container
             if (!@mkdir($directory, 0777, true) && !is_dir($directory)) {
                 throw new RuntimeException(
                     sprintf(
-                        "Unable to create the %s directory (%s)\n",
+                        "Unable to create directory %s (%s)\n",
                         $name,
                         $directory
                     )
@@ -237,7 +237,7 @@ class ServiceContainer implements Container
         } elseif (!is_writable($directory)) {
             throw new RuntimeException(
                 sprintf(
-                    "Unable to write in the %s directory (%s)\n",
+                    "Unable to write in directory %s (%s)\n",
                     $name,
                     $directory
                 )

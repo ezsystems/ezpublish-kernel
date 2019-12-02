@@ -57,16 +57,16 @@ class DeleteContentTranslationCommand extends Command
             ->addArgument(
                 'language-code',
                 InputArgument::REQUIRED,
-                'Language code of the Translation to be deleted'
+                'Language code of the translation to be deleted'
             )
             ->addOption(
                 'user',
                 'u',
                 InputOption::VALUE_OPTIONAL,
-                'eZ Platform username (with Role containing at least Content policies: read, versionread, edit, remove, versionremove)',
+                'eZ Platform username (with Role containing at least content Policies: read, versionread, edit, remove, versionremove)',
                 'admin'
             )
-            ->setDescription('Delete Translation from all the Versions of a Content Item');
+            ->setDescription('Deletes a translation from all versions of a Content item');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -93,12 +93,12 @@ class DeleteContentTranslationCommand extends Command
         if ($contentId === 0) {
             throw new InvalidArgumentException(
                 'content-id',
-                'Content Object Id has to be an integer'
+                'Content ID must be an integer'
             );
         }
 
         $this->output->writeln(
-            '<comment>**NOTE**: Make sure to run this command using the same SYMFONY_ENV setting as your eZ Platform installation does</comment>'
+            '<comment>**NOTE**: Make sure to run this command using the same SYMFONY_ENV setting as your eZ Platform installation</comment>'
         );
 
         $versionInfo = $this->contentService->loadVersionInfoById($contentId);
@@ -118,7 +118,7 @@ class DeleteContentTranslationCommand extends Command
             // Confirm operation
             $contentName = "#{$contentInfo->id} ($contentInfo->name)";
             $question = new ConfirmationQuestion(
-                "Are you sure you want to delete {$languageCode} Translation from the Content {$contentName}? This operation is permanent. [y/N] ",
+                "Are you sure you want to delete the {$languageCode} translation from Content item {$contentName}? This operation is permanent. [y/N] ",
                 false
             );
             if (!$this->questionHelper->ask($this->input, $this->output, $question)) {
@@ -131,7 +131,7 @@ class DeleteContentTranslationCommand extends Command
 
             // Delete Translation
             $output->writeln(
-                "<info>Deleting {$languageCode} Translation of the Content {$contentName}</info>"
+                "<info>Deleting the {$languageCode} translation of Content item {$contentName}</info>"
             );
             $this->contentService->deleteTranslation($contentInfo, $languageCode);
 
@@ -160,7 +160,7 @@ class DeleteContentTranslationCommand extends Command
     ) {
         $contentName = "#{$contentInfo->id} ($contentInfo->name)";
         $this->output->writeln(
-            "<comment>The specified Translation '{$languageCode}' is the Main Translation of the Content {$contentName}. It needs to be changed before removal.</comment>"
+            "<comment>The specified translation '{$languageCode}' is the main translation of Content item {$contentName}. It needs to be changed before removal.</comment>"
         );
 
         // get main Translation candidates w/o Translation being removed
@@ -173,7 +173,7 @@ class DeleteContentTranslationCommand extends Command
         if (empty($mainTranslationCandidates)) {
             throw new InvalidArgumentException(
                 'language-code',
-                "The last Version of the Content {$contentName} has no other Translations beside the main one"
+                "The last version of Content item {$contentName} has no other translations beside the main one"
             );
         }
         $question = new ChoiceQuestion(
@@ -183,7 +183,7 @@ class DeleteContentTranslationCommand extends Command
 
         $newMainLanguageCode = $this->questionHelper->ask($this->input, $this->output, $question);
         $this->output->writeln(
-            "<info>Updating Main Translation of the Content {$contentName} to {$newMainLanguageCode}</info>"
+            "<info>Updating main translation of Content item {$contentName} to {$newMainLanguageCode}</info>"
         );
 
         $contentMetadataUpdateStruct = $this->contentService->newContentMetadataUpdateStruct();

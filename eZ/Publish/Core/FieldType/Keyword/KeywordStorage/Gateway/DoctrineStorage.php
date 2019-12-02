@@ -155,7 +155,7 @@ class DoctrineStorage extends Gateway
         if ($row === false) {
             throw new RuntimeException(
                 sprintf(
-                    'Content Type ID cannot be retrieved based on the field definition ID "%s"',
+                    'Content Type ID cannot be retrieved based on the Field definition ID "%s"',
                     $fieldDefinitionId
                 )
             );

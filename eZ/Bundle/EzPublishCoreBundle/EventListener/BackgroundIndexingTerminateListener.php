@@ -130,7 +130,7 @@ class BackgroundIndexingTerminateListener implements BackgroundIndexerInterface,
         if ($this->logger instanceof LoggerInterface && (!empty($contentIndexed) || !empty($contentRemoved))) {
             $this->logger->warning(
                 sprintf(
-                    'Exceptions detected on search index, content %s  was re indexed, & %s was removed from index',
+                    'Exceptions detected on search index. Content %s was re-indexed and %s was removed from index',
                     implode(', ', $contentIndexed),
                     implode(', ', $contentRemoved)
                 )

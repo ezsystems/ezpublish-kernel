@@ -62,7 +62,7 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
         }
 
         if (empty($permissionSets)) {
-            throw new RuntimeException("Got an empty array of limitations from hasAccess( '{$module}', '{$function}' )");
+            throw new RuntimeException("Received an empty array of limitations from hasAccess( '{$module}', '{$function}' )");
         }
 
         /*

@@ -43,7 +43,7 @@ final class BeforeRemovePolicyByRoleDraftEvent extends BeforeEvent
     public function getUpdatedRoleDraft(): RoleDraft
     {
         if (!$this->hasUpdatedRoleDraft()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedRoleDraft() or set it by setUpdatedRoleDraft() before you call getter.', RoleDraft::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUpdatedRoleDraft() or set it using setUpdatedRoleDraft() before you call the getter.', RoleDraft::class));
         }
 
         return $this->updatedRoleDraft;

@@ -65,9 +65,9 @@ class UserWrapped implements UserInterface, EquatableInterface
     public function setWrappedUser(CoreUserInterface $wrappedUser)
     {
         if ($wrappedUser instanceof self) {
-            throw new InvalidArgumentException('Injecting UserWrapped to itself is not allowed to avoid recursion');
+            throw new InvalidArgumentException('Injecting UserWrapped in itself is not allowed to avoid recursion');
         } elseif ($wrappedUser instanceof User) {
-            throw new InvalidArgumentException('Injecting User into UserWrapped causes duplication of APIUser, not wanted for session serialization');
+            throw new InvalidArgumentException('Injecting a User into UserWrapped causes duplication of APIUser, which should be avoided for session serialization');
         }
 
         $this->wrappedUser = $wrappedUser;

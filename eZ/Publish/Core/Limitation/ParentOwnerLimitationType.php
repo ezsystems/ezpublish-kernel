@@ -120,7 +120,7 @@ class ParentOwnerLimitationType extends AbstractPersistenceLimitationType implem
         if ($value->limitationValues[0] != 1 && $value->limitationValues[0] != 2) {
             throw new BadStateException(
                 'Parent Owner limitation',
-                'expected limitation value to be 1 or 2 but got:' . $value->limitationValues[0]
+                'Expected Limitation value to be 1 or 2 instead of' . $value->limitationValues[0]
             );
         }
 
@@ -159,7 +159,7 @@ class ParentOwnerLimitationType extends AbstractPersistenceLimitationType implem
         if (false === $hasMandatoryTarget) {
             throw new InvalidArgumentException(
                 '$targets',
-                'Must contain objects of type: Location or LocationCreateStruct'
+                'Must contain Location or LocationCreateStruct objects'
             );
         }
 

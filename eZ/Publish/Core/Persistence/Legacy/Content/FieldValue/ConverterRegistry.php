@@ -65,7 +65,7 @@ class ConverterRegistry
             throw new NotFound($typeName);
         } elseif (!$this->converterMap[$typeName] instanceof Converter) {
             if (!is_callable($this->converterMap[$typeName])) {
-                throw new \RuntimeException("Converter '$typeName' is neither callable or instance");
+                throw new \RuntimeException("Converter '$typeName' is neither callable nor an instance");
             }
 
             $factory = $this->converterMap[$typeName];
@@ -73,8 +73,7 @@ class ConverterRegistry
 
             if (!$this->converterMap[$typeName] instanceof Converter) {
                 throw new \RuntimeException(
-                    "Converter '$typeName' callable did not return a converter, instead: "
-                    . gettype($this->converterMap[$typeName])
+                    "Converter '{$typeName}' callable returned " . gettype($this->converterMap[$typeName]) . ' instead of a converter'
                 );
             }
         }

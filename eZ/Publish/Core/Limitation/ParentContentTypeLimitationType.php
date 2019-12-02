@@ -159,7 +159,7 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
             } else {
                 throw new InvalidArgumentException(
                     '$targets',
-                    'Must contain objects of type: Location or LocationCreateStruct'
+                    'Must contain Location or LocationCreateStruct objects'
                 );
             }
 
@@ -208,7 +208,7 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
         if (false === $hasMandatoryTarget) {
             throw new InvalidArgumentException(
                 '$targets',
-                'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+                'If $object is ContentCreateStruct, it must contain LocationCreateStruct objects'
             );
         }
 

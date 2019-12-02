@@ -159,7 +159,7 @@ class Handler implements BaseLanguageHandler
     public function delete($id)
     {
         if (!$this->languageGateway->canDeleteLanguage($id)) {
-            throw new LogicException("Deleting language logic error, some content still references that language and therefore it can't be deleted");
+            throw new LogicException('Cannot delete language: some content still references the language');
         }
 
         $this->languageGateway->deleteLanguage($id);

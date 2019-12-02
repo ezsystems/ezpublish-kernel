@@ -559,7 +559,7 @@ class UserContext implements Context
             }
         }
 
-        throw new \Exception('Possible endless loop when attempting to find a new email for User.');
+        throw new \Exception('Possible endless loop when attempting to find a new email for the User.');
     }
 
     /**
@@ -578,6 +578,6 @@ class UserContext implements Context
             }
         }
 
-        throw new \Exception('Possible endless loop when attempting to find a new name for User.');
+        throw new \Exception('Possible endless loop when attempting to find a new name for the User.');
     }
 }

@@ -56,7 +56,7 @@ class DownloadController extends Controller
         );
         if (!$field instanceof Field) {
             throw new InvalidArgumentException(
-                "'{$fieldIdentifier}' field not present on content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
+                "'{$fieldIdentifier}' Field does not exist in Content item {$content->contentInfo->id} '{$content->contentInfo->name}'"
             );
         }
 

@@ -41,7 +41,7 @@ class DebugConfigResolverCommand extends Command
     {
         $this->setName('ezplatform:debug:config-resolver');
         $this->setAliases(['ezplatform:debug:config']);
-        $this->setDescription('Debug / Retrive parameter from Config Resolver');
+        $this->setDescription('Debugs / Retrieves a parameter from the Config Resolver');
         $this->addArgument(
             'parameter',
             InputArgument::REQUIRED,
@@ -57,24 +57,24 @@ class DebugConfigResolverCommand extends Command
             'scope',
             null,
             InputOption::VALUE_REQUIRED,
-            'Set another scope (siteaccess) to use, alternative to using the global --siteaccess[=SITEACCESS] option.'
+            'Set another scope (SiteAccess) to use. This is an alternative to using the global --siteaccess[=SITEACCESS] option.'
         );
         $this->addOption(
             'namespace',
             null,
             InputOption::VALUE_REQUIRED,
-            'Set another namespace than default "ezsettings" used by siteaccess settings.'
+            'Set a different namespace than the default "ezsettings" used by SiteAccess settings.'
         );
         $this->setHelp(<<<EOM
 Outputs a given config resolver parameter, more commonly known as a SiteAccess setting.
 
-By default it will give value depending on global <comment>--siteaccess[=SITEACCESS]</comment> (default siteaccess is used if not set).
+By default it will give value depending on the global <comment>--siteaccess[=SITEACCESS]</comment> (default SiteAccess is used if not set).
 
-However you can also manually set <comment>--scope[=NAME]</comment> yourself if you don't want to affect the siteaccess
-set by the system. You can also override namespace to get something else than default "ezsettings" namespace using
-<comment>--namespace[=NS]</comment> option.
+However, you can also manually set <comment>--scope[=NAME]</comment> yourself if you don't want to affect the SiteAccess
+set by the system. You can also override the namespace to get something other than the default "ezsettings" namespace by using
+the <comment>--namespace[=NS]</comment> option.
 
-NOTE: To rather see *all* compiled siteaccess settings, use: <comment>debug:config ezpublish [system.default]</comment>
+NOTE: To see *all* compiled SiteAccess settings, use: <comment>debug:config ezpublish [system.default]</comment>
 
 EOM
         );

@@ -43,7 +43,7 @@ final class BeforeUpdateLocationEvent extends BeforeEvent
     public function getUpdatedLocation(): Location
     {
         if (!$this->hasUpdatedLocation()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedLocation() or set it by setUpdatedLocation() before you call getter.', Location::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUpdatedLocation() or set it using setUpdatedLocation() before you call the getter.', Location::class));
         }
 
         return $this->updatedLocation;

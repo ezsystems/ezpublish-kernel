@@ -33,7 +33,7 @@ final class BeforeDeleteUserGroupEvent extends BeforeEvent
     public function getLocations(): array
     {
         if (!$this->hasLocations()) {
-            throw new UnexpectedValueException('Return value is not set or not a type of %s. Check hasLocations() or set it by setLocations() before you call getter.');
+            throw new UnexpectedValueException('Return value is not set or not a type of %s. Check hasLocations() or set it using setLocations() before you call getter.');
         }
 
         return $this->locations;

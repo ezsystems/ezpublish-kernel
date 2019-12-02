@@ -67,7 +67,7 @@ class IsMainLocation extends CriterionHandler
 
             default:
                 throw new RuntimeException(
-                    "Unknown value '{$criterion->value[0]}' for IsMainLocation criterion handler."
+                    "Unknown value '{$criterion->value[0]}' for IsMainLocation Criterion handler."
                 );
         }
     }

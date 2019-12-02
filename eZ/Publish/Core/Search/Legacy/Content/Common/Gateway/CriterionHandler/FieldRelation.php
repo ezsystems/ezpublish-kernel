@@ -57,7 +57,7 @@ class FieldRelation extends FieldBase
         if (empty($fieldDefinitionIdList)) {
             throw new InvalidArgumentException(
                 '$criterion->target',
-                "No searchable fields found for the given criterion target '{$fieldDefinitionIdentifier}'."
+                "No searchable Fields found for the provided Criterion target '{$fieldDefinitionIdentifier}'."
             );
         }
 
@@ -160,7 +160,7 @@ class FieldRelation extends FieldBase
                 );
 
             default:
-                throw new RuntimeException("Unknown operator '{$criterion->operator}' for RelationList criterion handler.");
+                throw new RuntimeException("Unknown operator '{$criterion->operator}' for RelationList Criterion handler.");
         }
     }
 }

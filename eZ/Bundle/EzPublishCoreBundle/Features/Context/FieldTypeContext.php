@@ -180,7 +180,7 @@ class FieldTypeContext implements Context
 
         switch ($stateFlag) {
             case self::FIELD_TYPE_NOT_CREATED:
-                throw new \Exception('A field type must be declared before anything else');
+                throw new \Exception('A Field Type must be declared before anything else');
                 break;
             case self::CONTENT_TYPE_CREATED:
                 $this->createContentType();

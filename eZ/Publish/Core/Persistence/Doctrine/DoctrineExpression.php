@@ -72,7 +72,7 @@ class DoctrineExpression implements Expression
 
         if (count($args) < 1) {
             throw new QueryException(
-                "The expression '{$by}' expected at least 1 argument but none provided."
+                "Expression '{$by}' expected at least 1 argument, but none were provided."
             );
         }
 
@@ -390,7 +390,7 @@ class DoctrineExpression implements Expression
         $args = func_get_args();
 
         if (count($args) < 2) {
-            throw new QueryException('Expected two or more parameters to in()');
+            throw new QueryException('Two or more parameters are expected for in()');
         }
 
         if (is_array($args[1])) {
@@ -723,7 +723,7 @@ class DoctrineExpression implements Expression
         $args = func_get_args();
 
         if (count($args) === 0) {
-            throw new QueryException('Expected at least one parameter in searchedCase()');
+            throw new QueryException('At least one parameter is expected in searchedCase()');
         }
 
         $expr = ' CASE';

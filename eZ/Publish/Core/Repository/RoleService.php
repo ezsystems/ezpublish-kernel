@@ -116,7 +116,7 @@ class RoleService implements RoleServiceInterface
 
             throw new InvalidArgumentException(
                 '$roleCreateStruct',
-                "Role '{$existingRole->id}' with the specified identifier '{$roleCreateStruct->identifier}' " .
+                "A Role '{$existingRole->id}' with identifier '{$roleCreateStruct->identifier}' " .
                 'already exists'
             );
         } catch (APINotFoundException $e) {
@@ -167,7 +167,7 @@ class RoleService implements RoleServiceInterface
             // Throw exception, so platformui et al can do conflict management. Follow-up: EZP-24719
             throw new InvalidArgumentException(
                 '$role',
-                "Cannot create a draft for role '{$role->identifier}' because another draft exists"
+                "Cannot create a draft for Role '{$role->identifier}' because another draft exists"
             );
         } catch (APINotFoundException $e) {
             $this->repository->beginTransaction();
@@ -273,7 +273,7 @@ class RoleService implements RoleServiceInterface
                 if ($existingSPIRole->id != $SPIRoleDraft->originalId) {
                     throw new InvalidArgumentException(
                         '$roleUpdateStruct',
-                        "Role '{$existingSPIRole->id}' with the specified identifier '{$roleUpdateStruct->identifier}' " .
+                        "A Role '{$existingSPIRole->id}' with identifier '{$roleUpdateStruct->identifier}' " .
                         'already exists'
                     );
                 }
@@ -388,7 +388,7 @@ class RoleService implements RoleServiceInterface
         }
 
         if ($policyDraft->roleId != $roleDraft->id) {
-            throw new InvalidArgumentException('$policy', 'Policy does not belong to the given role');
+            throw new InvalidArgumentException('$policy', 'The Policy does not belong to the given Role');
         }
 
         $this->internalDeletePolicy($policyDraft);
@@ -432,7 +432,7 @@ class RoleService implements RoleServiceInterface
         }
 
         if ($policy->roleId !== $roleDraft->id) {
-            throw new InvalidArgumentException('$policy', "doesn't belong to provided role draft");
+            throw new InvalidArgumentException('$policy', 'does not belong to the provided role draft');
         }
 
         $limitations = $policyUpdateStruct->getLimitations();
@@ -515,7 +515,7 @@ class RoleService implements RoleServiceInterface
         } catch (APINotFoundException $e) {
             throw new BadStateException(
                 '$roleDraft',
-                'The role does not have a draft.',
+                'The Role does not have a draft.',
                 $e
             );
         }
@@ -1037,7 +1037,7 @@ class RoleService implements RoleServiceInterface
         } catch (LimitationNotFoundException $e) {
             throw new BadStateException(
                 "{$module}/{$function}",
-                "policyMap configuration is referring to non existing identifier: {$identifier}",
+                "policyMap configuration is referring to a non-existent identifier: {$identifier}",
                 $e
             );
         }
@@ -1094,14 +1094,14 @@ class RoleService implements RoleServiceInterface
                 if (isset($limitationSet[$limitation->getIdentifier()])) {
                     throw new InvalidArgumentException(
                         'limitations',
-                        "'{$limitation->getIdentifier()}' was found several times among the limitations"
+                        "{$limitation->getIdentifier()}' was found multiple times among Limitations"
                     );
                 }
 
                 if (!isset($this->settings['policyMap'][$module][$function][$limitation->getIdentifier()])) {
                     throw new InvalidArgumentException(
                         'policy',
-                        "The limitation '{$limitation->getIdentifier()}' is not applicable on '{$module}/{$function}'"
+                        "Limitation '{$limitation->getIdentifier()}' is not applicable on '{$module}/{$function}'"
                     );
                 }
 
@@ -1139,7 +1139,7 @@ class RoleService implements RoleServiceInterface
             if ($spiAssignment->limitationIdentifier === null) {
                 throw new InvalidArgumentException(
                     '$role',
-                    "Role '{$spiRole->id}' already assigned without limitations"
+                    "Role '{$spiRole->id}' already assigned without Limitations"
                 );
             }
 
@@ -1158,7 +1158,7 @@ class RoleService implements RoleServiceInterface
             if (empty($newValues)) {
                 throw new InvalidArgumentException(
                     '$role',
-                    "Role '{$spiRole->id}' already assigned with same '{$spiAssignment->limitationIdentifier}' value"
+                    "Role '{$spiRole->id}' is already assigned with the same '{$spiAssignment->limitationIdentifier}' value"
                 );
             }
 

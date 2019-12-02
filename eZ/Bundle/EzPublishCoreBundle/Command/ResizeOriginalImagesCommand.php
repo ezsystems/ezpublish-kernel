@@ -106,9 +106,9 @@ class ResizeOriginalImagesCommand extends Command
         $this->setName('ezplatform:images:resize-original')->setDefinition(
             [
                 new InputArgument('contentTypeIdentifier', InputArgument::REQUIRED,
-                    'Indentifier of ContentType which has ezimage FieldType.'),
+                    'Identifier of a Content Type which has an ezimage Field Type.'),
                 new InputArgument('imageFieldIdentifier', InputArgument::REQUIRED,
-                    'Identifier of field of ezimage type.'),
+                    'Identifier of a Field of ezimage type.'),
             ]
         )
         ->addOption(
@@ -121,14 +121,14 @@ class ResizeOriginalImagesCommand extends Command
             'iteration-count',
             'i',
             InputOption::VALUE_OPTIONAL,
-            'Iteration count. Number of images to be recreated in a single iteration, for avoiding using too much memory.',
+            'Iteration count. Number of images to be recreated in a single iteration set to avoid using too much memory.',
             self::DEFAULT_ITERATION_COUNT
         )
         ->addOption(
             'user',
             'u',
             InputOption::VALUE_OPTIONAL,
-            'eZ Platform username (with Role containing at least Content policies: read, versionread, edit, publish)',
+            'eZ Platform username (with Role containing at least content Policies: read, versionread, edit, publish)',
             self::DEFAULT_REPOSITORY_USER
         );
     }
@@ -145,7 +145,7 @@ class ResizeOriginalImagesCommand extends Command
         if (!$fieldType || $fieldType->fieldTypeIdentifier !== 'ezimage') {
             $output->writeln(
                 sprintf(
-                    "<error>FieldType of identifier '%s' of ContentType '%s' has to be 'ezimage', '%s' given.</error>",
+                    "<error>Field Type with identifier '%s' in Content Type '%s' must be 'ezimage', you provided '%s'.</error>",
                     $imageFieldIdentifier,
                     $contentType->identifier,
                     $fieldType ? $fieldType->fieldTypeIdentifier : ''
@@ -194,7 +194,7 @@ class ResizeOriginalImagesCommand extends Command
         }
 
         $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion('<question>The changes you are going to perform cannot be undone. Please remember to do a proper backup before. Would you like to continue?</question> ', false);
+        $question = new ConfirmationQuestion('<question>The changes you are going to perform cannot be undone. Remember to do a proper backup before. Would you like to continue?</question> ', false);
         if (!$helper->ask($input, $output, $question)) {
             return;
         }
@@ -218,7 +218,7 @@ class ResizeOriginalImagesCommand extends Command
         $output->writeln('');
         $output->writeln(
             sprintf(
-                "<info>All images have been successfully resized using '%s' filter.</info>",
+                "<info>All images have been successfully resized using the '%s' filter.</info>",
                 $filter
             )
         );
@@ -269,7 +269,7 @@ class ResizeOriginalImagesCommand extends Command
         } catch (Exception $e) {
             $output->writeln(
                 sprintf(
-                    '<error>Can not resize image ID: %s, error message: %s.</error>',
+                    '<error>Cannot resize image ID: %s, error message: %s.</error>',
                     $field->imageId,
                     $e->getMessage()
                 )

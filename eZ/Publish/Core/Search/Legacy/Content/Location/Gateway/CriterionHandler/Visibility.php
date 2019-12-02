@@ -67,7 +67,7 @@ class Visibility extends CriterionHandler
 
             default:
                 throw new RuntimeException(
-                    "Unknown value '{$criterion->value[0]}' for Visibility criterion handler."
+                    "Unknown value '{$criterion->value[0]}' for Visibility Criterion handler."
                 );
         }
     }

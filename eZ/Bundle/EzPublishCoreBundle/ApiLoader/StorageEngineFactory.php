@@ -72,7 +72,7 @@ class StorageEngineFactory
         ) {
             throw new InvalidStorageEngine(
                 "Invalid storage engine '{$repositoryConfig['storage']['engine']}'. " .
-                'Could not find any service tagged as ezpublish.storageEngine ' .
+                'Could not find any service tagged with ezpublish.storageEngine ' .
                 "with alias {$repositoryConfig['storage']['engine']}."
             );
         }

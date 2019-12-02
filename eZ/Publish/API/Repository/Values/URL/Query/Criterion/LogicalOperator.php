@@ -40,7 +40,7 @@ abstract class LogicalOperator extends Criterion
                 }
 
                 throw new InvalidArgumentException(
-                    "Only Criterion objects are accepted, at index '{$key}': " . $type
+                    "You provided {$type} at index '{$key}', but only Criterion objects are accepted"
                 );
             }
 

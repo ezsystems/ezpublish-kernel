@@ -62,7 +62,7 @@ class Converter
         }
 
         if ($this->defaultHandler === null) {
-            throw new RuntimeException("No conversion for a field type '$fieldTypeIdentifier' found.");
+            throw new RuntimeException("No conversion for a Field Type '$fieldTypeIdentifier' found.");
         }
 
         return $this->defaultHandler->handle($query, $criterion, $column);

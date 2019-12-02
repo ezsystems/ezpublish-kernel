@@ -135,7 +135,7 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
      */
     public function match($pathinfo): array
     {
-        throw new \RuntimeException("The UrlWildcardRouter doesn't support the match() method. Please use matchRequest() instead.");
+        throw new \RuntimeException("The UrlWildcardRouter doesn't support the match() method. Use matchRequest() instead.");
     }
 
     /**

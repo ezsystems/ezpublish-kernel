@@ -184,7 +184,7 @@ EOT;
         $ezimageTag = $dom->documentElement;
 
         if (!$ezimageTag->hasAttribute('url')) {
-            throw new \RuntimeException('Missing attribute "url" in <ezimage/> tag.');
+            throw new \RuntimeException('Missing attribute "url" in the <ezimage/> tag.');
         }
 
         if (($legacyUrl = $ezimageTag->getAttribute('url')) === '') {
@@ -196,7 +196,7 @@ EOT;
         $extractedData['id'] = $this->imageIoService->loadBinaryFileByUri($url)->id;
 
         if (!$ezimageTag->hasAttribute('filename')) {
-            throw new \RuntimeException('Missing attribute "filename" in <ezimage/> tag.');
+            throw new \RuntimeException('Missing attribute "filename" in the <ezimage/> tag.');
         }
         $extractedData['fileName'] = $ezimageTag->getAttribute('filename');
         $extractedData['width'] = $ezimageTag->getAttribute('width');
@@ -204,7 +204,7 @@ EOT;
         $extractedData['mime'] = $ezimageTag->getAttribute('mime_type');
 
         if (!$ezimageTag->hasAttribute('alternative_text')) {
-            throw new \RuntimeException('Missing attribute "alternative_text" in <ezimage/> tag.');
+            throw new \RuntimeException('Missing attribute "alternative_text" in the <ezimage/> tag.');
         }
         $extractedData['alternativeText'] = $ezimageTag->getAttribute('alternative_text');
 

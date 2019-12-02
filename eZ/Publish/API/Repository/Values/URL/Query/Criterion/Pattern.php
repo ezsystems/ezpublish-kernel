@@ -26,7 +26,7 @@ class Pattern extends Matcher
     public function __construct($pattern)
     {
         if ($pattern === null || $pattern === '') {
-            throw new \InvalidArgumentException('URL pattern should not be empty!');
+            throw new \InvalidArgumentException('URL pattern cannot be empty.');
         }
 
         $this->pattern = $pattern;

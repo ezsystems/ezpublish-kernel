@@ -43,7 +43,7 @@ final class BeforeUpdateUserEvent extends BeforeEvent
     public function getUpdatedUser(): User
     {
         if (!$this->hasUpdatedUser()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedUser() or set it by setUpdatedUser() before you call getter.', User::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUpdatedUser() or set it using setUpdatedUser() before you call the getter.', User::class));
         }
 
         return $this->updatedUser;

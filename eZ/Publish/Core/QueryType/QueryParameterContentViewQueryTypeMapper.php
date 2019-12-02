@@ -29,7 +29,7 @@ class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMa
         }
 
         if (!$contentView->hasParameter('query')) {
-            throw new InvalidArgumentException('query', "Missing required 'query' view parameter");
+            throw new InvalidArgumentException('query', "Required 'query' view parameter is missing");
         }
 
         $queryOptions = $contentView->getParameter('query');

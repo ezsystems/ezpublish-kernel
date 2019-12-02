@@ -95,7 +95,7 @@ class URLService implements URLServiceInterface
         }
 
         if ($struct->url !== null && !$this->isUnique($url->id, $struct->url)) {
-            throw new InvalidArgumentException('struct', 'url already exists');
+            throw new InvalidArgumentException('struct', 'The URL already exists');
         }
 
         $updateStruct = $this->buildUpdateStruct($this->loadById($url->id), $struct);

@@ -31,7 +31,7 @@ class Subtree extends Criterion
     {
         foreach ((array)$value as $pathString) {
             if (preg_match('/^(\/\w+)+\/$/', $pathString) !== 1) {
-                throw new InvalidArgumentException("value '$pathString' must follow the pathString format, eg /1/2/");
+                throw new InvalidArgumentException("'$pathString' value must follow the pathString format, e.g. /1/2/");
             }
         }
 

@@ -79,7 +79,7 @@ class Handler implements BaseUserHandler
      */
     public function create(User $user)
     {
-        throw new NotImplementedException('Should not be called, creation is done via content handler.');
+        throw new NotImplementedException('This method should not be called, creation is done via content handler.');
     }
 
     /**
@@ -174,7 +174,7 @@ class Handler implements BaseUserHandler
      */
     public function update(User $user)
     {
-        throw new NotImplementedException('Should not be called, update is done via content handler.');
+        throw new NotImplementedException('This method should not be called, update is done via content handler.');
     }
 
     /**
@@ -206,7 +206,7 @@ class Handler implements BaseUserHandler
      */
     public function delete($userId)
     {
-        throw new NotImplementedException('Should not be called, delete is done via content handler.');
+        throw new NotImplementedException('This method should not be called, delete is done via content handler.');
     }
 
     /**

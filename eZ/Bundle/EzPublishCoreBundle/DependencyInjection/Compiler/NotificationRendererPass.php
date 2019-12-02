@@ -29,7 +29,7 @@ class NotificationRendererPass implements CompilerPassInterface
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(sprintf(
-                        'Tag %s needs a "alias" attribute to identify the notification type. None given.',
+                        'Tag %s needs an "alias" attribute to identify the notification type.',
                         self::TAG_NAME
                     ));
                 }

@@ -48,7 +48,7 @@ final class BeforeCreateEvent extends BeforeEvent
     public function getUrlWildcard(): URLWildcard
     {
         if (!$this->hasUrlWildcard()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUrlWildcard() or set it by setUrlWildcard() before you call getter.', URLWildcard::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUrlWildcard() or set it using setUrlWildcard() before you call the getter.', URLWildcard::class));
         }
 
         return $this->urlWildcard;

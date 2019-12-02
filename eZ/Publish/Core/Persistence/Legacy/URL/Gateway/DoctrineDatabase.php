@@ -64,7 +64,7 @@ class DoctrineDatabase extends Gateway
     {
         $count = $doCount ? $this->doCount($criterion) : null;
         if (!$doCount && $limit === 0) {
-            throw new \RuntimeException('Invalid query, can not disable count and request 0 items at the same time');
+            throw new \RuntimeException('Invalid query. Cannot disable count and request 0 items at the same time');
         }
 
         if ($limit === 0 || ($count !== null && $count <= $offset)) {

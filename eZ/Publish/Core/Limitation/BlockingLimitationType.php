@@ -40,7 +40,7 @@ class BlockingLimitationType implements SPILimitationTypeInterface
     public function __construct($identifier)
     {
         if (empty($identifier)) {
-            throw new \InvalidArgumentException('Argument $identifier can not be empty');
+            throw new \InvalidArgumentException('Argument $identifier cannot be empty');
         }
 
         $this->identifier = $identifier;

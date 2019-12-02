@@ -123,7 +123,7 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
         }
 
         if (empty($targets)) {
-            throw new InvalidArgumentException('$targets', 'Must contain objects of type: Section');
+            throw new InvalidArgumentException('$targets', 'Must contain Section objects');
         }
 
         if (empty($value->limitationValues)) {
@@ -165,7 +165,7 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
     public function getCriterionByTarget(APILimitationValue $value, APIUserReference $currentUser, ?array $targets): CriterionInterface
     {
         if (empty($targets)) {
-            throw new InvalidArgumentException('$targets', 'Must contain objects of type: Section');
+            throw new InvalidArgumentException('$targets', 'Must contain Section objects');
         }
 
         if ($this->doEvaluate($value, $targets)) {
@@ -189,7 +189,7 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
     {
         foreach ($targets as $target) {
             if (!$target instanceof Section && !$target instanceof SPISection) {
-                throw new InvalidArgumentException('$targets', 'Must contain objects of type: Section');
+                throw new InvalidArgumentException('$targets', 'Must contain Section objects');
             }
 
             if (!in_array($target->id, $value->limitationValues)) {

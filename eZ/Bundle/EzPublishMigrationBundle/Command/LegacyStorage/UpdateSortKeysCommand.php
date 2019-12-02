@@ -34,15 +34,15 @@ class UpdateSortKeysCommand extends ContainerAwareCommand
             ->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> updates field
-sort keys in configured Legacy Storage database for a given field type.
+sort keys in the configured Legacy Storage database for a given Field Type.
 
-Fields will be processed per Content version and updated only if newly generated
-sort key does not match stored one. In this case all field data will be updated.
+Fields will be processed per content version and updated only if the newly generated
+sort key does not match the stored one. In this case all Field data will be updated.
 
-<warning>During the script execution the database should not be modified.
+<warning>The database should not be modified while the script is being executed.
 
-To avoid surprises (particularly if using custom field types) you are advised to
-create a backup or execute a dry run before proceeding with actual update.</warning>
+Particularly when using custom Field Types, you are advised to
+create a backup or execute a dry run before proceeding with the actual update.</warning>
 
 Since this script can potentially run for a very long time, to avoid memory
 exhaustion run it in production environment using <info>--env=prod</info> switch.
@@ -68,7 +68,7 @@ EOT
         );
 
         if (!$this->getContainer()->has("ezpublish.fieldtype.{$fieldTypeIdentifier}")) {
-            $output->writeln("<error>Field type '{$fieldTypeIdentifier}' was not found.</error> ");
+            $output->writeln("<error>Field Type '{$fieldTypeIdentifier}' was not found.</error> ");
 
             return;
         }
@@ -102,7 +102,7 @@ EOT
 
         $output->writeln(
             [
-                'Found total Content versions to update: ' . $totalCount,
+                'Found total versions to update: ' . $totalCount,
                 '',
             ]
         );

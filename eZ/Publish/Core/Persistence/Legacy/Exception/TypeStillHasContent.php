@@ -26,7 +26,7 @@ class TypeStillHasContent extends BadStateException
         parent::__construct(
             '$typeId',
             sprintf(
-                'Type with ID "%s" in status "%s" still has content instances and can therefore not be deleted.',
+                'Type with ID "%s" in status "%s" still has content and cannot be deleted.',
                 $typeId,
                 $status
             )

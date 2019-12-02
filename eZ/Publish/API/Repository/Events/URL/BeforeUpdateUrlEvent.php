@@ -43,7 +43,7 @@ final class BeforeUpdateUrlEvent extends BeforeEvent
     public function getUpdatedUrl(): URL
     {
         if (!$this->hasUpdatedUrl()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedUrl() or set it by setUpdatedUrl() before you call getter.', URL::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUpdatedUrl() or set it using setUpdatedUrl() before you call the getter.', URL::class));
         }
 
         return $this->updatedUrl;

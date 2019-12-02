@@ -119,7 +119,7 @@ class ContentViewBuilder implements ViewBuilder
             } elseif (isset($location)) {
                 $contentId = $location->contentId;
             } else {
-                throw new InvalidArgumentException('Content', 'No content could be loaded from parameters');
+                throw new InvalidArgumentException('Content', 'Could not load any content from the parameters');
             }
 
             $content = $view->isEmbed() ? $this->loadEmbeddedContent($contentId, $location) : $this->loadContent($contentId);
@@ -129,13 +129,13 @@ class ContentViewBuilder implements ViewBuilder
 
         if (isset($location)) {
             if ($location->contentId !== $content->id) {
-                throw new InvalidArgumentException('Location', 'Provided location does not belong to selected content');
+                throw new InvalidArgumentException('Location', 'Provided Location does not belong to the selected Content item');
             }
 
             if (isset($parameters['contentId']) && $location->contentId !== (int)$parameters['contentId']) {
                 throw new InvalidArgumentException(
                     'Location',
-                    'Provided location does not belong to selected content as requested via contentId parameter'
+                    'Provided Location does not belong to the Content item requested via the contentId parameter'
                 );
             }
         } elseif (isset($this->locationLoader)) {
@@ -235,7 +235,7 @@ class ContentViewBuilder implements ViewBuilder
         $request = $this->requestStack->getCurrentRequest();
         if (!$request || !$request->attributes->get(PreviewController::PREVIEW_PARAMETER_NAME, false)) {
             if ($location->invisible || $location->hidden) {
-                throw new HiddenLocationException($location, 'Location cannot be displayed as it is flagged as invisible.');
+                throw new HiddenLocationException($location, 'Cannot display Location because it is flagged as invisible.');
             }
         }
 

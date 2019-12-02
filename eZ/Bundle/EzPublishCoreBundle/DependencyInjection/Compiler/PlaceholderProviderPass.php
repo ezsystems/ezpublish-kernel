@@ -28,7 +28,7 @@ class PlaceholderProviderPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds(self::TAG_NAME) as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['type'])) {
-                    throw new LogicException(self::TAG_NAME . ' service tag needs a "type" attribute to identify the placeholder provider type. None given.');
+                    throw new LogicException(self::TAG_NAME . ' service tag needs a "type" attribute to identify the placeholder provider type.');
                 }
 
                 $definition->addMethodCall(

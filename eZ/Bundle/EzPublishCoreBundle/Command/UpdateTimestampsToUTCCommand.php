@@ -60,7 +60,7 @@ class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
     {
         $this
             ->setName('ezplatform:timestamps:to-utc')
-            ->setDescription('Updates ezdate & ezdatetime timestamps to UTC')
+            ->setDescription('Updates ezdate and ezdatetime timestamps to UTC')
             ->addArgument(
                 'timezone',
                 InputArgument::OPTIONAL,
@@ -105,24 +105,24 @@ class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
                 'iteration-count',
                 null,
                 InputArgument::OPTIONAL,
-                'Limit how much records get updated by single process',
+                'Limit how many records get updated by a single process',
                 self::DEFAULT_ITERATION_COUNT
             )
             ->setHelp(
                 <<<'EOT'
 The command <info>%command.name%</info> updates field
-data_int in configured Legacy Storage database for a given field type.
+data_int in configured Legacy Storage database for a given Field Type.
 
 This is to be used either when migrating from eZ Publish to eZ Platform 
 (when using platform backend instead of legacy), or when upgrading legacy 
 to v2019.03 which has been adapted to use UTC.
 
-<warning>During the script execution the database should not be modified.
+<warning>The database should not be modified while the script is being executed.
 
 You are advised to create a backup or execute a dry run before 
-proceeding with actual update.</warning>
+proceeding with the actual update.</warning>
 
-<warning>This command should be only ran ONCE.</warning>
+<warning>This command should only be ran ONCE.</warning>
 
 Since this script can potentially run for a very long time, to avoid memory
 exhaustion run it in production environment using <info>--env=prod</info> switch.
@@ -148,7 +148,7 @@ EOT
 
         if (!array_key_exists($this->mode, self::MODES)) {
             $output->writeln(
-                sprintf('Selected mode is not supported, please use one of: %s', implode(', ', array_keys(self::MODES)))
+                sprintf('The selected mode is not supported. Use one of the following modes: %s', implode(', ', array_keys(self::MODES)))
             );
 
             return;
@@ -186,7 +186,7 @@ EOT
             ]);
             $count = $this->countTimestampBasedFields();
             $output->writeln([
-                sprintf('Found total of Field values for update: %d', $count),
+                sprintf('Found %d total Field values for update', $count),
                 '',
             ]);
 
@@ -480,7 +480,7 @@ EOT
         $this->phpPath = $phpFinder->find();
         if (!$this->phpPath) {
             throw new RuntimeException(
-                'The php executable could not be found, it\'s needed for executing parable sub processes, so add it to your PATH environment variable and try again'
+                'The php executable could not be found. It is needed for executing parallel subprocesses, so add it to your PATH environment variable and try again'
             );
         }
 

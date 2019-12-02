@@ -41,7 +41,7 @@ abstract class SortClause
     public function __construct($sortTarget, $sortDirection)
     {
         if ($sortDirection !== self::SORT_ASC && $sortDirection !== self::SORT_DESC) {
-            throw new InvalidArgumentException('Sort direction must be one of SortClause::SORT_ASC or SortClause::SORT_DESC');
+            throw new InvalidArgumentException('Sort direction must be either SortClause::SORT_ASC or SortClause::SORT_DESC');
         }
 
         $this->direction = $sortDirection;

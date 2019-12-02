@@ -103,7 +103,7 @@ final class GenericFieldTypeConverterPass implements CompilerPassInterface
         if (!isset($attributes['alias'])) {
             throw new LogicException(
                 vsprintf(
-                    '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                    'The %s or %s service tag needs an "alias" attribute to identify the Field Type.',
                     $tags
                 )
             );

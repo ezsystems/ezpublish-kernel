@@ -40,20 +40,20 @@ class UpdateFieldAlwaysAvailableFlagCommand extends ContainerAwareCommand
             )
             ->setHelp(
                 <<<EOT
-The command <info>%command.name%</info> fixes always available flag on Content
+The command <info>%command.name%</info> fixes the 'always available' flag on Content
 fields in Legacy Storage Engine database.
 
-This will process only fields of the current version of the always available Content
-where found that fields in multiple languages have always available flag set.
+It will process only Fields of the current version of the always available Content
+where Fields in multiple languages have the always available flag set.
 
-Provided the patch that fixes the cause of the problem has been applied, this
+If the patch that fixes the cause of the problem has been applied, this
 command can be executed on a live database.
 
-<warning>To avoid surprises you are advised to create a backup or execute a dry
-run before proceeding with the actual update.</warning>
+<warning>You are advised to create a backup or execute a dry run before
+proceeding with the actual update.</warning>
 
-Since this command can potentially run for a very long time, to avoid memory
-exhaustion run it in production environment using <info>--env=prod</info> switch.
+Since this script can potentially run for a very long time, to avoid memory
+exhaustion, run it in production environment using <info>--env=prod</info> switch.
 
 EOT
             );
@@ -83,7 +83,7 @@ EOT
 
         $output->writeln(
             [
-                'Found total of Content objects for update: ' . $totalCount,
+                'Total number of Content items to update: ' . $totalCount,
                 '',
             ]
         );
@@ -339,7 +339,7 @@ EOT
 
         $output->write("\r");
         $output->writeln(
-            "Updated fields for Content '{$contentId}' in version '{$versionNo}'"
+            "Updated Fields for Content '{$contentId}' in version '{$versionNo}'"
         );
         $output->write("\r");
 

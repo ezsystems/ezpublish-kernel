@@ -30,7 +30,7 @@ class URLHandlerPass implements CompilerPassInterface
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['scheme'])) {
                     throw new LogicException(sprintf(
-                        '%s service tag needs a "scheme" attribute to identify which scheme is supported by handler. None given.',
+                        '%s service tag needs a "scheme" attribute to identify which scheme is supported by the handler.',
                         'ezpublish.url_handler'
                     ));
                 }

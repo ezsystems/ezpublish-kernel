@@ -107,7 +107,7 @@ class EzPublishIOExtension extends Extension
         if (isset($config[$key])) {
             foreach ($config[$key] as $name => $value) {
                 if (isset($handlers[$name])) {
-                    throw new InvalidConfigurationException("A $key named $name already exists");
+                    throw new InvalidConfigurationException("A $key called $name already exists");
                 }
                 $handlerConfig = current($value);
                 $handlerConfig['type'] = key($value);

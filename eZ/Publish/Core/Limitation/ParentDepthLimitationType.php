@@ -139,7 +139,7 @@ class ParentDepthLimitationType extends AbstractPersistenceLimitationType implem
             } else {
                 throw new InvalidArgumentException(
                     '$targets',
-                    'Must contain objects of type: Location'
+                    'Must contain Location objects'
                 );
             }
 
@@ -186,7 +186,7 @@ class ParentDepthLimitationType extends AbstractPersistenceLimitationType implem
         if (false === $hasMandatoryTarget) {
             throw new InvalidArgumentException(
                 '$targets',
-                'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+                'If $object is ContentCreateStruct, it must contain LocationCreateStruct objects'
             );
         }
 

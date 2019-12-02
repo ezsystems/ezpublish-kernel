@@ -61,7 +61,7 @@ class CheckURLsCommand extends Command
             'iteration-count',
             'c',
             InputOption::VALUE_OPTIONAL,
-            'Number of urls to be checked in a single iteration, for avoiding using too much memory',
+            'Number of URLs to check in a single iteration set to avoid using too much memory',
             self::DEFAULT_ITERATION_COUNT
         );
 
@@ -69,7 +69,7 @@ class CheckURLsCommand extends Command
             'user',
             'u',
             InputOption::VALUE_OPTIONAL,
-            'eZ Platform username (with Role containing at least Content policies: read, versionread, edit, remove, versionremove)',
+            'eZ Platform username (with Role containing at least content Policies: read, versionread, edit, remove, versionremove)',
             self::DEFAULT_REPOSITORY_USER
         );
     }
@@ -82,7 +82,7 @@ class CheckURLsCommand extends Command
 
         $limit = $input->getOption('iteration-count');
         if (!ctype_digit($limit) || (int)$limit < 1) {
-            throw new RuntimeException("'--iteration-count' option should be > 0, got '{$limit}'");
+            throw new RuntimeException("'--iteration-count' should be > 0, you passed '{$limit}'");
         }
 
         $limit = (int)$limit;

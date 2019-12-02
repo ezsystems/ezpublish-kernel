@@ -152,7 +152,7 @@ class ViewController extends Controller
             } else {
                 $location = $this->getRepository()->getLocationService()->loadLocation($locationId);
                 if ($location->invisible) {
-                    throw new NotFoundHttpException("Location #$locationId cannot be displayed as it is flagged as invisible.");
+                    throw new NotFoundHttpException("Cannot display Location with ID $locationId because it is flagged as invisible.");
                 }
             }
 
@@ -215,7 +215,7 @@ class ViewController extends Controller
             );
 
             if ($location->invisible) {
-                throw new NotFoundHttpException("Location #{$locationId} cannot be displayed as it is flagged as invisible.");
+                throw new NotFoundHttpException("Cannot display Location with ID {$locationId} because it is flagged as invisible.");
             }
 
             // Check both 'content/read' and 'content/view_embed'.

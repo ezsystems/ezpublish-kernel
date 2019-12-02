@@ -108,7 +108,7 @@ class Field extends FieldBase
         if (empty($fieldMapArray)) {
             throw new InvalidArgumentException(
                 '$criterion->target',
-                "No searchable fields found for the given criterion target '{$fieldIdentifier}'."
+                "No searchable Fields found for the provided Criterion target '{$fieldIdentifier}'."
             );
         }
 

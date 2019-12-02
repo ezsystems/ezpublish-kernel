@@ -321,10 +321,10 @@ class LanguageLimitationType implements SPITargetAwareLimitationType
         APIUserReference $currentUser
     ): CriterionInterface {
         if (empty($value->limitationValues)) {
-            // no limitation values
+            // A Policy should not have empty limitationValues stored
             throw new BadStateException(
                 '$value',
-                '$value->limitationValues is empty, it should not have been stored in the first place'
+                '$value->limitationValues is empty'
             );
         }
 

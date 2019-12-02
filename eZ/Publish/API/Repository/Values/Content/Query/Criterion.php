@@ -83,7 +83,7 @@ abstract class Criterion implements CriterionInterface
 
                 case Specifications::FORMAT_ARRAY:
                     if (!is_array($value)) {
-                        throw new InvalidArgumentException('The criterion expects an array of values');
+                        throw new InvalidArgumentException('The Criterion expects an array of values');
                     }
                     break;
             }
@@ -104,7 +104,7 @@ abstract class Criterion implements CriterionInterface
 
         // Operator wasn't found in the criterion specifications
         if ($operatorFound === false) {
-            throw new InvalidArgumentException("Operator $operator isn't supported by the Criterion " . get_class($this));
+            throw new InvalidArgumentException("Operator $operator isn't supported by Criterion " . get_class($this));
         }
 
         $this->operator = $operator;

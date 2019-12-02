@@ -35,11 +35,11 @@ class UnauthorizedException extends APIUnauthorizedException implements Httpable
      */
     public function __construct($module, $function, array $properties = null, Exception $previous = null)
     {
-        $this->setMessageTemplate("User does not have access to '%function%' '%module%'");
+        $this->setMessageTemplate("The User does not have the '%function%' '%module%' permission");
         $this->setParameters(['%module%' => $module, '%function%' => $function]);
 
         if ($properties) {
-            $this->setMessageTemplate("User does not have access to '%function%' '%module%' with: %with%");
+            $this->setMessageTemplate("The User does not have the '%function%' '%module%' permission with: %with%");
             $with = [];
             foreach ($properties as $name => $value) {
                 $with[] = "{$name} '{$value}'";

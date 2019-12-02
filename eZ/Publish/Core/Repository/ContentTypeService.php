@@ -302,7 +302,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->repository->rollback();
             throw new InvalidArgumentException(
                 '$contentTypeGroup',
-                'Content type group has content type instances',
+                'Content Type group contains Content Types',
                 $e
             );
         } catch (Exception $e) {
@@ -482,7 +482,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if (empty($contentTypeGroups)) {
             throw new InvalidArgumentException(
                 '$contentTypeGroups',
-                'Argument must contain at least one ContentTypeGroup'
+                'The argument must contain at least one Content Type group'
             );
         }
 
@@ -662,7 +662,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
             throw new InvalidArgumentException(
                 '$contentTypeCreateStruct',
-                "Another ContentType with identifier '{$contentTypeCreateStruct->identifier}' exists"
+                "Another Content Type with identifier '{$contentTypeCreateStruct->identifier}' exists"
             );
         } catch (APINotFoundException $e) {
             // Do nothing
@@ -676,7 +676,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
                 throw new InvalidArgumentException(
                     '$contentTypeCreateStruct',
-                    "Another ContentType with remoteId '{$contentTypeCreateStruct->remoteId}' exists"
+                    "Another Content Type with remoteId '{$contentTypeCreateStruct->remoteId}' exists"
                 );
             } catch (APINotFoundException $e) {
                 // Do nothing
@@ -692,7 +692,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             } else {
                 throw new InvalidArgumentException(
                     '$contentTypeCreateStruct',
-                    "Argument contains duplicate field definition identifier '{$fieldDefinitionCreateStruct->identifier}'"
+                    "The argument contains duplicate Field definition identifier '{$fieldDefinitionCreateStruct->identifier}'"
                 );
             }
 
@@ -702,7 +702,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             } else {
                 throw new InvalidArgumentException(
                     '$contentTypeCreateStruct',
-                    "Argument contains duplicate field definition position '{$fieldDefinitionCreateStruct->position}'"
+                    "The argument contains duplicate Field definition position '{$fieldDefinitionCreateStruct->position}'"
                 );
             }
         }
@@ -718,7 +718,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
             if ($fieldType->isSingular() && isset($fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->fieldTypeIdentifier])) {
                 throw new ContentTypeValidationException(
-                    "FieldType '%identifier%' is singular and can't be repeated in a ContentType",
+                    "Field Type '%identifier%' is singular and cannot be used more than once in a Content Type",
                     ['%identifier%' => $fieldDefinitionCreateStruct->fieldTypeIdentifier]
                 );
             }
@@ -910,7 +910,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         if (!$ignoreOwnership && $spiContentType->modifierId != $this->permissionResolver->getCurrentUserReference()->getUserId()) {
-            throw new NotFoundException('ContentType owned by someone else', $contentTypeId);
+            throw new NotFoundException('The Content Type is owned by someone else', $contentTypeId);
         }
 
         return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($spiContentType);
@@ -983,7 +983,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
             throw new BadStateException(
                 '$contentType',
-                'Draft of the ContentType already exists'
+                'Draft of the Content Type already exists'
             );
         } catch (APINotFoundException $e) {
             $this->repository->beginTransaction();
@@ -1025,7 +1025,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         } catch (APINotFoundException $e) {
             throw new InvalidArgumentException(
                 '$contentTypeDraft',
-                'There is no ContentType draft assigned to the authenticated user',
+                'There is no Content Type draft assigned to the authenticated user',
                 $e
             );
         }
@@ -1037,7 +1037,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
                 throw new InvalidArgumentException(
                     '$contentTypeUpdateStruct',
-                    "Another ContentType with identifier '{$contentTypeUpdateStruct->identifier}' exists"
+                    "Another Content Type with identifier '{$contentTypeUpdateStruct->identifier}' exists"
                 );
             } catch (APINotFoundException $e) {
                 // Do nothing
@@ -1051,7 +1051,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
                 throw new InvalidArgumentException(
                     '$contentTypeUpdateStruct',
-                    "Another ContentType with remoteId '{$contentTypeUpdateStruct->remoteId}' exists"
+                    "Another Content Type with remoteId '{$contentTypeUpdateStruct->remoteId}' exists"
                 );
             } catch (APINotFoundException $e) {
                 // Do nothing
@@ -1181,7 +1181,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if (in_array($contentTypeGroup->id, $spiContentType->groupIds)) {
             throw new InvalidArgumentException(
                 '$contentTypeGroup',
-                'The given ContentType is already assigned to the ContentTypeGroup'
+                'The provided Content Type is already assigned to the Content Type group'
             );
         }
 
@@ -1223,7 +1223,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if (!in_array($contentTypeGroup->id, $spiContentType->groupIds)) {
             throw new InvalidArgumentException(
                 '$contentTypeGroup',
-                'The given ContentType is not assigned the ContentTypeGroup'
+                'The provided Content Type is not assigned the Content Type group'
             );
         }
 
@@ -1239,7 +1239,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->repository->rollback();
             throw new BadStateException(
                 '$contentType',
-                'The given ContentTypeGroup is the last group assigned to the ContentType',
+                'The provided Content Type group is the last group assigned to the Content Type',
                 $e
             );
         } catch (Exception $e) {
@@ -1277,7 +1277,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if ($loadedContentTypeDraft->getFieldDefinition($fieldDefinitionCreateStruct->identifier) !== null) {
             throw new InvalidArgumentException(
                 '$fieldDefinitionCreateStruct',
-                "Another FieldDefinition with identifier '{$fieldDefinitionCreateStruct->identifier}' exists in the ContentType"
+                "Another Field definition with identifier '{$fieldDefinitionCreateStruct->identifier}' exists in the Content Type"
             );
         }
         //Fill default translations with default value for mainLanguageCode with fallback if no exist
@@ -1307,7 +1307,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 if ($fieldDefinition->fieldTypeIdentifier === $fieldDefinitionCreateStruct->fieldTypeIdentifier) {
                     throw new BadStateException(
                         '$contentTypeDraft',
-                        "ContentType already contains field definition of non-repeatable field type '{$fieldDefinition->fieldTypeIdentifier}'"
+                        "The Content Type already contains a Field definition of the singular Field Type '{$fieldDefinition->fieldTypeIdentifier}'"
                     );
                 }
             }
@@ -1317,7 +1317,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         ) {
             throw new BadStateException(
                 '$contentTypeDraft',
-                "Field definition of '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' field type cannot be added because ContentType has Content instances"
+                "A Field definition of the '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' Field Type cannot be added because the Content Type already has Content items"
             );
         }
 
@@ -1365,7 +1365,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if (empty($loadedFieldDefinition) || $loadedFieldDefinition->id != $fieldDefinition->id) {
             throw new InvalidArgumentException(
                 '$fieldDefinition',
-                'The given FieldDefinition does not belong to the ContentType'
+                'The given Field definition does not belong to the Content Type'
             );
         }
 
@@ -1408,14 +1408,14 @@ class ContentTypeService implements ContentTypeServiceInterface
             } elseif ($existingFieldDefinition->identifier == $fieldDefinitionUpdateStruct->identifier) {
                 throw new InvalidArgumentException(
                     '$fieldDefinitionUpdateStruct',
-                    "Another FieldDefinition with identifier '{$fieldDefinitionUpdateStruct->identifier}' exists in the ContentType"
+                    "Another Field definition with identifier '{$fieldDefinitionUpdateStruct->identifier}' exists in the Content Type"
                 );
             }
         }
         if (!$foundFieldId) {
             throw new InvalidArgumentException(
                 '$fieldDefinition',
-                'The given FieldDefinition does not belong to the ContentType'
+                'The given Field definition does not belong to the Content Type'
             );
         }
 
@@ -1461,7 +1461,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         } catch (APINotFoundException $e) {
             throw new BadStateException(
                 '$contentTypeDraft',
-                'The content type does not have a draft.',
+                'The Content Type does not have a draft.',
                 $e
             );
         }
@@ -1469,7 +1469,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if (count($loadedContentTypeDraft->getFieldDefinitions()) === 0) {
             throw new InvalidArgumentException(
                 '$contentTypeDraft',
-                'The content type draft should have at least one field definition.'
+                'The Content Type draft should have at least one Field definition.'
             );
         }
 

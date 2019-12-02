@@ -27,7 +27,7 @@ class CleanupVersionsCommand extends Command
     const BEFORE_RUNNING_HINTS = <<<EOT
 <error>Before you continue:</error>
 - Make sure to back up your database.
-- Take installation offline, during the script execution the database should not be modified.
+- Take the installation offline. The database should not be modified while the script is being executed.
 - Run this command without memory limit.
 - Run this command in production environment using <info>--env=prod</info>
 EOT;
@@ -69,7 +69,7 @@ EOT;
         $beforeRunningHints = self::BEFORE_RUNNING_HINTS;
         $this
             ->setName('ezplatform:content:cleanup-versions')
-            ->setDescription('Remove unwanted content versions. It keeps published version untouched. By default, it keeps also the last archived/draft version.')
+            ->setDescription('Removes unwanted content versions. Keeps the published version untouched. By default, also keeps the last archived/draft version.')
             ->addOption(
                 'status',
                 't',
@@ -86,27 +86,27 @@ EOT;
                 'keep',
                 'k',
                 InputOption::VALUE_OPTIONAL,
-                "Sets number of the most recent versions (both drafts and archived) which won't be removed.",
+                "Sets the number of the most recent versions (both drafts and archived) which won't be removed.",
                 'config_default'
             )
             ->addOption(
                 'user',
                 'u',
                 InputOption::VALUE_OPTIONAL,
-                'eZ Platform username (with Role containing at least Content policies: remove, read, versionread)',
+                'eZ Platform username (with Role containing at least content policies: remove, read, versionread)',
                 self::DEFAULT_REPOSITORY_USER
             )
             ->addOption(
                 'excluded-content-types',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Comma separated list of ContentType identifiers of which versions should not be removed, for instance `article`.',
+                'Comma-separated list of Content Type identifiers whose versions should not be removed, for instance `article`.',
                 self::DEFAULT_EXCLUDED_CONTENT_TYPES
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> reduces content versions to a minimum. 
-It keeps published version untouched, and by default it keeps also the last archived/draft version.
-Note: This script can potentially run for a very long time, and in Symfony dev environment it will consume memory exponentially with size of dataset.
+It keeps published version untouched, and by default also keeps the last archived/draft version.
+Note: This script can potentially run for a very long time, and in Symfony dev environment it will consume memory exponentially with the size of the dataset.
 
 {$beforeRunningHints}
 EOT
@@ -125,7 +125,7 @@ EOT
         if (($keep = (int) $keep) < 0) {
             throw new InvalidArgumentException(
                 'keep',
-                'Keep value can not be negative.'
+                'Keep value cannot be negative.'
             );
         }
 
@@ -148,13 +148,13 @@ EOT
         $contentIdsCount = count($contentIds);
 
         if ($contentIdsCount === 0) {
-            $output->writeln('<info>There is no Content matching given criteria.</info>');
+            $output->writeln('<info>There is no content matching the given Criteria.</info>');
 
             return;
         }
 
         $output->writeln(sprintf(
-            '<info>Found %d Content IDs matching given criteria.</info>',
+            '<info>Found %d Content IDs matching the given Criteria.</info>',
             $contentIdsCount
         ));
 
@@ -198,7 +198,7 @@ EOT
                 }
 
                 $output->writeln(sprintf(
-                    "Found %d content's (%d) version(s) to remove.",
+                    'Found %d content (%d) version(s) to remove.',
                     count($versions),
                     (int) $contentId
                 ), OutputInterface::VERBOSITY_VERBOSE);
@@ -208,7 +208,7 @@ EOT
                     $contentService->deleteVersion($version);
                     ++$removedVersionsCounter;
                     $output->writeln(sprintf(
-                        "Content's (%d) version (%d) has been deleted.",
+                        'Content (%d) version (%d) has been deleted.',
                         $contentInfo->id,
                         $version->id
                     ), OutputInterface::VERBOSITY_VERBOSE);
@@ -226,7 +226,7 @@ EOT
         }
 
         $output->writeln(sprintf(
-            '<info>Removed %d unwanted contents version(s) from %d content(s).</info>',
+            '<info>Removed %d unwanted contents version(s) from %d Content item(s).</info>',
             $removedVersionsCounter,
             $contentIdsCount
         ));
@@ -292,7 +292,7 @@ EOT
         throw new InvalidArgumentException(
             'status',
             sprintf(
-                "Status %s can't be mapped to VersionInfo status.",
+                'Status %s cannot be mapped to a VersionInfo status.',
                 $status
             )
         );

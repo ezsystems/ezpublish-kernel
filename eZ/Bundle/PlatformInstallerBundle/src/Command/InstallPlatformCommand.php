@@ -123,7 +123,7 @@ final class InstallPlatformCommand extends Command
     {
         $output->writeln(
             sprintf(
-                'Creating the database <comment>%s</comment> if it does not exist, executing command doctrine:database:create --if-not-exists',
+                'Creating database <comment>%s</comment> if it does not exist, using doctrine:database:create --if-not-exists',
                 $this->connection->getDatabase()
             )
         );
@@ -203,7 +203,7 @@ final class InstallPlatformCommand extends Command
     {
         $phpFinder = new PhpExecutableFinder();
         if (!$phpPath = $phpFinder->find(false)) {
-            throw new \RuntimeException('The php executable could not be found, add it to your PATH environment variable and try again');
+            throw new \RuntimeException('The php executable could not be found. Add it to your PATH environment variable and try again');
         }
 
         // We don't know which php arguments where used so we gather some to be on the safe side

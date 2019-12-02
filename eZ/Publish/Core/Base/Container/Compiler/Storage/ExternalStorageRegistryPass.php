@@ -71,7 +71,7 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         sprintf(
-                            '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                            'The %s or %s service tag needs an "alias" attribute to identify the Field Type.',
                             self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG,
                             self::EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
                         )
@@ -81,7 +81,7 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                 if (!isset($attribute['identifier'])) {
                     throw new LogicException(
                         sprintf(
-                            '%s or %s service tag needs an "identifier" attribute to identify the gateway. None given.',
+                            'The %s or %s service tag needs an "identifier" attribute to identify the gateway.',
                             self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG,
                             self::EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
                         )
@@ -124,7 +124,7 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         sprintf(
-                            '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                            'The %s or %s service tag needs an "alias" attribute to identify the Field Type.',
                             self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_SERVICE_TAG,
                             self::EXTERNAL_STORAGE_HANDLER_SERVICE_TAG
                         )
@@ -147,8 +147,8 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                 ) {
                     if (!isset($externalStorageGateways[$attribute['alias']])) {
                         throw new LogicException(
-                            "External storage handler '$id' for field type {$attribute['alias']} needs a storage gateway but none was given.
-                            Consider defining a storage gateway as a service for this field type and add the 'ezplatform.field_type.external_storage_handler.gateway tag'"
+                            "External storage handler '$id' for Field Type {$attribute['alias']} needs a storage gateway.
+                            Consider defining a storage gateway as a service for this Field Type and add the 'ezplatform.field_type.external_storage_handler.gateway tag'"
                         );
                     }
 

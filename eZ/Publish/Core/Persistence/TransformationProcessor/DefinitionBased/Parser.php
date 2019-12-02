@@ -114,7 +114,7 @@ class Parser
             }
 
             if ($section === null) {
-                throw new RuntimeException('Expected section.');
+                throw new RuntimeException('Section expected.');
             }
 
             $ast[$section][] = $token;

@@ -43,7 +43,7 @@ final class BeforeCopyContentTypeEvent extends BeforeEvent
     public function getContentTypeCopy(): ContentType
     {
         if (!$this->hasContentTypeCopy()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContentTypeCopy() or set it by setContentTypeCopy() before you call getter.', ContentType::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasContentTypeCopy() or set it using setContentTypeCopy() before you call the getter.', ContentType::class));
         }
 
         return $this->contentTypeCopy;

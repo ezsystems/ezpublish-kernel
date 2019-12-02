@@ -51,7 +51,7 @@ abstract class AbstractFieldTypeBasedPass implements CompilerPassInterface
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         sprintf(
-                            '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                            'The %s or %s service tag needs an "alias" attribute to identify the Field Type.',
                             self::DEPRECATED_FIELD_TYPE_SERVICE_TAG,
                             self::FIELD_TYPE_SERVICE_TAG
                         )

@@ -143,7 +143,7 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
 
         foreach ($targets as $target) {
             if (!$target instanceof Location && !$target instanceof SPILocation) {
-                throw new InvalidArgumentException('$targets', 'Must contain objects of type: Location');
+                throw new InvalidArgumentException('$targets', 'Must contain Location objects');
             }
 
             // Single match is sufficient
@@ -189,7 +189,7 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
         if (false === $hasMandatoryTarget) {
             throw new InvalidArgumentException(
                 '$targets',
-                'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+                'If $object is ContentCreateStruct, it must contain LocationCreateStruct objects'
             );
         }
 
@@ -207,8 +207,8 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
         if (empty($value->limitationValues)) {
-            // no limitation values
-            throw new \RuntimeException('$value->limitationValues is empty, it should not have been stored in the first place');
+            // A Policy should not have empty limitationValues stored
+            throw new \RuntimeException('$value->limitationValues is empty');
         }
 
         if (!isset($value->limitationValues[1])) {

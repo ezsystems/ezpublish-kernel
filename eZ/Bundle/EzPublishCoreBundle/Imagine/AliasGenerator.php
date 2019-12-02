@@ -85,7 +85,7 @@ class AliasGenerator implements VariationHandler
         $fieldId = $field->id;
         $fieldDefIdentifier = $field->fieldDefIdentifier;
         if (!$this->supportsValue($imageValue)) {
-            throw new InvalidArgumentException("Value for field #$fieldId ($fieldDefIdentifier) cannot be used for image alias generation.");
+            throw new InvalidArgumentException("Value of Field with ID $fieldId ($fieldDefIdentifier) cannot be used for generating an image variation.");
         }
 
         $originalPath = $imageValue->id;

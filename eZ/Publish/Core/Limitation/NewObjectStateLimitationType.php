@@ -122,7 +122,7 @@ class NewObjectStateLimitationType extends AbstractPersistenceLimitationType imp
         }
 
         if (empty($targets)) {
-            throw new InvalidArgumentException('$targets', 'Must contain objects of type: ObjectState');
+            throw new InvalidArgumentException('$targets', 'Must contain ObjectState objects');
         }
 
         if (empty($value->limitationValues)) {
@@ -131,7 +131,7 @@ class NewObjectStateLimitationType extends AbstractPersistenceLimitationType imp
 
         foreach ($targets as $target) {
             if (!$target instanceof ObjectState && !$target instanceof SPIObjectState) {
-                throw new InvalidArgumentException('$targets', 'Must contain objects of type: ObjectState');
+                throw new InvalidArgumentException('$targets', 'Must contain ObjectState objects');
             }
 
             if (!in_array($target->id, $value->limitationValues)) {

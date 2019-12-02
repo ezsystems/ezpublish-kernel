@@ -43,7 +43,7 @@ final class BeforeUpdateSectionEvent extends BeforeEvent
     public function getUpdatedSection(): Section
     {
         if (!$this->hasUpdatedSection()) {
-            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedSection() or set it by setUpdatedSection() before you call getter.', Section::class));
+            throw new UnexpectedValueException(sprintf('Return value is not set or not of type %s. Check hasUpdatedSection() or set it using setUpdatedSection() before you call the getter.', Section::class));
         }
 
         return $this->updatedSection;

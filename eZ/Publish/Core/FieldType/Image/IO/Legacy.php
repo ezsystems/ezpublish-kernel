@@ -143,7 +143,7 @@ class Legacy implements IOServiceInterface
             $image = $this->publishedIOService->loadBinaryFile($binaryFileId);
 
             if ($image instanceof MissingBinaryFile) {
-                throw new InvalidArgumentException('binaryFileId', sprintf("Can't find file with id %s", $binaryFileId));
+                throw new InvalidArgumentException('binaryFileId', sprintf('Cannot find file with ID %s', $binaryFileId));
             }
 
             return $image;
@@ -166,7 +166,7 @@ class Legacy implements IOServiceInterface
             $image = $this->publishedIOService->loadBinaryFileByUri($binaryFileUri);
 
             if ($image instanceof MissingBinaryFile) {
-                throw new InvalidArgumentException('binaryFileUri', sprintf("Can't find file with url %s", $binaryFileUri));
+                throw new InvalidArgumentException('binaryFileUri', sprintf('Cannot find file with URL %s', $binaryFileUri));
             }
 
             return $image;

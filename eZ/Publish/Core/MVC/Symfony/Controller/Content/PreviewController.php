@@ -75,7 +75,7 @@ class PreviewController
             $location = $this->locationProvider->loadMainLocationByContent($content);
 
             if (!$location instanceof Location) {
-                throw new NotImplementedException('Preview for content without locations');
+                throw new NotImplementedException('Preview for content without Locations');
             }
 
             $this->previewHelper->setPreviewedContent($content);

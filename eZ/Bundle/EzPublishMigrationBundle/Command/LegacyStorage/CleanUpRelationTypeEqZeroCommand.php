@@ -49,7 +49,7 @@ EOT
 
         if (!$this->isValidAction($action)) {
             throw new RuntimeException(
-                "Action '{$action}' is not supported, use one of: " .
+                "Action '{$action}' is not supported. Choose one of the following actions: " .
                 implode(', ', $this->getAvailableActions())
             );
         }
@@ -88,7 +88,7 @@ EOT
 
         if (!$storageEngine instanceof LegacyStorageEngine) {
             throw new RuntimeException(
-                'Expected to find Legacy Storage Engine but found something else.'
+                'Did not find Legacy Storage Engine.'
             );
         }
     }
