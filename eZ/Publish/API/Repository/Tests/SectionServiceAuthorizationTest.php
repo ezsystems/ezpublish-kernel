@@ -44,7 +44,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage("User does not have access to 'edit' 'section");
+        $this->expectExceptionMessage("The User does not have the 'edit' 'section' permission");
 
         $sectionService->createSection($sectionCreate);
         /* END: Use Case */
@@ -76,7 +76,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage("User does not have access to 'view' 'section");
+        $this->expectExceptionMessage("The User does not have the 'view' 'section' permission");
 
         $sectionService->loadSection($sectionId);
         /* END: Use Case */
@@ -112,7 +112,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage("User does not have access to 'edit' 'section");
+        $this->expectExceptionMessage("The User does not have the 'edit' 'section' permission");
 
         $sectionService->updateSection($section, $sectionUpdate);
         /* END: Use Case */
@@ -226,7 +226,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage("User does not have access to 'view' 'section");
+        $this->expectExceptionMessage("The User does not have the 'view' 'section' permission");
 
         $sectionService->loadSectionByIdentifier('uniqueKey');
         /* END: Use Case */

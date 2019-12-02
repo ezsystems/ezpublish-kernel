@@ -615,7 +615,7 @@ abstract class FieldTypeTest extends TestCase
             $fieldType->acceptValue($inputValue);
             $this->fail(
                 sprintf(
-                    'Expected exception of type "%s" not thrown on incorrect input to acceptValue().',
+                    'Expected exception of type "%s" not thrown for incorrect input to acceptValue().',
                     $expectedException
                 )
             );

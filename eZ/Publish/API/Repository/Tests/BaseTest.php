@@ -169,7 +169,7 @@ abstract class BaseTest extends TestCase
             if (false === class_exists($setupClass)) {
                 throw new \ErrorException(
                     sprintf(
-                        'Environment variable "setupFactory" does not reference an existing class: %s. Did you forget to install an package dependency?',
+                        'Environment variable "setupFactory" does not reference an existing class: %s. Did you forget to install a package dependency?',
                         $setupClass
                     )
                 );
@@ -619,7 +619,7 @@ abstract class BaseTest extends TestCase
 
         if (!$connection instanceof Connection) {
             throw new \RuntimeException(
-                sprintf('Expected %s got %s', Connection::class, get_class($connection))
+                sprintf('Found %s instead of %s', get_class($connection), Connection::class)
             );
         }
 
@@ -712,7 +712,7 @@ abstract class BaseTest extends TestCase
         $locationService = $repository->getLocationService();
 
         if (empty($names)) {
-            throw new \RuntimeException(sprintf('%s expects non-empty names list', __METHOD__));
+            throw new \RuntimeException(sprintf('%s expects a non-empty names list', __METHOD__));
         }
         $mainLanguageCode = array_keys($names)[0];
 

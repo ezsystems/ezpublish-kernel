@@ -130,7 +130,7 @@ class LanguageServiceTest extends BaseTest
     public function testCreateLanguageThrowsInvalidArgumentException()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'languageCreateStruct\' is invalid: language with specified language code already exists');
+        $this->expectExceptionMessage('Argument \'languageCreateStruct\' is invalid: language with the specified language code already exists');
 
         $repository = $this->getRepository();
 
@@ -265,7 +265,7 @@ class LanguageServiceTest extends BaseTest
     public function testUpdateLanguageNameThrowsInvalidArgumentException()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'newName\' is invalid: \'\' is wrong value');
+        $this->expectExceptionMessage('Argument \'newName\' is invalid: \'\' is incorrect value');
 
         $repository = $this->getRepository();
         $languageService = $repository->getContentLanguageService();
@@ -533,7 +533,7 @@ class LanguageServiceTest extends BaseTest
     public function testDeleteLanguageThrowsInvalidArgumentException()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'language\' is invalid: Deleting language logic error, some content still references that language and therefore it can\'t be deleted');
+        $this->expectExceptionMessage('Argument \'language\' is invalid: Cannot delete language: some content still references the language');
 
         $repository = $this->getRepository();
 

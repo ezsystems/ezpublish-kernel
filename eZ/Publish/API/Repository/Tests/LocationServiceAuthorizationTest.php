@@ -413,7 +413,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     public function testDeleteLocationWithSubtreeThrowsUnauthorizedException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
-        $this->expectExceptionMessage('User does not have access to \'remove\' \'content\'');
+        $this->expectExceptionMessage('The User does not have the \'remove\' \'content\' permission');
 
         $repository = $this->getRepository();
         $permissionResolver = $repository->getPermissionResolver();

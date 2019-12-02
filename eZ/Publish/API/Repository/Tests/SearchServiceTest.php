@@ -1371,7 +1371,7 @@ class SearchServiceTest extends BaseTest
     public function testInvalidFieldIdentifierRange()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'$criterion->target\' is invalid: No searchable fields found for the given criterion target \'some_hopefully_unknown_field\'');
+        $this->expectExceptionMessage('Argument \'$criterion->target\' is invalid: No searchable Fields found for the provided Criterion target \'some_hopefully_unknown_field\'');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1393,7 +1393,7 @@ class SearchServiceTest extends BaseTest
     public function testInvalidFieldIdentifierIn()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'$criterion->target\' is invalid: No searchable fields found for the given criterion target \'some_hopefully_unknown_field\'');
+        $this->expectExceptionMessage('Argument \'$criterion->target\' is invalid: No searchable Fields found for the provided Criterion target \'some_hopefully_unknown_field\'');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1415,7 +1415,7 @@ class SearchServiceTest extends BaseTest
     public function testFindContentWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'$criterion->target\' is invalid: No searchable fields found for the given criterion target \'tag_cloud_url\'');
+        $this->expectExceptionMessage('Argument \'$criterion->target\' is invalid: No searchable Fields found for the provided Criterion target \'tag_cloud_url\'');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1437,7 +1437,7 @@ class SearchServiceTest extends BaseTest
     public function testSortFieldWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'$sortClause->targetData\' is invalid: No searchable fields found for the given sort clause target \'title\' on \'template_look\'');
+        $this->expectExceptionMessage('Argument \'$sortClause->targetData\' is invalid: No searchable Fields found for the provided Sort Clause target \'title\' on \'template_look\'');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1454,7 +1454,7 @@ class SearchServiceTest extends BaseTest
     public function testSortMapLocationDistanceWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'$sortClause->targetData\' is invalid: No searchable fields found for the given sort clause target \'title\' on \'template_look\'');
+        $this->expectExceptionMessage('Argument \'$sortClause->targetData\' is invalid: No searchable Fields found for the provided Sort Clause target \'title\' on \'template_look\'');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();

@@ -983,7 +983,7 @@ class LocationServiceTest extends BaseTest
     public function testLoadParentLocationsForDraftContentThrowsBadStateException(Content $contentDraft)
     {
         $this->expectException(BadStateException::class);
-        $this->expectExceptionMessageRegExp('/has been already published/');
+        $this->expectExceptionMessageRegExp('/is already published/');
 
         $repository = $this->getRepository(false);
         $locationService = $repository->getLocationService();
@@ -1560,7 +1560,7 @@ class LocationServiceTest extends BaseTest
             $expectedLocationIds,
             $actualLocationsIds,
             sprintf(
-                'Content %d contains Locations %s, but expected: %s',
+                'Content %d contains Locations %s, not expected Locations: %s',
                 $content->id,
                 implode(', ', $actualLocationsIds),
                 implode(', ', $expectedLocationIds)
@@ -1768,7 +1768,7 @@ class LocationServiceTest extends BaseTest
         $this->assertTrue(
             $hiddenLocation->hidden,
             sprintf(
-                'Location with ID "%s" not hidden.',
+                'Location with ID "%s" is not hidden.',
                 $hiddenLocation->id
             )
         );
@@ -1839,7 +1839,7 @@ class LocationServiceTest extends BaseTest
         $this->assertFalse(
             $unHiddenLocation->hidden,
             sprintf(
-                'Location with ID "%s" not unhidden.',
+                'Location with ID "%s" is hidden.',
                 $unHiddenLocation->id
             )
         );
@@ -1888,7 +1888,7 @@ class LocationServiceTest extends BaseTest
         $this->assertFalse(
             $unHiddenHigherLocation->hidden,
             sprintf(
-                'Location with ID "%s" not unhidden.',
+                'Location with ID "%s" is hidden.',
                 $unHiddenHigherLocation->id
             )
         );
@@ -1907,7 +1907,7 @@ class LocationServiceTest extends BaseTest
         $this->assertTrue(
             $stillHiddenLocation->hidden,
             sprintf(
-                'Hidden sub-location with ID %s accidentally unhidden.',
+                'Hidden sub-location with ID %s unhidden unexpectedly.',
                 $stillHiddenLocation->id
             )
         );

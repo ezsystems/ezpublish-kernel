@@ -287,7 +287,7 @@ abstract class TestCase extends BaseTestCase
     {
         if (!is_object($object)) {
             throw new InvalidArgumentException(
-                'Expected object as second parameter, received ' . gettype($object)
+                'Received ' . gettype($object) . ' instead of object as second parameter'
             );
         }
         foreach ($properties as $propName => $propVal) {

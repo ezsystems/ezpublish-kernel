@@ -2123,7 +2123,7 @@ class UserServiceTest extends BaseTest
     public function testAssignUserToUserGroupThrowsInvalidArgumentException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Argument \'user\' is invalid: user is already in the given user group');
+        $this->expectExceptionMessage('Argument \'user\' is invalid: User is already in the given User Group');
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
@@ -2222,7 +2222,7 @@ class UserServiceTest extends BaseTest
     public function testUnAssignUserFromUserGroupThrowsBadStateArgumentException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
-        $this->expectExceptionMessage('Argument \'user\' has a bad state: user only has one user group, cannot unassign from last group');
+        $this->expectExceptionMessage('Argument \'user\' has a bad state: User only has one User Group, cannot unassign from last group');
 
         $repository = $this->getRepository();
         $userService = $repository->getUserService();

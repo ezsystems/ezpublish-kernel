@@ -12,12 +12,12 @@
 // Get global config.php settings
 if (!file_exists(__DIR__ . '/config.php')) {
     if (!symlink(__DIR__ . '/config.php-DEVELOPMENT', __DIR__ . '/config.php')) {
-        throw new \RuntimeException('Could not symlink config.php-DEVELOPMENT to config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!');
+        throw new \RuntimeException('Could not symlink config.php-DEVELOPMENT to config.php. Copy config.php-DEVELOPMENT to config.php and customize it to your needs.');
     }
 }
 
 if (!($settings = include(__DIR__ . '/config.php'))) {
-    throw new \RuntimeException('Could not read config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!');
+    throw new \RuntimeException('Could not read config.php. Copy config.php-DEVELOPMENT to config.php and customize it to your needs.');
 }
 
 // Class alias used for BC

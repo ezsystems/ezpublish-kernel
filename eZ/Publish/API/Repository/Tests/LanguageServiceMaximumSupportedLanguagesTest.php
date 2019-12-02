@@ -81,7 +81,7 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
     public function testCreateMaximumLanguageLimit()
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Maximum number of languages reached!');
+        $this->expectExceptionMessage('Maximum number of languages reached.');
 
         $languageCreate = $this->languageService->newLanguageCreateStruct();
         $languageCreate->enabled = true;

@@ -5043,7 +5043,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($writerUser);
 
         $this->expectException(CoreUnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/User does not have access to \'publish\' \'content\'/');
+        $this->expectExceptionMessageRegExp('/The User does not have the \'publish\' \'content\' permission/');
 
         $this->createContentVersion1();
     }
@@ -5160,7 +5160,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // try to delete main translation
         $this->expectException(BadStateException::class);
-        $this->expectExceptionMessage('Specified translation is the main translation of the Content Object');
+        $this->expectExceptionMessage('The provided translation is the main translation of the Content item');
 
         $this->contentService->deleteTranslation($content->contentInfo, $content->contentInfo->mainLanguageCode);
     }
@@ -5219,7 +5219,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($writerUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage('User does not have access to \'remove\' \'content\'');
+        $this->expectExceptionMessage('The User does not have the \'remove\' \'content\' permission');
 
         $this->contentService->deleteTranslation($content->contentInfo, self::ENG_GB);
     }
@@ -5435,7 +5435,7 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->expectException(BadStateException::class);
-        $this->expectExceptionMessage('Specified Translation is the only one Content Object Version has');
+        $this->expectExceptionMessage('The provided translation is the only translation in this version');
 
         // attempt to delete Translation
         $this->contentService->deleteTranslationFromDraft($draft->versionInfo, self::ENG_US);
@@ -5462,7 +5462,7 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->expectException(BadStateException::class);
-        $this->expectExceptionMessage('Specified Translation is the main Translation of the Content Object');
+        $this->expectExceptionMessage('the specified translation is the main translation of the Content item');
 
         $this->contentService->deleteTranslationFromDraft($draft->versionInfo, $mainLanguageCode);
     }
@@ -5480,7 +5480,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $publishedContent = $this->contentService->publishVersion($draft->versionInfo);
 
         $this->expectException(BadStateException::class);
-        $this->expectExceptionMessage('Version is not a draft');
+        $this->expectExceptionMessage('The version is not a draft');
 
         $this->contentService->deleteTranslationFromDraft($publishedContent->versionInfo, $languageCode);
     }
@@ -5512,7 +5512,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($writerUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage('User does not have access to \'edit\' \'content\'');
+        $this->expectExceptionMessage('The User does not have the \'edit\' \'content\' permission');
 
         $this->contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
     }
@@ -5528,7 +5528,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $content = $this->createMultipleLanguageContentVersion2();
         $draft = $this->contentService->createContentDraft($content->contentInfo);
         $this->expectException(APIInvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/The Version \(ContentId=\d+, VersionNo=\d+\) is not translated into ger-DE/');
+        $this->expectExceptionMessageRegExp('/The version \(ContentId=\d+, VersionNo=\d+\) is not translated into ger-DE/');
         $this->contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
     }
 
@@ -5653,7 +5653,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     $propertyValue,
                     $actualAlias->$propertyName,
                     sprintf(
-                        'Property $%s incorrect on alias with path "%s" in languages "%s".',
+                        'Property $%s incorrect for alias with path "%s" in languages "%s".',
                         $propertyName,
                         $actualAlias->path,
                         implode(', ', $actualAlias->languageCodes)

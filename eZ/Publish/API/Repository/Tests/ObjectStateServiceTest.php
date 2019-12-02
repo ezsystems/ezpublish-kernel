@@ -458,7 +458,7 @@ class ObjectStateServiceTest extends BaseTest
             if (!isset($expectedIdentifiers[$loadedObject->identifier])) {
                 $this->fail(
                     sprintf(
-                        'Loaded not expected %s with identifier "%s"',
+                        'Loaded unexpected %s with identifier "%s"',
                         $class,
                         $loadedObject->identifier
                     )
@@ -1716,7 +1716,7 @@ class ObjectStateServiceTest extends BaseTest
             $objectStateService->loadObjectStateGroup($objectStateGroupId);
             $this->fail(
                 sprintf(
-                    'ObjectStateGroup with ID "%s" not deleted.',
+                    'Object state group with ID "%s" not deleted.',
                     $objectStateGroupId
                 )
             );
