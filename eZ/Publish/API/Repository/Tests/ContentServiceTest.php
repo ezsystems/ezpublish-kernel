@@ -2035,6 +2035,97 @@ XML
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\ContentService::updateContentMetadata
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdateContentAlwaysAvailable(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $folder = $this->createFolder(['eng-GB' => 'Folder'], 2);
+
+        $contentMetadataUpdate = $contentService->newContentMetadataUpdateStruct();
+        $contentMetadataUpdate->alwaysAvailable = !$folder->contentInfo->alwaysAvailable;
+        $contentService->updateContentMetadata($folder->contentInfo, $contentMetadataUpdate);
+
+        $reloadedFolder = $contentService->loadContent($folder->id);
+        self::assertEquals(
+            $contentMetadataUpdate->alwaysAvailable,
+            $reloadedFolder->contentInfo->alwaysAvailable
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentService::updateContentMetadata
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testUpdateContentMainTranslation(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // create a Content Type which is not always available by default
+        $contentType = $this->createSimpleContentType(
+            'test_t',
+            self::ENG_GB,
+            [
+                'name' => 'ezstring',
+            ],
+            false
+        );
+
+        $contentCreate = $contentService->newContentCreateStruct(
+            $contentType,
+            self::ENG_US
+        );
+        $contentCreate->setField('name', 'My Content');
+        $content = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreate,
+                [$locationService->newLocationCreateStruct(2)]
+            )->getVersionInfo()
+        );
+        // perform sanity check
+        self::assertFalse($content->contentInfo->alwaysAvailable);
+
+        $updateStruct = $contentService->newContentMetadataUpdateStruct();
+        $updateStruct->mainLanguageCode = self::ENG_GB;
+
+        $contentService->updateContentMetadata($content->contentInfo, $updateStruct);
+
+        $reloadedContent = $contentService->loadContent($content->id);
+        self::assertEquals(self::ENG_GB, $reloadedContent->contentInfo->mainLanguageCode);
+
+        // check that other properties remained unchanged
+        self::assertStructPropertiesCorrect(
+            $content->contentInfo,
+            $reloadedContent->contentInfo,
+            [
+                'id',
+                'contentTypeId',
+                'name',
+                'sectionId',
+                'currentVersionNo',
+                'published',
+                'ownerId',
+                'alwaysAvailable',
+                'remoteId',
+                'mainLocationId',
+                'isHidden',
+                'status',
+            ]
+        );
+    }
+
+    /**
      * Test for the deleteContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
