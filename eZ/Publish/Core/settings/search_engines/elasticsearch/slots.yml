@@ -25,7 +25,6 @@ parameters:
     ezpublish.search.elasticsearch.slot.delete_translation.class: eZ\Publish\Core\Search\Common\Slot\DeleteTranslation
     ezpublish.search.elasticsearch.slot.assign_section.class: eZ\Publish\Core\Search\Common\Slot\AssignSection
 
-
 services:
     ezpublish.search.elasticsearch.slot:
         class: "%ezpublish.search.elasticsearch.slot.class%"
@@ -188,3 +187,8 @@ services:
         parent: ezpublish.search.elasticsearch.slot
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\RevealContentSignal}
+            -
+    eZ\Publish\Core\Search\Common\Slot\AssignSectionToSubtree:
+        parent: ezpublish.search.elasticsearch.slot
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: SectionService\AssignSectionToSubtreeSignal}

@@ -124,3 +124,8 @@ services:
         parent: ezpublish.search.legacy.slot
         tags:
             - {name: ezpublish.search.legacy.slot, signal: ContentService\RevealContentSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\AssignSectionToSubtree:
+        parent: ezpublish.search.legacy.slot
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: SectionService\AssignSectionToSubtreeSignal}
