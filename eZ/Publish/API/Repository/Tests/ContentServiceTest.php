@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\DraftList\Item\UnauthorizedContentDraftListItem;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -5762,7 +5763,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         foreach ($objectStateGroups as $objectStateGroup) {
             $contentState = $objectStateService->getContentState($contentInfo, $objectStateGroup);
-            foreach ($objectStateService->loadObjectStates($objectStateGroup) as $objectState) {
+            foreach ($objectStateService->loadObjectStates($objectStateGroup, Language::ALL) as $objectState) {
                 // Only check the first object state which is the default one.
                 $this->assertEquals(
                     $objectState,

@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
@@ -1510,12 +1511,12 @@ class LocationServiceTest extends BaseTest
 
         self::assertEquals(
             $folder1,
-            $contentService->loadContent($folder1->id)
+            $contentService->loadContent($folder1->id, Language::ALL)
         );
 
         self::assertEquals(
             $folder2,
-            $contentService->loadContent($folder2->id)
+            $contentService->loadContent($folder2->id, Language::ALL)
         );
 
         // only in case of Folder 3, main location id changed due to swap
@@ -1659,12 +1660,12 @@ class LocationServiceTest extends BaseTest
 
         self::assertEquals(
             $folder1,
-            $contentService->loadContent($folder1->id)
+            $contentService->loadContent($folder1->id, Language::ALL)
         );
 
         self::assertEquals(
             $folder2,
-            $contentService->loadContent($folder2->id)
+            $contentService->loadContent($folder2->id, Language::ALL)
         );
     }
 
@@ -2198,7 +2199,7 @@ class LocationServiceTest extends BaseTest
 
         foreach ($objectStateGroups as $objectStateGroup) {
             $contentState = $objectStateService->getContentState($contentInfo, $objectStateGroup);
-            foreach ($objectStateService->loadObjectStates($objectStateGroup) as $objectState) {
+            foreach ($objectStateService->loadObjectStates($objectStateGroup, Language::ALL) as $objectState) {
                 // Only check the first object state which is the default one.
                 $this->assertEquals(
                     $objectState,

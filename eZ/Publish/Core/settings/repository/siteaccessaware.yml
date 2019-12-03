@@ -2,85 +2,84 @@ parameters:
     languages: []
 
 services:
-    ezpublish.siteaccessaware.repository:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\Repository
+    eZ\Publish\Core\Repository\SiteAccessAware\Repository:
         arguments:
             - '@eZ\Publish\Core\Event\Repository'
-            - '@ezpublish.siteaccessaware.service.content'
-            - '@ezpublish.siteaccessaware.service.content_type'
-            - '@ezpublish.siteaccessaware.service.object_state'
-            - '@ezpublish.siteaccessaware.service.url_alias'
-            - '@ezpublish.siteaccessaware.service.user'
-            - '@ezpublish.siteaccessaware.service.search'
-            - '@ezpublish.siteaccessaware.service.section'
-            - '@ezpublish.siteaccessaware.service.trash'
-            - '@ezpublish.siteaccessaware.service.location'
-            - '@ezpublish.siteaccessaware.service.language'
-            - '@ezpublish.siteaccessaware.service.notification'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\ContentService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\ContentTypeService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\ObjectStateService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\URLAliasService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\UserService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\SearchService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\SectionService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\TrashService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\LocationService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\LanguageService'
+            - '@eZ\Publish\Core\Repository\SiteAccessAware\NotificationService'
 
-
-    ezpublish.siteaccessaware.service.content:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\ContentService
+    eZ\Publish\Core\Repository\SiteAccessAware\ContentService:
         arguments:
             - '@eZ\Publish\Core\Event\ContentService'
             - '@ezpublish.helper.language_resolver'
 
-    ezpublish.siteaccessaware.service.content_type:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\ContentTypeService
+    eZ\Publish\Core\Repository\SiteAccessAware\ContentTypeService:
         arguments:
             - '@eZ\Publish\Core\Event\ContentTypeService'
             - '@ezpublish.helper.language_resolver'
 
-    ezpublish.siteaccessaware.service.object_state:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\ObjectStateService
+    eZ\Publish\Core\Repository\SiteAccessAware\ObjectStateService:
         arguments:
             - '@eZ\Publish\Core\Event\ObjectStateService'
             - '@ezpublish.helper.language_resolver'
 
-    ezpublish.siteaccessaware.service.url_alias:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\URLAliasService
+    eZ\Publish\Core\Repository\SiteAccessAware\URLAliasService:
         arguments:
             - '@eZ\Publish\Core\Event\URLAliasService'
             - '@ezpublish.helper.language_resolver'
 
-
-    ezpublish.siteaccessaware.service.user:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\UserService
+    eZ\Publish\Core\Repository\SiteAccessAware\UserService:
         arguments:
             - '@eZ\Publish\Core\Event\UserService'
             - '@ezpublish.helper.language_resolver'
 
-    ezpublish.siteaccessaware.service.search:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\SearchService
+    eZ\Publish\Core\Repository\SiteAccessAware\SearchService:
         arguments:
             - '@eZ\Publish\Core\Event\SearchService'
             - '@ezpublish.helper.language_resolver'
 
-    ezpublish.siteaccessaware.service.section:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\SectionService
+    eZ\Publish\Core\Repository\SiteAccessAware\SectionService:
         arguments:
             - '@eZ\Publish\Core\Event\SectionService'
 
-    ezpublish.siteaccessaware.service.trash:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\TrashService
+    eZ\Publish\Core\Repository\SiteAccessAware\TrashService:
         arguments:
             - '@eZ\Publish\Core\Event\TrashService'
 
-    ezpublish.siteaccessaware.service.location:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\LocationService
+    eZ\Publish\Core\Repository\SiteAccessAware\LocationService:
         arguments:
             - '@eZ\Publish\Core\Event\LocationService'
             - '@ezpublish.helper.language_resolver'
 
-    ezpublish.siteaccessaware.service.language:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\LanguageService
+    eZ\Publish\Core\Repository\SiteAccessAware\LanguageService:
         arguments:
             - '@eZ\Publish\Core\Event\LanguageService'
 
-    ezpublish.siteaccessaware.service.notification:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\NotificationService
+    eZ\Publish\Core\Repository\SiteAccessAware\NotificationService:
         arguments:
             - '@eZ\Publish\Core\Event\NotificationService'
+
+    ezpublish.siteaccessaware.repository: '@eZ\Publish\Core\Repository\SiteAccessAware\Repository'
+    ezpublish.siteaccessaware.service.content: '@eZ\Publish\Core\Repository\SiteAccessAware\ContentService'
+    ezpublish.siteaccessaware.service.content_type: '@eZ\Publish\Core\Repository\SiteAccessAware\ContentTypeService'
+    ezpublish.siteaccessaware.service.object_state: '@eZ\Publish\Core\Repository\SiteAccessAware\ObjectStateService'
+    ezpublish.siteaccessaware.service.url_alias: '@eZ\Publish\Core\Repository\SiteAccessAware\URLAliasService'
+    ezpublish.siteaccessaware.service.user: '@eZ\Publish\Core\Repository\SiteAccessAware\UserService'
+    ezpublish.siteaccessaware.service.search: '@eZ\Publish\Core\Repository\SiteAccessAware\SearchService'
+    ezpublish.siteaccessaware.service.section: '@eZ\Publish\Core\Repository\SiteAccessAware\SectionService'
+    ezpublish.siteaccessaware.service.trash: '@eZ\Publish\Core\Repository\SiteAccessAware\TrashService'
+    ezpublish.siteaccessaware.service.location: '@eZ\Publish\Core\Repository\SiteAccessAware\LocationService'
+    ezpublish.siteaccessaware.service.language: '@eZ\Publish\Core\Repository\SiteAccessAware\LanguageService'
+    ezpublish.siteaccessaware.service.notification: '@eZ\Publish\Core\Repository\SiteAccessAware\NotificationService'
 
     # Helpers
     eZ\Publish\Core\Repository\SiteAccessAware\Language\AbstractLanguageResolver:

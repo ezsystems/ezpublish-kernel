@@ -224,7 +224,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainObjectStateGroupObject($spiObjectStateGroup);
+        return $this->buildDomainObjectStateGroupObject($spiObjectStateGroup, $objectStateGroup->prioritizedLanguages);
     }
 
     /**
@@ -380,7 +380,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainObjectStateObject($spiObjectState);
+        return $this->buildDomainObjectStateObject($spiObjectState, null, $objectState->prioritizedLanguages);
     }
 
     /**
@@ -572,7 +572,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         APIObjectStateGroup $objectStateGroup = null,
         array $prioritizedLanguages = []
     ): APIObjectState {
-        $objectStateGroup = $objectStateGroup ?: $this->loadObjectStateGroup($spiObjectState->groupId);
+        $objectStateGroup = $objectStateGroup ?: $this->loadObjectStateGroup($spiObjectState->groupId, $prioritizedLanguages);
 
         return new ObjectState(
             [
