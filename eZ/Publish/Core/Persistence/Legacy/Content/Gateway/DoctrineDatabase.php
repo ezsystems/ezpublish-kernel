@@ -290,45 +290,28 @@ class DoctrineDatabase extends Gateway
      */
     public function updateContent($contentId, MetadataUpdateStruct $struct, VersionInfo $prePublishVersionInfo = null)
     {
-        $q = $this->dbHandler->createUpdateQuery();
-        $q->update($this->dbHandler->quoteTable('ezcontentobject'));
+        $query = $this->connection->createQueryBuilder();
+        $query->update('ezcontentobject');
 
-        if (isset($struct->name)) {
-            $q->set(
-                $this->dbHandler->quoteColumn('name'),
-                $q->bindValue($struct->name, null, \PDO::PARAM_STR)
+        $fieldsForUpdateMap = [
+            'name' => ['value' => $struct->name, 'type' => PDO::PARAM_STR],
+            'initial_language_id' => ['value' => $struct->mainLanguageId, 'type' => PDO::PARAM_INT],
+            'modified' => ['value' => $struct->modificationDate, 'type' => PDO::PARAM_INT],
+            'owner_id' => ['value' => $struct->ownerId, 'type' => PDO::PARAM_INT],
+            'published' => ['value' => $struct->publicationDate, 'type' => PDO::PARAM_INT],
+            'remote_id' => ['value' => $struct->remoteId, 'type' => PDO::PARAM_STR],
+        ];
+
+        foreach ($fieldsForUpdateMap as $fieldName => $field) {
+            if (null === $field['value']) {
+                continue;
+            }
+            $query->set(
+                $fieldName,
+                $query->createNamedParameter($field['value'], $field['type'], ":{$fieldName}")
             );
         }
-        if (isset($struct->mainLanguageId)) {
-            $q->set(
-                $this->dbHandler->quoteColumn('initial_language_id'),
-                $q->bindValue($struct->mainLanguageId, null, \PDO::PARAM_INT)
-            );
-        }
-        if (isset($struct->modificationDate)) {
-            $q->set(
-                $this->dbHandler->quoteColumn('modified'),
-                $q->bindValue($struct->modificationDate, null, \PDO::PARAM_INT)
-            );
-        }
-        if (isset($struct->ownerId)) {
-            $q->set(
-                $this->dbHandler->quoteColumn('owner_id'),
-                $q->bindValue($struct->ownerId, null, \PDO::PARAM_INT)
-            );
-        }
-        if (isset($struct->publicationDate)) {
-            $q->set(
-                $this->dbHandler->quoteColumn('published'),
-                $q->bindValue($struct->publicationDate, null, \PDO::PARAM_INT)
-            );
-        }
-        if (isset($struct->remoteId)) {
-            $q->set(
-                $this->dbHandler->quoteColumn('remote_id'),
-                $q->bindValue($struct->remoteId, null, \PDO::PARAM_STR)
-            );
-        }
+
         if ($prePublishVersionInfo !== null) {
             $languages = [];
             foreach ($prePublishVersionInfo->languageCodes as $languageCodes) {
@@ -336,24 +319,27 @@ class DoctrineDatabase extends Gateway
                     $languages[$languageCodes] = true;
                 }
             }
-
             $languages['always-available'] = isset($struct->alwaysAvailable) ? $struct->alwaysAvailable :
                 $prePublishVersionInfo->contentInfo->alwaysAvailable;
 
             $mask = $this->languageMaskGenerator->generateLanguageMask($languages);
 
-            $q->set(
-                $this->dbHandler->quoteColumn('language_mask'),
-                $q->bindValue($mask, null, \PDO::PARAM_INT)
+            $query->set(
+                'language_mask',
+                $query->createNamedParameter($mask, PDO::PARAM_INT, ':languageMask')
             );
         }
-        $q->where(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $q->bindValue($contentId, null, \PDO::PARAM_INT)
+
+        $query->where(
+            $query->expr()->eq(
+                'id',
+                $query->createNamedParameter($contentId, PDO::PARAM_INT, ':contentId')
             )
         );
-        $q->prepare()->execute();
+
+        if (!empty($query->getQueryPart('set'))) {
+            $query->execute();
+        }
 
         // Handle alwaysAvailable flag update separately as it's a more complex task and has impact on several tables
         if (isset($struct->alwaysAvailable) || isset($struct->mainLanguageId)) {
@@ -424,7 +410,7 @@ class DoctrineDatabase extends Gateway
         // everywhere needed
         $contentInfoRow = $this->loadContentInfo($contentId);
         if (!isset($alwaysAvailable)) {
-            $alwaysAvailable = (bool)$contentInfoRow['language_mask'] & 1;
+            $alwaysAvailable = 1 === ($contentInfoRow['language_mask'] & 1);
         }
 
         /** @var $q \eZ\Publish\Core\Persistence\Database\UpdateQuery */
