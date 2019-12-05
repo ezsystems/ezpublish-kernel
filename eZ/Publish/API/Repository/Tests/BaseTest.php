@@ -774,4 +774,44 @@ abstract class BaseTest extends TestCase
 
         return $languageService->createLanguage($languageStruct);
     }
+
+    /**
+     * @param string $identifier Content Type identifier
+     * @param string $mainTranslation main translation language code
+     * @param array $fieldsToDefine a map of field definition identifiers to their field type identifiers
+     * @param bool $alwaysAvailable default always available
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function createSimpleContentType(
+        string $identifier,
+        string $mainTranslation,
+        array $fieldsToDefine,
+        bool $alwaysAvailable = true
+    ) {
+        $contentTypeService = $this->getRepository(false)->getContentTypeService();
+        $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct($identifier);
+        $contentTypeCreateStruct->mainLanguageCode = $mainTranslation;
+        $contentTypeCreateStruct->names = [$mainTranslation => $identifier];
+        $contentTypeCreateStruct->defaultAlwaysAvailable = $alwaysAvailable;
+        foreach ($fieldsToDefine as $fieldDefinitionIdentifier => $fieldTypeIdentifier) {
+            $fieldDefinitionCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct(
+                $fieldDefinitionIdentifier,
+                $fieldTypeIdentifier
+            );
+            $contentTypeCreateStruct->addFieldDefinition($fieldDefinitionCreateStruct);
+        }
+        $contentTypeService->publishContentTypeDraft(
+            $contentTypeService->createContentType(
+                $contentTypeCreateStruct,
+                [$contentTypeService->loadContentTypeGroupByIdentifier('Content')]
+            )
+        );
+
+        return $contentTypeService->loadContentTypeByIdentifier($identifier);
+    }
 }
