@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the Functional\SearchViewTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use DOMDocument;
@@ -24,7 +24,10 @@ class SearchViewTest extends RESTFunctionalTestCase
     /** @var string */
     private $nonSearchableContentHref;
 
-    protected function setUp()
+    /**
+     * @throws \Psr\Http\Client\ClientException
+     */
+    protected function setUp(): void
     {
         parent::setUp();
         $this->contentTypeHref = $this->createTestContentType();
@@ -34,7 +37,10 @@ class SearchViewTest extends RESTFunctionalTestCase
         $this->contentHrefList[] = $this->createTestContentWithTags('even-fancier', ['bar', 'bazfoo']);
     }
 
-    protected function tearDown()
+    /**
+     * @throws \Psr\Http\Client\ClientException
+     */
+    protected function tearDown(): void
     {
         parent::tearDown();
         array_map([$this, 'deleteContent'], $this->contentHrefList);
@@ -43,14 +49,15 @@ class SearchViewTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @dataProvider xmlProvider
-     * Covers POST with ContentQuery Logic on /api/ezp/v2/views.
+     * Covers POST with ContentQuery Logic on /api/ezp/v2/views using payload in the XML format.
      *
-     * @param string $xmlQueryBody
-     * @param int $expectedCount
+     * @dataProvider xmlProvider
+     *
+     * @throws \Psr\Http\Client\ClientException
      */
-    public function testSimpleContentQuery(string $xmlQueryBody, int $expectedCount)
+    public function testSimpleXmlContentQuery(string $xmlQueryBody, int $expectedCount): void
     {
+        $format = 'xml';
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ViewInput>
@@ -65,20 +72,42 @@ class SearchViewTest extends RESTFunctionalTestCase
 </ContentQuery>
 </ViewInput>
 XML;
-        $request = $this->createHttpRequest(
-            'POST',
-            '/api/ezp/v2/views',
-            'ViewInput+xml; version=1.1',
-            'ContentInfo+json',
-            $body
-        );
-        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals($response, 200);
-        $jsonResponse = json_decode($response->getBody());
-        self::assertEquals($expectedCount, $jsonResponse->View->Result->count);
+        self::assertEquals($expectedCount, $this->getQueryResultsCount($format, $body));
     }
 
+    /**
+     * Covers POST with LocationQuery Logic on /api/ezp/v2/views using payload in the JSON format.
+     *
+     * @dataProvider jsonProvider
+     *
+     * @throws \Psr\Http\Client\ClientException
+     */
+    public function testSimpleJsonContentQuery(string $jsonQueryBody, int $expectedCount): void
+    {
+        $format = 'json';
+        $body = <<< JSON
+{
+    "ViewInput": {
+        "identifier": "your-query-id",
+        "public": "false",
+        "LocationQuery": {
+            "Filter": {
+                $jsonQueryBody
+            },
+            "limit": "10",
+            "offset": "0"
+        }
+    }
+}
+JSON;
+
+        self::assertEquals($expectedCount, $this->getQueryResultsCount($format, $body));
+    }
+
+    /**
+     * @throws \Psr\Http\Client\ClientException
+     */
     private function createTestContentType(): string
     {
         $body = <<< XML
@@ -148,6 +177,11 @@ XML;
         return $response->getHeader('Location')[0];
     }
 
+    /**
+     * @param string[] $tags
+     *
+     * @throws \Psr\Http\Client\ClientException
+     */
     private function createTestContentWithTags(string $name, array $tags): string
     {
         $tagsString = implode(',', $tags);
@@ -200,14 +234,17 @@ XML;
         return $href;
     }
 
-    private function deleteContent($href)
+    /**
+     * @throws \Psr\Http\Client\ClientException
+     */
+    private function deleteContent(string $href): void
     {
         $this->sendHttpRequest(
             $this->createHttpRequest('DELETE', $href)
         );
     }
 
-    public function xmlProvider()
+    public function xmlProvider(): array
     {
         $fooTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'foo');
         $barTag = $this->buildFieldXml('tags', Operator::CONTAINS, 'bar');
@@ -258,6 +295,50 @@ XML;
         ];
     }
 
+    public function jsonProvider(): array
+    {
+        return [
+            [
+                <<< JSON
+"OR": [
+    {
+        "ContentRemoteIdCriterion": "test-name"
+    },
+    {
+        "ContentRemoteIdCriterion": "fancy-name"
+    }
+]
+JSON,
+                2,
+            ],
+            [
+                <<< JSON
+"OR": {
+    "ContentRemoteIdCriterion": [
+        "test-name",
+        "fancy-name"
+    ]
+}
+JSON,
+            2,
+            ],
+            [
+                <<< JSON
+"AND": {
+    "OR": {
+        "ContentRemoteIdCriterion": [
+            "test-name",
+            "fancy-name"
+        ]
+    },
+    "ContentRemoteIdCriterion": "test-name"
+}
+JSON,
+                1,
+            ],
+        ];
+    }
+
     /**
      * @param string $name
      * @param string $operator
@@ -278,7 +359,7 @@ XML;
                 $valueWrapper->appendChild(new DOMElement('value', $value[0]));
                 $element->appendChild($valueWrapper);
             } else {
-                foreach ($value as $key => $singleValue) {
+                foreach ($value as $singleValue) {
                     $element->appendChild(new DOMElement('value', $singleValue));
                 }
             }
@@ -294,7 +375,7 @@ XML;
         $xml = new DOMDocument();
         $wrapper = $xml->createElement($logicalOperator);
 
-        foreach ($toWrap as $key => $field) {
+        foreach ($toWrap as $field) {
             $innerWrapper = $xml->createElement($logicalOperator);
             $innerWrapper->appendChild($xml->importNode($field, true));
             $wrapper->appendChild($innerWrapper);
@@ -311,6 +392,8 @@ XML;
     /**
      * This is just to assure that field with same name but without legacy search engine implementation
      * does not block search in different content type.
+     *
+     * @throws \Psr\Http\Client\ClientException
      */
     private function createContentWithUrlField(): string
     {
@@ -361,5 +444,33 @@ XML;
         self::assertHttpResponseHasHeader($response, 'Location');
 
         return $response->getHeader('Location')[0];
+    }
+
+    /**
+     * Perform search View Query providing payload ($body) in a given $format.
+     *
+     * @param string $format xml or json
+     *
+     * @throws \Psr\Http\Client\ClientException
+     */
+    private function getQueryResultsCount(string $format, string $body): int
+    {
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/views',
+            "ViewInput+{$format}; version=1.1",
+            'View+json',
+            $body
+        );
+        $response = $this->sendHttpRequest($request);
+
+        self::assertHttpResponseCodeEquals($response, 200);
+        $jsonResponse = json_decode($response->getBody()->getContents());
+
+        if (isset($jsonResponse->ErrorMessage)) {
+            self::fail(var_export($jsonResponse));
+        }
+
+        return $jsonResponse->View->Result->count;
     }
 }
