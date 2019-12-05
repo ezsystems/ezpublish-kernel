@@ -34,9 +34,10 @@ services:
     ezplatform.installer.install_command:
         class: "%ezplatform.installer.install_command.class%"
         arguments:
-            - "@database_connection"
+            - '@ezpublish.persistence.connection'
             - []
             - '@ezpublish.cache_pool'
             - "%kernel.environment%"
+            - '@ezpublish.api.repository_configuration_provider'
         tags:
             - { name: console.command, command: ezplatform:install }
