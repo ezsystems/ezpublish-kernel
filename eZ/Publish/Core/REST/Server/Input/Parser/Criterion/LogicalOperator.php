@@ -37,6 +37,20 @@ class LogicalOperator extends Criterion
      */
     protected function getFlattenedCriteriaData(array $criteriaByType)
     {
+        if ($this->isZeroBasedArray($criteriaByType)) {
+            $oldFormat = $criteriaByType;
+            $criteriaByType = $this->normalizeCriteriaByType($criteriaByType);
+            @trigger_error(
+                sprintf(
+                    'REST View: Passing criteria as a list of objects to a logical operator is deprecated ' .
+                    'and will cause Bad Request error in eZ Platform 3.0. Instead of "%s" provide "%s"',
+                    json_encode($oldFormat),
+                    json_encode($criteriaByType)
+                ),
+                E_USER_DEPRECATED
+            );
+        }
+
         $criteria = [];
         foreach ($criteriaByType as $type => $criterion) {
             if (!is_array($criterion) || !$this->isZeroBasedArray($criterion)) {
@@ -66,5 +80,44 @@ class LogicalOperator extends Criterion
         reset($value);
 
         return empty($value) || key($value) === 0;
+    }
+
+    /**
+     * Normalize list of criteria to be provided as the expected criterion type to its value map.
+     *
+     * Changes:
+     * <code>
+     * [
+     *  0 => "CriterionType1" => "<value1>",
+     *  1 => "CriterionType1" => "<value2>",
+     *  2 => "CriterionType2" => "<value3>",
+     * ]
+     * </code>
+     * into:
+     * <code>
+     * [
+     *  "CriterionType1" => ["<value1>", "<value2>"],
+     *  "CriterionType2" => ["<value3>"],
+     * ]
+     * </code>
+     *
+     * @param array $criterionList zero-based list of criteria
+     *
+     * @return array map of criterion types to their values
+     */
+    private function normalizeCriteriaByType(array $criterionList)
+    {
+        $criteriaByType = [];
+        foreach ($criterionList as $criterion) {
+            foreach ($criterion as $criterionType => $value) {
+                if (!isset($criteriaByType[$criterionType])) {
+                    $criteriaByType[$criterionType] = [];
+                }
+
+                $criteriaByType[$criterionType][] = $value;
+            }
+        }
+
+        return $criteriaByType;
     }
 }
