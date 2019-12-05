@@ -268,6 +268,12 @@ class LanguageLimitationType implements SPITargetAwareLimitationType
             }
         }
 
+        // intent to publish Version in specified languages
+        if (!empty($version->forPublishLanguageCodesList) || null !== $version->forPublishLanguageCodesList) {
+            $diff = array_diff($version->forPublishLanguageCodesList, $value->limitationValues);
+            $accessVote = empty($diff) ? self::ACCESS_GRANTED : self::ACCESS_DENIED;
+        }
+
         return $accessVote;
     }
 

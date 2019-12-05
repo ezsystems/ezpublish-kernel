@@ -437,6 +437,27 @@ class URLServiceTest extends BaseURLServiceTest
     }
 
     /**
+     * @see https://jira.ez.no/browse/EZP-31059
+     */
+    public function testFindUrlsUsingVisibleOnlyCriterionReturnsUniqueItems(): void
+    {
+        $exampleUrl = 'http://ezplatform.com';
+
+        $this->createContentWithLink('A', $exampleUrl);
+        $this->createContentWithLink('B', $exampleUrl);
+
+        $urlService = $this->getRepository()->getURLService();
+
+        $query = new URLQuery();
+        $query->filter = new Criterion\VisibleOnly();
+        $query->limit = -1;
+
+        $results = $urlService->findUrls($query);
+
+        $this->assertSearchResultItemsAreUnique($results);
+    }
+
+    /**
      * Test for URLService::findUrls() method.
      *
      * @see \eZ\Publish\Core\Repository\URLService::findUrls()
@@ -504,6 +525,7 @@ class URLServiceTest extends BaseURLServiceTest
         $query = new URLQuery();
         $query->filter = new Criterion\MatchAll();
         $query->offset = 10;
+        $query->sortClauses = [new SortClause\Id()];
 
         $this->doTestFindUrls($query, $expectedUrls, 20);
     }
@@ -526,6 +548,7 @@ class URLServiceTest extends BaseURLServiceTest
         $query->filter = new Criterion\MatchAll();
         $query->offset = 10;
         $query->limit = 3;
+        $query->sortClauses = [new SortClause\Id()];
 
         $this->doTestFindUrls($query, $expectedUrls, 20);
     }

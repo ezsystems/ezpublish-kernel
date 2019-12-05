@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\API\Repository\Values\Content\RelationList\Item\RelationListItem;
 use eZ\Publish\API\Repository\Values\Content\RelationList\Item\UnauthorizedRelationListItem;
 use eZ\Publish\API\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\SPI\Persistence\Handler;
@@ -1264,20 +1265,12 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContent(APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct)
     {
-        $contentUpdateStruct = clone $contentUpdateStruct;
-
         /** @var $content \eZ\Publish\Core\Repository\Values\Content\Content */
         $content = $this->loadContent(
             $versionInfo->getContentInfo()->id,
             null,
             $versionInfo->versionNo
         );
-        if (!$content->versionInfo->isDraft()) {
-            throw new BadStateException(
-                '$versionInfo',
-                'The version is not a draft and cannot be updated'
-            );
-        }
 
         if (!$this->repository->getPermissionResolver()->canUser(
             'content',
@@ -1293,6 +1286,39 @@ class ContentService implements ContentServiceInterface
             ]
         )) {
             throw new UnauthorizedException('content', 'edit', ['contentId' => $content->id]);
+        }
+
+        return $this->internalUpdateContent($versionInfo, $contentUpdateStruct);
+    }
+
+    /**
+     * Updates the fields of a draft without checking the permissions.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid,
+     *                                                                               or if a required field is missing / set to an empty value.
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException If field definition does not exist in the ContentType,
+     *                                                                          or value is set for non-translatable field in language
+     *                                                                          other than main.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a property on the struct is invalid.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    protected function internalUpdateContent(APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct): Content
+    {
+        $contentUpdateStruct = clone $contentUpdateStruct;
+
+        /** @var $content \eZ\Publish\Core\Repository\Values\Content\Content */
+        $content = $this->internalLoadContent(
+            $versionInfo->getContentInfo()->id,
+            null,
+            $versionInfo->versionNo
+        );
+        if (!$content->versionInfo->isDraft()) {
+            throw new BadStateException(
+                '$versionInfo',
+                'The version is not a draft and cannot be updated'
+            );
         }
 
         $mainLanguageCode = $content->contentInfo->mainLanguageCode;
@@ -1422,7 +1448,7 @@ class ContentService implements ContentServiceInterface
                 )->id,
             ]
         );
-        $existingRelations = $this->loadRelations($versionInfo);
+        $existingRelations = $this->internalLoadRelations($versionInfo);
 
         $this->repository->beginTransaction();
         try {
@@ -1573,23 +1599,18 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo
         );
 
-        $fromContent = null;
-        if ($content->contentInfo->currentVersionNo !== $versionInfo->versionNo) {
-            $fromContent = $this->internalLoadContent(
-                $content->contentInfo->id,
-                null,
-                $content->contentInfo->currentVersionNo
-            );
-            // should not occur now, might occur in case of un-publish
-            if (!$fromContent->contentInfo->isPublished()) {
-                $fromContent = null;
-            }
+        $targets = [];
+        if (!empty($translations)) {
+            $targets[] = (new Target\Builder\VersionBuilder())
+                ->publishTranslations($translations)
+                ->build();
         }
 
         if (!$this->permissionResolver->canUser(
             'content',
             'publish',
-            $content
+            $content,
+            $targets
         )) {
             throw new UnauthorizedException(
                 'content', 'publish', ['contentId' => $content->id]
@@ -1618,7 +1639,6 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     protected function copyTranslationsFromPublishedVersion(APIVersionInfo $versionInfo, array $translations = []): void
     {
@@ -1712,7 +1732,7 @@ class ContentService implements ContentServiceInterface
             $updateStruct->setField($fallbackField->fieldDefIdentifier, $fallbackField->value, $fallbackField->languageCode);
         }
 
-        $this->updateContent($versionInfo, $updateStruct);
+        $this->internalUpdateContent($versionInfo, $updateStruct);
     }
 
     /**
@@ -1971,6 +1991,18 @@ class ContentService implements ContentServiceInterface
             throw new UnauthorizedException('content', $function);
         }
 
+        return $this->internalLoadRelations($versionInfo);
+    }
+
+    /**
+     * Loads all outgoing relations for the given version without checking the permissions.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
+     */
+    protected function internalLoadRelations(APIVersionInfo $versionInfo): array
+    {
         $contentInfo = $versionInfo->getContentInfo();
         $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
             $contentInfo->id,

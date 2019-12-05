@@ -19,6 +19,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  * @property-read int $newStatus
  * @property-read string $forUpdateInitialLanguageCode
  * @property-read string[] $forUpdateLanguageCodesList
+ * @property-read string[] $forPublishLanguageCodesList
  */
 final class Version extends ValueObject implements Target
 {
@@ -49,6 +50,13 @@ final class Version extends ValueObject implements Target
      * @var string[]
      */
     protected $forUpdateLanguageCodesList = [];
+
+    /**
+     * List of language codes of translations to publish. All must match Limitation values.
+     *
+     * @var string[]
+     */
+    protected $forPublishLanguageCodesList = [];
 
     /**
      * One of the following: STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED.
