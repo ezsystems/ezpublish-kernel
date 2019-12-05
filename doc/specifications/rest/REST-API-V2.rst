@@ -2634,6 +2634,78 @@ Create View
 :Error codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
 
+Using logical operators in views
+``````````
+
+The criteria model allows combining criteria using the following logical operators:
+- AND
+- OR
+- NOT
+
+By default, if multiple criteria are given, but not wrapped by any operator, the AND operator is used.
+
+*However*, when trying to use the same type of criterion for multiple times, the parser will wrap it with the OR
+operator. While this is a side effect of internal operations of the view query parser, trying to make
+the AND query for different values of the same criterion type has no practical sense as it would always
+return 0 results.
+
+XML Example
+'''''''''''
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <ViewInput>
+      <identifier>test</identifier>
+      <ContentQuery>
+        <Filter>
+            <AND>
+                <OR>
+                    <ContentTypeIdentifierCriterion>folder</ContentTypeIdentifierCriterion>
+                    <ContentTypeIdentifierCriterion>article</ContentTypeIdentifierCriterion>
+                </OR>
+                <SectionIdentifierCriterion>standard</SectionIdentifierCriterion>
+            </AND>
+        </Filter>
+        <limit>10</limit>
+        <offset>0</offset>
+        <SortClauses>
+          <ContentName>ascending</ContentName>
+        </SortClauses>
+      </ContentQuery>
+    </ViewInput>
+
+JSON Example
+'''''''''''
+
+The above example has the following JSON equivalent.
+
+.. code:: json
+
+    {
+      "ViewInput": {
+        "identifier": "test",
+        "ContentQuery": {
+          "Filter": {
+            "AND": {
+              "OR": {
+                "ContentTypeIdentifierCriterion": [
+                  "folder",
+                  "article"
+                ]
+              },
+              "SectionIdentifierCriterion": "standard"
+            }
+          },
+          "limit": "10",
+          "offset": "0",
+          "SortClauses": { "ContentName": "ascending" }
+        }
+      }
+    }
+
+Note that the structure for ContentTypeIdentifierCriterion with multiple values is slightly
+different in JSON format, because the parser excepts keys to be unique.
+
 List views
 ``````````
 :Resource: /content/views
