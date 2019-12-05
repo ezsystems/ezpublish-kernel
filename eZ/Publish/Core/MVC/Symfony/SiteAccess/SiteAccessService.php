@@ -66,9 +66,9 @@ class SiteAccessService implements SiteAccessServiceInterface
         $siteAccess = $siteAccess ?? $this->siteAccess;
         $saRelationMap = [];
 
+        /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess[] $saList */
         $saList = iterator_to_array($this->provider->getSiteAccesses());
         // First build the SiteAccess relation map, indexed by repository and rootLocationId.
-        /** @var SiteAccess $siteAccess */
         foreach ($saList as $sa) {
             $siteAccessName = $sa->name;
 
