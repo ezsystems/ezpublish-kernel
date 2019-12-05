@@ -19,6 +19,15 @@ use PHPUnit\Framework\TestCase;
  */
 class VersionBuilderTest extends TestCase
 {
+    /** @var string */
+    private const GER_DE = 'ger-DE';
+
+    /** @var string */
+    private const ENG_US = 'eng-US';
+
+    /** @var string */
+    private const ENG_GB = 'eng-GB';
+
     /**
      * Data provider for testBuild.
      *
@@ -36,15 +45,16 @@ class VersionBuilderTest extends TestCase
 
         $data = [];
         foreach ($versionStatuses as $versionStatus) {
-            $languagesList = ['ger-DE', 'eng-US', 'eng-GB'];
+            $languagesList = [self::GER_DE, self::ENG_US, self::ENG_GB];
             $contentTypeIdsList = [1, 2];
-            $initialLanguageCode = 'eng-US';
+            $initialLanguageCode = self::ENG_US;
             $fields = [
-                new Field(['languageCode' => 'ger-DE']),
-                new Field(['languageCode' => 'ger-DE']),
-                new Field(['languageCode' => 'eng-US']),
+                new Field(['languageCode' => self::GER_DE]),
+                new Field(['languageCode' => self::GER_DE]),
+                new Field(['languageCode' => self::ENG_US]),
             ];
-            $updateTranslationsLanguageCodes = ['ger-DE', 'eng-US'];
+            $updateTranslationsLanguageCodes = [self::GER_DE, self::ENG_US];
+            $publishLanguageCodes = [self::GER_DE, self::ENG_US];
 
             $data[] = [
                 new Target\Version(
@@ -54,6 +64,7 @@ class VersionBuilderTest extends TestCase
                         'allContentTypeIdsList' => $contentTypeIdsList,
                         'forUpdateLanguageCodesList' => $updateTranslationsLanguageCodes,
                         'forUpdateInitialLanguageCode' => $initialLanguageCode,
+                        'forPublishLanguageCodesList' => $publishLanguageCodes,
                     ]
                 ),
                 $versionStatus,
@@ -61,6 +72,7 @@ class VersionBuilderTest extends TestCase
                 $fields,
                 $languagesList,
                 $contentTypeIdsList,
+                $publishLanguageCodes,
             ];
 
             // no published content
@@ -72,6 +84,7 @@ class VersionBuilderTest extends TestCase
                         'allContentTypeIdsList' => $contentTypeIdsList,
                         'forUpdateLanguageCodesList' => $updateTranslationsLanguageCodes,
                         'forUpdateInitialLanguageCode' => $initialLanguageCode,
+                        'forPublishLanguageCodesList' => $publishLanguageCodes,
                     ]
                 ),
                 $versionStatus,
@@ -79,6 +92,7 @@ class VersionBuilderTest extends TestCase
                 $fields,
                 $languagesList,
                 $contentTypeIdsList,
+                $publishLanguageCodes,
             ];
         }
 
@@ -96,6 +110,7 @@ class VersionBuilderTest extends TestCase
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $newFields
      * @param string[] $languagesList
      * @param int[] $contentTypeIdsList
+     * @param string[] $publishLanguageCodes
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
@@ -105,14 +120,17 @@ class VersionBuilderTest extends TestCase
         string $initialLanguageCode,
         array $newFields,
         array $languagesList,
-        array $contentTypeIdsList
+        array $contentTypeIdsList,
+        array $publishLanguageCodes
     ): void {
         $versionBuilder = new VersionBuilder();
         $versionBuilder
             ->changeStatusTo($newStatus)
             ->updateFieldsTo($initialLanguageCode, $newFields)
             ->translateToAnyLanguageOf($languagesList)
-            ->createFromAnyContentTypeOf($contentTypeIdsList);
+            ->createFromAnyContentTypeOf($contentTypeIdsList)
+            ->publishTranslations($publishLanguageCodes)
+        ;
 
         self::assertInstanceOf(VersionBuilder::class, $versionBuilder);
         self::assertEquals($expectedTargetVersion, $versionBuilder->build());

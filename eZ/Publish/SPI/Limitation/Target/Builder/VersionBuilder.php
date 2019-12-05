@@ -126,4 +126,26 @@ final class VersionBuilder
 
         return $this;
     }
+
+    /**
+     * Set intent to publish, to specified translations, all from the given list.
+     *
+     * @param string[] $languageCodes
+     *
+     * @return self
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function publishTranslations(array $languageCodes): self
+    {
+        foreach ($languageCodes as $languageCode) {
+            if (!is_string($languageCode) || empty($languageCode)) {
+                throw new InvalidArgumentException('$languageCodes', 'All language codes should be non-empty strings');
+            }
+        }
+
+        $this->targetVersionProperties['forPublishLanguageCodesList'] = $languageCodes;
+
+        return $this;
+    }
 }
