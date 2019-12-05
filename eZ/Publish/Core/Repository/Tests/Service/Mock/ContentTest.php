@@ -618,8 +618,8 @@ class ContentTest extends BaseServiceMockTest
         $content->method('getVersionInfo')
             ->will($this->returnValue($versionInfo));
 
-        $repositoryMock = $this->getRepositoryMock();
-        $repositoryMock
+        $permissionResolver = $this->getPermissionResolverMock();
+        $permissionResolver->expects($this->any())
             ->method('canUser')
             ->will($this->returnValue(true));
 
@@ -3181,11 +3181,8 @@ class ContentTest extends BaseServiceMockTest
             );
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
-        $repositoryMock
-            ->method('canUser')
-            ->will($this->returnValue(true));
 
-        $permissionResolverMock
+        $permissionResolverMock->expects($this->any())
             ->method('canUser')
             ->will($this->returnValue(true));
 
