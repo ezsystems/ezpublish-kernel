@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as P
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
@@ -792,7 +793,7 @@ abstract class BaseTest extends TestCase
         string $mainTranslation,
         array $fieldsToDefine,
         bool $alwaysAvailable = true
-    ) {
+    ): ContentType {
         $contentTypeService = $this->getRepository(false)->getContentTypeService();
         $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct($identifier);
         $contentTypeCreateStruct->mainLanguageCode = $mainTranslation;
