@@ -13,7 +13,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use function iterator_to_array;
 
-class SiteAccessService implements SiteAccessServiceInterface
+class SiteAccessService implements SiteAccessServiceInterface, SiteAccessAware
 {
     /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessProviderInterface */
     private $provider;
@@ -56,9 +56,13 @@ class SiteAccessService implements SiteAccessServiceInterface
         return $this->provider->getSiteAccesses();
     }
 
-    public function getCurrent(): SiteAccess
+    public function getCurrent(): ?SiteAccess
     {
-        return $this->siteAccess;
+        if ($this->siteAccess === null){
+            return null;
+        }
+
+        return $this->get($this->siteAccess->name);
     }
 
     public function getSiteAccessesRelation(?SiteAccess $siteAccess = null): array

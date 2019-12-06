@@ -27,7 +27,7 @@ interface SiteAccessServiceInterface
      */
     public function getAll(): iterable;
 
-    public function getCurrent(): SiteAccess;
+    public function getCurrent(): ?SiteAccess;
 
     /**
      * Handles relation between SiteAccesses. Related SiteAccesses share the same repository and root location id.
