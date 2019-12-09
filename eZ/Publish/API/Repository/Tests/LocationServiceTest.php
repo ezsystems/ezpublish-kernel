@@ -661,6 +661,30 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadLocationList() method.
+     *
+     * Ensures the list is returned in the same order as passed IDs array.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationList
+     */
+    public function testLoadLocationListInCorrectOrder()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $cachedLocationId = 2;
+        $locationIdsToLoad = [43, $cachedLocationId, 5];
+
+        // Call loadLocation to cache it in memory as it might possibly affect list order
+        $locationService->loadLocation($cachedLocationId);
+
+        $locations = $locationService->loadLocationList($locationIdsToLoad);
+        $locationIds = array_column($locations, 'id');
+
+        self::assertEquals($locationIdsToLoad, $locationIds);
+    }
+
+    /**
      * Test for the loadLocationByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
