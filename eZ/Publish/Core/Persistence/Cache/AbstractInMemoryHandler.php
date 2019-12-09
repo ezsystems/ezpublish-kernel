@@ -206,7 +206,7 @@ abstract class AbstractInMemoryHandler
         }
 
         // Generate unique cache keys and check if in-memory
-        $list = [];
+        $list = array_flip($ids);
         $cacheKeys = [];
         $cacheKeysToIdMap = [];
         foreach (array_unique($ids) as $id) {
