@@ -45,7 +45,7 @@ It's worth noting that shared cache comes at a cost:
 Because of that, *typically* avoid introducing cache if:
 - Lookup is per user => _it will consume a lot of memory and have very low hit ratio_
 - For drafts => _usually belongs to a single user & is short lived_
-- Seemly used lookups
+- Infrequently used lookups
 - Lookups that are fast against DB even under load _(see also notes in "Possible future plans")_
 
 
@@ -59,7 +59,7 @@ Like cache, tags also comes at a cost:
 For those reasons, only introduce use a tag if:
 - Mainly to represent an entity _(e.g. `content-<id>`)_
 - Only if it's represented on many different cache keys or if a key can have a lot of different variants.
-    - _Tip: Otherwise prefer to delete by cache key(s) when cache clear is needed, it will be faster._
+    - _Tip: Otherwise prefer to delete by cache key(s) when cache clear is needed, it will be faster and consume less memory._
 
 ### Possible future considerations
 
