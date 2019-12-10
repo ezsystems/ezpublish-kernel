@@ -376,7 +376,7 @@ class DomainMapper
                 'isHidden' => $spiContentInfo->isHidden,
                 'contentType' => $this->proxyFactory->createContentTypeProxy($spiContentInfo->contentTypeId),
                 'section' => $this->proxyFactory->createSectionProxy($spiContentInfo->sectionId),
-                'mainLocation' => $this->proxyFactory->createLocationProxy($spiContentInfo->mainLocationId),
+                'mainLocation' => $spiContentInfo->mainLocationId !== null ? $this->proxyFactory->createLocationProxy($spiContentInfo->mainLocationId) : null,
                 'mainLanguage' => $this->proxyFactory->createLanguageProxy($spiContentInfo->mainLanguageCode),
                 'owner' => $this->proxyFactory->createUserProxy($spiContentInfo->ownerId),
             ]

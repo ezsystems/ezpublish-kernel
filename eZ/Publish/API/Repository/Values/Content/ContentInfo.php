@@ -153,7 +153,7 @@ class ContentInfo extends ValueObject
     /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     protected $mainLanguage;
 
-    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
     protected $mainLocation;
 
     /** @var \eZ\Publish\API\Repository\Values\User\User */
@@ -198,7 +198,7 @@ class ContentInfo extends ValueObject
         return $this->mainLanguage;
     }
 
-    public function getMainLocation(): Location
+    public function getMainLocation(): ?Location
     {
         return $this->mainLocation;
     }
