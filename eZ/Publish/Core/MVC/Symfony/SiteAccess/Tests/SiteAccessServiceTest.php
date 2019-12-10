@@ -44,6 +44,16 @@ class SiteAccessServiceTest extends TestCase
 
     public function testGetCurrentSiteAccess(): void
     {
+        $this->provider
+            ->method('isDefined')
+            ->with('current')
+            ->willReturn(true);
+
+        $this->provider
+            ->method('getSiteAccess')
+            ->with('current')
+            ->willReturn($this->siteAccess);
+
         $this->assertSame($this->siteAccess, $this->getSiteAccessService()->getCurrent());
     }
 
