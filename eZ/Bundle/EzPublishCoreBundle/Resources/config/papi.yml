@@ -6,6 +6,7 @@ parameters:
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
     ezpublish.api.search_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineFactory
     ezpublish.api.search_engine.indexer.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineIndexerFactory
+    ezpublish.api.proxy_cache_dir: '%kernel.cache_dir%/repository/proxy'
 
     # Using legacy storage engine for data compatibility with 4.x
     ezpublish.api.storage_engine.default: legacy

@@ -22,7 +22,7 @@ parameters:
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
     ezpublish.api.search_engine.class: eZ\Publish\SPI\Search\Handler
 
-
+    ezpublish.api.proxy_cache_dir: 'var/cache/repository/proxy'
 services:
     ezpublish.api.repository.factory:
         class: "%ezpublish.api.repository.factory.class%"
@@ -147,7 +147,7 @@ services:
         public: true
         factory: ['eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory', 'create']
         arguments:
-            $proxyCacheDir: '%kernel.cache_dir%/repository/proxy'
+            $proxyCacheDir: '%ezpublish.api.proxy_cache_dir%'
 
     eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory:
         arguments:
