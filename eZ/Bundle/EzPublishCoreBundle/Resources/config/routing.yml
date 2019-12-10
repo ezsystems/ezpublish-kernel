@@ -63,6 +63,7 @@ services:
         class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider\StaticSiteAccessProvider
         arguments:
             - "%ezpublish.siteaccess.list%"
+            - "%ezpublish.siteaccess.groups_by_siteaccess%"
         tags:
             - { name: ezplatform.siteaccess.provider, priority: 10 }
 
@@ -73,6 +74,14 @@ services:
 
     ezpublish.siteaccess.provider:
         alias: ezpublish.siteaccess.provider.chain
+
+    ezpublish.siteaccess_service:
+        class: eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessService
+        arguments:
+            - "@ezpublish.siteaccess.provider"
+            - "@ezpublish.config.resolver"
+        calls:
+            - [setSiteAccess, ['@ezpublish.siteaccess']]
 
     ezpublish.siteaccess_router:
         class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Router

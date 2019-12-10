@@ -10,33 +10,57 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Test\Provider;
 
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccessGroup;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider\ChainSiteAccessProvider;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider\StaticSiteAccessProvider;
+use function array_map;
 
 final class ChainSiteAccessProviderTest extends TestCase
 {
     private const EXISTING_SA_NAME = 'existing_sa';
     private const UNDEFINED_SA_NAME = 'undefined_sa';
+    private const WITHOUT_GROUP_SA_NAME = 'without_group_sa';
+    private const SA_GROUP = 'group';
 
     /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessProviderInterface[] */
     private $providers;
+
+    /** @var array */
+    private $groupsBySiteAccess;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->groupsBySiteAccess = [
+            self::EXISTING_SA_NAME => [self::SA_GROUP],
+            'first_sa' => [self::SA_GROUP],
+            'second_sa' => [self::SA_GROUP],
+        ];
         $this->providers = [
-            new StaticSiteAccessProvider([self::EXISTING_SA_NAME, 'first_sa']),
-            new StaticSiteAccessProvider(['second_sa']),
+            new StaticSiteAccessProvider([self::EXISTING_SA_NAME, 'first_sa'], $this->groupsBySiteAccess),
+            new StaticSiteAccessProvider(['second_sa'], $this->groupsBySiteAccess),
+            new StaticSiteAccessProvider([self::WITHOUT_GROUP_SA_NAME]),
         ];
     }
 
-    public function testIsDefinedForExistingSiteAccess(): void
+    public function siteAccessNamesProvider(): array
+    {
+        return [
+            'existing_sa' => [self::EXISTING_SA_NAME],
+            'sa_without_group' => [self::WITHOUT_GROUP_SA_NAME],
+        ];
+    }
+
+    /**
+     * @dataProvider siteAccessNamesProvider
+     */
+    public function testIsDefined(string $siteAccessName): void
     {
         $chainSiteAccessProvider = $this->getChainSiteAccessProvider();
 
-        $this->assertTrue($chainSiteAccessProvider->isDefined(self::EXISTING_SA_NAME));
+        $this->assertTrue($chainSiteAccessProvider->isDefined($siteAccessName));
     }
 
     public function testIsDefinedForUndefinedSiteAccess(): void
@@ -51,42 +75,62 @@ final class ChainSiteAccessProviderTest extends TestCase
         $chainSiteAccessProvider = $this->getChainSiteAccessProvider();
         $siteAccesses = iterator_to_array($chainSiteAccessProvider->getSiteAccesses());
 
-        $this->assertCount(3, $siteAccesses);
+        $this->assertCount(4, $siteAccesses);
 
-        $expectedSiteAccessNames = [self::EXISTING_SA_NAME, 'first_sa', 'second_sa'];
+        $expectedSiteAccessNames = [
+            ['name' => self::EXISTING_SA_NAME, 'groups' => [self::SA_GROUP]],
+            ['name' => 'first_sa', 'groups' => [self::SA_GROUP]],
+            ['name' => 'second_sa', 'groups' => [self::SA_GROUP]],
+            ['name' => self::WITHOUT_GROUP_SA_NAME, 'groups' => []],
+        ];
 
-        foreach ($expectedSiteAccessNames as $key => $expectedSiteAccessName) {
-            $expectedSiteAccess = new SiteAccess(
-                $expectedSiteAccessName,
-                SiteAccess::DEFAULT_MATCHING_TYPE,
-                null,
-                StaticSiteAccessProvider::class
+        foreach ($expectedSiteAccessNames as $key => $saData) {
+            $expectedSiteAccess = $this->createSiteAcccess(
+                $saData['name'], $saData['groups']
             );
+
             $this->assertEquals($expectedSiteAccess, $siteAccesses[$key]);
         }
 
+        $undefinedSiteAccess = $this->createSiteAcccess(
+            self::UNDEFINED_SA_NAME, [self::SA_GROUP]
+        );
+
         $this->assertNotContains(
-            new SiteAccess(
-                self::UNDEFINED_SA_NAME,
-                SiteAccess::DEFAULT_MATCHING_TYPE,
-                null,
-                StaticSiteAccessProvider::class
-            ),
+            $undefinedSiteAccess,
             $siteAccesses
         );
     }
 
-    public function testGetExistingSiteAccess(): void
+    public function getExistingSiteProvider(): array
+    {
+        return [
+            'existing_sa' => [self::EXISTING_SA_NAME, [self::SA_GROUP]],
+            'sa_without_group' => [self::WITHOUT_GROUP_SA_NAME, []],
+        ];
+    }
+
+    /**
+     * @dataProvider getExistingSiteProvider
+     *
+     * @param string[] $expectedGroups
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     */
+    public function testGetExistingSiteAccess(string $siteAccessName, array $expectedGroups): void
     {
         $chainSiteAccessProvider = $this->getChainSiteAccessProvider();
+        $expectedSiteAccess = new SiteAccess(
+            $siteAccessName,
+            SiteAccess::DEFAULT_MATCHING_TYPE,
+            null,
+            StaticSiteAccessProvider::class
+        );
+        $expectedSiteAccess->groups = $expectedGroups;
+
         $this->assertEquals(
-            new SiteAccess(
-                self::EXISTING_SA_NAME,
-                SiteAccess::DEFAULT_MATCHING_TYPE,
-                null,
-                StaticSiteAccessProvider::class
-            ),
-            $chainSiteAccessProvider->getSiteAccess(self::EXISTING_SA_NAME)
+            $expectedSiteAccess,
+            $chainSiteAccessProvider->getSiteAccess($siteAccessName)
         );
     }
 
@@ -103,5 +147,26 @@ final class ChainSiteAccessProviderTest extends TestCase
     private function getChainSiteAccessProvider(): ChainSiteAccessProvider
     {
         return new ChainSiteAccessProvider($this->providers);
+    }
+
+    /**
+     * @param string[] $groupNames
+     */
+    private function createSiteAcccess(string $name, array $groupNames = []): SiteAccess
+    {
+        $undefinedSiteAccess = new SiteAccess(
+            $name,
+            SiteAccess::DEFAULT_MATCHING_TYPE,
+            null,
+            StaticSiteAccessProvider::class
+        );
+        $undefinedSiteAccess->groups = array_map(
+            static function (string $groupName) {
+                return new SiteAccessGroup($groupName);
+            },
+            $groupNames
+        );
+
+        return $undefinedSiteAccess;
     }
 }
