@@ -74,7 +74,7 @@ class DoctrineDatabase extends Gateway
             ];
         }
 
-        $query = $this->createSelectQuery();
+        $query = $this->createSelectDistinctQuery();
         $query->where($this->criteriaConverter->convertCriteria($query, $criterion));
         $query->limit($limit > 0 ? $limit : PHP_INT_MAX, $offset);
 
@@ -167,7 +167,7 @@ class DoctrineDatabase extends Gateway
             $query->bindValue($url->modified, null, PDO::PARAM_INT)
         )->set(
             $this->handler->quoteColumn(self::COLUMN_IS_VALID),
-            $query->bindValue((int) $url->isValid, null, PDO::PARAM_INT)
+            $query->bindValue((int)$url->isValid, null, PDO::PARAM_INT)
         )->set(
             $this->handler->quoteColumn(self::COLUMN_LAST_CHECKED),
             $query->bindValue($url->lastChecked, null, PDO::PARAM_INT)
@@ -245,17 +245,30 @@ class DoctrineDatabase extends Gateway
      */
     protected function createSelectQuery(): SelectQuery
     {
-        return $this->handler->createSelectQuery()
-            ->select(
-                $this->handler->quoteColumn(self::COLUMN_ID, self::URL_TABLE),
-                $this->handler->quoteColumn(self::COLUMN_URL, self::URL_TABLE),
-                $this->handler->quoteColumn(self::COLUMN_ORIGINAL_URL_MD5, self::URL_TABLE),
-                $this->handler->quoteColumn(self::COLUMN_IS_VALID, self::URL_TABLE),
-                $this->handler->quoteColumn(self::COLUMN_LAST_CHECKED, self::URL_TABLE),
-                $this->handler->quoteColumn(self::COLUMN_CREATED, self::URL_TABLE),
-                $this->handler->quoteColumn(self::COLUMN_MODIFIED, self::URL_TABLE)
-            )->from(
-                $this->handler->quoteTable(self::URL_TABLE)
-            );
+        return $this->handler
+            ->createSelectQuery()
+            ->select(...$this->getSelectColumns())
+            ->from($this->handler->quoteTable(self::URL_TABLE));
+    }
+
+    private function createSelectDistinctQuery(): SelectQuery
+    {
+        return $this->handler
+            ->createSelectQuery()
+            ->selectDistinct(...$this->getSelectColumns())
+            ->from($this->handler->quoteTable(self::URL_TABLE));
+    }
+
+    private function getSelectColumns(): array
+    {
+        return [
+            $this->handler->quoteColumn(self::COLUMN_ID, self::URL_TABLE),
+            $this->handler->quoteColumn(self::COLUMN_URL, self::URL_TABLE),
+            $this->handler->quoteColumn(self::COLUMN_ORIGINAL_URL_MD5, self::URL_TABLE),
+            $this->handler->quoteColumn(self::COLUMN_IS_VALID, self::URL_TABLE),
+            $this->handler->quoteColumn(self::COLUMN_LAST_CHECKED, self::URL_TABLE),
+            $this->handler->quoteColumn(self::COLUMN_CREATED, self::URL_TABLE),
+            $this->handler->quoteColumn(self::COLUMN_MODIFIED, self::URL_TABLE),
+        ];
     }
 }
