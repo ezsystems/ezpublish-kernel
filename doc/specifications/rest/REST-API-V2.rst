@@ -2704,7 +2704,7 @@ The above example has the following JSON equivalent.
     }
 
 Note that the structure for ContentTypeIdentifierCriterion with multiple values is slightly
-different in JSON format, because the parser excepts keys to be unique.
+different in JSON format, because the parser expects keys to be unique.
 
 List views
 ``````````
