@@ -48,7 +48,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
 
         $this->persistenceHandler->urlWildcardHandler()->remove($id);
 
-        $this->cache->invalidateTags(['ez-urlWildcard-id-' . $id]);
+        $this->cache->invalidateTags(['urlWildcard-' . $id]);
     }
 
     /**
@@ -56,20 +56,18 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
      */
     public function load($id)
     {
-        $cacheItem = $this->cache->getItem('ez-urlWildcard-id-' . $id);
+        $cacheItem = $this->cache->getItem('ez-urlWildcard-' . $id);
 
         if ($cacheItem->isHit()) {
-            $this->logger->logCacheHit(['id' => $id]);
-
             return $cacheItem->get();
         }
 
-        $this->logger->logCacheMiss(['id' => $id]);
+        $this->logger->logCall(__METHOD__, ['id' => $id]);
 
         $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->load($id);
 
         $cacheItem->set($urlWildcard);
-        $cacheItem->tag($this->getCacheTags([$urlWildcard]));
+        $cacheItem->tag(['urlWildcard-' . $urlWildcard->id]);
         $this->cache->save($cacheItem);
 
         return $urlWildcard;
@@ -93,8 +91,6 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         $cacheItem = $this->cache->getItem('ez-urlWildcard-source-' . $this->escapeForCacheKey($sourceUrl));
 
         if ($cacheItem->isHit()) {
-            $this->logger->logCacheHit(['url' => $sourceUrl]);
-
             if (($return = $cacheItem->get()) === self::NOT_FOUND) {
                 throw new NotFoundException('UrlWildcard', $sourceUrl);
             }
@@ -102,7 +98,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
             return $return;
         }
 
-        $this->logger->logCacheMiss(['url' => $sourceUrl]);
+        $this->logger->logCall(__METHOD__, ['source' => $sourceUrl]);
 
         try {
             $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->translate($sourceUrl);
@@ -115,7 +111,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         }
 
         $cacheItem->set($urlWildcard);
-        $cacheItem->tag($this->getCacheTags([$urlWildcard]));
+        $cacheItem->tag(['urlWildcard-' . $urlWildcard->id]);
         $this->cache->save($cacheItem);
 
         return $urlWildcard;
@@ -126,22 +122,8 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
      */
     public function exactSourceUrlExists(string $sourceUrl): bool
     {
+        $this->logger->logCall(__METHOD__, ['source' => $sourceUrl]);
+
         return $this->persistenceHandler->urlWildcardHandler()->exactSourceUrlExists($sourceUrl);
-    }
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard[] $urlWildcards
-     * @return array
-     */
-    private function getCacheTags(array $urlWildcards): array
-    {
-        $tags = [];
-
-        foreach ($urlWildcards as $urlWildcard) {
-            $tags[] = 'ez-urlWildcard-id-' . $urlWildcard->id;
-            $tags[] = 'ez-urlWildcard-source-' . $this->escapeForCacheKey($urlWildcard->sourceUrl);
-        }
-
-        return $tags;
     }
 }

@@ -30,11 +30,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
             $tags = [
                  'content-' . $location->contentId,
                  'location-' . $location->id,
-                 'location-data-' . $location->id,
              ];
             foreach (\explode('/', \trim($location->pathString, '/')) as $pathId) {
                 $tags[] = 'location-path-' . $pathId;
-                $tags[] = 'location-path-data-' . $pathId;
             }
 
             return $tags;
@@ -242,7 +240,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->hide($locationId);
 
-        $this->cache->invalidateTags(['location-path-data-' . $locationId]);
+        $this->cache->invalidateTags(['location-path-' . $locationId]);
 
         return $return;
     }
@@ -255,7 +253,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->unHide($locationId);
 
-        $this->cache->invalidateTags(['location-path-data-' . $locationId]);
+        $this->cache->invalidateTags(['location-path-' . $locationId]);
 
         return $return;
     }
@@ -270,7 +268,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $id]);
         $this->persistenceHandler->locationHandler()->setInvisible($id);
 
-        $this->cache->invalidateTags(['location-path-data-' . $id]);
+        $this->cache->invalidateTags(['location-path-' . $id]);
     }
 
     /**
@@ -283,7 +281,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $id]);
         $this->persistenceHandler->locationHandler()->setVisible($id);
 
-        $this->cache->invalidateTags(['location-path-data-' . $id]);
+        $this->cache->invalidateTags(['location-path-' . $id]);
     }
 
     /**
@@ -314,7 +312,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $locationId, 'struct' => $struct]);
         $this->persistenceHandler->locationHandler()->update($struct, $locationId);
 
-        $this->cache->invalidateTags(['location-data-' . $locationId]);
+        $this->cache->invalidateTags(['location-' . $locationId]);
     }
 
     /**
@@ -406,10 +404,8 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
     {
         $tags[] = 'content-' . $location->contentId;
         $tags[] = 'location-' . $location->id;
-        $tags[] = 'location-data-' . $location->id;
         foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
             $tags[] = 'location-path-' . $pathId;
-            $tags[] = 'location-path-data-' . $pathId;
         }
 
         return $tags;

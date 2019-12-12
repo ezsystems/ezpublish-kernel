@@ -54,8 +54,6 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
         $tags = [
             'content-' . $contentId,
-            'content-fields-' . $contentId,
-            'location-' . $originalLocationId,
             'location-path-' . $originalLocationId,
         ];
 
@@ -106,8 +104,6 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
         $tags = [
             'content-' . $contentId,
-            'content-fields-' . $contentId,
-            'location-' . $locationId,
             'location-path-' . $locationId,
         ];
 
@@ -155,7 +151,7 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
     {
         $trashedId = 6;
         $contentId = 42;
-        $relationSourceContentId = 42;
+        $relationSourceContentId = 44;
 
         $handlerMethodName = $this->getHandlerMethodName();
 
@@ -192,9 +188,8 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
         $tags = [
             'content-' . $contentId,
-            'content-fields-' . $relationSourceContentId,
-            'location-' . $trashedId,
             'location-path-' . $trashedId,
+            'content-' . $relationSourceContentId,
         ];
 
         $this->cacheMock
@@ -211,7 +206,7 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
     {
         $trashedId = 6;
         $contentId = 42;
-        $relationSourceContentId = 42;
+        $relationSourceContentId = 44;
 
         $handlerMethodName = $this->getHandlerMethodName();
 
@@ -243,9 +238,8 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
             ->will($this->returnValue($contentHandlerMock));
 
         $tags = [
-            'content-fields-' . $relationSourceContentId,
+            'content-' . $relationSourceContentId,
             'content-' . $contentId,
-            'location-' . $trashedId,
             'location-path-' . $trashedId,
         ];
 

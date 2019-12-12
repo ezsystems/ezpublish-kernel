@@ -86,7 +86,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['struct' => $user]);
 
         // Clear corresponding content cache as creation of the User changes it's external data
-        $this->cache->invalidateTags(['content-fields-' . $user->id]);
+        $this->cache->invalidateTags(['content-' . $user->id]);
         $this->cache->deleteItems([
             'ez-user-' . $user->id,
             'ez-user-' . $this->escapeForCacheKey($user->login) . '-by-login',
@@ -184,7 +184,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['struct' => $user]);
 
         // Clear corresponding content cache as update of the User changes it's external data
-        $this->cache->invalidateTags(['content-fields-' . $user->id, 'user-' . $user->id]);
+        $this->cache->invalidateTags(['content-' . $user->id, 'user-' . $user->id]);
         // Clear especially by email key as it might already be cached and this might represent change to email
         $this->cache->deleteItems(['ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email']);
 
@@ -226,7 +226,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['user' => $userId]);
 
         // user id == content id == group id
-        $this->cache->invalidateTags(['content-fields-' . $userId, 'user-' . $userId]);
+        $this->cache->invalidateTags(['content-' . $userId, 'user-' . $userId]);
     }
 
     /**

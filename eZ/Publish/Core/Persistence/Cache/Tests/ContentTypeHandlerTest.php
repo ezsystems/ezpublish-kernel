@@ -46,28 +46,31 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['updateGroup', [$groupUpdate], null, ['ez-content-type-group-list', 'ez-content-type-group-3', 'ez-content-type-group-media-by-identifier']],
             ['deleteGroup', [3], ['type-group-3']],
             ['loadContentTypes', [3, 1]], // also listed for cached cases in providerForCachedLoadMethods
+            ['load', [5, 1]], // also listed for cached case in providerForCachedLoadMethods
             ['create', [new SPITypeCreateStruct(['groupIds' => [2, 3]])], null, ['ez-content-type-list-by-group-2', 'ez-content-type-list-by-group-3']],
             ['update', [5, 0, $typeUpdate], ['type-5', 'type-map', 'content-fields-type-5']],
-            ['update', [5, 1, $typeUpdate], null, ['ez-content-type-5-1']],
+            ['update', [5, 1, $typeUpdate]],
             ['delete', [5, 0], ['type-5', 'type-map', 'content-fields-type-5']],
-            ['delete', [5, 1], null, ['ez-content-type-5-1']],
-            ['createDraft', [10, 5], null, ['ez-content-type-5-1']],
+            ['delete', [5, 1]],
+            ['createDraft', [10, 5]],
             ['copy', [10, 5, 0]],
             ['copy', [10, 5, 1]],
             ['unlink', [3, 5, 0], ['type-5']],
-            ['unlink', [3, 5, 1], null, ['ez-content-type-5-1']],
+            ['unlink', [3, 5, 1]],
             ['link', [3, 5, 0], ['type-5'], ['ez-content-type-list-by-group-3']],
-            ['link', [3, 5, 1], null, ['ez-content-type-5-1']],
+            ['link', [3, 5, 1]],
             ['getFieldDefinition', [7, 1]],
             ['getFieldDefinition', [7, 0]],
             ['getContentCount', [5]],
             ['addFieldDefinition', [5, 0, new SPITypeFieldDefinition()], ['type-5', 'type-map', 'content-fields-type-5']],
-            ['addFieldDefinition', [5, 1, new SPITypeFieldDefinition()], null, ['ez-content-type-5-1']],
+            ['addFieldDefinition', [5, 1, new SPITypeFieldDefinition()]],
             ['removeFieldDefinition', [5, 0, 7], ['type-5', 'type-map', 'content-fields-type-5']],
-            ['removeFieldDefinition', [5, 1, 7], null, ['ez-content-type-5-1']],
+            ['removeFieldDefinition', [5, 1, 7]],
             ['updateFieldDefinition', [5, 0, new SPITypeFieldDefinition()], ['type-5', 'type-map', 'content-fields-type-5']],
-            ['updateFieldDefinition', [5, 1, new SPITypeFieldDefinition()], null, ['ez-content-type-5-1']],
+            ['updateFieldDefinition', [5, 1, new SPITypeFieldDefinition()]],
             ['removeContentTypeTranslation', [5, 'eng-GB'], ['type-5', 'type-map', 'content-fields-type-5'], null, new SPIType()],
+            ['deleteByUserAndStatus', [12, 0], ['type']],
+            ['deleteByUserAndStatus', [12, 1]],
         ];
     }
 
@@ -86,8 +89,8 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['loadGroupByIdentifier', ['content'], 'ez-content-type-group-content-by-identifier', $group],
             ['loadAllGroups', [], 'ez-content-type-group-list', [3 => $group]],
             ['loadContentTypes', [3, 0], 'ez-content-type-list-by-group-3', [$type]],
-            ['loadContentTypeList', [[5]], 'ez-content-type-5-0', [5 => $type], true],
-            ['load', [5, 0], 'ez-content-type-5-0', $type],
+            ['loadContentTypeList', [[5]], 'ez-content-type-5', [5 => $type], true],
+            ['load', [5, 0], 'ez-content-type-5', $type],
             ['loadByIdentifier', ['article'], 'ez-content-type-article-by-identifier', $type],
             ['loadByRemoteId', ['f34tg45gf'], 'ez-content-type-f34tg45gf-by-remote', $type],
             ['getSearchableFieldMap', [], 'ez-content-type-field-map', [$type]],
@@ -105,7 +108,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
         $method = 'publish';
         $arguments = [5];
         $type = new SPIType(['id' => 5, 'groupIds' => [3, 4]]);
-        $cacheItem = $this->getCacheItem('ez-content-type-5-0', $type);
+        $cacheItem = $this->getCacheItem('ez-content-type-5', $type);
 
         $handlerMethodName = $this->getHandlerMethodName();
 

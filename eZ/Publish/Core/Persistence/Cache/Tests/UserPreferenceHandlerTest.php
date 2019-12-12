@@ -42,7 +42,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
         $name = 'setting';
         $userPreferenceCount = 10;
 
-        // string $method, array $arguments, array? $tags, string? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tags, array? $key, mixed? $returnValue
         return [
             [
                 'setUserPreference',

@@ -30,15 +30,15 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tags, array? $key, mixed? $returnValue
         return [
             ['copySubtree', [12, 45]],
             ['move', [12, 45], ['location-path-12']],
             ['markSubtreeModified', [12]],
-            ['hide', [12], ['location-path-data-12']],
-            ['unHide', [12], ['location-path-data-12']],
+            ['hide', [12], ['location-path-12']],
+            ['unHide', [12], ['location-path-12']],
             ['swap', [12, 45], ['location-12', 'location-45']],
-            ['update', [new UpdateStruct(), 12], ['location-data-12']],
+            ['update', [new UpdateStruct(), 12], ['location-12']],
             ['create', [new CreateStruct(['contentId' => 4, 'mainLocationId' => true])], ['content-4', 'role-assignment-group-list-4']],
             ['create', [new CreateStruct(['contentId' => 4, 'mainLocationId' => false])], ['content-4', 'role-assignment-group-list-4']],
             ['removeSubtree', [12], ['location-path-12']],
