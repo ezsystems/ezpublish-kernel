@@ -8,7 +8,6 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
-use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
@@ -283,7 +282,7 @@ class Repository implements RepositoryInterface
                 'urlWildcard' => [],
                 'nameSchema' => [],
                 'languages' => [],
-                'proxy_factory' => []
+                'proxy_factory' => [],
             ];
 
         if (!empty($this->serviceSettings['languages'])) {
@@ -711,7 +710,6 @@ class Repository implements RepositoryInterface
      * @private
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
      */
     public function getNameSchemaService()
     {
@@ -752,7 +750,6 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
      */
     protected function getRelationProcessor()
     {
@@ -764,7 +761,6 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\Helper\DomainMapper
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
      */
     protected function getDomainMapper()
     {
