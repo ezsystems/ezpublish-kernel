@@ -297,6 +297,7 @@ XML Example
                     <Content media-type="application/vnd.ez.api.ContentInfo+xml" href="/api/ezp/v2/content/objects/1" remoteId="9459d3c29e15006e45197295722c7ade" id="1">
                         <ContentType media-type="application/vnd.ez.api.ContentType+xml" href="/api/ezp/v2/content/types/1"/>
                         <Name>eZ Platform</Name>
+                        <TranslatedName>eZ Platform</TranslatedName>
                         <Versions media-type="application/vnd.ez.api.VersionList+xml" href="/api/ezp/v2/content/objects/1/versions"/>
                         <CurrentVersion media-type="application/vnd.ez.api.Version+xml" href="/api/ezp/v2/content/objects/1/currentversion"/>
                         <Section media-type="application/vnd.ez.api.Section+xml" href="/api/ezp/v2/content/sections/1"/>
@@ -372,6 +373,7 @@ JSON Example
                                     "_href": "/api/ezp/v2/content/types/1"
                                 },
                                 "Name": "eZ Platform",
+                                "TranslatedName": "eZ Platform",
                                 "Versions": {
                                     "_media-type": "application/vnd.ez.api.VersionList+json",
                                     "_href": "/api/ezp/v2/content/objects/1/versions"
@@ -825,6 +827,7 @@ XML Example
       media-type="application/vnd.ez.api.Content+xml" remoteId="remoteId12345678" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
       <Name>This is a title</Name>
+      <TranslatedName>This is a title</TranslatedName>
       <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
       <CurrentVersion href="/content/objects/23/currentversion"
         media-type="application/vnd.ez.api.Version+xml">
@@ -1129,6 +1132,7 @@ XML Example
       media-type="application/vnd.ez.api.Content+xml" remoteId="qwert123">
       <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
       <Name>This is a title</Name>
+      <TranslatedName>This is a title</TranslatedName>
       <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
       <CurrentVersion href="/content/objects/23/currentversion"
         media-type="application/vnd.ez.api.Version+xml"/>
@@ -1226,6 +1230,7 @@ In this example
       media-type="application/vnd.ez.api.Content+xml" remoteId="qwert4321">
       <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
       <Name>This is a title</Name>
+      <TranslatedName>This is a title</TranslatedName>
       <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
       <CurrentVersion href="/content/objects/23/currentversion"
         media-type="application/vnd.ez.api.Version+xml"/>
