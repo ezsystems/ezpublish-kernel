@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\BadStateException as CoreBadStateException;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -20,6 +21,14 @@ use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
  */
 class RestContent extends ValueObjectVisitor
 {
+    /** @var \eZ\Publish\Core\Helper\TranslationHelper */
+    private $translationHelper;
+
+    public function __construct(TranslationHelper $translationHelper)
+    {
+        $this->translationHelper = $translationHelper;
+    }
+
     /**
      * Visit struct returned by controllers.
      *
@@ -31,6 +40,7 @@ class RestContent extends ValueObjectVisitor
     {
         $restContent = $data;
         $contentInfo = $restContent->contentInfo;
+        $translatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo);
         $contentType = $restContent->contentType;
         $mainLocation = $restContent->mainLocation;
         $currentVersion = $restContent->currentVersion;
@@ -68,6 +78,9 @@ class RestContent extends ValueObjectVisitor
 
         $generator->startValueElement('Name', $contentInfo->name);
         $generator->endValueElement('Name');
+
+        $generator->startValueElement('TranslatedName', $translatedContentName);
+        $generator->endValueElement('TranslatedName');
 
         $generator->startObjectElement('Versions', 'VersionList');
         $generator->startAttribute(

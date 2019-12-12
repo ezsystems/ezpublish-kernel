@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Values\RestContent;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -18,6 +19,19 @@ use eZ\Publish\Core\REST\Server\Values\Version;
 
 class RestContentTest extends ValueObjectVisitorBaseTest
 {
+    /** @var \eZ\Publish\Core\Helper\TranslationHelper|\PHPUnit\Framework\MockObject\MockObject */
+    private $translationHelper;
+
+    protected function setUp(): void
+    {
+        $this->translationHelper = $this->createMock(TranslationHelper::class);
+        $this->translationHelper
+            ->method('getTranslatedContentNameByContentInfo')
+            ->willReturnCallback(function (ContentInfo $content) {
+                return $content->name . ' (Translated)';
+            });
+    }
+
     /**
      * @return \DOMDocument
      */
@@ -194,6 +208,16 @@ class RestContentTest extends ValueObjectVisitorBaseTest
     public function testNameCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/Content/Name[text()="Sindelfingen"]');
+    }
+
+    /**
+     * @param \DOMDocument $dom
+     *
+     * @depends testVisitWithoutEmbeddedVersion
+     */
+    public function testTranslatedNameCorrect(\DOMDocument $dom)
+    {
+        $this->assertXPath($dom, '/Content/TranslatedName[text()="Sindelfingen (Translated)"]');
     }
 
     /**
@@ -497,6 +521,8 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestContent();
+        return new ValueObjectVisitor\RestContent(
+            $this->translationHelper
+        );
     }
 }
