@@ -72,6 +72,7 @@ class InstallPlatformCommand extends Command
         $this->checkDatabase();
 
         $type = $input->getArgument('type');
+        $siteaccess = $input->getOption('siteaccess');
         $installer = $this->getInstaller($type);
         if ($installer === false) {
             $output->writeln(
@@ -87,7 +88,7 @@ class InstallPlatformCommand extends Command
         $installer->importData();
         $installer->importBinaries();
         $this->cacheClear($output);
-        $this->indexData($output);
+        $this->indexData($output, $siteaccess);
     }
 
     private function checkPermissions()
@@ -165,13 +166,20 @@ class InstallPlatformCommand extends Command
      * IMPORTANT: This is done using a command because config has change, so container and all services are different.
      *
      * @param OutputInterface $output
+     * @param null|string $siteaccess
      */
-    private function indexData(OutputInterface $output)
+    private function indexData(OutputInterface $output, string $siteaccess = null)
     {
         $output->writeln(
             sprintf('Search engine re-indexing, executing command ezplatform:reindex')
         );
-        $this->executeCommand($output, 'ezplatform:reindex');
+
+        $command = 'ezplatform:reindex';
+        if ($siteaccess) {
+            $command .= sprintf(' --siteaccess=%s', $siteaccess);
+        }
+
+        $this->executeCommand($output, $command);
     }
 
     /**
