@@ -27,14 +27,16 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
      * @param string $method
      * @param array $arguments
      * @param array|null $tags
-     * @param string|null $key
+     * @param string|array|null $key
      * @param mixed $returnValue
      */
-    final public function testUnCachedMethods(string $method, array $arguments, array $tags = null, string $key = null, $returnValue = null)
+    final public function testUnCachedMethods(string $method, array $arguments, array $tags = null, $key = null, $returnValue = null)
     {
         $handlerMethodName = $this->getHandlerMethodName();
 
         $this->loggerMock->expects($this->once())->method('logCall');
+        $this->loggerMock->expects($this->never())->method('logCacheHit');
+        $this->loggerMock->expects($this->never())->method('logCacheMiss');
 
         $innerHandler = $this->createMock($this->getHandlerClassName());
         $this->persistenceHandlerMock
@@ -55,13 +57,20 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
                 ->with($tags);
 
             $this->cacheMock
-                ->expects(!empty($key) ? $this->once() : $this->never())
+                ->expects(!empty($key) && is_string($key) ? $this->once() : $this->never())
                 ->method('deleteItem')
+                ->with($key);
+
+            $this->cacheMock
+                ->expects(!empty($key) && is_array($key) ? $this->once() : $this->never())
+                ->method('deleteItems')
                 ->with($key);
         }
 
         $handler = $this->persistenceCacheHandler->$handlerMethodName();
-        call_user_func_array([$handler, $method], $arguments);
+        $actualReturnValue = call_user_func_array([$handler, $method], $arguments);
+
+        $this->assertEquals($returnValue, $actualReturnValue);
     }
 
     abstract public function providerForCachedLoadMethods(): array;

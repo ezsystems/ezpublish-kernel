@@ -72,8 +72,8 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
                     return self::NOT_FOUND;
                 }
             },
-            static function () use ($userId) {
-                return ['user-preference-' . $userId];
+            static function () {
+                return [];
             },
             static function () use ($userId, $name) {
                 return ['ez-user-preference-' . $userId . '-' . $name];

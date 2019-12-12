@@ -40,10 +40,10 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
      */
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['create', [new CreateStruct()]],
-            ['createDraftFromVersion', [2, 1, 14], ['content-2-version-list']],
+            ['createDraftFromVersion', [2, 1, 14], [], ['ez-content-2-version-list']],
             ['copy', [2, 1]],
             ['loadDraftsForUser', [14]],
             ['setStatus', [2, 0, 1], ['content-2-version-1']],
@@ -57,6 +57,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['loadRelations', [2, 1, 3]],
             ['loadReverseRelations', [2, 3]],
             ['publish', [2, 3, new MetadataUpdateStruct()], ['content-2']],
+            ['listVersions', [2, 1], [], [], [new VersionInfo(['versionNo' => 1, 'contentInfo' => new ContentInfo(['id' => 2])])]],
         ];
     }
 
@@ -82,8 +83,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['loadContentInfoByRemoteId', ['3d8jrj'], 'ez-content-info-byRemoteId-3d8jrj', $info],
             ['loadVersionInfo', [2, 1], 'ez-content-version-info-2-1', $version],
             ['loadVersionInfo', [2], 'ez-content-version-info-2', $version],
-            ['listVersions', [2], 'ez-content-2-version-list-limit--1', [$version]],
-            ['listVersions', [2, 1], 'ez-content-2-version-list-byStatus-1-limit--1', [$version]],
+            ['listVersions', [2], 'ez-content-2-version-list', [$version]],
         ];
     }
 
@@ -125,7 +125,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
         $this->cacheMock
             ->expects($this->once())
             ->method('invalidateTags')
-            ->with(['content-fields-42', 'content-2']);
+            ->with(['content-42', 'content-2']);
 
         $handler = $this->persistenceCacheHandler->contentHandler();
         $handler->deleteContent(2);

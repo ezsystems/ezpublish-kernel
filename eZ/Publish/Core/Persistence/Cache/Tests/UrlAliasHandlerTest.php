@@ -28,7 +28,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tags, array? $key
         return [
             ['publishUrlAliasForLocation', [44, 2, 'name', 'eng-GB', true, false], ['urlAlias-location-44', 'urlAlias-location-path-44', 'urlAlias-notFound']],
             ['createCustomUrlAlias', [44, '1/2/44', true, null, false], ['urlAlias-location-44', 'urlAlias-location-path-44', 'urlAlias-notFound']],

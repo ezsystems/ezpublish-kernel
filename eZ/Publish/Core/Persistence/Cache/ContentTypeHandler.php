@@ -52,10 +52,8 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         $this->getTypeTags = static function (Type $type) {
             return [
-                'type',
+                'type', // For use by deleteByUserAndStatus() as it currently lacks return value for affected type ids
                 'type-' . $type->id,
-                'type-modifierId-' . $type->modifierId,
-                'type-creatorId-' . $type->creatorId,
             ];
         };
         $this->getTypeKeys = static function (Type $type, int $status = Type::STATUS_DEFINED) {
@@ -205,8 +203,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
                 return $this->persistenceHandler->contentTypeHandler()->loadContentTypeList($contentTypeIds);
             },
             $this->getTypeTags,
-            $this->getTypeKeys,
-            '-' . Type::STATUS_DEFINED
+            $this->getTypeKeys
         );
     }
 
@@ -215,6 +212,12 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function load($typeId, $status = Type::STATUS_DEFINED)
     {
+        if ($status !== Type::STATUS_DEFINED) {
+            $this->logger->logCall(__METHOD__, ['type' => $typeId, 'status' => $status]);
+
+            return $this->persistenceHandler->contentTypeHandler()->load($typeId, $status);
+        }
+
         $getTypeKeysFn = $this->getTypeKeys;
 
         return $this->getCacheValue(
@@ -226,8 +229,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             $this->getTypeTags,
             static function (Type $type) use ($status, $getTypeKeysFn) {
                 return $getTypeKeysFn($type, $status);
-            },
-            '-' . $status
+            }
         );
     }
 
@@ -295,8 +297,6 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         if ($status === Type::STATUS_DEFINED) {
             $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
-        } else {
-            $this->cache->deleteItems(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $type;
@@ -312,8 +312,6 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         if ($status === Type::STATUS_DEFINED) {
             $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
-        } else {
-            $this->cache->deleteItems(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $return;
@@ -326,8 +324,6 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     {
         $this->logger->logCall(__METHOD__, ['modifier' => $modifierId, 'type' => $typeId]);
         $draft = $this->persistenceHandler->contentTypeHandler()->createDraft($modifierId, $typeId);
-
-        $this->cache->deleteItems(['ez-content-type-' . $typeId . '-' . Type::STATUS_DRAFT]);
 
         return $draft;
     }
@@ -352,8 +348,6 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         if ($status === Type::STATUS_DEFINED) {
             $this->cache->invalidateTags(['type-' . $typeId]);
-        } else {
-            $this->cache->deleteItems(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $return;
@@ -371,8 +365,6 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             $this->cache->invalidateTags(['type-' . $typeId]);
             // Clear loadContentTypes() cache as we effetely add an item to it's collection here.
             $this->cache->deleteItems(['ez-content-type-list-by-group-' . $groupId]);
-        } else {
-            $this->cache->deleteItems(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $return;
@@ -412,8 +404,6 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         if ($status === Type::STATUS_DEFINED) {
             $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
-        } else {
-            $this->cache->deleteItems(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $return;
@@ -433,8 +423,6 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         if ($status === Type::STATUS_DEFINED) {
             $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
-        } else {
-            $this->cache->deleteItems(['ez-content-type-' . $typeId . '-' . $status]);
         }
     }
 
@@ -452,8 +440,6 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         if ($status === Type::STATUS_DEFINED) {
             $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
-        } else {
-            $this->cache->deleteItems(['ez-content-type-' . $typeId . '-' . $status]);
         }
     }
 
@@ -519,7 +505,12 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
     public function deleteByUserAndStatus(int $userId, int $status): void
     {
+        $this->logger->logCall(__METHOD__, ['user' => $userId, 'status' => $status]);
+
         $this->persistenceHandler->contentTypeHandler()->deleteByUserAndStatus($userId, $status);
-        $this->cache->invalidateTags(['type-modifierId-' . $userId, 'type-creatorId-' . $userId]);
+        if ($status === Type::STATUS_DEFINED) {
+            // As we don't have indication of affected type id's yet here, we need to clear all type cache for now.
+            $this->cache->invalidateTags(['type']);
+        }
     }
 }
