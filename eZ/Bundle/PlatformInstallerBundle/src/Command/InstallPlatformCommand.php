@@ -166,9 +166,9 @@ class InstallPlatformCommand extends Command
      * IMPORTANT: This is done using a command because config has change, so container and all services are different.
      *
      * @param OutputInterface $output
-     * @param null|string $siteaccess
+     * @param string|null $siteaccess
      */
-    private function indexData(OutputInterface $output, string $siteaccess = null)
+    private function indexData(OutputInterface $output, $siteaccess = null)
     {
         $output->writeln(
             sprintf('Search engine re-indexing, executing command ezplatform:reindex')
