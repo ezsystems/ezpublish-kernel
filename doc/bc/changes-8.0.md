@@ -17,7 +17,8 @@ Changes affecting version compatibility with former or future versions.
 * The following configuration nodes are not available anymore:
     * `ezpublish.<scope>.ezpage.*`
     * `ezpublish.<scope>.block_view.*`
-
+    * `ezpublish.siteaccess.relation_map` is replaced by `getSiteAccessesRelation` method from `eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessService` 
+    
 * REST Client has been dropped.
 
 * REST Server implementation and Common namespace have been removed in favor of
@@ -268,6 +269,8 @@ Changes affecting version compatibility with former or future versions.
 * `ezpublish.field_type_collection.factory` has been removed in favor of `eZ\Publish\Core\FieldType\FieldTypeRegistry`
 
 * `ezpublish.persistence.external_storage_registry.factory`
+
+* `ezpublish.config.resolver.core` has been removed. `eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver` should be used instead
 
 ## Changed behavior
 
