@@ -3156,13 +3156,13 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $userService = $this->getRepository()->getUserService();
 
-        $newOwner = $this->createUser('new_owner', 'foo', 'bar');
+        $owner = $this->createUser('new_owner', 'foo', 'bar');
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $contentVersion2 */
         $contentVersion2 = $this->createContentDraftVersion1(
             $parentLocationId,
             self::FORUM_IDENTIFIER,
             'name',
-            $newOwner
+            $owner
         );
 
         // Configure new target location
@@ -3174,6 +3174,9 @@ class ContentServiceTest extends BaseContentServiceTest
         $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
+        $this->contentService->publishVersion($contentVersion2->versionInfo);
+        $this->contentService->createContentDraft($contentVersion2->contentInfo);
+
         // Copy content with all versions and drafts
         $contentCopied = $this->contentService->copyContent(
             $contentVersion2->contentInfo,
@@ -3181,13 +3184,23 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertEquals(
-            $newOwner->id,
+            $owner->id,
             $contentVersion2->contentInfo->ownerId
         );
+        $newOwnerId = $userService->loadUserByLogin('admin')->getUserId();
         $this->assertEquals(
-            $userService->loadUserByLogin('admin')->getUserId(),
+            $newOwnerId,
             $contentCopied->contentInfo->ownerId
         );
+        $versions = $this->contentService->loadVersions($contentCopied->contentInfo);
+        $this->assertCount(2, $versions);
+
+        foreach ($versions as $version) {
+            $this->assertEquals(
+                $newOwnerId,
+                $version->creatorId
+            );
+        }
     }
 
     /**
