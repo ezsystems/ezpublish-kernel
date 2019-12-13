@@ -15,9 +15,7 @@ services:
         class: eZ\Publish\Core\MVC\Symfony\SiteAccess
         arguments: ["%ezpublish.siteaccess.default.name%", 'uninitialized']
 
-    ezpublish.config.resolver.default:
-        public: true
-        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver\DefaultScopeConfigResolver
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver\DefaultScopeConfigResolver:
         arguments:
             - '%ezpublish.config.default_scope%'
         calls:
@@ -26,8 +24,7 @@ services:
         tags:
             - { name: ezpublish.config.resolver, priority: 0 }
 
-    ezpublish.config.resolver.siteaccess_group:
-        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver\SiteAccessGroupConfigResolver
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver\SiteAccessGroupConfigResolver:
         arguments:
             - '@ezpublish.siteaccess.provider'
             - '%ezpublish.config.default_scope%'
@@ -38,8 +35,7 @@ services:
         tags:
             - { name: ezpublish.config.resolver, priority: 50 }
 
-    ezpublish.config.resolver.siteaccess_static:
-        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver\StaticSiteAccessConfigResolver
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver\StaticSiteAccessConfigResolver:
         arguments:
             - '@ezpublish.siteaccess.provider'
             - '%ezpublish.config.default_scope%'
@@ -50,9 +46,7 @@ services:
         tags:
             - { name: ezpublish.config.resolver, priority: 100 }
 
-    ezpublish.config.resolver.global:
-        public: true
-        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver\GlobalScopeConfigResolver
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver\GlobalScopeConfigResolver:
         arguments:
             - '%ezpublish.config.default_scope%'
         calls:
@@ -61,13 +55,12 @@ services:
         tags:
             - { name: ezpublish.config.resolver, priority: 255 }
 
-    ezpublish.config.resolver.chain:
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver:
         public: true # @todo should be private
-        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
 
     ezpublish.config.resolver:
         public: true # @todo should be private
-        alias: ezpublish.config.resolver.chain
+        alias: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
 
     ezpublish.config.dynamic_setting.parser:
         class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser

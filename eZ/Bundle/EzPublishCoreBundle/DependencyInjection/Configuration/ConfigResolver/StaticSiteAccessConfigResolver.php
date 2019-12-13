@@ -11,6 +11,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * @property-read \Symfony\Component\DependencyInjection\ContainerInterface $container
+ *
+ * @internal
  */
 class StaticSiteAccessConfigResolver extends SiteAccessConfigResolver
 {

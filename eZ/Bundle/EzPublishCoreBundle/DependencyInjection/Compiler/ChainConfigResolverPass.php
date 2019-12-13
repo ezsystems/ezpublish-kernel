@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -22,11 +23,11 @@ class ChainConfigResolverPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('ezpublish.config.resolver.chain')) {
+        if (!$container->hasDefinition(ChainConfigResolver::class)) {
             return;
         }
 
-        $chainResolver = $container->getDefinition('ezpublish.config.resolver.chain');
+        $chainResolver = $container->getDefinition(ChainConfigResolver::class);
 
         foreach ($container->findTaggedServiceIds('ezpublish.config.resolver') as $id => $attributes) {
             $priority = isset($attributes[0]['priority']) ? (int)$attributes[0]['priority'] : 0;

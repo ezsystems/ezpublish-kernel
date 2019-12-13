@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 
+/**
+ * @internal
+ */
 class DefaultScopeConfigResolver extends ContainerConfigResolver
 {
     private const SCOPE_NAME = 'default';

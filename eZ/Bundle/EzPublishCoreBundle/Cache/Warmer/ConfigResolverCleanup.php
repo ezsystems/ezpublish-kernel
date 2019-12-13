@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Cache\Warmer;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
@@ -26,7 +27,6 @@ class ConfigResolverCleanup implements CacheWarmerInterface
 
     public function warmUp($cacheDir)
     {
-        $this->container->set('ezpublish.config.resolver.core', null);
-        $this->container->set('ezpublish.config.resolver.chain', null);
+        $this->container->set(ChainConfigResolver::class, null);
     }
 }

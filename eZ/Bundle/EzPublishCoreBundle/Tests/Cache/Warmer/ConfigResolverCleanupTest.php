@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Cache\Warmer;
 
 use eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ConfigResolverCleanup;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\DependencyInjection\Container;
@@ -23,16 +24,13 @@ class ConfigResolverCleanupTest extends TestCase
     public function testWarmup()
     {
         $container = new Container();
-        $container->set('ezpublish.config.resolver.core', new stdClass());
-        $container->set('ezpublish.config.resolver.chain', new stdClass());
-        self::assertTrue($container->initialized('ezpublish.config.resolver.core'));
-        self::assertTrue($container->initialized('ezpublish.config.resolver.chain'));
+        $container->set(ChainConfigResolver::class, new stdClass());
+        self::assertTrue($container->initialized(ChainConfigResolver::class));
 
         $warmer = new ConfigResolverCleanup();
         $warmer->setContainer($container);
         $warmer->warmUp('my_cache_dir');
 
-        self::assertFalse($container->initialized('ezpublish.config.resolver.core'));
-        self::assertFalse($container->initialized('ezpublish.config.resolver.chain'));
+        self::assertFalse($container->initialized(ChainConfigResolver::class));
     }
 }

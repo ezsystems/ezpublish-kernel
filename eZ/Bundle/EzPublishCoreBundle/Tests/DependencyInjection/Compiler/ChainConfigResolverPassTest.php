@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -19,7 +20,7 @@ class ChainConfigResolverPassTest extends AbstractCompilerPassTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->setDefinition('ezpublish.config.resolver.chain', new Definition());
+        $this->setDefinition(ChainConfigResolver::class, new Definition());
     }
 
     /**
@@ -54,7 +55,7 @@ class ChainConfigResolverPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.config.resolver.chain',
+            ChainConfigResolver::class,
             'addResolver',
             [new Reference($serviceId), $expectedPriority]
         );
