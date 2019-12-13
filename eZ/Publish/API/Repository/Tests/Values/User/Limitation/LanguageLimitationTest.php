@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Limitation\Target\Builder\VersionBuilder;
 
 /**
  * Test cases for ContentService APIs calls made by user with LanguageLimitation on chosen policies.
@@ -115,6 +116,42 @@ class LanguageLimitationTest extends BaseTest
                 $folder->getField('name', $languageCode)->value->text
             );
         }
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\PermissionResolver::canUser
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testEditContentWithLimitationTargets(): void
+    {
+        $allowedTranslationsList = ['ger-DE'];
+        $expectedCanUserResult = false;
+
+        $repository = $this->getRepository();
+
+        // prepare test data as an admin
+        $content = $this->createFolder(['eng-GB' => 'BrE Folder'], 2);
+
+        $permissionResolver = $repository->getPermissionResolver();
+        $permissionResolver->setCurrentUserReference(
+            $this->createEditorUserWithLanguageLimitation($allowedTranslationsList)
+        );
+
+        $actualCanUserResult = $permissionResolver->canUser(
+            'content',
+            'edit',
+            $content->contentInfo,
+            [
+                (new VersionBuilder())
+                    ->translateToAnyLanguageOf($content->getVersionInfo()->languageCodes)
+                    ->build(),
+            ]
+        );
+
+        self::assertSame($expectedCanUserResult, $actualCanUserResult);
     }
 
     /**
