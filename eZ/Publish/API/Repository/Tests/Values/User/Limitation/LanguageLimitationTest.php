@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Limitation\Target\Builder\VersionBuilder;
 
 /**
  * Test cases for ContentService APIs calls made by user with LanguageLimitation on chosen policies.
@@ -115,6 +116,113 @@ class LanguageLimitationTest extends BaseTest
                 $folder->getField('name', $languageCode)->value->text
             );
         }
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\PermissionResolver::canUser
+     *
+     * @dataProvider providerForCanUserWithLimitationTargets
+     *
+     * @param array $folderNames names of a folder to create as test content
+     * @param array $allowedTranslationsList a list of language codes of translations a user is allowed to edit
+     * @param \eZ\Publish\SPI\Limitation\Target[] $targets
+     * @param bool $expectedCanUserResult
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCanUserWithLimitationTargets(
+        string $policyModule,
+        string $policyFunction,
+        array $folderNames,
+        array $allowedTranslationsList,
+        array $targets,
+        bool $expectedCanUserResult
+    ): void {
+        $repository = $this->getRepository();
+
+        // prepare test data as an admin
+        $content = $this->createFolder($folderNames, 2);
+
+        $permissionResolver = $repository->getPermissionResolver();
+        $permissionResolver->setCurrentUserReference(
+            $this->createEditorUserWithLanguageLimitation($allowedTranslationsList)
+        );
+
+        $actualCanUserResult = $permissionResolver->canUser(
+            $policyModule,
+            $policyFunction,
+            $content->contentInfo,
+            $targets
+        );
+
+        self::assertSame(
+            $expectedCanUserResult,
+            $actualCanUserResult,
+            "canUser('{$policyModule}', '{$policyFunction}') returned unexpected result"
+        );
+    }
+
+    /**
+     * Data provider for testEditContentWithLimitationTargets.
+     *
+     * @return array
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function providerForCanUserWithLimitationTargets(): array
+    {
+        return [
+            'Editing a content before translating it' => [
+                'content',
+                'edit',
+                ['eng-GB' => 'BrE Folder'],
+                ['ger-DE'],
+                [
+                    (new VersionBuilder())
+                        ->translateToAnyLanguageOf(['ger-DE'])
+                        ->build(),
+                ],
+                true,
+            ],
+            'Publishing the specific translation of a content item' => [
+                'content',
+                'publish',
+                ['eng-GB' => 'BrE Folder', 'ger-DE' => 'DE Folder'],
+                ['ger-DE'],
+                [
+                    (new VersionBuilder())
+                        ->publishTranslations(['ger-DE'])
+                        ->build(),
+                ],
+                true,
+            ],
+            'Not being able to edit a content before translating it' => [
+                'content',
+                'edit',
+                ['eng-GB' => 'BrE Folder'],
+                ['ger-DE'],
+                [
+                    (new VersionBuilder())
+                        ->translateToAnyLanguageOf(['eng-GB'])
+                        ->build(),
+                ],
+                false,
+            ],
+            'Not being able to publish the specific translation of a content item' => [
+                'content',
+                'publish',
+                ['eng-GB' => 'BrE Folder', 'ger-DE' => 'DE Folder'],
+                ['ger-DE'],
+                [
+                    (new VersionBuilder())
+                        ->publishTranslations(['eng-GB'])
+                        ->build(),
+                ],
+                false,
+            ],
+        ];
     }
 
     /**
