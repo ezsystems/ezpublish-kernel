@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\ThumbnailStrategy;
 final class ContentFieldStrategy implements ThumbnailStrategy
 {
     /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\ThumbnailStrategy[] */
-    protected $strategies = [];
+    private $strategies = [];
 
     public function __construct(array $strategies = [])
     {
