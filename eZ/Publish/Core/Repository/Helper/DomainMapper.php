@@ -542,25 +542,40 @@ class DomainMapper
         //  first known commit of eZ Publish 3.x
         $legacyDateTime = $this->getDateTime(1030968000);
 
+        $contentInfo = new ContentInfo([
+            'id' => 0,
+            'name' => 'Top Level Nodes',
+            'sectionId' => 1,
+            'mainLocationId' => 1,
+            'contentTypeId' => 1,
+            'currentVersionNo' => 1,
+            'published' => 1,
+            'ownerId' => 14, // admin user
+            'modificationDate' => $legacyDateTime,
+            'publishedDate' => $legacyDateTime,
+            'alwaysAvailable' => 1,
+            'remoteId' => null,
+            'mainLanguageCode' => 'eng-GB',
+        ]);
+
+        $content = new Content([
+            'versionInfo' => new VersionInfo([
+                'names' => [
+                    $contentInfo->mainLanguageCode => $contentInfo->name,
+                ],
+                'contentInfo' => $contentInfo,
+                'versionNo' => $contentInfo->currentVersionNo,
+                'modificationDate' => $contentInfo->modificationDate,
+                'creationDate' => $contentInfo->modificationDate,
+                'creatorId' => $contentInfo->ownerId,
+            ])
+        ]);
+
         // NOTE: this is hardcoded workaround for missing ContentInfo on root location
         return $this->mapLocation(
             $spiLocation,
-            new ContentInfo([
-                'id' => 0,
-                'name' => 'Top Level Nodes',
-                'sectionId' => 1,
-                'mainLocationId' => 1,
-                'contentTypeId' => 1,
-                'currentVersionNo' => 1,
-                'published' => 1,
-                'ownerId' => 14, // admin user
-                'modificationDate' => $legacyDateTime,
-                'publishedDate' => $legacyDateTime,
-                'alwaysAvailable' => 1,
-                'remoteId' => null,
-                'mainLanguageCode' => 'eng-GB',
-            ]),
-            new Content([])
+            $contentInfo,
+            $content
         );
     }
 
