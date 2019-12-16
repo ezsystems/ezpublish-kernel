@@ -75,6 +75,9 @@ class Legacy extends SetupFactory
 
     protected $repositoryReference = 'ezpublish.api.repository';
 
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
+
     /**
      * Creates a new setup factory.
      */
@@ -179,19 +182,22 @@ class Legacy extends SetupFactory
 
     /**
      * Insert the database data.
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function insertData()
+    public function insertData(): void
     {
         $data = $this->getInitialData();
-        $handler = $this->getDatabaseHandler();
-        $connection = $handler->getConnection();
+        $connection = $this->getDatabaseConnection();
         $dbPlatform = $connection->getDatabasePlatform();
         $this->cleanupVarDir($this->getInitialVarDir());
 
         foreach (array_reverse(array_keys($data)) as $table) {
             try {
                 // Cleanup before inserting (using TRUNCATE for speed, however not possible to rollback)
-                $connection->executeUpdate($dbPlatform->getTruncateTableSql($handler->quoteIdentifier($table)));
+                $connection->executeUpdate(
+                    $dbPlatform->getTruncateTableSql($this->connection->quoteIdentifier($table))
+                );
             } catch (DBALException | PDOException $e) {
                 // Fallback to DELETE if TRUNCATE failed (because of FKs for instance)
                 $connection->createQueryBuilder()->delete($table)->execute();
@@ -204,37 +210,26 @@ class Legacy extends SetupFactory
                 continue;
             }
 
-            $q = $handler->createInsertQuery();
-            $q->insertInto($handler->quoteIdentifier($table));
-
-            // Contains the bound parameters
-            $values = [];
-
-            // Binding the parameters
-            foreach ($rows[0] as $col => $val) {
-                $q->set(
-                    $handler->quoteIdentifier($col),
-                    $q->bindParam($values[$col])
-                );
-            }
-
-            $stmt = $q->prepare();
+            $query = $connection->createQueryBuilder();
+            $columns = array_keys($rows[0]);
+            $query
+                ->insert($table)
+                ->values(
+                    array_combine(
+                        $columns,
+                        array_map(
+                            function (string $columnName) {
+                                return ":{$columnName}";
+                            },
+                            $columns
+                        )
+                    )
+                )
+            ;
 
             foreach ($rows as $row) {
-                try {
-                    // This CANNOT be replaced by:
-                    // $values = $row
-                    // each $values[$col] is a PHP reference which should be
-                    // kept for parameters binding to work
-                    foreach ($row as $col => $val) {
-                        $values[$col] = $val;
-                    }
-
-                    $stmt->execute();
-                } catch (Exception $e) {
-                    echo "$table ( ", implode(', ', $row), " )\n";
-                    throw $e;
-                }
+                $query->setParameters($row);
+                $query->execute();
             }
         }
 
@@ -303,7 +298,7 @@ class Legacy extends SetupFactory
      *
      * @return array
      */
-    protected function getInitialData()
+    protected function getInitialData(): array
     {
         if (!isset(self::$initialData)) {
             $testDataFilePath = __DIR__ . '/../_fixtures/Legacy/data/test_data.yaml';
@@ -334,25 +329,16 @@ class Legacy extends SetupFactory
     /**
      * Applies the given SQL $statements to the database in use.
      *
-     * @param array $statements
-     */
-    protected function applyStatements(array $statements)
-    {
-        foreach ($statements as $statement) {
-            $this->getDatabaseHandler()->exec($statement);
-        }
-    }
-
-    // ************* Setup copied and refactored from common.php ************
-
-    /**
-     * Returns the database handler from the service container.
+     * @param string[] $statements SQL statements
      *
-     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getDatabaseHandler()
+    protected function applyStatements(array $statements): void
     {
-        return $this->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.dbhandler');
+        $connection = $this->getDatabaseConnection();
+        foreach ($statements as $statement) {
+            $connection->exec($statement);
+        }
     }
 
     /**
@@ -362,7 +348,11 @@ class Legacy extends SetupFactory
      */
     private function getDatabaseConnection(): Connection
     {
-        return $this->getServiceContainer()->get('ezpublish.persistence.connection');
+        if (null === $this->connection) {
+            $this->connection = $this->getServiceContainer()->get('ezpublish.persistence.connection');
+        }
+
+        return $this->connection;
     }
 
     /**
