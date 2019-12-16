@@ -23,6 +23,7 @@ use Exception;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Symfony\Component\Filesystem\Filesystem;
 use eZ\Publish\Core\Base\Container\Compiler;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -305,7 +306,8 @@ class Legacy extends SetupFactory
     protected function getInitialData()
     {
         if (!isset(self::$initialData)) {
-            self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php';
+            $testDataFilePath = __DIR__ . '/../_fixtures/Legacy/data/test_data.yaml';
+            self::$initialData = Yaml::parseFile($testDataFilePath);
         }
 
         return self::$initialData;
