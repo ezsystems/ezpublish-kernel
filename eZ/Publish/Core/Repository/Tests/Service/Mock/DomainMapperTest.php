@@ -200,7 +200,8 @@ class DomainMapperTest extends BaseServiceMockTest
             $this->getTypeHandlerMock(),
             $this->getContentTypeDomainMapperMock(),
             $this->getLanguageHandlerMock(),
-            $this->getFieldTypeRegistryMock()
+            $this->getFieldTypeRegistryMock(),
+            $this->getThumbnailStrategy()
         );
     }
 

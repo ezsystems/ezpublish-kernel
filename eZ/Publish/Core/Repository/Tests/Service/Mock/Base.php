@@ -11,6 +11,7 @@ use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
+use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -38,6 +39,9 @@ abstract class Base extends TestCase
 
     /** @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $persistenceMock;
+
+    /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy|\PHPUnit\Framework\MockObject\MockObject */
+    private $thumbnailStrategyMock;
 
     /**
      * The Content / Location / Search ... handlers for the persistence / Search / .. handler mocks.
@@ -68,6 +72,7 @@ abstract class Base extends TestCase
                 $this->getRelationProcessorMock(),
                 $this->getFieldTypeRegistryMock(),
                 $this->createMock(PasswordHashServiceInterface::class),
+                $this->getThumbnailStrategy(),
                 $serviceSettings,
             );
 
@@ -107,6 +112,18 @@ abstract class Base extends TestCase
         }
 
         return $this->fieldTypeRegistryMock;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getThumbnailStrategy()
+    {
+        if (!isset($this->thumbnailStrategyMock)) {
+            $this->thumbnailStrategyMock = $this->createMock(ThumbnailStrategy::class);
+        }
+
+        return $this->thumbnailStrategyMock;
     }
 
     /**
