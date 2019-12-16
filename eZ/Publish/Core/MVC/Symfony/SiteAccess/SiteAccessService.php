@@ -58,7 +58,7 @@ class SiteAccessService implements SiteAccessServiceInterface, SiteAccessAware
 
     public function getCurrent(): ?SiteAccess
     {
-        if ($this->siteAccess === null){
+        if ($this->siteAccess === null) {
             return null;
         }
 
