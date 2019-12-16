@@ -153,6 +153,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         $loader->load('tests/integration_legacy.yml');
         $loader->load('policies.yml');
         $loader->load('events.yml');
+        $loader->load('thumbnails.yml');
 
         $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
