@@ -39,16 +39,22 @@ class LanguageLimitationType implements SPITargetAwareLimitationType
     /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     private $persistenceContentHandler;
 
+    /** @var \eZ\Publish\Core\Limitation\LanguageLimitation\VersionTargetEvaluator[] */
+    private $versionTargetEvaluators;
+
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $persistenceLanguageHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $persistenceContentHandler
+     * @param \eZ\Publish\Core\Limitation\LanguageLimitation\VersionTargetEvaluator[] $versionTargetEvaluators
      */
     public function __construct(
         SPIPersistenceLanguageHandler $persistenceLanguageHandler,
-        SPIPersistenceContentHandler $persistenceContentHandler
+        SPIPersistenceContentHandler $persistenceContentHandler,
+        iterable $versionTargetEvaluators
     ) {
         $this->persistenceLanguageHandler = $persistenceLanguageHandler;
         $this->persistenceContentHandler = $persistenceContentHandler;
+        $this->versionTargetEvaluators = $versionTargetEvaluators;
     }
 
     /**
@@ -235,63 +241,18 @@ class LanguageLimitationType implements SPITargetAwareLimitationType
         Target\Version $version,
         APILimitationValue $value
     ): ?bool {
-        // intentionally evaluate all conditions separately from the least to the most important
         $accessVote = self::ACCESS_ABSTAIN;
 
-        // allow creating new drafts
-        if ($version->newStatus === VersionInfo::STATUS_DRAFT) {
-            $accessVote = self::ACCESS_GRANTED;
-        }
-
-        // ... unless there's a specific list of target translations
-        if (!empty($version->allLanguageCodesList)) {
-            $accessVote = $this->evaluateMatchingAnyLimitation(
-                $version->allLanguageCodesList,
-                $value->limitationValues
-            );
-        }
-
-        // ... or there's an intent to update Version
-        if (!empty($version->forUpdateLanguageCodesList) || null !== $version->forUpdateInitialLanguageCode) {
-            if (!empty($version->forUpdateLanguageCodesList)) {
-                $diff = array_diff($version->forUpdateLanguageCodesList, $value->limitationValues);
-                $accessVote = empty($diff) ? self::ACCESS_GRANTED : self::ACCESS_DENIED;
+        foreach ($this->versionTargetEvaluators as $evaluator) {
+            if ($evaluator->accept($version)) {
+                $accessVote = $evaluator->evaluate($version, $value);
+                if ($accessVote === self::ACCESS_DENIED) {
+                    return $accessVote;
+                }
             }
-
-            if ($accessVote !== self::ACCESS_DENIED && null !== $version->forUpdateInitialLanguageCode) {
-                $accessVote = in_array(
-                    $version->forUpdateInitialLanguageCode,
-                    $value->limitationValues
-                )
-                    ? self::ACCESS_GRANTED
-                    : self::ACCESS_DENIED;
-            }
-        }
-
-        // intent to publish Version in specified languages
-        if (!empty($version->forPublishLanguageCodesList)) {
-            $diff = array_diff($version->forPublishLanguageCodesList, $value->limitationValues);
-            $accessVote = empty($diff) ? self::ACCESS_GRANTED : self::ACCESS_DENIED;
         }
 
         return $accessVote;
-    }
-
-    /**
-     * Allow access if any of the given language codes for translations matches any of the limitation values.
-     *
-     * @param string[] $languageCodesList
-     * @param string[] $limitationValues
-     *
-     * @return bool
-     */
-    private function evaluateMatchingAnyLimitation(
-        array $languageCodesList,
-        array $limitationValues
-    ): bool {
-        return empty(array_intersect($languageCodesList, $limitationValues))
-            ? self::ACCESS_DENIED
-            : self::ACCESS_GRANTED;
     }
 
     /**
