@@ -98,8 +98,8 @@ services:
             $fieldTypeService: '@ezpublish.api.service.field_type'
             $contentFieldStrategy: '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\Field\ContentFieldStrategy'
         tags:
-            - { name: kernel.thumbnail_strategy, priority: 0 }
+            - { name: ezplatform.spi.content.thumbnail_strategy, priority: 0 }
 
     eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy:
         arguments:
-            $strategies: !tagged_iterator kernel.thumbnail_strategy
+            $strategies: !tagged_iterator ezplatform.spi.content.thumbnail_strategy
