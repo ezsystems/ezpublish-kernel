@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use DateTime;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
@@ -15,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Helper\DomainMapper;
 use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
@@ -48,10 +50,37 @@ class DomainMapperTest extends BaseServiceMockTest
         $spiRootLocation = new Location(['id' => 1, 'parentId' => 1]);
         $apiRootLocation = $this->getDomainMapper()->buildLocationWithContent($spiRootLocation, null);
 
-        $expectedContentInfo = new ContentInfo([
+        $legacyDateTime = new DateTime();
+        $legacyDateTime->setTimestamp(1030968000);
+
+        $expectedContentInfo = new \eZ\Publish\API\Repository\Values\Content\ContentInfo([
             'id' => 0,
+            'name' => 'Top Level Nodes',
+            'sectionId' => 1,
+            'mainLocationId' => 1,
+            'contentTypeId' => 1,
+            'currentVersionNo' => 1,
+            'published' => 1,
+            'ownerId' => 14,
+            'modificationDate' => $legacyDateTime,
+            'publishedDate' => $legacyDateTime,
+            'alwaysAvailable' => 1,
+            'remoteId' => null,
+            'mainLanguageCode' => 'eng-GB',
         ]);
-        $expectedContent = new Content();
+
+        $expectedContent = new Content([
+            'versionInfo' => new VersionInfo([
+                'names' => [
+                    $expectedContentInfo->mainLanguageCode => $expectedContentInfo->name,
+                ],
+                'contentInfo' => $expectedContentInfo,
+                'versionNo' => $expectedContentInfo->currentVersionNo,
+                'modificationDate' => $expectedContentInfo->modificationDate,
+                'creationDate' => $expectedContentInfo->modificationDate,
+                'creatorId' => $expectedContentInfo->ownerId,
+            ])
+        ]);
 
         $this->assertInstanceOf(APILocation::class, $apiRootLocation);
         $this->assertEquals($spiRootLocation->id, $apiRootLocation->id);
