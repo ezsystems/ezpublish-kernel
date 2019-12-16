@@ -696,7 +696,7 @@ class DoctrineDatabase extends Gateway
             $q->bindValue(($fieldDefinition->isTranslatable ? 1 : 0), null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('is_thumbnail'),
-            $q->bindValue($fieldDefinition->isThumbnail, null, \PDO::PARAM_BOOL)
+            $q->bindValue((bool)$fieldDefinition->isThumbnail, null, \PDO::PARAM_BOOL)
         )->set(
             $this->dbHandler->quoteColumn('is_required'),
             $q->bindValue(($fieldDefinition->isRequired ? 1 : 0), null, \PDO::PARAM_INT)

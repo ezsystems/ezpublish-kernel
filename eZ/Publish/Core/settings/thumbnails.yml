@@ -1,0 +1,37 @@
+parameters:
+    image_alias.placeholder_providers: []
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    eZ\Publish\Core\FieldType\Image\ImageThumbnailStrategy:
+        lazy: true
+        arguments:
+            $variationHandler: '@ezpublish.image_alias.imagine.variation.imagine_alias_generator'
+            $variationName: 'medium'
+
+    eZ\Publish\Core\FieldType\ImageAsset\ImageAssetThumbnailStrategy:
+        lazy: true
+        arguments:
+            $thumbnailStrategy: '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
+            $contentService: '@ezpublish.api.service.content'
+
+    eZ\Publish\Core\Repository\Strategy\ContentThumbnail\Field\ContentFieldStrategy:
+        arguments:
+            $strategies:
+                ezimage: '@eZ\Publish\Core\FieldType\Image\ImageThumbnailStrategy'
+                ezimageasset: '@eZ\Publish\Core\FieldType\ImageAsset\ImageAssetThumbnailStrategy'
+
+    eZ\Publish\Core\Repository\Strategy\ContentThumbnail\FirstMatchingFieldStrategy:
+        arguments:
+            $fieldTypeService: '@ezpublish.api.service.field_type'
+            $contentFieldStrategy: '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\Field\ContentFieldStrategy'
+        tags:
+            - { name: ezplatform.spi.content.thumbnail_strategy, priority: 0 }
+
+    eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy:
+        arguments:
+            $strategies: !tagged_iterator ezplatform.spi.content.thumbnail_strategy
