@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+    _instanceof:
+        eZ\Publish\Core\Limitation\LanguageLimitation\VersionTargetEvaluator:
+            tags:
+                - { name: ezplatform.limitation.language.version_target_evaluator }
+
+    eZ\Publish\Core\Limitation\LanguageLimitation\:
+        resource: '../../Limitation/LanguageLimitation/*'
