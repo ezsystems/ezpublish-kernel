@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
@@ -68,6 +69,7 @@ abstract class Base extends TestCase
                 $this->getRelationProcessorMock(),
                 $this->getFieldTypeRegistryMock(),
                 $this->createMock(PasswordHashServiceInterface::class),
+                $this->createMock(ProxyDomainMapperFactory::class),
                 $serviceSettings,
             );
 
