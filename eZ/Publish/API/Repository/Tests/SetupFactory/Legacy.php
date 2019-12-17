@@ -9,11 +9,11 @@
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\PDOException;
-use Doctrine\DBAL\Schema\Schema;
 use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
 use eZ\Publish\Core\Base\ServiceContainer;
+use eZ\Publish\SPI\Tests\Persistence\Fixture;
+use eZ\Publish\SPI\Tests\Persistence\FixtureImporter;
+use eZ\Publish\SPI\Tests\Persistence\YamlFixture;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
@@ -23,7 +23,6 @@ use Exception;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Symfony\Component\Filesystem\Filesystem;
 use eZ\Publish\Core\Base\Container\Compiler;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -67,11 +66,18 @@ class Legacy extends SetupFactory
     protected static $schemaInitialized = false;
 
     /**
-     * Initial database data.
+     * Cached in-memory initial database data fixture.
      *
-     * @var array
+     * @var \eZ\Publish\SPI\Tests\Persistence\Fixture
      */
-    protected static $initialData;
+    private static $initialDataFixture;
+
+    /**
+     * Cached in-memory post insert SQL statements.
+     *
+     * @var string[]
+     */
+    private static $postInsertStatements;
 
     protected $repositoryReference = 'ezpublish.api.repository';
 
@@ -187,53 +193,11 @@ class Legacy extends SetupFactory
      */
     public function insertData(): void
     {
-        $data = $this->getInitialData();
         $connection = $this->getDatabaseConnection();
-        $dbPlatform = $connection->getDatabasePlatform();
         $this->cleanupVarDir($this->getInitialVarDir());
 
-        foreach (array_reverse(array_keys($data)) as $table) {
-            try {
-                // Cleanup before inserting (using TRUNCATE for speed, however not possible to rollback)
-                $connection->executeUpdate(
-                    $dbPlatform->getTruncateTableSql($this->connection->quoteIdentifier($table))
-                );
-            } catch (DBALException | PDOException $e) {
-                // Fallback to DELETE if TRUNCATE failed (because of FKs for instance)
-                $connection->createQueryBuilder()->delete($table)->execute();
-            }
-        }
-
-        foreach ($data as $table => $rows) {
-            // Check that at least one row exists
-            if (!isset($rows[0])) {
-                continue;
-            }
-
-            $query = $connection->createQueryBuilder();
-            $columns = array_keys($rows[0]);
-            $query
-                ->insert($table)
-                ->values(
-                    array_combine(
-                        $columns,
-                        array_map(
-                            function (string $columnName) {
-                                return ":{$columnName}";
-                            },
-                            $columns
-                        )
-                    )
-                )
-            ;
-
-            foreach ($rows as $row) {
-                $query->setParameters($row);
-                $query->execute();
-            }
-        }
-
-        $this->applyStatements($this->getPostInsertStatements());
+        $fixtureImporter = new FixtureImporter($connection);
+        $fixtureImporter->import($this->getInitialDataFixture());
     }
 
     protected function getInitialVarDir()
@@ -278,34 +242,19 @@ class Legacy extends SetupFactory
     }
 
     /**
-     * Returns statements to be executed after data insert.
+     * Returns the initial database data fixture.
      *
-     * @return string[]
+     * @return \eZ\Publish\SPI\Tests\Persistence\Fixture
      */
-    protected function getPostInsertStatements()
+    protected function getInitialDataFixture(): Fixture
     {
-        if (self::$db === 'pgsql') {
-            $setvalPath = __DIR__ . '/../../../../Core/Persistence/Legacy/Tests/_fixtures/setval.pgsql.sql';
-
-            return array_filter(preg_split('(;\\s*$)m', file_get_contents($setvalPath)));
+        if (!isset(self::$initialDataFixture)) {
+            self::$initialDataFixture = new YamlFixture(
+                __DIR__ . '/../_fixtures/Legacy/data/test_data.yaml'
+            );
         }
 
-        return [];
-    }
-
-    /**
-     * Returns the initial database data.
-     *
-     * @return array
-     */
-    protected function getInitialData(): array
-    {
-        if (!isset(self::$initialData)) {
-            $testDataFilePath = __DIR__ . '/../_fixtures/Legacy/data/test_data.yaml';
-            self::$initialData = Yaml::parseFile($testDataFilePath);
-        }
-
-        return self::$initialData;
+        return self::$initialDataFixture;
     }
 
     /**
@@ -323,21 +272,6 @@ class Legacy extends SetupFactory
             );
 
             self::$schemaInitialized = true;
-        }
-    }
-
-    /**
-     * Applies the given SQL $statements to the database in use.
-     *
-     * @param string[] $statements SQL statements
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    protected function applyStatements(array $statements): void
-    {
-        $connection = $this->getDatabaseConnection();
-        foreach ($statements as $statement) {
-            $connection->exec($statement);
         }
     }
 
