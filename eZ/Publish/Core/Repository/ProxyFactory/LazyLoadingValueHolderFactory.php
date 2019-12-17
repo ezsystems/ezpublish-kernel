@@ -17,7 +17,7 @@ use RuntimeException;
 /**
  * @internal
  */
-final class LazyLoadingValueHolderFactory extends BaseLazyLoadingValueHolderFactory
+class LazyLoadingValueHolderFactory extends BaseLazyLoadingValueHolderFactory
 {
     /**
      * Use LazyLoadingValueHolderFactory::create method instead.

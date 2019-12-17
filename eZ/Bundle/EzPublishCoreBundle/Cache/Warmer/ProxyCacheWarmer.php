@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 final class ProxyCacheWarmer implements CacheWarmerInterface
 {
-    private const PROXY_CLASSES = [
+    public const PROXY_CLASSES = [
         Content::class,
         ContentInfo::class,
         ContentType::class,
