@@ -96,6 +96,10 @@ class TranslationHelper
      */
     public function getTranslatedContentNameByContentInfo(ContentInfo $contentInfo, $forcedLanguage = null)
     {
+        if ($contentInfo->mainLocationId === 1) {
+            return $contentInfo->name;
+        }
+
         if (isset($forcedLanguage) && $forcedLanguage === $contentInfo->mainLanguageCode) {
             return $contentInfo->name;
         }
