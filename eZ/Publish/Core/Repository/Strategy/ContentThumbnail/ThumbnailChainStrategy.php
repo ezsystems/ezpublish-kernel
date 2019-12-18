@@ -15,11 +15,12 @@ use Traversable;
 
 final class ThumbnailChainStrategy implements ThumbnailStrategy
 {
-    protected $strategies = [];
+    /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy[]|Traversable */
+    private $strategies;
 
     public function __construct(Traversable $strategies)
     {
-        $this->setStrategies(iterator_to_array($strategies));
+        $this->strategies = $strategies;
     }
 
     public function getThumbnail(ContentType $contentType, array $fields): ?Thumbnail
@@ -34,15 +35,5 @@ final class ThumbnailChainStrategy implements ThumbnailStrategy
         }
 
         return null;
-    }
-
-    public function setStrategies(array $strategies): void
-    {
-        $this->strategies = $strategies;
-    }
-
-    public function addStrategy(ThumbnailStrategy $strategy): void
-    {
-        $this->strategies[] = $strategy;
     }
 }
