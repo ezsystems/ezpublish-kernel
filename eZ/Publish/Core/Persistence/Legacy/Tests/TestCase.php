@@ -12,9 +12,9 @@ use Doctrine\Common\EventManager as DoctrineEventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory;
 use eZ\Publish\SPI\Tests\Persistence\FileFixtureFactory;
 use eZ\Publish\SPI\Tests\Persistence\FixtureImporter;
@@ -196,13 +196,18 @@ abstract class TestCase extends BaseTestCase
      * rows of columns.
      *
      * @param array $expectation
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery|\Doctrine\DBAL\Query\QueryBuilder $query
      * @param string $message
      */
-    public static function assertQueryResult(array $expectation, SelectQuery $query, $message = '')
+    public static function assertQueryResult(array $expectation, $query, $message = '')
     {
-        $statement = $query->prepare();
-        $statement->execute();
+        // @todo drop once everything else is aligned
+        if ($query instanceof QueryBuilder) {
+            $statement = $query->execute();
+        } else {
+            $statement = $query->prepare();
+            $statement->execute();
+        }
 
         $result = [];
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
