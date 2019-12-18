@@ -124,7 +124,7 @@ class EzPublishCoreBundle extends Bundle
         return $this->extension;
     }
 
-    public function boot()
+    public function boot(): void
     {
         $this->container->get(LazyLoadingValueHolderFactory::class)->registerAutoloader();
     }
