@@ -21,7 +21,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as ContentTyp
  */
 class AbstractTestCase extends LanguageAwareTestCase
 {
-    private static $setup;
+    /** @var bool */
+    private static $databaseInitialized = false;
 
     /**
      * Field registry mock.
@@ -39,16 +40,15 @@ class AbstractTestCase extends LanguageAwareTestCase
      * Skipping the reset-up, since setting up for these tests takes quite some
      * time, which is not required to spent, since we are only reading from the
      * database anyways.
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     protected function setUp(): void
     {
-        if (!self::$setup) {
+        if (!self::$databaseInitialized) {
             parent::setUp();
             $this->insertDatabaseFixture(__DIR__ . '/../_fixtures/full_dump.php');
-            self::$setup = $this->handler;
-        } else {
-            $this->handler = self::$setup;
-            $this->connection = $this->handler->getConnection();
+            self::$databaseInitialized = true;
         }
     }
 

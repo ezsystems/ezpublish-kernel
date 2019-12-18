@@ -16,12 +16,13 @@ use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory;
+use eZ\Publish\SPI\Tests\Persistence\FileFixtureFactory;
+use eZ\Publish\SPI\Tests\Persistence\FixtureImporter;
 use EzSystems\DoctrineSchema\Database\DbPlatform\SqliteDbPlatform;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use InvalidArgumentException;
 use ReflectionObject;
 use PDOException;
-use Exception;
 use ReflectionProperty;
 
 /**
@@ -132,8 +133,6 @@ abstract class TestCase extends BaseTestCase
                 dirname(__DIR__, 5) .
                 '/Bundle/EzPublishCoreBundle/Resources/config/storage/legacy/schema.yaml'
             );
-
-            $this->resetSequences();
         } catch (PDOException | DBALException | ConnectionException $e) {
             self::fail(
                 sprintf(
@@ -175,71 +174,14 @@ abstract class TestCase extends BaseTestCase
      * Inserts database fixture from $file.
      *
      * @param string $file
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function insertDatabaseFixture($file)
+    protected function insertDatabaseFixture(string $file): void
     {
-        $data = require $file;
-        $db = $this->getDatabaseHandler();
+        $fixtureImporter = new FixtureImporter($this->getDatabaseConnection());
 
-        foreach ($data as $table => $rows) {
-            // Check that at least one row exists
-            if (!isset($rows[0])) {
-                continue;
-            }
-
-            $q = $db->createInsertQuery();
-            $q->insertInto($db->quoteIdentifier($table));
-
-            // Contains the bound parameters
-            $values = [];
-
-            // Binding the parameters
-            foreach ($rows[0] as $col => $val) {
-                $q->set(
-                    $db->quoteIdentifier($col),
-                    $q->bindParam($values[$col])
-                );
-            }
-
-            $stmt = $q->prepare();
-
-            foreach ($rows as $row) {
-                try {
-                    // This CANNOT be replaced by:
-                    // $values = $row
-                    // each $values[$col] is a PHP reference which should be
-                    // kept for parameters binding to work
-                    foreach ($row as $col => $val) {
-                        $values[$col] = $val;
-                    }
-
-                    $stmt->execute();
-                } catch (Exception $e) {
-                    echo "$table ( ", implode(', ', $row), " )\n";
-                    throw $e;
-                }
-            }
-        }
-
-        $this->resetSequences();
-    }
-
-    /**
-     * Reset DB sequences.
-     */
-    public function resetSequences()
-    {
-        switch ($this->db) {
-            case 'pgsql':
-                // Update PostgreSQL sequences
-                $handler = $this->getDatabaseHandler();
-
-                $queries = array_filter(preg_split('(;\\s*$)m',
-                    file_get_contents(__DIR__ . '/_fixtures/setval.pgsql.sql')));
-                foreach ($queries as $query) {
-                    $handler->exec($query);
-                }
-        }
+        $fixtureImporter->import((new FileFixtureFactory())->buildFixture($file));
     }
 
     /**
