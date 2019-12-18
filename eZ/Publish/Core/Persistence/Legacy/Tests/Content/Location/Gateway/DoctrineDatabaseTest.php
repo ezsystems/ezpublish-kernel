@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
@@ -1190,30 +1191,44 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      * Test for the changeMainLocation() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::changeMainLocation
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function testChangeMainLocation()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         // Create additional location and assignment for test purpose
-        $query = $this->handler->createInsertQuery();
-        $query->insertInto($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set($this->handler->quoteColumn('contentobject_id'), $query->bindValue(10, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('contentobject_version'), $query->bindValue(2, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('main_node_id'), $query->bindValue(15, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('node_id'), $query->bindValue(228, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('parent_node_id'), $query->bindValue(227, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('path_string'), $query->bindValue('/1/5/13/228/', null, \PDO::PARAM_STR))
-            ->set($this->handler->quoteColumn('remote_id'), $query->bindValue('asdfg123437', null, \PDO::PARAM_STR));
-        $query->prepare()->execute();
-        $query = $this->handler->createInsertQuery();
-        $query->insertInto($this->handler->quoteTable('eznode_assignment'))
-            ->set($this->handler->quoteColumn('contentobject_id'), $query->bindValue(10, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('contentobject_version'), $query->bindValue(2, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('id'), $query->bindValue(0, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('is_main'), $query->bindValue(0, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('parent_node'), $query->bindValue(227, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('parent_remote_id'), $query->bindValue('5238a276bf8231fbcf8a986cdc82a6a5', null, \PDO::PARAM_STR));
-        $query->prepare()->execute();
+        $connection = $this->getDatabaseConnection();
+        $query = $connection->createQueryBuilder();
+        $query
+            ->insert('ezcontentobject_tree')
+            ->values(
+                [
+                    'contentobject_id' => $query->createPositionalParameter(10, ParameterType::INTEGER),
+                    'contentobject_version' => $query->createPositionalParameter(2, ParameterType::INTEGER),
+                    'main_node_id' => $query->createPositionalParameter(15, ParameterType::INTEGER),
+                    'node_id' => $query->createPositionalParameter(228, ParameterType::INTEGER),
+                    'parent_node_id' => $query->createPositionalParameter(227, ParameterType::INTEGER),
+                    'path_string' => $query->createPositionalParameter('/1/5/13/228/', ParameterType::STRING),
+                    'remote_id' => $query->createPositionalParameter('asdfg123437', ParameterType::STRING),
+                ]
+            );
+        $query->execute();
+
+        $query = $connection->createQueryBuilder();
+        $query
+            ->insert('eznode_assignment')
+            ->values(
+                [
+                    'contentobject_id' => $query->createPositionalParameter(10, ParameterType::INTEGER),
+                    'contentobject_version' => $query->createPositionalParameter(2, ParameterType::INTEGER),
+                    'id' => $query->createPositionalParameter(0, ParameterType::INTEGER),
+                    'is_main' => $query->createPositionalParameter(0, ParameterType::INTEGER),
+                    'parent_node' => $query->createPositionalParameter(227, ParameterType::INTEGER),
+                    'parent_remote_id' => $query->createPositionalParameter('5238a276bf8231fbcf8a986cdc82a6a5', ParameterType::STRING),
+                ]
+            );
+        $query->execute();
 
         $gateway = $this->getLocationGateway();
 
@@ -1224,48 +1239,48 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             227 // new main location parent id
         );
 
-        $query = $this->handler->createSelectQuery();
+        $query = $connection->createQueryBuilder();
         $this->assertQueryResult(
             [[228], [228]],
-            $query->select(
-                'main_node_id'
-            )->from(
-                'ezcontentobject_tree'
-            )->where(
-                $query->expr->eq('contentobject_id', 10)
-            )
+            $query
+                ->select('main_node_id')
+                ->from('ezcontentobject_tree')
+                ->where(
+                    $query->expr()->eq(
+                        'contentobject_id',
+                        $query->createPositionalParameter(10, ParameterType::INTEGER)
+                    )
+                )
         );
 
-        $query = $this->handler->createSelectQuery();
+        $query = $connection->createQueryBuilder();
         $this->assertQueryResult(
             [[1]],
-            $query->select(
-                'is_main'
-            )->from(
-                'eznode_assignment'
-            )->where(
-                $query->expr->lAnd(
-                    $query->expr->eq('contentobject_id', 10),
-                    $query->expr->eq('contentobject_version', 2),
-                    $query->expr->eq('parent_node', 227)
+            $query
+                ->select('is_main')
+                ->from('eznode_assignment')
+                ->where(
+                $query->expr()->andX(
+                    $query->expr()->eq('contentobject_id', $query->createPositionalParameter(10, ParameterType::INTEGER)),
+                    $query->expr()->eq('contentobject_version', $query->createPositionalParameter(2, ParameterType::INTEGER)),
+                    $query->expr()->eq('parent_node', $query->createPositionalParameter(227, ParameterType::INTEGER))
                 )
             )
         );
 
-        $query = $this->handler->createSelectQuery();
+        $query = $connection->createQueryBuilder();
         $this->assertQueryResult(
             [[0]],
-            $query->select(
-                'is_main'
-            )->from(
-                'eznode_assignment'
-            )->where(
-                $query->expr->lAnd(
-                    $query->expr->eq('contentobject_id', 10),
-                    $query->expr->eq('contentobject_version', 2),
-                    $query->expr->eq('parent_node', 44)
+            $query
+                ->select('is_main')
+                ->from('eznode_assignment')
+                ->where(
+                    $query->expr()->andX(
+                        $query->expr()->eq('contentobject_id', $query->createPositionalParameter(10, ParameterType::INTEGER)),
+                        $query->expr()->eq('contentobject_version', $query->createPositionalParameter(2, ParameterType::INTEGER)),
+                        $query->expr()->eq('parent_node', $query->createPositionalParameter(44, ParameterType::INTEGER))
+                    )
                 )
-            )
         );
     }
 
@@ -1292,21 +1307,29 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      * Test for the getFallbackMainNodeData() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::getFallbackMainNodeData
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function testGetFallbackMainNodeData()
+    public function testGetFallbackMainNodeData(): void
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         // Create additional location for test purpose
-        $query = $this->handler->createInsertQuery();
-        $query->insertInto($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set($this->handler->quoteColumn('contentobject_id'), $query->bindValue(12, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('contentobject_version'), $query->bindValue(1, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('main_node_id'), $query->bindValue(13, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('node_id'), $query->bindValue(228, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('parent_node_id'), $query->bindValue(227, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('path_string'), $query->bindValue('/1/5/13/228/', null, \PDO::PARAM_STR))
-            ->set($this->handler->quoteColumn('remote_id'), $query->bindValue('asdfg123437', null, \PDO::PARAM_STR));
-        $query->prepare()->execute();
+        $connection = $this->getDatabaseConnection();
+        $query = $connection->createQueryBuilder();
+        $query
+            ->insert('ezcontentobject_tree')
+            ->values(
+                [
+                    'contentobject_id' => $query->createPositionalParameter(12, ParameterType::INTEGER),
+                    'contentobject_version' => $query->createPositionalParameter(1, ParameterType::INTEGER),
+                    'main_node_id' => $query->createPositionalParameter(13, ParameterType::INTEGER),
+                    'node_id' => $query->createPositionalParameter(228, ParameterType::INTEGER),
+                    'parent_node_id' => $query->createPositionalParameter(227, ParameterType::INTEGER),
+                    'path_string' => $query->createPositionalParameter('/1/5/13/228/', ParameterType::STRING),
+                    'remote_id' => $query->createPositionalParameter('asdfg123437', ParameterType::STRING),
+                ]
+            );
+        $query->execute();
 
         $gateway = $this->getLocationGateway();
         $data = $gateway->getFallbackMainNodeData(12, 13);

@@ -77,8 +77,6 @@ class LocationHandlerTest extends TestCase
 
     protected function getLocationHandler()
     {
-        $dbHandler = $this->getDatabaseHandler();
-
         return new Handler(
             $this->locationGateway,
             $this->locationMapper,
