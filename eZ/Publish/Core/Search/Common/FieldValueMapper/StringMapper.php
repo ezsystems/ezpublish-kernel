@@ -51,9 +51,9 @@ class StringMapper extends FieldValueMapper
      */
     protected function convert($value)
     {
-        // Remove non-printable characters
+        // Remove non-printable characters (except LF and CR)
         return preg_replace(
-            '([\x00-\x09\x0B\x0C\x1E\x1F]+)',
+            '([\x00-\x09\x0B\x0C\x0E-\x1F]+)',
             '',
             (string)$value
         );
