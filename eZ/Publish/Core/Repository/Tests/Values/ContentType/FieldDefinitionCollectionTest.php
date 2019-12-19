@@ -16,6 +16,9 @@ use PHPUnit\Framework\TestCase;
 
 final class FieldDefinitionCollectionTest extends TestCase
 {
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::get
+     */
     public function testGet(): void
     {
         list($a, $b, $c) = $this->createFieldDefinitions('A', 'B', 'C');
@@ -27,6 +30,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertEquals($c, $collection->get('C'));
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::get
+     */
     public function testGetReturnsNullForNonExistingFieldDefinition(): void
     {
         $collection = new FieldDefinitionCollection(
@@ -36,6 +42,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertNull($collection->get('Z'));
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::has
+     */
     public function testHasReturnTrueForExistingFieldDefinition(): void
     {
         $collection = new FieldDefinitionCollection(
@@ -47,6 +56,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertTrue($collection->has('C'));
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::has
+     */
     public function testHasReturnFalseForNonExistingFieldDefinition(): void
     {
         $collection = new FieldDefinitionCollection(
@@ -56,6 +68,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertFalse($collection->has('Z'));
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::isEmpty
+     */
     public function testIsEmptyReturnsTrueForEmptyCollection(): void
     {
         $collection = new FieldDefinitionCollection();
@@ -63,6 +78,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertTrue($collection->isEmpty());
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::isEmpty
+     */
     public function testIsEmptyReturnsFalseForNonEmptyCollection(): void
     {
         $collection = new FieldDefinitionCollection([
@@ -72,6 +90,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertFalse($collection->isEmpty());
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::first
+     */
     public function testFirstReturnsNullForEmptyCollection(): void
     {
         $collection = new FieldDefinitionCollection();
@@ -79,6 +100,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertNull($collection->first());
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::first
+     */
     public function testFirstReturnsFieldDefinitionForNonEmptyCollection(): void
     {
         list($a, $b, $c) = $this->createFieldDefinitions('A', 'B', 'C');
@@ -88,6 +112,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertEquals($a, $collection->first());
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::last
+     */
     public function testLastReturnsFieldDefinitionForNonEmptyCollection(): void
     {
         list($a, $b, $c) = $this->createFieldDefinitions('A', 'B', 'C');
@@ -97,6 +124,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertEquals($c, $collection->last());
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::last
+     */
     public function testLastReturnsNullForEmptyCollection(): void
     {
         $collection = new FieldDefinitionCollection();
@@ -104,6 +134,10 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertNull($collection->last());
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::first
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::last
+     */
     public function testFirstAndLastAreEqualForCollectionWithOneElement(): void
     {
         $fieldDefinition = $this->createFieldDefinition('Example');
@@ -114,6 +148,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertEquals($fieldDefinition, $collection->last());
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::count
+     */
     public function testCountForNonEmptyCollection(): void
     {
         list($a, $b, $c) = $this->createFieldDefinitions('A', 'B', 'C');
@@ -123,6 +160,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertEquals(3, $collection->count());
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::count
+     */
     public function testCountReturnsZeroForEmptyCollection(): void
     {
         $collection = new FieldDefinitionCollection();
@@ -130,6 +170,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertEquals(0, $collection->count());
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::map
+     */
     public function testMap(): void
     {
         $collection = new FieldDefinitionCollection($this->createFieldDefinitions('A', 'B', 'C'));
@@ -141,6 +184,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertEquals(['a', 'b', 'c'], $collection->map($closure));
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::filter
+     */
     public function testFilter(): void
     {
         list($a, $b, $c) = $this->createFieldDefinitions('A', 'B', 'C');
@@ -163,6 +209,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::filterByType
+     */
     public function testFilterByType(): void
     {
         list($a, $b, $c) = $this->createFieldDefinitionsWith('fieldTypeIdentifier', ['ezstring', 'ezstring', 'ezimage']);
@@ -175,6 +224,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::filterByGroup
+     */
     public function filterByGroup(): void
     {
         list($a, $b, $c) = $this->createFieldDefinitionsWith('fieldGroup', ['default', 'default', 'seo']);
@@ -187,6 +239,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::all
+     */
     public function testAll(): void
     {
         $collection = new FieldDefinitionCollection($this->createFieldDefinitions('A', 'B', 'C'));
@@ -198,6 +253,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertFalse($collection->all($this->getContraction()));
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::any
+     */
     public function testAny(): void
     {
         $collection = new FieldDefinitionCollection($this->createFieldDefinitions('A', 'B', 'C'));
@@ -209,6 +267,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertFalse($collection->any($this->getContraction()));
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::anyOfType
+     */
     public function testAnyOfType(): void
     {
         $collection = new FieldDefinitionCollection(
@@ -219,6 +280,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertFalse($collection->anyOfType('ezrichtext'));
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::anyInGroup
+     */
     public function testAnyInGroup(): void
     {
         $collection = new FieldDefinitionCollection(
@@ -229,6 +293,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         $this->assertFalse($collection->anyInGroup('comments'));
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::partition
+     */
     public function testPartition(): void
     {
         list($a, $b, $c) = $this->createFieldDefinitions('A', 'B', 'C');
@@ -260,6 +327,9 @@ final class FieldDefinitionCollectionTest extends TestCase
         );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::toArray
+     */
     public function testToArray(): void
     {
         $fieldDefinitions = $this->createFieldDefinitions('A', 'B', 'C');
@@ -289,7 +359,7 @@ final class FieldDefinitionCollectionTest extends TestCase
     /**
      * Returns predicate which test if field definition identifier belongs to given set.
      */
-    public function getIdentifierIsEqualPredicate(string ...$identifiers): Closure
+    private function getIdentifierIsEqualPredicate(string ...$identifiers): Closure
     {
         return static function (APIFieldDefinition $fieldDefinition) use ($identifiers): bool {
             return in_array($fieldDefinition->identifier, $identifiers);
@@ -297,7 +367,7 @@ final class FieldDefinitionCollectionTest extends TestCase
     }
 
     /**
-     * Returns predicate with is always true.
+     * Returns a predicate which is always true.
      */
     private function getTautology(): Closure
     {
@@ -307,7 +377,7 @@ final class FieldDefinitionCollectionTest extends TestCase
     }
 
     /**
-     * Returns predicate with is always false.
+     * Returns a predicate which is always false.
      */
     private function getContraction(): Closure
     {

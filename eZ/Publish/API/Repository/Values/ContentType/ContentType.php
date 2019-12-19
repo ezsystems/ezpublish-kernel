@@ -174,8 +174,6 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
 
     /**
      * This method returns the content type field definitions from this type.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection
      */
     abstract public function getFieldDefinitions(): FieldDefinitionCollection;
 
@@ -193,10 +191,6 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
 
     /**
      * This method returns true if the field definition for the given identifier exists.
-     *
-     * @param string $fieldDefinitionIdentifier
-     *
-     * @return bool
      */
     public function hasFieldDefinition(string $fieldDefinitionIdentifier): bool
     {
@@ -205,10 +199,6 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
 
     /**
      * Returns true if field definition with given field type identifier exists.
-     *
-     * @param string $fieldTypeIdentifier
-     *
-     * @return bool
      */
     public function hasFieldDefinitionOfType(string $fieldTypeIdentifier): bool
     {
@@ -217,10 +207,6 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
 
     /**
      * Returns collection of the field definition for the given field type identifier.
-     *
-     * @param string $fieldTypeIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection
      */
     public function getFieldDefinitionsOfType(string $fieldTypeIdentifier): FieldDefinitionCollection
     {
@@ -229,10 +215,6 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
 
     /**
      * Returns true if field definition with given field type identifier or null.
-     *
-     * @param string $fieldTypeIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public function getFirstFieldDefinitionOfType(string $fieldTypeIdentifier): ?FieldDefinition
     {

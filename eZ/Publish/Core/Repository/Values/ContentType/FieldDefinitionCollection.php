@@ -20,13 +20,12 @@ final class FieldDefinitionCollection implements FieldDefinitionCollectionInterf
     /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] */
     private $fieldDefinitions;
 
-    /**
-     * Field definitions indexed by identifier.
-     *
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] */
     private $fieldDefinitionsByIdentifier;
 
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
+     */
     public function __construct(iterable $fieldDefinitions = [])
     {
         $this->fieldDefinitions = [];
@@ -71,9 +70,9 @@ final class FieldDefinitionCollection implements FieldDefinitionCollectionInterf
         return empty($this->fieldDefinitions);
     }
 
-    public function filter(Closure $p): FieldDefinitionCollectionInterface
+    public function filter(Closure $predicate): FieldDefinitionCollectionInterface
     {
-        return new self(array_filter($this->fieldDefinitions, $p));
+        return new self(array_filter($this->fieldDefinitions, $predicate));
     }
 
     public function filterByType(string $fieldTypeIdentifier): FieldDefinitionCollectionInterface
@@ -86,15 +85,15 @@ final class FieldDefinitionCollection implements FieldDefinitionCollectionInterf
         return $this->filter($this->getInGroupPredicate($fieldGroup));
     }
 
-    public function map(Closure $p): array
+    public function map(Closure $predicate): array
     {
-        return array_map($p, $this->fieldDefinitions);
+        return array_map($predicate, $this->fieldDefinitions);
     }
 
-    public function all(Closure $p): bool
+    public function all(Closure $predicate): bool
     {
         foreach ($this->fieldDefinitions as $fieldDefinition) {
-            if (!$p($fieldDefinition)) {
+            if (!$predicate($fieldDefinition)) {
                 return false;
             }
         }
@@ -102,10 +101,10 @@ final class FieldDefinitionCollection implements FieldDefinitionCollectionInterf
         return true;
     }
 
-    public function any(Closure $p): bool
+    public function any(Closure $predicate): bool
     {
         foreach ($this->fieldDefinitions as $fieldDefinition) {
-            if ($p($fieldDefinition)) {
+            if ($predicate($fieldDefinition)) {
                 return true;
             }
         }
@@ -123,12 +122,12 @@ final class FieldDefinitionCollection implements FieldDefinitionCollectionInterf
         return $this->any($this->getInGroupPredicate($fieldGroup));
     }
 
-    public function partition(Closure $p): array
+    public function partition(Closure $predicate): array
     {
         $matches = $noMatches = [];
 
         foreach ($this->fieldDefinitions as $fieldDefinition) {
-            if ($p($fieldDefinition)) {
+            if ($predicate($fieldDefinition)) {
                 $matches[] = $fieldDefinition;
             } else {
                 $noMatches[] = $fieldDefinition;
@@ -167,22 +166,22 @@ final class FieldDefinitionCollection implements FieldDefinitionCollectionInterf
         };
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->fieldDefinitions[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): FieldDefinition
     {
         return $this->fieldDefinitions[$offset];
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new BadMethodCallException(self::class . ' is read-only!');
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new BadMethodCallException(self::class . ' is read-only!');
     }
