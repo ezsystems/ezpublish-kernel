@@ -11,21 +11,22 @@ namespace eZ\Publish\Core\Repository\Strategy\ContentThumbnail;
 use eZ\Publish\API\Repository\Values\Content\Thumbnail;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
-use Traversable;
 
 final class ThumbnailChainStrategy implements ThumbnailStrategy
 {
-    /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy[]|Traversable */
+    /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy[] */
     private $strategies;
 
-    public function __construct(Traversable $strategies)
+    /**
+     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy[] $strategies
+     */
+    public function __construct(iterable $strategies)
     {
         $this->strategies = $strategies;
     }
 
     public function getThumbnail(ContentType $contentType, array $fields): ?Thumbnail
     {
-        /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $strategy */
         foreach ($this->strategies as $strategy) {
             $thumbnail = $strategy->getThumbnail($contentType, $fields);
 

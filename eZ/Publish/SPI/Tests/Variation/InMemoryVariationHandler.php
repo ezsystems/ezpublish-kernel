@@ -22,7 +22,7 @@ class InMemoryVariationHandler implements VariationHandler
         array $parameters = []
     ) {
         return new Variation([
-            'uri' => $field->value,
+            'uri' => $field->value . '-in-memory-test',
         ]);
     }
 }
