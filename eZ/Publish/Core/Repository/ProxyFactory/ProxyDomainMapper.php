@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\LocationListFactory\ChildrenLazySearchQuery;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\Proxy\LazyLoadingInterface;
 
@@ -184,5 +185,15 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
         };
 
         return $this->factory->createProxy(User::class, $initializer);
+    }
+
+    public function createLocationChildrenListProxy(int $locationId, array $prioritizedLanguages = Language::ALL)
+    {
+        return new ChildrenLazySearchQuery(
+            $this->repository->getSearchService(),
+            [
+                'prioritizedLanguages' => $prioritizedLanguages
+            ]
+        );
     }
 }

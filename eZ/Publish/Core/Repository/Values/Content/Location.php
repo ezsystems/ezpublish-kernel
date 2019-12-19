@@ -8,7 +8,11 @@
  */
 namespace eZ\Publish\Core\Repository\Values\Content;
 
+use Closure;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
+use eZ\Publish\API\Repository\Values\Content\LocationList;
+use eZ\Publish\Core\Repository\LocationListFactory\ChildrenLazySearchQuery;
+use eZ\Publish\Core\Repository\TreeAccessor\TreeDelegate;
 
 /**
  * This class represents a location in the repository.
@@ -26,6 +30,9 @@ class Location extends APILocation
 
     /** @var array */
     protected $path;
+
+    /** @var \eZ\Publish\Core\Repository\TreeAccessor\TreeDelegate */
+    private $treeDelegate;
 
     /**
      * Returns the content info of the content object of this location.
@@ -93,5 +100,20 @@ class Location extends APILocation
         }
 
         return parent::__isset($property);
+    }
+
+    public function getChildren(): iterable
+    {
+        return $this->treeDelegate->getChildren($this);
+    }
+
+    public function getSiblings(): iterable
+    {
+        return $this->treeDelegate->getSiblings($this);
+    }
+
+    public function getAncestors(): iterable
+    {
+        return $this->treeDelegate->getAncestors($this);
     }
 }

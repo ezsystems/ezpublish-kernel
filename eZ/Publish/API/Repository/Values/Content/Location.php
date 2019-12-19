@@ -233,4 +233,9 @@ abstract class Location extends ValueObject
 
         return [$sortClause];
     }
+
+    public function getChildren(): iterable
+    {
+        return [];
+    }
 }
