@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Exceptions;
 
-use RuntimeException;
-
-class OutOfBoundsException extends RuntimeException
+class OutOfBoundsException extends \OutOfBoundsException
 {
 }

@@ -252,7 +252,7 @@ Changes affecting version compatibility with former or future versions.
   );
   ```  
 
-* The signature of the  `\eZ\Publish\API\Repository\Values\ContentType\ContentType::getFieldDefinitions` method was changed to:
+* The signature of the `\eZ\Publish\API\Repository\Values\ContentType\ContentType::getFieldDefinitions` method was changed to:
   ```php
   abstract public function getFieldDefinitions(): FieldDefinitionCollection;
   ```
