@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Repository\Strategy\ContentThumbnail\Tests;
+namespace eZ\Publish\Core\Repository\Tests\ContentThumbnail;
 
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Thumbnail;
