@@ -587,6 +587,7 @@ abstract class BaseIntegrationTest extends TestCase
         $loader->load('policies.yml');
         $loader->load('events.yml');
         $loader->load('tests/integration_legacy.yml');
+        $loader->load('thumbnails.yml');
 
         $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 

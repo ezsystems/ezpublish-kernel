@@ -166,6 +166,7 @@ tables:
             is_information_collector: { type: integer, nullable: false, options: { default: '0' } }
             is_required: { type: integer, nullable: false, options: { default: '0' } }
             is_searchable: { type: integer, nullable: false, options: { default: '0' } }
+            is_thumbnail: { type: boolean, nullable: false, options: { default: '0' } }
             placement: { type: integer, nullable: false, options: { default: '0' } }
             serialized_data_text: { type: text, nullable: true, length: 0 }
             serialized_description_list: { type: text, nullable: true, length: 0 }

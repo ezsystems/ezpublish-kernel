@@ -25,6 +25,7 @@ use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
  * @property-read bool $isTranslatable indicates if fields of this definition are translatable
  * @property-read bool $isRequired indicates if this field is required in the content object
  * @property-read bool $isSearchable indicates if the field is searchable
+ * @property-read bool $isThumbnail indicates if the field can be thumbnail
  * @property-read bool $isInfoCollector indicates if this field is used for information collection
  * @property-read mixed $defaultValue the default value of the field
  * @property-read string $mainLanguageCode main Translation (language code) of a multilingual Field Definition
@@ -72,6 +73,13 @@ abstract class FieldDefinition extends ValueObject implements MultiLanguageName,
      * @var bool
      */
     protected $isTranslatable;
+
+    /**
+     * Indicates if the field can be a thumbnail.
+     *
+     * @var bool
+     */
+    protected $isThumbnail;
 
     /**
      * Is the field required.

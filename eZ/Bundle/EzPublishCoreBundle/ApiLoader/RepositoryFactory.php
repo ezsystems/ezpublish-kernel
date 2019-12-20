@@ -14,6 +14,7 @@ use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use Psr\Log\LoggerInterface;
@@ -72,6 +73,7 @@ class RepositoryFactory implements ContainerAwareInterface
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashService
+     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
@@ -81,7 +83,8 @@ class RepositoryFactory implements ContainerAwareInterface
         BackgroundIndexer $backgroundIndexer,
         RelationProcessor $relationProcessor,
         FieldTypeRegistry $fieldTypeRegistry,
-        PasswordHashServiceInterface $passwordHashService
+        PasswordHashServiceInterface $passwordHashService,
+        ThumbnailStrategy $thumbnailStrategy
     ) {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 
@@ -92,6 +95,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $relationProcessor,
             $fieldTypeRegistry,
             $passwordHashService,
+            $thumbnailStrategy,
             [
                 'role' => [
                     'limitationTypes' => $this->roleLimitations,

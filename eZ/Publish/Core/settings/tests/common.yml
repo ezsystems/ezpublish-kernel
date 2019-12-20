@@ -32,3 +32,6 @@ services:
 
     serializer:
         alias: ezpublish.field_type.ezgeneric.value_serializer.symfony.serializer
+
+    eZ\Publish\SPI\Tests\Variation\InMemoryVariationHandler: ~
+    eZ\Publish\SPI\Variation\VariationHandler: '@eZ\Publish\SPI\Tests\Variation\InMemoryVariationHandler'

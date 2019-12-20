@@ -383,7 +383,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $rows
         );
         $this->assertCount(
-            49,
+            50,
             $rows[0]
         );
 
@@ -416,7 +416,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $rows
         );
         $this->assertCount(
-            49,
+            50,
             $rows[0]
         );
     }
@@ -440,7 +440,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $rows
         );
         $this->assertCount(
-            49,
+            50,
             $rows[0]
         );
     }

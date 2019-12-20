@@ -79,6 +79,13 @@ class FieldDefinitionCreateStruct extends ValueObject
     public $isRequired;
 
     /**
+     * Indicates if the field can be a thumbnail.
+     *
+     * @var bool
+     */
+    public $isThumbnail;
+
+    /**
      * Indicates if this attribute is used for information collection.
      *
      * @var bool

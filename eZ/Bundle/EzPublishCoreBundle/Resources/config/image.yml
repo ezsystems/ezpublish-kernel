@@ -317,3 +317,6 @@ services:
 
     ezpublish.image_alias.variation_path_generator.alias_directory:
         class: "%ezpubish.image_alias.variation_path_generator.alias_directory.class%"
+
+    # SPI Aliases
+    eZ\Publish\SPI\Variation\VariationHandler: '@ezpublish.image_alias.imagine.variation.imagine_alias_generator'

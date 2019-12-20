@@ -318,6 +318,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $coreLoader->load('notification.yml');
         $coreLoader->load('user_preference.yml');
         $coreLoader->load('events.yml');
+        $coreLoader->load('thumbnails.yml');
 
         // Public API services
         $loader->load('papi.yml');

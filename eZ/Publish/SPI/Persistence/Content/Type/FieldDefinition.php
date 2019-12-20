@@ -82,6 +82,13 @@ class FieldDefinition extends ValueObject
     public $isRequired;
 
     /**
+     * If the field type can be a thumbnail.
+     *
+     * @var bool
+     */
+    public $isThumbnail;
+
+    /**
      * Just a flag.
      *
      * @var bool

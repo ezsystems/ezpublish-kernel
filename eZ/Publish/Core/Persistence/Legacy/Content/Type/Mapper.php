@@ -235,6 +235,7 @@ class Mapper
         $field->fieldType = $row['ezcontentclass_attribute_data_type_string'];
         $field->isTranslatable = ($row['ezcontentclass_attribute_can_translate'] == 1);
         $field->isRequired = $row['ezcontentclass_attribute_is_required'] == 1;
+        $field->isThumbnail = !empty($row['ezcontentclass_attribute_is_thumbnail']);
         $field->isInfoCollector = $row['ezcontentclass_attribute_is_information_collector'] == 1;
 
         $field->isSearchable = (bool)$row['ezcontentclass_attribute_is_searchable'];
