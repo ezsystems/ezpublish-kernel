@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Exceptions;
 
+use Throwable;
+
 /**
- * This Exception is thrown on create or update content type when content type is not valid.
+ * Marker interface for all Repository related exceptions.
  */
-abstract class ContentTypeValidationException extends ForbiddenException
+interface Exception extends Throwable
 {
 }
