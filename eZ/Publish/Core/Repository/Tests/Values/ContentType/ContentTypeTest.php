@@ -66,6 +66,13 @@ class ContentTypeTest extends TestCase
         $fieldDefinition = $this->createMock(FieldDefinition::class);
 
         $fieldDefinitionCollection = $this->createMock(APIFieldDefinitionCollection::class);
+
+        $fieldDefinitionCollection
+            ->expects($this->once())
+            ->method('has')
+            ->with(self::EXAMPLE_FIELD_DEFINITION_IDENTIFIER)
+            ->willReturn(true);
+
         $fieldDefinitionCollection
             ->expects($this->once())
             ->method('get')

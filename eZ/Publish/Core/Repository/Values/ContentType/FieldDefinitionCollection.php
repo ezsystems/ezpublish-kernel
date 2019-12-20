@@ -11,9 +11,10 @@ namespace eZ\Publish\Core\Repository\Values\ContentType;
 use ArrayIterator;
 use BadMethodCallException;
 use Closure;
+use Iterator;
+use eZ\Publish\API\Repository\Exceptions\OutOfBoundsException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection as FieldDefinitionCollectionInterface;
-use Iterator;
 
 final class FieldDefinitionCollection implements FieldDefinitionCollectionInterface
 {
@@ -37,9 +38,15 @@ final class FieldDefinitionCollection implements FieldDefinitionCollectionInterf
         }
     }
 
-    public function get(string $fieldDefinitionIdentifier): ?FieldDefinition
+    public function get(string $fieldDefinitionIdentifier): FieldDefinition
     {
-        return $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier] ?? null;
+        if ($this->has($fieldDefinitionIdentifier)) {
+            return $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier];
+        }
+
+        throw new OutOfBoundsException(
+            sprintf("Field Definition Collection does not contain element with identifier '%s'", $fieldDefinitionIdentifier)
+        );
     }
 
     public function has(string $fieldDefinitionIdentifier): bool
@@ -47,22 +54,22 @@ final class FieldDefinitionCollection implements FieldDefinitionCollectionInterf
         return array_key_exists($fieldDefinitionIdentifier, $this->fieldDefinitionsByIdentifier);
     }
 
-    public function first(): ?FieldDefinition
+    public function first(): FieldDefinition
     {
         if (($result = reset($this->fieldDefinitions)) !== false) {
             return $result;
         }
 
-        return null;
+        throw new OutOfBoundsException('Field Definition Collection is empty');
     }
 
-    public function last(): ?FieldDefinition
+    public function last(): FieldDefinition
     {
         if (($result = end($this->fieldDefinitions)) !== false) {
             return $result;
         }
 
-        return null;
+        throw new OutOfBoundsException('Field Definition Collection is empty');
     }
 
     public function isEmpty(): bool

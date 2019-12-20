@@ -17,8 +17,10 @@ interface FieldDefinitionCollection extends Countable, IteratorAggregate, ArrayA
 {
     /**
      * This method returns the field definition for the given identifier.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\OutOfBoundsException
      */
-    public function get(string $fieldDefinitionIdentifier): ?FieldDefinition;
+    public function get(string $fieldDefinitionIdentifier): FieldDefinition;
 
     /**
      * This method returns true if the field definition for the given identifier exists.
@@ -27,13 +29,17 @@ interface FieldDefinitionCollection extends Countable, IteratorAggregate, ArrayA
 
     /**
      * Return first element of collection.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\OutOfBoundsException
      */
-    public function first(): ?FieldDefinition;
+    public function first(): FieldDefinition;
 
     /**
      * Return last element of collection.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\OutOfBoundsException
      */
-    public function last(): ?FieldDefinition;
+    public function last(): FieldDefinition;
 
     /**
      * Checks whether the collection is empty (contains no elements).

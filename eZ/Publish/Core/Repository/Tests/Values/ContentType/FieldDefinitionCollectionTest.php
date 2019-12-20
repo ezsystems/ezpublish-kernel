@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Repository\Tests\Values\ContentType;
 
 use Closure;
+use eZ\Publish\API\Repository\Exceptions\OutOfBoundsException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection;
@@ -33,13 +34,16 @@ final class FieldDefinitionCollectionTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::get
      */
-    public function testGetReturnsNullForNonExistingFieldDefinition(): void
+    public function testGetThrowsOutOfBoundsExceptionForNonExistingFieldDefinition(): void
     {
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage("Field Definition Collection does not contain element with identifier 'Z'");
+
         $collection = new FieldDefinitionCollection(
             $this->createFieldDefinitions('A', 'B', 'C')
         );
 
-        $this->assertNull($collection->get('Z'));
+        $collection->get('Z');
     }
 
     /**
@@ -93,11 +97,13 @@ final class FieldDefinitionCollectionTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::first
      */
-    public function testFirstReturnsNullForEmptyCollection(): void
+    public function testFirstThrowsOutOfBoundsExceptionForEmptyCollection(): void
     {
-        $collection = new FieldDefinitionCollection();
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Field Definition Collection is empty');
 
-        $this->assertNull($collection->first());
+        $collection = new FieldDefinitionCollection();
+        $collection->first();
     }
 
     /**
@@ -127,11 +133,13 @@ final class FieldDefinitionCollectionTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection::last
      */
-    public function testLastReturnsNullForEmptyCollection(): void
+    public function testLastThrowsOutOfBoundsExceptionForEmptyCollection(): void
     {
-        $collection = new FieldDefinitionCollection();
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Field Definition Collection is empty');
 
-        $this->assertNull($collection->last());
+        $collection = new FieldDefinitionCollection();
+        $collection->last();
     }
 
     /**

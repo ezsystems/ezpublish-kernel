@@ -186,7 +186,11 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
      */
     public function getFieldDefinition($fieldDefinitionIdentifier): ?FieldDefinition
     {
-        return $this->getFieldDefinitions()->get($fieldDefinitionIdentifier);
+        if ($this->hasFieldDefinition($fieldDefinitionIdentifier)) {
+            return $this->getFieldDefinitions()->get($fieldDefinitionIdentifier);
+        }
+
+        return null;
     }
 
     /**
@@ -218,6 +222,11 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
      */
     public function getFirstFieldDefinitionOfType(string $fieldTypeIdentifier): ?FieldDefinition
     {
-        return $this->getFieldDefinitions()->filterByType($fieldTypeIdentifier)->first();
+        $fieldDefinitionsOfType = $this->getFieldDefinitionsOfType($fieldTypeIdentifier);
+        if (!$fieldDefinitionsOfType->isEmpty()) {
+            return $fieldDefinitionsOfType->first();
+        }
+
+        return null;
     }
 }
