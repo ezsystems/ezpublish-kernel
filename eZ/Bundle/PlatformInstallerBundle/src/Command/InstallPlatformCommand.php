@@ -94,7 +94,7 @@ class InstallPlatformCommand extends Command
         $installer->importData();
         $installer->importBinaries();
         $this->cacheClear($output);
-        
+
         if (!$input->getOption('skip-indexing')) {
             $this->indexData($output, $siteaccess);
         }
