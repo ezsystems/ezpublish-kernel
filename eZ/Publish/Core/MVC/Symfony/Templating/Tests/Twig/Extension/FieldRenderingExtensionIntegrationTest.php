@@ -20,6 +20,7 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection;
 use Psr\Log\LoggerInterface;
 
 class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
@@ -131,7 +132,9 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
                     'id' => $contentTypeIdentifier,
                     'identifier' => $contentTypeIdentifier,
                     'mainLanguageCode' => 'fre-FR',
-                    'fieldDefinitions' => $this->fieldDefinitions[$contentTypeIdentifier],
+                    'fieldDefinitions' => new FieldDefinitionCollection(
+                        $this->fieldDefinitions[$contentTypeIdentifier
+                    ]),
                 ]),
                 'versionInfo' => new VersionInfo(
                     [

@@ -8,12 +8,14 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection as APIFieldDefinitionCollection;
 use eZ\Publish\API\Repository\Values\Translation\Message;
 use Exception;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
@@ -823,7 +825,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 case 'fieldDefinitions':
                     $this->assertFieldDefinitionsCorrect(
                         $typeCreate->fieldDefinitions,
-                        $contentType->fieldDefinitions
+                        $contentType->fieldDefinitions->toArray()
                     );
                     break;
 
@@ -2744,7 +2746,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeStructValues
      */
-    public function testLoadContentTypeFieldDefinitions(array $fieldDefinitions)
+    public function testLoadContentTypeFieldDefinitions(APIFieldDefinitionCollection $fieldDefinitions)
     {
         $expectedFieldDefinitions = [
             'name' => [
@@ -2779,6 +2781,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             ],
         ];
 
+        $fieldDefinitions = $fieldDefinitions->toArray();
         foreach ($fieldDefinitions as $index => $fieldDefinition) {
             $this->assertInstanceOf(
                 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
@@ -3076,7 +3079,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
-        $commentType = $contentTypeService->loadContentTypeByIdentifier('comment');
+        $commentType = $contentTypeService->loadContentTypeByIdentifier('comment', Language::ALL);
 
         $commentTypeDraft = $contentTypeService->createContentTypeDraft($commentType);
         /* END: Use Case */

@@ -40,6 +40,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
@@ -545,7 +546,7 @@ class ContentTest extends BaseServiceMockTest
 
         $spiContent = new SPIContent([
             'versionInfo' => new VersionInfo([
-                    'contentInfo' => new ContentInfo(['id' => 42, 'contentTypeId' => 123]),
+                'contentInfo' => new ContentInfo(['id' => 42, 'contentTypeId' => 123]),
             ]),
         ]);
         $contentHandler
@@ -1078,14 +1079,14 @@ class ContentTest extends BaseServiceMockTest
      * Returns full, possibly redundant array of field values, indexed by field definition
      * identifier and language code.
      *
-     * @throws \RuntimeException Method is intended to be used only with consistent fixtures
-     *
      * @param string $mainLanguageCode
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $structFields
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions
      * @param array $languageCodes
      *
      * @return array
+     *
+     * @throws \RuntimeException Method is intended to be used only with consistent fixtures
      */
     protected function determineValuesForCreate(
         $mainLanguageCode,
@@ -1180,7 +1181,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $objectStateHandlerMock */
         $objectStateHandlerMock = $this->getPersistenceMock()->objectStateHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
@@ -1190,7 +1190,7 @@ class ContentTest extends BaseServiceMockTest
         $contentType = new ContentType(
             [
                 'id' => 123,
-                'fieldDefinitions' => $fieldDefinitions,
+                'fieldDefinitions' => new FieldDefinitionCollection($fieldDefinitions),
                 'nameSchema' => '<nameSchema>',
             ]
         );
@@ -1906,7 +1906,7 @@ class ContentTest extends BaseServiceMockTest
         $contentType = new ContentType(
             [
                 'id' => 123,
-                'fieldDefinitions' => $fieldDefinitions,
+                'fieldDefinitions' => new FieldDefinitionCollection($fieldDefinitions),
             ]
         );
         $contentCreateStruct = new ContentCreateStruct(
@@ -2056,7 +2056,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
         $permissionResolver = $this->getPermissionResolverMock();
@@ -2064,7 +2063,7 @@ class ContentTest extends BaseServiceMockTest
         $contentType = new ContentType(
             [
                 'id' => 123,
-                'fieldDefinitions' => $fieldDefinitions,
+                'fieldDefinitions' => new FieldDefinitionCollection($fieldDefinitions),
                 'nameSchema' => '<nameSchema>',
             ]
         );
@@ -2249,7 +2248,6 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
@@ -2259,7 +2257,7 @@ class ContentTest extends BaseServiceMockTest
         $contentType = new ContentType(
             [
                 'id' => 123,
-                'fieldDefinitions' => $fieldDefinitions,
+                'fieldDefinitions' => new FieldDefinitionCollection($fieldDefinitions),
                 'nameSchema' => '<nameSchema>',
             ]
         );
@@ -3157,7 +3155,9 @@ class ContentTest extends BaseServiceMockTest
                 'internalFields' => $existingFields,
             ]
         );
-        $contentType = new ContentType(['fieldDefinitions' => $fieldDefinitions]);
+        $contentType = new ContentType([
+            'fieldDefinitions' => new FieldDefinitionCollection($fieldDefinitions),
+        ]);
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -4234,9 +4234,9 @@ class ContentTest extends BaseServiceMockTest
     }
 
     /**
-     * @todo add first field empty
-     *
      * @return array
+     *
+     * @todo add first field empty
      */
     public function providerForTestUpdateContentNonRedundantFieldSetComplex()
     {
@@ -4721,7 +4721,9 @@ class ContentTest extends BaseServiceMockTest
                 'internalFields' => [],
             ]
         );
-        $contentType = new ContentType(['fieldDefinitions' => $fieldDefinitions]);
+        $contentType = new ContentType([
+            'fieldDefinitions' => new FieldDefinitionCollection($fieldDefinitions),
+        ]);
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -4910,7 +4912,9 @@ class ContentTest extends BaseServiceMockTest
                 'internalFields' => $existingFields,
             ]
         );
-        $contentType = new ContentType(['fieldDefinitions' => $fieldDefinitions]);
+        $contentType = new ContentType([
+            'fieldDefinitions' => new FieldDefinitionCollection($fieldDefinitions),
+        ]);
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -5121,7 +5125,9 @@ class ContentTest extends BaseServiceMockTest
                 'internalFields' => $existingFields,
             ]
         );
-        $contentType = new ContentType(['fieldDefinitions' => $fieldDefinitions]);
+        $contentType = new ContentType([
+            'fieldDefinitions' => new FieldDefinitionCollection($fieldDefinitions),
+        ]);
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -5449,16 +5455,14 @@ class ContentTest extends BaseServiceMockTest
 
         $repository->expects($this->once())
             ->method('getLocationService')
-            ->will($this->returnValue($locationServiceMock))
-        ;
+            ->will($this->returnValue($locationServiceMock));
 
         $locationServiceMock->expects($this->once())
             ->method('loadLocation')
             ->with(
                 $locationCreateStruct->parentLocationId
             )
-            ->will($this->returnValue($location))
-        ;
+            ->will($this->returnValue($location));
 
         $contentInfo->expects($this->any())
             ->method('__get')
@@ -5517,8 +5521,7 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock->expects($this->once())
             ->method('loadLocation')
             ->with($locationCreateStruct->parentLocationId)
-            ->will($this->returnValue($location))
-        ;
+            ->will($this->returnValue($location));
 
         $contentInfoMock->expects($this->any())
             ->method('__get')
@@ -5649,8 +5652,7 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock->expects($this->once())
             ->method('loadLocation')
             ->with($locationCreateStruct->parentLocationId)
-            ->will($this->returnValue($location))
-        ;
+            ->will($this->returnValue($location));
 
         $contentInfoMock->expects($this->any())
             ->method('__get')
@@ -5773,14 +5775,12 @@ class ContentTest extends BaseServiceMockTest
 
         $repositoryMock->expects($this->once())
             ->method('getLocationService')
-            ->will($this->returnValue($locationServiceMock))
-        ;
+            ->will($this->returnValue($locationServiceMock));
 
         $locationServiceMock->expects($this->once())
             ->method('loadLocation')
             ->with($locationCreateStruct->parentLocationId)
-            ->will($this->returnValue($location))
-        ;
+            ->will($this->returnValue($location));
 
         $contentInfoMock = $this->createMock(APIContentInfo::class);
         $contentInfoMock->expects($this->any())
@@ -5930,7 +5930,7 @@ class ContentTest extends BaseServiceMockTest
 
         $spiContent = new SPIContent([
             'versionInfo' => new VersionInfo([
-                    'contentInfo' => new ContentInfo(['id' => 42, 'contentTypeId' => 123]),
+                'contentInfo' => new ContentInfo(['id' => 42, 'contentTypeId' => 123]),
             ]),
         ]);
 

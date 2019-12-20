@@ -1282,7 +1282,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->validateInputFieldDefinitionCreateStruct($fieldDefinitionCreateStruct);
         $loadedContentTypeDraft = $this->loadContentTypeDraft($contentTypeDraft->id);
 
-        if ($loadedContentTypeDraft->getFieldDefinition($fieldDefinitionCreateStruct->identifier) !== null) {
+        if ($loadedContentTypeDraft->hasFieldDefinition($fieldDefinitionCreateStruct->identifier)) {
             throw new InvalidArgumentException(
                 '$fieldDefinitionCreateStruct',
                 "Another Field definition with identifier '{$fieldDefinitionCreateStruct->identifier}' exists in the Content Type"
@@ -1311,13 +1311,11 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         if ($fieldType->isSingular()) {
-            foreach ($loadedContentTypeDraft->getFieldDefinitions() as $fieldDefinition) {
-                if ($fieldDefinition->fieldTypeIdentifier === $fieldDefinitionCreateStruct->fieldTypeIdentifier) {
-                    throw new BadStateException(
-                        '$contentTypeDraft',
-                        "The Content Type already contains a Field definition of the singular Field Type '{$fieldDefinition->fieldTypeIdentifier}'"
-                    );
-                }
+            if ($loadedContentTypeDraft->hasFieldDefinitionOfType($fieldDefinitionCreateStruct->fieldTypeIdentifier)) {
+                throw new BadStateException(
+                    '$contentTypeDraft',
+                    "The Content Type already contains a Field definition of the singular Field Type '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}'"
+                );
             }
         }
 
@@ -1474,7 +1472,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        if (count($loadedContentTypeDraft->getFieldDefinitions()) === 0) {
+        if ($loadedContentTypeDraft->getFieldDefinitions()->isEmpty()) {
             throw new InvalidArgumentException(
                 '$contentTypeDraft',
                 'The Content Type draft should have at least one Field definition.'

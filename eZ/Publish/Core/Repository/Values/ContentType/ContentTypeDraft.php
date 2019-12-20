@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCollection as APIFieldDefinitionCollection;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
 
 /**
@@ -127,7 +129,7 @@ class ContentTypeDraft extends APIContentTypeDraft
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
-    public function getFieldDefinitions()
+    public function getFieldDefinitions(): APIFieldDefinitionCollection
     {
         return $this->innerContentType->getFieldDefinitions();
     }
@@ -139,20 +141,13 @@ class ContentTypeDraft extends APIContentTypeDraft
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
-    public function getFieldDefinition($fieldDefinitionIdentifier)
+    public function getFieldDefinition($fieldDefinitionIdentifier): ?FieldDefinition
     {
         return $this->innerContentType->getFieldDefinition($fieldDefinitionIdentifier);
     }
 
-    /**
-     * This method returns the field definition for the given id.
-     *
-     * @param mixed $fieldDefinitionId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
-     */
-    public function getFieldDefinitionById($fieldDefinitionId)
+    public function hasFieldDefinition(string $fieldDefinitionIdentifier): bool
     {
-        return $this->innerContentType->getFieldDefinition($fieldDefinitionId);
+        return $this->innerContentType->hasFieldDefinition($fieldDefinitionIdentifier);
     }
 }
