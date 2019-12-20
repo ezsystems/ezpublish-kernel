@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Exceptions;
 
-class OutOfBoundsException extends \OutOfBoundsException
+use eZ\Publish\API\Repository\Exceptions\Exception as RepositoryException;
+use OutOfBoundsException as BaseOutOfBoundsException;
+
+class OutOfBoundsException extends BaseOutOfBoundsException implements RepositoryException
 {
 }
