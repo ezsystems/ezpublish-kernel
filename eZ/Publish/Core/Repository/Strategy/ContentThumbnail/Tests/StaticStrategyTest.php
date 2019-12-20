@@ -36,7 +36,7 @@ class StaticStrategyTest extends TestCase
 
         $this->assertEquals(
             new Thumbnail([
-                'resource' => $resource
+                'resource' => $resource,
             ]),
             $result
         );

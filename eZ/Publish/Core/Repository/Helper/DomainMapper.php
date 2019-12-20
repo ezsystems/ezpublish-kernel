@@ -568,7 +568,7 @@ class DomainMapper
                 'modificationDate' => $contentInfo->modificationDate,
                 'creationDate' => $contentInfo->modificationDate,
                 'creatorId' => $contentInfo->ownerId,
-            ])
+            ]),
         ]);
 
         // NOTE: this is hardcoded workaround for missing ContentInfo on root location

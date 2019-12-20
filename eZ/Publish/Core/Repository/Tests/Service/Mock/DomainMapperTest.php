@@ -79,7 +79,7 @@ class DomainMapperTest extends BaseServiceMockTest
                 'modificationDate' => $expectedContentInfo->modificationDate,
                 'creationDate' => $expectedContentInfo->modificationDate,
                 'creatorId' => $expectedContentInfo->ownerId,
-            ])
+            ]),
         ]);
 
         $this->assertInstanceOf(APILocation::class, $apiRootLocation);

@@ -74,14 +74,14 @@ class ThumbnailChainStrategyTest extends TestCase
             ->expects($this->once())
             ->method('getThumbnail')
             ->willReturn(new Thumbnail([
-                'resource' => 'second'
+                'resource' => 'second',
             ]));
 
         $thirdStrategyMock
             ->expects($this->never())
             ->method('getThumbnail')
             ->willReturn(new Thumbnail([
-                'resource' => 'third'
+                'resource' => 'third',
             ]));
 
         $thumbnailChainStrategy = new ThumbnailChainStrategy([
