@@ -8,12 +8,12 @@
  */
 namespace eZ\Publish\API\Repository\Exceptions;
 
-use Exception;
+use eZ\Publish\API\Repository\Exceptions\Exception as RepositoryException;
 
 /**
  * This Exception is thrown on a write attempt in a read only property in a value object.
  */
-class PropertyReadOnlyException extends Exception
+class PropertyReadOnlyException extends \Exception implements RepositoryException
 {
     /**
      * Generates: Property '{$propertyName}' is readonly[ on class '{$className}'].
@@ -22,7 +22,7 @@ class PropertyReadOnlyException extends Exception
      * @param string|null $className Optionally to specify class in abstract/parent classes
      * @param \Exception|null $previous
      */
-    public function __construct($propertyName, $className = null, Exception $previous = null)
+    public function __construct($propertyName, $className = null, \Exception $previous = null)
     {
         if ($className === null) {
             parent::__construct("Property '{$propertyName}' is readonly", 0, $previous);
