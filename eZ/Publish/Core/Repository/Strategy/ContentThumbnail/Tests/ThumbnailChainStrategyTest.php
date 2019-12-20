@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class ThumbnailChainStrategyTest extends TestCase
 {
-    public function testThumbnailStrategyChaining()
+    public function testThumbnailStrategyChaining(): void
     {
         $firstStrategyMock = $this->createMock(ThumbnailStrategy::class);
         $secondStrategyMock = $this->createMock(ThumbnailStrategy::class);
