@@ -78,6 +78,7 @@ final class InstallPlatformCommand extends Command
         $this->checkCreateDatabase($output);
 
         $type = $input->getArgument('type');
+        $siteaccess = $input->getOption('siteaccess');
         $installer = $this->getInstaller($type);
         if ($installer === false) {
             $output->writeln(
@@ -95,7 +96,7 @@ final class InstallPlatformCommand extends Command
         $this->cacheClear($output);
 
         if (!$input->getOption('skip-indexing')) {
-            $this->indexData($output);
+            $this->indexData($output, $siteaccess);
         }
     }
 
@@ -164,13 +165,20 @@ final class InstallPlatformCommand extends Command
      * IMPORTANT: This is done using a command because config has change, so container and all services are different.
      *
      * @param OutputInterface $output
+     * @param string|null $siteaccess
      */
-    private function indexData(OutputInterface $output)
+    private function indexData(OutputInterface $output, $siteaccess = null)
     {
         $output->writeln(
             sprintf('Search engine re-indexing, executing command ezplatform:reindex')
         );
-        $this->executeCommand($output, 'ezplatform:reindex');
+
+        $command = 'ezplatform:reindex';
+        if ($siteaccess) {
+            $command .= sprintf(' --siteaccess=%s', $siteaccess);
+        }
+
+        $this->executeCommand($output, $command);
     }
 
     /**
