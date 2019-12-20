@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\Exception as RepositoryException;
+use Exception;
 
 /**
  * An Exception which is thrown if an operation cannot be performed by a service
  * although the current user would have permission to perform this action.
  */
-abstract class ForbiddenException extends \Exception implements RepositoryException
+abstract class ForbiddenException extends Exception implements RepositoryException
 {
 }

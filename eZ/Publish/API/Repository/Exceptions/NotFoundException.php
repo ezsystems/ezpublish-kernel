@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\Exception as RepositoryException;
+use Exception;
 
 /**
  * This Exception is thrown if an object referenced by an id or identifier
  * could not be found in the repository.
  */
-abstract class NotFoundException extends \Exception implements RepositoryException
+abstract class NotFoundException extends Exception implements RepositoryException
 {
 }
