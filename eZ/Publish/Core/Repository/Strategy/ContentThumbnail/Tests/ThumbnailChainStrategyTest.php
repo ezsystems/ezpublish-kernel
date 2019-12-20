@@ -52,7 +52,7 @@ class ThumbnailChainStrategyTest extends TestCase
         $this->assertInstanceOf(Thumbnail::class, $result);
     }
 
-    public function testThumbnailStrategyChainBreakOnThumbnailFound()
+    public function testThumbnailStrategyChainBreakOnThumbnailFound(): void
     {
         $firstStrategyMock = $this->createMock(ThumbnailStrategy::class);
         $secondStrategyMock = $this->createMock(ThumbnailStrategy::class);
