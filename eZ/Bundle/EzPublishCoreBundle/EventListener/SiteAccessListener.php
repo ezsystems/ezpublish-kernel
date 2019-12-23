@@ -111,7 +111,10 @@ class SiteAccessListener implements EventSubscriberInterface, ContainerAwareInte
     private function getViewParameters($pathinfo)
     {
         // No view parameters, get out of here.
-        if (($vpStart = strpos($pathinfo, '/(')) === false) {
+        if (
+            strpos($pathinfo, ')/') === false
+            || ($vpStart = strpos($pathinfo, '/(')) === false
+        ) {
             return [$pathinfo, [], ''];
         }
 
