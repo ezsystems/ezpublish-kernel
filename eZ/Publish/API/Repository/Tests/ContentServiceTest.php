@@ -821,6 +821,22 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     */
+    public function testLoadVersionInfoByIdGetLanguages(VersionInfo $versionInfo): void
+    {
+        $actualLanguages = $versionInfo->getLanguages();
+
+        $expectedLanguages = ['eng-US'];
+        foreach ($expectedLanguages as $i => $expectedLanguage) {
+            $this->assertEquals($expectedLanguage, $actualLanguages[$i]->languageCode);
+        }
+    }
+
+    /**
      * Test for the loadVersionInfoById() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById()

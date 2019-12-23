@@ -34,6 +34,8 @@ interface ProxyDomainMapperInterface
 
     public function createLanguageProxy(string $languageCode): Language;
 
+    public function createLanguageProxyList(array $languageCodes): array;
+
     public function createLocationProxy(int $locationId, array $prioritizedLanguages = Language::ALL): Location;
 
     public function createSectionProxy(int $sectionId): Section;

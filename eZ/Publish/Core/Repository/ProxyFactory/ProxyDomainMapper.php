@@ -139,6 +139,16 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
         return $this->factory->createProxy(Language::class, $initializer);
     }
 
+    public function createLanguageProxyList(array $languageCodes): array
+    {
+        $languages = [];
+        foreach ($languageCodes as $languageCode) {
+            $languages[] = $this->createLanguageProxy($languageCode);
+        }
+
+        return $languages;
+    }
+
     public function createLocationProxy(
         int $locationId,
         array $prioritizedLanguages = Language::ALL

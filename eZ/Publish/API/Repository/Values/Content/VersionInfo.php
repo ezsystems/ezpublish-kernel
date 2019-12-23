@@ -103,6 +103,11 @@ abstract class VersionInfo extends ValueObject implements MultiLanguageName
     abstract public function getInitialLanguage(): Language;
 
     /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Language[]
+     */
+    abstract public function getLanguages(): iterable;
+
+    /**
      * Returns true if version is a draft.
      *
      * @return bool

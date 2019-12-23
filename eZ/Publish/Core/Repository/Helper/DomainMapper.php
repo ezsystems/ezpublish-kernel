@@ -335,6 +335,7 @@ class DomainMapper
                 'prioritizedNameLanguageCode' => $prioritizedNameLanguageCode,
                 'creator' => $this->proxyFactory->createUserProxy($spiVersionInfo->creatorId, $prioritizedLanguages),
                 'initialLanguage' => $this->proxyFactory->createLanguageProxy($spiVersionInfo->initialLanguageCode),
+                'languages' => $this->proxyFactory->createLanguageProxyList($spiVersionInfo->languageCodes),
             ]
         );
     }

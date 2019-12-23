@@ -44,6 +44,9 @@ class VersionInfo extends APIVersionInfo
     /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     protected $initialLanguage;
 
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language[] */
+    protected $languages;
+
     /**
      * The first matched name language among user provided prioritized languages.
      *
@@ -77,6 +80,14 @@ class VersionInfo extends APIVersionInfo
     public function getInitialLanguage(): Language
     {
         return $this->initialLanguage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLanguages(): iterable
+    {
+        return $this->languages;
     }
 
     /**
