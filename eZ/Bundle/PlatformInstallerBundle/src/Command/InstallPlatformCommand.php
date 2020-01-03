@@ -9,6 +9,7 @@
 namespace EzSystems\PlatformInstallerBundle\Command;
 
 use Doctrine\DBAL\Connection;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,6 +22,9 @@ use Symfony\Component\Process\PhpExecutableFinder;
 
 class InstallPlatformCommand extends Command
 {
+    private const REPOSITORY_STORAGE = 'storage';
+    private const REPOSITORY_CONNECTION = 'connection';
+
     /** @var \Doctrine\DBAL\Connection */
     private $db;
 
@@ -36,6 +40,9 @@ class InstallPlatformCommand extends Command
     /** @var \EzSystems\PlatformInstallerBundle\Installer\Installer[] */
     private $installers = [];
 
+    /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider */
+    private $repositoryConfigurationProvider;
+
     const EXIT_GENERAL_DATABASE_ERROR = 4;
     const EXIT_PARAMETERS_NOT_FOUND = 5;
     const EXIT_UNKNOWN_INSTALL_TYPE = 6;
@@ -45,12 +52,14 @@ class InstallPlatformCommand extends Command
         Connection $db,
         array $installers,
         CacheItemPoolInterface $cachePool,
-        $environment
+        $environment,
+        RepositoryConfigurationProvider $repositoryConfigurationProvider
     ) {
         $this->db = $db;
         $this->installers = $installers;
         $this->cachePool = $cachePool;
         $this->environment = $environment;
+        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         parent::__construct();
     }
 
@@ -127,7 +136,10 @@ class InstallPlatformCommand extends Command
         );
         try {
             $bufferedOutput = new BufferedOutput();
-            $this->executeCommand($bufferedOutput, 'doctrine:database:create --if-not-exists');
+            $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
+            $connectionName = $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION];
+            $command = sprintf('doctrine:database:create --if-not-exists --connection=%s', $connectionName);
+            $this->executeCommand($bufferedOutput, $command);
             $output->writeln($bufferedOutput->fetch());
         } catch (\RuntimeException $exception) {
             $this->output->writeln(
