@@ -1,12 +1,16 @@
 <?php
 
 /**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPurger;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList;
+use eZ\Publish\Core\IO\IOConfig;
 use PHPUnit\Framework\TestCase;
 
 class LegacyStorageImageFileListTest extends TestCase
@@ -17,12 +21,19 @@ class LegacyStorageImageFileListTest extends TestCase
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList */
     protected $fileList;
 
+    /** @var \eZ\Publish\Core\IO\IOConfig|\PHPUnit\Framework\MockObject\MockObject */
+    private $ioConfigResolverMock;
+
     protected function setUp(): void
     {
         $this->rowReaderMock = $this->createMock(ImageFileRowReader::class);
+        $this->ioConfigResolverMock = $this->createMock(IOConfig::class);
+        $this->ioConfigResolverMock
+            ->method('getLegacyUrlPrefix')
+            ->willReturn('var/ezdemo_site/storage');
         $this->fileList = new LegacyStorageImageFileList(
             $this->rowReaderMock,
-            'var/ezdemo_site/storage',
+            $this->ioConfigResolverMock,
             'images'
         );
     }

@@ -8,16 +8,16 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\Tests\EventListener;
 
-use eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener;
+use DateTime;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
+use eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener;
+use eZ\Publish\Core\IO\IOConfig;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use DateTime;
 
 class StreamFileListenerTest extends TestCase
 {
@@ -27,18 +27,16 @@ class StreamFileListenerTest extends TestCase
     /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $ioServiceMock;
 
-    private $ioUriPrefix = 'var/test/storage';
-
-    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $configResolverMock;
+    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\IOConfigResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $ioConfigResolverMock;
 
     protected function setUp(): void
     {
         $this->ioServiceMock = $this->createMock(IOServiceInterface::class);
 
-        $this->configResolverMock = $this->createMock(ConfigResolverInterface::class);
+        $this->ioConfigResolverMock = $this->createMock(IOConfig::class);
 
-        $this->eventListener = new StreamFileListener($this->ioServiceMock, $this->configResolverMock);
+        $this->eventListener = new StreamFileListener($this->ioServiceMock, $this->ioConfigResolverMock);
     }
 
     public function testDoesNotRespondToNonIoUri()
@@ -135,10 +133,8 @@ class StreamFileListenerTest extends TestCase
 
     private function configureIoUrlPrefix($urlPrefix)
     {
-        $this->configResolverMock
-            ->expects($this->any())
-            ->method('getParameter')
-            ->with('io.url_prefix')
+        $this->ioConfigResolverMock
+            ->method('getUrlPrefix')
             ->willReturn($urlPrefix);
     }
 

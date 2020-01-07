@@ -5,6 +5,8 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger;
 
+use eZ\Publish\Core\IO\IOConfig;
+
 /**
  * Iterator for entries in legacy's ezimagefile table.
  *
@@ -27,28 +29,27 @@ class LegacyStorageImageFileList implements ImageFileList
     private $cursor;
 
     /**
-     * The storage prefix used by legacy, usually the vardir + the 'storage' folder.
-     * Example: var/ezdemo_site/storage.
-     *
-     * @var string
-     */
-    private $prefix;
-
-    /**
      * Used to get ezimagefile rows.
      *
      * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader
      */
     private $rowReader;
 
+    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\IOConfigResolver */
+    private $ioConfigResolver;
+
+    /** @var string */
+    private $imagesDir;
+
     /**
      * @param \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader $rowReader
-     * @param string $storageDir Folder, relative to the root, where files are stored. Example: var/ezdemo_site/storage
+     * @param \eZ\Publish\Core\IO\IOConfig $ioConfigResolver
      * @param string $imagesDir Folder where images are stored, within the storage dir. Example: 'images'
      */
-    public function __construct(ImageFileRowReader $rowReader, $storageDir, $imagesDir)
+    public function __construct(ImageFileRowReader $rowReader, IOConfig $ioConfigResolver, $imagesDir)
     {
-        $this->prefix = $storageDir . '/' . $imagesDir;
+        $this->ioConfigResolver = $ioConfigResolver;
+        $this->imagesDir = $imagesDir;
         $this->rowReader = $rowReader;
     }
 
@@ -87,13 +88,16 @@ class LegacyStorageImageFileList implements ImageFileList
     /**
      * Fetches the next item from the resultset, moves the cursor forward, and removes the prefix from the image id.
      */
-    private function fetchRow()
+    private function fetchRow(): void
     {
+        // Folder, relative to the root, where files are stored. Example: var/ezdemo_site/storage
+        $storageDir = $this->ioConfigResolver->getLegacyUrlPrefix();
+        $prefix = $storageDir . '/' . $this->imagesDir;
         ++$this->cursor;
         $imageId = $this->rowReader->getRow();
 
-        if (substr($imageId, 0, strlen($this->prefix)) == $this->prefix) {
-            $imageId = ltrim(substr($imageId, strlen($this->prefix)), '/');
+        if (substr($imageId, 0, strlen($prefix)) == $prefix) {
+            $imageId = ltrim(substr($imageId, strlen($prefix)), '/');
         }
 
         $this->item = $imageId;

@@ -9,9 +9,9 @@
 namespace eZ\Bundle\EzPublishIOBundle\EventListener;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
+use eZ\Publish\Core\IO\IOConfig;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,13 +26,13 @@ class StreamFileListener implements EventSubscriberInterface
     /** @var IOServiceInterface */
     private $ioService;
 
-    /** @var ConfigResolverInterface */
-    private $configResolver;
+    /** @var \eZ\Publish\Core\IO\IOConfig */
+    private $ioConfigResolver;
 
-    public function __construct(IOServiceInterface $ioService, ConfigResolverInterface $configResolver)
+    public function __construct(IOServiceInterface $ioService, IOConfig $ioConfigResolver)
     {
         $this->ioService = $ioService;
-        $this->configResolver = $configResolver;
+        $this->ioConfigResolver = $ioConfigResolver;
     }
 
     public static function getSubscribedEvents()
@@ -42,9 +42,6 @@ class StreamFileListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
-     */
     public function onKernelRequest(RequestEvent $event)
     {
         if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
@@ -52,7 +49,7 @@ class StreamFileListener implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        $urlPrefix = $this->configResolver->getParameter('io.url_prefix');
+        $urlPrefix = $this->ioConfigResolver->getUrlPrefix();
         if (strpos($urlPrefix, '://') !== false) {
             $uri = $request->getSchemeAndHttpHost() . $request->getPathInfo();
         } else {
@@ -85,6 +82,6 @@ class StreamFileListener implements EventSubscriberInterface
      */
     private function isIoUri($uri, $urlPrefix)
     {
-        return strpos(ltrim($uri, '/'), $this->configResolver->getParameter('io.url_prefix')) === 0;
+        return strpos(ltrim($uri, '/'), $this->ioConfigResolver->getUrlPrefix()) === 0;
     }
 }

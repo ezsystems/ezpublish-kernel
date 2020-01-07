@@ -1,14 +1,15 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\IO\UrlDecorator;
 
 use eZ\Publish\Core\IO\Exception\InvalidBinaryPrefixException;
+use eZ\Publish\Core\IO\IOConfig;
 use eZ\Publish\Core\IO\UrlDecorator;
 
 /**
@@ -16,44 +17,42 @@ use eZ\Publish\Core\IO\UrlDecorator;
  */
 class Prefix implements UrlDecorator
 {
-    /**
-     * The URI prefix.
-     *
-     * @var string
-     */
-    protected $prefix;
+    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\IOConfigResolver */
+    protected $ioConfigResolver;
 
-    public function __construct($prefix = null)
+    public function __construct(IOConfig $IOConfigResolver)
     {
-        if ($prefix !== null) {
-            $this->setPrefix($prefix);
-        }
+        $this->ioConfigResolver = $IOConfigResolver;
     }
 
-    public function setPrefix($prefix)
+    public function getPrefix()
     {
-        $this->prefix = trim($prefix, '/') . '/';
+        $prefix = $this->ioConfigResolver->getLegacyUrlPrefix();
+
+        return trim($prefix, '/') . '/';
     }
 
     public function decorate($id)
     {
-        if (empty($this->prefix)) {
+        $prefix = $this->getPrefix();
+        if (empty($prefix)) {
             return $id;
         }
 
-        return $this->prefix . trim($id, '/');
+        return $prefix . trim($id, '/');
     }
 
     public function undecorate($url)
     {
-        if (empty($this->prefix)) {
+        $prefix = $this->getPrefix();
+        if (empty($prefix)) {
             return $url;
         }
 
-        if (strpos($url, $this->prefix) !== 0) {
-            throw new InvalidBinaryPrefixException($url, $this->prefix);
+        if (strpos($url, $prefix) !== 0) {
+            throw new InvalidBinaryPrefixException($url, $prefix);
         }
 
-        return trim(substr($url, strlen($this->prefix)), '/');
+        return trim(substr($url, strlen($prefix)), '/');
     }
 }

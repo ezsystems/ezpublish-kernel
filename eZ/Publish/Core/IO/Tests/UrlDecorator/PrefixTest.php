@@ -1,13 +1,14 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
- * @license For full copyright and license information view LICENSE file distributd with this source code.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\IO\Tests\UrlDecorator;
 
+use eZ\Publish\Core\IO\IOConfig;
 use eZ\Publish\Core\IO\UrlDecorator\Prefix;
 use PHPUnit\Framework\TestCase;
 
@@ -46,7 +47,12 @@ class PrefixTest extends TestCase
      */
     protected function buildDecorator($prefix)
     {
-        return new Prefix($prefix);
+        $ioConfigResolverMock = $this->createMock(IOConfig::class);
+        $ioConfigResolverMock
+            ->method('getLegacyUrlPrefix')
+            ->willReturn($prefix);
+
+        return new Prefix($ioConfigResolverMock);
     }
 
     public function provideData()
