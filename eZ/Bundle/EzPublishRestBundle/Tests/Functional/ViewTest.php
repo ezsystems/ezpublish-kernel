@@ -79,7 +79,8 @@ class ViewTest extends TestCase
     <offset>0</offset>
   </Query>
 </ViewInput>
-XML,
+XML
+,
                 'xml',
                 2,
                 [$foo, $bar],
@@ -103,7 +104,8 @@ XML,
     }
   }
 }
-JSON,
+JSON
+,
                 'json',
                 2,
                 [$foo, $bar],
@@ -127,7 +129,8 @@ JSON,
     <offset>0</offset>
   </Query>
 </ViewInput>
-XML,
+XML
+,
                 'xml',
                 1,
                 [$foo, $bar],
@@ -156,7 +159,8 @@ XML,
     }
   }
 }
-JSON,
+JSON
+,
                 'json',
                 2,
                 [$foo, $bar],
@@ -200,7 +204,8 @@ JSON,
     }
   }
 }
-JSON,
+JSON
+,
                 'json',
                 2,
                 [$foo, $bar],
