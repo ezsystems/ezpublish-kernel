@@ -1,5 +1,6 @@
 parameters:
     languages: []
+    storage_dir: var/ezdemo_site/storage
 
 services:
     eZ\Publish\Core\Repository\SiteAccessAware\Repository:
@@ -96,3 +97,9 @@ services:
 
     ezpublish.helper.language_resolver:
         alias: eZ\Publish\API\Repository\LanguageResolver
+
+    eZ\Publish\Core\IO\IOConfig:
+        alias: eZ\Publish\Core\Repository\SiteAccessAware\Config\IOConfigResolver
+
+    eZ\Publish\Core\Repository\SiteAccessAware\Config\IOConfigResolver:
+        arguments: ['%storage_dir%']
