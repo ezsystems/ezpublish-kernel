@@ -136,8 +136,7 @@ class InstallPlatformCommand extends Command
         );
         try {
             $bufferedOutput = new BufferedOutput();
-            $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
-            $connectionName = $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION];
+            $connectionName = $this->getCurrentConnectionName();
             $command = sprintf('doctrine:database:create --if-not-exists --connection=%s', $connectionName);
             $this->executeCommand($bufferedOutput, $command);
             $output->writeln($bufferedOutput->fetch());
@@ -254,5 +253,12 @@ class InstallPlatformCommand extends Command
         if (!$process->isSuccessful()) {
             throw new \RuntimeException(sprintf('An error occurred when executing the "%s" command.', escapeshellarg($cmd)));
         }
+    }
+
+    private function getCurrentConnectionName(): string
+    {
+        $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
+
+        return $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION];
     }
 }
