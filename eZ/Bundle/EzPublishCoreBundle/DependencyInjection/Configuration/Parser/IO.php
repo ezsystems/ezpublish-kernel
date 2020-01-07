@@ -96,32 +96,6 @@ class IO extends AbstractParser
             $this->addComplexParametersDependencies('io.legacy_url_prefix', $scope, $container);
             $this->addComplexParametersDependencies('io.root_dir', $scope, $container);
         }
-
-        // we should only write for default, and for sa/sa groups/global IF they have a declared value
-        $scopes = array_merge(
-            ['default'],
-            $config['siteaccess']['list'],
-            array_keys($config['siteaccess']['groups'])
-        );
-        foreach ($scopes as $scope) {
-            // post process io.url_prefix for complex settings
-            $postProcessedValue = $this->postProcessComplexSetting('io.url_prefix', $scope, $container);
-            if (is_string($postProcessedValue)) {
-                $contextualizer->setContextualParameter('io.url_prefix', $scope, $postProcessedValue);
-            }
-
-            // post process io.legacy_url_prefix for complex settings
-            $postProcessedValue = $this->postProcessComplexSetting('io.legacy_url_prefix', $scope, $container);
-            if (is_string($postProcessedValue)) {
-                $contextualizer->setContextualParameter('io.legacy_url_prefix', $scope, $postProcessedValue);
-            }
-
-            // post process io.root_dir for complex settings
-            $postProcessedValue = $this->postProcessComplexSetting('io.root_dir', $scope, $container);
-            if (is_string($postProcessedValue)) {
-                $contextualizer->setContextualParameter('io.root_dir', $scope, $postProcessedValue);
-            }
-        }
     }
 
     /**
@@ -158,49 +132,5 @@ class IO extends AbstractParser
                 break;
             }
         }
-    }
-
-    private function postProcessComplexSetting($setting, $sa, ContainerBuilder $container)
-    {
-        $configResolver = $container->get('ezpublish.config.resolver.core');
-
-        if (!$configResolver->hasParameter($setting, null, $sa)) {
-            return false;
-        }
-
-        $settingValue = $configResolver->getParameter($setting, null, $sa);
-        if (!$this->complexSettingParser->containsDynamicSettings($settingValue)) {
-            return false;
-        }
-
-        // we kind of need to process this as well, don't we ?
-        if ($this->complexSettingParser->isDynamicSetting($settingValue)) {
-            $parts = $this->complexSettingParser->parseDynamicSetting($settingValue);
-            if (!isset($parts['namespace'])) {
-                $parts['namespace'] = 'ezsettings';
-            }
-            if (!isset($parts['scope'])) {
-                $parts['scope'] = $sa;
-            }
-
-            return $configResolver->getParameter($parts['param'], null, $sa);
-        }
-
-        $value = $settingValue;
-        foreach ($this->complexSettingParser->parseComplexSetting($settingValue) as $dynamicSetting) {
-            $parts = $this->complexSettingParser->parseDynamicSetting($dynamicSetting);
-            if (!isset($parts['namespace'])) {
-                $parts['namespace'] = 'ezsettings';
-            }
-            if (!isset($parts['scope'])) {
-                $parts['scope'] = $sa;
-            }
-
-            $dynamicSettingValue = $configResolver->getParameter($parts['param'], $parts['namespace'], $parts['scope']);
-
-            $value = str_replace($dynamicSetting, $dynamicSettingValue, $value);
-        }
-
-        return $value;
     }
 }

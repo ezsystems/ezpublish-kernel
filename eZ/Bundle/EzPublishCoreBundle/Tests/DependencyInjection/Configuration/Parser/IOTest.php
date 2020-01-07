@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the IOTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -54,44 +52,5 @@ class IOTest extends AbstractParserTestCase
 
         $this->assertConfigResolverParameterValue('io.metadata_handler', 'cluster', 'ezdemo_site');
         $this->assertConfigResolverParameterValue('io.binarydata_handler', 'cluster', 'ezdemo_site');
-    }
-
-    /**
-     * Tests that a complex default io.url_prefix will be set in a context where one of its dependencies is set.
-     */
-    public function testComplexIoUrlPrefix()
-    {
-        $this->load();
-
-        // Should have been defined & converted in ezdemo_site
-        $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site.io.url_prefix', 'var/ezdemo_site/storage');
-        // Should have been converted in default
-        $this->assertContainerBuilderHasParameter('ezsettings.default.io.url_prefix', 'var/storage');
-    }
-
-    /**
-     * Tests that a complex default io.url_prefix will be set in a context where one of its dependencies is set.
-     */
-    public function testComplexIoLegacyUrlPrefix()
-    {
-        $this->load();
-
-        // Should have been defined & converted in ezdemo_site
-        $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site.io.legacy_url_prefix', 'var/ezdemo_site/storage');
-        // Should have been converted in default
-        $this->assertContainerBuilderHasParameter('ezsettings.default.io.legacy_url_prefix', 'var/storage');
-    }
-
-    /**
-     * Tests that a complex default io.url_prefix will be set in a context where one of its dependencies is set.
-     */
-    public function testComplexIoRootDir()
-    {
-        $this->load();
-
-        // Should have been defined & converted in ezdemo_site
-        $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site.io.root_dir', '%webroot_dir%/var/ezdemo_site/storage');
-        // Should have been converted in default
-        $this->assertContainerBuilderHasParameter('ezsettings.default.io.root_dir', '%webroot_dir%/var/storage');
     }
 }
