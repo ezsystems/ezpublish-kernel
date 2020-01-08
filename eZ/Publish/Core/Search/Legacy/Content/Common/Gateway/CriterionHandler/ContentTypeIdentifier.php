@@ -83,6 +83,10 @@ class ContentTypeIdentifier extends CriterionHandler
             }
         }
 
+        if (count($idList) === 0) {
+            return $query->expr->not($query->bindValue('1'));
+        }
+
         return $query->expr->in(
             $this->dbHandler->quoteColumn('contentclass_id', 'ezcontentobject'),
             $idList
