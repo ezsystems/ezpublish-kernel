@@ -7,7 +7,7 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Factory;
 
-use eZ\Publish\Core\IO\IOConfig;
+use eZ\Publish\Core\IO\IOConfigProvider;
 use League\Flysystem\Adapter\Local;
 
 /**
@@ -16,13 +16,13 @@ use League\Flysystem\Adapter\Local;
 class LocalAdapterFactory
 {
     /**
-     * @param \eZ\Publish\Core\IO\IOConfig $ioConfigResolver
+     * @param \eZ\Publish\Core\IO\IOConfigProvider $ioConfigResolver
      * @param int $filesPermissions Permissions used when creating files. Example: 0640.
      * @param int $directoriesPermissions Permissions when creating directories. Example: 0750.
      *
      * @return Local
      */
-    public function build(IOConfig $ioConfigResolver, $filesPermissions, $directoriesPermissions)
+    public function build(IOConfigProvider $ioConfigResolver, $filesPermissions, $directoriesPermissions)
     {
         return new Local(
             $ioConfigResolver->getRootDir(),

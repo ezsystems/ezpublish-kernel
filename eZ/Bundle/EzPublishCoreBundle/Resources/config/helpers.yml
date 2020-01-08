@@ -61,7 +61,7 @@ services:
     eZ\Publish\API\Repository\LanguageResolver:
         alias: eZ\Bundle\EzPublishCoreBundle\SiteAccess\LanguageResolver
 
-    eZ\Publish\Core\IO\IOConfig:
+    eZ\Publish\Core\IO\IOConfigProvider:
         alias: eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\IOConfigResolver
 
     eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\ComplexConfigProcessor:

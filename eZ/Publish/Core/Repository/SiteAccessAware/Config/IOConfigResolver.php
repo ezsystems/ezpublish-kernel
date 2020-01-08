@@ -8,19 +8,30 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository\SiteAccessAware\Config;
 
-use eZ\Publish\Core\IO\IOConfig;
+use eZ\Publish\Core\IO\IOConfigProvider;
 
 /**
  * @internal
  */
-final class IOConfigResolver implements IOConfig
+final class IOConfigResolver implements IOConfigProvider
 {
     /** @var string */
     private $storageDir;
 
-    public function __construct(string $storageDir)
-    {
+    /** @var string */
+    private $legacyUrlPrefix;
+
+    /** @var string */
+    private $urlPrefix;
+
+    public function __construct(
+        string $storageDir,
+        string $legacyUrlPrefix,
+        string $urlPrefix
+    ) {
         $this->storageDir = $storageDir;
+        $this->legacyUrlPrefix = $legacyUrlPrefix;
+        $this->urlPrefix = $urlPrefix;
     }
 
     public function getRootDir(): string
@@ -30,11 +41,11 @@ final class IOConfigResolver implements IOConfig
 
     public function getLegacyUrlPrefix(): string
     {
-        return $this->storageDir;
+        return $this->legacyUrlPrefix;
     }
 
     public function getUrlPrefix(): string
     {
-        return $this->storageDir;
+        return $this->urlPrefix;
     }
 }

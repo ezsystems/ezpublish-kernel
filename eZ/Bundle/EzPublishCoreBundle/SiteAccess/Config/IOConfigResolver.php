@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config;
 
-use eZ\Publish\Core\IO\IOConfig;
+use eZ\Publish\Core\IO\IOConfigProvider;
 
 /**
  * @internal
  */
-final class IOConfigResolver implements IOConfig
+final class IOConfigResolver implements IOConfigProvider
 {
     /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\ComplexConfigProcessor */
     private $complexConfigProcessor;

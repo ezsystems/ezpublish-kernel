@@ -9,7 +9,7 @@
 namespace eZ\Bundle\EzPublishIOBundle\EventListener;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
-use eZ\Publish\Core\IO\IOConfig;
+use eZ\Publish\Core\IO\IOConfigProvider;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -26,10 +26,10 @@ class StreamFileListener implements EventSubscriberInterface
     /** @var IOServiceInterface */
     private $ioService;
 
-    /** @var \eZ\Publish\Core\IO\IOConfig */
+    /** @var \eZ\Publish\Core\IO\IOConfigProvider */
     private $ioConfigResolver;
 
-    public function __construct(IOServiceInterface $ioService, IOConfig $ioConfigResolver)
+    public function __construct(IOServiceInterface $ioService, IOConfigProvider $ioConfigResolver)
     {
         $this->ioService = $ioService;
         $this->ioConfigResolver = $ioConfigResolver;

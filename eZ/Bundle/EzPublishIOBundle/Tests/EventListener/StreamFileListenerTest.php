@@ -11,7 +11,7 @@ namespace eZ\Bundle\EzPublishIOBundle\Tests\EventListener;
 use DateTime;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener;
-use eZ\Publish\Core\IO\IOConfig;
+use eZ\Publish\Core\IO\IOConfigProvider;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use PHPUnit\Framework\TestCase;
@@ -27,14 +27,14 @@ class StreamFileListenerTest extends TestCase
     /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $ioServiceMock;
 
-    /** @var \eZ\Publish\Core\IO\IOConfig|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\Core\IO\IOConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $ioConfigResolverMock;
 
     protected function setUp(): void
     {
         $this->ioServiceMock = $this->createMock(IOServiceInterface::class);
 
-        $this->ioConfigResolverMock = $this->createMock(IOConfig::class);
+        $this->ioConfigResolverMock = $this->createMock(IOConfigProvider::class);
 
         $this->eventListener = new StreamFileListener($this->ioServiceMock, $this->ioConfigResolverMock);
     }

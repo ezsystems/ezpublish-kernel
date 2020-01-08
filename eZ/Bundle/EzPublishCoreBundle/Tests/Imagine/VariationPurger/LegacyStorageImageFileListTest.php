@@ -10,7 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPurger;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList;
-use eZ\Publish\Core\IO\IOConfig;
+use eZ\Publish\Core\IO\IOConfigProvider;
 use PHPUnit\Framework\TestCase;
 
 class LegacyStorageImageFileListTest extends TestCase
@@ -21,13 +21,13 @@ class LegacyStorageImageFileListTest extends TestCase
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList */
     protected $fileList;
 
-    /** @var \eZ\Publish\Core\IO\IOConfig|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\Core\IO\IOConfigProvider|\PHPUnit\Framework\MockObject\MockObject */
     private $ioConfigResolverMock;
 
     protected function setUp(): void
     {
         $this->rowReaderMock = $this->createMock(ImageFileRowReader::class);
-        $this->ioConfigResolverMock = $this->createMock(IOConfig::class);
+        $this->ioConfigResolverMock = $this->createMock(IOConfigProvider::class);
         $this->ioConfigResolverMock
             ->method('getLegacyUrlPrefix')
             ->willReturn('var/ezdemo_site/storage');

@@ -1,6 +1,8 @@
 parameters:
     languages: []
     storage_dir: var/ezdemo_site/storage
+    legacy_url_prefix: var/ezdemo_site/storage
+    url_prefix: var/ezdemo_site/storage
 
 services:
     eZ\Publish\Core\Repository\SiteAccessAware\Repository:
@@ -98,8 +100,11 @@ services:
     ezpublish.helper.language_resolver:
         alias: eZ\Publish\API\Repository\LanguageResolver
 
-    eZ\Publish\Core\IO\IOConfig:
+    eZ\Publish\Core\IO\IOConfigProvider:
         alias: eZ\Publish\Core\Repository\SiteAccessAware\Config\IOConfigResolver
 
     eZ\Publish\Core\Repository\SiteAccessAware\Config\IOConfigResolver:
-        arguments: ['%storage_dir%']
+        arguments:
+            - '%storage_dir%'
+            - '%legacy_url_prefix%'
+            - '%url_prefix%'

@@ -5,7 +5,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger;
 
-use eZ\Publish\Core\IO\IOConfig;
+use eZ\Publish\Core\IO\IOConfigProvider;
 
 /**
  * Iterator for entries in legacy's ezimagefile table.
@@ -35,7 +35,7 @@ class LegacyStorageImageFileList implements ImageFileList
      */
     private $rowReader;
 
-    /** @var \eZ\Publish\Core\IO\IOConfig */
+    /** @var \eZ\Publish\Core\IO\IOConfigProvider */
     private $ioConfigResolver;
 
     /** @var string */
@@ -43,10 +43,10 @@ class LegacyStorageImageFileList implements ImageFileList
 
     /**
      * @param \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader $rowReader
-     * @param \eZ\Publish\Core\IO\IOConfig $ioConfigResolver
+     * @param \eZ\Publish\Core\IO\IOConfigProvider $ioConfigResolver
      * @param string $imagesDir Folder where images are stored, within the storage dir. Example: 'images'
      */
-    public function __construct(ImageFileRowReader $rowReader, IOConfig $ioConfigResolver, $imagesDir)
+    public function __construct(ImageFileRowReader $rowReader, IOConfigProvider $ioConfigResolver, $imagesDir)
     {
         $this->ioConfigResolver = $ioConfigResolver;
         $this->imagesDir = $imagesDir;
@@ -96,7 +96,7 @@ class LegacyStorageImageFileList implements ImageFileList
         ++$this->cursor;
         $imageId = $this->rowReader->getRow();
 
-        if (substr($imageId, 0, strlen($prefix)) == $prefix) {
+        if (substr($imageId, 0, strlen($prefix)) === $prefix) {
             $imageId = ltrim(substr($imageId, strlen($prefix)), '/');
         }
 

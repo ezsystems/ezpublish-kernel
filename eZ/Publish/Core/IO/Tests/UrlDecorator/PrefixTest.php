@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\IO\Tests\UrlDecorator;
 
-use eZ\Publish\Core\IO\IOConfig;
+use eZ\Publish\Core\IO\IOConfigProvider;
 use eZ\Publish\Core\IO\UrlDecorator\Prefix;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +47,7 @@ class PrefixTest extends TestCase
      */
     protected function buildDecorator($prefix)
     {
-        $ioConfigResolverMock = $this->createMock(IOConfig::class);
+        $ioConfigResolverMock = $this->createMock(IOConfigProvider::class);
         $ioConfigResolverMock
             ->method('getLegacyUrlPrefix')
             ->willReturn($prefix);

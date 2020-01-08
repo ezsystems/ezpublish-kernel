@@ -13,7 +13,7 @@ namespace eZ\Publish\Core\IO;
  *
  * @internal
  */
-interface IOConfig
+interface IOConfigProvider
 {
     public function getRootDir(): string;
 

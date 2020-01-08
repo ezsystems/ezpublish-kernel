@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\IO\UrlDecorator;
 
 use eZ\Publish\Core\IO\Exception\InvalidBinaryPrefixException;
-use eZ\Publish\Core\IO\IOConfig;
+use eZ\Publish\Core\IO\IOConfigProvider;
 use eZ\Publish\Core\IO\UrlDecorator;
 
 /**
@@ -17,10 +17,10 @@ use eZ\Publish\Core\IO\UrlDecorator;
  */
 class Prefix implements UrlDecorator
 {
-    /** @var \eZ\Publish\Core\IO\IOConfig */
+    /** @var \eZ\Publish\Core\IO\IOConfigProvider */
     protected $ioConfigResolver;
 
-    public function __construct(IOConfig $IOConfigResolver)
+    public function __construct(IOConfigProvider $IOConfigResolver)
     {
         $this->ioConfigResolver = $IOConfigResolver;
     }
