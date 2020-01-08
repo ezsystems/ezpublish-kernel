@@ -213,6 +213,12 @@ Changes affecting version compatibility with former or future versions.
   Register your Query Type as a service and explicitly tag that service with `ezpublish.query`
   or enable its automatic configuration (`autoconfigure: true`).
 
+* The deprecated Symfony Dependency Injection Container parameters ending with `.class` have been
+  removed, services relying on them have now their classes defined explicitly.
+  To properly decorate a Symfony service, use the `decorates` attribute instead.
+  For the full list of the dropped parameters please see the
+  [8.0/dropped-container-parameters.md](8.0/dropped-container-parameters.md) document.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
@@ -250,7 +256,7 @@ Changes affecting version compatibility with former or future versions.
       $matcher = null,
       ?string $provider = null
   );
-  ```  
+  ```
 
 * The signature of the `\eZ\Publish\API\Repository\Values\ContentType\ContentType::getFieldDefinitions` method was changed to:
   ```php
@@ -281,22 +287,3 @@ site:
 * `eZ\Bundle\EzPublishCoreBundle\Controller` extends `Symfony\Bundle\FrameworkBundle\Controller\AbstractController` instead of `Symfony\Bundle\FrameworkBundle\Controller\Controller` which has limited access to the dependency injection container. See https://symfony.com/doc/current/service_container/service_subscribers_locators.html
 
 * SiteAccessAware Repository layer is now used by default. If you need to load repository object in all translations, explicitly pass `\eZ\Publish\API\Repository\Values\Content\Language::ALL` as as prioritized languages list.
-
-## Removed parameters
-
-* `ezpublish.chain_router.class`
-* `ezpublish.url_generator.base.class`
-* `ezpublish.urlalias_router.class`
-* `ezpublish.urlalias_generator.class`
-* `ezpublish.siteaccess.matcher_builder.class`
-* `ezpublish.siteaccess_router.class`
-* `ezpublish.siteaccess_listener.class`
-* `ezpublish.siteaccess_listener.routing.class`
-* `ezpublish.request_redirect_listener.class`
-* `ezpublish.request_index_listener.class`
-* `ezpublish.siteaccess_match_listener.class`
-* `ezpublish.route_reference.generator.class`
-* `ezpublish.route_reference.listener.language_switch.class`
-* `ezpublish.original_request_listener.class`
-* `ezpublish.preview_request_listener.class`
-* `ezpublish.route_reference.listener.content_download.class`
