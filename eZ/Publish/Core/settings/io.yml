@@ -1,17 +1,6 @@
-parameters:
-    ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
-    ezpublish.core.io.tolerant_service.class: eZ\Publish\Core\IO\TolerantIOService
-    ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
-    ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
-    ezpublish.core.io.binarydata_handler.flysystem.class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
-    ezpublish.core.io.metadata_handler.flysystem.class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
-    ezpublish.core.io.url_decorator.prefix.class: eZ\Publish\Core\IO\UrlDecorator\Prefix
-    ezpublish.core.io.url_decorator.absolute_prefix.class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
-    ezpublish.core.io.image_fieldtype.legacy_url_redecorator.class: eZ\Publish\Core\IO\UrlRedecorator
-
 services:
     ezpublish.core.io.service:
-        class: "%ezpublish.core.io.tolerant_service.class%"
+        class: eZ\Publish\Core\IO\TolerantIOService
         lazy: true
         arguments:
             - "@ezpublish.core.io.metadata_handler"
@@ -21,7 +10,7 @@ services:
             - [ setLogger, ["@?logger" ] ]
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
-        class: "%ezpublish.core.io.mimeTypeDetector.fileinfo.class%"
+        class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
 
     ezpublish.core.io.mimeTypeDetector:
         alias: ezpublish.core.io.mimeTypeDetector.fileinfo
@@ -31,7 +20,7 @@ services:
         alias: ezpublish.core.io.metadata_handler.flysystem
 
     ezpublish.core.io.metadata_handler.flysystem:
-        class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
+        class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
 
@@ -40,7 +29,7 @@ services:
         alias: ezpublish.core.io.binarydata_handler.flysystem
 
     ezpublish.core.io.binarydata_handler.flysystem:
-        class: "%ezpublish.core.io.binarydata_handler.flysystem.class%"
+        class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
             - "@ezpublish.core.io.default_url_decorator"
@@ -63,18 +52,18 @@ services:
         alias: ezpublish.core.io.prefix_url_decorator
 
     ezpublish.core.io.prefix_url_decorator:
-        class: "%ezpublish.core.io.url_decorator.absolute_prefix.class%"
+        class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
         arguments:
             - "%storage_dir%"
 
     # used by legacy in Image Converter to decorate its own url
     ezpublish.core.io.image_fieldtype.legacy_url_decorator:
-        class: "%ezpublish.core.io.url_decorator.prefix.class%"
+        class: eZ\Publish\Core\IO\UrlDecorator\Prefix
         arguments:
             - "%storage_dir%"
 
     ezpublish.core.io.image_fieldtype.legacy_url_redecorator:
-        class: "%ezpublish.core.io.image_fieldtype.legacy_url_redecorator.class%"
+        class: eZ\Publish\Core\IO\UrlRedecorator
         arguments:
             - "@ezpublish.core.io.default_url_decorator"
             - "@ezpublish.core.io.image_fieldtype.legacy_url_decorator"
