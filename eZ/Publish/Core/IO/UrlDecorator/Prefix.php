@@ -17,7 +17,7 @@ use eZ\Publish\Core\IO\UrlDecorator;
  */
 class Prefix implements UrlDecorator
 {
-    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\IOConfigResolver */
+    /** @var \eZ\Publish\Core\IO\IOConfig */
     protected $ioConfigResolver;
 
     public function __construct(IOConfig $IOConfigResolver)

@@ -27,7 +27,7 @@ class StreamFileListenerTest extends TestCase
     /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $ioServiceMock;
 
-    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\IOConfigResolver|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\Core\IO\IOConfig|\PHPUnit\Framework\MockObject\MockObject */
     private $ioConfigResolverMock;
 
     protected function setUp(): void

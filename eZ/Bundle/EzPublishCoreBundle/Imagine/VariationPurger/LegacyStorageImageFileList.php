@@ -35,7 +35,7 @@ class LegacyStorageImageFileList implements ImageFileList
      */
     private $rowReader;
 
-    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\IOConfigResolver */
+    /** @var \eZ\Publish\Core\IO\IOConfig */
     private $ioConfigResolver;
 
     /** @var string */
