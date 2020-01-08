@@ -1,15 +1,3 @@
-parameters:
-    ezpublish.persistence.legacy.url.criterion_handler.logical_and.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalAnd
-    ezpublish.persistence.legacy.url.criterion_handler.logical_not.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalNot
-    ezpublish.persistence.legacy.url.criterion_handler.logical_or.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalOr
-    ezpublish.persistence.legacy.url.criterion_handler.match_all.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\MatchAll
-    ezpublish.persistence.legacy.url.criterion_handler.match_none.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\MatchNone
-    ezpublish.persistence.legacy.url.criterion_handler.validity.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\Validity
-    ezpublish.persistence.legacy.url.criterion_handler.pattern.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\Pattern
-    ezpublish.persistence.legacy.url.criterion_handler.visible_only.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\VisibleOnly
-    ezpublish.persistence.legacy.url.criterion_handler.section_id.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\SectionId
-    ezpublish.persistence.legacy.url.criterion_handler.section_identifier.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\SectionIdentifier
-
 services:
    ezpublish.persistence.legacy.url.criterion_handler.base:
         abstract: true
@@ -17,60 +5,60 @@ services:
 
    ezpublish.persistence.legacy.url.criterion_handler.logical_and:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.logical_and.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalAnd
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }
 
    ezpublish.persistence.legacy.url.criterion_handler.logical_or:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.logical_or.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalOr
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }
 
    ezpublish.persistence.legacy.url.criterion_handler.logical_not:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.logical_not.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalNot
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }
 
    ezpublish.persistence.legacy.url.criterion_handler.match_all:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.match_all.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\MatchAll
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }
 
    ezpublish.persistence.legacy.url.criterion_handler.match_none:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.match_none.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\MatchNone
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }
 
    ezpublish.persistence.legacy.url.criterion_handler.validity:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.validity.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\Validity
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }
 
    ezpublish.persistence.legacy.url.criterion_handler.pattern:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.pattern.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\Pattern
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }
 
    ezpublish.persistence.legacy.url.criterion_handler.visible_only:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.visible_only.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\VisibleOnly
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }
 
    ezpublish.persistence.legacy.url.criterion_handler.section_id:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.section_id.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\SectionId
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }
 
    ezpublish.persistence.legacy.url.criterion_handler.section_identifier:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base
-       class: '%ezpublish.persistence.legacy.url.criterion_handler.section_identifier.class%'
+       class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\SectionIdentifier
        tags:
            - { name: ezpublish.persistence.legacy.url.criterion_handler }

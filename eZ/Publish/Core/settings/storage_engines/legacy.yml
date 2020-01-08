@@ -17,16 +17,9 @@ imports:
     - {resource: storage_engines/legacy/notification.yml}
     - {resource: storage_engines/legacy/user_preference.yml}
 
-parameters:
-    ezpublish.spi.search.legacy.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\MainHandler
-    ezpublish.spi.persistence.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
-    ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-    ezpublish.persistence.connection.class: Doctrine\DBAL\Connection
-    ezpublish.spi.persistence.legacy.transactionhandler.class: eZ\Publish\Core\Persistence\Legacy\TransactionHandler
-
 services:
     ezpublish.spi.persistence.legacy:
-        class: "%ezpublish.spi.persistence.legacy.class%"
+        class: eZ\Publish\Core\Persistence\Legacy\Handler
         arguments:
             - "@ezpublish.spi.persistence.legacy.content.handler"
             - "@ezpublish.spi.persistence.legacy.content_type.handler"
@@ -50,21 +43,21 @@ services:
 
     # Compiler pass will alias 'ezpublish.api.storage_engine.legacy.connection' service to the StorageConnectionFactory
     ezpublish.api.storage_engine.legacy.dbhandler:
-        class: "%ezpublish.api.storage_engine.legacy.dbhandler.class%"
-        factory: ["%ezpublish.api.storage_engine.legacy.dbhandler.class%", "createFromConnection"]
+        class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+        factory: ['eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler', 'createFromConnection']
         arguments:
             - "@ezpublish.api.storage_engine.legacy.connection"
         lazy: true
         public: true # @todo should be private
 
     ezpublish.api.storage_engine.legacy.connection:
-        class: "%ezpublish.persistence.connection.class%"
-        factory: ["%ezpublish.api.storage_engine.legacy.dbhandler.class%", "createConnectionFromDSN"]
+        class: Doctrine\DBAL\Connection
+        factory: ['eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler', 'createConnectionFromDSN']
         arguments:
             - "%legacy_dsn%"
 
     ezpublish.spi.persistence.legacy.transactionhandler:
-        class: "%ezpublish.spi.persistence.legacy.transactionhandler.class%"
+        class: eZ\Publish\Core\Persistence\Legacy\TransactionHandler
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.spi.persistence.legacy.content_type.handler.caching"

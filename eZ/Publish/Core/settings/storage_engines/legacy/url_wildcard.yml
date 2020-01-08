@@ -1,17 +1,11 @@
-parameters:
-    ezpublish.spi.persistence.legacy.url_wildcard.handler.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler
-    ezpublish.persistence.legacy.url_wildcard.mapper.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper
-    ezpublish.persistence.legacy.url_wildcard.gateway.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
-    ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\ExceptionConversion
-
 services:
     ezpublish.persistence.legacy.url_wildcard.gateway.inner:
-        class: "%ezpublish.persistence.legacy.url_wildcard.gateway.class%"
+        class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
 
     ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion:
-        class: "%ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion.class%"
+        class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\ExceptionConversion
         arguments:
             - "@ezpublish.persistence.legacy.url_wildcard.gateway.inner"
 
@@ -20,10 +14,10 @@ services:
         alias: ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion
 
     ezpublish.persistence.legacy.url_wildcard.mapper:
-        class: "%ezpublish.persistence.legacy.url_wildcard.mapper.class%"
+        class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper
 
     ezpublish.spi.persistence.legacy.url_wildcard.handler:
-        class: "%ezpublish.spi.persistence.legacy.url_wildcard.handler.class%"
+        class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler
         arguments:
             - "@ezpublish.persistence.legacy.url_wildcard.gateway"
             - "@ezpublish.persistence.legacy.url_wildcard.mapper"

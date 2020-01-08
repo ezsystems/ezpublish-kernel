@@ -1,22 +1,4 @@
 parameters:
-    ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
-    ezpublish.spi.persistence.cache.abstractHandler.class: eZ\Publish\Core\Persistence\Cache\AbstractHandler
-    ezpublish.spi.persistence.cache.sectionHandler.class: eZ\Publish\Core\Persistence\Cache\SectionHandler
-    ezpublish.spi.persistence.cache.locationHandler.class: eZ\Publish\Core\Persistence\Cache\LocationHandler
-    ezpublish.spi.persistence.cache.contentHandler.class: eZ\Publish\Core\Persistence\Cache\ContentHandler
-    ezpublish.spi.persistence.cache.contentLanguageHandler.class: eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler
-    ezpublish.spi.persistence.cache.contentTypeHandler.class: eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
-    ezpublish.spi.persistence.cache.userHandler.class: eZ\Publish\Core\Persistence\Cache\UserHandler
-    ezpublish.spi.persistence.cache.transactionhandler.class: eZ\Publish\Core\Persistence\Cache\TransactionHandler
-    ezpublish.spi.persistence.cache.trashHandler.class: eZ\Publish\Core\Persistence\Cache\TrashHandler
-    ezpublish.spi.persistence.cache.urlAliasHandler.class: eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
-    ezpublish.spi.persistence.cache.objectStateHandler.class: eZ\Publish\Core\Persistence\Cache\ObjectStateHandler
-    ezpublish.spi.persistence.cache.urlHandler.class: eZ\Publish\Core\Persistence\Cache\URLHandler
-    ezpublish.spi.persistence.cache.bookmarkHandler.class: eZ\Publish\Core\Persistence\Cache\BookmarkHandler
-    ezpublish.spi.persistence.cache.notificationHandler.class: eZ\Publish\Core\Persistence\Cache\NotificationHandler
-    ezpublish.spi.persistence.cache.userPreferenceHandler.class: eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler
-    ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
-    ezpublish.spi.persistence.cache.urlWildcardHandler.class: eZ\Publish\Core\Persistence\Cache\UrlWildcardHandler
     # Make sure logging is only enabled for debug by default
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: "%kernel.debug%"
     # Global in-memory settings, for meta data
@@ -52,7 +34,7 @@ services:
 
     # Logger which logs info when in dev for Symfony web toolbar
     ezpublish.spi.persistence.cache.persistenceLogger:
-        class: "%ezpublish.spi.persistence.cache.persistenceLogger.class%"
+        class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
         arguments:
             - "%ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging%"
 
@@ -77,7 +59,7 @@ services:
 
     # SPI Persistence Cache Handlers, incl abstracts
     ezpublish.spi.persistence.cache.abstractHandler:
-        class: "%ezpublish.spi.persistence.cache.abstractHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\AbstractHandler
         abstract:  true
         arguments:
             - "@ezpublish.cache_pool"
@@ -99,73 +81,73 @@ services:
         arguments: ["@ezpublish.api.storage_engine"]
 
     ezpublish.spi.persistence.cache.sectionHandler:
-        class: "%ezpublish.spi.persistence.cache.sectionHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\SectionHandler
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.locationHandler:
-        class: "%ezpublish.spi.persistence.cache.locationHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\LocationHandler
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
         arguments: # Overload argument to use content in-memory service
             index_2: '@ezpublish.spi.persistence.cache.inmemory.content'
 
     ezpublish.spi.persistence.cache.contentHandler:
-        class: "%ezpublish.spi.persistence.cache.contentHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\ContentHandler
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
         arguments: # Overload argument to use content in-memory service
             index_2: '@ezpublish.spi.persistence.cache.inmemory.content'
 
     ezpublish.spi.persistence.cache.contentLanguageHandler:
-        class: "%ezpublish.spi.persistence.cache.contentLanguageHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.contentTypeHandler:
-        class: "%ezpublish.spi.persistence.cache.contentTypeHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.userHandler:
-        class: "%ezpublish.spi.persistence.cache.userHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\UserHandler
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.transactionhandler:
-        class: "%ezpublish.spi.persistence.cache.transactionhandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\TransactionHandler
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.trashHandler:
-        class: "%ezpublish.spi.persistence.cache.trashHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\TrashHandler
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.urlAliasHandler:
-        class: "%ezpublish.spi.persistence.cache.urlAliasHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
         arguments: # Overload argument to use content in-memory service
           index_2: '@ezpublish.spi.persistence.cache.inmemory.content'
 
     ezpublish.spi.persistence.cache.objectStateHandler:
-        class: "%ezpublish.spi.persistence.cache.objectStateHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\ObjectStateHandler
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.urlHandler:
-        class: "%ezpublish.spi.persistence.cache.urlHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\URLHandler
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.bookmarkHandler:
-        class: "%ezpublish.spi.persistence.cache.bookmarkHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\BookmarkHandler
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.notificationHandler:
-        class: "%ezpublish.spi.persistence.cache.notificationHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\NotificationHandler
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.userPreferenceHandler:
-        class: "%ezpublish.spi.persistence.cache.userPreferenceHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.urlWildcardHandler:
-        class: "%ezpublish.spi.persistence.cache.urlWildcardHandler.class%"
+        class: eZ\Publish\Core\Persistence\Cache\UrlWildcardHandler
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache:
-        class: "%ezpublish.spi.persistence.cache.class%"
+        class: eZ\Publish\Core\Persistence\Cache\Handler
         arguments:
             - "@ezpublish.api.storage_engine"
             - "@ezpublish.spi.persistence.cache.sectionHandler"

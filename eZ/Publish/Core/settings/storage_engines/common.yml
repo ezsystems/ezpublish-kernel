@@ -1,16 +1,6 @@
 parameters:
-    ezpublish.persistence.field_type_registry.class: eZ\Publish\Core\Persistence\FieldTypeRegistry
-    ezpublish.persistence.external_storage_registry.class: eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
-    ezpublish.persistence.slug_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
-
-    # Transformation parser/compiler for search purpose
-    ezpublish.api.storage_engine.pcre_compiler.class: eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler
-    ezpublish.api.storage_engine.transformation_converter.class: eZ\Publish\Core\Persistence\Utf8Converter
-
     # Using definition files:
-    #
-    # ezpublish.api.storage_engine.transformation_processor.class: eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased
-    ezpublish.api.storage_engine.transformation_parser.class: eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser
+
     # Transformation rules resources
     ezpublish.api.storage_engine.transformation_rules.resources:
         - "%ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr"
@@ -22,8 +12,7 @@ parameters:
         - "%ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr"
 
     # Using preprocessed files:
-    #
-    ezpublish.api.storage_engine.transformation_processor.class: eZ\Publish\Core\Persistence\TransformationProcessor\PreprocessedBased
+
     ezpublish.api.storage_engine.preprocessed_transformation_rules.resources:
         - "%ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr.result"
         - "%ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/basic.tr.result"
@@ -35,29 +24,29 @@ parameters:
 
 services:
     ezpublish.persistence.field_type_registry:
-        class: "%ezpublish.persistence.field_type_registry.class%"
+        class: eZ\Publish\Core\Persistence\FieldTypeRegistry
 
     ezpublish.persistence.external_storage_registry:
-        class: "%ezpublish.persistence.external_storage_registry.class%"
+        class: eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
 
     ezpublish.persistence.slug_converter:
-        class: '%ezpublish.persistence.slug_converter.class%'
+        class: eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
         arguments:
             - '@ezpublish.api.storage_engine.transformation_processor'
             - []
 
     ezpublish.api.storage_engine.transformation_parser:
-        class: "%ezpublish.api.storage_engine.transformation_parser.class%"
+        class: eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser
 
     ezpublish.api.storage_engine.pcre_compiler:
-        class: "%ezpublish.api.storage_engine.pcre_compiler.class%"
+        class: eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler
         arguments: ["@ezpublish.api.storage_engine.transformation_converter"]
 
     ezpublish.api.storage_engine.transformation_converter:
-        class: "%ezpublish.api.storage_engine.transformation_converter.class%"
+        class: eZ\Publish\Core\Persistence\Utf8Converter
 
     ezpublish.api.storage_engine.transformation_processor:
-        class: "%ezpublish.api.storage_engine.transformation_processor.class%"
+        class: eZ\Publish\Core\Persistence\TransformationProcessor\PreprocessedBased
         arguments:
             # Using definition files:
             #
