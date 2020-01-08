@@ -15,6 +15,8 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessService;
 
 final class ComplexConfigProcessor
 {
+    private const DEFAULT_NAMESPACE = 'ezsettings';
+
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
@@ -33,12 +35,11 @@ final class ComplexConfigProcessor
     {
         $siteAccessName = $this->siteAccessService->getCurrent()->name;
 
-        $complexSettingParser = new ComplexSettingParser();
-
         if (!$this->configResolver->hasParameter($setting, null, $siteAccessName)) {
             throw new ParameterNotFoundException($setting, null, [$siteAccessName]);
         }
 
+        $complexSettingParser = new ComplexSettingParser();
         $settingValue = $this->configResolver->getParameter($setting, null, $siteAccessName);
 
         if (!$complexSettingParser->containsDynamicSettings($settingValue)) {
@@ -48,12 +49,6 @@ final class ComplexConfigProcessor
         // we kind of need to process this as well, don't we ?
         if ($complexSettingParser->isDynamicSetting($settingValue)) {
             $parts = $complexSettingParser->parseDynamicSetting($settingValue);
-            if (!isset($parts['namespace'])) {
-                $parts['namespace'] = 'ezsettings';
-            }
-            if (!isset($parts['scope'])) {
-                $parts['scope'] = $siteAccessName;
-            }
 
             return $this->configResolver->getParameter($parts['param'], null, $siteAccessName);
         }
@@ -62,7 +57,7 @@ final class ComplexConfigProcessor
         foreach ($complexSettingParser->parseComplexSetting($settingValue) as $dynamicSetting) {
             $parts = $complexSettingParser->parseDynamicSetting($dynamicSetting);
             if (!isset($parts['namespace'])) {
-                $parts['namespace'] = 'ezsettings';
+                $parts['namespace'] = self::DEFAULT_NAMESPACE;
             }
             if (!isset($parts['scope'])) {
                 $parts['scope'] = $siteAccessName;

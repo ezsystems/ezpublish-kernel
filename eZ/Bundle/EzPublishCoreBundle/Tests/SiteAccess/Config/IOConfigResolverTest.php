@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 class IOConfigResolverTest extends TestCase
 {
+    private const DEFAULT_NAMESPACE = 'ezsettings';
+
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $configResolver;
 
@@ -47,8 +49,8 @@ class IOConfigResolverTest extends TestCase
             ->method('getParameter')
             ->willReturnMap([
                 ['io.url_prefix', null, 'ezdemo_site', '$var_dir$/ezdemo_site/$storage_dir$'],
-                ['var_dir', 'ezsettings', 'ezdemo_site', 'var'],
-                ['storage_dir', 'ezsettings', 'ezdemo_site', 'storage'],
+                ['var_dir', self::DEFAULT_NAMESPACE, 'ezdemo_site', 'var'],
+                ['storage_dir', self::DEFAULT_NAMESPACE, 'ezdemo_site', 'storage'],
             ]);
 
         $complexConfigProcessor = new ComplexConfigProcessor(
@@ -80,8 +82,8 @@ class IOConfigResolverTest extends TestCase
             ->method('getParameter')
             ->willReturnMap([
                 ['io.legacy_url_prefix', null, 'ezdemo_site', '$var_dir$/ezdemo_site/$storage_dir$'],
-                ['var_dir', 'ezsettings', 'ezdemo_site', 'var'],
-                ['storage_dir', 'ezsettings', 'ezdemo_site', 'legacy_storage'],
+                ['var_dir', self::DEFAULT_NAMESPACE, 'ezdemo_site', 'var'],
+                ['storage_dir', self::DEFAULT_NAMESPACE, 'ezdemo_site', 'legacy_storage'],
             ]);
 
         $complexConfigProcessor = new ComplexConfigProcessor(
@@ -113,8 +115,8 @@ class IOConfigResolverTest extends TestCase
             ->method('getParameter')
             ->willReturnMap([
                 ['io.root_dir', null, 'ezdemo_site', '/path/to/ezpublish/web/$var_dir$/ezdemo_site/$storage_dir$'],
-                ['var_dir', 'ezsettings', 'ezdemo_site', 'var'],
-                ['storage_dir', 'ezsettings', 'ezdemo_site', 'legacy_storage'],
+                ['var_dir', self::DEFAULT_NAMESPACE, 'ezdemo_site', 'var'],
+                ['storage_dir', self::DEFAULT_NAMESPACE, 'ezdemo_site', 'legacy_storage'],
             ]);
 
         $complexConfigProcessor = new ComplexConfigProcessor(
