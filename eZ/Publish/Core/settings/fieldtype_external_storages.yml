@@ -1,15 +1,6 @@
-parameters:
-    ezpublish.fieldType.ezbinaryfile.externalStorage.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
-    ezpublish.fieldType.ezimage.externalStorage.class: eZ\Publish\Core\FieldType\Image\ImageStorage
-    ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
-    ezpublish.fieldType.ezmedia.externalStorage.class: eZ\Publish\Core\FieldType\Media\MediaStorage
-    ezpublish.fieldType.ezurl.externalStorage.class: eZ\Publish\Core\FieldType\Url\UrlStorage
-    ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
-    ezpublish.fieldType.ezuser.externalStorage.class: eZ\Publish\Core\FieldType\User\UserStorage
-
 services:
     ezpublish.fieldType.ezbinaryfile.externalStorage:
-        class: "%ezpublish.fieldType.ezbinaryfile.externalStorage.class%"
+        class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
         arguments:
             - "@ezpublish.fieldType.ezbinaryfile.storage_gateway"
             - "@ezpublish.fieldType.ezbinaryfile.io_service"
@@ -19,7 +10,7 @@ services:
             - {name: ezplatform.field_type.external_storage_handler, alias: ezbinaryfile}
 
     ezpublish.fieldType.ezimage.externalStorage:
-        class: "%ezpublish.fieldType.ezimage.externalStorage.class%"
+        class: eZ\Publish\Core\FieldType\Image\ImageStorage
         arguments:
             - "@ezpublish.fieldType.ezimage.storage_gateway"
             - "@ezpublish.fieldType.ezimage.io_service"
@@ -31,13 +22,13 @@ services:
             - {name: ezplatform.field_type.external_storage_handler, alias: ezimage}
 
     ezpublish.fieldType.ezkeyword.externalStorage:
-        class: "%ezpublish.fieldType.ezkeyword.externalStorage.class%"
+        class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
         arguments: ["@ezpublish.fieldType.ezkeyword.storage_gateway"]
         tags:
             - {name: ezplatform.field_type.external_storage_handler, alias: ezkeyword}
 
     ezpublish.fieldType.ezmedia.externalStorage:
-        class: "%ezpublish.fieldType.ezmedia.externalStorage.class%"
+        class: eZ\Publish\Core\FieldType\Media\MediaStorage
         arguments:
             - "@ezpublish.fieldType.ezmedia.storage_gateway"
             - "@ezpublish.fieldType.ezbinaryfile.io_service"
@@ -47,7 +38,7 @@ services:
             - {name: ezplatform.field_type.external_storage_handler, alias: ezmedia}
 
     ezpublish.fieldType.ezurl.externalStorage:
-        class: "%ezpublish.fieldType.ezurl.externalStorage.class%"
+        class: eZ\Publish\Core\FieldType\Url\UrlStorage
         arguments:
             - "@ezpublish.fieldType.ezurl.storage_gateway"
             - "@?logger"
@@ -55,16 +46,16 @@ services:
             - {name: ezplatform.field_type.external_storage_handler, alias: ezurl}
 
     ezpublish.fieldType.ezgmaplocation.externalStorage:
-        class: "%ezpublish.fieldType.ezgmaplocation.externalStorage.class%"
+        class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
         arguments: ["@ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway"]
         tags:
             - {name: ezplatform.field_type.external_storage_handler, alias: ezgmaplocation}
 
     ezpublish.fieldType.ezuser.externalStorage:
-        class: "%ezpublish.fieldType.ezuser.externalStorage.class%"
+        class: eZ\Publish\Core\FieldType\User\UserStorage
         arguments: ["@ezpublish.fieldType.ezuser.storage_gateway"]
         tags:
             - {name: ezplatform.field_type.external_storage_handler, alias: ezuser}
 
     ezpublish.fieldType.metadataHandler.imagesize:
-        class: "%ezpublish.core.io.metadataHandler.imageSize.class%"
+        class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
