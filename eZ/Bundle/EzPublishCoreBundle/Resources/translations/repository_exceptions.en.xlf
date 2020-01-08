@@ -122,10 +122,10 @@
         <jms:reference-file line="1394">eZ/Publish/Core/Repository/ContentService.php</jms:reference-file>
         <jms:reference-file line="756">eZ/Publish/Core/Repository/ContentService.php</jms:reference-file>
       </trans-unit>
-      <trans-unit id="097b8a2bc1db5e54deb4aa00b0e0483fe1af27a4" resname="FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type (%ezpublish.fieldType.eznull.class%)">
-        <source>FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type (%ezpublish.fieldType.eznull.class%)</source>
-        <target>FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type (%ezpublish.fieldType.eznull.class%)</target>
-        <note>key: FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type (%ezpublish.fieldType.eznull.class%)</note>
+      <trans-unit id="097b8a2bc1db5e54deb4aa00b0e0483fe1af27a4" resname="FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type">
+        <source>FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type</source>
+        <target>FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type</target>
+        <note>key: FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\Null\Type</note>
         <jms:reference-file line="32">eZ/Publish/Core/Base/Exceptions/NotFound/FieldTypeNotFoundException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="25f2ccabd8883a36aee5754ce43741c211cf378a" resname="FieldType '%identifier%' is singular and can't be repeated in a ContentType">
@@ -133,10 +133,10 @@
         <target>FieldType '%identifier%' is singular and can't be repeated in a ContentType</target>
         <note>key: FieldType '%identifier%' is singular and can't be repeated in a ContentType</note>
       </trans-unit>
-      <trans-unit id="b592a161a19d303272498874fb27a71626461be7" resname="Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%">
-        <source>Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%</source>
-        <target>Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%</target>
-        <note>key: Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%</note>
+      <trans-unit id="b592a161a19d303272498874fb27a71626461be7" resname="Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType">
+        <source>Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType</source>
+        <target>Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType</target>
+        <note>key: Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\BlockingLimitationType</note>
         <jms:reference-file line="32">eZ/Publish/Core/Base/Exceptions/NotFound/LimitationNotFoundException.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="71fd5f8839faaadfe7c61def7e4b42d429959952" resname="Limitations did not validate">

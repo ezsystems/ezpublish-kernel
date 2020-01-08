@@ -91,7 +91,7 @@ services:
             - "%ezpublish.siteaccess.default%"
             - "%ezpublish.siteaccess.match_config%"
             - "@ezpublish.siteaccess.provider"
-            - "%ezpublish.siteaccess.class%"
+            - 'eZ\Publish\Core\MVC\Symfony\SiteAccess'
             - "%kernel.debug%"
 
     ezpublish.siteaccess_listener:

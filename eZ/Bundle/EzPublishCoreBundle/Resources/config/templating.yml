@@ -1,38 +1,13 @@
 parameters:
-    ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
-
-    ezpublish.view_manager.class: eZ\Bundle\EzPublishCoreBundle\View\Manager
+    # @todo drop once core dependencies stop relying on those parameters
     ezpublish.view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Configured
 
     ezpublish.view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ServiceAwareMatcherFactory
 
     ezpublish.content_view.viewbase_layout: "@@EzPublishCore/viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
-    ezpublish.view.custom_location_controller_checker.class: eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker
 
-    ezpublish.templating.global_helper.core.class: eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
-    ezpublish.twig.extension.core.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\CoreExtension
-    ezpublish.twig.extension.filesize.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FileSizeExtension
     ezpublish.twig.extension.filesize.suffixes: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB']
-    ezpublish.templating.extension.routing.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension
-    ezpublish.templating.field_block_renderer.twig.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer
-    ezpublish.twig.extension.field_rendering.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension
-    ezpublish.twig.extension.image.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
-
-    ezpublish.view.cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\CacheViewResponseListener
-    ezpublish.view.view_parameters.injector.viewbase_layout.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ViewbaseLayout
-    ezpublish.view.view_parameters.injector.value_objects_ids.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ValueObjectsIds
-    ezpublish.view.view_parameters.injector.no_layout.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\NoLayout
-    ezpublish.view.view_parameters.injector.embed_object_parameters.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EmbedObjectParameters
-    ezpublish.view.view_parameters.injector.custom_parameters.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\CustomParameters
-    ezpublish.view.view_parameters.injector.dispatcher.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EventDispatcherInjector
-    ezpublish.view.renderer_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewRendererListener
-    ezpublish.view.template_renderer.class: eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer
-    ezpublish.view.builder_parameter_collector.request_attributes.class: eZ\Publish\Core\MVC\Symfony\View\Builder\ParametersFilter\RequestAttributes
-    ezpublish.view_builder.content.class: eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder
-    ezpublish.view_builder.registry.class: eZ\Publish\Core\MVC\Symfony\View\Builder\Registry\ControllerMatch
-    ezpublish.view.configurator.class: eZ\Publish\Core\MVC\Symfony\View\Configurator\ViewProvider
-    ezpublish.view_provider.registry.class: eZ\Publish\Core\MVC\Symfony\View\Provider\Registry
 
 services:
     # Enable Twig intl extension
@@ -42,7 +17,7 @@ services:
             - {name: twig.extension}
 
     ezpublish.twig.extension.content:
-        class: "%ezpublish.twig.extension.content.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
         arguments:
             - "@ezpublish.api.repository"
             - "@ezpublish.translation_helper"
@@ -52,7 +27,7 @@ services:
             - {name: twig.extension}
 
     ezpublish.view_manager:
-        class: "%ezpublish.view_manager.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\View\Manager
         arguments:
           - "@twig"
           - "@event_dispatcher"
@@ -65,13 +40,13 @@ services:
     eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry: ~
 
     ezpublish.content_view_provider.configured:
-        class: "%ezpublish.view_provider.configured.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Configured
         arguments: ["@ezpublish.content_view.matcher_factory"]
         tags:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: 10}
 
     ezpublish.content_view.matcher_factory:
-        class: "%ezpublish.view.matcher_factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Matcher\ServiceAwareMatcherFactory
         arguments:
             - '@eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry'
             - '@ezpublish.api.repository'
@@ -86,13 +61,13 @@ services:
             $parameterName: content_view
 
     ezpublish.content_view_provider.default_configured:
-        class: "%ezpublish.view_provider.configured.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Configured
         arguments: ["@ezpublish.content_view.default_matcher_factory"]
         tags:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: -1}
 
     ezpublish.content_view.default_matcher_factory:
-        class: "%ezpublish.view.matcher_factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Matcher\ServiceAwareMatcherFactory
         arguments:
             - '@eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry'
             - '@ezpublish.api.repository'
@@ -107,13 +82,13 @@ services:
             $parameterName: content_view_defaults
 
     ezpublish.location_view_provider.configured:
-        class: "%ezpublish.view_provider.configured.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Configured
         arguments: ["@ezpublish.location_view.matcher_factory"]
         tags:
             - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: 10}
 
     ezpublish.location_view.matcher_factory:
-        class: "%ezpublish.view.matcher_factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Matcher\ServiceAwareMatcherFactory
         arguments:
             - '@eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry'
             - '@ezpublish.api.repository'
@@ -128,7 +103,7 @@ services:
             $parameterName: location_view
 
     ezpublish.templating.global_helper.core:
-        class: "%ezpublish.templating.global_helper.core.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
         arguments: ["@ezpublish.config.resolver", "@ezpublish.siteaccessaware.service.location", "@router", "@ezpublish.translation_helper"]
         calls:
             - [setRequestStack, ["@request_stack"]]
@@ -140,25 +115,25 @@ services:
         alias: ezpublish.templating.global_helper.core
 
     ezpublish.twig.extension.core:
-        class: "%ezpublish.twig.extension.core.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\CoreExtension
         arguments: ["@ezpublish.templating.global_helper"]
         tags:
             - {name: twig.extension}
 
     ezpublish.twig.extension.filesize:
-        class: "%ezpublish.twig.extension.filesize.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FileSizeExtension
         arguments: ["@translator", "%ezpublish.twig.extension.filesize.suffixes%", "@ezpublish.config.resolver", "@ezpublish.locale.converter" ]
         tags:
             - {name: twig.extension}
 
     ezpublish.templating.extension.routing:
-        class: "%ezpublish.templating.extension.routing.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension
         arguments: ["@ezpublish.route_reference.generator"]
         tags:
             - {name: twig.extension}
 
     ezpublish.templating.field_block_renderer.twig:
-        class: "%ezpublish.templating.field_block_renderer.twig.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer
         calls:
             - [setTwig, ["@twig"]]
             - [setBaseTemplate, ["%ezpublish.content_view.viewbase_layout%"]]
@@ -172,7 +147,7 @@ services:
         alias: ezpublish.templating.field_block_renderer.twig
 
     ezpublish.twig.extension.field_rendering:
-        class: "%ezpublish.twig.extension.field_rendering.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension
         arguments:
             - "@ezpublish.templating.field_block_renderer"
             - "@ezpublish.fieldType.parameterProviderRegistry"
@@ -181,7 +156,7 @@ services:
             - { name: twig.extension }
 
     ezpublish.twig.extension.image:
-        class: "%ezpublish.twig.extension.image.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
         arguments:
             - '@ezpublish.fieldType.ezimage.variation_service'
             - '@eZ\Publish\Core\FieldType\ImageAsset\AssetMapper'
@@ -189,22 +164,22 @@ services:
             - { name: twig.extension }
 
     ezpublish.view.custom_location_controller_checker:
-        class: "%ezpublish.view.custom_location_controller_checker.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker
 
     ezpublish.view_provider.registry:
-        class: "%ezpublish.view_provider.registry.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\Provider\Registry
 
     ezpublish.view.configurator:
-        class: "%ezpublish.view.configurator.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\Configurator\ViewProvider
         arguments: ["@ezpublish.view_provider.registry"]
 
     ezpublish.view_builder.registry:
-        class: "%ezpublish.view_builder.registry.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\Builder\Registry\ControllerMatch
         calls:
             - [addToRegistry, [["@ezpublish.view_builder.content"]]]
 
     ezpublish.view_builder.content:
-        class: "%ezpublish.view_builder.content.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder
         arguments:
             - "@ezpublish.siteaccessaware.repository"
             - "@ezpublish.view.configurator"
@@ -213,46 +188,46 @@ services:
             - "@ezpublish.content_info_location_loader.main"
 
     ezpublish.view.builder_parameter_collector.request_attributes:
-        class: "%ezpublish.view.builder_parameter_collector.request_attributes.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\Builder\ParametersFilter\RequestAttributes
         tags:
             - {name: kernel.event_subscriber}
 
     ezpublish.view.template_renderer:
-        class: "%ezpublish.view.template_renderer.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer
         arguments: ["@twig", "@event_dispatcher"]
 
     ezpublish.view.renderer_listener:
-        class: "%ezpublish.view.renderer_listener.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewRendererListener
         arguments: ["@ezpublish.view.template_renderer"]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.dispatcher:
-        class: "%ezpublish.view.view_parameters.injector.dispatcher.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EventDispatcherInjector
         arguments: ["@event_dispatcher"]
 
     ezpublish.view.view_parameters.injector.custom_parameters:
-        class: "%ezpublish.view.view_parameters.injector.custom_parameters.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\CustomParameters
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.embed_object_parameters:
-        class: "%ezpublish.view.view_parameters.injector.embed_object_parameters.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EmbedObjectParameters
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.no_layout:
-        class: "%ezpublish.view.view_parameters.injector.no_layout.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\NoLayout
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.value_objects_ids:
-        class: "%ezpublish.view.view_parameters.injector.value_objects_ids.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ValueObjectsIds
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.view_parameters.injector.viewbase_layout:
-        class: "%ezpublish.view.view_parameters.injector.viewbase_layout.class%"
+        class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ViewbaseLayout
         arguments:
             - "%ezpublish.content_view.viewbase_layout%"
             - "@ezpublish.config.resolver"
@@ -260,7 +235,7 @@ services:
             - { name: kernel.event_subscriber }
 
     ezpublish.view.cache_response_listener:
-        class: "%ezpublish.view.cache_response_listener.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\CacheViewResponseListener
         arguments:
             - $content.view_cache$
             - $content.ttl_cache$

@@ -1,54 +1,15 @@
-parameters:
-    ezpublish.image_alias.imagine.binary_loader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader
-    ezpublish.image_alias.imagine.cache_resolver_decorator_factory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\ResolverFactory
-    ezpublish.image_alias.imagine.cache_resolver_decorator_relative.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\Resolver\RelativeResolver
-    ezpublish.image_alias.imagine.cache_resolver_decorator_proxy.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\Resolver\ProxyResolver
-    ezpublish.image_alias.imagine.cache_resolver.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver
-    ezpublish.image_alias.imagine.cache_resolver_decorator.class: Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
-    ezpublish.image_alias.imagine.cache.alias_generator_decorator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\AliasGeneratorDecorator
-    ezpublish.image_alias.imagine.variation.imagine_alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Variation\ImagineAwareAliasGenerator
-    ezpublish.image_alias.imagine.alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator
-    ezpublish.image_alias.imagine.alias_cleaner.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasCleaner
-
-    ezpublish.image_alias.imagine.filter.loader.scaledownonly.width_height.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleDownOnlyFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.scaledownonly.width.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthDownOnlyFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.scaledownonly.height.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleHeightDownOnlyFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.scalewidth.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.scaleheight.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleHeightFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.scale.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.scale_exact.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleExactFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.scale_percent.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScalePercentFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.crop.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\CropFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.border.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\BorderFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.reduce_noise.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ReduceNoiseFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.grayscale.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\GrayscaleFilterLoader
-    ezpublish.image_alias.imagine.filter.loader.swirl.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\SwirlFilterLoader
-
-    ezpublish.image_alias.imagine.filter.unsupported.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\UnsupportedFilter
-    ezpublish.image_alias.imagine.filter.reduce_noise.imagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\ReduceNoiseFilter
-    ezpublish.image_alias.imagine.filter.reduce_noise.gmagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Gmagick\ReduceNoiseFilter
-    ezpublish.image_alias.imagine.filter.swirl.imagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\SwirlFilter
-    ezpublish.image_alias.imagine.filter.swirl.gmagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Gmagick\SwirlFilter
-
-    ezpublish.image_alias.variation_purger.legacy_storage_image_file.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger
-    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList
-    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileRowReader
-    ezpublish.image_alias.variation_purger.io.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\IOVariationPurger
-    ezpubish.image_alias.variation_path_generator.original_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\OriginalDirectoryVariationPathGenerator
-    ezpubish.image_alias.variation_path_generator.alias_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\AliasDirectoryVariationPathGenerator
-
 services:
     # Filters
     ezpublish.image_alias.imagine.filter.unsupported:
-        class: "%ezpublish.image_alias.imagine.filter.unsupported.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\UnsupportedFilter
         public: false
 
     ezpublish.image_alias.imagine.filter.reduce_noise.imagick:
-        class: "%ezpublish.image_alias.imagine.filter.reduce_noise.imagick.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\ReduceNoiseFilter
         public: false
 
     ezpublish.image_alias.imagine.filter.reduce_noise.gmagick:
-        class: "%ezpublish.image_alias.imagine.filter.reduce_noise.gmagick.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Gmagick\ReduceNoiseFilter
         public: false
 
     # Aliasing by default to unsupported filter as it's not supported by GD.
@@ -57,11 +18,11 @@ services:
         alias: ezpublish.image_alias.imagine.filter.unsupported
 
     ezpublish.image_alias.imagine.filter.swirl.imagick:
-        class: "%ezpublish.image_alias.imagine.filter.swirl.imagick.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\SwirlFilter
         public: false
 
     ezpublish.image_alias.imagine.filter.swirl.gmagick:
-        class: "%ezpublish.image_alias.imagine.filter.swirl.gmagick.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Gmagick\SwirlFilter
         public: false
 
     ezpublish.image_alias.imagine.filter.swirl:
@@ -69,13 +30,13 @@ services:
 
     # Filter loaders
     ezpublish.image_alias.imagine.binary_loader:
-        class: "%ezpublish.image_alias.imagine.binary_loader.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader
         arguments: ["@ezpublish.fieldType.ezimage.io_service", "@mime_types"]
         tags:
             - { name: liip_imagine.binary.loader, loader: ezpublish }
 
     ezpublish.image_alias.imagine.cache_resolver:
-        class: "%ezpublish.image_alias.imagine.cache_resolver.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver
         arguments:
             - "@ezpublish.fieldType.ezimage.io_service"
             - "@router.request_context"
@@ -86,12 +47,12 @@ services:
             - { name: liip_imagine.cache.resolver, resolver: ezpublish }
 
     ezpublish.image_alias.imagine.cache_resolver_decorator_factory:
-        class: '%ezpublish.image_alias.imagine.cache_resolver_decorator_factory.class%'
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\ResolverFactory
         arguments:
             - '@ezpublish.config.resolver'
             - '@ezpublish.image_alias.imagine.cache_resolver_decorator.inner'
-            - '%ezpublish.image_alias.imagine.cache_resolver_decorator_proxy.class%'
-            - '%ezpublish.image_alias.imagine.cache_resolver_decorator_relative.class%'
+            - 'eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\Resolver\ProxyResolver'
+            - 'eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\Resolver\RelativeResolver'
 
     ezpublish.image_alias.imagine.cache_resolver_decorator:
         class: Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
@@ -100,7 +61,7 @@ services:
         lazy: true
 
     ezpublish.image_alias.imagine.cache.alias_generator_decorator:
-        class: '%ezpublish.image_alias.imagine.cache.alias_generator_decorator.class%'
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\AliasGeneratorDecorator
         lazy: true
         arguments:
             - '@ezpublish.image_alias.imagine.variation.imagine_alias_generator'
@@ -110,7 +71,7 @@ services:
             - [setSiteAccess, ['@ezpublish.siteaccess']]
 
     ezpublish.image_alias.imagine.variation.imagine_alias_generator:
-        class: '%ezpublish.image_alias.imagine.variation.imagine_alias_generator.class%'
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Variation\ImagineAwareAliasGenerator
         arguments:
             - '@ezpublish.image_alias.imagine.alias_generator'
             - '@ezpublish.image_alias.variation_path_generator'
@@ -118,7 +79,7 @@ services:
             - '@liip_imagine'
 
     ezpublish.image_alias.imagine.alias_generator:
-        class: "%ezpublish.image_alias.imagine.alias_generator.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator
         arguments:
             - "@ezpublish.image_alias.imagine.binary_loader"
             - "@liip_imagine.filter.manager"
@@ -127,7 +88,7 @@ services:
             - "@?logger"
 
     ezpublish.image_alias.imagine.alias_cleaner:
-        class: "%ezpublish.image_alias.imagine.alias_cleaner.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasCleaner
         arguments: ["@ezpublish.image_alias.imagine.cache_resolver"]
 
     ezpublish.image_alias.imagine.placeholder_provider.configurator:
@@ -179,19 +140,19 @@ services:
 
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.width_height:
         parent: ezpublish.image_alias.imagine.filter.loader.scaledown.base
-        class: "%ezpublish.image_alias.imagine.filter.loader.scaledownonly.width_height.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleDownOnlyFilterLoader
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scaledownonly" }
 
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.width:
         parent: ezpublish.image_alias.imagine.filter.loader.scaledown.base
-        class: "%ezpublish.image_alias.imagine.filter.loader.scaledownonly.width.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthDownOnlyFilterLoader
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scalewidthdownonly" }
 
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.height:
         parent: ezpublish.image_alias.imagine.filter.loader.scaledown.base
-        class: "%ezpublish.image_alias.imagine.filter.loader.scaledownonly.height.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleHeightDownOnlyFilterLoader
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scaleheightdownonly" }
 
@@ -203,19 +164,19 @@ services:
 
     ezpublish.image_alias.imagine.filter.loader.scalewidth:
         parent: ezpublish.image_alias.imagine.filter.loader.relative_scale
-        class: "%ezpublish.image_alias.imagine.filter.loader.scalewidth.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthFilterLoader
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scalewidth" }
 
     ezpublish.image_alias.imagine.filter.loader.scaleheight:
         parent: ezpublish.image_alias.imagine.filter.loader.relative_scale
-        class: "%ezpublish.image_alias.imagine.filter.loader.scaleheight.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleHeightFilterLoader
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scaleheight" }
 
     ezpublish.image_alias.imagine.filter.loader.scale:
         parent: ezpublish.image_alias.imagine.filter.loader.relative_scale
-        class: "%ezpublish.image_alias.imagine.filter.loader.scale.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleFilterLoader
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scale" }
 
@@ -227,18 +188,18 @@ services:
 
     ezpublish.image_alias.imagine.filter.loader.scale_exact:
         parent: ezpublish.image_alias.imagine.filter.loader.scale_exact.base
-        class: "%ezpublish.image_alias.imagine.filter.loader.scale_exact.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleExactFilterLoader
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scaleexact" }
 
     ezpublish.image_alias.imagine.filter.loader.scale_percent:
         parent: ezpublish.image_alias.imagine.filter.loader.scale_exact.base
-        class: "%ezpublish.image_alias.imagine.filter.loader.scale_percent.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScalePercentFilterLoader
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scalepercent" }
 
     ezpublish.image_alias.imagine.filter.loader.crop:
-        class: "%ezpublish.image_alias.imagine.filter.loader.crop.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\CropFilterLoader
         public: false
         calls:
             - [setInnerLoader, ["@liip_imagine.filter.loader.crop"]]
@@ -246,27 +207,27 @@ services:
             - { name: liip_imagine.filter.loader, loader: "geometry/crop" }
 
     ezpublish.image_alias.imagine.filter.loader.border:
-        class: "%ezpublish.image_alias.imagine.filter.loader.border.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\BorderFilterLoader
         public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "border" }
 
     ezpublish.image_alias.imagine.filter.loader.reduce_noise:
-        class: "%ezpublish.image_alias.imagine.filter.loader.reduce_noise.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ReduceNoiseFilterLoader
         arguments: ["@ezpublish.image_alias.imagine.filter.reduce_noise"]
         public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "filter/noise" }
 
     ezpublish.image_alias.imagine.filter.loader.swirl:
-        class: "%ezpublish.image_alias.imagine.filter.loader.swirl.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\SwirlFilterLoader
         arguments: ["@ezpublish.image_alias.imagine.filter.swirl"]
         public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "filter/swirl" }
 
     ezpublish.image_alias.imagine.filter.loader.grayscale:
-        class: "%ezpublish.image_alias.imagine.filter.loader.grayscale.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\GrayscaleFilterLoader
         public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "colorspace/gray" }
@@ -278,7 +239,7 @@ services:
         alias: ezpublish.image_alias.variation_purger.io
 
     ezpublish.image_alias.variation_purger.io:
-        class: "%ezpublish.image_alias.variation_purger.io.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\IOVariationPurger
         arguments:
             - "@ezpublish.fieldType.ezimage.io_service"
             - "@ezpublish.image_alias.variation_path_generator.alias_directory"
@@ -286,7 +247,7 @@ services:
             - [setLogger, ["@?logger"]]
 
     ezpublish.image_alias.variation_purger.legacy_storage_image_file:
-        class: "%ezpublish.image_alias.variation_purger.legacy_storage_image_file.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger
         arguments:
             - "@ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list"
             - "@ezpublish.fieldType.ezimage.io_service"
@@ -295,14 +256,14 @@ services:
             - [setLogger, ["@?logger"]]
 
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list:
-        class: "%ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList
         arguments:
             - "@ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader"
             - $io.legacy_url_prefix$
             - $image.published_images_dir$
 
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader:
-        class: "%ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileRowReader
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
 
@@ -313,10 +274,10 @@ services:
         alias: ezpublish.image_alias.variation_path_generator.alias_directory
 
     ezpublish.image_alias.variation_path_generator.original_directory:
-        class: "%ezpubish.image_alias.variation_path_generator.original_directory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\OriginalDirectoryVariationPathGenerator
 
     ezpublish.image_alias.variation_path_generator.alias_directory:
-        class: "%ezpubish.image_alias.variation_path_generator.alias_directory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\AliasDirectoryVariationPathGenerator
 
     # SPI Aliases
     eZ\Publish\SPI\Variation\VariationHandler: '@ezpublish.image_alias.imagine.variation.imagine_alias_generator'

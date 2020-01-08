@@ -1,18 +1,13 @@
-parameters:
-    ezpublish.persistence.connection.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageConnectionFactory
-    ezpublish.api.repository_configuration_provider.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
-    ezpublish.persistence.connection.class: Doctrine\DBAL\Connection
-
 services:
     ezpublish.api.repository_configuration_provider:
         public: true # @todo should be private
-        class: "%ezpublish.api.repository_configuration_provider.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
         arguments:
             - "@ezpublish.config.resolver"
             - "%ezpublish.repositories%"
 
     ezpublish.persistence.connection.factory:
-        class: "%ezpublish.persistence.connection.factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageConnectionFactory
         arguments:
             - "@ezpublish.api.repository_configuration_provider"
         calls:
@@ -20,7 +15,7 @@ services:
 
     ezpublish.persistence.connection:
         public: true # @todo should be private
-        class: "%ezpublish.persistence.connection.class%"
+        class: Doctrine\DBAL\Connection
         factory: ["@ezpublish.persistence.connection.factory", getConnection]
         lazy: true
 
