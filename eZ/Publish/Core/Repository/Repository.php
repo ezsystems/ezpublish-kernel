@@ -236,20 +236,6 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface|null */
     private $proxyDomainMapper;
 
-    /**
-     * Construct repository object with provided storage engine.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
-     * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
-     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
-     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
-     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory
-     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
-     * @param array $serviceSettings
-     * @param \Psr\Log\LoggerInterface|null $logger
-     */
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
@@ -260,7 +246,7 @@ class Repository implements RepositoryInterface
         ThumbnailStrategy $thumbnailStrategy,
         ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
         array $serviceSettings = [],
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->searchHandler = $searchHandler;
@@ -713,11 +699,12 @@ class Repository implements RepositoryInterface
      * Get NameSchemaResolverService.
      *
      *
-     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
      * @internal
      * @private
      *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
     public function getNameSchemaService()
     {
@@ -756,8 +743,9 @@ class Repository implements RepositoryInterface
      * Get RelationProcessor.
      *
      *
-     * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor
      */
     protected function getRelationProcessor()
     {
@@ -767,8 +755,9 @@ class Repository implements RepositoryInterface
     /**
      * Get Content Domain Mapper.
      *
-     * @return \eZ\Publish\Core\Repository\Helper\DomainMapper
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected function getDomainMapper()
     {
@@ -826,6 +815,8 @@ class Repository implements RepositoryInterface
 
     /**
      * Get PermissionCriterionResolver.
+     *
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
      * @return \eZ\Publish\API\Repository\PermissionCriterionResolver
      */
