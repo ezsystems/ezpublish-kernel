@@ -148,3 +148,13 @@ services:
             $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
             $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
             $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
+
+    eZ\Publish\Core\Repository\Mapper\ContentDomainMapper:
+        arguments:
+            $contentHandler: '@ezpublish.spi.persistence.content_handler'
+            $locationHandler: '@ezpublish.spi.persistence.location_handler'
+            $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+            $contentTypeDomainMapper: '@eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper'
+            $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
+            $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
+            $thumbnailStrategy: '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
