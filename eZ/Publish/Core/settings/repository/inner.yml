@@ -134,3 +134,8 @@ services:
     eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory:
         arguments:
             $proxyGenerator: '@eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface'
+
+    # Permission-related
+    eZ\Publish\Core\Repository\Permission\LimitationService:
+        arguments:
+            $limitationTypes: !tagged_iterator { tag: ezpublish.limitationType, index_by: alias }
