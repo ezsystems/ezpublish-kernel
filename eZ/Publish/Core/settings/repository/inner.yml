@@ -24,6 +24,7 @@ services:
             - '@eZ\Publish\Core\Repository\User\PasswordHashService'
             - '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
             - '@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory'
+            - '@eZ\Publish\Core\Repository\Mapper\ContentDomainMapper'
             - '@eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper'
             - '@eZ\Publish\Core\Repository\Permission\LimitationService'
         lazy: true

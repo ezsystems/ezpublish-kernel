@@ -31,7 +31,6 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Helper\NameSchemaService;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -6046,20 +6045,6 @@ class ContentTest extends BaseServiceMockTest
         $urlAliasHandlerMock->expects($this->once())
             ->method('archiveUrlAliasesForDeletedTranslations')
             ->with(123, 456, ['eng-GB']);
-    }
-
-    protected $contentDomainMapperMock;
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Mapper\ContentDomainMapper
-     */
-    protected function getContentDomainMapperMock(): MockObject
-    {
-        if (!isset($this->contentDomainMapperMock)) {
-            $this->contentDomainMapperMock = $this->createMock(ContentDomainMapper::class);
-        }
-
-        return $this->contentDomainMapperMock;
     }
 
     protected $relationProcessorMock;

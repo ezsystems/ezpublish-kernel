@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
 use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
@@ -58,6 +59,9 @@ abstract class Base extends TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper */
     private $contentTypeDomainMapperMock;
 
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Mapper\ContentDomainMapper */
+    private $contentDomainMapperMock;
+
     /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Permission\LimitationService */
     private $limitationServiceMock;
 
@@ -80,6 +84,7 @@ abstract class Base extends TestCase
                 $this->createMock(PasswordHashServiceInterface::class),
                 $this->getThumbnailStrategy(),
                 $this->createMock(ProxyDomainMapperFactoryInterface::class),
+                $this->getContentDomainMapperMock(),
                 $this->getContentTypeDomainMapperMock(),
                 $this->getLimitationServiceMock(),
                 $serviceSettings,
@@ -157,6 +162,18 @@ abstract class Base extends TestCase
         }
 
         return $this->permissionResolverMock;
+    }
+
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Mapper\ContentDomainMapper
+     */
+    protected function getContentDomainMapperMock(): MockObject
+    {
+        if (!isset($this->contentDomainMapperMock)) {
+            $this->contentDomainMapperMock = $this->createMock(ContentDomainMapper::class);
+        }
+
+        return $this->contentDomainMapperMock;
     }
 
     /**

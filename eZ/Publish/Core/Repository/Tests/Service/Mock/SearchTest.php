@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\ContentService;
-use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\SearchService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
@@ -943,21 +942,6 @@ class SearchTest extends BaseServiceMockTest
             $endResult,
             $result
         );
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Mapper\ContentDomainMapper
-     */
-    protected function getContentDomainMapperMock()
-    {
-        if (!isset($this->contentDomainMapperMock)) {
-            $this->contentDomainMapperMock = $this
-                ->getMockBuilder(ContentDomainMapper::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        }
-
-        return $this->contentDomainMapperMock;
     }
 
     /**
