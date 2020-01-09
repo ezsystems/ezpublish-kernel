@@ -9,6 +9,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
@@ -75,7 +76,8 @@ class RepositoryFactory implements ContainerAwareInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashService,
         ThumbnailStrategy $thumbnailStrategy,
-        ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory
+        ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
+        LimitationService $limitationService
     ): Repository {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 
@@ -88,6 +90,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $passwordHashService,
             $thumbnailStrategy,
             $proxyDomainMapperFactory,
+            $limitationService,
             [
                 'role' => [
                     'limitationTypes' => $this->roleLimitations,

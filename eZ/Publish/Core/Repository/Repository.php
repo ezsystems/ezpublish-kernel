@@ -8,6 +8,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
@@ -187,11 +188,7 @@ class Repository implements RepositoryInterface
      */
     protected $serviceSettings;
 
-    /**
-     * Instance of role service.
-     *
-     * @var \eZ\Publish\Core\Repository\Permission\LimitationService
-     */
+    /** @var \eZ\Publish\Core\Repository\Permission\LimitationService */
     protected $limitationService;
 
     /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
@@ -245,6 +242,7 @@ class Repository implements RepositoryInterface
         PasswordHashServiceInterface $passwordHashGenerator,
         ThumbnailStrategy $thumbnailStrategy,
         ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
+        LimitationService $limitationService,
         array $serviceSettings = [],
         ?LoggerInterface $logger = null
     ) {
@@ -256,6 +254,7 @@ class Repository implements RepositoryInterface
         $this->passwordHashService = $passwordHashGenerator;
         $this->thumbnailStrategy = $thumbnailStrategy;
         $this->proxyDomainMapperFactory = $proxyDomainMapperFactory;
+        $this->limitationService = $limitationService;
 
         $this->serviceSettings = $serviceSettings + [
                 'content' => [],
@@ -606,28 +605,12 @@ class Repository implements RepositoryInterface
         $this->roleService = new RoleService(
             $this,
             $this->persistenceHandler->userHandler(),
-            $this->getLimitationService(),
+            $this->limitationService,
             $this->getRoleDomainMapper(),
             $this->serviceSettings['role']
         );
 
         return $this->roleService;
-    }
-
-    /**
-     * Get LimitationService.
-     *
-     * @return \eZ\Publish\Core\Repository\Permission\LimitationService
-     */
-    protected function getLimitationService()
-    {
-        if ($this->limitationService !== null) {
-            return $this->limitationService;
-        }
-
-        $this->limitationService = new Permission\LimitationService($this->serviceSettings['role']);
-
-        return $this->limitationService;
     }
 
     /**
@@ -641,7 +624,7 @@ class Repository implements RepositoryInterface
             return $this->roleDomainMapper;
         }
 
-        $this->roleDomainMapper = new Helper\RoleDomainMapper($this->getLimitationService());
+        $this->roleDomainMapper = new Helper\RoleDomainMapper($this->limitationService);
 
         return $this->roleDomainMapper;
     }
@@ -834,14 +817,14 @@ class Repository implements RepositoryInterface
             $this->permissionsHandler = new CachedPermissionService(
                 $permissionResolver = new Permission\PermissionResolver(
                     $this->getRoleDomainMapper(),
-                    $this->getLimitationService(),
+                    $this->limitationService,
                     $this->persistenceHandler->userHandler(),
                     new UserReference($this->serviceSettings['user']['anonymousUserID']),
                     $this->serviceSettings['role']['policyMap']
                 ),
                 new PermissionCriterionResolver(
                     $permissionResolver,
-                    $this->getLimitationService()
+                    $this->limitationService
                 )
             );
         }
