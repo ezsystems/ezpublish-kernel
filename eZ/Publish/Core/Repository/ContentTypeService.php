@@ -64,7 +64,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /** @var \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper */
     protected $contentDomainMapper;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
     /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
@@ -80,7 +80,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper $contentDomainMapper
-     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
+     * @param \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper $contentTypeDomainMapper
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      * @param array $settings
@@ -90,7 +90,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         Handler $contentTypeHandler,
         UserHandler $userHandler,
         Mapper\ContentDomainMapper $contentDomainMapper,
-        Helper\ContentTypeDomainMapper $contentTypeDomainMapper,
+        Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
         FieldTypeRegistry $fieldTypeRegistry,
         PermissionResolver $permissionResolver,
         array $settings = []

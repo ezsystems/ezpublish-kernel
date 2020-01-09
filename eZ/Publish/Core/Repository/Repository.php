@@ -197,11 +197,7 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper */
     protected $contentDomainMapper;
 
-    /**
-     * Instance of content type domain mapper.
-     *
-     * @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
-     */
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
     /**
@@ -773,16 +769,14 @@ class Repository implements RepositoryInterface
      * Get ContentType Domain Mapper.
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
-     * @return \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
      */
-    protected function getContentTypeDomainMapper()
+    protected function getContentTypeDomainMapper(): Mapper\ContentTypeDomainMapper
     {
         if ($this->contentTypeDomainMapper !== null) {
             return $this->contentTypeDomainMapper;
         }
 
-        $this->contentTypeDomainMapper = new Helper\ContentTypeDomainMapper(
+        $this->contentTypeDomainMapper = new Mapper\ContentTypeDomainMapper(
             $this->persistenceHandler->contentTypeHandler(),
             $this->persistenceHandler->contentLanguageHandler(),
             $this->fieldTypeRegistry,

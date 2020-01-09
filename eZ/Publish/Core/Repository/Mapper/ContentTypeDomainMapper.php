@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Repository\Helper;
+namespace eZ\Publish\Core\Repository\Mapper;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
@@ -260,7 +260,7 @@ class ContentTypeDomainMapper
      * Builds SPIFieldDefinition object using API FieldDefinitionUpdateStruct
      * and API FieldDefinition.
      *
-     * @deprecated use \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper::buildSPIFieldDefinitionFromUpdateStruct()
+     * @deprecated use \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper::buildSPIFieldDefinitionFromUpdateStruct()
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
      *         field setting do not validate
@@ -445,7 +445,7 @@ class ContentTypeDomainMapper
     /**
      * Builds SPIFieldDefinition object using API FieldDefinitionCreateStruct.
      *
-     * @deprecated use \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper::buildSPIFieldDefinitionFromCreateStruct()
+     * @deprecated use \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper::buildSPIFieldDefinitionFromCreateStruct()
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
      *         field setting do not validate
