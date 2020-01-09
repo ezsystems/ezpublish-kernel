@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\User\LookupPolicyLimitations;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
 use eZ\Publish\SPI\Limitation\Target;
 use eZ\Publish\SPI\Limitation\TargetAwareType;
@@ -37,7 +36,7 @@ class PermissionResolver implements PermissionResolverInterface
     /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
     private $roleDomainMapper;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\LimitationService */
+    /** @var \eZ\Publish\Core\Repository\Permission\LimitationService */
     private $limitationService;
 
     /** @var \eZ\Publish\SPI\Persistence\User\Handler */
@@ -59,7 +58,7 @@ class PermissionResolver implements PermissionResolverInterface
 
     /**
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
-     * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
+     * @param \eZ\Publish\Core\Repository\Permission\LimitationService $limitationService
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $userReference
      * @param array $policyMap Map of system configured policies, for validation usage.

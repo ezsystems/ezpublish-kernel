@@ -1,12 +1,10 @@
 <?php
 
 /**
- * File containing LimitationService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Repository\Helper;
+namespace eZ\Publish\Core\Repository\Permission;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;

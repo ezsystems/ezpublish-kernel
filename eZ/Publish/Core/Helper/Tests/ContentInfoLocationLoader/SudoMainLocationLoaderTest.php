@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use PHPUnit\Framework\TestCase;

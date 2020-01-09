@@ -190,7 +190,7 @@ class Repository implements RepositoryInterface
     /**
      * Instance of role service.
      *
-     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
+     * @var \eZ\Publish\Core\Repository\Permission\LimitationService
      */
     protected $limitationService;
 
@@ -617,7 +617,7 @@ class Repository implements RepositoryInterface
     /**
      * Get LimitationService.
      *
-     * @return \eZ\Publish\Core\Repository\Helper\LimitationService
+     * @return \eZ\Publish\Core\Repository\Permission\LimitationService
      */
     protected function getLimitationService()
     {
@@ -625,7 +625,7 @@ class Repository implements RepositoryInterface
             return $this->limitationService;
         }
 
-        $this->limitationService = new Helper\LimitationService($this->serviceSettings['role']);
+        $this->limitationService = new Permission\LimitationService($this->serviceSettings['role']);
 
         return $this->limitationService;
     }

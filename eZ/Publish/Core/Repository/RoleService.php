@@ -50,7 +50,7 @@ class RoleService implements RoleServiceInterface
     /** @var \eZ\Publish\SPI\Persistence\User\Handler */
     protected $userHandler;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\LimitationService */
+    /** @var \eZ\Publish\Core\Repository\Permission\LimitationService */
     protected $limitationService;
 
     /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
@@ -67,14 +67,14 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
-     * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
+     * @param \eZ\Publish\Core\Repository\Permission\LimitationService $limitationService
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $userHandler,
-        Helper\LimitationService $limitationService,
+        Permission\LimitationService $limitationService,
         Helper\RoleDomainMapper $roleDomainMapper,
         array $settings = []
     ) {

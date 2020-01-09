@@ -14,7 +14,7 @@ use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured;
 use eZ\Publish\Core\Repository\Repository;
 use PHPUnit\Framework\TestCase;

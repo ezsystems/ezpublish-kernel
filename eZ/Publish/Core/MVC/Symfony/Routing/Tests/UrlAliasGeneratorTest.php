@@ -18,7 +18,7 @@ use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
 use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Location;

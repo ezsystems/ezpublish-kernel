@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Limitation\TargetOnlyLimitationType;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use eZ\Publish\Core\Repository\Values\User\Policy;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\SPI\Limitation\Type;
 use PHPUnit\Framework\TestCase;
 

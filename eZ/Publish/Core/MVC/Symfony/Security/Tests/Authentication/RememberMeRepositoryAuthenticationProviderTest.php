@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\User\User as ApiUser;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RememberMeRepositoryAuthenticationProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use PHPUnit\Framework\TestCase;

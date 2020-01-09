@@ -9,7 +9,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Repository\Repository as CoreRepository;
@@ -1110,7 +1110,7 @@ class PermissionTest extends BaseServiceMockTest
     protected $limitationServiceMock;
 
     /**
-     * @return \eZ\Publish\Core\Repository\Helper\LimitationService|\PHPUnit\Framework\MockObject\MockObject
+     * @return \eZ\Publish\Core\Repository\Permission\LimitationService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLimitationServiceMock($methods = [])
     {
