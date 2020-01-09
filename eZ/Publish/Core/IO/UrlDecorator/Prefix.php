@@ -25,7 +25,7 @@ class Prefix implements UrlDecorator
         $this->ioConfigResolver = $IOConfigResolver;
     }
 
-    public function getPrefix()
+    public function getPrefix(): string
     {
         $prefix = $this->ioConfigResolver->getLegacyUrlPrefix();
 
@@ -42,6 +42,9 @@ class Prefix implements UrlDecorator
         return $prefix . trim($id, '/');
     }
 
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
     public function undecorate($url)
     {
         $prefix = $this->getPrefix();

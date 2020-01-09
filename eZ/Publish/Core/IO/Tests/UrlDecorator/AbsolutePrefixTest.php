@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\IO\Tests\UrlDecorator;
 
 use eZ\Publish\Core\IO\IOConfigProvider;
+use eZ\Publish\Core\IO\UrlDecorator;
 use eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix;
 
 /**
@@ -16,7 +17,7 @@ use eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix;
  */
 class AbsolutePrefixTest extends PrefixTest
 {
-    protected function buildDecorator($prefix)
+    protected function buildDecorator(string $prefix): UrlDecorator
     {
         $ioConfigResolverMock = $this->createMock(IOConfigProvider::class);
         $ioConfigResolverMock
@@ -26,7 +27,7 @@ class AbsolutePrefixTest extends PrefixTest
         return new AbsolutePrefix($ioConfigResolverMock);
     }
 
-    public function provideData()
+    public function provideData(): array
     {
         return [
             [
