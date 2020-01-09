@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use ArrayIterator;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
@@ -20,6 +21,7 @@ use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\RoleService;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -1105,7 +1107,9 @@ class RoleTest extends BaseServiceMockTest
         ?RoleDomainMapper $roleDomainMapper = null
     ) {
         if (!isset($this->partlyMockedRoleService) || !empty($settings) || $roleDomainMapper) {
-            $limitationService = $this->getPartlyMockedLimitationService($methods, $settings);
+            $limitationService = new LimitationService(
+                new ArrayIterator($settings['limitationTypes'] ?? [])
+            );
             if ($roleDomainMapper === null) {
                 $roleDomainMapper = $this->getMockBuilder(RoleDomainMapper::class)
                     ->setMethods([])
@@ -1128,35 +1132,6 @@ class RoleTest extends BaseServiceMockTest
         }
 
         return $this->partlyMockedRoleService;
-    }
-
-    /** @var \eZ\Publish\Core\Repository\RoleService */
-    protected $partlyMockedLimitationService;
-
-    /**
-     * Return mocked LimitationService.
-     *
-     * @param string[] $methods
-     * @param array $settings
-     *
-     * @return \eZ\Publish\Core\Repository\Permission\LimitationService|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getPartlyMockedLimitationService(array $methods = null, array $settings = [])
-    {
-        if (!isset($this->partlyMockedLimitationService) || !empty($settings)) {
-            $this->partlyMockedLimitationService = $this->getMockBuilder(
-                'eZ\\Publish\\Core\\Repository\\Permission\\LimitationService'
-            )
-                ->setMethods($methods)
-                ->setConstructorArgs(
-                    [
-                        $settings,
-                    ]
-                )
-                ->getMock();
-        }
-
-        return $this->partlyMockedLimitationService;
     }
 
     /**
