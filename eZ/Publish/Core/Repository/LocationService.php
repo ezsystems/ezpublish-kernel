@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
@@ -54,8 +55,8 @@ class LocationService implements LocationServiceInterface
     /** @var array */
     protected $settings;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\DomainMapper */
-    protected $domainMapper;
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper */
+    protected $contentDomainMapper;
 
     /** @var \eZ\Publish\Core\Repository\Helper\NameSchemaService */
     protected $nameSchemaService;
@@ -74,7 +75,7 @@ class LocationService implements LocationServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper $contentDomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
      * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
      * @param array $settings
@@ -83,7 +84,7 @@ class LocationService implements LocationServiceInterface
     public function __construct(
         RepositoryInterface $repository,
         Handler $handler,
-        Helper\DomainMapper $domainMapper,
+        ContentDomainMapper $contentDomainMapper,
         Helper\NameSchemaService $nameSchemaService,
         PermissionCriterionResolver $permissionCriterionResolver,
         PermissionResolver $permissionResolver,
@@ -92,7 +93,7 @@ class LocationService implements LocationServiceInterface
     ) {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
-        $this->domainMapper = $domainMapper;
+        $this->contentDomainMapper = $contentDomainMapper;
         $this->nameSchemaService = $nameSchemaService;
         $this->permissionResolver = $permissionResolver;
         // Union makes sure default settings are ignored if provided in argument
@@ -188,7 +189,7 @@ class LocationService implements LocationServiceInterface
             throw $e;
         }
 
-        return $this->domainMapper->buildLocationWithContent($newLocation, $content);
+        return $this->contentDomainMapper->buildLocationWithContent($newLocation, $content);
     }
 
     /**
@@ -197,7 +198,7 @@ class LocationService implements LocationServiceInterface
     public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
-        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
+        $location = $this->contentDomainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
         if (!$this->permissionResolver->canUser('content', 'read', $location->getContentInfo(), [$location])) {
             throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
         }
@@ -227,7 +228,7 @@ class LocationService implements LocationServiceInterface
 
         // Load content info and Get content proxy
         $spiContentInfoList = $this->persistenceHandler->contentHandler()->loadContentInfoList($contentIds);
-        $contentProxyList = $this->domainMapper->buildContentProxyList(
+        $contentProxyList = $this->contentDomainMapper->buildContentProxyList(
             $spiContentInfoList,
             $prioritizedLanguages ?? [],
             $useAlwaysAvailable ?? true
@@ -237,7 +238,7 @@ class LocationService implements LocationServiceInterface
         $locations = [];
         $permissionResolver = $this->repository->getPermissionResolver();
         foreach ($spiLocations as $spiLocation) {
-            $location = $this->domainMapper->buildLocationWithContent(
+            $location = $this->contentDomainMapper->buildLocationWithContent(
                 $spiLocation,
                 $contentProxyList[$spiLocation->contentId] ?? null,
                 $spiContentInfoList[$spiLocation->contentId] ?? null
@@ -261,7 +262,7 @@ class LocationService implements LocationServiceInterface
         }
 
         $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
-        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
+        $location = $this->contentDomainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
         if (!$this->permissionResolver->canUser('content', 'read', $location->getContentInfo(), [$location])) {
             throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
         }
@@ -285,9 +286,9 @@ class LocationService implements LocationServiceInterface
 
         $locations = [];
         $spiInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($contentInfo->id);
-        $content = $this->domainMapper->buildContentProxy($spiInfo, $prioritizedLanguages ?: []);
+        $content = $this->contentDomainMapper->buildContentProxy($spiInfo, $prioritizedLanguages ?: []);
         foreach ($spiLocations as $spiLocation) {
-            $location = $this->domainMapper->buildLocationWithContent($spiLocation, $content, $spiInfo);
+            $location = $this->contentDomainMapper->buildLocationWithContent($spiLocation, $content, $spiInfo);
             if ($this->permissionResolver->canUser('content', 'read', $location->getContentInfo(), [$location])) {
                 $locations[] = $location;
             }
@@ -301,11 +302,11 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocationChildren(APILocation $location, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
     {
-        if (!$this->domainMapper->isValidLocationSortField($location->sortField)) {
+        if (!$this->contentDomainMapper->isValidLocationSortField($location->sortField)) {
             throw new InvalidArgumentValue('sortField', $location->sortField, 'Location');
         }
 
-        if (!$this->domainMapper->isValidLocationSortOrder($location->sortOrder)) {
+        if (!$this->contentDomainMapper->isValidLocationSortOrder($location->sortOrder)) {
             throw new InvalidArgumentValue('sortOrder', $location->sortOrder, 'Location');
         }
 
@@ -359,9 +360,9 @@ class LocationService implements LocationServiceInterface
         $locations = [];
         $permissionResolver = $this->repository->getPermissionResolver();
         $spiContentInfoList = $this->persistenceHandler->contentHandler()->loadContentInfoList($contentIds);
-        $contentList = $this->domainMapper->buildContentProxyList($spiContentInfoList, $prioritizedLanguages ?: []);
+        $contentList = $this->contentDomainMapper->buildContentProxyList($spiContentInfoList, $prioritizedLanguages ?: []);
         foreach ($spiLocations as $spiLocation) {
-            $location = $this->domainMapper->buildLocationWithContent(
+            $location = $this->contentDomainMapper->buildLocationWithContent(
                 $spiLocation,
                 $contentList[$spiLocation->contentId],
                 $spiContentInfoList[$spiLocation->contentId]
@@ -425,12 +426,12 @@ class LocationService implements LocationServiceInterface
      */
     public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct)
     {
-        $content = $this->domainMapper->buildContentDomainObjectFromPersistence(
+        $content = $this->contentDomainMapper->buildContentDomainObjectFromPersistence(
             $this->persistenceHandler->contentHandler()->load($contentInfo->id),
             $this->persistenceHandler->contentTypeHandler()->load($contentInfo->contentTypeId)
         );
 
-        $parentLocation = $this->domainMapper->buildLocation(
+        $parentLocation = $this->contentDomainMapper->buildLocation(
             $this->persistenceHandler->locationHandler()->load($locationCreateStruct->parentLocationId)
         );
 
@@ -465,7 +466,7 @@ class LocationService implements LocationServiceInterface
             }
         }
 
-        $spiLocationCreateStruct = $this->domainMapper->buildSPILocationCreateStruct(
+        $spiLocationCreateStruct = $this->contentDomainMapper->buildSPILocationCreateStruct(
             $locationCreateStruct,
             $parentLocation,
             $contentInfo->mainLocationId ?? true,
@@ -495,7 +496,7 @@ class LocationService implements LocationServiceInterface
             throw $e;
         }
 
-        return $this->domainMapper->buildLocationWithContent($newLocation, $content);
+        return $this->contentDomainMapper->buildLocationWithContent($newLocation, $content);
     }
 
     /**
@@ -511,7 +512,7 @@ class LocationService implements LocationServiceInterface
      */
     public function updateLocation(APILocation $location, LocationUpdateStruct $locationUpdateStruct)
     {
-        if (!$this->domainMapper->isValidLocationPriority($locationUpdateStruct->priority)) {
+        if (!$this->contentDomainMapper->isValidLocationPriority($locationUpdateStruct->priority)) {
             throw new InvalidArgumentValue('priority', $locationUpdateStruct->priority, 'LocationUpdateStruct');
         }
 
@@ -519,11 +520,11 @@ class LocationService implements LocationServiceInterface
             throw new InvalidArgumentValue('remoteId', $locationUpdateStruct->remoteId, 'LocationUpdateStruct');
         }
 
-        if ($locationUpdateStruct->sortField !== null && !$this->domainMapper->isValidLocationSortField($locationUpdateStruct->sortField)) {
+        if ($locationUpdateStruct->sortField !== null && !$this->contentDomainMapper->isValidLocationSortField($locationUpdateStruct->sortField)) {
             throw new InvalidArgumentValue('sortField', $locationUpdateStruct->sortField, 'LocationUpdateStruct');
         }
 
-        if ($locationUpdateStruct->sortOrder !== null && !$this->domainMapper->isValidLocationSortOrder($locationUpdateStruct->sortOrder)) {
+        if ($locationUpdateStruct->sortOrder !== null && !$this->contentDomainMapper->isValidLocationSortOrder($locationUpdateStruct->sortOrder)) {
             throw new InvalidArgumentValue('sortOrder', $locationUpdateStruct->sortOrder, 'LocationUpdateStruct');
         }
 
@@ -866,7 +867,7 @@ class LocationService implements LocationServiceInterface
         $spiContentInfoList = $this->persistenceHandler->contentHandler()->loadContentInfoList(
             $contentIds
         );
-        $contentList = $this->domainMapper->buildContentProxyList(
+        $contentList = $this->contentDomainMapper->buildContentProxyList(
             $spiContentInfoList,
             Language::ALL,
             false
@@ -884,7 +885,7 @@ class LocationService implements LocationServiceInterface
                 continue;
             }
 
-            $location = $this->domainMapper->buildLocationWithContent(
+            $location = $this->contentDomainMapper->buildLocationWithContent(
                 $spiLocation,
                 $contentList[$spiLocation->contentId],
                 $spiContentInfoList[$spiLocation->contentId]

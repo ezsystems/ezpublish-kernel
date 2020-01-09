@@ -23,6 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
 use eZ\Publish\SPI\Search\Capable;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Search\Handler;
@@ -41,8 +42,8 @@ class SearchService implements SearchServiceInterface
     /** @var array */
     protected $settings;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\DomainMapper */
-    protected $domainMapper;
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper */
+    protected $contentDomainMapper;
 
     /** @var \eZ\Publish\API\Repository\PermissionCriterionResolver */
     protected $permissionCriterionResolver;
@@ -55,7 +56,7 @@ class SearchService implements SearchServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
-     * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper $contentDomainMapper
      * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
      * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
      * @param array $settings
@@ -63,14 +64,14 @@ class SearchService implements SearchServiceInterface
     public function __construct(
         RepositoryInterface $repository,
         Handler $searchHandler,
-        Helper\DomainMapper $domainMapper,
+        ContentDomainMapper $contentDomainMapper,
         PermissionCriterionResolver $permissionCriterionResolver,
         BackgroundIndexer $backgroundIndexer,
         array $settings = []
     ) {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
-        $this->domainMapper = $domainMapper;
+        $this->contentDomainMapper = $contentDomainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + [
             //'defaultSetting' => array(),
@@ -95,7 +96,7 @@ class SearchService implements SearchServiceInterface
     public function findContent(Query $query, array $languageFilter = [], bool $filterOnUserPermissions = true): SearchResult
     {
         $result = $this->internalFindContentInfo($query, $languageFilter, $filterOnUserPermissions);
-        $missingContentList = $this->domainMapper->buildContentDomainObjectsOnSearchResult($result, $languageFilter);
+        $missingContentList = $this->contentDomainMapper->buildContentDomainObjectsOnSearchResult($result, $languageFilter);
         foreach ($missingContentList as $missingContent) {
             $this->backgroundIndexer->registerContent($missingContent);
         }
@@ -123,7 +124,7 @@ class SearchService implements SearchServiceInterface
     {
         $result = $this->internalFindContentInfo($query, $languageFilter, $filterOnUserPermissions);
         foreach ($result->searchHits as $hit) {
-            $hit->valueObject = $this->domainMapper->buildContentInfoDomainObject(
+            $hit->valueObject = $this->contentDomainMapper->buildContentInfoDomainObject(
                 $hit->valueObject
             );
         }
@@ -303,7 +304,7 @@ class SearchService implements SearchServiceInterface
 
         $result = $this->searchHandler->findLocations($query, $languageFilter);
 
-        $missingLocations = $this->domainMapper->buildLocationDomainObjectsOnSearchResult($result, $languageFilter);
+        $missingLocations = $this->contentDomainMapper->buildLocationDomainObjectsOnSearchResult($result, $languageFilter);
         foreach ($missingLocations as $missingLocation) {
             $this->backgroundIndexer->registerLocation($missingLocation);
         }

@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\ContentService;
-use eZ\Publish\Core\Repository\Helper\DomainMapper;
+use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\SearchService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
@@ -35,7 +35,7 @@ class SearchTest extends BaseServiceMockTest
 {
     protected $repositoryMock;
 
-    protected $domainMapperMock;
+    protected $contentDomainMapperMock;
 
     protected $permissionsCriterionResolverMock;
 
@@ -49,14 +49,14 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $domainMapperMock = $this->getDomainMapperMock();
+        $contentDomainMapperMock = $this->getContentDomainMapperMock();
         $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $settings = ['teh setting'];
 
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            $domainMapperMock,
+            $contentDomainMapperMock,
             $permissionsCriterionResolverMock,
             new NullIndexer(),
             $settings
@@ -108,7 +108,7 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            $this->getDomainMapperMock(),
+            $this->getContentDomainMapperMock(),
             $permissionsCriterionResolverMock,
             new NullIndexer(),
             []
@@ -156,7 +156,7 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            $this->getDomainMapperMock(),
+            $this->getContentDomainMapperMock(),
             $permissionsCriterionResolverMock,
             new NullIndexer(),
             []
@@ -191,7 +191,7 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            $this->getDomainMapperMock(),
+            $this->getContentDomainMapperMock(),
             $permissionsCriterionResolverMock,
             new NullIndexer(),
             []
@@ -228,7 +228,7 @@ class SearchTest extends BaseServiceMockTest
             ->setConstructorArgs([
                 $this->getRepositoryMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
-                $mapper = $this->getDomainMapperMock(),
+                $mapper = $this->getContentDomainMapperMock(),
                 $this->getPermissionCriterionResolverMock(),
                 $indexer,
             ])->setMethods(['internalFindContentInfo'])
@@ -271,7 +271,7 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            $mapper = $this->getDomainMapperMock(),
+            $mapper = $this->getContentDomainMapperMock(),
             $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock(),
             new NullIndexer(),
             []
@@ -332,7 +332,7 @@ class SearchTest extends BaseServiceMockTest
     {
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $this->getRepositoryMock(),
@@ -409,7 +409,7 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $this->getRepositoryMock(),
             $searchHandlerMock,
-            $mapper = $this->getDomainMapperMock(),
+            $mapper = $this->getContentDomainMapperMock(),
             $permissionsCriterionResolverMock,
             new NullIndexer(),
             []
@@ -449,7 +449,7 @@ class SearchTest extends BaseServiceMockTest
     {
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $service = new SearchService(
             $this->getRepositoryMock(),
             $searchHandlerMock,
@@ -526,7 +526,7 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            $this->getDomainMapperMock(),
+            $this->getContentDomainMapperMock(),
             $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock(),
             new NullIndexer(),
             []
@@ -564,7 +564,7 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            $this->getDomainMapperMock(),
+            $this->getContentDomainMapperMock(),
             $permissionsCriterionResolverMock,
             new NullIndexer(),
             []
@@ -595,7 +595,7 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
@@ -660,7 +660,7 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
@@ -731,7 +731,7 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $permissionsCriterionResolverMock = $this->getPermissionCriterionResolverMock();
         $service = new SearchService(
             $repositoryMock,
@@ -806,7 +806,7 @@ class SearchTest extends BaseServiceMockTest
             ->setConstructorArgs([
                 $this->getRepositoryMock(),
                 $searchHandler = $this->getSPIMockHandler('Search\\Handler'),
-                $mapper = $this->getDomainMapperMock(),
+                $mapper = $this->getContentDomainMapperMock(),
                 $this->getPermissionCriterionResolverMock(),
                 $indexer,
             ])->setMethods(['addPermissionsCriterion'])
@@ -856,7 +856,7 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
-            $this->getDomainMapperMock(),
+            $this->getContentDomainMapperMock(),
             $permissionsCriterionResolverMock,
             new NullIndexer(),
             []
@@ -885,7 +885,7 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
@@ -946,18 +946,18 @@ class SearchTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\DomainMapper
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Mapper\ContentDomainMapper
      */
-    protected function getDomainMapperMock()
+    protected function getContentDomainMapperMock()
     {
-        if (!isset($this->domainMapperMock)) {
-            $this->domainMapperMock = $this
-                ->getMockBuilder(DomainMapper::class)
+        if (!isset($this->contentDomainMapperMock)) {
+            $this->contentDomainMapperMock = $this
+                ->getMockBuilder(ContentDomainMapper::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         }
 
-        return $this->domainMapperMock;
+        return $this->contentDomainMapperMock;
     }
 
     /**
