@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Values\Content;
 
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 
 /**
@@ -27,6 +28,9 @@ class TrashItem extends APITrashItem
     /** @var array */
     protected $path;
 
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
+    protected $parentLocation;
+
     /**
      * Returns the content info of the content object of this trash item.
      *
@@ -35,6 +39,11 @@ class TrashItem extends APITrashItem
     public function getContentInfo()
     {
         return $this->contentInfo;
+    }
+
+    public function getParentLocation(): ?Location
+    {
+        return $this->parentLocation;
     }
 
     /**

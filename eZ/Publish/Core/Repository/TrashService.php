@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
@@ -57,6 +58,9 @@ class TrashService implements TrashServiceInterface
     /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface */
+    private $proxyDomainMapper;
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
@@ -64,6 +68,8 @@ class TrashService implements TrashServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
      * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
+     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface $permissionResolver
      * @param array $settings
      */
     public function __construct(
@@ -72,6 +78,7 @@ class TrashService implements TrashServiceInterface
         Helper\NameSchemaService $nameSchemaService,
         PermissionCriterionResolver $permissionCriterionResolver,
         PermissionResolver $permissionResolver,
+        ProxyDomainMapperInterface $proxyDomainMapper,
         array $settings = []
     ) {
         $this->repository = $repository;
@@ -83,6 +90,7 @@ class TrashService implements TrashServiceInterface
         ];
         $this->permissionCriterionResolver = $permissionCriterionResolver;
         $this->permissionResolver = $permissionResolver;
+        $this->proxyDomainMapper = $proxyDomainMapper;
     }
 
     /**
@@ -369,6 +377,7 @@ class TrashService implements TrashServiceInterface
                 'sortField' => $spiTrashItem->sortField,
                 'sortOrder' => $spiTrashItem->sortOrder,
                 'trashed' => isset($spiTrashItem->trashed) ? new DateTime('@' . $spiTrashItem->trashed) : new DateTime('@0'),
+                'parentLocation' => $this->proxyDomainMapper->createLocationProxy($spiTrashItem->parentId),
             ]
         );
     }

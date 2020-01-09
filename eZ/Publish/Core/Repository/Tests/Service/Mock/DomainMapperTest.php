@@ -184,8 +184,8 @@ class DomainMapperTest extends BaseServiceMockTest
         ];
 
         $locationHits = [
-            new Location(['id' => 21, 'contentId' => 32]),
-            new Location(['id' => 22, 'contentId' => 33]),
+            new Location(['id' => 21, 'contentId' => 32, 'parentId' => 1]),
+            new Location(['id' => 22, 'contentId' => 33, 'parentId' => 1]),
         ];
 
         return [

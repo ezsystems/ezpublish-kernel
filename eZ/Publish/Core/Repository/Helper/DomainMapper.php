@@ -464,7 +464,8 @@ class DomainMapper
         return $this->mapLocation(
             $spiLocation,
             $this->buildContentInfoDomainObject($spiContentInfo),
-            $this->buildContentProxy($spiContentInfo, $prioritizedLanguages, $useAlwaysAvailable)
+            $this->buildContentProxy($spiContentInfo, $prioritizedLanguages, $useAlwaysAvailable),
+            $this->proxyFactory->createLocationProxy($spiLocation->parentId, $prioritizedLanguages)
         );
     }
 
@@ -496,7 +497,11 @@ class DomainMapper
             $contentInfo = $content->contentInfo;
         }
 
-        return $this->mapLocation($spiLocation, $contentInfo, $content);
+        $parentLocation = $this->proxyFactory->createLocationProxy(
+            $spiLocation->parentId,
+        );
+
+        return $this->mapLocation($spiLocation, $contentInfo, $content, $parentLocation);
     }
 
     /**
@@ -548,8 +553,12 @@ class DomainMapper
         );
     }
 
-    private function mapLocation(SPILocation $spiLocation, ContentInfo $contentInfo, APIContent $content): APILocation
-    {
+    private function mapLocation(
+        SPILocation $spiLocation,
+        ContentInfo $contentInfo,
+        APIContent $content,
+        ?APILocation $parentLocation = null
+    ): APILocation {
         return new Location(
             [
                 'content' => $content,
@@ -565,6 +574,7 @@ class DomainMapper
                 'depth' => $spiLocation->depth,
                 'sortField' => $spiLocation->sortField,
                 'sortOrder' => $spiLocation->sortOrder,
+                'parentLocation' => $parentLocation,
             ]
         );
     }

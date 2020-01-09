@@ -432,6 +432,7 @@ class Repository implements RepositoryInterface
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
             $this->getPermissionResolver(),
+            $this->getProxyDomainMapper(),
             $this->serviceSettings['trash']
         );
 
