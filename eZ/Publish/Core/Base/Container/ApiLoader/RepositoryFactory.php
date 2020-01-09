@@ -15,7 +15,6 @@ use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
-use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -27,13 +26,6 @@ class RepositoryFactory implements ContainerAwareInterface
 
     /** @var string */
     private $repositoryClass;
-
-    /**
-     * Collection of limitation types for the RoleService.
-     *
-     * @var \eZ\Publish\SPI\Limitation\Type[]
-     */
-    protected $roleLimitations = [];
 
     /**
      * Policies map.
@@ -79,23 +71,11 @@ class RepositoryFactory implements ContainerAwareInterface
             $limitationService,
             [
                 'role' => [
-                    'limitationTypes' => $this->roleLimitations,
                     'policyMap' => $this->policyMap,
                 ],
                 'languages' => $this->container->getParameter('languages'),
             ],
         );
-    }
-
-    /**
-     * Registers a limitation type for the RoleService.
-     *
-     * @param string $limitationName
-     * @param \eZ\Publish\SPI\Limitation\Type $limitationType
-     */
-    public function registerLimitationType($limitationName, SPILimitationType $limitationType)
-    {
-        $this->roleLimitations[$limitationName] = $limitationType;
     }
 
     /**

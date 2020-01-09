@@ -75,7 +75,6 @@ $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
 $containerBuilder->addCompilerPass(new Compiler\FieldTypeRegistryPass(), PassConfig::TYPE_OPTIMIZE);
 $containerBuilder->addCompilerPass(new Compiler\Persistence\FieldTypeRegistryPass(), PassConfig::TYPE_OPTIMIZE);
-$containerBuilder->addCompilerPass(new Compiler\RegisterLimitationTypePass());
 
 $containerBuilder->addCompilerPass(new Compiler\Storage\ExternalStorageRegistryPass());
 $containerBuilder->addCompilerPass(new Compiler\Storage\Legacy\FieldValueConverterRegistryPass());
