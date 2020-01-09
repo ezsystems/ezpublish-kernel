@@ -308,7 +308,8 @@ XML;
         "ContentRemoteIdCriterion": "fancy-name"
     }
 ]
-JSON,
+JSON
+,
                 2,
             ],
             [
@@ -319,7 +320,8 @@ JSON,
         "fancy-name"
     ]
 }
-JSON,
+JSON
+,
             2,
             ],
             [
@@ -333,7 +335,8 @@ JSON,
     },
     "ContentRemoteIdCriterion": "test-name"
 }
-JSON,
+JSON
+,
                 1,
             ],
         ];
