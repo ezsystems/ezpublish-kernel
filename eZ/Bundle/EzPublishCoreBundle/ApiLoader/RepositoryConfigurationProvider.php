@@ -16,6 +16,9 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
  */
 class RepositoryConfigurationProvider
 {
+    private const REPOSITORY_STORAGE = 'storage';
+    private const REPOSITORY_CONNECTION = 'connection';
+
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
@@ -50,5 +53,12 @@ class RepositoryConfigurationProvider
         }
 
         return ['alias' => $repositoryAlias] + $this->repositories[$repositoryAlias];
+    }
+
+    public function getStorageConnectionName(): string
+    {
+        $repositoryConfig = $this->getRepositoryConfig();
+
+        return $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION];
     }
 }

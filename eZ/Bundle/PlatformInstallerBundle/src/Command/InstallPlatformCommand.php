@@ -22,9 +22,6 @@ use Symfony\Component\Process\PhpExecutableFinder;
 
 class InstallPlatformCommand extends Command
 {
-    private const REPOSITORY_STORAGE = 'storage';
-    private const REPOSITORY_CONNECTION = 'connection';
-
     /** @var \Doctrine\DBAL\Connection */
     private $db;
 
@@ -136,7 +133,7 @@ class InstallPlatformCommand extends Command
         );
         try {
             $bufferedOutput = new BufferedOutput();
-            $connectionName = $this->getCurrentConnectionName();
+            $connectionName = $this->repositoryConfigurationProvider->getStorageConnectionName();
             $command = sprintf('doctrine:database:create --if-not-exists --connection=%s', $connectionName);
             $this->executeCommand($bufferedOutput, $command);
             $output->writeln($bufferedOutput->fetch());
@@ -253,12 +250,5 @@ class InstallPlatformCommand extends Command
         if (!$process->isSuccessful()) {
             throw new \RuntimeException(sprintf('An error occurred when executing the "%s" command.', escapeshellarg($cmd)));
         }
-    }
-
-    private function getCurrentConnectionName(): string
-    {
-        $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
-
-        return $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION];
     }
 }
