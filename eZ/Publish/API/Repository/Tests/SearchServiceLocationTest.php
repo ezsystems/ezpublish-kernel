@@ -56,7 +56,7 @@ class SearchServiceLocationTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      */
-    protected function createMovieContent()
+    protected function createMovieContent(): array
     {
         $movies = [];
 
