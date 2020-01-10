@@ -52,6 +52,84 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
+     * Create movie Content with subtitle field set to null.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     */
+    protected function createMovieContent()
+    {
+        $movies = [];
+
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct('movie');
+        $createStruct->mainLanguageCode = 'eng-GB';
+        $createStruct->remoteId = 'movie-123';
+        $createStruct->names = ['eng-GB' => 'Movie'];
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new \DateTime();
+
+        $fieldTitle = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
+        $fieldTitle->names = ['eng-GB' => 'Title'];
+        $fieldTitle->fieldGroup = 'main';
+        $fieldTitle->position = 1;
+        $fieldTitle->isTranslatable = false;
+        $fieldTitle->isSearchable = true;
+        $fieldTitle->isRequired = true;
+        $createStruct->addFieldDefinition($fieldTitle);
+
+        $fieldSubtitle = $contentTypeService->newFieldDefinitionCreateStruct('subtitle', 'ezstring');
+        $fieldSubtitle->names = ['eng-GB' => 'Subtitle'];
+        $fieldSubtitle->fieldGroup = 'main';
+        $fieldSubtitle->position = 2;
+        $fieldSubtitle->isTranslatable = false;
+        $fieldSubtitle->isSearchable = true;
+        $fieldSubtitle->isRequired = false;
+        $createStruct->addFieldDefinition($fieldSubtitle);
+
+        $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
+        $contentTypeDraft = $contentTypeService->createContentType($createStruct, [$contentTypeGroup]);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        $createStructRambo = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStructRambo->remoteId = 'movie-456';
+        $createStructRambo->alwaysAvailable = false;
+        $createStructRambo->setField('title', 'Rambo');
+        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct(2);
+
+        $ramboDraft = $contentService->createContent($createStructRambo, [$locationCreateStruct]);
+        $movies[] = $contentService->publishVersion($ramboDraft->getVersionInfo());
+        $this->refreshSearch($repository);
+
+        $createStructRobocop = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStructRobocop->remoteId = 'movie-789';
+        $createStructRobocop->alwaysAvailable = false;
+        $createStructRobocop->setField('title', 'Robocop');
+        $createStructRobocop->setField('subtitle', '');
+        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct(2);
+
+        $robocopDraft = $contentService->createContent($createStructRobocop, [$locationCreateStruct]);
+        $movies[] = $contentService->publishVersion($robocopDraft->getVersionInfo());
+        $this->refreshSearch($repository);
+
+        $createStructLastHope = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStructLastHope->remoteId = 'movie-101112';
+        $createStructLastHope->alwaysAvailable = false;
+        $createStructLastHope->setField('title', 'Star Wars');
+        $createStructLastHope->setField('subtitle', 'Last Hope');
+        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct(2);
+
+        $lastHopeDraft = $contentService->createContent($createStructLastHope, [$locationCreateStruct]);
+        $movies[] = $contentService->publishVersion($lastHopeDraft->getVersionInfo());
+        $this->refreshSearch($repository);
+
+        return $movies;
+    }
+
+    /**
      * Create test Content with ezcountry field having multiple countries selected.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
@@ -101,6 +179,68 @@ class SearchServiceLocationTest extends BaseTest
         return $content;
     }
 
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     */
+    public function testFieldIsEmptyInLocation()
+    {
+        $testContents = $this->createMovieContent();
+
+        $query = new LocationQuery(
+            [
+                'query' => new Criterion\IsFieldEmpty('subtitle'),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(2, $result->totalCount);
+
+        $this->assertEquals(
+            $testContents[0]->contentInfo->mainLocationId,
+            $result->searchHits[0]->valueObject->id
+        );
+
+        $this->assertEquals(
+            $testContents[1]->contentInfo->mainLocationId,
+            $result->searchHits[1]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     */
+    public function testFieldIsNotEmptyInLocation()
+    {
+        $testContents = $this->createMovieContent();
+
+        $query = new LocationQuery(
+            [
+                'query' => new Criterion\IsFieldEmpty(
+                    'subtitle',
+                    false
+                ),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(1, $result->totalCount);
+
+        $this->assertEquals(
+            $testContents[2]->contentInfo->mainLocationId,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+    
     /**
      * Test for the findLocations() method.
      *
