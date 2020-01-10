@@ -240,7 +240,7 @@ class SearchServiceLocationTest extends BaseTest
             $result->searchHits[0]->valueObject->id
         );
     }
-    
+
     /**
      * Test for the findLocations() method.
      *
