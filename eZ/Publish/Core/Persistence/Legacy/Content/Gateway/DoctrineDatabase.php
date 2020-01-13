@@ -84,14 +84,11 @@ class DoctrineDatabase extends Gateway
     /** @var \eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway */
     private $sharedGateway;
 
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $databasePlatform;
+
     /**
-     * Creates a new gateway based on $db.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder $queryBuilder
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(
         DatabaseHandler $db,
@@ -103,6 +100,7 @@ class DoctrineDatabase extends Gateway
     ) {
         $this->dbHandler = $db;
         $this->connection = $connection;
+        $this->databasePlatform = $connection->getDatabasePlatform();
         $this->sharedGateway = $sharedGateway;
         $this->queryBuilder = $queryBuilder;
         $this->languageHandler = $languageHandler;
