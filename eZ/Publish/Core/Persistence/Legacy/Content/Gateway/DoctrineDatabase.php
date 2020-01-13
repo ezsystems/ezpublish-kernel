@@ -22,6 +22,7 @@ use eZ\Publish\Core\Persistence\Database\InsertQuery;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway as SharedGateway;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
@@ -80,6 +81,9 @@ class DoctrineDatabase extends Gateway
      */
     protected $languageMaskGenerator;
 
+    /** @var \eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway */
+    private $sharedGateway;
+
     /**
      * Creates a new gateway based on $db.
      *
@@ -92,12 +96,14 @@ class DoctrineDatabase extends Gateway
     public function __construct(
         DatabaseHandler $db,
         Connection $connection,
+        SharedGateway $sharedGateway,
         QueryBuilder $queryBuilder,
         LanguageHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator
     ) {
         $this->dbHandler = $db;
         $this->connection = $connection;
+        $this->sharedGateway = $sharedGateway;
         $this->queryBuilder = $queryBuilder;
         $this->languageHandler = $languageHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
