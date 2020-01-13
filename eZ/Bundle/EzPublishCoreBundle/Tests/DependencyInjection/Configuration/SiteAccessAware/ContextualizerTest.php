@@ -20,12 +20,22 @@ class ContextualizerTest extends TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $container;
 
+    /** @var string */
     private $namespace = 'ez_test';
 
+    /** @var string */
     private $saNodeName = 'heyho';
 
+    /** @var array */
     private $availableSAs = ['sa1', 'sa2', 'sa3'];
 
+    /** @var array */
+    private $availableSiteAccessGroups = [
+        'sa_group1' => ['sa1', 'sa2', 'sa3'],
+        'sa_group2' => ['sa1'],
+    ];
+
+    /** @var array */
     private $groupsBySA = [
         'sa1' => ['sa_group1', 'sa_group2'],
         'sa2' => ['sa_group1'],
@@ -39,7 +49,14 @@ class ContextualizerTest extends TestCase
     {
         parent::setUp();
         $this->container = $this->createMock(ContainerInterface::class);
-        $this->contextualizer = new Contextualizer($this->container, $this->namespace, $this->saNodeName, $this->availableSAs, $this->groupsBySA);
+        $this->contextualizer = new Contextualizer(
+            $this->container,
+            $this->namespace,
+            $this->saNodeName,
+            $this->availableSAs,
+            $this->availableSiteAccessGroups,
+            $this->groupsBySA
+        );
     }
 
     /**
@@ -187,6 +204,14 @@ class ContextualizerTest extends TestCase
                 'enabled' => false,
                 'j_adore' => 'la_truite_a_la_vapeur',
             ],
+            'sa_group1' => [
+                'foo' => 'bar', // sa_group1
+                'some' => 'thing', // sa_group1
+                'planets' => ['Earth'], // default
+                'an_integer' => 123, // sa_group1
+                'enabled' => false, // default
+                'j_adore' => 'la_truite_a_la_vapeur', // global
+            ],
         ];
 
         $this->contextualizer->mapConfigArray('foo_setting', $config);
@@ -202,6 +227,10 @@ class ContextualizerTest extends TestCase
         $this->assertSame(
             $expectedMergedSettings['sa3'],
             $containerBuilder->getParameter("$this->namespace.sa3.foo_setting")
+        );
+        $this->assertSame(
+            $expectedMergedSettings['sa_group1'],
+            $containerBuilder->getParameter("$this->namespace.sa_group1.foo_setting")
         );
     }
 
@@ -282,6 +311,17 @@ class ContextualizerTest extends TestCase
                 'enabled' => false,
                 'j_adore' => ['les_sushis', 'la_truite_a_la_vapeur'],
             ],
+            'sa_group1' => [
+                'foo' => 'bar', // sa_group1
+                'some' => 'thing', // sa_group1
+                'planets' => ['Earth'], // default
+                'an_integer' => 123, // sa_group1
+                'enabled' => false, // default
+                'j_adore' => [
+                    'les_sushis', // default
+                    'la_truite_a_la_vapeur', // global
+                ],
+            ],
         ];
 
         $this->contextualizer->mapConfigArray('foo_setting', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
@@ -297,6 +337,10 @@ class ContextualizerTest extends TestCase
         $this->assertSame(
             $expectedMergedSettings['sa3'],
             $containerBuilder->getParameter("$this->namespace.sa3.foo_setting")
+        );
+        $this->assertSame(
+            $expectedMergedSettings['sa_group1'],
+            $containerBuilder->getParameter("$this->namespace.sa_group1.foo_setting")
         );
     }
 
@@ -330,6 +374,7 @@ class ContextualizerTest extends TestCase
             'sa1' => ['Earth', 'Mars'],
             'sa2' => ['Earth', 'Mars', 'Venus'],
             'sa3' => ['Earth', 'Mars', 'Jupiter'],
+            'sa_group1' => ['Earth', 'Mars'],
         ];
 
         $this->contextualizer->mapConfigArray('foo_setting', $config, ContextualizerInterface::UNIQUE);
@@ -345,6 +390,10 @@ class ContextualizerTest extends TestCase
         $this->assertSame(
             $expectedMergedSettings['sa3'],
             $containerBuilder->getParameter("$this->namespace.sa3.foo_setting")
+        );
+        $this->assertSame(
+            $expectedMergedSettings['sa_group1'],
+            $containerBuilder->getParameter("$this->namespace.sa_group1.foo_setting")
         );
     }
 
