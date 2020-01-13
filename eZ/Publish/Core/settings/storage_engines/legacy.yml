@@ -8,6 +8,7 @@ imports:
     - {resource: storage_engines/legacy/location.yml}
     - {resource: storage_engines/legacy/object_state.yml}
     - {resource: storage_engines/legacy/section.yml}
+    - {resource: storage_engines/legacy/shared_gateway.yaml}
     - {resource: storage_engines/legacy/trash.yml}
     - {resource: storage_engines/legacy/url_alias.yml}
     - {resource: storage_engines/legacy/url_wildcard.yml}
