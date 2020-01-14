@@ -5366,11 +5366,9 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getHandler(): Handler
+    protected function getHandler(): UrlAlias\Handler
     {
         $languageHandler = $this->getLanguageHandler();
         $languageMaskGenerator = $this->getLanguageMaskGenerator();
@@ -5380,10 +5378,11 @@ class UrlAliasHandlerTest extends TestCase
         );
         $mapper = new Mapper($languageMaskGenerator);
         $slugConverter = new SlugConverter($this->getProcessor());
+        $connection = $this->getDatabaseConnection();
         $contentGateway = new ContentGateway(
-            $this->getDatabaseHandler(),
-            $this->getDatabaseConnection(),
-            new ContentGateway\QueryBuilder($this->getDatabaseHandler()),
+            $connection,
+            $this->getSharedGateway(),
+            new ContentGateway\QueryBuilder($connection),
             $languageHandler,
             $languageMaskGenerator
         );

@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -630,7 +628,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::listVersions
      */
-    public function testListVersions()
+    public function testListVersions(): void
     {
         $this->insertDatabaseFixture(
             __DIR__ . '/../_fixtures/contentobjects.php'
@@ -659,15 +657,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             676,
             $res[1]['ezcontentobject_version_id']
         );
-
-        //$orig = include __DIR__ . '/../_fixtures/restricted_version_rows.php';
-
-        /*$this->storeFixture(
-            __DIR__ . '/../_fixtures/restricted_version_rows.php',
-            $res
-        );*/
-
-        //$this->assertEquals( $orig, $res, "Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/restricted_version_rows.php) and tests needs to be adapted." );
     }
 
     /**
@@ -1304,8 +1293,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function testLoadRelations()
+    public function testLoadRelations(): void
     {
         $this->insertRelationFixture();
 
@@ -1810,11 +1801,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $orig = include __DIR__ . '/../_fixtures/extract_version_info_from_rows_multiple_versions.php';
 
-        /*$this->storeFixture(
-            __DIR__ . '/../_fixtures/extract_version_info_from_rows_multiple_versions.php',
-            $res
-        );*/
-
         $this->assertEquals($orig, $res, 'Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows_multiple_versions.php) and tests needs to be adapted.');
     }
 
@@ -2014,15 +2000,16 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a ready to test DoctrineDatabase gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getDatabaseGateway()
+    protected function getDatabaseGateway(): DoctrineDatabase
     {
         if (!isset($this->databaseGateway)) {
+            $connection = $this->getDatabaseConnection();
             $this->databaseGateway = new DoctrineDatabase(
-                ($dbHandler = $this->getDatabaseHandler()),
-                $this->getDatabaseConnection(),
-                new DoctrineDatabase\QueryBuilder($dbHandler),
+                $connection,
+                $this->getSharedGateway(),
+                new DoctrineDatabase\QueryBuilder($connection),
                 $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             );
