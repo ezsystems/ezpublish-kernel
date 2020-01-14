@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAliasHandlerTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -5368,9 +5366,9 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getHandler()
+    protected function getHandler(): UrlAlias\Handler
     {
         $languageHandler = $this->getLanguageHandler();
         $languageMaskGenerator = $this->getLanguageMaskGenerator();
@@ -5381,10 +5379,11 @@ class UrlAliasHandlerTest extends TestCase
         );
         $mapper = new Mapper($languageMaskGenerator);
         $slugConverter = new SlugConverter($this->getProcessor());
+        $connection = $this->getDatabaseConnection();
         $contentGateway = new ContentGateway(
-            $this->getDatabaseHandler(),
-            $this->getDatabaseConnection(),
-            new ContentGateway\QueryBuilder($this->getDatabaseHandler()),
+            $connection,
+            $this->getSharedGateway(),
+            new ContentGateway\QueryBuilder($connection),
             $languageHandler,
             $languageMaskGenerator
         );

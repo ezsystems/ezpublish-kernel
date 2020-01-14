@@ -24,6 +24,7 @@ return [
     'ezcontentobject_name' => 'Members',
     'ezcontentobject_language_mask' => '3',
     'ezcontentobject_is_hidden' => '0',
+    'ezcontentobject_version_contentobject_id' => '11',
   ],
   1 => [
     'ezcontentobject_version_id' => '674',
@@ -48,5 +49,6 @@ return [
     'ezcontentobject_name' => 'Members',
     'ezcontentobject_language_mask' => '3',
     'ezcontentobject_is_hidden' => '0',
+    'ezcontentobject_version_contentobject_id' => '11',
   ],
 ];

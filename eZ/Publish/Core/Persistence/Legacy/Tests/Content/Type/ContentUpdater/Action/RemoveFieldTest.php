@@ -52,7 +52,8 @@ class RemoveFieldTest extends TestCase
         $contentId = 42;
         $versionNumbers = [1];
         $action = $this->getRemoveFieldAction();
-        $content = $this->getContentFixture(1, ['cro-HR']);
+        $fieldId = 3;
+        $content = $this->getContentFixture(1, ['cro-HR' => $fieldId]);
 
         $this->getContentGatewayMock()
             ->expects($this->once())
@@ -81,14 +82,14 @@ class RemoveFieldTest extends TestCase
         $this->getContentGatewayMock()
             ->expects($this->once())
             ->method('deleteField')
-            ->with($this->equalTo('3-cro-HR'));
+            ->with($this->equalTo($fieldId));
 
         $this->getContentStorageHandlerMock()->expects($this->once())
             ->method('deleteFieldData')
             ->with(
                 $this->equalTo('ezstring'),
                 $content->versionInfo,
-                $this->equalTo(['3-cro-HR'])
+                $this->equalTo([$fieldId])
             );
 
         $action->apply($contentId);
@@ -102,8 +103,9 @@ class RemoveFieldTest extends TestCase
         $contentId = 42;
         $versionNumbers = [1, 2];
         $action = $this->getRemoveFieldAction();
-        $content1 = $this->getContentFixture(1, ['cro-HR']);
-        $content2 = $this->getContentFixture(2, ['cro-HR']);
+        $fieldId = 3;
+        $content1 = $this->getContentFixture(1, ['cro-HR' => $fieldId]);
+        $content2 = $this->getContentFixture(2, ['cro-HR' => $fieldId]);
 
         $this->getContentGatewayMock()
             ->expects($this->once())
@@ -144,7 +146,7 @@ class RemoveFieldTest extends TestCase
         $this->getContentGatewayMock()
             ->expects($this->once())
             ->method('deleteField')
-            ->with($this->equalTo('3-cro-HR'));
+            ->with($this->equalTo($fieldId));
 
         $this->getContentStorageHandlerMock()
             ->expects($this->at(0))
@@ -152,7 +154,7 @@ class RemoveFieldTest extends TestCase
             ->with(
                 $this->equalTo('ezstring'),
                 $content1->versionInfo,
-                $this->equalTo(['3-cro-HR'])
+                $this->equalTo([$fieldId])
             );
 
         $this->getContentStorageHandlerMock()
@@ -161,7 +163,7 @@ class RemoveFieldTest extends TestCase
             ->with(
                 $this->equalTo('ezstring'),
                 $content2->versionInfo,
-                $this->equalTo(['3-cro-HR'])
+                $this->equalTo([$fieldId])
             );
 
         $action->apply($contentId);
@@ -175,8 +177,10 @@ class RemoveFieldTest extends TestCase
         $contentId = 42;
         $versionNumbers = [1, 2];
         $action = $this->getRemoveFieldAction();
-        $content1 = $this->getContentFixture(1, ['cro-HR', 'hun-HU']);
-        $content2 = $this->getContentFixture(2, ['cro-HR', 'hun-HU']);
+        $fieldId1 = 3;
+        $fieldId2 = 4;
+        $content1 = $this->getContentFixture(1, ['cro-HR' => $fieldId1, 'hun-HU' => $fieldId2]);
+        $content2 = $this->getContentFixture(2, ['cro-HR' => $fieldId1, 'hun-HU' => $fieldId2]);
 
         $this->getContentGatewayMock()
             ->expects($this->once())
@@ -217,12 +221,12 @@ class RemoveFieldTest extends TestCase
         $this->getContentGatewayMock()
             ->expects($this->at(4))
             ->method('deleteField')
-            ->with($this->equalTo('3-cro-HR'));
+            ->with($this->equalTo($fieldId1));
 
         $this->getContentGatewayMock()
             ->expects($this->at(5))
             ->method('deleteField')
-            ->with($this->equalTo('3-hun-HU'));
+            ->with($this->equalTo($fieldId2));
 
         $this->getContentStorageHandlerMock()
             ->expects($this->at(0))
@@ -230,7 +234,7 @@ class RemoveFieldTest extends TestCase
             ->with(
                 $this->equalTo('ezstring'),
                 $content1->versionInfo,
-                $this->equalTo(['3-cro-HR', '3-hun-HU'])
+                $this->equalTo([$fieldId1, $fieldId2])
             );
 
         $this->getContentStorageHandlerMock()
@@ -239,24 +243,19 @@ class RemoveFieldTest extends TestCase
             ->with(
                 $this->equalTo('ezstring'),
                 $content2->versionInfo,
-                $this->equalTo(['3-cro-HR', '3-hun-HU'])
+                $this->equalTo([$fieldId1, $fieldId2])
             );
 
         $action->apply($contentId);
     }
 
-    /**
-     * Returns a Content fixture.
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content
-     */
-    protected function getContentFixture($versionNo, $languageCodes)
+    protected function getContentFixture(int $versionNo, array $languageCodes): Content
     {
         $fields = [];
 
-        foreach ($languageCodes as $index => $languageCode) {
+        foreach ($languageCodes as $languageCode => $fieldId) {
             $fieldNoRemove = new Content\Field();
-            $fieldNoRemove->id = "2-{$languageCode}";
+            $fieldNoRemove->id = 2;
             $fieldNoRemove->versionNo = $versionNo;
             $fieldNoRemove->fieldDefinitionId = 23;
             $fieldNoRemove->type = 'ezstring';
@@ -265,7 +264,7 @@ class RemoveFieldTest extends TestCase
             $fields[] = $fieldNoRemove;
 
             $fieldRemove = new Content\Field();
-            $fieldRemove->id = "3-{$languageCode}";
+            $fieldRemove->id = $fieldId;
             $fieldRemove->versionNo = $versionNo;
             $fieldRemove->fieldDefinitionId = 42;
             $fieldRemove->type = 'ezstring';

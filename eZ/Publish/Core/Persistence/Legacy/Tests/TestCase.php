@@ -15,6 +15,7 @@ use Doctrine\DBAL\DBALException;
 use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Legacy\SharedGateway;
 use eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory;
 use EzSystems\DoctrineSchema\Database\DbPlatform\SqliteDbPlatform;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -58,6 +59,9 @@ abstract class TestCase extends BaseTestCase
      * @var \Doctrine\DBAL\Connection
      */
     protected $connection;
+
+    /** @var \eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway */
+    private $sharedGateway;
 
     /**
      * Get data source name.
@@ -118,6 +122,26 @@ abstract class TestCase extends BaseTestCase
         }
 
         return $this->connection;
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    final public function getSharedGateway(): SharedGateway\Gateway
+    {
+        if (!$this->sharedGateway) {
+            $connection = $this->getDatabaseConnection();
+            $factory = new SharedGateway\GatewayFactory(
+                new SharedGateway\DatabasePlatform\FallbackGateway($connection),
+                [
+                    'sqlite' => new SharedGateway\DatabasePlatform\SqliteGateway($connection),
+                ]
+            );
+
+            $this->sharedGateway = $factory->buildSharedGateway($connection);
+        }
+
+        return $this->sharedGateway;
     }
 
     /**
