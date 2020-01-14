@@ -1286,12 +1286,12 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content[]
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends \eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldIsEmpty
      */
-    public function testFieldIsNotEmpty(array $testContents)
+    public function testFieldIsNotEmpty()
     {
+        $testContents = $this->createMovieContent();
+
         $query = new Query(
             [
                 'query' => new Criterion\IsFieldEmpty(
