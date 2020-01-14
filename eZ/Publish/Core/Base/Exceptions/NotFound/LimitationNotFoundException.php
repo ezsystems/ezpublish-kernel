@@ -12,6 +12,7 @@ use eZ\Publish\Core\Base\Exceptions\Httpable;
 use Exception;
 use eZ\Publish\Core\Base\TranslatableBase;
 use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Limitation\BlockingLimitationType;
 use RuntimeException;
 
 /**
@@ -30,9 +31,14 @@ class LimitationNotFoundException extends RuntimeException implements Httpable, 
     public function __construct($limitation, Exception $previous = null)
     {
         $this->setMessageTemplate(
-            "Limitation '%limitation%' not found. It must be implemented or configured to use Limitation\\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%)"
+            "Limitation '%limitation%' not found. It must be implemented or configured to use %blockingLimitation%"
         );
-        $this->setParameters(['%limitation%' => $limitation]);
+        $this->setParameters(
+            [
+                '%limitation%' => $limitation,
+                '%blockingLimitation%' => BlockingLimitationType::class,
+            ]
+        );
 
         parent::__construct($this->getBaseTranslation(), self::INTERNAL_ERROR, $previous);
     }

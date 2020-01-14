@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -51,7 +52,7 @@ class FragmentPass implements CompilerPassInterface
             $decoratedDef->setTags($tags);
             // Special treatment for inline fragment renderer, to fit ESI renderer constructor type hinting (forced to InlineFragmentRenderer)
             if ($id === 'fragment.renderer.inline') {
-                $decoratedDef->setClass($container->getParameter('ezpublish.decorated_fragment_renderer.inline.class'));
+                $decoratedDef->setClass(InlineFragmentRenderer::class);
             }
 
             $container->setDefinition($id, $decoratedDef);

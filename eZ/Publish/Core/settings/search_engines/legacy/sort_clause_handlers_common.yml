@@ -1,15 +1,3 @@
-parameters:
-    ezpublish.search.legacy.gateway.sort_clause_converter.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter
-    ezpublish.search.legacy.gateway.sort_clause_handler.common.content_id.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\ContentId
-    ezpublish.search.legacy.gateway.sort_clause_handler.common.content_name.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\ContentName
-    ezpublish.search.legacy.gateway.sort_clause_handler.common.date_modified.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\DateModified
-    ezpublish.search.legacy.gateway.sort_clause_handler.common.date_published.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\DatePublished
-    ezpublish.search.legacy.gateway.sort_clause_handler.common.field.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Field
-    ezpublish.search.legacy.gateway.sort_clause_handler.common.map_location_distance.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\MapLocationDistance
-    ezpublish.search.legacy.gateway.sort_clause_handler.common.section_identifier.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\SectionIdentifier
-    ezpublish.search.legacy.gateway.sort_clause_handler.common.section_name.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\SectionName
-    ezpublish.search.legacy.gateway.sort_clause_handler.common.random.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\AbstractRandom
-
 services:
     ezpublish.search.legacy.gateway.sort_clause_handler.base:
         abstract: true
@@ -17,34 +5,34 @@ services:
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.content_id:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.content_id.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\ContentId
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.content_name:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.content_name.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\ContentName
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.date_modified:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.date_modified.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\DateModified
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.date_published:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.date_published.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\DatePublished
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.field:
-        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.field.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Field
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.spi.persistence.language_handler"
@@ -54,7 +42,7 @@ services:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.map_location_distance:
-        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.map_location_distance.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\MapLocationDistance
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.spi.persistence.language_handler"
@@ -65,14 +53,14 @@ services:
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.section_identifier:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.section_identifier.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\SectionIdentifier
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.section_name:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.section_name.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\SectionName
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
@@ -84,7 +72,7 @@ services:
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.random:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: '%ezpublish.search.legacy.gateway.sort_clause_handler.common.random.class%'
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\AbstractRandom
         factory: ['@eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\RandomSortClauseHandlerFactory', 'getGateway']
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}

@@ -1,143 +1,123 @@
 parameters:
-    ezpublish.fieldType.indexable.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\SearchField
-    ezpublish.fieldType.indexable.ezauthor.class: eZ\Publish\Core\FieldType\Author\SearchField
-    ezpublish.fieldType.indexable.ezstring.class: eZ\Publish\Core\FieldType\TextLine\SearchField
-    ezpublish.fieldType.indexable.eztext.class: eZ\Publish\Core\FieldType\TextBlock\SearchField
-    ezpublish.fieldType.indexable.ezisbn.class: eZ\Publish\Core\FieldType\ISBN\SearchField
-    ezpublish.fieldType.indexable.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\SearchField
-    ezpublish.fieldType.indexable.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\SearchField
-    ezpublish.fieldType.indexable.ezemail.class: eZ\Publish\Core\FieldType\EmailAddress\SearchField
-    ezpublish.fieldType.indexable.ezimage.class: eZ\Publish\Core\FieldType\Image\SearchField
-    ezpublish.fieldType.indexable.ezmedia.class: eZ\Publish\Core\FieldType\Media\SearchField
-    ezpublish.fieldType.indexable.ezobjectrelation.class: eZ\Publish\Core\FieldType\Relation\SearchField
-    ezpublish.fieldType.indexable.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\SearchField
-    ezpublish.fieldType.indexable.ezdate.class: eZ\Publish\Core\FieldType\Date\SearchField
-    ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
-    ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
-    ezpublish.fieldType.indexable.ezinteger.class: eZ\Publish\Core\FieldType\Integer\SearchField
-    ezpublish.fieldType.indexable.ezfloat.class: eZ\Publish\Core\FieldType\Float\SearchField
-    ezpublish.fieldType.indexable.eztime.class: eZ\Publish\Core\FieldType\Time\SearchField
-    ezpublish.fieldType.indexable.ezselection.class: eZ\Publish\Core\FieldType\Selection\SearchField
-    ezpublish.fieldType.indexable.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\RelationList\SearchField
-    ezpublish.fieldType.indexable.ezurl.class: eZ\Publish\Core\FieldType\Url\SearchField
+    # @todo drop once core dependencies stop relying on this parameter
     ezpublish.fieldType.indexable.unindexed.class: eZ\Publish\Core\FieldType\Unindexed
 
 services:
     ezpublish.fieldType.indexable.ezkeyword:
-        class: "%ezpublish.fieldType.indexable.ezkeyword.class%"
+        class: eZ\Publish\Core\FieldType\Keyword\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezkeyword}
 
     ezpublish.fieldType.indexable.ezauthor:
-        class: "%ezpublish.fieldType.indexable.ezauthor.class%"
+        class: eZ\Publish\Core\FieldType\Author\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezauthor}
 
     ezpublish.fieldType.indexable.ezstring:
-        class: "%ezpublish.fieldType.indexable.ezstring.class%"
+        class: eZ\Publish\Core\FieldType\TextLine\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezstring}
 
     ezpublish.fieldType.indexable.ezgmaplocation:
-        class: "%ezpublish.fieldType.indexable.ezgmaplocation.class%"
+        class: eZ\Publish\Core\FieldType\MapLocation\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezgmaplocation}
 
     ezpublish.fieldType.indexable.ezcountry:
-        class: "%ezpublish.fieldType.indexable.ezcountry.class%"
+        class: eZ\Publish\Core\FieldType\Country\SearchField
         arguments:
             - "%ezpublish.fieldType.ezcountry.data%"
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezcountry}
 
     ezpublish.fieldType.indexable.ezdate:
-        class: "%ezpublish.fieldType.indexable.ezdate.class%"
+        class: eZ\Publish\Core\FieldType\Date\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezdate}
 
     ezpublish.fieldType.indexable.ezinteger:
-        class: "%ezpublish.fieldType.indexable.ezinteger.class%"
+        class: eZ\Publish\Core\FieldType\Integer\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezinteger}
 
     ezpublish.fieldType.indexable.ezfloat:
-        class: "%ezpublish.fieldType.indexable.ezfloat.class%"
+        class: eZ\Publish\Core\FieldType\Float\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezfloat}
 
     ezpublish.fieldType.indexable.ezemail:
-        class: "%ezpublish.fieldType.indexable.ezemail.class%"
+        class: eZ\Publish\Core\FieldType\EmailAddress\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezemail}
 
     ezpublish.fieldType.indexable.ezimage:
-        class: "%ezpublish.fieldType.indexable.ezimage.class%"
+        class: eZ\Publish\Core\FieldType\Image\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezimage}
 
     ezpublish.fieldType.indexable.ezmedia:
-        class: "%ezpublish.fieldType.indexable.ezmedia.class%"
+        class: eZ\Publish\Core\FieldType\Media\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezmedia}
 
     ezpublish.fieldType.indexable.ezbinaryfile:
-        class: "%ezpublish.fieldType.indexable.ezbinaryfile.class%"
+        class: eZ\Publish\Core\FieldType\BinaryFile\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezbinaryfile}
 
     ezpublish.fieldType.indexable.eztime:
-        class: "%ezpublish.fieldType.indexable.eztime.class%"
+        class: eZ\Publish\Core\FieldType\Time\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: eztime}
 
     ezpublish.fieldType.indexable.eztext:
-        class: "%ezpublish.fieldType.indexable.eztext.class%"
+        class: eZ\Publish\Core\FieldType\TextBlock\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: eztext}
 
     ezpublish.fieldType.indexable.ezboolean:
-        class: "%ezpublish.fieldType.indexable.ezboolean.class%"
+        class: eZ\Publish\Core\FieldType\Checkbox\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezboolean}
 
     ezpublish.fieldType.indexable.ezdatetime:
-        class: "%ezpublish.fieldType.indexable.ezdatetime.class%"
+        class: eZ\Publish\Core\FieldType\DateAndTime\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezdatetime}
 
     ezpublish.fieldType.indexable.ezisbn:
-        class: "%ezpublish.fieldType.indexable.ezisbn.class%"
+        class: eZ\Publish\Core\FieldType\ISBN\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezisbn}
 
     ezpublish.fieldType.indexable.ezobjectrelation:
-        class: "%ezpublish.fieldType.indexable.ezobjectrelation.class%"
+        class: eZ\Publish\Core\FieldType\Relation\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezobjectrelation}
 
     ezpublish.fieldType.indexable.ezselection:
-        class: "%ezpublish.fieldType.indexable.ezselection.class%"
+        class: eZ\Publish\Core\FieldType\Selection\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezselection}
 
     ezpublish.fieldType.indexable.ezobjectrelationlist:
-        class: "%ezpublish.fieldType.indexable.ezobjectrelationlist.class%"
+        class: eZ\Publish\Core\FieldType\RelationList\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.indexable.ezurl:
-        class: "%ezpublish.fieldType.indexable.ezurl.class%"
+        class: eZ\Publish\Core\FieldType\Url\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezurl}
 
     ezpublish.fieldType.indexable.ezimageasset:
-        class: 'eZ\Publish\Core\FieldType\ImageAsset\SearchField'
+        class: eZ\Publish\Core\FieldType\ImageAsset\SearchField
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezimageasset}
 
 
     ezpublish.fieldType.indexable.unindexed:
-        class: "%ezpublish.fieldType.indexable.unindexed.class%"
+        class: eZ\Publish\Core\FieldType\Unindexed
         tags:
             - {name: ezplatform.field_type.indexable, alias: ezuser}
             - {name: ezplatform.field_type.indexable, alias: ezenum}

@@ -1,9 +1,3 @@
-parameters:
-    ezpublish.fieldType.ezimage.io_legacy.class: eZ\Publish\Core\FieldType\Image\IO\Legacy
-    ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
-    ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
-    ezpublish.fieldType.ezimage.io_service.options_provider.class: eZ\Publish\Core\FieldType\Image\IO\OptionsProvider
-
 services:
     # Deprecated since 5.4. Use ezpublish.fieldType.ezimage.io_service.
     ezpublish.fieldType.ezimage.io:
@@ -11,14 +5,14 @@ services:
 
     # Custom IOService with a proxy that handles the legacy prefix (images-versioned)
     ezpublish.fieldType.ezimage.io_service:
-        class: "%ezpublish.fieldType.ezimage.io_legacy.class%"
+        class: eZ\Publish\Core\FieldType\Image\IO\Legacy
         arguments:
             - "@ezpublish.fieldType.ezimage.io_service.published"
             - "@ezpublish.fieldType.ezimage.io_service.draft"
             - "@ezpublish.fieldType.ezimage.io_service.options_provider"
 
     ezpublish.fieldType.ezimage.io_service.options_provider:
-        class: "%ezpublish.fieldType.ezimage.io_service.options_provider.class%"
+        class: eZ\Publish\Core\FieldType\Image\IO\OptionsProvider
         calls:
             - [ setVarDir, [ "%storage_dir%" ] ]
             - [ setDraftImagesDir, [ "%image_draft_storage_prefix%" ] ]
@@ -36,7 +30,7 @@ services:
             - [ setPrefix, [ "%image_draft_storage_prefix%" ] ]
 
     ezpublish.fieldType.ezimage.pathGenerator:
-        class: "%ezpublish.fieldType.ezimage.pathGenerator.class%"
+        class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
 
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.io_service:
@@ -45,7 +39,7 @@ services:
             - [ setPrefix, [ "%binaryfile_storage_prefix%" ] ]
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
-        class: "%ezpublish.fieldType.ezbinaryfile.pathGenerator.class%"
+        class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
 
     # Symfony 3.4+ service definitions:
     eZ\Publish\Core\FieldType\ImageAsset\AssetMapper:

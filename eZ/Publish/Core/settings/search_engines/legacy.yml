@@ -8,25 +8,12 @@ imports:
     - {resource: search_engines/legacy/sort_clause_handlers_location.yml}
     - {resource: search_engines/common.yml}
 
-parameters:
-    ezpublish.spi.search.legacy.class: eZ\Publish\Core\Search\Legacy\Content\Handler
-    ezpublish.spi.search.legacy.indexer.class: eZ\Publish\Core\Search\Legacy\Content\Indexer
-    ezpublish.search.legacy.gateway.content.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\DoctrineDatabase
-    ezpublish.search.legacy.gateway.content.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\ExceptionConversion
-    ezpublish.search.legacy.gateway.location.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\DoctrineDatabase
-    ezpublish.search.legacy.gateway.location.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\ExceptionConversion
-
-    ezpublish.search.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-    ezpublish.search.connection.class: Doctrine\DBAL\Connection
-
-    ezpublish.search.legacy.mapper.fulltext.class: eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper
-
 services:
     # Legacy Search Engine semantic configuration will override connection service to the one
     # resolved for the current siteaccess
     ezpublish.api.search_engine.legacy.dbhandler:
-        class: "%ezpublish.search.legacy.dbhandler.class%"
-        factory: ["%ezpublish.search.legacy.dbhandler.class%", createFromConnection]
+        class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+        factory: ['eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler', createFromConnection]
         arguments:
             - "@ezpublish.api.search_engine.legacy.connection"
         lazy: true
@@ -37,7 +24,7 @@ services:
         alias: ezpublish.api.storage_engine.legacy.connection
 
     ezpublish.search.legacy.gateway.content.inner:
-        class: "%ezpublish.search.legacy.gateway.content.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Gateway\DoctrineDatabase
         arguments:
             - "@ezpublish.api.search_engine.legacy.dbhandler"
             - "@ezpublish.search.legacy.gateway.criteria_converter.content"
@@ -45,7 +32,7 @@ services:
             - "@ezpublish.spi.persistence.language_handler"
 
     ezpublish.search.legacy.gateway.content.exception_conversion:
-        class: "%ezpublish.search.legacy.gateway.content.exception_conversion.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Gateway\ExceptionConversion
         arguments:
             - "@ezpublish.search.legacy.gateway.content.inner"
 
@@ -54,7 +41,7 @@ services:
         alias: ezpublish.search.legacy.gateway.content.exception_conversion
 
     ezpublish.search.legacy.gateway.location.inner:
-        class: "%ezpublish.search.legacy.gateway.location.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\DoctrineDatabase
         arguments:
             - "@ezpublish.api.search_engine.legacy.dbhandler"
             - "@ezpublish.search.legacy.gateway.criteria_converter.location"
@@ -62,7 +49,7 @@ services:
             - "@ezpublish.spi.persistence.language_handler"
 
     ezpublish.search.legacy.gateway.location.exception_conversion:
-        class: "%ezpublish.search.legacy.gateway.location.exception_conversion.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\ExceptionConversion
         arguments:
             - "@ezpublish.search.legacy.gateway.location.inner"
 
@@ -71,7 +58,7 @@ services:
         alias: ezpublish.search.legacy.gateway.location.exception_conversion
 
     ezpublish.search.legacy.mapper.fulltext:
-        class: "%ezpublish.search.legacy.mapper.fulltext.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper
         arguments:
             - "@ezpublish.search.common.field_registry"
             - "@ezpublish.spi.persistence.content_type_handler"
@@ -80,7 +67,7 @@ services:
         alias: ezpublish.search.legacy.mapper.fulltext
 
     ezpublish.spi.search.legacy:
-        class: "%ezpublish.spi.search.legacy.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Handler
         arguments:
             - "@ezpublish.search.legacy.gateway.content"
             - "@ezpublish.search.legacy.gateway.location"
@@ -94,7 +81,7 @@ services:
         lazy: true
 
     ezpublish.spi.search.legacy.indexer:
-        class: "%ezpublish.spi.search.legacy.indexer.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\Indexer
         arguments:
             - "@logger"
             - "@ezpublish.api.storage_engine"

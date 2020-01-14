@@ -1,14 +1,13 @@
 <?php
 
 /**
- * File containing the FragmentPassTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
+use eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -23,9 +22,7 @@ class FragmentPassTest extends AbstractCompilerPassTestCase
 
     public function testProcess()
     {
-        $inlineClass = 'Foo';
-        $this->container->setParameter('ezpublish.decorated_fragment_renderer.inline.class', $inlineClass);
-        $inlineRendererDef = new Definition($inlineClass);
+        $inlineRendererDef = new Definition(InlineFragmentRenderer::class);
         $inlineRendererDef->addTag('kernel.fragment_renderer');
         $esiRendererDef = new Definition();
         $esiRendererDef->addTag('kernel.fragment_renderer');
@@ -69,7 +66,7 @@ class FragmentPassTest extends AbstractCompilerPassTestCase
             [new Reference('fragment.renderer.inline.inner')],
             $decoratedInlineDef->getArguments()
         );
-        $this->assertSame($inlineClass, $decoratedInlineDef->getClass());
+        $this->assertSame(InlineFragmentRenderer::class, $decoratedInlineDef->getClass());
 
         $this->assertContainerBuilderHasServiceDefinitionWithParent('fragment.renderer.esi', 'ezpublish.decorated_fragment_renderer');
         $decoratedEsiDef = $this->container->getDefinition('fragment.renderer.esi');

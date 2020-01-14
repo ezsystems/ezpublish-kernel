@@ -1,6 +1,3 @@
-parameters:
-    ezpublish.cache_pool.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory
-
 services:
     ezpublish.cache_pool:
         # As we support custom TagAware services, we set class as interface here so lazy class is "correct"
@@ -9,7 +6,7 @@ services:
         arguments: ["@ezpublish.config.resolver"]
 
     ezpublish.cache_pool.factory:
-        class: "%ezpublish.cache_pool.factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory
         calls:
             - [setContainer, ["@service_container"]]
 

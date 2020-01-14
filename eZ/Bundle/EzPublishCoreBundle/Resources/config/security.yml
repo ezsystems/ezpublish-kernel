@@ -1,13 +1,6 @@
-parameters:
-    ezpublish.security.user_provider.class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
-    ezpublish.security.voter.core.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
-    ezpublish.security.voter.value_object.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\ValueObjectVoter
-    ezpublish.security.controller.class: eZ\Publish\Core\MVC\Symfony\Controller\SecurityController
-    ezpublish.security.login_listener.class: eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener
-
 services:
     ezpublish.security.user_provider:
-        class: "%ezpublish.security.user_provider.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
         arguments:
             - '@eZ\Publish\API\Repository\UserService'
             - '@eZ\Publish\API\Repository\PermissionResolver'
@@ -17,14 +10,14 @@ services:
             - '@eZ\Publish\API\Repository\UserService'
 
     ezpublish.security.voter.core:
-        class: "%ezpublish.security.voter.core.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
         arguments: ['@eZ\Publish\API\Repository\PermissionResolver']
         public: false
         tags:
             - { name: security.voter }
 
     ezpublish.security.voter.value_object:
-        class: "%ezpublish.security.voter.value_object.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\ValueObjectVoter
         arguments: ['@eZ\Publish\API\Repository\PermissionResolver']
         public: false
         tags:
@@ -32,11 +25,11 @@ services:
 
     ezpublish.security.controller:
         public: true
-        class: "%ezpublish.security.controller.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Controller\SecurityController
         arguments: ["@twig", "@ezpublish.config.resolver", "@security.authentication_utils"]
 
     ezpublish.security.login_listener:
-        class: "%ezpublish.security.login_listener.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener
         arguments:
             - '@eZ\Publish\API\Repository\PermissionResolver'
             - '@eZ\Publish\API\Repository\UserService'

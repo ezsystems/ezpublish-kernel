@@ -12,6 +12,7 @@ use eZ\Publish\Core\Base\Exceptions\Httpable;
 use Exception;
 use eZ\Publish\Core\Base\TranslatableBase;
 use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\FieldType\Null\Type as NullType;
 use RuntimeException;
 
 /**
@@ -30,9 +31,14 @@ class FieldTypeNotFoundException extends RuntimeException implements Httpable, T
     public function __construct($fieldType, Exception $previous = null)
     {
         $this->setMessageTemplate(
-            "Field Type '%fieldType%' not found. It must be implemented or configured to use FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%)"
+            "Field Type '%fieldType%' not found. It must be implemented or configured to use %nullType%"
         );
-        $this->setParameters(['%fieldType%' => $fieldType]);
+        $this->setParameters(
+            [
+                '%fieldType%' => $fieldType,
+                '%nullType%' => NullType::class,
+            ]
+        );
 
         parent::__construct($this->getBaseTranslation(), self::INTERNAL_ERROR, $previous);
     }

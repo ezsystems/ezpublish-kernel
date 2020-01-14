@@ -2,45 +2,22 @@ imports:
     - { resource: commands.yml }
 
 parameters:
-    ezpublish.siteaccess.class: eZ\Publish\Core\MVC\Symfony\SiteAccess
     ezpublish.siteaccess.default.name: default
-    ezpublish.config.resolver.dynamic.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
-    ezpublish.config.resolver.chain.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
     ezpublish.config.default_scope: ezsettings
-    ezpublish.config.dynamic_setting.parser.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser
-    ezpublish.config.complex_setting_value.resolver.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueResolver
-    ezpublish.console_event_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ConsoleCommandListener
-    ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
-    ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
-    ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
-    ezpublish.controller.content.download.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadController
-    ezpublish.controller.content.download_redirection.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadRedirectionController
 
     # Param converters
-    ezpublish.param_converter.content.class: eZ\Bundle\EzPublishCoreBundle\Converter\ContentParamConverter
     ezpublish.param_converter.content.priority: -2
-    ezpublish.param_converter.location.class: eZ\Bundle\EzPublishCoreBundle\Converter\LocationParamConverter
     ezpublish.param_converter.location.priority: -2
-
-    # FragmentRenderer overrides
-    ezpublish.decorated_fragment_renderer.inline.class: eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer
-    ezpublish.decorated_fragment_renderer.class: eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer
-    ezpublish.fragment_listener.factory.class: eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentListenerFactory
-
-    ezpublish.view_controller_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener
-    ezpublish.exception_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ExceptionListener
-
-    ezpublish.fields_groups.list.class: eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList
 
 services:
     # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
-        class: "%ezpublish.siteaccess.class%"
+        class: eZ\Publish\Core\MVC\Symfony\SiteAccess
         arguments: ["%ezpublish.siteaccess.default.name%", 'uninitialized']
 
     ezpublish.config.resolver.core:
         public: true # @todo should be private
-        class: "%ezpublish.config.resolver.dynamic.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
         arguments: ["@?logger", "%ezpublish.siteaccess.groups_by_siteaccess%", "%ezpublish.config.default_scope%"]
         calls:
             - [setSiteAccess, ["@ezpublish.siteaccess"]]
@@ -51,20 +28,20 @@ services:
 
     ezpublish.config.resolver.chain:
         public: true # @todo should be private
-        class: "%ezpublish.config.resolver.chain.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
 
     ezpublish.config.resolver:
         public: true # @todo should be private
         alias: ezpublish.config.resolver.chain
 
     ezpublish.config.dynamic_setting.parser:
-        class: "%ezpublish.config.dynamic_setting.parser.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser
 
     ezpublish.config.complex_setting_value.resolver:
-        class: "%ezpublish.config.complex_setting_value.resolver.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueResolver
 
     ezpublish.console_event_listener:
-        class: "%ezpublish.console_event_listener.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\ConsoleCommandListener
         arguments:
             - "%ezpublish.siteaccess.default%"
             - '@ezpublish.siteaccess.provider'
@@ -76,13 +53,13 @@ services:
             - { name: kernel.event_subscriber }
 
     ezpublish.controller.base:
-        class: "%ezpublish.controller.base.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
         abstract: true
         calls:
             - [ setContainer, ["@service_container"] ]
 
     ezpublish.controller.content.view:
-        class: "%ezpublish.controller.content.view.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
         arguments:
             - "@ezpublish.view_manager"
             - "@security.authorization_checker"
@@ -91,7 +68,7 @@ services:
             - { name: controller.service_arguments }
 
     ezpublish.controller.content.preview.core:
-        class: "%ezpublish.controller.content.preview.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
         arguments:
             - "@ezpublish.api.service.content"
             - "@http_kernel"
@@ -107,7 +84,7 @@ services:
         public: true
 
     ezpublish.controller.content.download:
-        class: "%ezpublish.controller.content.download.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadController
         arguments:
             - "@ezpublish.api.service.content"
             - "@ezpublish.fieldType.ezbinaryfile.io_service"
@@ -119,7 +96,7 @@ services:
               - { name: controller.service_arguments }
 
     ezpublish.controller.content.download_redirection:
-        class: "%ezpublish.controller.content.download_redirection.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadRedirectionController
         arguments:
             - "@ezpublish.api.service.content"
             - "@router"
@@ -135,7 +112,7 @@ services:
         alias: ezpublish.controller.content.view
 
     ezpublish.view_controller_listener:
-        class: "%ezpublish.view_controller_listener.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener
         arguments:
             - "@controller_resolver"
             - "@ezpublish.view_builder.registry"
@@ -145,13 +122,13 @@ services:
             - { name: kernel.event_subscriber }
 
     ezpublish.fragment_listener.factory:
-        class: "%ezpublish.fragment_listener.factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentListenerFactory
         arguments: ["%fragment.path%"]
         calls:
             - [setRequestStack, ["@request_stack"]]
 
     ezpublish.decorated_fragment_renderer:
-        class: "%ezpublish.decorated_fragment_renderer.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer
         # Arguments replaced at compile time
         arguments: []
         calls:
@@ -160,21 +137,21 @@ services:
         abstract: true
 
     ezpublish.param_converter.content:
-        class: "%ezpublish.param_converter.content.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Converter\ContentParamConverter
         arguments:
             - "@ezpublish.siteaccessaware.service.content"
         tags:
             - { name: request.param_converter, priority: "%ezpublish.param_converter.content.priority%", converter: ez_content_converter }
 
     ezpublish.param_converter.location:
-        class: "%ezpublish.param_converter.location.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\Converter\LocationParamConverter
         arguments:
             - "@ezpublish.siteaccessaware.service.location"
         tags:
             - { name: request.param_converter, priority: "%ezpublish.param_converter.location.priority%", converter: ez_location_converter }
 
     ezpublish.exception_listener:
-        class: "%ezpublish.exception_listener.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\ExceptionListener
         arguments: ["@translator"]
         tags:
             - { name: kernel.event_subscriber }
@@ -183,7 +160,7 @@ services:
         class: eZ\Publish\Core\QueryType\ArrayQueryTypeRegistry
 
     ezpublish.fields_groups.list:
-        class: "%ezpublish.fields_groups.list.class%"
+        class: eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList
         factory: ["@ezpublish.fields_groups.list.repository_settings_factory", "build"]
         arguments:
             - "@translator"

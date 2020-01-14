@@ -1,11 +1,6 @@
-parameters:
-    ezpublish.debug.data_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\EzPublishCoreCollector
-    ezpublish_debug.persistence_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\PersistenceCacheCollector
-    ezpublish_debug.siteaccess_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\SiteAccessCollector
-
 services:
     ezpublish_debug.data_collector:
-        class: "%ezpublish.debug.data_collector.class%"
+        class: eZ\Bundle\EzPublishDebugBundle\Collector\EzPublishCoreCollector
         tags:
             -
                 name: data_collector
@@ -13,7 +8,7 @@ services:
                 id: "ezpublish.debug.toolbar"
 
     ezpublish_debug.siteaccess_collector:
-        class: "%ezpublish_debug.siteaccess_collector.class%"
+        class: eZ\Bundle\EzPublishDebugBundle\Collector\SiteAccessCollector
         tags:
             -
                 name: ezpublish_data_collector
@@ -22,7 +17,7 @@ services:
                 toolbarTemplate: '@EzPublishDebug/Profiler/siteaccess/toolbar.html.twig'
 
     ezpublish_debug.persistence_collector:
-        class: "%ezpublish_debug.persistence_collector.class%"
+        class: eZ\Bundle\EzPublishDebugBundle\Collector\PersistenceCacheCollector
         arguments: ["@ezpublish.spi.persistence.cache.persistenceLogger"]
         tags:
             -

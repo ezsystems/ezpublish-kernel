@@ -1,11 +1,6 @@
-parameters:
-    ezpublish.search.legacy.gateway.wordIndexer.class: eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway\DoctrineDatabase
-    ezpublish.search.legacy.repository.searchIndex.class: eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex
-
 services:
-
     ezpublish.search.legacy.gateway.wordIndexer:
-        class: "%ezpublish.search.legacy.gateway.wordIndexer.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway\DoctrineDatabase
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.spi.persistence.content_type_handler"
@@ -14,6 +9,6 @@ services:
             - "%ezpublish.search.legacy.criterion_handler.full_text.configuration%"
 
     ezpublish.search.legacy.repository.searchIndex:
-        class: "%ezpublish.search.legacy.repository.searchIndex.class%"
+        class: eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"

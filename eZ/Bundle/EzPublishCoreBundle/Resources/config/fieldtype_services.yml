@@ -1,24 +1,10 @@
-parameters:
-    # Parameter provider
-    ezpublish.fieldType.parameterProviderRegistry.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry
-    ezpublish.fieldType.locale.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider
-
-    # Image
-    ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
-    ezpublish.fieldType.ezimage.io_service.options_provider.class: eZ\Publish\Core\FieldType\Image\IO\OptionsProvider
-    ezpublish.fieldType.ezimage.io_legacy.class: eZ\Publish\Core\FieldType\Image\IO\Legacy
-
-    # BinaryFile
-    ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
-    ezpublish.fieldType.ezbinarybase.downloadUrlGenerator.class: eZ\Publish\Core\MVC\Symfony\FieldType\BinaryBase\ContentDownloadUrlGenerator
-
 services:
     # Parameter providers
     ezpublish.fieldType.parameterProviderRegistry:
-        class: "%ezpublish.fieldType.parameterProviderRegistry.class%"
+        class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry
 
     ezpublish.fieldType.ezdatetime.parameterProvider:
-        class: "%ezpublish.fieldType.locale.parameterProvider.class%"
+        class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider
         arguments: ["@ezpublish.locale.converter"]
         calls:
             - [setRequestStack, ["@request_stack"]]
@@ -28,21 +14,21 @@ services:
             - {name: ezplatform.field_type.parameter_provider, alias: eztime}
 
     ezpublish.fieldType.ezobjectrelation.parameterProvider:
-        class: \eZ\Publish\Core\MVC\Symfony\FieldType\Relation\ParameterProvider
+        class: eZ\Publish\Core\MVC\Symfony\FieldType\Relation\ParameterProvider
         arguments:
             - "@ezpublish.api.service.content"
         tags:
             - {name: ezplatform.field_type.parameter_provider, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezobjectrelationlist.parameterProvider:
-        class: \eZ\Publish\Core\MVC\Symfony\FieldType\RelationList\ParameterProvider
+        class: eZ\Publish\Core\MVC\Symfony\FieldType\RelationList\ParameterProvider
         arguments:
             - "@ezpublish.api.service.content"
         tags:
             - {name: ezplatform.field_type.parameter_provider, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.ezimageasset.parameterProvider:
-        class: \eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider
+        class: eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider
         lazy: true
         arguments:
             - "@ezpublish.siteaccessaware.repository"
@@ -58,7 +44,7 @@ services:
 
     # Image
     ezpublish.fieldType.ezimage.io_service:
-        class: "%ezpublish.fieldType.ezimage.io_legacy.class%"
+        class: eZ\Publish\Core\FieldType\Image\IO\Legacy
         arguments:
             - "@ezpublish.fieldType.ezimage.io_service.published"
             - "@ezpublish.fieldType.ezimage.io_service.draft"
@@ -67,7 +53,7 @@ services:
         lazy: true
 
     ezpublish.fieldType.ezimage.io_service.options_provider:
-        class: "%ezpublish.fieldType.ezimage.io_service.options_provider.class%"
+        class: eZ\Publish\Core\FieldType\Image\IO\OptionsProvider
         calls:
             - [ setVarDir, [ "$var_dir$" ] ]
             - [ setStorageDir, [ "$storage_dir$" ] ]
@@ -89,7 +75,7 @@ services:
             - [ setPrefix, [ "$image.versioned_images_dir$" ] ]
 
     ezpublish.fieldType.ezimage.pathGenerator:
-        class: "%ezpublish.fieldType.ezimage.pathGenerator.class%"
+        class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
 
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.io_service:
@@ -98,12 +84,12 @@ services:
             - [ setPrefix, [ "$binary_dir$" ] ]
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
-        class: "%ezpublish.fieldType.ezbinaryfile.pathGenerator.class%"
+        class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
 
     # Will be added to binaryfile & mediafile external storage handlers by a compiler pass
     ezpublish.fieldType.ezbinarybase.download_url_generator:
         public: true # @todo should be private
-        class: "%ezpublish.fieldType.ezbinarybase.downloadUrlGenerator.class%"
+        class: eZ\Publish\Core\MVC\Symfony\FieldType\BinaryBase\ContentDownloadUrlGenerator
         arguments: ["@router"]
 
     # Symfony 3.4+ service definitions:

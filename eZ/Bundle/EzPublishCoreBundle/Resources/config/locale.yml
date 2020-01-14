@@ -94,11 +94,9 @@ parameters:
         tw: ['chi-TW']
         ua: ['ukr-UA']
 
-    ezpublish.locale.converter.class: eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter
-
 services:
     ezpublish.locale.converter:
-        class: "%ezpublish.locale.converter.class%"
+        class: eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter
         arguments: ["%ezpublish.locale.conversion_map%", "@logger"]
         public: true
 

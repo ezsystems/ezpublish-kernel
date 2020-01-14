@@ -1,24 +1,13 @@
 parameters:
     ezpublish.kernel.root_dir: "%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel"
-
-    # API
-    ezpublish.api.repository.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryFactory
-    ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
-    ezpublish.api.search_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineFactory
-    ezpublish.api.search_engine.indexer.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineIndexerFactory
-
     # Using legacy storage engine for data compatibility with 4.x
     ezpublish.api.storage_engine.default: legacy
     ezpublish.api.search_engine.default: legacy
 
-    ezpublish.api.content.class: eZ\Publish\Core\Repository\Values\Content\Content
-    ezpublish.api.location.class: eZ\Publish\Core\Repository\Values\Content\Location
-    ezpublish.api.version.class: eZ\Publish\Core\Repository\Values\Content\VersionInfo
-
 services:
     # API
     ezpublish.api.repository.factory:
-        class: "%ezpublish.api.repository.factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryFactory
         arguments:
             - "@ezpublish.config.resolver"
             - "%ezpublish.api.inner_repository.class%"
@@ -28,7 +17,7 @@ services:
             - [setContainer, ["@service_container"]]
 
     ezpublish.api.storage_engine.factory:
-        class: "%ezpublish.api.storage_engine.factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
         arguments:
             - "@ezpublish.api.repository_configuration_provider"
 
@@ -37,17 +26,17 @@ services:
         alias: ezpublish.spi.persistence.cache
 
     ezpublish.api.storage_engine:
-        class: "%ezpublish.api.storage_engine.class%"
+        class: eZ\Publish\SPI\Persistence\Handler
         factory: ["@ezpublish.api.storage_engine.factory", buildStorageEngine]
         public: false
 
     ezpublish.api.search_engine.factory:
-        class: "%ezpublish.api.search_engine.factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineFactory
         arguments:
             - "@ezpublish.api.repository_configuration_provider"
 
     ezpublish.api.search_engine.indexer.factory:
-            class: "%ezpublish.api.search_engine.indexer.factory.class%"
+            class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineIndexerFactory
             arguments:
                 - "@ezpublish.api.repository_configuration_provider"
 
@@ -58,12 +47,12 @@ services:
         alias: ezpublish.spi.search_engine.indexer
 
     ezpublish.spi.search_engine:
-        class: "%ezpublish.api.search_engine.class%"
+        class: eZ\Publish\SPI\Search\Handler
         factory: ["@ezpublish.api.search_engine.factory", buildSearchEngine]
         public: false
 
     ezpublish.spi.search_engine.indexer:
-        class: "%ezpublish.search.common.indexer.class%"
+        class: eZ\Publish\Core\Search\Common\Indexer
         factory: ["@ezpublish.api.search_engine.indexer.factory", buildSearchEngineIndexer]
         public: false
 
