@@ -38,10 +38,10 @@ final class ServiceAwareMatcherFactory extends ClassNameMatcherFactory
      */
     protected function getMatcher($matcherIdentifier)
     {
-        if (strpos($matcherIdentifier, '@') === 0) {
-            return $this->viewMatcherRegistry->getMatcher(substr($matcherIdentifier, 1));
+        try {
+            return $this->viewMatcherRegistry->getMatcher($matcherIdentifier);
+        } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
+            return parent::getMatcher($matcherIdentifier);
         }
-
-        return parent::getMatcher($matcherIdentifier);
     }
 }
