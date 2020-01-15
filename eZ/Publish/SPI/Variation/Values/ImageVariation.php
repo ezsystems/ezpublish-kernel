@@ -14,6 +14,7 @@ namespace eZ\Publish\SPI\Variation\Values;
  * @property-read string $name The name of the image alias (for example "original")
  * @property-read mixed $info Extra information about the image, depending on the image type
  * @property-read mixed $imageId
+ * @property-read string $imageValueId The ID property of the eZ\Publish\Core\FieldType\Image\Value class
  */
 class ImageVariation extends Variation
 {
@@ -52,4 +53,11 @@ class ImageVariation extends Variation
 
     /** @var mixed */
     protected $imageId;
+
+    /**
+     * The ID property of the eZ\Publish\Core\FieldType\Image\Value class.
+     *
+     * @var string
+     */
+    protected $imageValueId;
 }

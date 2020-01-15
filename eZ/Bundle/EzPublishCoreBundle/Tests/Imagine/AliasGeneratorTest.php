@@ -233,6 +233,7 @@ class AliasGeneratorTest extends TestCase
                 'imageId' => $imageId,
                 'height' => $imageHeight,
                 'width' => $imageWidth,
+                'imageValueId' => $originalPath,
             ]
         );
         $this->assertEquals($expected, $this->decoratedAliasGenerator->getVariation($field, new VersionInfo(), $variationName));
