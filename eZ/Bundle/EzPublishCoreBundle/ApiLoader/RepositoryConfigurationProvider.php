@@ -18,6 +18,7 @@ class RepositoryConfigurationProvider
 {
     private const REPOSITORY_STORAGE = 'storage';
     private const REPOSITORY_CONNECTION = 'connection';
+    private const DEFAULT_CONNECTION_NAME = 'default';
 
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
@@ -59,6 +60,8 @@ class RepositoryConfigurationProvider
     {
         $repositoryConfig = $this->getRepositoryConfig();
 
-        return $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION];
+        return $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION]
+            ? $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION]
+            : self::DEFAULT_CONNECTION_NAME;
     }
 }
