@@ -38,5 +38,6 @@ services:
             - []
             - '@ezpublish.cache_pool'
             - "%kernel.environment%"
+            - '@ezpublish.api.repository_configuration_provider'
         tags:
             - { name: console.command, command: ezplatform:install }
