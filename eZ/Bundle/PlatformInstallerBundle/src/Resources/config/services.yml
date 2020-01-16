@@ -22,5 +22,6 @@ services:
             $installers: []
             $cachePool: '@ezpublish.cache_pool'
             $environment: "%kernel.environment%"
+            $repositoryConfigurationProvider: '@ezpublish.api.repository_configuration_provider'
         tags:
             - { name: console.command, command: ezplatform:install }
