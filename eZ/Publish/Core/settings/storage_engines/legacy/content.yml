@@ -13,7 +13,6 @@ services:
     ezpublish.persistence.legacy.content.gateway.inner:
         class: eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase
         arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.api.storage_engine.legacy.connection"
             - '@eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway'
             - "@ezpublish.persistence.legacy.content.query_builder"
