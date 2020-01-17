@@ -7,8 +7,10 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use function time;
 
 /**
  * @internal For internal use by the Content gateway.
@@ -59,6 +61,29 @@ final class QueryBuilder
             ->from(
                 Gateway::CONTENT_RELATION_TABLE, 'l'
             );
+
+        return $query;
+    }
+
+    /**
+     * Create an update query for setting Content item Version status.
+     */
+    public function getSetVersionStatusQuery(
+        int $contentId,
+        int $versionNo,
+        int $versionStatus
+    ): DoctrineQueryBuilder {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(Gateway::CONTENT_VERSION_TABLE)
+            ->set('status', ':status')
+            ->set('modified', ':modified')
+            ->where('contentobject_id = :contentId')
+            ->andWhere('version = :versionNo')
+            ->setParameter('status', $versionStatus, ParameterType::INTEGER)
+            ->setParameter('modified', time(), ParameterType::INTEGER)
+            ->setParameter('contentId', $contentId, ParameterType::INTEGER)
+            ->setParameter('versionNo', $versionNo, ParameterType::INTEGER);
 
         return $query;
     }
