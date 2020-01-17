@@ -510,7 +510,7 @@ final class DoctrineDatabase extends Gateway
     public function setStatus(int $contentId, int $version, int $status): bool
     {
         if ($status !== APIVersionInfo::STATUS_PUBLISHED) {
-            $query = $this->getSetVersionStatusQuery($contentId, $version, $status);
+            $query = $this->queryBuilder->getSetVersionStatusQuery($contentId, $version, $status);
             $rowCount = $query->execute();
 
             return $rowCount > 0;
@@ -524,7 +524,7 @@ final class DoctrineDatabase extends Gateway
 
     public function setPublishedStatus(int $contentId, int $versionNo): void
     {
-        $query = $this->getSetVersionStatusQuery(
+        $query = $this->queryBuilder->getSetVersionStatusQuery(
             $contentId,
             $versionNo,
             VersionInfo::STATUS_PUBLISHED
@@ -546,26 +546,6 @@ HEREDOC;
             );
         }
         $this->markContentAsPublished($contentId, $versionNo);
-    }
-
-    private function getSetVersionStatusQuery(
-        int $contentId,
-        int $versionNo,
-        int $versionStatus
-    ): DoctrineQueryBuilder {
-        $query = $this->connection->createQueryBuilder();
-        $query
-            ->update('ezcontentobject_version')
-            ->set('status', ':status')
-            ->set('modified', ':modified')
-            ->where('contentobject_id = :contentId')
-            ->andWhere('version = :versionNo')
-            ->setParameter('status', $versionStatus, ParameterType::INTEGER)
-            ->setParameter('modified', time(), ParameterType::INTEGER)
-            ->setParameter('contentId', $contentId, ParameterType::INTEGER)
-            ->setParameter('versionNo', $versionNo, ParameterType::INTEGER);
-
-        return $query;
     }
 
     private function markContentAsPublished(int $contentId, int $versionNo): void
