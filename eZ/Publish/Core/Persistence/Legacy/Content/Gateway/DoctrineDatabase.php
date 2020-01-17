@@ -17,9 +17,6 @@ use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Database\UpdateQuery;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway as SharedGateway;
@@ -43,14 +40,6 @@ use PDO;
  */
 class DoctrineDatabase extends Gateway
 {
-    /**
-     * eZ Doctrine database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
-
     /**
      * The native Doctrine connection.
      *
@@ -91,14 +80,12 @@ class DoctrineDatabase extends Gateway
      * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(
-        DatabaseHandler $db,
         Connection $connection,
         SharedGateway $sharedGateway,
         QueryBuilder $queryBuilder,
         LanguageHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator
     ) {
-        $this->dbHandler = $db;
         $this->connection = $connection;
         $this->databasePlatform = $connection->getDatabasePlatform();
         $this->sharedGateway = $sharedGateway;
