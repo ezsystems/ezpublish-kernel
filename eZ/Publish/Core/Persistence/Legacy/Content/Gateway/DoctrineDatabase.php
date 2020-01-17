@@ -842,41 +842,9 @@ HEREDOC;
         return $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Get query builder to load Content Info data.
-     *
-     * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoList(), loadContentInfoByLocationId()
-     */
-    private function createLoadContentInfoQueryBuilder(bool $joinMainLocation = true): DoctrineQueryBuilder
-    {
-        $queryBuilder = $this->connection->createQueryBuilder();
-        $expr = $queryBuilder->expr();
-
-        $joinCondition = $expr->eq('c.id', 't.contentobject_id');
-        if ($joinMainLocation) {
-            // wrap join condition with AND operator and join by a Main Location
-            $joinCondition = $expr->andX(
-                $joinCondition,
-                $expr->eq('t.node_id', 't.main_node_id')
-            );
-        }
-
-        $queryBuilder
-            ->select('c.*', 't.main_node_id AS ezcontentobject_tree_main_node_id')
-            ->from('ezcontentobject', 'c')
-            ->leftJoin(
-                'c',
-                'ezcontentobject_tree',
-                't',
-                $joinCondition
-            );
-
-        return $queryBuilder;
-    }
-
     public function loadContentInfo(int $contentId): array
     {
-        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder = $this->queryBuilder->createLoadContentInfoQueryBuilder();
         $queryBuilder
             ->where('c.id = :id')
             ->setParameter('id', $contentId, ParameterType::INTEGER);
@@ -891,7 +859,7 @@ HEREDOC;
 
     public function loadContentInfoList(array $contentIds): array
     {
-        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder = $this->queryBuilder->createLoadContentInfoQueryBuilder();
         $queryBuilder
             ->where('c.id IN (:ids)')
             ->setParameter('ids', $contentIds, Connection::PARAM_INT_ARRAY);
@@ -901,7 +869,7 @@ HEREDOC;
 
     public function loadContentInfoByRemoteId(string $remoteId): array
     {
-        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder = $this->queryBuilder->createLoadContentInfoQueryBuilder();
         $queryBuilder
             ->where('c.remote_id = :id')
             ->setParameter('id', $remoteId, ParameterType::STRING);
@@ -916,7 +884,7 @@ HEREDOC;
 
     public function loadContentInfoByLocationId(int $locationId): array
     {
-        $queryBuilder = $this->createLoadContentInfoQueryBuilder(false);
+        $queryBuilder = $this->queryBuilder->createLoadContentInfoQueryBuilder(false);
         $queryBuilder
             ->where('t.node_id = :id')
             ->setParameter('id', $locationId, ParameterType::INTEGER);

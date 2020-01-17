@@ -89,6 +89,42 @@ final class QueryBuilder
     }
 
     /**
+     * Create a select query to load Content Info data.
+     *
+     * @see Gateway::loadContentInfo()
+     * @see Gateway::loadContentInfoList()
+     * @see Gateway::loadContentInfoByRemoteId()
+     * @see Gateway::loadContentInfoByLocationId()
+     */
+    public function createLoadContentInfoQueryBuilder(
+        bool $joinMainLocation = true
+    ): DoctrineQueryBuilder {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+
+        $joinCondition = $expr->eq('c.id', 't.contentobject_id');
+        if ($joinMainLocation) {
+            // wrap join condition with AND operator and join by a Main Location
+            $joinCondition = $expr->andX(
+                $joinCondition,
+                $expr->eq('t.node_id', 't.main_node_id')
+            );
+        }
+
+        $queryBuilder
+            ->select('c.*', 't.main_node_id AS ezcontentobject_tree_main_node_id')
+            ->from(Gateway::CONTENT_ITEM_TABLE, 'c')
+            ->leftJoin(
+                'c',
+                'ezcontentobject_tree',
+                't',
+                $joinCondition
+            );
+
+        return $queryBuilder;
+    }
+
+    /**
      * Create a doctrine query builder with db fields needed to populate VersionInfo.
      *
      * @param int|null $versionNo Selects current version number if left undefined as null
