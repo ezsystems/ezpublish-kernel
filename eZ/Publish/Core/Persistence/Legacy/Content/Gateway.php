@@ -16,6 +16,8 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 
 /**
  * Base class for content gateways.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
