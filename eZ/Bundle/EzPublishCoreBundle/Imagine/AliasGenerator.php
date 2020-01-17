@@ -134,7 +134,6 @@ class AliasGenerator implements VariationHandler
                 'imageId' => $imageValue->imageId,
                 'width' => $variationWidth,
                 'height' => $variationHeight,
-                'imageValueId' => $imageValue->id,
             ]
         );
     }

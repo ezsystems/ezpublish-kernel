@@ -70,8 +70,8 @@ class ImagineAwareAliasGenerator implements VariationHandler
             $parameters
         );
 
-        if ((null === $variation->width || null === $variation->height) && !empty($variation->imageValueId)) {
-            $variationBinaryFile = $this->getVariationBinaryFile($variation->imageValueId, $variationName);
+        if (null === $variation->width || null === $variation->height) {
+            $variationBinaryFile = $this->getVariationBinaryFile($field->value->id, $variationName);
             $image = $this->imagine->load($this->ioService->getFileContents($variationBinaryFile));
             $dimensions = $image->getSize();
 
