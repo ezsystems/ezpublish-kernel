@@ -11,7 +11,6 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Language;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use RuntimeException;
 
 /**
@@ -24,14 +23,6 @@ use RuntimeException;
 final class DoctrineDatabase extends Gateway
 {
     /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    private $dbHandler;
-
-    /**
      * The native Doctrine connection.
      *
      * @var \Doctrine\DBAL\Connection
@@ -42,16 +33,11 @@ final class DoctrineDatabase extends Gateway
     private $dbPlatform;
 
     /**
-     * Creates a new Doctrine database Section Gateway.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
-        $this->connection = $dbHandler->getConnection();
+        $this->connection = $connection;
         $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
