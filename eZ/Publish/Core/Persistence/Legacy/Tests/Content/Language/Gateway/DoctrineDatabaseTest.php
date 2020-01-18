@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -38,7 +36,6 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::insertLanguage
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
      */
     public function testInsertLanguage()
     {
@@ -80,7 +77,7 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::updateLanguage
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setLanguageQueryParameters
      */
     public function testUpdateLanguage()
     {
@@ -193,15 +190,15 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * Returns a ready to test DoctrineDatabase gateway.
+     * Return a ready to test DoctrineDatabase gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getDatabaseGateway()
+    protected function getDatabaseGateway(): DoctrineDatabase
     {
         if (!isset($this->databaseGateway)) {
             $this->databaseGateway = new DoctrineDatabase(
-                $this->getDatabaseHandler()
+                $this->getDatabaseConnection()
             );
         }
 

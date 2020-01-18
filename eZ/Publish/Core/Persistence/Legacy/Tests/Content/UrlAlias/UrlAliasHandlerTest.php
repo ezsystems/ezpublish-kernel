@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAliasHandlerTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -5402,14 +5400,14 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getLanguageHandler()
+    protected function getLanguageHandler(): LanguageHandler
     {
         if (!isset($this->languageHandler)) {
             $this->languageHandler = new LanguageHandler(
                 new LanguageGateway(
-                    $this->getDatabaseHandler()
+                    $this->getDatabaseConnection()
                 ),
                 new LanguageMapper()
             );

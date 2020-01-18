@@ -489,9 +489,6 @@ class LanguageServiceTest extends BaseTest
      */
     public function testDeleteLanguage()
     {
-        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
-        $this->expectExceptionMessage('Could not find \'Language\' with identifier \'eng-NZ\'');
-
         $repository = $this->getRepository();
         $languageService = $repository->getContentLanguageService();
 
@@ -513,6 +510,9 @@ class LanguageServiceTest extends BaseTest
 
         // +1 -1
         $this->assertEquals($beforeCount, count($languageService->loadLanguages()));
+
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('Could not find \'Language\' with identifier \'eng-NZ\'');
 
         // ensure just created & deleted language doesn't exist
         $languageService->loadLanguage($languageCreateEnglish->languageCode);
