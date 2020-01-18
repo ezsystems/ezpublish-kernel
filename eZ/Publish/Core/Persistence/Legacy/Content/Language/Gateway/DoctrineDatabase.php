@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase Language Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -18,8 +16,12 @@ use RuntimeException;
 
 /**
  * Doctrine database based Language Gateway.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence Language Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * Database handler.
@@ -27,14 +29,14 @@ class DoctrineDatabase extends Gateway
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      * @deprecated Start to use DBAL $connection instead.
      */
-    protected $dbHandler;
+    private $dbHandler;
 
     /**
      * The native Doctrine connection.
      *
      * @var \Doctrine\DBAL\Connection
      */
-    protected $connection;
+    private $connection;
 
     /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
     private $dbPlatform;
@@ -105,7 +107,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Sets columns in $query from $language.
      */
-    protected function setLanguageQueryParameters(QueryBuilder $query, Language $language)
+    private function setLanguageQueryParameters(QueryBuilder $query, Language $language)
     {
         $query
             ->setParameter('language_code', $language->languageCode, ParameterType::STRING)
@@ -168,7 +170,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Creates a Language find query.
      */
-    protected function createFindQuery(): QueryBuilder
+    private function createFindQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query
