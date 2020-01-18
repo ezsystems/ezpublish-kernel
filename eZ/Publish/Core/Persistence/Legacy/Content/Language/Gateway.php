@@ -15,6 +15,32 @@ use eZ\Publish\SPI\Persistence\Content\Language;
  */
 abstract class Gateway
 {
+    public const CONTENT_LANGUAGE_TABLE = 'ezcontent_language';
+
+    /**
+     * A map of language-related table name to its language column.
+     *
+     * The first column is considered to be a language bitmask.
+     * The second, optional, column is an explicit language id.
+     *
+     * It depends on the schema defined in
+     * <code>eZ/Bundle/EzPublishCoreBundle/Resources/config/storage/legacy/schema.yaml</code>
+     */
+    public const MULTILINGUAL_TABLES_COLUMNS = [
+        'ezcobj_state' => ['language_mask', 'default_language_id'],
+        'ezcobj_state_group_language' => ['language_id'],
+        'ezcobj_state_group' => ['language_mask', 'default_language_id'],
+        'ezcobj_state_language' => ['language_id'],
+        'ezcontentclass_attribute_ml' => ['language_id'],
+        'ezcontentclass_name' => ['language_id'],
+        'ezcontentclass' => ['language_mask', 'initial_language_id'],
+        'ezcontentobject_attribute' => ['language_id'],
+        'ezcontentobject_name' => ['language_id'],
+        'ezcontentobject_version' => ['language_mask', 'initial_language_id'],
+        'ezcontentobject' => ['language_mask', 'initial_language_id'],
+        'ezurlalias_ml' => ['lang_mask'],
+    ];
+
     /**
      * Inserts the given $language.
      *
