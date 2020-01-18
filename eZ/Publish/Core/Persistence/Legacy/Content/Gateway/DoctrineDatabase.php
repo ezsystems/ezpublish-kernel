@@ -899,15 +899,38 @@ HEREDOC;
 
     public function loadVersionInfo(int $contentId, ?int $versionNo = null): array
     {
-        $queryBuilder = $this->queryBuilder->createVersionInfoQueryBuilder($versionNo);
-        $queryBuilder->where(
-            $queryBuilder->expr()->eq(
-                'c.id',
-                $queryBuilder->createNamedParameter($contentId, PDO::PARAM_INT)
-            )
-        );
+        $queryBuilder = $this->queryBuilder->createVersionInfoFindQueryBuilder();
+        $expr = $queryBuilder->expr();
 
-        return $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $queryBuilder
+            ->where(
+                $expr->eq(
+                    'v.contentobject_id',
+                    $queryBuilder->createNamedParameter(
+                        $contentId,
+                        ParameterType::INTEGER,
+                        ':content_id'
+                    )
+                )
+            );
+
+        if (null !== $versionNo) {
+            $queryBuilder
+                ->andWhere(
+                    $expr->eq(
+                        'v.version',
+                        $queryBuilder->createNamedParameter(
+                            $versionNo,
+                            ParameterType::INTEGER,
+                            ':version_no'
+                        )
+                    )
+                );
+        } else {
+            $queryBuilder->andWhere($expr->eq('v.version', 'c.current_version'));
+        }
+
+        return $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     public function countVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): int
