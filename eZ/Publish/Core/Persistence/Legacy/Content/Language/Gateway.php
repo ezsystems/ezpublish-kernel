@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Language Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -11,7 +9,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
- * Language Handler.
+ * Content Model language gateway.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
