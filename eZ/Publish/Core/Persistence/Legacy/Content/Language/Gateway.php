@@ -42,23 +42,17 @@ abstract class Gateway
     ];
 
     /**
-     * Inserts the given $language.
-     *
-     * @param Language $language
-     *
-     * @return int ID of the new language
+     * Insert the given $language.
      */
-    abstract public function insertLanguage(Language $language);
+    abstract public function insertLanguage(Language $language): int;
 
     /**
-     * Updates the data of the given $language.
-     *
-     * @param Language $language
+     * Update the data of the given $language.
      */
-    abstract public function updateLanguage(Language $language);
+    abstract public function updateLanguage(Language $language): void;
 
     /**
-     * Loads data list for the Language with $ids.
+     * Load data list for the Language with $ids.
      *
      * @param int[] $ids
      *
@@ -67,7 +61,7 @@ abstract class Gateway
     abstract public function loadLanguageListData(array $ids): iterable;
 
     /**
-     * Loads data list for Languages by $languageCodes (eg: eng-GB).
+     * Load data list for Languages by $languageCodes (eg: eng-GB).
      *
      * @param string[] $languageCodes
      *
@@ -76,25 +70,17 @@ abstract class Gateway
     abstract public function loadLanguageListDataByLanguageCode(array $languageCodes): iterable;
 
     /**
-     * Loads the data for all languages.
-     *
-     * @return string[][]
+     * Load the data for all languages.
      */
-    abstract public function loadAllLanguagesData();
+    abstract public function loadAllLanguagesData(): array;
 
     /**
-     * Deletes the language with $id.
-     *
-     * @param int $id
+     * Delete the language with $id.
      */
-    abstract public function deleteLanguage($id);
+    abstract public function deleteLanguage(int $id): void;
 
     /**
      * Check whether a language may be deleted.
-     *
-     * @param int $id
-     *
-     * @return bool
      */
-    abstract public function canDeleteLanguage($id);
+    abstract public function canDeleteLanguage(int $id): bool;
 }
