@@ -55,14 +55,7 @@ final class DoctrineDatabase extends Gateway
         $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
-    /**
-     * Inserts the given $language.
-     *
-     * @param Language $language
-     *
-     * @return int ID of the new language
-     */
-    public function insertLanguage(Language $language)
+    public function insertLanguage(Language $language): int
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -105,9 +98,9 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Sets columns in $query from $language.
+     * Set columns for $query based on $language.
      */
-    private function setLanguageQueryParameters(QueryBuilder $query, Language $language)
+    private function setLanguageQueryParameters(QueryBuilder $query, Language $language): void
     {
         $query
             ->setParameter('language_code', $language->languageCode, ParameterType::STRING)
@@ -115,12 +108,7 @@ final class DoctrineDatabase extends Gateway
             ->setParameter('disabled', (int)!$language->isEnabled, ParameterType::INTEGER);
     }
 
-    /**
-     * Updates the data of the given $language.
-     *
-     * @param Language $language
-     */
-    public function updateLanguage(Language $language)
+    public function updateLanguage(Language $language): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -141,9 +129,6 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadLanguageListData(array $ids): iterable
     {
         $query = $this->createFindQuery();
@@ -154,9 +139,6 @@ final class DoctrineDatabase extends Gateway
         return $query->execute()->fetchAll();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadLanguageListDataByLanguageCode(array $languageCodes): iterable
     {
         $query = $this->createFindQuery();
@@ -168,7 +150,7 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Creates a Language find query.
+     * Build a Language find (fetch) query.
      */
     private function createFindQuery(): QueryBuilder
     {
@@ -180,24 +162,14 @@ final class DoctrineDatabase extends Gateway
         return $query;
     }
 
-    /**
-     * Loads the data for all languages.
-     *
-     * @return string[][]
-     */
-    public function loadAllLanguagesData()
+    public function loadAllLanguagesData(): array
     {
         $query = $this->createFindQuery();
 
         return $query->execute()->fetchAll();
     }
 
-    /**
-     * Deletes the language with $id.
-     *
-     * @param int $id
-     */
-    public function deleteLanguage($id)
+    public function deleteLanguage(int $id): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -212,14 +184,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Check whether a language may be deleted.
-     *
-     * @param int $id
-     *
-     * @return bool
-     */
-    public function canDeleteLanguage($id)
+    public function canDeleteLanguage(int $id): bool
     {
         // note: at some point this should be delegated to specific gateways
         foreach (self::MULTILINGUAL_TABLES_COLUMNS as $tableName => $columns) {

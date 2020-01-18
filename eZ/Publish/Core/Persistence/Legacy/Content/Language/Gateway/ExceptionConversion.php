@@ -32,7 +32,7 @@ final class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    public function insertLanguage(Language $language)
+    public function insertLanguage(Language $language): int
     {
         try {
             return $this->innerGateway->insertLanguage($language);
@@ -41,10 +41,10 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function updateLanguage(Language $language)
+    public function updateLanguage(Language $language): void
     {
         try {
-            return $this->innerGateway->updateLanguage($language);
+            $this->innerGateway->updateLanguage($language);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
@@ -68,7 +68,7 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadAllLanguagesData()
+    public function loadAllLanguagesData(): array
     {
         try {
             return $this->innerGateway->loadAllLanguagesData();
@@ -77,16 +77,16 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function deleteLanguage($id)
+    public function deleteLanguage(int $id): void
     {
         try {
-            return $this->innerGateway->deleteLanguage($id);
+            $this->innerGateway->deleteLanguage($id);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function canDeleteLanguage($id)
+    public function canDeleteLanguage(int $id): bool
     {
         try {
             return $this->innerGateway->canDeleteLanguage($id);
