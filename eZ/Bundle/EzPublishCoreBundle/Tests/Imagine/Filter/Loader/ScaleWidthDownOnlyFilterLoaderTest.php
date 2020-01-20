@@ -47,7 +47,7 @@ class ScaleWidthDownOnlyFilterLoaderTest extends TestCase
         $this->innerLoader
             ->expects($this->once())
             ->method('load')
-            ->with($image, $this->equalTo(['size' => [$width, null], 'mode' => ImageInterface::THUMBNAIL_INSET]))
+            ->with($image, $this->equalTo(['size' => [$width, null], 'mode' => 'inset']))
             ->will($this->returnValue($image));
 
         $this->assertSame($image, $this->loader->load($image, [$width]));

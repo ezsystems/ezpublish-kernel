@@ -37,7 +37,7 @@ class ScaleDownOnlyFilterLoader extends FilterLoaderWrapped
             $image,
             [
                 'size' => $options,
-                'mode' => ImageInterface::THUMBNAIL_INSET,
+                'mode' => 'inset',
             ]
         );
     }
