@@ -768,7 +768,7 @@ class DoctrineDatabase extends Gateway
             );
         $query->prepare()->execute();
 
-        $location->id = $this->handler->lastInsertId($this->handler->getSequenceName('ezcontentobject_tree', 'node_id'));
+        $location->id = (int)$this->handler->lastInsertId($this->handler->getSequenceName('ezcontentobject_tree', 'node_id'));
 
         $mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
         $location->pathString = $parentNode['path_string'] . $location->id . '/';

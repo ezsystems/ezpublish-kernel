@@ -60,7 +60,7 @@ class DoctrineDatabase extends Gateway
 
         $query->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId(
+        return (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName('ezsection', 'id')
         );
     }
