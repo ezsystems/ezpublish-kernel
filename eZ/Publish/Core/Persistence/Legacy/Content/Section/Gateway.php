@@ -7,7 +7,9 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Section;
 
 /**
- * Section Handler.
+ * Base class for Section gateways.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {

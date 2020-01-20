@@ -10,9 +10,11 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
 /**
- * Section Handler.
+ * @internal Gateway implementation is considered internal. Use Persistence Section Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\Section\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * Database handler.
@@ -20,7 +22,7 @@ class DoctrineDatabase extends Gateway
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      * @deprecated Start to use DBAL $connection instead.
      */
-    protected $dbHandler;
+    private $dbHandler;
 
     /**
      * Creates a new DoctrineDatabase Section Gateway.
