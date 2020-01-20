@@ -6,6 +6,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
 
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
@@ -27,15 +29,20 @@ final class DoctrineDatabase extends Gateway
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $dbPlatform;
+
     /**
      * Creates a new DoctrineDatabase Section Gateway.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(DatabaseHandler $dbHandler)
     {
         $this->dbHandler = $dbHandler;
         $this->connection = $dbHandler->getConnection();
+        $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
     /**
@@ -48,25 +55,19 @@ final class DoctrineDatabase extends Gateway
      */
     public function insertSection($name, $identifier)
     {
-        $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto(
-            $this->dbHandler->quoteTable('ezsection')
-        )->set(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->getAutoIncrementValue('ezsection', 'id')
-        )->set(
-            $this->dbHandler->quoteColumn('name'),
-            $query->bindValue($name)
-        )->set(
-            $this->dbHandler->quoteColumn('identifier'),
-            $query->bindValue($identifier)
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert('ezsection')
+            ->values(
+                [
+                    'name' => $query->createPositionalParameter($name),
+                    'identifier' => $query->createPositionalParameter($identifier),
+                ]
+            );
 
-        $query->prepare()->execute();
+        $query->execute();
 
-        return (int)$this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName('ezsection', 'id')
-        );
+        return (int)$this->connection->lastInsertId(Gateway::CONTENT_SECTION_SEQ);
     }
 
     /**
@@ -78,23 +79,19 @@ final class DoctrineDatabase extends Gateway
      */
     public function updateSection($id, $name, $identifier)
     {
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezsection')
-        )->set(
-            $this->dbHandler->quoteColumn('name'),
-            $query->bindValue($name)
-        )->set(
-            $this->dbHandler->quoteColumn('identifier'),
-            $query->bindValue($identifier)
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($id, null, \PDO::PARAM_INT)
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update('ezsection')
+            ->set('name', $query->createPositionalParameter($name))
+            ->set('identifier', $query->createPositionalParameter($identifier))
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            );
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
     /**
@@ -106,24 +103,20 @@ final class DoctrineDatabase extends Gateway
      */
     public function loadSectionData($id)
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->quoteColumn('identifier'),
-            $this->dbHandler->quoteColumn('name')
-        )->from(
-            $this->dbHandler->quoteTable('ezsection')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($id, null, \PDO::PARAM_INT)
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(['id', 'identifier', 'name'])
+            ->from('ezsection')
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -133,19 +126,14 @@ final class DoctrineDatabase extends Gateway
      */
     public function loadAllSectionData()
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->quoteColumn('identifier'),
-            $this->dbHandler->quoteColumn('name')
-        )->from(
-            $this->dbHandler->quoteTable('ezsection')
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(['id', 'identifier', 'name'])
+            ->from('ezsection');
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -157,24 +145,23 @@ final class DoctrineDatabase extends Gateway
      */
     public function loadSectionDataByIdentifier($identifier)
     {
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query->select(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->quoteColumn('identifier'),
-            $this->dbHandler->quoteColumn('name')
+            'id',
+            'identifier',
+            'name'
         )->from(
-            $this->dbHandler->quoteTable('ezsection')
+            'ezsection'
         )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('identifier'),
-                $query->bindValue($identifier, null, \PDO::PARAM_STR)
+            $query->expr()->eq(
+                'identifier',
+                $query->createPositionalParameter($identifier, ParameterType::STRING)
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -186,25 +173,19 @@ final class DoctrineDatabase extends Gateway
      */
     public function countContentObjectsInSection($id)
     {
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query->select(
-            $query->alias(
-                $query->expr->count(
-                    $this->dbHandler->quoteColumn('id')
-                ),
-                'content_count'
-            )
+            $this->dbPlatform->getCountExpression('id')
         )->from(
-            $this->dbHandler->quoteTable('ezcontentobject')
+            'ezcontentobject'
         )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('section_id'),
-                $query->bindValue($id, null, \PDO::PARAM_INT)
+            $query->expr()->eq(
+                'section_id',
+                $query->createPositionalParameter($id, ParameterType::INTEGER)
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
         return (int)$statement->fetchColumn();
     }
@@ -218,35 +199,35 @@ final class DoctrineDatabase extends Gateway
      */
     public function countPoliciesUsingSection($id)
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->expr->count(
-                $this->dbHandler->quoteColumn('id', 'ezpolicy_limitation')
-            )
-        )->from(
-            $this->dbHandler->quoteTable('ezpolicy_limitation'),
-            $this->dbHandler->quoteTable('ezpolicy_limitation_value')
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('id', 'ezpolicy_limitation'),
-                    $this->dbHandler->quoteColumn('limitation_id', 'ezpolicy_limitation_value')
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('identifier', 'ezpolicy_limitation'),
-                    $query->bindValue('Section', null, \PDO::PARAM_STR)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('value', 'ezpolicy_limitation_value'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select($this->dbPlatform->getCountExpression('l.id'))
+            ->from('ezpolicy_limitation', 'l')
+            ->join(
+                'l',
+                'ezpolicy_limitation_value',
+                'lv',
+                $expr->eq(
+                    'l.id',
+                    'lv.limitation_id'
                 )
             )
-        );
+            ->where(
+                $expr->eq(
+                    'l.identifier',
+                    $query->createPositionalParameter('Section', ParameterType::STRING)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'lv.value',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            )
+        ;
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return (int)$statement->fetchColumn();
+        return (int)$query->execute()->fetchColumn();
     }
 
     /**
@@ -258,30 +239,26 @@ final class DoctrineDatabase extends Gateway
      */
     public function countRoleAssignmentsUsingSection($id)
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->expr->count(
-                $this->dbHandler->quoteColumn('id', 'ezuser_role')
-            )
-        )->from(
-            $this->dbHandler->quoteTable('ezuser_role')
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('limit_identifier', 'ezuser_role'),
-                    $query->bindValue('Section', null, \PDO::PARAM_STR)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('limit_value', 'ezuser_role'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select($this->dbPlatform->getCountExpression('ur.id'))
+            ->from('ezuser_role', 'ur')
+            ->where(
+                $expr->eq(
+                    'ur.limit_identifier',
+                    $query->createPositionalParameter('Section', ParameterType::STRING)
                 )
             )
-        );
+            ->andWhere(
+                $expr->eq(
+                    'ur.limit_value',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            )
+        ;
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return (int)$statement->fetchColumn();
+        return (int)$query->execute()->fetchColumn();
     }
 
     /**
@@ -291,17 +268,17 @@ final class DoctrineDatabase extends Gateway
      */
     public function deleteSection($id)
     {
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable('ezsection')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($id, null, \PDO::PARAM_INT)
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete('ezsection')
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            );
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
     /**
@@ -312,19 +289,20 @@ final class DoctrineDatabase extends Gateway
      */
     public function assignSectionToContent($sectionId, $contentId)
     {
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezcontentobject')
-        )->set(
-            $this->dbHandler->quoteColumn('section_id'),
-            $query->bindValue($sectionId, null, \PDO::PARAM_INT)
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($contentId, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update('ezcontentobject')
+            ->set(
+                'section_id',
+                $query->createPositionalParameter($sectionId, ParameterType::INTEGER)
             )
-        );
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($contentId, ParameterType::INTEGER)
+                )
+            );
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 }
