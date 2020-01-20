@@ -12,3 +12,4 @@ composer.phar
 var/
 composer.lock
 .php_cs.cache
+.idea
