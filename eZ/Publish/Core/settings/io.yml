@@ -54,13 +54,13 @@ services:
     ezpublish.core.io.prefix_url_decorator:
         class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
         arguments:
-            - "%storage_dir%"
+            - '@eZ\Publish\Core\IO\IOConfigProvider'
 
     # used by legacy in Image Converter to decorate its own url
     ezpublish.core.io.image_fieldtype.legacy_url_decorator:
         class: eZ\Publish\Core\IO\UrlDecorator\Prefix
         arguments:
-            - "%storage_dir%"
+            - '@eZ\Publish\Core\IO\IOConfigProvider'
 
     ezpublish.core.io.image_fieldtype.legacy_url_redecorator:
         class: eZ\Publish\Core\IO\UrlRedecorator

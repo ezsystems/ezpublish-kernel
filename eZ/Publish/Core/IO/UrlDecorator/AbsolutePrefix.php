@@ -1,11 +1,11 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\IO\UrlDecorator;
 
 use eZ\Publish\Core\IO\UrlDecorator;
@@ -15,14 +15,11 @@ use eZ\Publish\Core\IO\UrlDecorator;
  */
 class AbsolutePrefix extends Prefix implements UrlDecorator
 {
-    /**
-     * Makes the prefix absolute.
-     *
-     * @param $prefix
-     */
-    public function setPrefix($prefix)
+    public function getPrefix(): string
     {
-        if ($prefix != '') {
+        $prefix = $this->ioConfigResolver->getLegacyUrlPrefix();
+
+        if ($prefix !== '') {
             $urlParts = parse_url($prefix);
 
             // Since PHP 5.4.7 parse_url will return host when url scheme is ommited.
@@ -34,6 +31,6 @@ class AbsolutePrefix extends Prefix implements UrlDecorator
             }
         }
 
-        $this->prefix = $prefix;
+        return $prefix;
     }
 }
