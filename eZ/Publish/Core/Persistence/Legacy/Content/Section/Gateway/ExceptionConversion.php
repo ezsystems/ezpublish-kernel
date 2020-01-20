@@ -11,14 +11,17 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 
-class ExceptionConversion extends Gateway
+/**
+ * @internal Internal exception conversion layer.
+ */
+final class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway
      */
-    protected $innerGateway;
+    private $innerGateway;
 
     /**
      * Creates a new exception conversion gateway around $innerGateway.
