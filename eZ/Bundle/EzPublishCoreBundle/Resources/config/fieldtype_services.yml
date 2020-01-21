@@ -62,7 +62,7 @@ services:
 
     # Image alias generator
     ezpublish.fieldType.ezimage.variation_service:
-        alias: ezpublish.image_alias.imagine.cache.alias_generator_decorator
+        alias: ezpublish.image_alias.imagine.alias_generator.image_asset
 
     ezpublish.fieldType.ezimage.io_service.published:
         parent: ezpublish.core.io.service

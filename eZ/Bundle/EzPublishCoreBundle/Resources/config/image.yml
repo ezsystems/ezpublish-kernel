@@ -110,9 +110,8 @@ services:
 
     ezpublish.image_alias.imagine.alias_generator.image_asset:
         class: 'eZ\Bundle\EzPublishCoreBundle\Imagine\ImageAsset\AliasGenerator'
-        decorates: 'ezpublish.image_alias.imagine.alias_generator'
         arguments:
-            - '@ezpublish.image_alias.imagine.alias_generator.image_asset.inner'
+            - '@ezpublish.image_alias.imagine.cache.alias_generator_decorator'
             - '@ezpublish.api.service.content'
             - '@eZ\Publish\Core\FieldType\ImageAsset\AssetMapper'
         public: false
