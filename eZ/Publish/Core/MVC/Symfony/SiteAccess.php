@@ -43,7 +43,7 @@ class SiteAccess extends ValueObject
     /**
      * The name of the provider from which Site Access comes.
      *
-     * @var string
+     * @var string|null
      */
     public $provider;
 
