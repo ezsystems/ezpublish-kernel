@@ -27,6 +27,7 @@
             -->
             <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
             <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
+            <directory>eZ/Publish/API/Repository/Tests/SearchService/</directory>
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
@@ -53,7 +54,6 @@
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceFulltextTest.php</file>
-            <file>eZ/Publish/API/Repository/Tests/SearchServiceFulltextEmbedTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTranslationLanguageFallbackTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceLocationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>

@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Tests;
+namespace eZ\Publish\API\Repository\Tests\SearchService;
 
 use eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -25,7 +28,7 @@ use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
  */
 class SearchServiceFulltextEmbedTest extends BaseTest
 {
-    private const SLAVE_ARTICLE_NAME = 'test1';
+    private const EMBEDDED_ARTICLE_NAME = 'test1';
 
     private static $createdIds = [];
 
@@ -36,7 +39,7 @@ class SearchServiceFulltextEmbedTest extends BaseTest
         $repository = $this->getRepository(false);
 
         if (false === $repository->getSearchService()->supports(SearchService::CAPABILITY_ADVANCED_FULLTEXT)) {
-            $this->markTestSkipped('Engine says it does not support advance fulltext format');
+            $this->markTestSkipped('Advanced FullText search is not supported by the current search engine');
         }
     }
 
@@ -45,12 +48,12 @@ class SearchServiceFulltextEmbedTest extends BaseTest
         $contentService = $this->getRepository()->getContentService();
         $baseArticleStruct = $this->prepareBaseArticleStruct();
 
-        $slaveArticleStruct = $this->fillSlaveArticleStruct(clone $baseArticleStruct);
-        $slaveArticleContent = $contentService->publishVersion(
-            $this->createContent($slaveArticleStruct)->versionInfo
+        $embeddedArticleStruct = $this->fillEmbeddedArticleStruct(clone $baseArticleStruct);
+        $embeddedArticleContent = $contentService->publishVersion(
+            $this->createContent($embeddedArticleStruct)->versionInfo
         );
 
-        $mainArticleStruct = $this->fillMainArticleStruct(clone $baseArticleStruct, $slaveArticleContent->id);
+        $mainArticleStruct = $this->fillMainArticleStruct(clone $baseArticleStruct, $embeddedArticleContent->id);
         $mainArticleContent = $contentService->publishVersion(
             $this->createContent($mainArticleStruct)->versionInfo
         );
@@ -58,7 +61,7 @@ class SearchServiceFulltextEmbedTest extends BaseTest
         $this->refreshSearch($this->getRepository());
 
         self::$createdIds = [
-            $slaveArticleContent->id,
+            $embeddedArticleContent->id,
             $mainArticleContent->id,
         ];
     }
@@ -71,7 +74,7 @@ class SearchServiceFulltextEmbedTest extends BaseTest
         $searchService = $this->getRepository()->getSearchService();
 
         $query = new Query([
-            'query' => new Criterion\FullText(self::SLAVE_ARTICLE_NAME),
+            'query' => new Criterion\FullText(self::EMBEDDED_ARTICLE_NAME),
         ]);
 
         $searchResult = $searchService->findContent($query);
@@ -88,7 +91,7 @@ class SearchServiceFulltextEmbedTest extends BaseTest
         $searchService = $this->getRepository()->getSearchService();
 
         $query = new LocationQuery([
-            'query' => new Criterion\FullText(self::SLAVE_ARTICLE_NAME),
+            'query' => new Criterion\FullText(self::EMBEDDED_ARTICLE_NAME),
         ]);
 
         $searchResult = $searchService->findLocations($query);
@@ -112,14 +115,14 @@ EOT
         $repository = $this->getRepository();
         $contentType = $repository->getContentTypeService()->loadContentTypeByIdentifier('article');
 
-        /** @var ContentCreateStruct $articleStruct */
+        /** @var \eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct $articleStruct */
         $articleStruct = $repository->getContentService()->newContentCreateStruct($contentType, 'eng-GB');
         $articleStruct->setField('intro', new RichTextValue($introDocument), 'eng-GB');
 
         return $articleStruct;
     }
 
-    private function fillSlaveArticleStruct(ContentCreateStruct $articleStruct): ContentCreateStruct
+    private function fillEmbeddedArticleStruct(ContentCreateStruct $articleStruct): ContentCreateStruct
     {
         $articleBodyDoc = new \DOMDocument();
         $articleBodyDoc->loadXML(
@@ -131,7 +134,7 @@ EOT
 EOT
         );
 
-        $articleStruct->setField('title', self::SLAVE_ARTICLE_NAME);
+        $articleStruct->setField('title', self::EMBEDDED_ARTICLE_NAME);
         $articleStruct->setField('body', new RichTextValue($articleBodyDoc), 'eng-GB');
 
         return $articleStruct;
