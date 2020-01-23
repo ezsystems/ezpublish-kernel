@@ -28,6 +28,15 @@ abstract class Gateway
     abstract public function setTable($name);
 
     /**
+     * Loads all list of aliases by given $locationId.
+     *
+     * @param int $locationId
+     *
+     * @return array
+     */
+    abstract public function loadAllLocationEntries($locationId);
+
+    /**
      * Loads list of aliases by given $locationId.
      *
      * @param mixed $locationId

@@ -20,6 +20,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as Languag
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use RuntimeException;
+use PDO;
 
 /**
  * UrlAlias Gateway.
@@ -99,6 +100,36 @@ class DoctrineDatabase extends Gateway
     public function setTable($name)
     {
         $this->table = $name;
+    }
+
+    /**
+     * Loads all list of aliases by given $locationId.
+     *
+     * @param int $locationId
+     * @return false|mixed
+     */
+    public function loadAllLocationEntries($locationId)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(...$this->columns[$this->table])
+            ->from($this->connection->quoteIdentifier($this->table))
+            ->where(
+                $query->expr()->andX(
+                    $query->expr()->eq(
+                        $this->connection->quoteIdentifier('action'),
+                        ':action'
+                    ),
+                    $query->expr()->eq(
+                        $this->connection->quoteIdentifier('is_original'),
+                        ':isOriginal'
+                    )
+                )
+            )
+            ->setParameter(':action', "eznode:{$locationId}", PDO::PARAM_STR)
+            ->setParameter(':isOriginal', 1, PDO::PARAM_INT);
+
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

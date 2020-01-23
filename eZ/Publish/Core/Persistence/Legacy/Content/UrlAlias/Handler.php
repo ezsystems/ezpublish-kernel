@@ -679,14 +679,15 @@ class Handler implements UrlAliasHandlerInterface
      * @param int $location1ParentId
      * @param int $location2Id
      * @param int $location2ParentId
+     * @throws NotFoundException
      */
     public function locationSwapped($location1Id, $location1ParentId, $location2Id, $location2ParentId)
     {
         $location1 = new SwappedLocationProperties($location1Id, $location1ParentId);
         $location2 = new SwappedLocationProperties($location2Id, $location2ParentId);
 
-        $location1->entries = $this->gateway->loadLocationEntries($location1Id);
-        $location2->entries = $this->gateway->loadLocationEntries($location2Id);
+        $location1->entries = $this->gateway->loadAllLocationEntries($location1Id);
+        $location2->entries = $this->gateway->loadAllLocationEntries($location2Id);
 
         $location1->mainLanguageId = $this->gateway->getLocationContentMainLanguageId($location1Id);
         $location2->mainLanguageId = $this->gateway->getLocationContentMainLanguageId($location2Id);
@@ -729,6 +730,12 @@ class Handler implements UrlAliasHandlerInterface
                 );
             }
         }
+
+        $languageMaskIds1 = $this->maskGenerator->extractLanguageIdsFromMask($contentInfo1['language_mask']);
+        $languageMaskIds2 = $this->maskGenerator->extractLanguageIdsFromMask($contentInfo2['language_mask']);
+
+        $this->internalPublishCustomUrlAliasForLocation($location1, $languageMaskIds1);
+        $this->internalPublishCustomUrlAliasForLocation($location2, $languageMaskIds2);
     }
 
     /**
@@ -1134,5 +1141,44 @@ class Handler implements UrlAliasHandlerInterface
         $aliasEntry['action_type'] = 'nop';
 
         $this->gateway->insertRow($aliasEntry);
+    }
+
+    /**
+     * Internal publish custom aliases method, accepting languages ID to set correct language mask
+     * new alias ID (used when swapping Locations).
+     *
+     * @param SwappedLocationProperties $location
+     * @param array $languageMaskIds
+     */
+    private function internalPublishCustomUrlAliasForLocation(SwappedLocationProperties $location, array $languageMaskIds)
+    {
+        foreach ($location->entries as $entry) {
+            if ($entry['is_alias'] === 0) {
+                continue;
+            }
+
+            $mask = $location->isAlwaysAvailable ? 1 : 0;
+            $maskLangAlias = $this->maskGenerator->extractLanguageIdsFromMask($entry['lang_mask']);
+            foreach ($languageMaskIds as $langId) {
+                if (in_array($langId, $maskLangAlias)) {
+                    $mask |= $langId;
+                }
+            }
+
+            if ($mask <= 1) {
+                continue;
+            }
+
+            $this->gateway->updateRow(
+                $entry['parent'],
+                $entry['text_md5'],
+                [
+                    'id' => $entry['id'],
+                    'is_original' => 1,
+                    'is_alias' => 1,
+                    'lang_mask' => $mask
+                ]
+            );
+        }
     }
 }

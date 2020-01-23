@@ -39,6 +39,15 @@ class ExceptionConversion extends Gateway
         }
     }
 
+    public function loadAllLocationEntries($locationId)
+    {
+        try {
+            return $this->innerGateway->loadAllLocationEntries($locationId);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
+        }
+    }
+
     public function loadLocationEntries($locationId, $custom = false, $languageId = false)
     {
         try {
