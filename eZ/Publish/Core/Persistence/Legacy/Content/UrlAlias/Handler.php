@@ -1176,7 +1176,7 @@ class Handler implements UrlAliasHandlerInterface
                     'id' => $entry['id'],
                     'is_original' => 1,
                     'is_alias' => 1,
-                    'lang_mask' => $mask
+                    'lang_mask' => $mask,
                 ]
             );
         }
