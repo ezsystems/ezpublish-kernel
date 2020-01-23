@@ -17,7 +17,7 @@ Changes affecting version compatibility with former or future versions.
 * The following configuration nodes are not available anymore:
     * `ezpublish.<scope>.ezpage.*`
     * `ezpublish.<scope>.block_view.*`
-    * `ezpublish.siteaccess.relation_map` is replaced by `getSiteAccessesRelation` method from `eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessService` 
+    * `ezpublish.siteaccess.relation_map` has been replaced by `getSiteAccessesRelation` method from `eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessService` 
     
 * REST Client has been dropped.
 
