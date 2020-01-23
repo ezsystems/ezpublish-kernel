@@ -35,7 +35,7 @@ abstract class SiteAccessConfigResolver implements VersatileScopeInterface, Site
         $this->defaultNamespace = $defaultNamespace;
     }
 
-    public function hasParameter(string $paramName, ?string $namespace = null, ?string $scope = null): bool
+    final public function hasParameter(string $paramName, ?string $namespace = null, ?string $scope = null): bool
     {
         [$namespace, $scope] = $this->resolveNamespaceAndScope($namespace, $scope);
         if (!$this->isSiteAccessScope($scope)) {
@@ -47,10 +47,10 @@ abstract class SiteAccessConfigResolver implements VersatileScopeInterface, Site
             return false;
         }
 
-        return $this->doHasParameter($siteAccess, $namespace, $scope);
+        return $this->resolverHasParameter($siteAccess, $namespace, $scope);
     }
 
-    public function getParameter(string $paramName, ?string $namespace = null, ?string $scope = null)
+    final public function getParameter(string $paramName, ?string $namespace = null, ?string $scope = null)
     {
         [$namespace, $scope] = $this->resolveNamespaceAndScope($namespace, $scope);
 
@@ -63,7 +63,7 @@ abstract class SiteAccessConfigResolver implements VersatileScopeInterface, Site
             throw new ParameterNotFoundException($paramName, $namespace, [$scope]);
         }
 
-        return $this->doGetParameter($siteAccess, $paramName, $namespace);
+        return $this->getParameterFromResolver($siteAccess, $paramName, $namespace);
     }
 
     public function getDefaultNamespace(): string
@@ -119,7 +119,7 @@ abstract class SiteAccessConfigResolver implements VersatileScopeInterface, Site
         return "$namespace.$scope.$paramName";
     }
 
-    abstract protected function doHasParameter(SiteAccess $siteAccess, string $paramName, string $namespace): bool;
+    abstract protected function resolverHasParameter(SiteAccess $siteAccess, string $paramName, string $namespace): bool;
 
-    abstract protected function doGetParameter(SiteAccess $siteAccess, string $paramName, string $namespace);
+    abstract protected function getParameterFromResolver(SiteAccess $siteAccess, string $paramName, string $namespace);
 }

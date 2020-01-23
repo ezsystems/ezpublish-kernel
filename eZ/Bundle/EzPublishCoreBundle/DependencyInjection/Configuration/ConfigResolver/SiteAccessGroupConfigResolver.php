@@ -21,7 +21,7 @@ class SiteAccessGroupConfigResolver extends SiteAccessConfigResolver
 {
     use ContainerAwareTrait;
 
-    protected function doHasParameter(SiteAccess $siteAccess, string $paramName, string $namespace): bool
+    protected function resolverHasParameter(SiteAccess $siteAccess, string $paramName, string $namespace): bool
     {
         foreach ($siteAccess->groups as $group) {
             $groupScopeParamName = $this->resolveScopeRelativeParamName($paramName, $namespace, $group->getName());
@@ -33,7 +33,7 @@ class SiteAccessGroupConfigResolver extends SiteAccessConfigResolver
         return false;
     }
 
-    protected function doGetParameter(SiteAccess $siteAccess, string $paramName, string $namespace)
+    protected function getParameterFromResolver(SiteAccess $siteAccess, string $paramName, string $namespace)
     {
         $triedScopes = [];
 

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
@@ -18,14 +22,14 @@ class StaticSiteAccessConfigResolver extends SiteAccessConfigResolver
 {
     use ContainerAwareTrait;
 
-    protected function doHasParameter(SiteAccess $siteAccess, string $paramName, string $namespace): bool
+    protected function resolverHasParameter(SiteAccess $siteAccess, string $paramName, string $namespace): bool
     {
         return $this->container->hasParameter(
             $this->resolveScopeRelativeParamName($paramName, $namespace, $siteAccess->name)
         );
     }
 
-    protected function doGetParameter(SiteAccess $siteAccess, string $paramName, string $namespace)
+    protected function getParameterFromResolver(SiteAccess $siteAccess, string $paramName, string $namespace)
     {
         $scopeRelativeParamName = $this->getScopeRelativeParamName($paramName, $namespace, $siteAccess->name);
         if ($this->container->hasParameter($scopeRelativeParamName)) {

@@ -13,9 +13,6 @@ use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-/**
- * @property-read \Symfony\Component\DependencyInjection\ContainerInterface $container
- */
 abstract class ContainerConfigResolver implements ConfigResolverInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
