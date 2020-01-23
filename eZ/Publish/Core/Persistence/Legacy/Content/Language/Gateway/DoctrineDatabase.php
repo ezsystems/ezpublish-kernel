@@ -152,9 +152,7 @@ final class DoctrineDatabase extends Gateway
 
     public function loadAllLanguagesData(): array
     {
-        $query = $this->createFindQuery();
-
-        return $query->execute()->fetchAll();
+        return $this->createFindQuery()->execute()->fetchAll();
     }
 
     public function deleteLanguage(int $id): void
