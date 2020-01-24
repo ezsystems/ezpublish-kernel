@@ -10,7 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
@@ -87,7 +87,7 @@ class RepositoryFactory implements ContainerAwareInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashService,
         ThumbnailStrategy $thumbnailStrategy,
-        ProxyDomainMapperFactory $proxyDomainMapperFactory
+        ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory
     ) {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 

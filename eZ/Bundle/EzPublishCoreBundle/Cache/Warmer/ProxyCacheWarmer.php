@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\User\User;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory;
+use eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 final class ProxyCacheWarmer implements CacheWarmerInterface

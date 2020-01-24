@@ -38,7 +38,7 @@ class DomainMapperTest extends BaseServiceMockTest
     private const EXAMPLE_CREATOR_ID = 23;
 
     /**
-     * @covers       \eZ\Publish\Core\Repository\Helper\DomainMapper::buildVersionInfoDomainObject
+     * @covers \eZ\Publish\Core\Repository\Helper\DomainMapper::buildVersionInfoDomainObject
      * @dataProvider providerForBuildVersionInfo
      */
     public function testBuildVersionInfo(SPIVersionInfo $spiVersionInfo)

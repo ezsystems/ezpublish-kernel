@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
-use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
@@ -76,7 +76,7 @@ class RepositoryFactory implements ContainerAwareInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashService,
         ThumbnailStrategy $thumbnailStrategy,
-        ProxyDomainMapperFactory $proxyDomainMapperFactory
+        ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory
     ) {
         $repository = new $this->repositoryClass(
             $persistenceHandler,

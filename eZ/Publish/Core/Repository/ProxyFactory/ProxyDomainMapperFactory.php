@@ -14,7 +14,7 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 /**
  * @internal
  */
-class ProxyDomainMapperFactory
+final class ProxyDomainMapperFactory implements ProxyDomainMapperFactoryInterface
 {
     /** @var \ProxyManager\Factory\LazyLoadingValueHolderFactory */
     private $lazyLoadingValueHolderFactory;

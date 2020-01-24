@@ -8,7 +8,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
-use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
@@ -258,7 +258,7 @@ class Repository implements RepositoryInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashGenerator,
         ThumbnailStrategy $thumbnailStrategy,
-        ProxyDomainMapperFactory $proxyDomainMapperFactory,
+        ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
         array $serviceSettings = [],
         LoggerInterface $logger = null
     ) {
