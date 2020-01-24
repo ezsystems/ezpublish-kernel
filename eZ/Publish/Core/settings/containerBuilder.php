@@ -1,10 +1,6 @@
 <?php
 
 /**
- * File generates service container builder instance.
- *
- * Expects global $installDir to be set by caller
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
