@@ -255,7 +255,7 @@ class DoctrineStorage extends Gateway
             foreach (array_keys($keywordsToInsert) as $keyword) {
                 $insertQuery->setParameter(':keyword', $keyword);
                 $insertQuery->execute();
-                $keywordIdMap[$keyword] = $this->connection->lastInsertId(
+                $keywordIdMap[$keyword] = (int)$this->connection->lastInsertId(
                     $this->getSequenceName(self::KEYWORD_TABLE, 'id')
                 );
             }

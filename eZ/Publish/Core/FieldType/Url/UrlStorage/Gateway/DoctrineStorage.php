@@ -124,7 +124,7 @@ class DoctrineStorage extends Gateway
 
         $query->execute();
 
-        return $this->connection->lastInsertId(
+        return (int)$this->connection->lastInsertId(
             $this->getSequenceName(self::URL_TABLE, 'id')
         );
     }

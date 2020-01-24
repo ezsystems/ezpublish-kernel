@@ -709,7 +709,7 @@ class DoctrineDatabase extends Gateway
         }
         $query->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId($sequence);
+        return (int)$this->dbHandler->lastInsertId($sequence);
     }
 
     /**

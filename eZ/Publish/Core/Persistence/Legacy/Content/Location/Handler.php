@@ -251,8 +251,8 @@ class Handler implements BaseLocationHandler
             // Copy content
             if (!isset($contentMap[$child['contentobject_id']])) {
                 $content = $this->contentHandler->copy(
-                    $child['contentobject_id'],
-                    $child['contentobject_version'],
+                    (int)$child['contentobject_id'],
+                    (int)$child['contentobject_version'],
                     $newOwnerId
                 );
 
