@@ -158,7 +158,7 @@ class DoctrineDatabase extends Gateway
         );
         $q->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId(
+        return (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName('ezcontentclassgroup', 'id')
         );
     }
@@ -353,14 +353,15 @@ class DoctrineDatabase extends Gateway
         $q->prepare()->execute();
 
         if (empty($typeId)) {
-            $typeId = $this->dbHandler->lastInsertId(
+            $typeId = (int)$this->dbHandler->lastInsertId(
                 $this->dbHandler->getSequenceName('ezcontentclass', 'id')
             );
         }
 
         $this->insertTypeNameData($typeId, $type->status, $type->name);
 
-        return $typeId;
+        // $typeId passed as the argument could still be non-int
+        return (int)$typeId;
     }
 
     /**
@@ -614,9 +615,9 @@ class DoctrineDatabase extends Gateway
 
         $q->prepare()->execute();
 
-        $fieldDefinitionId = $fieldDefinition->id ?? $this->dbHandler->lastInsertId(
+        $fieldDefinitionId = (int)($fieldDefinition->id ?? $this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName('ezcontentclass_attribute', 'id')
-        );
+        ));
 
         foreach ($storageFieldDef->multilingualData as $multilingualData) {
             $this->insertFieldDefinitionMultilingualData($fieldDefinitionId, $multilingualData, $status);

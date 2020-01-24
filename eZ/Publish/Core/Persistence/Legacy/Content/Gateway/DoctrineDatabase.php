@@ -186,7 +186,7 @@ class DoctrineDatabase extends Gateway
 
         $q->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId(
+        return (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName('ezcontentobject', 'id')
         );
     }
@@ -275,7 +275,7 @@ class DoctrineDatabase extends Gateway
 
         $q->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId(
+        return (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName('ezcontentobject_version', 'id')
         );
     }
@@ -673,7 +673,7 @@ HEREDOC;
 
         $q->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId(
+        return (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName('ezcontentobject_attribute', 'id')
         );
     }
@@ -742,7 +742,7 @@ HEREDOC;
             $q->bindValue($value->sortKeyInt, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('sort_key_string'),
-            $q->bindValue(mb_substr($value->sortKeyString, 0, 255))
+            $q->bindValue(mb_substr((string)$value->sortKeyString, 0, 255))
         )->set(
             $this->dbHandler->quoteColumn('language_id'),
             $q->bindValue(
@@ -823,7 +823,7 @@ HEREDOC;
             $q->bindValue($value->sortKeyInt, null, \PDO::PARAM_INT)
         )->set(
             $this->dbHandler->quoteColumn('sort_key_string'),
-            $q->bindValue(mb_substr($value->sortKeyString, 0, 255))
+            $q->bindValue(mb_substr((string)$value->sortKeyString, 0, 255))
         );
     }
 
@@ -1310,7 +1310,7 @@ HEREDOC;
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return array_map('intval', $statement->fetchAll(\PDO::FETCH_COLUMN));
     }
 
     /**
@@ -2097,7 +2097,7 @@ HEREDOC;
 
         $q->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId(
+        return (int)$this->dbHandler->lastInsertId(
             $this->dbHandler->getSequenceName('ezcontentobject_link', 'id')
         );
     }
