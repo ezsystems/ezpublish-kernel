@@ -47,7 +47,7 @@ abstract class SiteAccessConfigResolver implements VersatileScopeInterface, Site
             return false;
         }
 
-        return $this->resolverHasParameter($siteAccess, $namespace, $scope);
+        return $this->resolverHasParameter($siteAccess, $paramName, $namespace);
     }
 
     final public function getParameter(string $paramName, ?string $namespace = null, ?string $scope = null)
