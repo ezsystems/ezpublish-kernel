@@ -6,10 +6,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
 /**
  * @internal Gateway implementation is considered internal. Use Persistence Section Handler instead.
@@ -18,14 +18,6 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
  */
 final class DoctrineDatabase extends Gateway
 {
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    private $dbHandler;
-
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
@@ -35,13 +27,11 @@ final class DoctrineDatabase extends Gateway
     /**
      * Creates a new DoctrineDatabase Section Gateway.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
-        $this->connection = $dbHandler->getConnection();
+        $this->connection = $connection;
         $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
