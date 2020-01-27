@@ -180,8 +180,7 @@ class HandlerContentSortTest extends AbstractTestCase
             },
             $result->searchHits
         );
-        sort($ids);
-        $this->assertEquals(
+        $this->assertEqualsCanonicalizing(
             [4, 10, 11, 12, 13, 14, 42, 226],
             $ids
         );
@@ -281,8 +280,7 @@ class HandlerContentSortTest extends AbstractTestCase
         foreach ($idMapSet as $idSet) {
             $contentIdsSubset = array_slice($contentIds, $index, $count = count($idSet));
             $index += $count;
-            sort($contentIdsSubset);
-            $this->assertEquals(
+            $this->assertEqualsCanonicalizing(
                 $idSet,
                 $contentIdsSubset
             );
@@ -335,8 +333,7 @@ class HandlerContentSortTest extends AbstractTestCase
         foreach ($idMapSet as $idSet) {
             $contentIdsSubset = array_slice($contentIds, $index, $count = count($idSet));
             $index += $count;
-            sort($contentIdsSubset);
-            $this->assertEquals(
+            $this->assertEqualsCanonicalizing(
                 $idSet,
                 $contentIdsSubset
             );
@@ -433,8 +430,7 @@ class HandlerContentSortTest extends AbstractTestCase
         foreach ($idMapSet as $idSet) {
             $contentIdsSubset = array_slice($contentIds, $index, $count = count($idSet));
             $index += $count;
-            sort($contentIdsSubset);
-            $this->assertEquals(
+            $this->assertEqualsCanonicalizing(
                 $idSet,
                 $contentIdsSubset
             );

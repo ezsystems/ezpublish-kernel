@@ -63,7 +63,7 @@ class URLCheckerTest extends TestCase
                 ->expects($this->once())
                 ->method('validate')
                 ->willReturnCallback(function (array $urls) use ($scheme, $groups) {
-                    $this->assertEqualsArrays($groups[$scheme], $urls);
+                    $this->assertEqualsCanonicalizing($groups[$scheme], $urls);
                 });
         }
 
@@ -98,7 +98,7 @@ class URLCheckerTest extends TestCase
                 ->expects($this->once())
                 ->method('validate')
                 ->willReturnCallback(function (array $urls) use ($scheme, $groups) {
-                    $this->assertEqualsArrays($groups[$scheme], $urls);
+                    $this->assertEqualsCanonicalizing($groups[$scheme], $urls);
                 });
         }
 
@@ -106,14 +106,6 @@ class URLCheckerTest extends TestCase
 
         $urlChecker = $this->createUrlChecker();
         $urlChecker->check($query);
-    }
-
-    protected function assertEqualsArrays(array $expected, array $actual, $message = '')
-    {
-        sort($expected);
-        sort($actual);
-
-        $this->assertEquals($expected, $actual, $message);
     }
 
     private function configureUrlHandlerRegistry(array $schemes)
