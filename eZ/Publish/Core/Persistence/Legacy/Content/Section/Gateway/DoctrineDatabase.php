@@ -35,14 +35,6 @@ final class DoctrineDatabase extends Gateway
         $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
-    /**
-     * Inserts a new section with $name and $identifier.
-     *
-     * @param string $name
-     * @param string $identifier
-     *
-     * @return int The ID of the new section
-     */
     public function insertSection(string $name, string $identifier): int
     {
         $query = $this->connection->createQueryBuilder();
@@ -60,13 +52,6 @@ final class DoctrineDatabase extends Gateway
         return (int)$this->connection->lastInsertId(Gateway::CONTENT_SECTION_SEQ);
     }
 
-    /**
-     * Updates section with $id to have $name and $identifier.
-     *
-     * @param int $id
-     * @param string $name
-     * @param string $identifier
-     */
     public function updateSection(int $id, string $name, string $identifier): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -84,13 +69,6 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Loads data for section with $id.
-     *
-     * @param int $id
-     *
-     * @return string[][]
-     */
     public function loadSectionData(int $id): array
     {
         $query = $this->connection->createQueryBuilder();
@@ -109,11 +87,6 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads data for all sections.
-     *
-     * @return string[][]
-     */
     public function loadAllSectionData(): array
     {
         $query = $this->connection->createQueryBuilder();
@@ -126,13 +99,6 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads data for section with $identifier.
-     *
-     * @param string $identifier
-     *
-     * @return string[][]
-     */
     public function loadSectionDataByIdentifier(string $identifier): array
     {
         $query = $this->connection->createQueryBuilder();
@@ -154,13 +120,6 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Counts the number of content objects assigned to section with $id.
-     *
-     * @param int $id
-     *
-     * @return int
-     */
     public function countContentObjectsInSection(int $id): int
     {
         $query = $this->connection->createQueryBuilder();
@@ -180,13 +139,6 @@ final class DoctrineDatabase extends Gateway
         return (int)$statement->fetchColumn();
     }
 
-    /**
-     * Counts the number of role policies using section with $id in their limitations.
-     *
-     * @param int $id
-     *
-     * @return int
-     */
     public function countPoliciesUsingSection(int $id): int
     {
         $query = $this->connection->createQueryBuilder();
@@ -220,13 +172,6 @@ final class DoctrineDatabase extends Gateway
         return (int)$query->execute()->fetchColumn();
     }
 
-    /**
-     * Counts the number of role assignments using section with $id in their limitations.
-     *
-     * @param int $id
-     *
-     * @return int
-     */
     public function countRoleAssignmentsUsingSection(int $id): int
     {
         $query = $this->connection->createQueryBuilder();
@@ -251,11 +196,6 @@ final class DoctrineDatabase extends Gateway
         return (int)$query->execute()->fetchColumn();
     }
 
-    /**
-     * Deletes the Section with $id.
-     *
-     * @param int $id
-     */
     public function deleteSection(int $id): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -271,12 +211,6 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Inserts the assignment of $contentId to $sectionId.
-     *
-     * @param int $sectionId
-     * @param int $contentId
-     */
     public function assignSectionToContent(int $sectionId, int $contentId): void
     {
         $query = $this->connection->createQueryBuilder();
