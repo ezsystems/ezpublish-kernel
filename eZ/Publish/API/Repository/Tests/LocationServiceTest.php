@@ -1515,8 +1515,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the swapLocation() method with custom aliases.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
-     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     * @covers \eZ\Publish\API\Repository\LocationService::swapLocation
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
@@ -1534,7 +1533,7 @@ class LocationServiceTest extends BaseTest
         $location1 = $locationService->loadLocation($folder1->contentInfo->mainLocationId);
         $location2 = $locationService->loadLocation($folder2->contentInfo->mainLocationId);
 
-        $urlAliasService->createUrlAlias($location1, '/custom-location1', 'eng-GB', false, true);
+        $urlAlias = $urlAliasService->createUrlAlias($location1, '/custom-location1', 'eng-GB', false, true);
         $urlAliasService->createUrlAlias($location1, '/custom-location1', 'pol-Pl', false, true);
         $urlAliasService->createUrlAlias($location2, '/custom-location2', 'eng-GB', false, true);
         $location1UrlAliases = $urlAliasService->listLocationAliases($location1);
@@ -1543,26 +1542,18 @@ class LocationServiceTest extends BaseTest
         $locationService->swapLocation($location1, $location2);
         $location1 = $locationService->loadLocation($location1->contentInfo->mainLocationId);
         $location2 = $locationService->loadLocation($location2->contentInfo->mainLocationId);
+
         $location1UrlAliasesAfterSwap = $urlAliasService->listLocationAliases($location1);
         $location2UrlAliasesAfterSwap = $urlAliasService->listLocationAliases($location2);
 
-        $urlAlias = new URLAlias([
-            'id' => $location1UrlAliases[0]->id,
-            'type' => $location1UrlAliases[0]->type,
-            'destination' => $location1UrlAliases[0]->destination,
-            'path' => $location1UrlAliases[0]->path,
-            'languageCodes' => ['eng-GB'],
-            'alwaysAvailable' => $location1UrlAliases[0]->alwaysAvailable,
-            'isHistory' => $location1UrlAliases[0]->isHistory,
-            'isCustom' => $location1UrlAliases[0]->isCustom,
-            'forward' => $location1UrlAliases[0]->forward,
-        ]);
+        $keyUrlAlias = array_search($urlAlias->id, array_column($location1UrlAliasesAfterSwap, 'id'));
 
         self::assertEquals($folder1->id, $location2->contentInfo->id);
         self::assertEquals($folder2->id, $location1->contentInfo->id);
         self::assertNotEquals($location1UrlAliases, $location1UrlAliasesAfterSwap);
         self::assertEquals($location2UrlAliases, $location2UrlAliasesAfterSwap);
-        self::assertEquals([$urlAlias], $location1UrlAliasesAfterSwap);
+        self::assertEquals(['eng-GB'], $location1UrlAliasesAfterSwap[$keyUrlAlias]->languageCodes);
+
     }
 
     /**

@@ -30,11 +30,8 @@ abstract class Gateway
     /**
      * Loads all list of aliases by given $locationId.
      *
-     * @param int $locationId
-     *
-     * @return array
      */
-    abstract public function loadAllLocationEntries($locationId);
+    abstract public function loadAllLocationEntries(int $locationId): array;
 
     /**
      * Loads list of aliases by given $locationId.

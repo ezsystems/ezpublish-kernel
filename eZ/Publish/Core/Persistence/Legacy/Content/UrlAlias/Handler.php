@@ -679,7 +679,7 @@ class Handler implements UrlAliasHandlerInterface
      * @param int $location1ParentId
      * @param int $location2Id
      * @param int $location2ParentId
-     * @throws NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function locationSwapped($location1Id, $location1ParentId, $location2Id, $location2ParentId)
     {
@@ -731,11 +731,8 @@ class Handler implements UrlAliasHandlerInterface
             }
         }
 
-        $languageMaskIds1 = $this->maskGenerator->extractLanguageIdsFromMask($contentInfo1['language_mask']);
-        $languageMaskIds2 = $this->maskGenerator->extractLanguageIdsFromMask($contentInfo2['language_mask']);
-
-        $this->internalPublishCustomUrlAliasForLocation($location1, $languageMaskIds1);
-        $this->internalPublishCustomUrlAliasForLocation($location2, $languageMaskIds2);
+        $this->internalPublishCustomUrlAliasForLocation($location1, $contentInfo1['language_mask']);
+        $this->internalPublishCustomUrlAliasForLocation($location2, $contentInfo2['language_mask']);
     }
 
     /**
@@ -1144,36 +1141,28 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
-     * Internal publish custom aliases method, accepting languages ID to set correct language mask
+     * Internal publish custom aliases method, accepting language mask to set correct language mask on url aliases
      * new alias ID (used when swapping Locations).
      *
-     * @param SwappedLocationProperties $location
-     * @param array $languageMaskIds
      */
-    private function internalPublishCustomUrlAliasForLocation(SwappedLocationProperties $location, array $languageMaskIds)
+    private function internalPublishCustomUrlAliasForLocation(SwappedLocationProperties $location, int $languageMask)
     {
         foreach ($location->entries as $entry) {
-            if ($entry['is_alias'] === 0) {
+            if ((int)$entry['is_alias'] === 0) {
                 continue;
             }
 
-            $mask = $location->isAlwaysAvailable ? 1 : 0;
-            $maskLangAlias = $this->maskGenerator->extractLanguageIdsFromMask($entry['lang_mask']);
-            foreach ($languageMaskIds as $langId) {
-                if (in_array($langId, $maskLangAlias)) {
-                    $mask |= $langId;
-                }
-            }
+            $mask = (int)$entry['lang_mask'] & $languageMask;
 
             if ($mask <= 1) {
                 continue;
             }
 
             $this->gateway->updateRow(
-                $entry['parent'],
+                (int)$entry['parent'],
                 $entry['text_md5'],
                 [
-                    'id' => $entry['id'],
+                    'id' => (int)$entry['id'],
                     'is_original' => 1,
                     'is_alias' => 1,
                     'lang_mask' => $mask,

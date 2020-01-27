@@ -39,7 +39,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadAllLocationEntries($locationId)
+    public function loadAllLocationEntries(int $locationId): array
     {
         try {
             return $this->innerGateway->loadAllLocationEntries($locationId);
