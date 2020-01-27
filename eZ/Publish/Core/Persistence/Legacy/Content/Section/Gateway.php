@@ -14,6 +14,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Section;
 abstract class Gateway
 {
     public const CONTENT_SECTION_SEQ = 'ezsection_id_seq';
+    public const CONTENT_SECTION_TABLE = 'ezsection';
 
     /**
      * Inserts a new section with $name and $identifier.
