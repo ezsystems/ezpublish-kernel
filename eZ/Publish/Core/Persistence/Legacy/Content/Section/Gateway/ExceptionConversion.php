@@ -33,7 +33,7 @@ final class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    public function insertSection($name, $identifier)
+    public function insertSection(string $name, string $identifier): int
     {
         try {
             return $this->innerGateway->insertSection($name, $identifier);
@@ -42,16 +42,16 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function updateSection($id, $name, $identifier)
+    public function updateSection(int $id, string $name, string $identifier): void
     {
         try {
-            return $this->innerGateway->updateSection($id, $name, $identifier);
+            $this->innerGateway->updateSection($id, $name, $identifier);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function loadSectionData($id)
+    public function loadSectionData(int $id): array
     {
         try {
             return $this->innerGateway->loadSectionData($id);
@@ -60,7 +60,7 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadAllSectionData()
+    public function loadAllSectionData(): array
     {
         try {
             return $this->innerGateway->loadAllSectionData();
@@ -69,7 +69,7 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadSectionDataByIdentifier($identifier)
+    public function loadSectionDataByIdentifier(string $identifier): array
     {
         try {
             return $this->innerGateway->loadSectionDataByIdentifier($identifier);
@@ -78,7 +78,7 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function countContentObjectsInSection($id)
+    public function countContentObjectsInSection(int $id): int
     {
         try {
             return $this->innerGateway->countContentObjectsInSection($id);
@@ -87,7 +87,7 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function countPoliciesUsingSection($id)
+    public function countPoliciesUsingSection(int $id): int
     {
         try {
             return $this->innerGateway->countPoliciesUsingSection($id);
@@ -96,7 +96,7 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function countRoleAssignmentsUsingSection($id)
+    public function countRoleAssignmentsUsingSection(int $id): int
     {
         try {
             return $this->innerGateway->countRoleAssignmentsUsingSection($id);
@@ -105,19 +105,19 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function deleteSection($id)
+    public function deleteSection(int $id): void
     {
         try {
-            return $this->innerGateway->deleteSection($id);
+            $this->innerGateway->deleteSection($id);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function assignSectionToContent($sectionId, $contentId)
+    public function assignSectionToContent(int $sectionId, int $contentId): void
     {
         try {
-            return $this->innerGateway->assignSectionToContent($sectionId, $contentId);
+            $this->innerGateway->assignSectionToContent($sectionId, $contentId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }

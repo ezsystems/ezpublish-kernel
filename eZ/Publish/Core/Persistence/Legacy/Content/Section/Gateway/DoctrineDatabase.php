@@ -43,7 +43,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return int The ID of the new section
      */
-    public function insertSection($name, $identifier)
+    public function insertSection(string $name, string $identifier): int
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -67,7 +67,7 @@ final class DoctrineDatabase extends Gateway
      * @param string $name
      * @param string $identifier
      */
-    public function updateSection($id, $name, $identifier)
+    public function updateSection(int $id, string $name, string $identifier): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -91,7 +91,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return string[][]
      */
-    public function loadSectionData($id)
+    public function loadSectionData(int $id): array
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -114,7 +114,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return string[][]
      */
-    public function loadAllSectionData()
+    public function loadAllSectionData(): array
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -129,11 +129,11 @@ final class DoctrineDatabase extends Gateway
     /**
      * Loads data for section with $identifier.
      *
-     * @param int $identifier
+     * @param string $identifier
      *
      * @return string[][]
      */
-    public function loadSectionDataByIdentifier($identifier)
+    public function loadSectionDataByIdentifier(string $identifier): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(
@@ -161,7 +161,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return int
      */
-    public function countContentObjectsInSection($id)
+    public function countContentObjectsInSection(int $id): int
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(
@@ -187,7 +187,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return int
      */
-    public function countPoliciesUsingSection($id)
+    public function countPoliciesUsingSection(int $id): int
     {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
@@ -227,7 +227,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return int
      */
-    public function countRoleAssignmentsUsingSection($id)
+    public function countRoleAssignmentsUsingSection(int $id): int
     {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
@@ -256,7 +256,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @param int $id
      */
-    public function deleteSection($id)
+    public function deleteSection(int $id): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -277,7 +277,7 @@ final class DoctrineDatabase extends Gateway
      * @param int $sectionId
      * @param int $contentId
      */
-    public function assignSectionToContent($sectionId, $contentId)
+    public function assignSectionToContent(int $sectionId, int $contentId): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
