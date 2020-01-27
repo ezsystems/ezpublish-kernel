@@ -39,7 +39,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->insert('ezsection')
+            ->insert(self::CONTENT_SECTION_TABLE)
             ->values(
                 [
                     'name' => $query->createPositionalParameter($name),
@@ -56,7 +56,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezsection')
+            ->update(self::CONTENT_SECTION_TABLE)
             ->set('name', $query->createPositionalParameter($name))
             ->set('identifier', $query->createPositionalParameter($identifier))
             ->where(
@@ -74,7 +74,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $query
             ->select(['id', 'identifier', 'name'])
-            ->from('ezsection')
+            ->from(self::CONTENT_SECTION_TABLE)
             ->where(
                 $query->expr()->eq(
                     'id',
@@ -92,7 +92,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $query
             ->select(['id', 'identifier', 'name'])
-            ->from('ezsection');
+            ->from(self::CONTENT_SECTION_TABLE);
 
         $statement = $query->execute();
 
@@ -107,7 +107,7 @@ final class DoctrineDatabase extends Gateway
             'identifier',
             'name'
         )->from(
-            'ezsection'
+            self::CONTENT_SECTION_TABLE
         )->where(
             $query->expr()->eq(
                 'identifier',
@@ -200,7 +200,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->delete('ezsection')
+            ->delete(self::CONTENT_SECTION_TABLE)
             ->where(
                 $query->expr()->eq(
                     'id',
