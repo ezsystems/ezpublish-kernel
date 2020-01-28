@@ -26,8 +26,12 @@ use PDO;
 
 /**
  * Location gateway implementation using the Doctrine database.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence Location Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
@@ -43,14 +47,14 @@ class DoctrineDatabase extends Gateway
     protected $handler;
 
     /** @var \Doctrine\DBAL\Connection */
-    protected $connection;
+    private $connection;
 
     /**
      * Language mask generator.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
-    protected $languageMaskGenerator;
+    private $languageMaskGenerator;
 
     /**
      * Construct from database handler.
@@ -230,7 +234,7 @@ class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\Core\Persistence\Database\Query $query
      * @param string $rootLocationId
      */
-    protected function applySubtreeLimitation(DatabaseQuery $query, $rootLocationId)
+    private function applySubtreeLimitation(DatabaseQuery $query, $rootLocationId)
     {
         $query->where(
             $query->expr->like(
@@ -1259,7 +1263,7 @@ class DoctrineDatabase extends Gateway
      * @param mixed $contentId
      * @param int $status
      */
-    protected function setContentStatus($contentId, $status)
+    private function setContentStatus($contentId, $status)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
