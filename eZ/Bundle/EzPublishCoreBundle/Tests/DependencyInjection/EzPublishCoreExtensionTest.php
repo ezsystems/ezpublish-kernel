@@ -108,23 +108,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 $groupsBySiteaccess[$member][] = $groupName;
             }
         }
-        $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups_by_siteaccess', $groupsBySiteaccess);
-
-        $relatedSiteAccesses = ['ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin'];
-        $this->assertContainerBuilderHasParameter(
-            'ezpublish.siteaccess.relation_map',
-            [
-                // Empty string is the default repository name
-                '' => [
-                    // 2 is the default rootLocationId
-                    2 => $relatedSiteAccesses,
-                ],
-            ]
-        );
-
-        $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site.related_siteaccesses', $relatedSiteAccesses);
-        $this->assertContainerBuilderHasParameter('ezsettings.eng.related_siteaccesses', $relatedSiteAccesses);
-        $this->assertContainerBuilderHasParameter('ezsettings.fre.related_siteaccesses', $relatedSiteAccesses);
     }
 
     public function testSiteAccessNoConfiguration()
@@ -698,85 +681,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $expectedRepositories,
             $this->container->getParameter('ezpublish.repositories')
         );
-    }
-
-    public function testRelatedSiteAccesses()
-    {
-        $mainRepo = 'main';
-        $fooRepo = 'foo';
-        $rootLocationId1 = 123;
-        $rootLocationId2 = 456;
-        $rootLocationId3 = 2;
-        $config = [
-            'siteaccess' => [
-                'default_siteaccess' => 'ezdemo_site',
-                'list' => ['ezdemo_site', 'eng', 'fre', 'ezdemo_site2', 'eng2', 'ezdemo_site3', 'fre3'],
-                'groups' => [
-                    'ezdemo_group' => ['ezdemo_site', 'eng', 'fre'],
-                    'ezdemo_group2' => ['ezdemo_site2', 'eng2'],
-                    'ezdemo_group3' => ['ezdemo_site3', 'fre3'],
-                ],
-                'match' => [],
-            ],
-            'repositories' => [
-                $mainRepo => ['engine' => 'legacy', 'connection' => 'default'],
-                $fooRepo => ['engine' => 'bar', 'connection' => 'blabla'],
-            ],
-            'system' => [
-                'ezdemo_group' => [
-                    'repository' => $mainRepo,
-                    'content' => [
-                        'tree_root' => ['location_id' => $rootLocationId1],
-                    ],
-                ],
-                'ezdemo_group2' => [
-                    'repository' => $mainRepo,
-                    'content' => [
-                        'tree_root' => ['location_id' => $rootLocationId2],
-                    ],
-                ],
-                'ezdemo_group3' => [
-                    'repository' => $fooRepo,
-                ],
-            ],
-        ] + $this->siteaccessConfig;
-
-        // Injecting needed config parsers.
-        $refExtension = new ReflectionObject($this->extension);
-        $refMethod = $refExtension->getMethod('getMainConfigParser');
-        $refMethod->setAccessible(true);
-        $refMethod->invoke($this->extension);
-        $refParser = $refExtension->getProperty('mainConfigParser');
-        $refParser->setAccessible(true);
-        /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser $parser */
-        $parser = $refParser->getValue($this->extension);
-        $parser->setConfigParsers([new Common(), new Content()]);
-
-        $this->load($config);
-
-        $relatedSiteAccesses1 = ['ezdemo_site', 'eng', 'fre'];
-        $relatedSiteAccesses2 = ['ezdemo_site2', 'eng2'];
-        $relatedSiteAccesses3 = ['ezdemo_site3', 'fre3'];
-        $expectedRelationMap = [
-            $mainRepo => [
-                $rootLocationId1 => $relatedSiteAccesses1,
-                $rootLocationId2 => $relatedSiteAccesses2,
-            ],
-            $fooRepo => [
-                $rootLocationId3 => $relatedSiteAccesses3,
-            ],
-        ];
-        $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.relation_map', $expectedRelationMap);
-
-        $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site.related_siteaccesses', $relatedSiteAccesses1);
-        $this->assertContainerBuilderHasParameter('ezsettings.eng.related_siteaccesses', $relatedSiteAccesses1);
-        $this->assertContainerBuilderHasParameter('ezsettings.fre.related_siteaccesses', $relatedSiteAccesses1);
-
-        $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site2.related_siteaccesses', $relatedSiteAccesses2);
-        $this->assertContainerBuilderHasParameter('ezsettings.eng2.related_siteaccesses', $relatedSiteAccesses2);
-
-        $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site3.related_siteaccesses', $relatedSiteAccesses3);
-        $this->assertContainerBuilderHasParameter('ezsettings.fre3.related_siteaccesses', $relatedSiteAccesses3);
     }
 
     public function testRegisteredPolicies()

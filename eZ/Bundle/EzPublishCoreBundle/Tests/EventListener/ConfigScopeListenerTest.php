@@ -70,7 +70,7 @@ class ConfigScopeListenerTest extends TestCase
                 ->with($siteAccess);
         }
 
-        $listener = new ConfigScopeListener($this->configResolver, $this->viewManager);
+        $listener = new ConfigScopeListener([$this->configResolver], $this->viewManager);
         $listener->setViewProviders($this->viewProviders);
         $listener->onConfigScopeChange($event);
         $this->assertSame($siteAccess, $event->getSiteAccess());

@@ -115,17 +115,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
         return $this->undefinedStrategy;
     }
 
-    /**
-     * Checks if $paramName exists in $namespace.
-     *
-     * @param string $paramName
-     * @param string $namespace If null, the default namespace should be used.
-     * @param string $scope The scope you need $paramName value for. It's typically the siteaccess name.
-     *                      If null, the current siteaccess name will be used.
-     *
-     * @return bool
-     */
-    public function hasParameter($paramName, $namespace = null, $scope = null)
+    public function hasParameter(string $paramName, ?string $namespace = null, ?string $scope = null): bool
     {
         $namespace = $namespace ?: $this->defaultNamespace;
         $scope = $scope ?: $this->getDefaultScope();
@@ -154,18 +144,11 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     }
 
     /**
-     * Returns value for $paramName, in $namespace.
-     *
-     * @param string $paramName The parameter name, without $prefix and the current scope (i.e. siteaccess name).
-     * @param string $namespace Namespace for the parameter name. If null, the default namespace will be used.
-     * @param string $scope The scope you need $paramName value for. It's typically the siteaccess name.
-     *                      If null, the current siteaccess name will be used.
+     * @return mixed
      *
      * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
-     *
-     * @return mixed
      */
-    public function getParameter($paramName, $namespace = null, $scope = null)
+    public function getParameter(string $paramName, ?string $namespace = null, ?string $scope = null)
     {
         $this->logTooEarlyLoadedListIfNeeded($paramName);
 
@@ -218,25 +201,17 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
         }
     }
 
-    /**
-     * Changes the default namespace to look parameter into.
-     *
-     * @param string $defaultNamespace
-     */
-    public function setDefaultNamespace($defaultNamespace)
+    public function setDefaultNamespace(string $defaultNamespace): void
     {
         $this->defaultNamespace = $defaultNamespace;
     }
 
-    /**
-     * @return string
-     */
-    public function getDefaultNamespace()
+    public function getDefaultNamespace(): string
     {
         return $this->defaultNamespace;
     }
 
-    public function getDefaultScope()
+    public function getDefaultScope(): string
     {
         return $this->defaultScope ?: $this->siteAccess->name;
     }
@@ -244,7 +219,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     /**
      * @param string $scope The default "scope" aka siteaccess name, as opposed to the self::SCOPE_DEFAULT.
      */
-    public function setDefaultScope($scope)
+    public function setDefaultScope(string $scope): void
     {
         $this->defaultScope = $scope;
 
