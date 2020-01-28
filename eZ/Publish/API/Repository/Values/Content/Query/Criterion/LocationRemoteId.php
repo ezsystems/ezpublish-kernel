@@ -23,7 +23,7 @@ class LocationRemoteId extends Criterion
     /**
      * Creates a new locationRemoteId criterion.
      *
-     * @param int|int[] $value One or more locationRemoteId that must be matched
+     * @param string|string[] $value One or more locationRemoteId that must be matched
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
