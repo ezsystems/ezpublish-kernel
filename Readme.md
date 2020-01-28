@@ -40,7 +40,7 @@ as separate *(sub-tree split)* packages for re-usability. As is the case with [S
 
 ### Current Organization
 
-In the doc folder, you'll find [Specifications](doc/specifications/) for most features.
+In the doc folder, you'll find [Specifications](doc/specifications) for most features, including the REST API.
 
 MVC layer:
 - [eZ/Bundle](eZ/Bundle) - the bundles that are important to expose the functionality of the Backend and MVC layer to Symfony.
@@ -52,6 +52,7 @@ Backend:
 - [eZ/Publish/SPI/Persistence](eZ/Publish/SPI/Persistence) - a layer which is not frozen yet, meaning it might change in between releases. Those are persistence interfaces for Storage Engine.
 - [eZ/Publish/SPI](eZ/Publish/SPI) - (anything other than Persistence) is frozen and has a Backward Compatibility promise of Service Provider Interface, meaning no breaking changes both from consumption and implementation POV.
 - [eZ/Publish/Core](eZ/Publish/Core) - implementations of both APIs and SPIs; the naming aims to map to name of the interface they implement. For example, `Core\Persistence\Legacy` being implementation of `SPI\Persistence`.
+- [eZ/Publish/Core/REST](eZ/Publish/Core/REST) is a component providing REST server and *prototype* of a REST Client.
 
 
 ### Testing Locally
