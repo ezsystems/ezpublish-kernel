@@ -22,7 +22,7 @@ class Ancestor extends Criterion
     /**
      * Creates a new Ancestor criterion.
      *
-     * @param string $value Location path string
+     * @param string|string[] $value Location path string
      *
      * @throws \InvalidArgumentException if a non integer or string id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator

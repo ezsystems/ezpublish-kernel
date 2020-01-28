@@ -23,7 +23,7 @@ class RemoteId extends Criterion
     /**
      * Creates a new remoteId criterion.
      *
-     * @param int|int[] $value One or more remoteId that must be matched
+     * @param string|string[] $value One or more remoteId that must be matched
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
