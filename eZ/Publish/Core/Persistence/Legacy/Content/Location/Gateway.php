@@ -11,6 +11,8 @@ use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 
 /**
  * Base class for location gateways.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
