@@ -48,10 +48,10 @@ MVC layer:
 - [eZ/Publish/Core/Pagination](eZ/Publish/Core/Pagination) - a component extending PagerFanta for pagination of eZ Platform search queries.
 
 Backend:
-- [eZ/Publish/API](eZ/Publish/API/) - the definition of stable interfaces for the PHP *Public* API, mainly Content *Repository API*.
-- [eZ/Publish/SPI/Persistence](eZ/Publish/SPI/Persistence/) - a layer which indeed is not frozen yet, meaning it might change in between releases. Those are persistence interfaces for Storage Engine. They can't be frozen yet, because we wouldn't be able to add features to the API (or rather it would be difficult). We need to improve this layer so we can actually give SPI BC promise on it.
-- [eZ/Publish/SPI](eZ/Publish/SPI/)* - (anything other than Persistence) is frozen and has a Backward Compatibility promise of Service Provider Interface, meaning no breaking changes both from consumption and implementation POV.
-- [eZ/Publish/Core](eZ/Publish/Core/) - implementations of both APIs and SPIs; the naming aims to map to name of the interface they implement. For example, `Core\Persistence\Legacy` being implementation of `SPI\Persistence`.
+- [eZ/Publish/API](eZ/Publish/API) - the definition of stable interfaces for the PHP *Public* API, mainly Content *Repository API*.
+- [eZ/Publish/SPI/Persistence](eZ/Publish/SPI/Persistence) - a layer which is not frozen yet, meaning it might change in between releases. Those are persistence interfaces for Storage Engine.
+- [eZ/Publish/SPI](eZ/Publish/SPI) - (anything other than Persistence) is frozen and has a Backward Compatibility promise of Service Provider Interface, meaning no breaking changes both from consumption and implementation POV.
+- [eZ/Publish/Core](eZ/Publish/Core) - implementations of both APIs and SPIs; the naming aims to map to name of the interface they implement. For example, `Core\Persistence\Legacy` being implementation of `SPI\Persistence`.
 
 
 ### Testing Locally
