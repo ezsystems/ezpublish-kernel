@@ -56,16 +56,22 @@ final class DoctrineDatabase extends Gateway
      */
     private $languageMaskGenerator;
 
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $dbPlatform;
+
     /**
      * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(DatabaseHandler $handler, MaskGenerator $languageMaskGenerator)
     {
         $this->handler = $handler;
         $this->connection = $handler->getConnection();
+        $this->dbPlatform = $this->connection->getDatabasePlatform();
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
@@ -1368,9 +1374,8 @@ final class DoctrineDatabase extends Gateway
 
     public function countTrashed(): int
     {
-        $dbPlatform = $this->connection->getDatabasePlatform();
         $query = $this->connection->createQueryBuilder()
-            ->select($dbPlatform->getCountExpression('node_id'))
+            ->select($this->dbPlatform->getCountExpression('node_id'))
             ->from('ezcontentobject_trash');
 
         return $query->execute()->fetchColumn();
@@ -1656,7 +1661,6 @@ final class DoctrineDatabase extends Gateway
             ->from('ezcontentobject_tree', 't');
 
         if (!empty($translations)) {
-            $dbPlatform = $this->connection->getDatabasePlatform();
             $expr = $queryBuilder->expr();
             $mask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
                 $translations,
@@ -1673,7 +1677,7 @@ final class DoctrineDatabase extends Gateway
             $queryBuilder->where(
                 $expr->orX(
                     $expr->gt(
-                        $dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
+                        $this->dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
                         0
                     ),
                     // Root location doesn't have language mask
