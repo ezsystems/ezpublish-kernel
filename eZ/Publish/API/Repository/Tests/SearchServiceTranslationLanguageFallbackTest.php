@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -209,7 +210,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core3',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -219,7 +220,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -229,7 +230,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -251,7 +252,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core3',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -261,7 +262,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -271,7 +272,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -293,7 +294,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -303,7 +304,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -313,7 +314,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -335,7 +336,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -345,7 +346,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -355,7 +356,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -377,7 +378,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -387,7 +388,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -397,7 +398,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -419,7 +420,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -429,7 +430,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -439,7 +440,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -460,7 +461,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core3',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -470,7 +471,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -491,7 +492,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -501,7 +502,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -522,7 +523,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core3',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -532,7 +533,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -542,7 +543,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -563,7 +564,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -573,7 +574,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -583,7 +584,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -604,7 +605,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -614,7 +615,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -624,7 +625,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -645,7 +646,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -655,7 +656,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -665,7 +666,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -705,7 +706,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -715,7 +716,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -735,7 +736,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -745,7 +746,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -755,7 +756,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -786,7 +787,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core3',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -796,7 +797,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -806,7 +807,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -828,7 +829,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core3',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -838,7 +839,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -848,7 +849,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -870,7 +871,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -880,7 +881,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -890,7 +891,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -912,7 +913,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -922,7 +923,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -932,7 +933,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -954,7 +955,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -964,7 +965,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -974,7 +975,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -996,7 +997,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1006,7 +1007,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1016,7 +1017,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1037,7 +1038,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core3',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1047,7 +1048,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1068,7 +1069,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1078,7 +1079,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1099,7 +1100,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core3',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1109,7 +1110,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1119,7 +1120,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1140,7 +1141,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1150,7 +1151,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1160,7 +1161,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1181,7 +1182,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1191,7 +1192,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1201,7 +1202,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1222,7 +1223,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1232,7 +1233,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1242,7 +1243,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1262,7 +1263,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core3',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1272,7 +1273,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core0',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1292,7 +1293,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1302,7 +1303,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1322,7 +1323,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1332,7 +1333,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1342,7 +1343,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core2',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core2_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1362,7 +1363,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core0',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1380,7 +1381,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                             self::SETUP_SHARED => 'localhost:8983/solr/core0',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1390,7 +1391,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core0',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
                         ],
                     ],
                     [
@@ -1400,7 +1401,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core0',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1462,7 +1463,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                             self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
                             self::SETUP_SHARED => 'localhost:8983/solr/core0',
                             self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
-                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica_n1/',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
                         ],
                     ],
                 ],
@@ -1541,10 +1542,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 $data[$contentNo]['content']->id,
                 $content->id
             );
-            $this->assertEquals(
-                $this->getIndexName($indexMap),
-                $searchResult->searchHits[$index]->index
-            );
+            $this->assertIndexName($indexMap, $searchResult->searchHits[$index]);
             $this->assertEquals(
                 $translationLanguageCode,
                 $searchResult->searchHits[$index]->matchedTranslation
@@ -1596,10 +1594,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 $data[$contentNo]['locations'][0]->id,
                 $location->id
             );
-            $this->assertEquals(
-                $this->getIndexName($indexMap),
-                $searchResult->searchHits[$index]->index
-            );
+            $this->assertIndexName($indexMap, $searchResult->searchHits[$index]);
             $this->assertEquals(
                 $translationLanguageCode,
                 $searchResult->searchHits[$index]->matchedTranslation
@@ -1647,10 +1642,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 $data[$contentNo]['locations'][0]->id,
                 $location->id
             );
-            $this->assertEquals(
-                $this->getIndexName($indexMap),
-                $searchResult->searchHits[$index]->index
-            );
+            $this->assertIndexName($indexMap, $searchResult->searchHits[$index]);
             $this->assertEquals(
                 $translationLanguageCode,
                 $searchResult->searchHits[$index]->matchedTranslation
@@ -1667,14 +1659,22 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 $data[$contentNo]['locations'][1]->id,
                 $location->id
             );
-            $this->assertEquals(
-                $this->getIndexName($indexMap),
-                $searchResult->searchHits[$realIndex]->index
-            );
+            $this->assertIndexName($indexMap, $searchResult->searchHits[$realIndex]);
             $this->assertEquals(
                 $translationLanguageCode,
                 $searchResult->searchHits[$realIndex]->matchedTranslation
             );
+        }
+    }
+
+    private function assertIndexName(array $indexMap, SearchHit $searchHit): void
+    {
+        $indexName = $this->getIndexName($indexMap);
+
+        if ($indexName === null) {
+            $this->assertNull($searchHit->index);
+        } else {
+            $this->assertRegExp('~^' . $indexName . '$~', $searchHit->index);
         }
     }
 }
