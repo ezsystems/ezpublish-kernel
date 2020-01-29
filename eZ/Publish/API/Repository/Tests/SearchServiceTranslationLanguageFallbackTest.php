@@ -1675,7 +1675,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         }
     }
 
-    private function assertIndexName(array $indexMap, SearchHit $searchHit)
+    private function assertIndexName(array $indexMap, SearchHit $searchHit): void
     {
         $indexName = $this->getIndexName($indexMap);
 
