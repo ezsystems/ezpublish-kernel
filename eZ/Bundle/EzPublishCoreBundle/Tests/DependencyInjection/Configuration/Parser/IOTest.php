@@ -13,6 +13,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class IOTest extends AbstractParserTestCase
 {
+    private const EMPTY_SA_GROUP = 'empty_group';
+
     private $minimalConfig;
 
     protected function setUp(): void
@@ -52,5 +54,6 @@ class IOTest extends AbstractParserTestCase
 
         $this->assertConfigResolverParameterValue('io.metadata_handler', 'cluster', 'ezdemo_site');
         $this->assertConfigResolverParameterValue('io.binarydata_handler', 'cluster', 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('io.binarydata_handler', 'default', self::EMPTY_SA_GROUP);
     }
 }

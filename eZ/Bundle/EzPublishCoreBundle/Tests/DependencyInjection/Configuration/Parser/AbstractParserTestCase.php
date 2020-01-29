@@ -65,6 +65,7 @@ abstract class AbstractParserTestCase extends AbstractExtensionTestCase
                 ['fre', true],
                 ['fre2', true],
                 ['ezdemo_site_admin', true],
+                ['empty_group', false],
             ]);
         $siteAccessProvider
             ->method('getSiteAccess')

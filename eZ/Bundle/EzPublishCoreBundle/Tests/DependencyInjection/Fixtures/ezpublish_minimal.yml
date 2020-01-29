@@ -12,6 +12,7 @@ siteaccess:
         ezdemo_frontend_group:
             - ezdemo_site
             - fre
+        empty_group: []
     match:
         URIElement: 1
         Map\URI:
