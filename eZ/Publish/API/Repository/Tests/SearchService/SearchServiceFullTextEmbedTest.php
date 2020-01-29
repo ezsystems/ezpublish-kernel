@@ -10,13 +10,12 @@ namespace eZ\Publish\API\Repository\Tests\SearchService;
 
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Tests\BaseTest;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\FieldType\RichText\Value as RichTextValue;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 
 /**
  * Test case for full text search in the SearchService (for embed).
@@ -26,13 +25,13 @@ use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
  * @group search
  * @group fulltext
  */
-class SearchServiceFulltextEmbedTest extends BaseTest
+class SearchServiceFullTextEmbedTest extends BaseTest
 {
     private const EMBEDDED_ARTICLE_NAME = 'test1';
 
     private static $createdIds = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -40,15 +39,58 @@ class SearchServiceFulltextEmbedTest extends BaseTest
 
         if (
             false === $repository->getSearchService()->supports(
-            SearchService::CAPABILITY_ADVANCED_FULLTEXT
+                SearchService::CAPABILITY_ADVANCED_FULLTEXT
             )
         ) {
-            $this->markTestSkipped('Advanced FullText search is not supported by the current search engine');
+            $this->markTestSkipped(
+                'Advanced FullText search is not supported by the current search engine'
+            );
         }
     }
 
-    public function testPrepareContent(): void
+    public function testFullTextContentSearch(): void
     {
+        $this->prepareTestContent();
+
+        $searchService = $this->getRepository()->getSearchService();
+
+        $query = new Query([
+            'query' => new Criterion\FullText(self::EMBEDDED_ARTICLE_NAME),
+        ]);
+
+        $searchResult = $searchService->findContent($query);
+
+        $this->assertGreaterThanOrEqual(2, $searchResult->totalCount);
+        $this->assertResults($searchResult->searchHits);
+    }
+
+    public function testFullTextLocationSearch(): void
+    {
+        $this->prepareTestContent();
+
+        $searchService = $this->getRepository()->getSearchService();
+
+        $query = new LocationQuery([
+            'query' => new Criterion\FullText(self::EMBEDDED_ARTICLE_NAME),
+        ]);
+
+        $searchResult = $searchService->findLocations($query);
+
+        $this->assertGreaterThanOrEqual(2, $searchResult->totalCount);
+        $this->assertResults($searchResult->searchHits);
+    }
+
+    private function hasTestPreparedContent(): bool
+    {
+        return !empty(self::$createdIds);
+    }
+
+    private function prepareTestContent(): void
+    {
+        if ($this->hasTestPreparedContent()) {
+            return;
+        }
+
         $contentService = $this->getRepository()->getContentService();
         $baseArticleStruct = $this->prepareBaseArticleStruct();
 
@@ -70,40 +112,6 @@ class SearchServiceFulltextEmbedTest extends BaseTest
         ];
     }
 
-    /**
-     * @depends testPrepareContent
-     */
-    public function testFulltextContentSearch(): void
-    {
-        $searchService = $this->getRepository()->getSearchService();
-
-        $query = new Query([
-            'query' => new Criterion\FullText(self::EMBEDDED_ARTICLE_NAME),
-        ]);
-
-        $searchResult = $searchService->findContent($query);
-
-        $this->assertGreaterThanOrEqual(2, $searchResult->totalCount);
-        $this->assertResults($searchResult->searchHits);
-    }
-
-    /**
-     * @depends testPrepareContent
-     */
-    public function testFulltextLocationSearch(): void
-    {
-        $searchService = $this->getRepository()->getSearchService();
-
-        $query = new LocationQuery([
-            'query' => new Criterion\FullText(self::EMBEDDED_ARTICLE_NAME),
-        ]);
-
-        $searchResult = $searchService->findLocations($query);
-
-        $this->assertGreaterThanOrEqual(2, $searchResult->totalCount);
-        $this->assertResults($searchResult->searchHits);
-    }
-
     private function prepareBaseArticleStruct(): ContentCreateStruct
     {
         $introDocument = new \DOMDocument();
@@ -119,15 +127,15 @@ EOT
         $repository = $this->getRepository();
         $contentType = $repository->getContentTypeService()->loadContentTypeByIdentifier('article');
 
-        /** @var \eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct $articleStruct */
         $articleStruct = $repository->getContentService()->newContentCreateStruct($contentType, 'eng-GB');
         $articleStruct->setField('intro', new RichTextValue($introDocument), 'eng-GB');
 
         return $articleStruct;
     }
 
-    private function fillEmbeddedArticleStruct(ContentCreateStruct $articleStruct): ContentCreateStruct
-    {
+    private function fillEmbeddedArticleStruct(
+        ContentCreateStruct $articleStruct
+    ): ContentCreateStruct {
         $articleBodyDoc = new \DOMDocument();
         $articleBodyDoc->loadXML(
             <<<EOT
@@ -144,8 +152,10 @@ EOT
         return $articleStruct;
     }
 
-    private function fillMainArticleStruct(ContentCreateStruct $articleStruct, int $embedContentId): ContentCreateStruct
-    {
+    private function fillMainArticleStruct(
+        ContentCreateStruct $articleStruct,
+        int $embedContentId
+    ): ContentCreateStruct {
         $mainArticleBodyDoc = new \DOMDocument();
         $mainArticleBodyDoc->loadXML(
             <<<EOT
@@ -176,13 +186,11 @@ EOT
     {
         $resultIds = [];
 
-        /** @var SearchHit $contentItem */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Search\SearchHit $contentItem */
         foreach ($searchHits as $contentItem) {
             $resultIds[] = $contentItem->valueObject->contentInfo->id;
         }
 
-        $this->assertTrue(
-            count(array_intersect($resultIds, self::$createdIds)) === 2
-        );
+        self::assertCount(2, array_intersect($resultIds, self::$createdIds));
     }
 }
