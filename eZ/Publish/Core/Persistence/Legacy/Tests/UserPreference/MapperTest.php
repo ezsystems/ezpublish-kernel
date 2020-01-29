@@ -40,6 +40,12 @@ class MapperTest extends TestCase
                 'name' => 'setting_2',
                 'value' => 'value_2',
             ],
+            [
+                'id' => 1,
+                'user_id' => 5,
+                'name' => 'setting_2',
+                'value' => '<b>value_2</b>',
+            ],
         ];
 
         $objects = [
@@ -48,6 +54,12 @@ class MapperTest extends TestCase
                 'userId' => 5,
                 'name' => 'setting_1',
                 'value' => 'value_1',
+            ]),
+            new UserPreference([
+                'id' => 1,
+                'userId' => 5,
+                'name' => 'setting_2',
+                'value' => 'value_2',
             ]),
             new UserPreference([
                 'id' => 1,
