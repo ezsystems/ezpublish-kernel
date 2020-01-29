@@ -44,7 +44,7 @@ class MapperTest extends TestCase
                 'id' => 1,
                 'user_id' => 5,
                 'name' => 'setting_2',
-                'value' => '<b>value_2</b>',
+                'value' => '<script>alert(1);</script><b>value_2</b><?php echo 1;?>',
             ],
         ];
 
@@ -65,7 +65,7 @@ class MapperTest extends TestCase
                 'id' => 1,
                 'userId' => 5,
                 'name' => 'setting_2',
-                'value' => 'value_2',
+                'value' => htmlspecialchars('<script>alert(1);</script><b>value_2</b><?php echo 1;?>'),
             ]),
         ];
 
