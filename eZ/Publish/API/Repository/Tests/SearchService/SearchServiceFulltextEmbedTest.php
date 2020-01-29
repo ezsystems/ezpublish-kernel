@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Tests\SearchService;
 
 use eZ\Publish\API\Repository\SearchService;
@@ -38,7 +38,11 @@ class SearchServiceFulltextEmbedTest extends BaseTest
 
         $repository = $this->getRepository(false);
 
-        if (false === $repository->getSearchService()->supports(SearchService::CAPABILITY_ADVANCED_FULLTEXT)) {
+        if (
+            false === $repository->getSearchService()->supports(
+            SearchService::CAPABILITY_ADVANCED_FULLTEXT
+            )
+        ) {
             $this->markTestSkipped('Advanced FullText search is not supported by the current search engine');
         }
     }
