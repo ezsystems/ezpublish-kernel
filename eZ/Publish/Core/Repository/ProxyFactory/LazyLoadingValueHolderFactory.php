@@ -46,10 +46,15 @@ class LazyLoadingValueHolderFactory extends BaseLazyLoadingValueHolderFactory
         // Proxy cache directory needs to be created before
         if (!is_dir($proxyCacheDir)) {
             if (false === @mkdir($proxyCacheDir, 0777, true)) {
-                throw new RuntimeException(sprintf(
-                    'Unable to create the Repository Proxy directory "%s".',
-                    $proxyCacheDir
-                ));
+                if (!is_dir($proxyCacheDir)) {
+                    $error = error_get_last();
+
+                    throw new RuntimeException(sprintf(
+                        'Unable to create the Repository Proxy directory "%s": %s',
+                        $proxyCacheDir,
+                        $error['message']
+                    ));
+                }
             }
         } elseif (!is_writable($proxyCacheDir)) {
             throw new RuntimeException(sprintf(
