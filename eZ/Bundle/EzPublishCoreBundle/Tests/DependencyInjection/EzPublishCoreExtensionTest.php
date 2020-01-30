@@ -40,6 +40,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 'groups' => [
                     'ezdemo_group' => ['ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin'],
                     'ezdemo_frontend_group' => ['ezdemo_site', 'eng', 'fre'],
+                    'empty_group' => [],
                 ],
                 'match' => [
                     'URILElement' => 1,
@@ -51,6 +52,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 'eng' => [],
                 'fre' => [],
                 'ezdemo_site_admin' => [],
+                'empty_group' => ['var_dir' => 'foo'],
             ],
         ];
 
@@ -97,6 +99,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $expectedMatchingConfig[$key] = is_array($val) ? $val : ['value' => $val];
         }
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.match_config', $expectedMatchingConfig);
+        $this->assertContainerBuilderHasParameter('ezsettings.empty_group.var_dir', 'foo');
 
         $groupsBySiteaccess = [];
         foreach ($this->siteaccessConfig['siteaccess']['groups'] as $groupName => $groupMembers) {

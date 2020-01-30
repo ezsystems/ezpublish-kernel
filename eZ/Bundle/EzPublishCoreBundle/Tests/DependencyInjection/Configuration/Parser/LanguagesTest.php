@@ -14,6 +14,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class LanguagesTest extends AbstractParserTestCase
 {
+    private const EMPTY_SA_GROUP = 'empty_group';
+
     protected function getContainerExtensions(): array
     {
         return [new EzPublishCoreExtension([new Languages()])];
@@ -43,6 +45,7 @@ class LanguagesTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue('languages', $langDemoSite, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('languages', $langFre, 'fre');
         $this->assertConfigResolverParameterValue('languages', $langFre, 'fre2');
+        $this->assertConfigResolverParameterValue('languages', [], self::EMPTY_SA_GROUP);
         $this->assertSame(
             [
                 'eng-GB' => ['ezdemo_site'],
@@ -68,6 +71,7 @@ class LanguagesTest extends AbstractParserTestCase
 
         $this->assertConfigResolverParameterValue('languages', $langDemoSite, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('languages', $langDemoSite, 'fre');
+        $this->assertConfigResolverParameterValue('languages', [], self::EMPTY_SA_GROUP);
         $this->assertSame(
             [
                 'eng-US' => ['ezdemo_site', 'fre'],
@@ -93,6 +97,7 @@ class LanguagesTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue('translation_siteaccesses', $translationSAsDemoSite, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('translation_siteaccesses', $translationSAsFre, 'fre');
         $this->assertConfigResolverParameterValue('translation_siteaccesses', [], 'ezdemo_site_admin');
+        $this->assertConfigResolverParameterValue('translation_siteaccesses', [], self::EMPTY_SA_GROUP);
     }
 
     public function testTranslationSiteAccessesWithGroup()
@@ -110,5 +115,6 @@ class LanguagesTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue('translation_siteaccesses', $translationSAsDemoSite, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('translation_siteaccesses', $translationSAsDemoSite, 'fre');
         $this->assertConfigResolverParameterValue('translation_siteaccesses', [], 'ezdemo_site_admin');
+        $this->assertConfigResolverParameterValue('translation_siteaccesses', [], self::EMPTY_SA_GROUP);
     }
 }

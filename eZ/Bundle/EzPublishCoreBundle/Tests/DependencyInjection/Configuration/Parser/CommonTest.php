@@ -15,6 +15,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class CommonTest extends AbstractParserTestCase
 {
+    private const EMPTY_SA_GROUP = 'empty_group';
+
     private $minimalConfig;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject */
@@ -46,6 +48,7 @@ class CommonTest extends AbstractParserTestCase
 
         $this->assertConfigResolverParameterValue('index_page', $indexPage1, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('index_page', $indexPage2, 'ezdemo_site_admin');
+        $this->assertConfigResolverParameterValue('index_page', null, self::EMPTY_SA_GROUP);
     }
 
     public function testDefaultPage()
@@ -62,6 +65,7 @@ class CommonTest extends AbstractParserTestCase
 
         $this->assertConfigResolverParameterValue('default_page', $defaultPage1, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('default_page', $defaultPage2, 'ezdemo_site_admin');
+        $this->assertConfigResolverParameterValue('index_page', null, self::EMPTY_SA_GROUP);
     }
 
     public function testDatabaseSingleSiteaccess()
