@@ -40,6 +40,12 @@ class MapperTest extends TestCase
                 'name' => 'setting_2',
                 'value' => 'value_2',
             ],
+            [
+                'id' => 1,
+                'user_id' => 5,
+                'name' => 'setting_2',
+                'value' => '<script>alert(1);</script><b>value_2</b><?php echo 1;?>',
+            ],
         ];
 
         $objects = [
@@ -54,6 +60,12 @@ class MapperTest extends TestCase
                 'userId' => 5,
                 'name' => 'setting_2',
                 'value' => 'value_2',
+            ]),
+            new UserPreference([
+                'id' => 1,
+                'userId' => 5,
+                'name' => 'setting_2',
+                'value' => htmlspecialchars('<script>alert(1);</script><b>value_2</b><?php echo 1;?>'),
             ]),
         ];
 
