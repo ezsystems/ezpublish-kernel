@@ -78,59 +78,20 @@ class Contextualizer implements ContextualizerInterface
             []
         );
 
-        // (!) Keep siteaccess group settings
+        // (!) Keep SiteAccess group settings
         foreach (array_keys($this->availableSiteAccessGroups) as $scope) {
             $scopeSettings = $config[$this->siteAccessNodeName][$scope][$id] ?? [];
             if (empty($scopeSettings)) {
                 continue;
             }
-            if ($options & static::MERGE_FROM_SECOND_LEVEL) {
-                $mergedSettings = [];
 
-                // array_merge() has to be used because we don't
-                // know whether we have a hash or a plain array
-                $keys = array_unique(
-                    array_merge(
-                        array_keys($defaultSettings),
-                        array_keys($scopeSettings),
-                        array_keys($globalSettings)
-                    )
-                );
-                foreach ($keys as $key) {
-                    // Only merge if actual setting is an array.
-                    // We assume default setting to be a clear reference for this.
-                    // If the setting is not an array, we copy the right value, in respect to the precedence:
-                    // 1. global
-                    // 3. Group
-                    // 4. default
-                    if (array_key_exists($key, $defaultSettings) && !is_array($defaultSettings[$key])) {
-                        if (array_key_exists($key, $globalSettings)) {
-                            $mergedSettings[$key] = $globalSettings[$key];
-                        } elseif (array_key_exists($key, $scopeSettings)) {
-                            $mergedSettings[$key] = $scopeSettings[$key];
-                        } else {
-                            $mergedSettings[$key] = $defaultSettings[$key];
-                        }
-                    } else {
-                        $mergedSettings[$key] = array_merge(
-                            $defaultSettings[$key] ?? [],
-                            $scopeSettings[$key] ?? [],
-                            $globalSettings[$key] ?? []
-                        );
-                    }
-                }
-            } else {
-                $mergedSettings = array_merge(
-                    $defaultSettings,
-                    $scopeSettings,
-                    $globalSettings
-                );
-            }
-            if ($options & static::UNIQUE) {
-                $mergedSettings = array_values(
-                    array_unique($mergedSettings)
-                );
-            }
+            $mergedSettings = $this->mergeSettingsForSiteAccessGroup(
+                $options,
+                $defaultSettings,
+                $scopeSettings,
+                $globalSettings
+            );
+
             $this->container->setParameter("$this->namespace.$scope.$id", $mergedSettings);
         }
 
@@ -157,59 +118,13 @@ class Contextualizer implements ContextualizerInterface
                 continue;
             }
 
-            if ($options & static::MERGE_FROM_SECOND_LEVEL) {
-                // array_merge() has to be used because we don't
-                // know whether we have a hash or a plain array
-                $keys1 = array_unique(
-                    array_merge(
-                        array_keys($defaultSettings),
-                        array_keys($groupsSettings),
-                        array_keys($scopeSettings),
-                        array_keys($globalSettings)
-                    )
-                );
-                $mergedSettings = [];
-                foreach ($keys1 as $key) {
-                    // Only merge if actual setting is an array.
-                    // We assume default setting to be a clear reference for this.
-                    // If the setting is not an array, we copy the right value, in respect to the precedence:
-                    // 1. global
-                    // 2. SiteAccess
-                    // 3. Group
-                    // 4. default
-                    if (array_key_exists($key, $defaultSettings) && !is_array($defaultSettings[$key])) {
-                        if (array_key_exists($key, $globalSettings)) {
-                            $mergedSettings[$key] = $globalSettings[$key];
-                        } elseif (array_key_exists($key, $scopeSettings)) {
-                            $mergedSettings[$key] = $scopeSettings[$key];
-                        } elseif (array_key_exists($key, $groupsSettings)) {
-                            $mergedSettings[$key] = $groupsSettings[$key];
-                        } else {
-                            $mergedSettings[$key] = $defaultSettings[$key];
-                        }
-                    } else {
-                        $mergedSettings[$key] = array_merge(
-                            isset($defaultSettings[$key]) ? $defaultSettings[$key] : [],
-                            isset($groupsSettings[$key]) ? $groupsSettings[$key] : [],
-                            isset($scopeSettings[$key]) ? $scopeSettings[$key] : [],
-                            isset($globalSettings[$key]) ? $globalSettings[$key] : []
-                        );
-                    }
-                }
-            } else {
-                $mergedSettings = array_merge(
-                    $defaultSettings,
-                    $groupsSettings,
-                    $scopeSettings,
-                    $globalSettings
-                );
-            }
-
-            if ($options & static::UNIQUE) {
-                $mergedSettings = array_values(
-                    array_unique($mergedSettings)
-                );
-            }
+            $mergedSettings = $this->mergeSettingsForSiteAccess(
+                $options,
+                $defaultSettings,
+                $groupsSettings,
+                $scopeSettings,
+                $globalSettings
+            );
 
             $this->container->setParameter("$this->namespace.$scope.$id", $mergedSettings);
         }
@@ -281,7 +196,6 @@ class Contextualizer implements ContextualizerInterface
      * "Reserved scope" can typically be ConfigResolver::SCOPE_DEFAULT or ConfigResolver::SCOPE_GLOBAL.
      *
      * @param string $id
-     * @param array $config
      * @param string $scope
      */
     private function mapReservedScopeArray($id, array $config, $scope)
@@ -350,5 +264,126 @@ class Contextualizer implements ContextualizerInterface
     public function getGroupsBySiteAccess()
     {
         return $this->groupsBySiteAccess;
+    }
+
+    private function mergeSettingsForSiteAccessGroup(
+        int $options,
+        array $defaultSettings,
+        array $scopeSettings,
+        array $globalSettings
+    ): array {
+        if ($options & static::MERGE_FROM_SECOND_LEVEL) {
+            $mergedSettings = [];
+
+            // array_merge() has to be used because we don't
+            // know whether we have a hash or a plain array
+            $keys = array_unique(
+                array_merge(
+                    array_keys($defaultSettings),
+                    array_keys($scopeSettings),
+                    array_keys($globalSettings)
+                )
+            );
+            foreach ($keys as $key) {
+                // Only merge if actual setting is an array.
+                // We assume default setting to be a clear reference for this.
+                // If the setting is not an array, we copy the right value, in respect to the precedence:
+                // 1. global
+                // 3. Group
+                // 4. default
+                if (array_key_exists($key, $defaultSettings) && !is_array($defaultSettings[$key])) {
+                    if (array_key_exists($key, $globalSettings)) {
+                        $mergedSettings[$key] = $globalSettings[$key];
+                    } elseif (array_key_exists($key, $scopeSettings)) {
+                        $mergedSettings[$key] = $scopeSettings[$key];
+                    } else {
+                        $mergedSettings[$key] = $defaultSettings[$key];
+                    }
+                } else {
+                    $mergedSettings[$key] = array_merge(
+                        $defaultSettings[$key] ?? [],
+                        $scopeSettings[$key] ?? [],
+                        $globalSettings[$key] ?? []
+                    );
+                }
+            }
+        } else {
+            $mergedSettings = array_merge(
+                $defaultSettings,
+                $scopeSettings,
+                $globalSettings
+            );
+        }
+        if ($options & static::UNIQUE) {
+            $mergedSettings = array_values(
+                array_unique($mergedSettings)
+            );
+        }
+
+        return $mergedSettings;
+    }
+
+    private function mergeSettingsForSiteAccess(
+        int $options,
+        array $defaultSettings,
+        array $groupsSettings,
+        array $scopeSettings,
+        array $globalSettings
+    ): array {
+        if ($options & static::MERGE_FROM_SECOND_LEVEL) {
+            // array_merge() has to be used because we don't
+            // know whether we have a hash or a plain array
+            $keys1 = array_unique(
+                array_merge(
+                    array_keys($defaultSettings),
+                    array_keys($groupsSettings),
+                    array_keys($scopeSettings),
+                    array_keys($globalSettings)
+                )
+            );
+            $mergedSettings = [];
+            foreach ($keys1 as $key) {
+                // Only merge if actual setting is an array.
+                // We assume default setting to be a clear reference for this.
+                // If the setting is not an array, we copy the right value, in respect to the precedence:
+                // 1. global
+                // 2. SiteAccess
+                // 3. Group
+                // 4. default
+                if (array_key_exists($key, $defaultSettings) && !is_array($defaultSettings[$key])) {
+                    if (array_key_exists($key, $globalSettings)) {
+                        $mergedSettings[$key] = $globalSettings[$key];
+                    } elseif (array_key_exists($key, $scopeSettings)) {
+                        $mergedSettings[$key] = $scopeSettings[$key];
+                    } elseif (array_key_exists($key, $groupsSettings)) {
+                        $mergedSettings[$key] = $groupsSettings[$key];
+                    } else {
+                        $mergedSettings[$key] = $defaultSettings[$key];
+                    }
+                } else {
+                    $mergedSettings[$key] = array_merge(
+                        isset($defaultSettings[$key]) ? $defaultSettings[$key] : [],
+                        isset($groupsSettings[$key]) ? $groupsSettings[$key] : [],
+                        isset($scopeSettings[$key]) ? $scopeSettings[$key] : [],
+                        isset($globalSettings[$key]) ? $globalSettings[$key] : []
+                    );
+                }
+            }
+        } else {
+            $mergedSettings = array_merge(
+                $defaultSettings,
+                $groupsSettings,
+                $scopeSettings,
+                $globalSettings
+            );
+        }
+
+        if ($options & static::UNIQUE) {
+            $mergedSettings = array_values(
+                array_unique($mergedSettings)
+            );
+        }
+
+        return $mergedSettings;
     }
 }

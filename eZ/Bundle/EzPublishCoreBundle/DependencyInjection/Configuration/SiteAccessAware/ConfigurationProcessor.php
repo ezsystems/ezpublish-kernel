@@ -57,6 +57,8 @@ class ConfigurationProcessor
      *
      * Important: Available SiteAccesses need to be set before ConfigurationProcessor to be constructed by a bundle
      * to set its configuration up.
+     *
+     * @param string[] $availableSiteAccesses
      */
     public static function setAvailableSiteAccesses(array $availableSiteAccesses)
     {
@@ -68,6 +70,8 @@ class ConfigurationProcessor
      *
      * Important: Groups need to be set before ConfigurationProcessor to be constructed by a bundle
      * to set its configuration up.
+     *
+     * @param array $groupsBySiteAccess Registered scope groups names, indexed by scope.
      */
     public static function setGroupsBySiteAccess(array $groupsBySiteAccess)
     {
