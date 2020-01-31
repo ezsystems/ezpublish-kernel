@@ -184,7 +184,7 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function testFulltextContentSearchSolr7(string $searchString, array $expectedKeys, array $idMap): void
     {
-        if (($solrVersion = getenv('SOLR_VERSION')) < 7) {
+        if (false === $this->isSolrMajorVersionInRange('7.0.0', '8.0.0')) {
             $this->markTestSkipped('This test is only relevant for Solr >= 7');
         }
 
@@ -214,7 +214,7 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function testFulltextLocationSearchSolr7($searchString, array $expectedKeys, array $idMap): void
     {
-        if (($solrVersion = getenv('SOLR_VERSION')) < 7) {
+        if (false === $this->isSolrMajorVersionInRange('7.0.0', '8.0.0')) {
             $this->markTestSkipped('This test is only relevant for Solr >= 7');
         }
 
