@@ -266,10 +266,6 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function testFulltextContentSearchSolr6(string $searchString, array $expectedKeys, array $idMap): void
     {
-        self::markTestIncomplete(
-            'Scoring changed due to EZP-31226. Test results need to be revisited.'
-        );
-
         if (($solrVersion = getenv('SOLR_VERSION')) >= 7) {
             $this->markTestSkipped('This test is only relevant for Solr 6');
         }
