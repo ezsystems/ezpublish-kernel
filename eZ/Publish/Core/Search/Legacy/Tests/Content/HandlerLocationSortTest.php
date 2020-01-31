@@ -153,8 +153,7 @@ class HandlerLocationSortTest extends AbstractTestCase
         );
 
         $ids = $this->getIds($locations);
-        sort($ids);
-        $this->assertEquals(
+        $this->assertEqualsCanonicalizing(
             [179, 180, 181, 182, 183],
             $ids
         );
@@ -330,8 +329,7 @@ class HandlerLocationSortTest extends AbstractTestCase
         foreach ($idMapSet as $idSet) {
             $locationIdsSubset = array_slice($locationIds, $index, $count = count($idSet));
             $index += $count;
-            sort($locationIdsSubset);
-            $this->assertEquals(
+            $this->assertEqualsCanonicalizing(
                 $idSet,
                 $locationIdsSubset
             );
@@ -499,8 +497,7 @@ class HandlerLocationSortTest extends AbstractTestCase
         foreach ($idMapSet as $idSet) {
             $locationIdsSubset = array_slice($locationIds, $index, $count = count($idSet));
             $index += $count;
-            sort($locationIdsSubset);
-            $this->assertEquals(
+            $this->assertEqualsCanonicalizing(
                 $idSet,
                 $locationIdsSubset
             );
@@ -569,8 +566,7 @@ class HandlerLocationSortTest extends AbstractTestCase
         foreach ($idMapSet as $idSet) {
             $locationIdsSubset = array_slice($locationIds, $index, $count = count($idSet));
             $index += $count;
-            sort($locationIdsSubset);
-            $this->assertEquals(
+            $this->assertEqualsCanonicalizing(
                 $idSet,
                 $locationIdsSubset
             );
