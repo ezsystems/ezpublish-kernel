@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.api.proxy_cache_dir: 'var/cache/repository/proxy'
+    ezplatform.kernel.proxy_cache_dir: 'var/cache/repository/proxy'
 
     # intentionally defined class parameter to be used by the Repository Factory
     ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
@@ -126,7 +126,7 @@ services:
 
     eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator:
         arguments:
-            $proxyCacheDir: '%ezpublish.api.proxy_cache_dir%'
+            $proxyCacheDir: '%ezplatform.kernel.proxy_cache_dir%'
 
     eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface:
         alias: 'eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator'

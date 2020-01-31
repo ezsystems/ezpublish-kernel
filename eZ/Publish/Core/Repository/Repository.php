@@ -245,7 +245,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
-     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory $proxyDomainMapperFactory
+     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory
      * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
      * @param array $serviceSettings
      * @param \Psr\Log\LoggerInterface|null $logger
