@@ -13,7 +13,10 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Content type criterion handler.
@@ -28,18 +31,26 @@ class ContentTypeIdentifier extends CriterionHandler
     protected $contentTypeHandler;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Construct from handler handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
         DatabaseHandler $dbHandler,
-        ContentTypeHandler $contentTypeHandler
+        ContentTypeHandler $contentTypeHandler,
+        LoggerInterface $logger = null
     ) {
         parent::__construct($dbHandler);
 
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -73,9 +84,28 @@ class ContentTypeIdentifier extends CriterionHandler
         array $languageSettings
     ) {
         $idList = [];
+        $invalidIdentifiers = [];
 
         foreach ($criterion->value as $identifier) {
-            $idList[] = $this->contentTypeHandler->loadByIdentifier($identifier)->id;
+            try {
+                $idList[] = $this->contentTypeHandler->loadByIdentifier($identifier)->id;
+            } catch (NotFoundException $e) {
+                // Skip non-existing content types, but track for code below
+                $invalidIdentifiers[] = $identifier;
+            }
+        }
+
+        if (count($invalidIdentifiers) > 0) {
+            $this->logger->warning(
+                sprintf(
+                    'Invalid content type identifiers provided for ContentTypeIdentifier criterion: %s',
+                    implode(', ', $invalidIdentifiers)
+                )
+            );
+        }
+
+        if (count($idList) === 0) {
+            return $query->expr->not($query->bindValue('1'));
         }
 
         return $query->expr->in(
