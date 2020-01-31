@@ -9,23 +9,22 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Repository\ProxyFactory;
 
 use eZ\Publish\API\Repository\Repository;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 
 /**
  * @internal
  */
 final class ProxyDomainMapperFactory implements ProxyDomainMapperFactoryInterface
 {
-    /** @var \ProxyManager\Factory\LazyLoadingValueHolderFactory */
-    private $lazyLoadingValueHolderFactory;
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator */
+    private $proxyGenerator;
 
-    public function __construct(LazyLoadingValueHolderFactory $lazyLoadingValueHolderFactory)
+    public function __construct(ProxyGenerator $proxyGenerator)
     {
-        $this->lazyLoadingValueHolderFactory = $lazyLoadingValueHolderFactory;
+        $this->proxyGenerator = $proxyGenerator;
     }
 
     public function create(Repository $repository): ProxyDomainMapperInterface
     {
-        return new ProxyDomainMapper($repository, $this->lazyLoadingValueHolderFactory);
+        return new ProxyDomainMapper($repository, $this->proxyGenerator);
     }
 }

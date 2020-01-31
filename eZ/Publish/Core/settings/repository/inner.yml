@@ -124,12 +124,13 @@ services:
         calls:
             - ['setLogger', ['@?logger']]
 
-    eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory:
-        public: true
-        factory: ['eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory', 'create']
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator:
         arguments:
             $proxyCacheDir: '%ezpublish.api.proxy_cache_dir%'
 
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface:
+        alias: 'eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator'
+
     eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory:
         arguments:
-            $lazyLoadingValueHolderFactory: '@eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory'
+            $proxyGenerator: '@eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface'

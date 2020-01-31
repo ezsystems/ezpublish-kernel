@@ -9,21 +9,21 @@ declare(strict_types=1);
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Cache\Warmer;
 
 use eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ProxyCacheWarmer;
-use eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface;
 use PHPUnit\Framework\TestCase;
 
 final class ProxyCacheWarmerTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory|\PHPUnit\Framework\MockObject\MockObject */
-    private $lazyLoadingValueHolderFactory;
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $proxyGenerator;
 
     /** @var \eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ProxyCacheWarmer */
     private $proxyCacheWarmer;
 
     protected function setUp(): void
     {
-        $this->lazyLoadingValueHolderFactory = $this->createMock(LazyLoadingValueHolderFactory::class);
-        $this->proxyCacheWarmer = new ProxyCacheWarmer($this->lazyLoadingValueHolderFactory);
+        $this->proxyGenerator = $this->createMock(ProxyGeneratorInterface::class);
+        $this->proxyCacheWarmer = new ProxyCacheWarmer($this->proxyGenerator);
     }
 
     public function testIsOptional(): void
@@ -33,7 +33,7 @@ final class ProxyCacheWarmerTest extends TestCase
 
     public function testWarmUp(): void
     {
-        $this->lazyLoadingValueHolderFactory
+        $this->proxyGenerator
             ->expects($this->once())
             ->method('warmUp')
             ->with(ProxyCacheWarmer::PROXY_CLASSES);

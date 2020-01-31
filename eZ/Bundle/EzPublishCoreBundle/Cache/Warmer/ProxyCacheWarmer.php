@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 final class ProxyCacheWarmer implements CacheWarmerInterface
@@ -32,12 +32,12 @@ final class ProxyCacheWarmer implements CacheWarmerInterface
         User::class,
     ];
 
-    /** @var \eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory */
-    private $lazyLoadingValueHolderFactory;
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface */
+    private $proxyGenerator;
 
-    public function __construct(LazyLoadingValueHolderFactory $lazyLoadingValueHolderFactory)
+    public function __construct(ProxyGeneratorInterface $proxyGenerator)
     {
-        $this->lazyLoadingValueHolderFactory = $lazyLoadingValueHolderFactory;
+        $this->proxyGenerator = $proxyGenerator;
     }
 
     public function isOptional(): bool
@@ -47,6 +47,6 @@ final class ProxyCacheWarmer implements CacheWarmerInterface
 
     public function warmUp($cacheDir): void
     {
-        $this->lazyLoadingValueHolderFactory->warmUp(self::PROXY_CLASSES);
+        $this->proxyGenerator->warmUp(self::PROXY_CLASSES);
     }
 }

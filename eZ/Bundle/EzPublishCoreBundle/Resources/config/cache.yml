@@ -19,6 +19,6 @@ services:
 
     eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ProxyCacheWarmer:
         arguments:
-            - '@eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory'
+            - '@eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface'
         tags:
             - { name: kernel.cache_warmer }

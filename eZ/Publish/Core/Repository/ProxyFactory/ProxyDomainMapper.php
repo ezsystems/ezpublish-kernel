@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\User\User;
-use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\Proxy\LazyLoadingInterface;
 
 /**
@@ -29,12 +28,12 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
     private $repository;
 
     /** @var \ProxyManager\Factory\LazyLoadingValueHolderFactory */
-    private $factory;
+    private $proxyGenerator;
 
-    public function __construct(Repository $repository, LazyLoadingValueHolderFactory $lazyLoadingValueHolderFactory)
+    public function __construct(Repository $repository, ProxyGenerator $proxyGenerator)
     {
         $this->repository = $repository;
-        $this->factory = $lazyLoadingValueHolderFactory;
+        $this->proxyGenerator = $proxyGenerator;
     }
 
     public function createContentProxy(
@@ -56,7 +55,7 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
             return true;
         };
 
-        return $this->factory->createProxy(Content::class, $initializer);
+        return $this->proxyGenerator->createProxy(Content::class, $initializer);
     }
 
     public function createContentInfoProxy(int $contentId): ContentInfo
@@ -72,7 +71,7 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
             return true;
         };
 
-        return $this->factory->createProxy(ContentInfo::class, $initializer);
+        return $this->proxyGenerator->createProxy(ContentInfo::class, $initializer);
     }
 
     public function createContentTypeProxy(
@@ -91,7 +90,7 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
             return true;
         };
 
-        return $this->factory->createProxy(ContentType::class, $initializer);
+        return $this->proxyGenerator->createProxy(ContentType::class, $initializer);
     }
 
     public function createContentTypeGroupProxy(
@@ -110,7 +109,7 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
             return true;
         };
 
-        return $this->factory->createProxy(ContentTypeGroup::class, $initializer);
+        return $this->proxyGenerator->createProxy(ContentTypeGroup::class, $initializer);
     }
 
     public function createContentTypeGroupProxyList(
@@ -136,7 +135,7 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
             return true;
         };
 
-        return $this->factory->createProxy(Language::class, $initializer);
+        return $this->proxyGenerator->createProxy(Language::class, $initializer);
     }
 
     public function createLanguageProxyList(array $languageCodes): array
@@ -165,7 +164,7 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
             return true;
         };
 
-        return $this->factory->createProxy(Location::class, $initializer);
+        return $this->proxyGenerator->createProxy(Location::class, $initializer);
     }
 
     public function createSectionProxy(int $sectionId): Section
@@ -179,7 +178,7 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
             return true;
         };
 
-        return $this->factory->createProxy(Section::class, $initializer);
+        return $this->proxyGenerator->createProxy(Section::class, $initializer);
     }
 
     public function createUserProxy(int $userId, array $prioritizedLanguages = Language::ALL): User
@@ -193,6 +192,6 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
             return true;
         };
 
-        return $this->factory->createProxy(User::class, $initializer);
+        return $this->proxyGenerator->createProxy(User::class, $initializer);
     }
 }

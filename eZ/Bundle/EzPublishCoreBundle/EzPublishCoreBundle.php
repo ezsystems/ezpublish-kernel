@@ -46,7 +46,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\URLHandlerPass;
-use eZ\Publish\Core\Repository\ProxyFactory\LazyLoadingValueHolderFactory;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -122,10 +121,5 @@ class EzPublishCoreBundle extends Bundle
         }
 
         return $this->extension;
-    }
-
-    public function boot(): void
-    {
-        $this->container->get(LazyLoadingValueHolderFactory::class)->registerAutoloader();
     }
 }
