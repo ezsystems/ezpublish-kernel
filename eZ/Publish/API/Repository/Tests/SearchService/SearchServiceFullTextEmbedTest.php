@@ -33,6 +33,10 @@ class SearchServiceFullTextEmbedTest extends BaseTest
 
     protected function setUp(): void
     {
+        self::markTestIncomplete(
+            'Requires EZP-31337 due to RichText being no longer available in Kernel'
+        );
+
         parent::setUp();
 
         $repository = $this->getRepository(false);
