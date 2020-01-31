@@ -169,10 +169,8 @@ class ViewManagerTest extends TestCase
             ->method('render');
 
         $templateResult = unserialize($this->viewManager->renderContent($content, 'full', $params));
-        sort($expectedTemplateResult);
-        sort($templateResult);
 
-        self::assertEquals($expectedTemplateResult, $templateResult);
+        self::assertEqualsCanonicalizing($expectedTemplateResult, $templateResult);
     }
 
     public function testRenderLocation()

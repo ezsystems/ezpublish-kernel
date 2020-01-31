@@ -755,9 +755,7 @@ class RoleServiceTest extends BaseTest
         }
         /* END: Use Case */
 
-        sort($roleNames);
-
-        $this->assertEquals(
+        $this->assertEqualsCanonicalizing(
             [
                 'Administrator',
                 'Anonymous',

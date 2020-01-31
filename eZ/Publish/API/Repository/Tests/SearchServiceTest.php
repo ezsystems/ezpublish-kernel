@@ -139,12 +139,32 @@ class SearchServiceTest extends BaseTest
             ],
             7 => [
                 [
+                    'filter' => new Criterion\ContentTypeIdentifier(
+                        'user',
+                        'invalid'
+                    ),
+                    'sortClauses' => [new SortClause\ContentId()],
+                ],
+                $fixtureDir . 'ContentTypeId.php',
+            ],
+            8 => [
+                [
+                    'filter' => new Criterion\ContentTypeIdentifier(
+                        'invalid1',
+                        'invalid2'
+                    ),
+                    'sortClauses' => [new SortClause\ContentId()],
+                ],
+                $fixtureDir . 'MatchNone.php',
+            ],
+            9 => [
+                [
                     'filter' => new Criterion\MatchNone(),
                     'sortClauses' => [new SortClause\ContentId()],
                 ],
                 $fixtureDir . 'MatchNone.php',
             ],
-            8 => [
+            10 => [
                 [
                     'filter' => new Criterion\ContentTypeGroupId(
                         2
@@ -153,7 +173,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'ContentTypeGroupId.php',
             ],
-            9 => [
+            11 => [
                 [
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -164,7 +184,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'DateMetadataGt.php',
             ],
-            10 => [
+            12 => [
                 [
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -175,7 +195,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'DateMetadataGte.php',
             ],
-            11 => [
+            13 => [
                 [
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -187,7 +207,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'DateMetadataLte.php',
             ],
-            12 => [
+            14 => [
                 [
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -198,7 +218,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'DateMetadataIn.php',
             ],
-            13 => [
+            15 => [
                 [
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -209,7 +229,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'DateMetadataBetween.php',
             ],
-            14 => [
+            16 => [
                 [
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::CREATED,
@@ -220,7 +240,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'DateMetadataCreated.php',
             ],
-            15 => [
+            17 => [
                 [
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -231,7 +251,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'Field.php',
             ],
-            16 => [
+            18 => [
                 [
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -242,7 +262,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'Field.php',
             ],
-            17 => [
+            19 => [
                 [
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -253,7 +273,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'CustomFieldLt.php',
             ],
-            18 => [
+            20 => [
                 [
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -264,7 +284,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'CustomFieldLte.php',
             ],
-            19 => [
+            21 => [
                 [
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -275,7 +295,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'CustomFieldGt.php',
             ],
-            20 => [
+            22 => [
                 [
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -286,7 +306,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'CustomFieldGte.php',
             ],
-            21 => [
+            23 => [
                 [
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -297,7 +317,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'CustomFieldBetween.php',
             ],
-            22 => [
+            24 => [
                 [
                     'filter' => new Criterion\RemoteId(
                         ['f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca']
@@ -306,7 +326,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'RemoteId.php',
             ],
-            23 => [
+            25 => [
                 [
                     'filter' => new Criterion\SectionId(
                         [2]
@@ -315,7 +335,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'SectionId.php',
             ],
-            24 => [
+            26 => [
                 [
                     'filter' => new Criterion\Field(
                         'name',
@@ -326,7 +346,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'Field.php',
             ],
-            25 => [
+            27 => [
                 [
                     'filter' => new Criterion\Field(
                         'name',
@@ -337,7 +357,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'FieldIn.php',
             ],
-            26 => [
+            28 => [
                 [
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -348,7 +368,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'FieldBetween.php',
             ],
-            27 => [
+            29 => [
                 [
                     'filter' => new Criterion\LogicalOr(
                         [
@@ -368,7 +388,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'FieldOr.php',
             ],
-            28 => [
+            30 => [
                 [
                     'filter' => new Criterion\Subtree(
                         '/1/5/'
@@ -377,7 +397,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'Subtree.php',
             ],
-            29 => [
+            31 => [
                 [
                     'filter' => new Criterion\LocationId(
                         [1, 2, 5]
@@ -386,7 +406,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'LocationId.php',
             ],
-            30 => [
+            32 => [
                 [
                     'filter' => new Criterion\ParentLocationId(
                         [1]
@@ -395,7 +415,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'ParentLocationId.php',
             ],
-            31 => [
+            33 => [
                 [
                     'filter' => new Criterion\LocationRemoteId(
                         ['3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983']
@@ -404,7 +424,7 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'LocationRemoteId.php',
             ],
-            32 => [
+            34 => [
                 [
                     // There is no Status Criterion anymore, this should match all published as well
                     'filter' => new Criterion\Subtree(
@@ -434,38 +454,10 @@ class SearchServiceTest extends BaseTest
                     );
                 },
             ],
-            33 => [
-                [
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::MODIFIER,
-                        Criterion\Operator::EQ,
-                        14
-                    ),
-                    'sortClauses' => [
-                        new SortClause\ContentId(),
-                    ],
-                    'limit' => 50,
-                ],
-                $fixtureDir . 'UserMetadata.php',
-            ],
-            34 => [
-                [
-                    'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::MODIFIER,
-                        Criterion\Operator::IN,
-                        [14]
-                    ),
-                    'sortClauses' => [
-                        new SortClause\ContentId(),
-                    ],
-                    'limit' => 50,
-                ],
-                $fixtureDir . 'UserMetadata.php',
-            ],
             35 => [
                 [
                     'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::OWNER,
+                        Criterion\UserMetadata::MODIFIER,
                         Criterion\Operator::EQ,
                         14
                     ),
@@ -479,7 +471,7 @@ class SearchServiceTest extends BaseTest
             36 => [
                 [
                     'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::OWNER,
+                        Criterion\UserMetadata::MODIFIER,
                         Criterion\Operator::IN,
                         [14]
                     ),
@@ -493,9 +485,9 @@ class SearchServiceTest extends BaseTest
             37 => [
                 [
                     'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::GROUP,
+                        Criterion\UserMetadata::OWNER,
                         Criterion\Operator::EQ,
-                        12
+                        14
                     ),
                     'sortClauses' => [
                         new SortClause\ContentId(),
@@ -507,9 +499,9 @@ class SearchServiceTest extends BaseTest
             38 => [
                 [
                     'filter' => new Criterion\UserMetadata(
-                        Criterion\UserMetadata::GROUP,
+                        Criterion\UserMetadata::OWNER,
                         Criterion\Operator::IN,
-                        [12]
+                        [14]
                     ),
                     'sortClauses' => [
                         new SortClause\ContentId(),
@@ -523,7 +515,7 @@ class SearchServiceTest extends BaseTest
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
                         Criterion\Operator::EQ,
-                        4
+                        12
                     ),
                     'sortClauses' => [
                         new SortClause\ContentId(),
@@ -537,7 +529,7 @@ class SearchServiceTest extends BaseTest
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
                         Criterion\Operator::IN,
-                        [4]
+                        [12]
                     ),
                     'sortClauses' => [
                         new SortClause\ContentId(),
@@ -547,6 +539,34 @@ class SearchServiceTest extends BaseTest
                 $fixtureDir . 'UserMetadata.php',
             ],
             41 => [
+                [
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::GROUP,
+                        Criterion\Operator::EQ,
+                        4
+                    ),
+                    'sortClauses' => [
+                        new SortClause\ContentId(),
+                    ],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserMetadata.php',
+            ],
+            42 => [
+                [
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::GROUP,
+                        Criterion\Operator::IN,
+                        [4]
+                    ),
+                    'sortClauses' => [
+                        new SortClause\ContentId(),
+                    ],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserMetadata.php',
+            ],
+            43 => [
                 [
                     'filter' => new Criterion\Ancestor(
                         [

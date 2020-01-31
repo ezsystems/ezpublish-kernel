@@ -2772,7 +2772,7 @@ class UserServiceTest extends BaseTest
 
         $userTokenUpdateStruct = new UserTokenUpdateStruct();
         $userTokenUpdateStruct->hashKey = md5('hash');
-        $userTokenUpdateStruct->time = new DateTime();
+        $userTokenUpdateStruct->time = (new DateTime())->add(new DateInterval('PT10S'));
 
         $userService->updateUserToken($user, $userTokenUpdateStruct);
 
@@ -2823,7 +2823,7 @@ class UserServiceTest extends BaseTest
 
         $userTokenUpdateStruct = new UserTokenUpdateStruct();
         $userTokenUpdateStruct->hashKey = md5('my_updated_hash');
-        $userTokenUpdateStruct->time = new DateTime();
+        $userTokenUpdateStruct->time = (new DateTime())->add(new DateInterval('PT10S'));
 
         $userService->updateUserToken($user, $userTokenUpdateStruct);
 

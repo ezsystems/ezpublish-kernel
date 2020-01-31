@@ -81,6 +81,7 @@ services:
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.spi.persistence.content_type_handler"
+            - "@?logger"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
