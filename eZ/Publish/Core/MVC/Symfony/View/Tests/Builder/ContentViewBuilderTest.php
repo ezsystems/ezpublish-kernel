@@ -23,7 +23,6 @@ use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpFoundation\RequestStack;
 use PHPUnit\Framework\TestCase;
 
@@ -251,46 +250,6 @@ class ContentViewBuilderTest extends TestCase
         $this->contentViewBuilder->buildView($parameters);
     }
 
-    public function testBuildViewWithDeprecatedControllerReference(): void
-    {
-        $contentInfo = new ContentInfo(['id' => 120]);
-        $content = new Content([
-            'versionInfo' => new VersionInfo([
-                'contentInfo' => $contentInfo,
-            ]),
-        ]);
-        $location = new Location(
-            [
-                'invisible' => false,
-                'contentInfo' => $contentInfo,
-                'content' => $content,
-            ]
-        );
-
-        $expectedView = new ContentView(null, [], 'full');
-        $expectedView->setControllerReference(new ControllerReference('ez_content:viewAction'));
-        $expectedView->setLocation($location);
-        $expectedView->setContent($content);
-
-        $parameters = [
-            'viewType' => 'full',
-            '_controller' => 'ez_content:viewLocation',
-            'locationId' => 2,
-        ];
-
-        $this->repository
-            ->expects($this->once())
-            ->method('sudo')
-            ->willReturn($location);
-
-        $this->permissionResolver
-            ->expects($this->at(0))
-            ->method('canUser')
-            ->willReturn(true);
-
-        $this->assertEquals($expectedView, $this->contentViewBuilder->buildView($parameters));
-    }
-
     public function testBuildView(): void
     {
         $contentInfo = new ContentInfo(['id' => 120]);
@@ -308,13 +267,12 @@ class ContentViewBuilderTest extends TestCase
         );
 
         $expectedView = new ContentView(null, [], 'full');
-        $expectedView->setControllerReference(new ControllerReference('ez_content:viewAction'));
         $expectedView->setLocation($location);
         $expectedView->setContent($content);
 
         $parameters = [
             'viewType' => 'full',
-            '_controller' => 'ez_content:viewContent',
+            '_controller' => 'ez_content:viewAction',
             'locationId' => 2,
         ];
 

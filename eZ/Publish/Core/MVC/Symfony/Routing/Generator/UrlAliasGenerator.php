@@ -21,7 +21,6 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class UrlAliasGenerator extends Generator
 {
-    const INTERNAL_LOCATION_ROUTE = '_ezpublishLocation';
     const INTERNAL_CONTENT_VIEW_ROUTE = '_ez_content_view';
 
     /** @var \eZ\Publish\Core\Repository\Repository */

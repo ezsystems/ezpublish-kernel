@@ -1,13 +1,3 @@
-# Internal routes
-_ezpublishLocation:
-    path: /content/location/{locationId}/{viewType}/{layout}
-    defaults:
-        _controller: ez_content:viewLocation
-        viewType: full
-        layout: true
-    options:
-        expose: true # @todo it was originally exposed by AdminUI, discuss if this change is okay
-
 # This route is deprecated and will be removed in future versions.
 # The purpose of the route is to preserve BC by redirecting from the old format
 # of "_ez_content_view" route with "language" parameter, to the new format without
