@@ -20,9 +20,11 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\DraftList\Item\UnauthorizedContentDraftListItem;
+use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
@@ -537,6 +539,76 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testLoadContentInfoGetContentType(ContentInfo $contentInfo): void
+    {
+        $contentType = $contentInfo->getContentType();
+
+        $this->assertInstanceOf(ContentType::class, $contentType);
+        $this->assertEquals('folder', $contentType->identifier);
+    }
+
+    /**
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testLoadContentInfoGetSection(ContentInfo $contentInfo): void
+    {
+        $section = $contentInfo->getSection();
+
+        $this->assertInstanceOf(Section::class, $section);
+        $this->assertEquals('media', $section->identifier);
+    }
+
+    /**
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testLoadContentInfoGetMainLanguage(ContentInfo $contentInfo): void
+    {
+        $language = $contentInfo->getMainLanguage();
+
+        $this->assertInstanceOf(Language::class, $language);
+        $this->assertEquals('eng-US', $language->languageCode);
+    }
+
+    /**
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testLoadContentInfoGetMainLocation(ContentInfo $contentInfo): void
+    {
+        $mainLocation = $contentInfo->getMainLocation();
+
+        $this->assertInstanceOf(Location::class, $mainLocation);
+        $this->assertEquals('75c715a51699d2d309a924eca6a95145', $mainLocation->remoteId);
+    }
+
+    /**
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testLoadContentInfoSetsExpectedOwnerProxy(ContentInfo $contentInfo): void
+    {
+        $owner = $contentInfo->getOwner();
+
+        $this->assertInstanceOf(User::class, $owner);
+        $this->assertEquals('Administrator User', $owner->getName());
+    }
+
+    /**
      * Test for the loadContentInfo() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
@@ -718,6 +790,50 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertTrue($versionInfo->isPublished());
         $this->assertFalse($versionInfo->isDraft());
         $this->assertFalse($versionInfo->isArchived());
+    }
+
+    /**
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     */
+    public function testLoadVersionInfoByIdGetCreator(VersionInfo $versionInfo): void
+    {
+        $creator = $versionInfo->getCreator();
+
+        $this->assertInstanceOf(User::class, $creator);
+        $this->assertEquals('Administrator User', $creator->getName());
+    }
+
+    /**
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     */
+    public function testLoadVersionInfoByIdGetInitialLanguage(VersionInfo $versionInfo): void
+    {
+        $initialLanguage = $versionInfo->getInitialLanguage();
+
+        $this->assertInstanceOf(Language::class, $initialLanguage);
+        $this->assertEquals('eng-US', $initialLanguage->languageCode);
+    }
+
+    /**
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     */
+    public function testLoadVersionInfoByIdGetLanguages(VersionInfo $versionInfo): void
+    {
+        $actualLanguages = $versionInfo->getLanguages();
+
+        $expectedLanguages = ['eng-US'];
+        foreach ($expectedLanguages as $i => $expectedLanguage) {
+            $this->assertEquals($expectedLanguage, $actualLanguages[$i]->languageCode);
+        }
     }
 
     /**

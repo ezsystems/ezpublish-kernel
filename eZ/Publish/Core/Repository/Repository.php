@@ -8,6 +8,8 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
@@ -228,6 +230,12 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy */
     private $thumbnailStrategy;
 
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory */
+    private $proxyDomainMapperFactory;
+
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface|null */
+    private $proxyDomainMapper;
+
     /**
      * Construct repository object with provided storage engine.
      *
@@ -237,6 +245,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
+     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory
      * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
      * @param array $serviceSettings
      * @param \Psr\Log\LoggerInterface|null $logger
@@ -249,6 +258,7 @@ class Repository implements RepositoryInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashGenerator,
         ThumbnailStrategy $thumbnailStrategy,
+        ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
         array $serviceSettings = [],
         LoggerInterface $logger = null
     ) {
@@ -259,25 +269,28 @@ class Repository implements RepositoryInterface
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->passwordHashService = $passwordHashGenerator;
         $this->thumbnailStrategy = $thumbnailStrategy;
+        $this->proxyDomainMapperFactory = $proxyDomainMapperFactory;
+
         $this->serviceSettings = $serviceSettings + [
-            'content' => [],
-            'contentType' => [],
-            'location' => [],
-            'section' => [],
-            'role' => [],
-            'user' => [
-                'anonymousUserID' => 10,
-            ],
-            'language' => [],
-            'trash' => [],
-            'io' => [],
-            'objectState' => [],
-            'search' => [],
-            'urlAlias' => [],
-            'urlWildcard' => [],
-            'nameSchema' => [],
-            'languages' => [],
-        ];
+                'content' => [],
+                'contentType' => [],
+                'location' => [],
+                'section' => [],
+                'role' => [],
+                'user' => [
+                    'anonymousUserID' => 10,
+                ],
+                'language' => [],
+                'trash' => [],
+                'io' => [],
+                'objectState' => [],
+                'search' => [],
+                'urlAlias' => [],
+                'urlWildcard' => [],
+                'nameSchema' => [],
+                'languages' => [],
+                'proxy_factory' => [],
+            ];
 
         if (!empty($this->serviceSettings['languages'])) {
             $this->serviceSettings['language']['languages'] = $this->serviceSettings['languages'];
@@ -419,6 +432,7 @@ class Repository implements RepositoryInterface
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
             $this->getPermissionResolver(),
+            $this->getProxyDomainMapper(),
             $this->serviceSettings['trash']
         );
 
@@ -699,12 +713,11 @@ class Repository implements RepositoryInterface
      * Get NameSchemaResolverService.
      *
      *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
+     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService
      * @internal
      * @private
      *
-     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      */
     public function getNameSchemaService()
     {
@@ -743,9 +756,8 @@ class Repository implements RepositoryInterface
      * Get RelationProcessor.
      *
      *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
      * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      */
     protected function getRelationProcessor()
     {
@@ -755,9 +767,8 @@ class Repository implements RepositoryInterface
     /**
      * Get Content Domain Mapper.
      *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
      * @return \eZ\Publish\Core\Repository\Helper\DomainMapper
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      */
     protected function getDomainMapper()
     {
@@ -772,10 +783,22 @@ class Repository implements RepositoryInterface
             $this->getContentTypeDomainMapper(),
             $this->persistenceHandler->contentLanguageHandler(),
             $this->fieldTypeRegistry,
-            $this->thumbnailStrategy
+            $this->thumbnailStrategy,
+            $this->getProxyDomainMapper()
         );
 
         return $this->domainMapper;
+    }
+
+    protected function getProxyDomainMapper(): ProxyDomainMapperInterface
+    {
+        if ($this->proxyDomainMapper !== null) {
+            return $this->proxyDomainMapper;
+        }
+
+        $this->proxyDomainMapper = $this->proxyDomainMapperFactory->create($this);
+
+        return $this->proxyDomainMapper;
     }
 
     /**
@@ -794,7 +817,8 @@ class Repository implements RepositoryInterface
         $this->contentTypeDomainMapper = new Helper\ContentTypeDomainMapper(
             $this->persistenceHandler->contentTypeHandler(),
             $this->persistenceHandler->contentLanguageHandler(),
-            $this->fieldTypeRegistry
+            $this->fieldTypeRegistry,
+            $this->getProxyDomainMapper()
         );
 
         return $this->contentTypeDomainMapper;
@@ -802,8 +826,6 @@ class Repository implements RepositoryInterface
 
     /**
      * Get PermissionCriterionResolver.
-     *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
      * @return \eZ\Publish\API\Repository\PermissionCriterionResolver
      */

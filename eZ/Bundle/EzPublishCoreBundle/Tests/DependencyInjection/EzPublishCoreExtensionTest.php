@@ -801,6 +801,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->disableCheckExceptionOnInvalidReferenceBehaviorPass();
         $this->container->setParameter('webroot_dir', __DIR__);
         $this->container->setParameter('kernel.root_dir', __DIR__);
+        $this->container->setParameter('kernel.cache_dir', __DIR__ . '/cache');
         $this->container->setParameter('kernel.debug', false);
         $this->compile();
     }

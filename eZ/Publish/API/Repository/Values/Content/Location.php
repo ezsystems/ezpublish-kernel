@@ -153,6 +153,13 @@ abstract class Location extends ValueObject
     abstract public function getContentInfo();
 
     /**
+     * Return the parent location of of this location.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location|null
+     */
+    abstract public function getParentLocation(): ?Location;
+
+    /**
      * Returns true if current location is a draft.
      *
      * @return bool

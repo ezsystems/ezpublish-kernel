@@ -1,7 +1,8 @@
 parameters:
+    ezplatform.kernel.proxy_cache_dir: 'var/cache/repository/proxy'
+
     # intentionally defined class parameter to be used by the Repository Factory
     ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
-
 services:
     ezpublish.api.repository.factory:
         class: eZ\Publish\Core\Base\Container\ApiLoader\RepositoryFactory
@@ -22,6 +23,7 @@ services:
             - '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
             - '@eZ\Publish\Core\Repository\User\PasswordHashService'
             - '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
+            - '@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory'
         lazy: true
 
     ezpublish.api.service.inner_content:
@@ -121,3 +123,14 @@ services:
             - '@ezpublish.api.persistence_handler'
         calls:
             - ['setLogger', ['@?logger']]
+
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator:
+        arguments:
+            $proxyCacheDir: '%ezplatform.kernel.proxy_cache_dir%'
+
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface:
+        alias: 'eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator'
+
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory:
+        arguments:
+            $proxyGenerator: '@eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface'

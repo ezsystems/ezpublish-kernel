@@ -13,21 +13,30 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Helper\DomainMapper;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
-use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 
 /**
  * Mock test case for internal DomainMapper.
  */
 class DomainMapperTest extends BaseServiceMockTest
 {
+    private const EXAMPLE_CONTENT_TYPE_ID = 1;
+    private const EXAMPLE_SECTION_ID = 1;
+    private const EXAMPLE_MAIN_LOCATION_ID = 1;
+    private const EXAMPLE_MAIN_LANGUAGE_CODE = 'ger-DE';
+    private const EXAMPLE_OWNER_ID = 1;
+    private const EXAMPLE_INITIAL_LANGUAGE_CODE = 'eng-GB';
+    private const EXAMPLE_CREATOR_ID = 23;
+
     /**
      * @covers \eZ\Publish\Core\Repository\Helper\DomainMapper::buildVersionInfoDomainObject
      * @dataProvider providerForBuildVersionInfo
@@ -113,45 +122,51 @@ class DomainMapperTest extends BaseServiceMockTest
 
     public function providerForBuildVersionInfo()
     {
+        $properties = [
+            'contentInfo' => new SPIContentInfo([
+                'contentTypeId' => self::EXAMPLE_CONTENT_TYPE_ID,
+                'sectionId' => self::EXAMPLE_SECTION_ID,
+                'mainLocationId' => self::EXAMPLE_MAIN_LOCATION_ID,
+                'mainLanguageCode' => self::EXAMPLE_MAIN_LANGUAGE_CODE,
+                'ownerId' => self::EXAMPLE_OWNER_ID,
+            ]),
+            'creatorId' => self::EXAMPLE_CREATOR_ID,
+            'initialLanguageCode' => self::EXAMPLE_INITIAL_LANGUAGE_CODE,
+        ];
+
         return [
             [
                 new SPIVersionInfo(
-                    [
+                    $properties + [
                         'status' => 44,
-                        'contentInfo' => new SPIContentInfo(),
-                    ]
-                ),
+                    ]),
             ],
             [
                 new SPIVersionInfo(
-                    [
+                    $properties + [
                         'status' => SPIVersionInfo::STATUS_DRAFT,
-                        'contentInfo' => new SPIContentInfo(),
                     ]
                 ),
             ],
             [
                 new SPIVersionInfo(
-                    [
+                    $properties + [
                         'status' => SPIVersionInfo::STATUS_PENDING,
-                        'contentInfo' => new SPIContentInfo(),
                     ]
                 ),
             ],
             [
                 new SPIVersionInfo(
-                    [
+                    $properties + [
                         'status' => SPIVersionInfo::STATUS_ARCHIVED,
-                        'contentInfo' => new SPIContentInfo(),
                         'languageCodes' => ['eng-GB', 'nor-NB', 'fre-FR'],
                     ]
                 ),
             ],
             [
                 new SPIVersionInfo(
-                    [
+                    $properties + [
                         'status' => SPIVersionInfo::STATUS_PUBLISHED,
-                        'contentInfo' => new SPIContentInfo(),
                     ]
                 ),
             ],
@@ -160,15 +175,46 @@ class DomainMapperTest extends BaseServiceMockTest
 
     public function providerForBuildLocationDomainObjectsOnSearchResult()
     {
+        $properties = [
+            'contentTypeId' => self::EXAMPLE_CONTENT_TYPE_ID,
+            'sectionId' => self::EXAMPLE_SECTION_ID,
+            'mainLocationId' => self::EXAMPLE_MAIN_LOCATION_ID,
+            'mainLanguageCode' => self::EXAMPLE_MAIN_LANGUAGE_CODE,
+            'ownerId' => self::EXAMPLE_OWNER_ID,
+        ];
+
         $locationHits = [
-            new Location(['id' => 21, 'contentId' => 32]),
-            new Location(['id' => 22, 'contentId' => 33]),
+            new Location(['id' => 21, 'contentId' => 32, 'parentId' => 1]),
+            new Location(['id' => 22, 'contentId' => 33, 'parentId' => 1]),
         ];
 
         return [
-            [$locationHits, [32, 33], [], [32 => new ContentInfo(['id' => 32]), 33 => new ContentInfo(['id' => 33])], 0],
-            [$locationHits, [32, 33], ['languages' => ['eng-GB']], [32 => new ContentInfo(['id' => 32])], 1],
-            [$locationHits, [32, 33], ['languages' => ['eng-GB']], [], 2],
+            [
+                $locationHits,
+                [32, 33],
+                [],
+                [
+                    32 => new ContentInfo($properties + ['id' => 32]),
+                    33 => new ContentInfo($properties + ['id' => 33]),
+                ],
+                0,
+            ],
+            [
+                $locationHits,
+                [32, 33],
+                ['languages' => ['eng-GB']],
+                [
+                    32 => new ContentInfo($properties + ['id' => 32]),
+                ],
+                1,
+            ],
+            [
+                $locationHits,
+                [32, 33],
+                ['languages' => ['eng-GB']],
+                [],
+                2,
+            ],
         ];
     }
 
@@ -230,7 +276,8 @@ class DomainMapperTest extends BaseServiceMockTest
             $this->getContentTypeDomainMapperMock(),
             $this->getLanguageHandlerMock(),
             $this->getFieldTypeRegistryMock(),
-            $this->getThumbnailStrategy()
+            $this->getThumbnailStrategy(),
+            $this->getProxyFactoryMock()
         );
     }
 
@@ -256,5 +303,10 @@ class DomainMapperTest extends BaseServiceMockTest
     protected function getTypeHandlerMock()
     {
         return $this->getPersistenceMockHandler('Content\\Type\\Handler');
+    }
+
+    protected function getProxyFactoryMock(): ProxyDomainMapperInterface
+    {
+        return $this->createMock(ProxyDomainMapperInterface::class);
     }
 }

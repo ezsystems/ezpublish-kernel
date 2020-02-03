@@ -487,11 +487,11 @@ class LocationServiceTest extends BaseTest
             $location
         );
 
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo',
-            $location->contentInfo
-        );
+        $this->assertInstanceOf(ContentInfo::class, $location->contentInfo);
         $this->assertEquals($this->generateId('object', 4), $location->contentInfo->id);
+
+        $this->assertInstanceOf(Location::class, $location->getParentLocation());
+        $this->assertEquals($this->generateId('location', 1), $location->getParentLocation()->id);
 
         // Check lazy loaded proxy on ->content
         $this->assertInstanceOf(

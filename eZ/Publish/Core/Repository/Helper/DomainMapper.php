@@ -11,12 +11,12 @@ namespace eZ\Publish\Core\Repository\Helper;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as TypeHandler;
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\ContentProxy;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -70,6 +70,9 @@ class DomainMapper
     /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy */
     private $thumbnailStrategy;
 
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface */
+    private $proxyFactory;
+
     /**
      * Setups service with reference to repository.
      *
@@ -80,6 +83,7 @@ class DomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
+     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface $proxyFactory
      */
     public function __construct(
         ContentHandler $contentHandler,
@@ -88,7 +92,8 @@ class DomainMapper
         ContentTypeDomainMapper $contentTypeDomainMapper,
         LanguageHandler $contentLanguageHandler,
         FieldTypeRegistry $fieldTypeRegistry,
-        ThumbnailStrategy $thumbnailStrategy
+        ThumbnailStrategy $thumbnailStrategy,
+        ProxyDomainMapperInterface $proxyFactory
     ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
@@ -97,6 +102,7 @@ class DomainMapper
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->thumbnailStrategy = $thumbnailStrategy;
+        $this->proxyFactory = $proxyFactory;
     }
 
     /**
@@ -168,9 +174,11 @@ class DomainMapper
         array $prioritizedLanguages = [],
         bool $useAlwaysAvailable = true
     ): APIContent {
-        $generator = $this->generatorForContentList([$info], $prioritizedLanguages, $useAlwaysAvailable);
-
-        return new ContentProxy($generator, $info->id);
+        return $this->proxyFactory->createContentProxy(
+            $info->id,
+            $prioritizedLanguages,
+            $useAlwaysAvailable
+        );
     }
 
     /**
@@ -188,62 +196,15 @@ class DomainMapper
         bool $useAlwaysAvailable = true
     ): array {
         $list = [];
-        $generator = $this->generatorForContentList($infoList, $prioritizedLanguages, $useAlwaysAvailable);
         foreach ($infoList as $info) {
-            $list[$info->id] = new ContentProxy($generator, $info->id);
+            $list[$info->id] = $this->proxyFactory->createContentProxy(
+                $info->id,
+                $prioritizedLanguages,
+                $useAlwaysAvailable
+            );
         }
 
         return $list;
-    }
-
-    /**
-     * @todo Maybe change signature to generatorForContentList($contentIds, $prioritizedLanguages, $translations)
-     * @todo to avoid keeping referance to $infoList all the way until the generator is called.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo[] $infoList
-     * @param string[] $prioritizedLanguages
-     * @param bool $useAlwaysAvailable
-     *
-     * @return \Generator
-     */
-    private function generatorForContentList(
-        array $infoList,
-        array $prioritizedLanguages = [],
-        bool $useAlwaysAvailable = true
-    ): \Generator {
-        $contentIds = [];
-        $contentTypeIds = [];
-        $translations = $prioritizedLanguages;
-        foreach ($infoList as $info) {
-            $contentIds[] = $info->id;
-            $contentTypeIds[] = $info->contentTypeId;
-            // Unless we are told to load all languages, we add main language to translations so they are loaded too
-            // Might in some case load more languages then intended, but prioritised handling will pick right one
-            if (!empty($prioritizedLanguages) && $useAlwaysAvailable && $info->alwaysAvailable) {
-                $translations[] = $info->mainLanguageCode;
-            }
-        }
-
-        unset($infoList);
-
-        $contentList = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
-        $contentTypeList = $this->contentTypeHandler->loadContentTypeList(array_unique($contentTypeIds));
-        while (!empty($contentList)) {
-            $id = yield;
-            /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $info */
-            $info = $contentList[$id]->versionInfo->contentInfo;
-            yield $this->buildContentDomainObject(
-                $contentList[$id],
-                $this->contentTypeDomainMapper->buildContentTypeDomainObject(
-                    $contentTypeList[$info->contentTypeId],
-                    $prioritizedLanguages
-                ),
-                $prioritizedLanguages,
-                $info->alwaysAvailable ? $info->mainLanguageCode : null
-            );
-
-            unset($contentList[$id]);
-        }
     }
 
     /**
@@ -372,6 +333,9 @@ class DomainMapper
                 'names' => $spiVersionInfo->names,
                 'contentInfo' => $this->buildContentInfoDomainObject($spiVersionInfo->contentInfo),
                 'prioritizedNameLanguageCode' => $prioritizedNameLanguageCode,
+                'creator' => $this->proxyFactory->createUserProxy($spiVersionInfo->creatorId, $prioritizedLanguages),
+                'initialLanguage' => $this->proxyFactory->createLanguageProxy($spiVersionInfo->initialLanguageCode),
+                'languages' => $this->proxyFactory->createLanguageProxyList($spiVersionInfo->languageCodes),
             ]
         );
     }
@@ -421,6 +385,11 @@ class DomainMapper
                 'mainLocationId' => $spiContentInfo->mainLocationId,
                 'status' => $status,
                 'isHidden' => $spiContentInfo->isHidden,
+                'contentType' => $this->proxyFactory->createContentTypeProxy($spiContentInfo->contentTypeId),
+                'section' => $this->proxyFactory->createSectionProxy($spiContentInfo->sectionId),
+                'mainLocation' => $spiContentInfo->mainLocationId !== null ? $this->proxyFactory->createLocationProxy($spiContentInfo->mainLocationId) : null,
+                'mainLanguage' => $this->proxyFactory->createLanguageProxy($spiContentInfo->mainLanguageCode),
+                'owner' => $this->proxyFactory->createUserProxy($spiContentInfo->ownerId),
             ]
         );
     }
@@ -495,7 +464,8 @@ class DomainMapper
         return $this->mapLocation(
             $spiLocation,
             $this->buildContentInfoDomainObject($spiContentInfo),
-            $this->buildContentProxy($spiContentInfo, $prioritizedLanguages, $useAlwaysAvailable)
+            $this->buildContentProxy($spiContentInfo, $prioritizedLanguages, $useAlwaysAvailable),
+            $this->proxyFactory->createLocationProxy($spiLocation->parentId, $prioritizedLanguages)
         );
     }
 
@@ -527,7 +497,11 @@ class DomainMapper
             $contentInfo = $content->contentInfo;
         }
 
-        return $this->mapLocation($spiLocation, $contentInfo, $content);
+        $parentLocation = $this->proxyFactory->createLocationProxy(
+            $spiLocation->parentId,
+        );
+
+        return $this->mapLocation($spiLocation, $contentInfo, $content, $parentLocation);
     }
 
     /**
@@ -579,8 +553,12 @@ class DomainMapper
         );
     }
 
-    private function mapLocation(SPILocation $spiLocation, ContentInfo $contentInfo, APIContent $content): APILocation
-    {
+    private function mapLocation(
+        SPILocation $spiLocation,
+        ContentInfo $contentInfo,
+        APIContent $content,
+        ?APILocation $parentLocation = null
+    ): APILocation {
         return new Location(
             [
                 'content' => $content,
@@ -596,6 +574,7 @@ class DomainMapper
                 'depth' => $spiLocation->depth,
                 'sortField' => $spiLocation->sortField,
                 'sortOrder' => $spiLocation->sortOrder,
+                'parentLocation' => $parentLocation,
             ]
         );
     }

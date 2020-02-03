@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
@@ -63,6 +64,7 @@ class RepositoryFactory implements ContainerAwareInterface
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashService
      * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
+     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory $proxyDomainMapperFactory
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
@@ -73,7 +75,8 @@ class RepositoryFactory implements ContainerAwareInterface
         RelationProcessor $relationProcessor,
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashService,
-        ThumbnailStrategy $thumbnailStrategy
+        ThumbnailStrategy $thumbnailStrategy,
+        ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory
     ) {
         $repository = new $this->repositoryClass(
             $persistenceHandler,
@@ -83,6 +86,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $fieldTypeRegistry,
             $passwordHashService,
             $thumbnailStrategy,
+            $proxyDomainMapperFactory,
             [
                 'role' => [
                     'limitationTypes' => $this->roleLimitations,

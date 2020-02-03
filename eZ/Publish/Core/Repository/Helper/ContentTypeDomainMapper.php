@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the DomainMapper class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
@@ -19,10 +19,10 @@ use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroupProxy;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
@@ -47,8 +47,11 @@ class ContentTypeDomainMapper
     /** @var \eZ\Publish\SPI\Persistence\Content\Language\Handler */
     protected $contentLanguageHandler;
 
-    /** @var FieldTypeRegistry */
+    /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
     protected $fieldTypeRegistry;
+
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper */
+    protected $proxyFactory;
 
     /**
      * Setups service with reference to repository.
@@ -56,15 +59,18 @@ class ContentTypeDomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper $proxyFactory
      */
     public function __construct(
         SPITypeHandler $contentTypeHandler,
         SPILanguageHandler $contentLanguageHandler,
-        FieldTypeRegistry $fieldTypeRegistry
+        FieldTypeRegistry $fieldTypeRegistry,
+        ProxyDomainMapperInterface $proxyFactory
     ) {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
+        $this->proxyFactory = $proxyFactory;
     }
 
     /**
@@ -91,7 +97,10 @@ class ContentTypeDomainMapper
             [
                 'names' => $spiContentType->name,
                 'descriptions' => $spiContentType->description,
-                'contentTypeGroups' => $this->buildContentTypeGroupProxyList($spiContentType->groupIds, $prioritizedLanguages),
+                'contentTypeGroups' => $this->proxyFactory->createContentTypeGroupProxyList(
+                    $spiContentType->groupIds,
+                    $prioritizedLanguages
+                ),
                 'fieldDefinitions' => new FieldDefinitionCollection($fieldDefinitions),
                 'id' => $spiContentType->id,
                 'status' => $spiContentType->status,
@@ -207,34 +216,6 @@ class ContentTypeDomainMapper
                 'prioritizedLanguages' => $prioritizedLanguages,
             ]
         );
-    }
-
-    /**
-     * Builds a list of ContentTypeGroup proxy objects (lazy loaded, loads all as soon as one of them loads).
-     */
-    public function buildContentTypeGroupProxyList(array $ids, array $prioritizedLanguages = []): array
-    {
-        $groups = [];
-        $generator = $this->generatorForContentTypeGroupList($ids, $prioritizedLanguages);
-        foreach ($ids as $id) {
-            $groups[] = new ContentTypeGroupProxy($generator, $id);
-        }
-
-        return $groups;
-    }
-
-    private function generatorForContentTypeGroupList(array $ids, array $prioritizedLanguages = []): \Generator
-    {
-        $groups = $this->contentTypeHandler->loadGroups($ids);
-
-        while (!empty($groups)) {
-            $id = yield;
-            yield $this->buildContentTypeGroupDomainObject(
-                $groups[$id],
-                $prioritizedLanguages
-            );
-            unset($groups[$id]);
-        }
     }
 
     /**

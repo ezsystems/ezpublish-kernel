@@ -27,6 +27,9 @@ class Location extends APILocation
     /** @var array */
     protected $path;
 
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
+    protected $parentLocation;
+
     /**
      * Returns the content info of the content object of this location.
      *
@@ -35,6 +38,11 @@ class Location extends APILocation
     public function getContentInfo()
     {
         return $this->contentInfo;
+    }
+
+    public function getParentLocation(): ?APILocation
+    {
+        return $this->parentLocation;
     }
 
     /**
