@@ -98,88 +98,6 @@ class SearchServiceFulltextTest extends BaseTest
      *
      * @see testPrepareContent
      */
-    public function providerForTestFulltextSearchSolr6(): array
-    {
-        return [
-            [
-                'fox',
-                [3, [6, 8, 10], [11, 13, 14, 15]],
-            ],
-            [
-                'quick fox',
-                $quickOrFox = [6, [11, 13, 15], [1, 3], [5, 7, 8, 10], [12, 14]],
-            ],
-            [
-                'quick OR fox',
-                $quickOrFox,
-            ],
-            [
-                'quick AND () OR AND fox',
-                $quickOrFox,
-            ],
-            [
-                '+quick +fox',
-                $quickAndFox = [6, [11, 13, 15]],
-            ],
-            [
-                'quick AND fox',
-                $quickAndFox,
-            ],
-            [
-                'brown +fox -news',
-                [8, 11, 3, 6],
-            ],
-            [
-                'quick +fox -news',
-                [6, 11, 3, 8],
-            ],
-            [
-                'quick brown +fox -news',
-                $notNewsFox = [11, [6, 8], 3],
-            ],
-            [
-                '((quick AND fox) OR (brown AND fox) OR fox) AND NOT news',
-                $notNewsFox,
-            ],
-            [
-                '"quick brown"',
-                [5, [11, 12, 15]],
-            ],
-            [
-                '"quick brown" AND fox',
-                [[11, 15]],
-            ],
-            [
-                'quick OR brown AND fox AND NOT news',
-                [11, 8],
-            ],
-            [
-                '(quick OR brown) AND fox AND NOT news',
-                [11, [6, 8]],
-            ],
-            [
-                '"fox brown"',
-                [],
-            ],
-            [
-                'qui*',
-                [[1, 5, 6, 7, 11, 12, 13, 15]],
-            ],
-            [
-                '+qui* +fox',
-                [6, [11, 13, 15]],
-            ],
-        ];
-    }
-
-    /**
-     * Return pairs of arguments:
-     *  - search string for testing
-     *  - an array of corresponding Content keys as defined in testPrepareContent() method,
-     *    ordered and grouped by relevancy.
-     *
-     * @see testPrepareContent
-     */
     public function providerForTestFulltextSearchSolr7(): array
     {
         return [
@@ -255,29 +173,6 @@ class SearchServiceFulltextTest extends BaseTest
     }
 
     /**
-     * Test for the findContent() method on Solr 6.
-     *
-     * @param string $searchString
-     * @param array $expectedKeys
-     * @param array $idMap
-     *
-     * @depends testPrepareContent
-     * @dataProvider providerForTestFulltextSearchSolr6
-     */
-    public function testFulltextContentSearchSolr6(string $searchString, array $expectedKeys, array $idMap): void
-    {
-        self::markTestIncomplete(
-            'Scoring changed due to EZP-31226. Test results need to be revisited.'
-        );
-
-        if (($solrVersion = getenv('SOLR_VERSION')) >= 7) {
-            $this->markTestSkipped('This test is only relevant for Solr 6');
-        }
-
-        $this->doTestFulltextContentSearch($searchString, $expectedKeys, $idMap);
-    }
-
-    /**
      * Test for the findContent() method on Solr >= 7.
      *
      * @param string $searchString
@@ -289,7 +184,7 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function testFulltextContentSearchSolr7(string $searchString, array $expectedKeys, array $idMap): void
     {
-        if (($solrVersion = getenv('SOLR_VERSION')) < 7) {
+        if (false === $this->isSolrMajorVersionInRange('7.0.0', '8.0.0')) {
             $this->markTestSkipped('This test is only relevant for Solr >= 7');
         }
 
@@ -308,25 +203,6 @@ class SearchServiceFulltextTest extends BaseTest
     }
 
     /**
-     * Test for the findLocations() method on Solr 6.
-     *
-     * @param $searchString
-     * @param array $expectedKeys
-     * @param array $idMap
-     *
-     * @depends testPrepareContent
-     * @dataProvider providerForTestFulltextSearchSolr6
-     */
-    public function testFulltextLocationSearchSolr6($searchString, array $expectedKeys, array $idMap): void
-    {
-        if (!$this->isSolrMajorVersionInRange('6.0.0', '7.0.0')) {
-            $this->markTestSkipped('This test is only relevant for Solr 6');
-        }
-
-        $this->doTestFulltextLocationSearch($searchString, $expectedKeys, $idMap);
-    }
-
-    /**
      * Test for the findLocations() method on Solr >= 7.
      *
      * @param $searchString
@@ -338,7 +214,7 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function testFulltextLocationSearchSolr7($searchString, array $expectedKeys, array $idMap): void
     {
-        if (($solrVersion = getenv('SOLR_VERSION')) < 7) {
+        if (false === $this->isSolrMajorVersionInRange('7.0.0', '8.0.0')) {
             $this->markTestSkipped('This test is only relevant for Solr >= 7');
         }
 
