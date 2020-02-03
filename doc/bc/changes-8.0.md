@@ -82,7 +82,27 @@ Changes affecting version compatibility with former or future versions.
     * `\eZ\Publish\API\Repository\RoleService::loadPoliciesByUserId`
     * `\eZ\Publish\API\Repository\RoleService::unassignRoleFromUser`
     * `\eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup`
-
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Ancestor::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeGroupId::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\FieldRelation::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchAll::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchNone::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\MoreLikeThis::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility::createFromQueryBuilder`
+    
 * The "Setup" folder and Section have been removed from the initial (clean installation) data.
 
 * The "Design" Section has been removed from the initial (clean installation) data.
