@@ -25,8 +25,14 @@ class ConfigurationProcessorTest extends TestCase
         $container = $this->getContainerMock();
         $siteAccessList = ['test', 'bar'];
         $groupsBySa = ['test' => ['group1', 'group2'], 'bar' => ['group1', 'group3']];
+        $siteAccessGroups = [
+            'group1' => ['test', 'bar'],
+            'group2' => ['test'],
+            'group3' => ['bar'],
+        ];
         ConfigurationProcessor::setAvailableSiteAccesses($siteAccessList);
         ConfigurationProcessor::setGroupsBySiteAccess($groupsBySa);
+        ConfigurationProcessor::setAvailableSiteAccessGroups($siteAccessGroups);
         $processor = new ConfigurationProcessor($container, $namespace, $siteAccessNodeName);
 
         $contextualizer = $processor->getContextualizer();

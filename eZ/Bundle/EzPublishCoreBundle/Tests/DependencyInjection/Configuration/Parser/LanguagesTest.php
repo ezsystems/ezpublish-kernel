@@ -74,7 +74,7 @@ class LanguagesTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue('languages', [], self::EMPTY_SA_GROUP);
         $this->assertSame(
             [
-                'eng-US' => ['ezdemo_site', 'fre'],
+                'eng-US' => ['ezdemo_frontend_group', 'ezdemo_site', 'fre'],
             ],
             $this->container->getParameter('ezpublish.siteaccesses_by_language')
         );

@@ -1,15 +1,13 @@
 <?php
 
 /**
- * File containing the ScopeConfigurationProcessor class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use InvalidArgumentException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Processor for SiteAccess aware configuration processing.
@@ -33,13 +31,20 @@ class ConfigurationProcessor
     protected static $groupsBySiteAccess = [];
 
     /**
+     * Keys are Site Access group names and values are an array of Site Access name which belongs to this group.
+     *
+     * @var array
+     */
+    protected static $availableSiteAccessGroups = [];
+
+    /**
      * Name of the node under which scope based (semantic) configuration takes place.
      *
      * @var string
      */
     protected $scopeNodeName;
 
-    /** @var ContextualizerInterface */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface */
     protected $contextualizer;
 
     public function __construct(ContainerInterface $containerBuilder, $namespace, $siteAcccessNodeName = 'system')
@@ -53,7 +58,7 @@ class ConfigurationProcessor
      * Important: Available SiteAccesses need to be set before ConfigurationProcessor to be constructed by a bundle
      * to set its configuration up.
      *
-     * @param array $availableSiteAccesses
+     * @param string[] $availableSiteAccesses
      */
     public static function setAvailableSiteAccesses(array $availableSiteAccesses)
     {
@@ -66,11 +71,20 @@ class ConfigurationProcessor
      * Important: Groups need to be set before ConfigurationProcessor to be constructed by a bundle
      * to set its configuration up.
      *
-     * @param array $groupsBySiteAccess
+     * @param array $groupsBySiteAccess Registered scope groups names, indexed by scope.
      */
     public static function setGroupsBySiteAccess(array $groupsBySiteAccess)
     {
         static::$groupsBySiteAccess = $groupsBySiteAccess;
+    }
+
+    /**
+     * @param array<string, array<string>> $availableSiteAccessGroups keys are Site Access group names and values are
+     * an array of Site Access name which belongs to this group
+     */
+    public static function setAvailableSiteAccessGroups(array $availableSiteAccessGroups)
+    {
+        static::$availableSiteAccessGroups = $availableSiteAccessGroups;
     }
 
     /**
@@ -145,7 +159,6 @@ class ConfigurationProcessor
      *
      * static::$scopes and static::$groupsByScope must be injected first.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $containerBuilder
      * @param string $namespace
      * @param string $siteAccessNodeName
      *
@@ -153,7 +166,14 @@ class ConfigurationProcessor
      */
     protected function buildContextualizer(ContainerInterface $containerBuilder, $namespace, $siteAccessNodeName)
     {
-        return new Contextualizer($containerBuilder, $namespace, $siteAccessNodeName, static::$availableSiteAccesses, static::$groupsBySiteAccess);
+        return new Contextualizer(
+            $containerBuilder,
+            $namespace,
+            $siteAccessNodeName,
+            static::$availableSiteAccesses,
+            static::$availableSiteAccessGroups,
+            static::$groupsBySiteAccess
+        );
     }
 
     /**
