@@ -355,7 +355,7 @@ class LocationService implements APILocationService, Sessionable
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function moveSubtree(Location $location, Location $newParentLocation)
     {

@@ -654,7 +654,7 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function moveSubtree(APILocation $location, APILocation $newParentLocation)
     {
