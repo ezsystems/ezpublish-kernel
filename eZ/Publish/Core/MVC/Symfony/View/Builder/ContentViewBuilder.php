@@ -221,7 +221,6 @@ class ContentViewBuilder implements ViewBuilder
      * @param $locationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
-     * @todo Do we need to handle permissions here ?
      */
     private function loadLocation($locationId)
     {
