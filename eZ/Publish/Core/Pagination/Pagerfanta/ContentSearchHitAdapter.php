@@ -24,13 +24,30 @@ class ContentSearchHitAdapter implements AdapterInterface
     /** @var \eZ\Publish\API\Repository\SearchService */
     private $searchService;
 
+    /** @var array */
+    private $languageFilter;
+
+    /** @var string|null */
+    private $displayLanguage;
+
     /** @var int */
     private $nbResults;
 
-    public function __construct(Query $query, SearchService $searchService)
-    {
+    public function __construct(
+        Query $query,
+        SearchService $searchService,
+        array $languageFilter = [],
+        ?string $displayLanguage = null
+    ) {
         $this->query = $query;
         $this->searchService = $searchService;
+        $this->languageFilter = $languageFilter;
+        $this->displayLanguage = $displayLanguage;
+    }
+
+    public function getDisplayLanguage(): ?string
+    {
+        return $this->displayLanguage;
     }
 
     /**
@@ -47,7 +64,12 @@ class ContentSearchHitAdapter implements AdapterInterface
         $countQuery = clone $this->query;
         $countQuery->limit = 0;
 
-        return $this->nbResults = $this->searchService->findContent($countQuery)->totalCount;
+        $searchResult = $this->searchService->findContent(
+            $countQuery,
+            $this->languageFilter
+        );
+
+        return $this->nbResults = $searchResult->totalCount;
     }
 
     /**
@@ -65,7 +87,7 @@ class ContentSearchHitAdapter implements AdapterInterface
         $query->limit = $length;
         $query->performCount = false;
 
-        $searchResult = $this->searchService->findContent($query);
+        $searchResult = $this->searchService->findContent($query, $this->languageFilter);
 
         // Set count for further use if returned by search engine despite !performCount (Solr, ES)
         if (!isset($this->nbResults) && isset($searchResult->totalCount)) {
