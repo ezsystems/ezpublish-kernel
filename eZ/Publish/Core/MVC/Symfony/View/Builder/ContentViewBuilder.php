@@ -218,8 +218,6 @@ class ContentViewBuilder implements ViewBuilder
 
     /**
      * Loads a visible Location.
-     * @todo Do we need to handle permissions here ?
-     *
      * @param $locationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
@@ -257,7 +255,7 @@ class ContentViewBuilder implements ViewBuilder
 
         return
             $this->permissionResolver->canUser('content', 'read', $content->contentInfo, $targets) ||
-            $this->permissionResolver->canUser('content', 'view_embed', $content->contentInfo, $targets);
+            ($isEmbed && $this->permissionResolver->canUser('content', 'view_embed', $content->contentInfo, $targets));
     }
 
     /**
