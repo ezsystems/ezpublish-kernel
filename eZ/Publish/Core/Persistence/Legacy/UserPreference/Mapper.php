@@ -42,7 +42,7 @@ class Mapper
         $userPreference->id = (int)$row['id'];
         $userPreference->userId = (int)$row['user_id'];
         $userPreference->name = $row['name'];
-        $userPreference->value = htmlspecialchars($row['value']);
+        $userPreference->value = $row['value'];
 
         return $userPreference;
     }
