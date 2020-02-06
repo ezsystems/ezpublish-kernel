@@ -27,27 +27,17 @@ class ContentSearchHitAdapter implements AdapterInterface
     /** @var array */
     private $languageFilter;
 
-    /** @var string|null */
-    private $displayLanguage;
-
     /** @var int */
     private $nbResults;
 
     public function __construct(
         Query $query,
         SearchService $searchService,
-        array $languageFilter = [],
-        ?string $displayLanguage = null
+        array $languageFilter = []
     ) {
         $this->query = $query;
         $this->searchService = $searchService;
         $this->languageFilter = $languageFilter;
-        $this->displayLanguage = $displayLanguage;
-    }
-
-    public function getDisplayLanguage(): ?string
-    {
-        return $this->displayLanguage;
     }
 
     /**
