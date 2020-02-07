@@ -196,6 +196,16 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
             return false;
         }
 
+        // Targets may be instances of classes (not being LocationCreateStruct or Location), which are not supported within
+        // this Limitation but are still valid as permission check targets
+        $targets = array_filter($targets, function ($target) {
+            return $target instanceof LocationCreateStruct or $target instanceof Location;
+        });
+
+        if (empty($targets)) {
+            return true;
+        }
+
         $hasLocationCreateStruct = false;
         foreach ($targets as $target) {
             if (!$target instanceof LocationCreateStruct) {
