@@ -381,7 +381,7 @@ EOT
             throw new InvalidArgumentException('--content-ids', '$contentIds can not be empty');
         }
 
-        $consolePath = $consolePath = file_exists(sprintf('%s/bin/console', $this->projectDir)) ? sprintf('%s/bin/console', $this->projectDir) : sprintf('%s/app/console', $this->projectDir);;
+        $consolePath = $consolePath = file_exists(sprintf('%s/bin/console', $this->projectDir)) ? sprintf('%s/bin/console', $this->projectDir) : sprintf('%s/app/console', $this->projectDir);
         $subProcessArgs = [
             $consolePath,
             'ezplatform:reindex',
