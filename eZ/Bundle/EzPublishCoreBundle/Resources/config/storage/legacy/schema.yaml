@@ -1170,6 +1170,7 @@ tables:
             published: { type: integer, nullable: false, options: { default: '0' } }
             section_id: { type: integer, nullable: false, options: { default: '0' } }
             word_id: { type: integer, nullable: false, options: { default: '0' } }
+            language_mask: { type: bigint, nullable: false, options: { default: '0' } }
     ezsearch_search_phrase:
         indexes:
             ezsearch_search_phrase_count: { fields: [phrase_count] }
