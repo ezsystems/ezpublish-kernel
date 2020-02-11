@@ -136,6 +136,7 @@ class DoctrineDatabase extends Gateway
                     'ContentClassAttributeID' => $fullTextValue->fieldDefinitionId,
                     'identifier' => $fullTextValue->fieldDefinitionIdentifier,
                     'integer_value' => $integerValue,
+                    'language_code' => $fullTextValue->languageCode,
                 ];
                 $indexArrayOnlyWords[$word] = 1;
                 ++$wordCount;
@@ -245,6 +246,7 @@ class DoctrineDatabase extends Gateway
             $contentFieldId = $indexArray[$i]['ContentClassAttributeID'];
             $identifier = $indexArray[$i]['identifier'];
             $integerValue = $indexArray[$i]['integer_value'];
+            $languageCode = $indexArray[$i]['language_code'];
             $wordId = $wordIDArray[$indexWord];
 
             if (isset($indexArray[$i + 1])) {
@@ -266,7 +268,8 @@ class DoctrineDatabase extends Gateway
                 $fullTextData->published,
                 $fullTextData->sectionId,
                 $identifier,
-                $integerValue
+                $integerValue,
+                $languageCode
             );
             $prevWordId = $wordId;
             ++$placement;
