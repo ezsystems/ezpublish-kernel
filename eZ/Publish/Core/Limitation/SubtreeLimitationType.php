@@ -130,6 +130,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
             $targets = array_filter($targets, function ($target) {
                 return $target instanceof Location || $target instanceof LocationCreateStruct;
             });
+
             return $this->evaluateForContentCreateStruct($value, $targets);
         } elseif ($object instanceof Content) {
             $object = $object->getVersionInfo()->getContentInfo();
