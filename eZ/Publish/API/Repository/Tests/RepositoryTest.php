@@ -986,6 +986,92 @@ class RepositoryTest extends BaseTest
      * Test for the canUser() method.
      *
      * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCanUserWithTargetThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $homeId = $this->generateId('object', 57);
+
+        /* BEGIN: Use Case */
+        // $homeId contains the ID of the "Home" frontpage
+
+        $user = $this->createUserVersion1();
+
+        // Set created user as current user
+        $repository->setCurrentUser($user);
+
+        $contentService = $repository->getContentService();
+
+        // Load the ContentInfo for "Home" frontpage
+        $contentInfo = $contentService->loadContentInfo($homeId);
+
+        // This call will throw "InvalidArgumentException" because $targets argument must be an
+        // instance of \eZ\Publish\API\Repository\Values\ValueObject class or an array of the same
+        $canUser = $repository->canUser(
+            'content',
+            'remove',
+            $contentInfo,
+            new \stdClass()
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the canUser() method.
+     *
+     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetURLAliasService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testSetCurrentUser
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testHasAccessLimited
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCanUserWithTargetThrowsInvalidArgumentExceptionVariant()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Set created user as current user
+        $repository->setCurrentUser($user);
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+
+        $contentService = $repository->getContentService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct->setField('name', 'My awesome forum');
+        $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
+        $contentCreateStruct->alwaysAvailable = true;
+
+        $urlAliasService = $repository->getURLAliasService();
+        $rootUrlAlias = $urlAliasService->lookUp('/');
+
+        // This call will throw "InvalidArgumentException" because $rootAlias is not a valid target object
+        $canUser = $repository->canUser(
+            'content',
+            'create',
+            $contentCreateStruct,
+            $rootUrlAlias
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the canUser() method.
+     *
+     * @see \eZ\Publish\API\Repository\Repository::canUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testCanUserThrowsBadStateException()
