@@ -706,54 +706,6 @@ class PermissionResolverTest extends BaseTest
      * Test for the canUser() method.
      *
      * @see \eZ\Publish\API\Repository\PermissionResolver::canUser()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetURLAliasService
-     * @depends eZ\Publish\API\Repository\Tests\PermissionResolverTest::testSetCurrentUserReference
-     * @depends eZ\Publish\API\Repository\Tests\PermissionResolverTest::testHasAccessLimited
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testCanUserWithTargetThrowsInvalidArgumentException()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
-
-        $permissionResolver = $repository->getPermissionResolver();
-
-        // Set created user as current user reference
-        $permissionResolver->setCurrentUserReference($user);
-
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
-
-        $contentService = $repository->getContentService();
-
-        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
-        $contentCreateStruct->setField('name', 'My awesome forum');
-        $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
-        $contentCreateStruct->alwaysAvailable = true;
-
-        $urlAliasService = $repository->getURLAliasService();
-        $rootUrlAlias = $urlAliasService->lookup('/');
-
-        // This call will throw "InvalidArgumentException" because $rootAlias is not a valid target object
-        $canUser = $permissionResolver->canUser(
-            'content',
-            'create',
-            $contentCreateStruct,
-            [$rootUrlAlias]
-        );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the canUser() method.
-     *
-     * @see \eZ\Publish\API\Repository\PermissionResolver::canUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testCanUserThrowsBadStateException()
