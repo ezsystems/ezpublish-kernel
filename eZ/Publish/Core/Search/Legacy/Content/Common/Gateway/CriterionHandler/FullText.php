@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -82,7 +81,7 @@ class FullText extends CriterionHandler
      */
     protected $processor;
 
-    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator  */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator */
     private $languageMaskGenerator;
 
     /**
@@ -100,8 +99,7 @@ class FullText extends CriterionHandler
         TransformationProcessor $processor,
         MaskGenerator $languageMaskGenerator,
         array $configuration = []
-    )
-    {
+    ) {
         parent::__construct($dbHandler);
 
         $this->configuration = $configuration + $this->configuration;
@@ -238,8 +236,7 @@ class FullText extends CriterionHandler
         SelectQuery $query,
         Criterion $criterion,
         array $languageSettings
-    )
-    {
+    ) {
         $subSelect = $query->subSelect();
         $subSelect
             ->select(
