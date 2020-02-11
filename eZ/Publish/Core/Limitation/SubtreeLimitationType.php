@@ -127,7 +127,10 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         }
 
         if ($object instanceof ContentCreateStruct) {
-            return $this->evaluateForContentCreateStruct($value, $targets);
+            $createStructTargets = array_filter($targets, function ($target) {
+                return $target instanceof Location || $target instanceof LocationCreateStruct;
+            });
+            return $this->evaluateForContentCreateStruct($value, $createStructTargets);
         } elseif ($object instanceof Content) {
             $object = $object->getVersionInfo()->getContentInfo();
         } elseif ($object instanceof VersionInfo) {
@@ -194,16 +197,6 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         // to content w/o location with this limitation
         if (empty($targets)) {
             return false;
-        }
-
-        // Targets may be instances of classes (not being LocationCreateStruct or Location), which are not supported within
-        // this Limitation but are still valid as permission check targets
-        $targets = array_filter($targets, function ($target) {
-            return $target instanceof LocationCreateStruct or $target instanceof Location;
-        });
-
-        if (empty($targets)) {
-            return true;
         }
 
         $hasLocationCreateStruct = false;
