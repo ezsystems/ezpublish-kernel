@@ -6,10 +6,12 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
@@ -80,20 +82,26 @@ class FullText extends CriterionHandler
      */
     protected $processor;
 
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator  */
+    private $languageMaskGenerator;
+
     /**
      * Construct from full text search configuration.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $processor
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      * @param array $configuration
      *
-     * @throws InvalidArgumentException On invalid $configuration values
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException On invalid $configuration values
      */
     public function __construct(
         DatabaseHandler $dbHandler,
         TransformationProcessor $processor,
+        MaskGenerator $languageMaskGenerator,
         array $configuration = []
-    ) {
+    )
+    {
         parent::__construct($dbHandler);
 
         $this->configuration = $configuration + $this->configuration;
@@ -108,6 +116,7 @@ class FullText extends CriterionHandler
                 'Stop Word Threshold Factor needs to be between 0 and 1, got: ' . $this->configuration['stopWordThresholdFactor']
             );
         }
+        $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
     /**
@@ -149,7 +158,7 @@ class FullText extends CriterionHandler
     protected function getWordExpression(SelectQuery $query, $token)
     {
         if ($this->configuration['enableWildcards'] &&
-             $token[0] === '*') {
+            $token[0] === '*') {
             return $query->expr->like(
                 $this->dbHandler->quoteColumn('word'),
                 $query->bindValue('%' . substr($token, 1))
@@ -157,7 +166,7 @@ class FullText extends CriterionHandler
         }
 
         if ($this->configuration['enableWildcards'] &&
-             $token[strlen($token) - 1] === '*') {
+            $token[strlen($token) - 1] === '*') {
             return $query->expr->like(
                 $this->dbHandler->quoteColumn('word'),
                 $query->bindValue(substr($token, 0, -1) . '%')
@@ -173,12 +182,12 @@ class FullText extends CriterionHandler
     /**
      * Get subquery to select relevant word IDs.
      *
-     * @uses ::getStopWordThresholdValue() To get threshold for words we would like to ignore in query.
-     *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $string
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     * @uses ::getStopWordThresholdValue() To get threshold for words we would like to ignore in query.
+     *
      */
     protected function getWordIdSubquery(SelectQuery $query, $string)
     {
@@ -229,7 +238,8 @@ class FullText extends CriterionHandler
         SelectQuery $query,
         Criterion $criterion,
         array $languageSettings
-    ) {
+    )
+    {
         $subSelect = $query->subSelect();
         $subSelect
             ->select(
@@ -242,6 +252,16 @@ class FullText extends CriterionHandler
                     $this->getWordIdSubquery($subSelect, $criterion->value)
                 )
             );
+
+        $subSelect->where(
+            $query->expr->bitAnd(
+                $this->dbHandler->quoteColumn('language_mask'),
+                $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                    $languageSettings['languages'],
+                    $languageSettings['useAlwaysAvailable']
+                )
+            )
+        );
 
         return $query->expr->in(
             $this->dbHandler->quoteColumn('id', 'ezcontentobject'),

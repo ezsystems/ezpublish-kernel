@@ -77,6 +77,8 @@ class ContentSearchHitAdapter implements AdapterInterface
         $query->limit = $length;
         $query->performCount = false;
 
+        dump($query, $this->languageFilter);
+
         $searchResult = $this->searchService->findContent($query, $this->languageFilter);
 
         // Set count for further use if returned by search engine despite !performCount (Solr, ES)

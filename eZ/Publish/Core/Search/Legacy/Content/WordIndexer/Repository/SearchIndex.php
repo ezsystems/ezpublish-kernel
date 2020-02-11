@@ -153,8 +153,7 @@ class SearchIndex
                                       $sectionId,
                                       $identifier,
                                       $integerValue,
-                                      $languageCode,
-                                      $isMainAndAlwaysAvailable
+                                      $languageMask
     ) {
         $assoc = [
             'word_id' => $wordId,
@@ -170,8 +169,7 @@ class SearchIndex
             'identifier' => $identifier,
             'integer_value' => $integerValue,
             'integer_value' => $integerValue,
-            'language_code' => $languageCode,
-            'is_main_and_always_available' => (int) $isMainAndAlwaysAvailable,
+            'language_mask' => $languageMask,
         ];
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto('ezsearch_object_word_link');

@@ -7,6 +7,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
@@ -63,6 +64,9 @@ class DoctrineDatabase extends Gateway
      */
     protected $searchIndex;
 
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator */
+    private $languageMaskGenerator;
+
     /**
      * Full text search configuration options.
      *
@@ -77,6 +81,7 @@ class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $typeHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      * @param \eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex $searchIndex
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      * @param array $fullTextSearchConfiguration
      */
     public function __construct(
@@ -84,6 +89,7 @@ class DoctrineDatabase extends Gateway
         SPITypeHandler $typeHandler,
         TransformationProcessor $transformationProcessor,
         SearchIndex $searchIndex,
+        MaskGenerator $languageMaskGenerator,
         array $fullTextSearchConfiguration
     ) {
         $this->dbHandler = $dbHandler;
@@ -91,6 +97,7 @@ class DoctrineDatabase extends Gateway
         $this->transformationProcessor = $transformationProcessor;
         $this->searchIndex = $searchIndex;
         $this->fullTextSearchConfiguration = $fullTextSearchConfiguration;
+        $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
     /**
@@ -250,6 +257,10 @@ class DoctrineDatabase extends Gateway
             $languageCode = $indexArray[$i]['language_code'];
             $wordId = $wordIDArray[$indexWord];
             $isMainAndAlwaysAvailable = $indexArray[$i]['is_main_and_always_available'];
+            $languageMask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                [$languageCode],
+                $isMainAndAlwaysAvailable
+            );
 
             if (isset($indexArray[$i + 1])) {
                 $nextIndexWord = $indexArray[$i + 1]['Word'];
@@ -271,8 +282,7 @@ class DoctrineDatabase extends Gateway
                 $fullTextData->sectionId,
                 $identifier,
                 $integerValue,
-                $languageCode,
-                $isMainAndAlwaysAvailable
+                $languageMask
             );
             $prevWordId = $wordId;
             ++$placement;
