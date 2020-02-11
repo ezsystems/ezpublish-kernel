@@ -42,7 +42,6 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\Core\FieldType\User\Type as UserType;
@@ -489,48 +488,6 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Loads a user for the given login and password.
-     *
-     * If the password hash type differs from that configured for the service, it will be updated to the configured one.
-     *
-     * {@inheritdoc}
-     *
-     * @param string $login
-     * @param string $password the plain password
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if credentials are invalid
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
-     */
-    public function loadUserByCredentials($login, $password, array $prioritizedLanguages = [])
-    {
-        @trigger_error(
-            sprintf('%s method will be removed in eZ Platform 3.0. Use UserService::checkUserCredentials instead.', __METHOD__),
-            E_USER_DEPRECATED
-        );
-
-        if (!is_string($login) || empty($login)) {
-            throw new InvalidArgumentValue('login', $login);
-        }
-
-        if (!is_string($password)) {
-            throw new InvalidArgumentValue('password', $password);
-        }
-
-        $spiUser = $this->userHandler->loadByLogin($login);
-        if (!$this->comparePasswordHashForSPIUser($login, $password, $spiUser)) {
-            throw new NotFoundException('user', $login);
-        }
-
-        // Don't catch BadStateException, on purpose, to avoid broken hashes.
-        $this->updatePasswordHash($login, $password, $spiUser);
-
-        return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
-    }
-
-    /**
      * Checks if credentials are valid for provided User.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -540,7 +497,7 @@ class UserService implements UserServiceInterface
      */
     public function checkUserCredentials(APIUser $user, string $credentials): bool
     {
-        return $this->comparePasswordHashForAPIUser($user->login, $credentials, $user);
+        return $this->comparePasswordHashForAPIUser($user, $credentials);
     }
 
     /**
@@ -613,16 +570,41 @@ class UserService implements UserServiceInterface
      * @param string $email
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
-     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
+    public function loadUserByEmail(string $email, array $prioritizedLanguages = []): APIUser
     {
-        if (!is_string($email) || empty($email)) {
+        if (empty($email)) {
+            throw new InvalidArgumentValue('email', $email);
+        }
+
+        $spiUser = $this->userHandler->loadByEmail($email);
+
+        return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
+    }
+
+    /**
+     * Loads a user for the given email.
+     *
+     * {@inheritdoc}
+     *
+     * @param string $email
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function loadUsersByEmail(string $email, array $prioritizedLanguages = []): array
+    {
+        if (empty($email)) {
             throw new InvalidArgumentValue('email', $email);
         }
 
         $users = [];
-        foreach ($this->userHandler->loadByEmail($email) as $spiUser) {
+        foreach ($this->userHandler->loadUsersByEmail($email) as $spiUser) {
             $users[] = $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
         }
 
@@ -1225,7 +1207,7 @@ class UserService implements UserServiceInterface
             $isNewPasswordRequired = $configuration['PasswordValueValidator']['requireNewPassword'] ?? false;
 
             if (($isPasswordTTLEnabled || $isNewPasswordRequired) &&
-                $this->comparePasswordHashForAPIUser($context->user->login, $password, $context->user)
+                $this->comparePasswordHashForAPIUser($context->user, $password)
             ) {
                 $errors[] = new ValidationError('New password cannot be the same as old password', null, [], 'password');
             }
@@ -1335,35 +1317,26 @@ class UserService implements UserServiceInterface
     /**
      * Verifies if the provided login and password are valid for eZ\Publish\SPI\Persistence\User.
      *
-     * @param string $login User login
-     * @param string $password User password
-     * @param \eZ\Publish\SPI\Persistence\User $spiUser Loaded user handler
-     *
      * @return bool return true if the login and password are sucessfully validated and false, if not.
      */
-    protected function comparePasswordHashForSPIUser(string $login, string $password, SPIUser $spiUser): bool
+    protected function comparePasswordHashForSPIUser(SPIUser $user, string $password): bool
     {
-        return $this->comparePasswordHashes($login, $password, $spiUser->passwordHash, $spiUser->hashAlgorithm);
+        return $this->comparePasswordHashes($password, $user->passwordHash, $user->hashAlgorithm);
     }
 
     /**
      * Verifies if the provided login and password are valid for eZ\Publish\API\Repository\Values\User\User.
      *
-     * @param string $login User login
-     * @param string $password User password
-     * @param \eZ\Publish\API\Repository\Values\User\User $apiUser Loaded user
-     *
      * @return bool return true if the login and password are sucessfully validated and false, if not.
      */
-    protected function comparePasswordHashForAPIUser(string $login, string $password, APIUser $apiUser): bool
+    protected function comparePasswordHashForAPIUser(APIUser $user, string $password): bool
     {
-        return $this->comparePasswordHashes($login, $password, $apiUser->passwordHash, $apiUser->hashAlgorithm);
+        return $this->comparePasswordHashes($password, $user->passwordHash, $user->hashAlgorithm);
     }
 
     /**
      * Verifies if the provided login and password are valid against given password hash and hash type.
      *
-     * @param string $login User login
      * @param string $plainPassword User password
      * @param string $passwordHash User password hash
      * @param int $hashAlgorithm Hash type
@@ -1371,7 +1344,6 @@ class UserService implements UserServiceInterface
      * @return bool return true if the login and password are sucessfully validated and false, if not.
      */
     private function comparePasswordHashes(
-        string $login,
         string $plainPassword,
         string $passwordHash,
         int $hashAlgorithm

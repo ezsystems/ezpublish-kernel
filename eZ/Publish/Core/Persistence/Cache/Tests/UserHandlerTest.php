@@ -45,9 +45,11 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ez-user-14',
                 'ez-user-' . str_replace('@', '_A', $user->login) . '-by-login',
                 'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
+                'ez-users-' . str_replace('@', '_A', $user->email) . '-by-email',
             ], $user, false],
             ['update', [$user], ['content-14', 'user-14'], [
                 'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
+                'ez-users-' . str_replace('@', '_A', $user->email) . '-by-email',
             ], $user, false],
             ['updateUserToken', [$userToken], ['user-14-account-key'], ['ez-user-4irj8t43r-by-account-key']],
             ['expireUserToken', ['4irj8t43r'], null, ['ez-user-4irj8t43r-by-account-key']],
@@ -82,7 +84,8 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         return [
             ['load', [14], 'ez-user-14', $user],
             ['loadByLogin', ['admin'], 'ez-user-admin-by-login', $user],
-            ['loadByEmail', ['nospam@ez.no'], 'ez-user-nospam_Aez.no-by-email', [$user]],
+            ['loadByEmail', ['nospam@ez.no'], 'ez-user-nospam_Aez.no-by-email', $user],
+            ['loadUsersByEmail', ['nospam@ez.no'], 'ez-users-nospam_Aez.no-by-email', [$user]],
             ['loadUserByToken', ['hash'], 'ez-user-hash-by-account-key', $user],
             ['loadRole', [9], 'ez-role-9', $role],
             ['loadRoleByIdentifier', ['member'], 'ez-role-member-by-identifier', $role],

@@ -154,20 +154,19 @@ class UserServiceDecoratorTest extends TestCase
         $decoratedService->loadUser(...$parameters);
     }
 
-    public function testLoadUserByCredentialsDecorator()
+    public function testCheckUserCredentialsDecorator()
     {
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
+            $this->createMock(User::class),
             'random_value_5ced05ce1771c7.58152750',
-            'random_value_5ced05ce1771d3.89279980',
-            ['random_value_5ced05ce1771e1.45786513'],
         ];
 
-        $serviceMock->expects($this->once())->method('loadUserByCredentials')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('checkUserCredentials')->with(...$parameters);
 
-        $decoratedService->loadUserByCredentials(...$parameters);
+        $decoratedService->checkUserCredentials(...$parameters);
     }
 
     public function testLoadUserByLoginDecorator()

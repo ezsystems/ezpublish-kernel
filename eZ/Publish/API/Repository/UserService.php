@@ -142,24 +142,22 @@ interface UserService
     public function loadUser($userId, array $prioritizedLanguages = []);
 
     /**
-     * Loads a user for the given login and password.
+     * Loads a user for the given login.
      *
-     * Since 6.1 login is case-insensitive across all storage engines and database backends, however if login
-     * is part of the password hash this method will essentially be case sensitive.
+     * Since 6.1 login is case-insensitive across all storage engines and database backends, like was the case
+     * with mysql before in eZ Publish 3.x/4.x/5.x.
      *
      * @deprecated since eZ Platform 2.5, will be dropped in the next major version as authentication
      *             may depend on various user providers. Use UserService::checkUserCredentials() instead.
      *
      * @param string $login
-     * @param string $password the plain password
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if credentials are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByCredentials($login, $password, array $prioritizedLanguages = []);
+    public function loadUserByLogin($login, array $prioritizedLanguages = []);
 
     /**
      * Checks if credentials are valid for provided User.
@@ -172,22 +170,19 @@ interface UserService
     public function checkUserCredentials(User $user, string $credentials): bool;
 
     /**
-     * Loads a user for the given login.
+     * Loads a user for the given email.
      *
-     * Since 6.1 login is case-insensitive across all storage engines and database backends, like was the case
-     * with mysql before in eZ Publish 3.x/4.x/5.x.
-     *
-     * @param string $login
+     * @param string $email
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function loadUserByLogin($login, array $prioritizedLanguages = []);
+    public function loadUserByEmail(string $email, array $prioritizedLanguages = []): User;
 
     /**
-     * Loads a user for the given email.
+     * Loads a users for the given email.
      *
      * Note: This method loads user by $email where $email might be case-insensitive on certain storage engines!
      *
@@ -198,8 +193,10 @@ interface UserService
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function loadUsersByEmail($email, array $prioritizedLanguages = []);
+    public function loadUsersByEmail(string $email, array $prioritizedLanguages = []): array;
 
     /**
      * Loads a user with user hash key.

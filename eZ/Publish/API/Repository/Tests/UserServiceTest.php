@@ -1252,12 +1252,10 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadUserByCredentials() method.
-     *
-     * @see \eZ\Publish\API\Repository\UserService::loadUserByCredentials()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @see \eZ\Publish\API\Repository\UserService::checkUserCredentials()
+     * @depends \eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testLoadUserByCredentials()
+    public function testCheckUserCredentialsValid(): void
     {
         $repository = $this->getRepository();
 
@@ -1266,103 +1264,31 @@ class UserServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
-        // Load the newly created user
-        $userReloaded = $userService->loadUserByCredentials('user', 'secret', Language::ALL);
+        // Load the newly created user credentials
+        $credentialsValid = $userService->loadUserByCredentials($user, 'secret');
         /* END: Use Case */
 
-        $this->assertEquals($user, $userReloaded);
+        $this->assertTrue($credentialsValid);
     }
 
     /**
-     * Test for the loadUserByCredentials() method.
-     *
-     * @see \eZ\Publish\API\Repository\UserService::loadUserByCredentials()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByCredentials
+     * @see \eZ\Publish\API\Repository\UserService::checkUserCredentials()
+     * @depends \eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testLoadUserByCredentialsThrowsNotFoundExceptionForUnknownPassword()
+    public function testCheckUserCredentialsInvalid(): void
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
-
         $repository = $this->getRepository();
 
         $userService = $repository->getUserService();
 
         /* BEGIN: Use Case */
-        $this->createUserVersion1();
+        $user = $this->createUserVersion1();
 
-        // This call will fail with a "NotFoundException", because the given
-        // login/password combination does not exist.
-        $userService->loadUserByCredentials('user', 'SeCrEt');
+        // Load the newly created user credentials
+        $credentialsValid = $userService->loadUserByCredentials($user, '1234');
         /* END: Use Case */
-    }
 
-    /**
-     * Test for the loadUserByCredentials() method.
-     *
-     * @see \eZ\Publish\API\Repository\UserService::loadUserByCredentials()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByCredentials
-     */
-    public function testLoadUserByCredentialsThrowsNotFoundExceptionForUnknownPasswordEmtpy()
-    {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
-
-        $repository = $this->getRepository();
-
-        $userService = $repository->getUserService();
-
-        /* BEGIN: Use Case */
-        $this->createUserVersion1();
-
-        // This call will fail with a "NotFoundException", because the given
-        // login/password combination does not exist.
-        $userService->loadUserByCredentials('user', '');
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the loadUserByCredentials() method.
-     *
-     * @see \eZ\Publish\API\Repository\UserService::loadUserByCredentials()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByCredentials
-     */
-    public function testLoadUserByCredentialsThrowsNotFoundExceptionForUnknownLogin()
-    {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
-
-        $repository = $this->getRepository();
-
-        $userService = $repository->getUserService();
-
-        /* BEGIN: Use Case */
-        $this->createUserVersion1();
-
-        // This call will fail with a "NotFoundException", because the given
-        // login/password combination does not exist.
-        $userService->loadUserByCredentials('üser', 'secret');
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the loadUserByCredentials() method.
-     *
-     * @see \eZ\Publish\API\Repository\UserService::loadUserByCredentials()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByCredentials
-     */
-    public function testLoadUserByCredentialsThrowsInvalidArgumentValueForEmptyLogin()
-    {
-        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue::class);
-
-        $repository = $this->getRepository();
-
-        $userService = $repository->getUserService();
-
-        /* BEGIN: Use Case */
-        $this->createUserVersion1();
-
-        // This call will fail with a "InvalidArgumentValue", because the given
-        // login is empty.
-        $userService->loadUserByCredentials('', 'secret');
-        /* END: Use Case */
+        $this->assertFalse($credentialsValid);
     }
 
     /**
@@ -2424,46 +2350,6 @@ class UserServiceTest extends BaseTest
 
         // load, with prioritized languages, the newly created user
         $loadedUser = $userService->loadUserByLogin($user->login, $prioritizedLanguages);
-        if ($expectedLanguageCode === null) {
-            $expectedLanguageCode = $loadedUser->contentInfo->mainLanguageCode;
-        }
-
-        self::assertEquals(
-            $loadedUser->getName($expectedLanguageCode),
-            $loadedUser->getName()
-        );
-
-        foreach (['first_name', 'last_name', 'signature'] as $fieldIdentifier) {
-            self::assertEquals(
-                $loadedUser->getFieldValue($fieldIdentifier, $expectedLanguageCode),
-                $loadedUser->getFieldValue($fieldIdentifier)
-            );
-        }
-    }
-
-    /**
-     * Test that multi-language logic for the loadUserByCredentials method respects
-     * prioritized language list.
-     *
-     * @covers \eZ\Publish\API\Repository\UserService::loadUserByCredentials
-     * @dataProvider getPrioritizedLanguageList
-     * @param string[] $prioritizedLanguages
-     * @param string|null $expectedLanguageCode language code of expected translation
-     */
-    public function testLoadUserByCredentialsWithPrioritizedLanguagesList(
-        array $prioritizedLanguages,
-        $expectedLanguageCode
-    ) {
-        $repository = $this->getRepository();
-        $userService = $repository->getUserService();
-        $user = $this->createMultiLanguageUser();
-
-        // load, with prioritized languages, the newly created user
-        $loadedUser = $userService->loadUserByCredentials(
-            $user->login,
-            'secret',
-            $prioritizedLanguages
-        );
         if ($expectedLanguageCode === null) {
             $expectedLanguageCode = $loadedUser->contentInfo->mainLanguageCode;
         }
