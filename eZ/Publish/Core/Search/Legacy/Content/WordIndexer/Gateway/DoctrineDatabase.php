@@ -137,6 +137,7 @@ class DoctrineDatabase extends Gateway
                     'identifier' => $fullTextValue->fieldDefinitionIdentifier,
                     'integer_value' => $integerValue,
                     'language_code' => $fullTextValue->languageCode,
+                    'is_main_and_always_available' => $fullTextValue->isMainAndAlwaysAvailable,
                 ];
                 $indexArrayOnlyWords[$word] = 1;
                 ++$wordCount;
@@ -248,6 +249,7 @@ class DoctrineDatabase extends Gateway
             $integerValue = $indexArray[$i]['integer_value'];
             $languageCode = $indexArray[$i]['language_code'];
             $wordId = $wordIDArray[$indexWord];
+            $isMainAndAlwaysAvailable = $indexArray[$i]['is_main_and_always_available'];
 
             if (isset($indexArray[$i + 1])) {
                 $nextIndexWord = $indexArray[$i + 1]['Word'];
@@ -269,7 +271,8 @@ class DoctrineDatabase extends Gateway
                 $fullTextData->sectionId,
                 $identifier,
                 $integerValue,
-                $languageCode
+                $languageCode,
+                $isMainAndAlwaysAvailable
             );
             $prevWordId = $wordId;
             ++$placement;

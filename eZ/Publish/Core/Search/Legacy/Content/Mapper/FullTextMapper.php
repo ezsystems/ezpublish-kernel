@@ -92,6 +92,7 @@ class FullTextMapper
                 continue;
             }
 
+            $contentInfo = $content->versionInfo->contentInfo;
             $fullTextValues[] = new FullTextValue(
                 [
                     'id' => $field->id,
@@ -99,6 +100,11 @@ class FullTextMapper
                     'fieldDefinitionIdentifier' => $fieldDefinition->identifier,
                     'languageCode' => $field->languageCode,
                     'value' => !is_array($value) ? $value : implode(' ', $value),
+                    'isMainAndAlwaysAvailable' => (
+                    ($field->languageCode === $contentInfo->mainLanguageCode && $contentInfo->alwaysAvailable)
+                        ? true
+                        : false
+                    ),
                 ]
             );
         }
