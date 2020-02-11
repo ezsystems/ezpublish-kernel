@@ -127,10 +127,10 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         }
 
         if ($object instanceof ContentCreateStruct) {
-            $createStructTargets = array_filter($targets, function ($target) {
+            $targets = array_filter($targets, function ($target) {
                 return $target instanceof Location || $target instanceof LocationCreateStruct;
             });
-            return $this->evaluateForContentCreateStruct($value, $createStructTargets);
+            return $this->evaluateForContentCreateStruct($value, $targets);
         } elseif ($object instanceof Content) {
             $object = $object->getVersionInfo()->getContentInfo();
         } elseif ($object instanceof VersionInfo) {
