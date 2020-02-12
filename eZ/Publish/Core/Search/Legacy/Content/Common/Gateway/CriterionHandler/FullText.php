@@ -251,13 +251,18 @@ class FullText extends CriterionHandler
             );
 
         if (false === empty($languageSettings['languages'])) {
+            $languageMask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                $languageSettings['languages'],
+                $languageSettings['useAlwaysAvailable'] ?? true
+            );
+
             $subSelect->where(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn('language_mask'),
-                    $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
-                        $languageSettings['languages'],
-                        $languageSettings['useAlwaysAvailable'] ?? true
-                    )
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn('language_mask', 'ezsearch_object_word_link'),
+                        $query->bindValue($languageMask, null, \PDO::PARAM_INT)
+                    ),
+                    $query->bindValue(0, null, \PDO::PARAM_INT)
                 )
             );
         }
