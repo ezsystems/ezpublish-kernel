@@ -17,12 +17,13 @@ class ContentSearchAdapterTest extends ContentSearchHitAdapterTest
     /**
      * @param Query $query
      * @param SearchService $searchService
+     * @param array
      *
      * @return ContentSearchAdapter
      */
-    protected function getAdapter(Query $query, SearchService $searchService)
+    protected function getAdapter(Query $query, SearchService $searchService, array $languageFilter = [])
     {
-        return new ContentSearchAdapter($query, $searchService);
+        return new ContentSearchAdapter($query, $searchService, $languageFilter);
     }
 
     /**

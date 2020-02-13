@@ -37,9 +37,9 @@ class ContentSearchHitAdapterTest extends TestCase
      *
      * @return ContentSearchHitAdapter
      */
-    protected function getAdapter(Query $query, SearchService $searchService)
+    protected function getAdapter(Query $query, SearchService $searchService, array $languageFilter = [])
     {
-        return new ContentSearchHitAdapter($query, $searchService);
+        return new ContentSearchHitAdapter($query, $searchService, $languageFilter);
     }
 
     public function testGetNbResults()
