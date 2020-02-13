@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateS
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleCopyStruct as APIRoleCopyStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft as APIRoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
@@ -33,6 +34,7 @@ use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\Role;
+use eZ\Publish\Core\Repository\Values\User\RoleCopyStruct;
 use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\SPI\Persistence\User\Handler;
 use eZ\Publish\SPI\Persistence\User\Role as SPIRole;
@@ -179,6 +181,74 @@ class RoleService implements RoleServiceInterface
         }
 
         return $this->roleDomainMapper->buildDomainRoleDraftObject($spiRole);
+    }
+
+    /**
+     * Copies an existing Role.
+     *
+     * @since 7.5
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to copy a Role
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *         if the name of the role already exists or if limitation of the same type
+     *         is repeated in the policy create struct or if limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCopyStruct is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     * @param \eZ\Publish\API\Repository\Values\User\RoleCopyStruct $roleCopyStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Role
+     */
+    public function copyRole(APIRole $role, APIRoleCopyStruct $roleCopyStruct)
+    {
+        if (!is_string($roleCopyStruct->newIdentifier) || empty($roleCopyStruct->newIdentifier)) {
+            throw new InvalidArgumentValue('newIdentifier', $roleCopyStruct->newIdentifier, 'RoleCopyStruct');
+        }
+
+        if (!$this->permissionResolver->canUser('role', 'create', $roleCopyStruct)) {
+            throw new UnauthorizedException('role', 'create');
+        }
+
+        try {
+            $existingRole = $this->loadRoleByIdentifier($roleCopyStruct->newIdentifier);
+
+            throw new InvalidArgumentException(
+                '$roleCopyStruct',
+                "Role '{$existingRole->id}' with the specified identifier '{$roleCopyStruct->newIdentifier}' " .
+                'already exists'
+            );
+        } catch (APINotFoundException $e) {
+            // Do nothing
+        }
+
+        foreach ($role->getPolicies() as $policy) {
+            $policyCreateStruct = new PolicyCreateStruct([
+                'module' => $policy->module,
+                'function' => $policy->function,
+            ]);
+            foreach ($policy->getLimitations() as $limitation) {
+                $policyCreateStruct->addLimitation($limitation);
+            }
+            $roleCopyStruct->addPolicy($policyCreateStruct);
+        }
+
+        $limitationValidationErrors = $this->validateRoleCopyStruct($roleCopyStruct);
+        if (!empty($limitationValidationErrors)) {
+            throw new LimitationValidationException($limitationValidationErrors);
+        }
+
+        $spiRoleCopyStruct = $this->roleDomainMapper->buildPersistenceRoleCopyStruct($roleCopyStruct, $role->id);
+
+        $this->repository->beginTransaction();
+        try {
+            $spiRole = $this->userHandler->copyRole($spiRoleCopyStruct);
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->loadRole($spiRole->id);
     }
 
     /**
@@ -1228,6 +1298,23 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
+     * Instantiates a role copy class.
+     *
+     * @param string $name
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleCopyStruct
+     */
+    public function newRoleCopyStruct($name)
+    {
+        return new RoleCopyStruct(
+            [
+                'newIdentifier' => $name,
+                'policies' => [],
+            ]
+        );
+    }
+
+    /**
      * Instantiates a policy create class.
      *
      * @param string $module
@@ -1341,6 +1428,33 @@ class RoleService implements RoleServiceInterface
                 $policyCreateStruct->module,
                 $policyCreateStruct->function,
                 $policyCreateStruct->getLimitations()
+            );
+
+            if (!empty($errors)) {
+                $allErrors[$key] = $errors;
+            }
+        }
+
+        return $allErrors;
+    }
+
+    /**
+     * Validates Policies and Limitations in Role copy struct.
+     *
+     * @uses ::validatePolicy()
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleCopyStruct $roleCopyStruct
+     *
+     * @return \eZ\Publish\Core\FieldType\ValidationError[][][]
+     */
+    protected function validateRoleCopyStruct(APIRoleCopyStruct $roleCopyStruct)
+    {
+        $allErrors = [];
+        foreach ($roleCopyStruct->getPolicies() as $key => $policyCopyStruct) {
+            $errors = $this->validatePolicy(
+                $policyCopyStruct->module,
+                $policyCopyStruct->function,
+                $policyCopyStruct->getLimitations()
             );
 
             if (!empty($errors)) {

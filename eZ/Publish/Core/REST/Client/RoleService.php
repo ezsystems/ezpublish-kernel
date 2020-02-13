@@ -269,38 +269,56 @@ class RoleService implements APIRoleService, Sessionable
         $createdRole = $this->inputDispatcher->parse($result);
         $createdRoleValues = $this->requestParser->parse('role', $createdRole->id);
 
-        $createdPolicies = array();
+        $createdPolicies = [];
         foreach ($roleCreateStruct->getPolicies() as $policyCreateStruct) {
             $inputMessage = $this->outputVisitor->visit($policyCreateStruct);
             $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('Policy');
 
             $result = $this->client->request(
                 'POST',
-                $this->requestParser->generate('policies', array('role' => $createdRoleValues['role'])),
+                $this->requestParser->generate('policies', ['role' => $createdRoleValues['role']]),
                 $inputMessage
             );
 
             $createdPolicy = $this->inputDispatcher->parse($result);
 
             // @todo Workaround for missing roleId in Policy XSD definition
-            $createdPolicyArray = array(
+            $createdPolicyArray = [
                 'id' => $createdPolicy->id,
                 'roleId' => $createdRole->id,
                 'module' => $createdPolicy->module,
                 'function' => $createdPolicy->function,
-            );
+            ];
 
             $createdPolicy = new Policy($createdPolicyArray);
             $createdPolicies[] = $createdPolicy;
         }
 
         return new RoleDraft(
-            array(
+            [
                 'id' => $createdRole->id,
                 'identifier' => $createdRole->identifier,
-            ),
+            ],
             $createdPolicies
         );
+    }
+
+    /**
+     * Copies an existing Role.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to copy a role
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the
+     *                                                                        same type is repeated in the policy create struct or if
+     *                                                                        limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCopyStruct is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleCopyStruct $roleCopyStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function copyRole(APIRoleCopyStruct $roleCopyStruct)
+    {
+        //todo
     }
 
     /**
@@ -354,19 +372,19 @@ class RoleService implements APIRoleService, Sessionable
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate('policies', array('role' => $values['role'])),
+            $this->requestParser->generate('policies', ['role' => $values['role']]),
             $inputMessage
         );
 
         $createdPolicy = $this->inputDispatcher->parse($result);
 
         // @todo Workaround for missing roleId in Policy XSD definition
-        $createdPolicyArray = array(
+        $createdPolicyArray = [
             'id' => $createdPolicy->id,
             'roleId' => $role->id,
             'module' => $createdPolicy->module,
             'function' => $createdPolicy->function,
-        );
+        ];
 
         $createdPolicy = new Policy($createdPolicyArray);
 
@@ -374,10 +392,10 @@ class RoleService implements APIRoleService, Sessionable
         $existingPolicies[] = $createdPolicy;
 
         return new Role(
-            array(
+            [
                 'id' => $role->id,
                 'identifier' => $role->identifier,
-            ),
+            ],
             $existingPolicies
         );
     }
@@ -402,17 +420,17 @@ class RoleService implements APIRoleService, Sessionable
             'DELETE',
             $this->requestParser->generate(
                 'policy',
-                array(
+                [
                     'role' => $values['role'],
                     'policy' => $policy->id,
-                )
+                ]
             ),
             new Message(
                 // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array('Accept' => $this->outputVisitor->getMediaType('Policy'))
+                ['Accept' => $this->outputVisitor->getMediaType('Policy')]
             )
         );
 
@@ -464,10 +482,10 @@ class RoleService implements APIRoleService, Sessionable
             'POST',
             $this->requestParser->generate(
                 'policy',
-                array(
+                [
                     'role' => $values['role'],
                     'policy' => $policy->id,
-                )
+                ]
             ),
             $inputMessage
         );
@@ -491,7 +509,7 @@ class RoleService implements APIRoleService, Sessionable
             'GET',
             $id,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('Role'))
+                ['Accept' => $this->outputVisitor->getMediaType('Role')]
             )
         );
 
@@ -499,19 +517,19 @@ class RoleService implements APIRoleService, Sessionable
         $loadedRoleValues = $this->requestParser->parse('role', $loadedRole->id);
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('policies', array('role' => $loadedRoleValues['role'])),
+            $this->requestParser->generate('policies', ['role' => $loadedRoleValues['role']]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('PolicyList'))
+                ['Accept' => $this->outputVisitor->getMediaType('PolicyList')]
             )
         );
 
         $policies = $this->inputDispatcher->parse($response);
 
         return new Role(
-            array(
+            [
                 'id' => $loadedRole->id,
                 'identifier' => $loadedRole->identifier,
-            ),
+            ],
             $policies
         );
     }
@@ -530,9 +548,9 @@ class RoleService implements APIRoleService, Sessionable
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('roleByIdentifier', array('role' => $name)),
+            $this->requestParser->generate('roleByIdentifier', ['role' => $name]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('RoleList'))
+                ['Accept' => $this->outputVisitor->getMediaType('RoleList')]
             )
         );
 
@@ -552,7 +570,7 @@ class RoleService implements APIRoleService, Sessionable
             'GET',
             $this->requestParser->generate('roles'),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('RoleList'))
+                ['Accept' => $this->outputVisitor->getMediaType('RoleList')]
             )
         );
 
@@ -576,7 +594,7 @@ class RoleService implements APIRoleService, Sessionable
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array('Accept' => $this->outputVisitor->getMediaType('Role'))
+                ['Accept' => $this->outputVisitor->getMediaType('Role')]
             )
         );
 
@@ -599,9 +617,9 @@ class RoleService implements APIRoleService, Sessionable
         $values = $this->requestParser->parse('user', $userId);
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('userPolicies', array('user' => $values['user'])),
+            $this->requestParser->generate('userPolicies', ['user' => $values['user']]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('PolicyList'))
+                ['Accept' => $this->outputVisitor->getMediaType('PolicyList')]
             )
         );
 
@@ -621,10 +639,10 @@ class RoleService implements APIRoleService, Sessionable
     public function assignRoleToUserGroup(APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null)
     {
         $roleAssignment = new RoleAssignment(
-            array(
+            [
                 'role' => $role,
                 'limitation' => $roleLimitation,
-            )
+            ]
         );
 
         $inputMessage = $this->outputVisitor->visit($roleAssignment);
@@ -632,7 +650,7 @@ class RoleService implements APIRoleService, Sessionable
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate('groupRoleAssignments', array('group' => $userGroup->id)),
+            $this->requestParser->generate('groupRoleAssignments', ['group' => $userGroup->id]),
             $inputMessage
         );
 
@@ -658,13 +676,13 @@ class RoleService implements APIRoleService, Sessionable
 
         $response = $this->client->request(
             'DELETE',
-            $this->requestParser->generate('groupRoleAssignment', array('group' => $userGroupId, 'role' => $roleId)),
+            $this->requestParser->generate('groupRoleAssignment', ['group' => $userGroupId, 'role' => $roleId]),
             new Message(
                 // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array('Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList'))
+                ['Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList')]
             )
         );
 
@@ -688,10 +706,10 @@ class RoleService implements APIRoleService, Sessionable
     public function assignRoleToUser(APIRole $role, User $user, RoleLimitation $roleLimitation = null)
     {
         $roleAssignment = new RoleAssignment(
-            array(
+            [
                 'role' => $role,
                 'limitation' => $roleLimitation,
-            )
+            ]
         );
 
         $inputMessage = $this->outputVisitor->visit($roleAssignment);
@@ -699,7 +717,7 @@ class RoleService implements APIRoleService, Sessionable
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate('userRoleAssignments', array('user' => $user->id)),
+            $this->requestParser->generate('userRoleAssignments', ['user' => $user->id]),
             $inputMessage
         );
 
@@ -725,13 +743,13 @@ class RoleService implements APIRoleService, Sessionable
 
         $response = $this->client->request(
             'DELETE',
-            $this->requestParser->generate('userRoleAssignment', array('user' => $userId, 'role' => $roleId)),
+            $this->requestParser->generate('userRoleAssignment', ['user' => $userId, 'role' => $roleId]),
             new Message(
                 // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array('Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList'))
+                ['Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList')]
             )
         );
 
@@ -790,20 +808,20 @@ class RoleService implements APIRoleService, Sessionable
             'GET',
             $this->requestParser->generate('userRoleAssignments'),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList'))
+                ['Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList')]
             )
         );
 
         $roleAssignments = $this->inputDispatcher->parse($response);
 
-        $userRoleAssignments = array();
+        $userRoleAssignments = [];
         foreach ($roleAssignments as $roleAssignment) {
             $userRoleAssignments[] = new UserRoleAssignment(
-                array(
+                [
                     'limitation' => $roleAssignment->getRoleLimitation(),
                     'role' => $roleAssignment->getRole(),
                     'user' => $user,
-                )
+                ]
             );
         }
 
@@ -823,20 +841,20 @@ class RoleService implements APIRoleService, Sessionable
             'GET',
             $this->requestParser->generate('groupRoleAssignments'),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList'))
+                ['Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList')]
             )
         );
 
         $roleAssignments = $this->inputDispatcher->parse($response);
 
-        $userGroupRoleAssignments = array();
+        $userGroupRoleAssignments = [];
         foreach ($roleAssignments as $roleAssignment) {
             $userGroupRoleAssignments[] = new UserGroupRoleAssignment(
-                array(
+                [
                     'limitation' => $roleAssignment->getRoleLimitation(),
                     'role' => $roleAssignment->getRole(),
                     'userGroup' => $userGroup,
-                )
+                ]
             );
         }
 
@@ -853,6 +871,18 @@ class RoleService implements APIRoleService, Sessionable
     public function newRoleCreateStruct($name)
     {
         return new Values\User\RoleCreateStruct($name);
+    }
+
+    /**
+     * Instantiates a role copy class.
+     *
+     * @param string $name
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleCopyStruct
+     */
+    public function newRoleCopyStruct($name)
+    {
+        return new Values\User\RoleCopyStruct($name);
     }
 
     /**

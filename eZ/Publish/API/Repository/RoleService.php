@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
+use eZ\Publish\API\Repository\Values\User\RoleCopyStruct;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -57,6 +58,24 @@ interface RoleService
      * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
      */
     public function createRoleDraft(Role $role);
+
+    /**
+     * Copies an existing Role.
+     *
+     * @since 7.5
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to copy a role
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *         if the name of the role already exists or if limitation of the same type
+     *         is repeated in the policy create struct or if limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCopyStruct is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     * @param \eZ\Publish\API\Repository\Values\User\RoleCopyStruct $roleCopyStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function copyRole(Role $role, RoleCopyStruct $roleCopyStruct);
 
     /**
      * Loads a RoleDraft for the given id.
@@ -420,6 +439,15 @@ interface RoleService
      * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
     public function newPolicyUpdateStruct();
+
+    /**
+     * Instantiates a role copy class.
+     *
+     * @param string $name
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleCopyStruct
+     */
+    public function newRoleCopyStruct($name);
 
     /**
      * Instantiates a policy update class.

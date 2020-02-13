@@ -171,7 +171,7 @@ class Mapper
             $contentId = (int)$row['contentobject_id'];
             // if user already have full access to a role, continue
             if (isset($roleAssignmentData[$roleId][$contentId])
-              && $roleAssignmentData[$roleId][$contentId] instanceof RoleAssignment) {
+                && $roleAssignmentData[$roleId][$contentId] instanceof RoleAssignment) {
                 continue;
             }
 
@@ -239,6 +239,24 @@ class Mapper
         $role->identifier = $createStruct->identifier;
         $role->policies = $createStruct->policies;
         $role->status = Role::STATUS_DRAFT;
+
+        return $role;
+    }
+
+    /**
+     * Maps properties from $struct to $role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleCopyStruct $copyStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function createRoleFromCopyStruct(User\RoleCopyStruct $copyStruct)
+    {
+        $role = new Role();
+
+        $role->identifier = $copyStruct->newIdentifier;
+        $role->policies = $copyStruct->policies;
+        $role->status = Role::STATUS_DEFINED;
 
         return $role;
     }

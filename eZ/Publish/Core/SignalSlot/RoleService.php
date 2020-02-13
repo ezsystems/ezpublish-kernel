@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
+use eZ\Publish\API\Repository\Values\User\RoleCopyStruct;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -25,6 +26,7 @@ use eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicyByRoleDraftSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicySignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\CopyRoleSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleDraftSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleDraftSignal;
@@ -120,6 +122,35 @@ class RoleService implements RoleServiceInterface
         $returnValue = $this->service->createRoleDraft($role);
         $this->signalDispatcher->emit(
             new CreateRoleDraftSignal(
+                [
+                    'roleId' => $returnValue->id,
+                ]
+            )
+        );
+
+        return $returnValue;
+    }
+
+    /**
+     * Creates a new RoleDraft.
+     *
+     * @since 7.5
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to copy a role
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *         if the name of the role already exists or if limitation of the same type
+     *         is repeated in the policy create struct or if limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCopyStruct is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleCopyStruct $roleCopyStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function copyRole(Role $role, RoleCopyStruct $roleCopyStruct)
+    {
+        $returnValue = $this->service->copyRole($role, $roleCopyStruct);
+        $this->signalDispatcher->emit(
+            new CopyRoleSignal(
                 [
                     'roleId' => $returnValue->id,
                 ]
@@ -686,6 +717,18 @@ class RoleService implements RoleServiceInterface
     public function newRoleCreateStruct($name)
     {
         return $this->service->newRoleCreateStruct($name);
+    }
+
+    /**
+     * Instantiates a role copy class.
+     *
+     * @param string $name
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleCopyStruct
+     */
+    public function newRoleCopyStruct($name)
+    {
+        return $this->service->newRoleCopyStruct($name);
     }
 
     /**

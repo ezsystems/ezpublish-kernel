@@ -129,6 +129,15 @@ interface Handler
     public function createRoleDraft($roleId);
 
     /**
+     * Copy an existing role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleCopyStruct $copyStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function copyRole(RoleCopyStruct $copyStruct);
+
+    /**
      * Loads a specified role (draft) by $roleId.
      *
      * @param mixed $roleId

@@ -269,6 +269,28 @@ class Handler implements BaseUserHandler
     }
 
     /**
+     * Copies an existing role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleCopyStruct $copyStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function copyRole(User\RoleCopyStruct $copyStruct)
+    {
+        $role = $this->mapper->createRoleFromCopyStruct(
+            $copyStruct
+        );
+
+        $this->roleGateway->copyRole($role);
+
+        foreach ($role->policies as $policy) {
+            $this->addPolicy($role->id, $policy);
+        }
+
+        return $role;
+    }
+
+    /**
      * Loads a specified role (draft) by $roleId and $status.
      *
      * @param mixed $roleId

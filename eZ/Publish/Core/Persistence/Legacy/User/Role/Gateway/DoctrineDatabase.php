@@ -90,6 +90,41 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Copies an existing role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     */
+    public function copyRole(Role $role)
+    {
+        $query = $this->handler->createInsertQuery();
+        $query
+            ->insertInto($this->handler->quoteTable('ezrole'))
+            ->set(
+                $this->handler->quoteColumn('id'),
+                $this->handler->getAutoIncrementValue('ezrole', 'id')
+            )->set(
+                $this->handler->quoteColumn('is_new'),
+                0
+            )->set(
+                $this->handler->quoteColumn('name'),
+                $query->bindValue($role->identifier)
+            )->set(
+                $this->handler->quoteColumn('value'),
+                0
+            )->set(
+                $this->handler->quoteColumn('version'),
+                $query->bindValue(0)
+            );
+        $query->prepare()->execute();
+
+        if (!isset($role->id) || (int)$role->id < 1 || $role->status === Role::STATUS_DRAFT) {
+            $role->id = $this->handler->lastInsertId(
+                $this->handler->getSequenceName('ezrole', 'id')
+            );
+        }
+    }
+
+    /**
      * Loads a specified role by id.
      *
      * @param mixed $roleId

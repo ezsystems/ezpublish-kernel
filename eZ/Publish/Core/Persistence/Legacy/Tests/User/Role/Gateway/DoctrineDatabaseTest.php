@@ -81,6 +81,35 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::createRole
+     */
+    public function testCopyRole()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $spiRole = new Role([
+            'identifier' => 'cloned_role',
+            'status' => Role::STATUS_DRAFT,
+        ]);
+        $gateway->copyRole($spiRole);
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+
+        $this->assertQueryResult(
+            [
+                [
+                    'id' => '6',
+                    'name' => 'cloned_role',
+                    'version' => 0,
+                ],
+            ],
+            $query
+                ->select('id', 'name', 'version')
+                ->from('ezrole')
+                ->where($query->expr->eq('name', $query->bindValue('cloned_role')))
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignment
      */
     public function testLoadRoleAssignment()
