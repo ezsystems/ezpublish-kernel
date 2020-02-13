@@ -4783,8 +4783,12 @@ class SearchServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    private function find(string $findMethod, Query $query, array $languages, bool $useAlwaysAvailable): SearchResult
-    {
+    private function find(
+        string $findMethod,
+        Query $query,
+        array $languages,
+        bool $useAlwaysAvailable
+    ): SearchResult {
         if (false === in_array($findMethod, self::AVAILABLE_FIND_METHODS)) {
             throw new \InvalidArgumentException(
                 'Allowed find methods are: '
@@ -4799,7 +4803,7 @@ class SearchServiceTest extends BaseTest
             $query,
             [
                 'languages' => $languages,
-                'useAlwaysAvailable' => $useAlwaysAvailable
+                'useAlwaysAvailable' => $useAlwaysAvailable,
             ]
         );
     }
@@ -4873,7 +4877,7 @@ class SearchServiceTest extends BaseTest
         $searchHits = $searchResult->searchHits;
         $this->sortSearchHitsById($searchHits);
 
-        for ($i = 0; $i < $searchResult->totalCount; $i++) {
+        for ($i = 0; $i < $searchResult->totalCount; ++$i) {
             $this->assertEquals(
                 $translationsToMatch[$i],
                 $searchHits[$i]->matchedTranslation
