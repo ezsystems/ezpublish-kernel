@@ -250,7 +250,7 @@ class FullText extends CriterionHandler
                 )
             );
 
-        if (false === empty($languageSettings['languages'])) {
+        if (!empty($languageSettings['languages'])) {
             $languageMask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
                 $languageSettings['languages'],
                 $languageSettings['useAlwaysAvailable'] ?? true
