@@ -47,7 +47,7 @@ class FullTextValue extends ValueObject
     public $value;
 
     /**
-     * @todo: description and name
+     * Is value from main language and always available.
      *
      * @var bool
      */

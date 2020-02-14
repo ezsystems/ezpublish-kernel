@@ -476,7 +476,8 @@ CREATE TABLE ezsearch_object_word_link (
   prev_word_id integer NOT NULL DEFAULT 0,
   published integer NOT NULL DEFAULT 0,
   section_id integer NOT NULL DEFAULT 0,
-  word_id integer NOT NULL DEFAULT 0
+  word_id integer NOT NULL DEFAULT 0,
+  language_mask integer NOT NULL DEFAULT 0
 );
 CREATE INDEX ezsearch_object_word_link_frequency ON ezsearch_object_word_link (frequency);
 CREATE INDEX ezsearch_object_word_link_identifier ON ezsearch_object_word_link (identifier);

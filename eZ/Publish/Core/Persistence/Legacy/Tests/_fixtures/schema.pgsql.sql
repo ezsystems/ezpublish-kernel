@@ -351,7 +351,8 @@ CREATE TABLE ezsearch_object_word_link (
     prev_word_id integer DEFAULT 0 NOT NULL,
     published integer DEFAULT 0 NOT NULL,
     section_id integer DEFAULT 0 NOT NULL,
-    word_id integer DEFAULT 0 NOT NULL
+    word_id integer DEFAULT 0 NOT NULL,
+    language_mask bigint DEFAULT 0 NOT NULL
 );
 
 DROP TABLE IF EXISTS ezsearch_word;

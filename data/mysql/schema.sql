@@ -1897,6 +1897,7 @@ CREATE TABLE `ezsearch_object_word_link` (
   `published` int(11) NOT NULL DEFAULT '0',
   `section_id` int(11) NOT NULL DEFAULT '0',
   `word_id` int(11) NOT NULL DEFAULT '0',
+  `language_mask` bigint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `ezsearch_object_word_link_frequency` (`frequency`),
   KEY `ezsearch_object_word_link_identifier` (`identifier` (191)),
