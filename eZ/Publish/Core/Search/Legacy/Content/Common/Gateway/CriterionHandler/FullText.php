@@ -92,7 +92,7 @@ class FullText extends CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      * @param array $configuration
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException On invalid $configuration values
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException On invalid $configuration values
      */
     public function __construct(
         DatabaseHandler $dbHandler,
