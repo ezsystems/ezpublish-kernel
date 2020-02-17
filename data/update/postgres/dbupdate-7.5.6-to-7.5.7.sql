@@ -1,3 +1,4 @@
+UPDATE ezsite_data SET value='7.5.7' WHERE name='ezpublish-version';
 --
 -- EZP-31299: Searching in languages
 --
