@@ -101,9 +101,7 @@ class FullTextMapper
                     'languageCode' => $field->languageCode,
                     'value' => !is_array($value) ? $value : implode(' ', $value),
                     'isMainAndAlwaysAvailable' => (
-                    ($field->languageCode === $contentInfo->mainLanguageCode && $contentInfo->alwaysAvailable)
-                        ? true
-                        : false
+                        $field->languageCode === $contentInfo->mainLanguageCode && $contentInfo->alwaysAvailable
                     ),
                 ]
             );

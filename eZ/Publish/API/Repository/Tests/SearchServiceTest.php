@@ -4426,7 +4426,7 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @covers \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends testFulltextComplex
      *
      * @param array $data
@@ -4497,7 +4497,7 @@ class SearchServiceTest extends BaseTest
 
     /**
      * Test for the findLocations() method.
-     * @see     \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @covers \eZ\Publish\API\Repository\SearchService::findLocations()
      * @depends testFulltextComplex
      *
      * @param array $data
@@ -4789,7 +4789,7 @@ class SearchServiceTest extends BaseTest
         array $languages,
         bool $useAlwaysAvailable
     ): SearchResult {
-        if (false === in_array($findMethod, self::AVAILABLE_FIND_METHODS)) {
+        if (false === in_array($findMethod, self::AVAILABLE_FIND_METHODS, true)) {
             throw new \InvalidArgumentException(
                 'Allowed find methods are: '
                 . implode(',', self::AVAILABLE_FIND_METHODS)
