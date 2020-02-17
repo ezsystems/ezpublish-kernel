@@ -115,7 +115,7 @@ class Exception extends ValueObjectVisitor
         $generator->startValueElement('errorMessage', $this->httpStatusCodes[$statusCode]);
         $generator->endValueElement('errorMessage');
 
-        if ($this->debug) {
+        if ($this->debug || $statusCode < 500) {
             $errorDescription = $data instanceof Translatable && $this->translator
                 ? /** @Ignore */ $this->translator->trans($data->getMessageTemplate(), $data->getParameters(), 'repository_exceptions')
                 : $data->getMessage();
