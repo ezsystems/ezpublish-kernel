@@ -115,12 +115,17 @@ class Exception extends ValueObjectVisitor
         $generator->startValueElement('errorMessage', $this->httpStatusCodes[$statusCode]);
         $generator->endValueElement('errorMessage');
 
-        if ($data instanceof Translatable && $this->translator) {
-            /** @Ignore */
-            $errorDescription = $this->translator->trans($data->getMessageTemplate(), $data->getParameters(), 'repository_exceptions');
+        if ($this->debug || $statusCode < 500) {
+            $errorDescription = $data instanceof Translatable && $this->translator
+                ? /** @Ignore */ $this->translator->trans($data->getMessageTemplate(), $data->getParameters(), 'repository_exceptions')
+                : $data->getMessage();
         } else {
-            $errorDescription = $data->getMessage();
+            // Do not leak any file paths and sensitive data on production environments
+            $errorDescription = $this->translator
+                ? /** @Desc("An error has occurred. Please try again later or contact your Administrator.") */ $this->translator->trans('non_verbose_error', [], 'repository_exceptions')
+                : 'An error has occurred. Please try again later or contact your Administrator.';
         }
+
         $generator->startValueElement('errorDescription', $errorDescription);
         $generator->endValueElement('errorDescription');
 
