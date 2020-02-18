@@ -4858,7 +4858,7 @@ class SearchServiceTest extends BaseTest
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $searchResult
-     * @param array $translationsToMatch
+     * @param string[] $translationsToMatch
      */
     private function assertSearchResultMatchTranslations(
         SearchResult $searchResult,
