@@ -18,7 +18,6 @@ use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use RuntimeException;
 use PDO;
@@ -38,6 +37,12 @@ final class DoctrineDatabase extends Gateway
      * on 64 bit systems.
      */
     const MAX_LIMIT = 1073741824;
+
+    private const SORT_CLAUSE_TARGET_MAP = [
+        'location_depth' => 'depth',
+        'location_priority' => 'priority',
+        'location_path' => 'path_string',
+    ];
 
     /**
      * Database handler.
@@ -1295,15 +1300,6 @@ final class DoctrineDatabase extends Gateway
         throw new NotFound('trash', $locationId);
     }
 
-    /**
-     * List trashed items.
-     *
-     * @param int $offset
-     * @param int $limit
-     * @param array $sort
-     *
-     * @return array
-     */
     public function listTrashed($offset, $limit, array $sort = null)
     {
         $query = $this->connection->createQueryBuilder();
@@ -1313,27 +1309,17 @@ final class DoctrineDatabase extends Gateway
 
         $sort = $sort ?: [];
         foreach ($sort as $condition) {
-            $sortDirection = $condition->direction === Query::SORT_ASC ? 'ASC' : 'DESC';
-            switch (true) {
-                case $condition instanceof SortClause\Location\Depth:
-                    $query->orderBy('depth', $sortDirection);
-                    break;
-
-                case $condition instanceof SortClause\Location\Path:
-                    $query->orderBy('path_string', $sortDirection);
-                    break;
-
-                case $condition instanceof SortClause\Location\Priority:
-                    $query->orderBy('priority', $sortDirection);
-                    break;
-
-                default:
-                    // Only handle location related sort clauses. The others
-                    // require data aggregation which is not sensible here.
-                    // Since also criteria are yet ignored, because they are
-                    // simply not used yet in eZ Publish, we skip that for now.
-                    throw new RuntimeException('Unhandled sort clause: ' . get_class($condition));
+            if (!isset(self::SORT_CLAUSE_TARGET_MAP[$condition->target])) {
+                // Only handle location related sort clause targets. The others
+                // require data aggregation which is not sensible here.
+                // Since also criteria are yet ignored, because they are
+                // simply not used yet in eZ Platform, we skip that for now.
+                throw new RuntimeException('Unhandled sort clause: ' . get_class($condition));
             }
+            $query->addOrderBy(
+                self::SORT_CLAUSE_TARGET_MAP[$condition->target],
+                $condition->direction === Query::SORT_ASC ? 'ASC' : 'DESC'
+            );
         }
 
         if ($limit !== null) {
@@ -1343,12 +1329,7 @@ final class DoctrineDatabase extends Gateway
 
         $statement = $query->execute();
 
-        $rows = [];
-        while ($row = $statement->fetch(FetchMode::ASSOCIATIVE)) {
-            $rows[] = $row;
-        }
-
-        return $rows;
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     public function countTrashed(): int

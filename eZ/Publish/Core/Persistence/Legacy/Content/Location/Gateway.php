@@ -319,14 +319,13 @@ abstract class Gateway
     abstract public function cleanupTrash();
 
     /**
-     * Lists trashed items.
-     * Returns entries from ezcontentobject_trash.
+     * List trashed items.
      *
      * @param int $offset
      * @param int $limit
-     * @param array $sort
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      *
-     * @return array
+     * @return array entries from ezcontentobject_trash.
      */
     abstract public function listTrashed($offset, $limit, array $sort = null);
 
