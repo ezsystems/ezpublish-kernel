@@ -4889,7 +4889,7 @@ class SearchServiceTest extends BaseTest
     {
         usort(
             $searchHits,
-            function ($a, $b) {
+           static function (SearchHit $a, SearchHit  $b): int {
                 return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
             }
         );
