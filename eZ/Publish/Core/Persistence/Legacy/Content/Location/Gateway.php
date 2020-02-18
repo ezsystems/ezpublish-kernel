@@ -30,6 +30,9 @@ abstract class Gateway
     const NODE_ASSIGNMENT_OP_CODE_SET_NOP = 8;
     const NODE_ASSIGNMENT_OP_CODE_SET = 9;
 
+    public const CONTENT_TREE_TABLE = 'ezcontentobject_tree';
+    public const CONTENT_TREE_SEQ = 'ezcontentobject_tree_node_id_seq';
+
     /**
      * Returns an array with basic node data.
      *
@@ -259,7 +262,7 @@ abstract class Gateway
     abstract public function removeLocation($locationId);
 
     /**
-     * Returns id of the next in line node to be set as a new main node.
+     * Return data of the next in line node to be set as a new main node.
      *
      * This returns lowest node id for content identified by $contentId, and not of
      * the node identified by given $locationId (current main node).
