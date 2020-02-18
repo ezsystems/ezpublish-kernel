@@ -21,7 +21,6 @@ use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\API\Repository\Values\Content\URLAlias;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -1553,7 +1552,6 @@ class LocationServiceTest extends BaseTest
         self::assertNotEquals($location1UrlAliases, $location1UrlAliasesAfterSwap);
         self::assertEquals($location2UrlAliases, $location2UrlAliasesAfterSwap);
         self::assertEquals(['eng-GB'], $location1UrlAliasesAfterSwap[$keyUrlAlias]->languageCodes);
-
     }
 
     /**

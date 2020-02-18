@@ -29,7 +29,6 @@ abstract class Gateway
 
     /**
      * Loads all list of aliases by given $locationId.
-     *
      */
     abstract public function loadAllLocationEntries(int $locationId): array;
 

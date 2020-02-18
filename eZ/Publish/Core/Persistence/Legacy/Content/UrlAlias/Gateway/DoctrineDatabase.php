@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use Doctrine\DBAL\Connection;
@@ -21,7 +20,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as Languag
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use RuntimeException;
-use PDO;
 
 /**
  * UrlAlias Gateway.
@@ -91,8 +89,7 @@ class DoctrineDatabase extends Gateway
     public function __construct(
         DatabaseHandler $dbHandler,
         LanguageMaskGenerator $languageMaskGenerator
-    )
-    {
+    ) {
         $this->dbHandler = $dbHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
         $this->table = static::TABLE;
@@ -106,7 +103,6 @@ class DoctrineDatabase extends Gateway
 
     /**
      * Loads all list of aliases by given $locationId.
-     *
      */
     public function loadAllLocationEntries(int $locationId): array
     {
@@ -895,7 +891,6 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
-     *
      */
     public function loadPathData($id)
     {

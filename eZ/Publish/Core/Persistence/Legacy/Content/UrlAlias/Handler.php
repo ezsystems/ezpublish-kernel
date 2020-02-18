@@ -1143,7 +1143,6 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * Internal publish custom aliases method, accepting language mask to set correct language mask on url aliases
      * new alias ID (used when swapping Locations).
-     *
      */
     private function internalPublishCustomUrlAliasForLocation(SwappedLocationProperties $location, int $languageMask)
     {
