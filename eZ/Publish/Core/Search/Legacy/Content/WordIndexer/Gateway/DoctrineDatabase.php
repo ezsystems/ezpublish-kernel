@@ -152,10 +152,14 @@ class DoctrineDatabase extends Gateway
                 // treat it as url and add additional entry to the index
                 if (mb_strtolower(mb_substr($word, 0, 4)) === 'www.') {
                     $additionalUrlWord = substr($word, 4);
-                    $indexArray[] = ['Word' => $additionalUrlWord,
+                    $indexArray[] = [
+                        'Word' => $additionalUrlWord,
                         'ContentClassAttributeID' => $fullTextValue->fieldDefinitionId,
                         'identifier' => $fullTextValue->fieldDefinitionIdentifier,
-                        'integer_value' => $integerValue, ];
+                        'integer_value' => $integerValue,
+                        'language_code' => $fullTextValue->languageCode,
+                        'is_main_and_always_available' => $fullTextValue->isMainAndAlwaysAvailable,
+                    ];
                     $indexArrayOnlyWords[$additionalUrlWord] = 1;
                     ++$wordCount;
                 }

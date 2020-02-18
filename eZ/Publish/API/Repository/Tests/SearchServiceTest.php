@@ -4888,10 +4888,10 @@ class SearchServiceTest extends BaseTest
     private function sortSearchHitsById(array &$searchHits): void
     {
         usort(
-            $searchHits,
-           static function (SearchHit $a, SearchHit  $b): int {
-                return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
-            }
+           $searchHits,
+           static function (SearchHit $a, SearchHit $b): int {
+               return $a->valueObject->id <=> $b->valueObject->id;
+           }
         );
     }
 }
