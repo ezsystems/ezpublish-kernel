@@ -233,6 +233,11 @@
         <target>expected value to be of type '%expectedType%', got '%actualType%'</target>
         <note>key: expected value to be of type '%expectedType%', got '%actualType%'</note>
       </trans-unit>
+      <trans-unit id="9307ee9a550b5c318fbbd6f5750e95d1de1d3483" resname="non_verbose_error">
+        <source>An error has occurred. Please try again later or contact your Administrator.</source>
+        <target>An error has occurred. Please try again later or contact your Administrator.</target>
+        <note>key: non_verbose_error</note>
+      </trans-unit>
     </body>
   </file>
 </xliff>
