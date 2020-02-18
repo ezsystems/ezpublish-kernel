@@ -242,4 +242,22 @@ class Mapper
 
         return $role;
     }
+
+    /**
+     * Maps properties from $struct to $role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleCopyStruct $copyStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function createRoleFromCopyStruct(User\RoleCopyStruct $copyStruct)
+    {
+        $role = new Role();
+
+        $role->identifier = $copyStruct->newIdentifier;
+        $role->policies = $copyStruct->policies;
+        $role->status = Role::STATUS_DEFINED;
+
+        return $role;
+    }
 }

@@ -57,6 +57,24 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Copies an existing Role.
+     *
+     * @param Role $role
+     *
+     * @return Role
+     */
+    public function copyRole(Role $role)
+    {
+        try {
+            return $this->innerGateway->copyRole($role);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Loads a specified role by $roleId.
      *
      * @param mixed $roleId

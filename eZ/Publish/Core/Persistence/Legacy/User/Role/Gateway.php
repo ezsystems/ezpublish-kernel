@@ -27,6 +27,15 @@ abstract class Gateway
     abstract public function createRole(Role $role);
 
     /**
+     * Copies an existing Role.
+     *
+     * @param Role $role
+     *
+     * @return Role
+     */
+    abstract public function copyRole(Role $role);
+
+    /**
      * Loads a specified role by $roleId.
      *
      * @param mixed $roleId

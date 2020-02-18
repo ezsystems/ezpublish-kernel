@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
+use eZ\Publish\API\Repository\Events\Role\BeforeCopyRoleEvent;
+use eZ\Publish\API\Repository\Events\Role\CopyRoleEvent;
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
@@ -15,6 +17,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
+use eZ\Publish\API\Repository\Values\User\RoleCopyStruct;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -103,6 +106,33 @@ class RoleService extends RoleServiceDecorator
         );
 
         return $roleDraft;
+    }
+
+    public function copyRole(
+        Role $role,
+        RoleCopyStruct $roleCopyStruct
+    ): Role {
+        $eventData = [
+            $role,
+            $roleCopyStruct,
+        ];
+
+        $beforeEvent = new BeforeCopyRoleEvent(...$eventData);
+
+        $this->eventDispatcher->dispatch($beforeEvent);
+        if ($beforeEvent->isPropagationStopped()) {
+            return $beforeEvent->getCopiedRole();
+        }
+
+        $copiedRole = $beforeEvent->hasCopiedRole()
+            ? $beforeEvent->getCopiedRole()
+            : $this->innerService->copyRole($role, $roleCopyStruct);
+
+        $this->eventDispatcher->dispatch(
+            new CopyRoleEvent($copiedRole, ...$eventData)
+        );
+
+        return $copiedRole;
     }
 
     public function updateRoleDraft(
