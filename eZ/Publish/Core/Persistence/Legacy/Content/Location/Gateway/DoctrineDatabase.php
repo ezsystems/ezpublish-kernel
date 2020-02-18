@@ -80,11 +80,11 @@ final class DoctrineDatabase extends Gateway
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBasicNodeData($nodeId, array $translations = null, bool $useAlwaysAvailable = true)
-    {
+    public function getBasicNodeData(
+        int $nodeId,
+        array $translations = null,
+        bool $useAlwaysAvailable = true
+    ): array {
         $query = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
         $query->andWhere(
             $query->expr()->eq('t.node_id', $query->createNamedParameter($nodeId, ParameterType::INTEGER))
@@ -113,11 +113,11 @@ final class DoctrineDatabase extends Gateway
         return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
-    {
+    public function getBasicNodeDataByRemoteId(
+        string $remoteId,
+        array $translations = null,
+        bool $useAlwaysAvailable = true
+    ): array {
         $query = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
         $query->andWhere(
             $query->expr()->eq('t.remote_id', $query->createNamedParameter($remoteId, ParameterType::STRING))
@@ -130,16 +130,7 @@ final class DoctrineDatabase extends Gateway
         throw new NotFound('location', $remoteId);
     }
 
-    /**
-     * Loads data for all Locations for $contentId, optionally only in the
-     * subtree starting at $rootLocationId.
-     *
-     * @param int $contentId
-     * @param int $rootLocationId
-     *
-     * @return array
-     */
-    public function loadLocationDataByContent($contentId, $rootLocationId = null)
+    public function loadLocationDataByContent(int $contentId, ?int $rootLocationId = null): array
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -165,10 +156,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * @see \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway::loadParentLocationsDataForDraftContent
-     */
-    public function loadParentLocationsDataForDraftContent($contentId, $drafts = null)
+    public function loadParentLocationsDataForDraftContent(int $contentId): array
     {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
@@ -221,15 +209,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Find all content in the given subtree.
-     *
-     * @param mixed $sourceId
-     * @param bool $onlyIds
-     *
-     * @return array
-     */
-    public function getSubtreeContent($sourceId, $onlyIds = false)
+    public function getSubtreeContent(int $sourceId, bool $onlyIds = false): array
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -261,14 +241,7 @@ final class DoctrineDatabase extends Gateway
         );
     }
 
-    /**
-     * Returns data for the first level children of the location identified by given $locationId.
-     *
-     * @param mixed $locationId
-     *
-     * @return array
-     */
-    public function getChildren($locationId)
+    public function getChildren(int $locationId): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('*')->from(
@@ -284,18 +257,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Update path strings to move nodes in the ezcontentobject_tree table.
-     *
-     * This query can likely be optimized to use some more advanced string
-     * operations, which then depend on the respective database.
-     *
-     * @todo optimize
-     *
-     * @param array $sourceNodeData
-     * @param array $destinationNodeData
-     */
-    public function moveSubtreeNodes(array $sourceNodeData, array $destinationNodeData)
+    public function moveSubtreeNodes(array $sourceNodeData, array $destinationNodeData): void
     {
         $fromPathString = $sourceNodeData['path_string'];
 
@@ -391,7 +353,7 @@ final class DoctrineDatabase extends Gateway
         }
     }
 
-    private function isHiddenByParent($pathString, array $rows)
+    private function isHiddenByParent($pathString, array $rows): bool
     {
         $parentNodeIds = explode('/', trim($pathString, '/'));
         array_pop($parentNodeIds); // remove self
@@ -404,13 +366,7 @@ final class DoctrineDatabase extends Gateway
         return false;
     }
 
-    /**
-     * Updated subtree modification time for all nodes on path.
-     *
-     * @param string $pathString
-     * @param int|null $timestamp
-     */
-    public function updateSubtreeModificationTime($pathString, $timestamp = null)
+    public function updateSubtreeModificationTime(string $pathString, ?int $timestamp = null): void
     {
         $nodes = array_filter(explode('/', $pathString));
         $query = $this->connection->createQueryBuilder();
@@ -431,12 +387,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Sets a location to be hidden, and it self + all children to invisible.
-     *
-     * @param string $pathString
-     */
-    public function hideSubtree($pathString)
+    public function hideSubtree(string $pathString): void
     {
         $this->setNodeWithChildrenInvisible($pathString);
         $this->setNodeHidden($pathString);
@@ -499,13 +450,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Sets a location to be unhidden, and self + children to visible unless a parent is hiding the tree.
-     * If not make sure only children down to first hidden node is marked visible.
-     *
-     * @param string $pathString
-     */
-    public function unHideSubtree($pathString)
+    public function unHideSubtree(string $pathString): void
     {
         $this->setNodeUnhidden($pathString);
         $this->setNodeWithChildrenVisible($pathString);
@@ -742,7 +687,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function create(CreateStruct $createStruct, array $parentNode)
+    public function create(CreateStruct $createStruct, array $parentNode): Location
     {
         $location = $this->insertLocationIntoContentTree($createStruct, $parentNode);
 
@@ -771,15 +716,11 @@ final class DoctrineDatabase extends Gateway
         return $location;
     }
 
-    /**
-     * Create an entry in the node assignment table.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
-     * @param mixed $parentNodeId
-     * @param int $type
-     */
-    public function createNodeAssignment(CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP)
-    {
+    public function createNodeAssignment(
+        CreateStruct $createStruct,
+        int $parentNodeId,
+        int $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
+    ): void {
         $isMain = ($createStruct->mainLocationId === true ? 1 : 0);
 
         $query = $this->connection->createQueryBuilder();
@@ -848,7 +789,7 @@ final class DoctrineDatabase extends Gateway
      * @param int $contentId
      * @param int|null $versionNo
      */
-    public function deleteNodeAssignment($contentId, $versionNo = null)
+    public function deleteNodeAssignment(int $contentId, ?int $versionNo = null): void
     {
         $query = $this->connection->createQueryBuilder();
         $query->delete(
@@ -870,16 +811,12 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Update node assignment table.
-     *
-     * @param int $contentObjectId
-     * @param int $oldParent
-     * @param int $newParent
-     * @param int $opcode
-     */
-    public function updateNodeAssignment($contentObjectId, $oldParent, $newParent, $opcode)
-    {
+    public function updateNodeAssignment(
+        int $contentObjectId,
+        int $oldParent,
+        int $newParent,
+        int $opcode
+    ): void {
         $query = $this->connection->createQueryBuilder();
         $query
             ->update('eznode_assignment')
@@ -912,15 +849,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Create locations from node assignments.
-     *
-     * Convert existing node assignments into real locations.
-     *
-     * @param mixed $contentId
-     * @param mixed $versionNo
-     */
-    public function createLocationsFromNodeAssignments($contentId, $versionNo)
+    public function createLocationsFromNodeAssignments(int $contentId, int $versionNo): void
     {
         // select all node assignments with OP_CODE_CREATE (3) for this content
         $query = $this->connection->createQueryBuilder();
@@ -954,20 +883,19 @@ final class DoctrineDatabase extends Gateway
         // convert all these assignments to nodes
 
         while ($row = $statement->fetch(FetchMode::ASSOCIATIVE)) {
-            if ((bool)$row['is_main'] === true) {
-                $mainLocationId = true;
-            } else {
-                $mainLocationId = $this->getMainNodeId($contentId);
-            }
+            $isMain = (bool)$row['is_main'];
+            // set null for main to indicate that new Location ID is required
+            $mainLocationId = $isMain ? null : $this->getMainNodeId($contentId);
 
-            $parentLocationData = $this->getBasicNodeData($row['parent_node']);
+            $parentLocationData = $this->getBasicNodeData((int)$row['parent_node']);
             $isInvisible = $row['is_hidden'] || $parentLocationData['is_hidden'] || $parentLocationData['is_invisible'];
             $this->create(
                 new CreateStruct(
                     [
                         'contentId' => $row['contentobject_id'],
                         'contentVersion' => $row['contentobject_version'],
-                        'mainLocationId' => $mainLocationId,
+                        // BC layer: for CreateStruct "true" means that a main Location should be created
+                        'mainLocationId' => $mainLocationId ?? true,
                         'remoteId' => $row['parent_remote_id'],
                         'sortField' => $row['sort_field'],
                         'sortOrder' => $row['sort_order'],
@@ -980,21 +908,15 @@ final class DoctrineDatabase extends Gateway
             );
 
             $this->updateNodeAssignment(
-                $row['contentobject_id'],
-                $row['parent_node'],
-                $row['parent_node'],
+                (int)$row['contentobject_id'],
+                (int)$row['parent_node'],
+                (int)$row['parent_node'],
                 self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
             );
         }
     }
 
-    /**
-     * Updates all Locations of content identified with $contentId with $versionNo.
-     *
-     * @param mixed $contentId
-     * @param mixed $versionNo
-     */
-    public function updateLocationsContentVersionNo($contentId, $versionNo)
+    public function updateLocationsContentVersionNo(int $contentId, int $versionNo): void
     {
         $query = $this->connection->createQueryBuilder();
         $query->update(
@@ -1012,13 +934,9 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Searches for the main nodeId of $contentId in $versionId.
-     *
-     * @param int $contentId
-     *
-     * @return int|bool
+     * Search for the main nodeId of $contentId.
      */
-    private function getMainNodeId($contentId)
+    private function getMainNodeId(int $contentId): ?int
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -1038,12 +956,9 @@ final class DoctrineDatabase extends Gateway
             );
         $statement = $query->execute();
 
-        $result = $statement->fetchAll(FetchMode::ASSOCIATIVE);
-        if (count($result) === 1) {
-            return (int)$result[0]['node_id'];
-        } else {
-            return false;
-        }
+        $result = $statement->fetchColumn();
+
+        return false !== $result ? (int)$result : null;
     }
 
     /**
@@ -1054,7 +969,7 @@ final class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
      */
-    public function update(UpdateStruct $location, $locationId)
+    public function update(UpdateStruct $location, $locationId): void
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -1085,14 +1000,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Updates path identification string for given $locationId.
-     *
-     * @param mixed $locationId
-     * @param mixed $parentLocationId
-     * @param string $text
-     */
-    public function updatePathIdentificationString($locationId, $parentLocationId, $text)
+    public function updatePathIdentificationString($locationId, $parentLocationId, $text): void
     {
         $parentData = $this->getBasicNodeData($parentLocationId);
 
@@ -1120,7 +1028,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @param mixed $locationId
      */
-    public function removeLocation($locationId)
+    public function removeLocation($locationId): void
     {
         $query = $this->connection->createQueryBuilder();
         $query->delete(
@@ -1146,7 +1054,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function getFallbackMainNodeData($contentId, $locationId)
+    public function getFallbackMainNodeData($contentId, $locationId): array
     {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
@@ -1183,16 +1091,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetch(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Sends a single location identified by given $locationId to the trash.
-     *
-     * The associated content object is left untouched.
-     *
-     * @param mixed $locationId
-     *
-     * @return bool
-     */
-    public function trashLocation($locationId)
+    public function trashLocation(int $locationId): void
     {
         $locationRow = $this->getBasicNodeData($locationId);
 
@@ -1208,23 +1107,10 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
 
         $this->removeLocation($locationRow['node_id']);
-        $this->setContentStatus($locationRow['contentobject_id'], ContentInfo::STATUS_TRASHED);
+        $this->setContentStatus((int)$locationRow['contentobject_id'], ContentInfo::STATUS_TRASHED);
     }
 
-    /**
-     * Returns a trashed location to normal state.
-     *
-     * Recreates the originally trashed location in the new position. If no new
-     * position has been specified, it will be tried to re-create the location
-     * at the old position. If this is not possible ( because the old location
-     * does not exist any more) and exception is thrown.
-     *
-     * @param mixed $locationId
-     * @param mixed|null $newParentId
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
-     */
-    public function untrashLocation($locationId, $newParentId = null)
+    public function untrashLocation(int $locationId, ?int $newParentId = null): Location
     {
         $row = $this->loadTrashByLocation($locationId);
 
@@ -1242,20 +1128,16 @@ final class DoctrineDatabase extends Gateway
                     'sortOrder' => $row['sort_order'],
                 ]
             ),
-            $this->getBasicNodeData($newParentId ?: $row['parent_node_id'])
+            $this->getBasicNodeData($newParentId ?? (int)$row['parent_node_id'])
         );
 
         $this->removeElementFromTrash($locationId);
-        $this->setContentStatus($row['contentobject_id'], ContentInfo::STATUS_PUBLISHED);
+        $this->setContentStatus((int)$row['contentobject_id'], ContentInfo::STATUS_PUBLISHED);
 
         return $newLocation;
     }
 
-    /**
-     * @param mixed $contentId
-     * @param int $status
-     */
-    private function setContentStatus($contentId, $status)
+    private function setContentStatus(int $contentId, int $status): void
     {
         $query = $this->connection->createQueryBuilder();
         $query->update(
@@ -1272,14 +1154,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Loads trash data specified by location ID.
-     *
-     * @param mixed $locationId
-     *
-     * @return array
-     */
-    public function loadTrashByLocation($locationId)
+    public function loadTrashByLocation(int $locationId): array
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -1300,7 +1175,7 @@ final class DoctrineDatabase extends Gateway
         throw new NotFound('trash', $locationId);
     }
 
-    public function listTrashed($offset, $limit, array $sort = null)
+    public function listTrashed(int $offset, ?int $limit, array $sort = null): array
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -1347,20 +1222,14 @@ final class DoctrineDatabase extends Gateway
      *
      * Basically truncates ezcontentobject_trash table.
      */
-    public function cleanupTrash()
+    public function cleanupTrash(): void
     {
         $query = $this->connection->createQueryBuilder();
         $query->delete('ezcontentobject_trash');
         $query->execute();
     }
 
-    /**
-     * Removes trashed element identified by $id from trash.
-     * Will NOT remove associated content object nor attributes.
-     *
-     * @param int $id The trashed location Id
-     */
-    public function removeElementFromTrash($id)
+    public function removeElementFromTrash(int $id): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -1374,15 +1243,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Set section on all content objects in the subtree.
-     *
-     * @param string $pathString
-     * @param int $sectionId
-     *
-     * @return bool
-     */
-    public function setSectionForSubtree($pathString, $sectionId)
+    public function setSectionForSubtree(string $pathString, int $sectionId): bool
     {
         $selectContentIdsQuery = $this->connection->createQueryBuilder();
         $selectContentIdsQuery
@@ -1422,14 +1283,7 @@ final class DoctrineDatabase extends Gateway
         return $affectedRows > 0;
     }
 
-    /**
-     * Returns how many locations given content object identified by $contentId has.
-     *
-     * @param int $contentId
-     *
-     * @return int
-     */
-    public function countLocationsByContentId($contentId)
+    public function countLocationsByContentId(int $contentId): int
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -1448,20 +1302,12 @@ final class DoctrineDatabase extends Gateway
         return (int)$stmt->fetchColumn();
     }
 
-    /**
-     * Changes main location of content identified by given $contentId to location identified by given $locationId.
-     *
-     * Updates ezcontentobject_tree table for the given $contentId and eznode_assignment table for the given
-     * $contentId, $parentLocationId and $versionNo
-     *
-     * @param mixed $contentId
-     * @param mixed $locationId
-     * @param mixed $versionNo version number, needed to update eznode_assignment table
-     * @param mixed $parentLocationId parent location of location identified by $locationId, needed to update
-     *        eznode_assignment table
-     */
-    public function changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId)
-    {
+    public function changeMainLocation(
+        int $contentId,
+        int $locationId,
+        int $versionNo,
+        int $parentLocationId
+    ): void {
         // Update ezcontentobject_tree table
         $query = $this->connection->createQueryBuilder();
         $query
@@ -1494,7 +1340,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return int
      */
-    public function countAllLocations()
+    public function countAllLocations(): int
     {
         $query = $this->getAllLocationsQueryBuilder(['count(node_id)']);
 
@@ -1503,15 +1349,7 @@ final class DoctrineDatabase extends Gateway
         return (int) $statement->fetch(FetchMode::COLUMN);
     }
 
-    /**
-     * Load data of every Location, except the Root node.
-     *
-     * @param int $offset Paginator offset
-     * @param int $limit Paginator limit
-     *
-     * @return array
-     */
-    public function loadAllLocationsData($offset, $limit)
+    public function loadAllLocationsData(int $offset, int $limit): array
     {
         $query = $this
             ->getAllLocationsQueryBuilder(
@@ -1550,7 +1388,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getAllLocationsQueryBuilder(array $columns)
+    private function getAllLocationsQueryBuilder(array $columns): \Doctrine\DBAL\Query\QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query

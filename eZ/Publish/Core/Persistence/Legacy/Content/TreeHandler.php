@@ -98,9 +98,11 @@ class TreeHandler
      */
     public function removeRawContent($contentId)
     {
-        $this->locationGateway->removeElementFromTrash(
-            $this->loadContentInfo($contentId)->mainLocationId
-        );
+        $mainLocationId = $this->loadContentInfo($contentId)->mainLocationId;
+        // there can be no Locations for Draft Content items
+        if (null !== $mainLocationId) {
+            $this->locationGateway->removeElementFromTrash($mainLocationId);
+        }
 
         foreach ($this->listVersions($contentId) as $versionInfo) {
             $this->fieldHandler->deleteFields($contentId, $versionInfo);
