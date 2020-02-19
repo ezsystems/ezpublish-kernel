@@ -47,6 +47,9 @@ class ReindexCommand extends ContainerAwareCommand
     /** @var bool */
     private $isDebug;
 
+    /** @var string */
+    private $projectDir;
+
     /**
      * Initialize objects required by {@see execute()}.
      *
@@ -61,6 +64,7 @@ class ReindexCommand extends ContainerAwareCommand
         $this->logger = $this->getContainer()->get('logger');
         $this->env = $this->getContainer()->getParameter('kernel.environment');
         $this->isDebug = $this->getContainer()->getParameter('kernel.debug');
+        $this->projectDir = $this->getContainer()->getParameter('kernel.project_dir');
         if (!$this->searchIndexer instanceof Indexer) {
             throw new RuntimeException(
                 sprintf(
@@ -252,6 +256,7 @@ EOT
         $processes = array_fill(0, $processCount, null);
         $generator = $this->fetchIteration($stmt, $iterationCount);
         do {
+            /** @var \Symfony\Component\Process\Process $process */
             foreach ($processes as $key => $process) {
                 if ($process !== null && $process->isRunning()) {
                     continue;
@@ -262,7 +267,7 @@ EOT
                     $progress->advance(1);
 
                     if (!$process->isSuccessful()) {
-                        $this->logger->error('Child indexer process returned: ' . $process->getExitCodeText());
+                        $this->logger->error(sprintf('Child indexer process returned: %s - %s', $process->getExitCodeText(), $progress->getOutput()));
                     }
                 }
 
@@ -376,7 +381,7 @@ EOT
             throw new InvalidArgumentException('--content-ids', '$contentIds can not be empty');
         }
 
-        $consolePath = file_exists('bin/console') ? 'bin/console' : 'app/console';
+        $consolePath = $consolePath = file_exists(sprintf('%s/bin/console', $this->projectDir)) ? sprintf('%s/bin/console', $this->projectDir) : sprintf('%s/app/console', $this->projectDir);
         $subProcessArgs = [
             $consolePath,
             'ezplatform:reindex',
