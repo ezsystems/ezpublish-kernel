@@ -1,8 +1,6 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -19,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 use RuntimeException;
 use DateTime;
@@ -145,7 +144,7 @@ EOT
     }
 
     /**
-     * {@inheritdoc}
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -181,8 +180,18 @@ EOT
 
             return $return;
         }
+
+        return 0;
     }
 
+    /**
+     * @param int $iterationCount
+     * @param bool $commit
+     *
+     * @return int
+     *
+     * @throws \Exception
+     */
     protected function indexIncrementally(InputInterface $input, OutputInterface $output, $iterationCount, $commit)
     {
         if ($contentIds = $input->getOption('content-ids')) {
@@ -248,10 +257,20 @@ EOT
         }
 
         $progress->finish();
+
+        return 0;
     }
 
-    private function runParallelProcess(ProgressBar $progress, Statement $stmt, $processCount, $iterationCount, $commit)
-    {
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function runParallelProcess(
+        ProgressBar $progress,
+        Statement $stmt,
+        int $processCount,
+        int $iterationCount,
+        bool $commit
+    ): void {
         /** @var \Symfony\Component\Process\Process[]|null[] */
         $processes = array_fill(0, $processCount, null);
         $generator = $this->fetchIteration($stmt, $iterationCount);
@@ -267,7 +286,13 @@ EOT
                     $progress->advance(1);
 
                     if (!$process->isSuccessful()) {
-                        $this->logger->error(sprintf('Child indexer process returned: %s - %s', $process->getExitCodeText(), $progress->getOutput()));
+                        $this->logger->error(
+                            sprintf(
+                                'Child indexer process returned: %s - %s',
+                                $process->getExitCodeText(),
+                                $process->getOutput()
+                            )
+                        );
                     }
                 }
 
@@ -311,6 +336,8 @@ EOT
      * @param bool $count
      *
      * @return \Doctrine\DBAL\Driver\Statement
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     private function getStatementSubtree($locationId, $count = false)
     {
@@ -371,17 +398,16 @@ EOT
 
     /**
      * @param array $contentIds
-     * @param bool $commit
      *
-     * @return \Symfony\Component\Process\Process
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    private function getPhpProcess(array $contentIds, $commit)
+    private function getPhpProcess(array $contentIds, bool $commit): Process
     {
         if (empty($contentIds)) {
             throw new InvalidArgumentException('--content-ids', '$contentIds can not be empty');
         }
 
-        $consolePath = $consolePath = file_exists(sprintf('%s/bin/console', $this->projectDir)) ? sprintf('%s/bin/console', $this->projectDir) : sprintf('%s/app/console', $this->projectDir);
+        $consolePath = file_exists(sprintf('%s/bin/console', $this->projectDir)) ? sprintf('%s/bin/console', $this->projectDir) : sprintf('%s/app/console', $this->projectDir);
         $subProcessArgs = [
             $consolePath,
             'ezplatform:reindex',
@@ -418,7 +444,7 @@ EOT
         $phpFinder = new PhpExecutableFinder();
         $this->phpPath = $phpFinder->find();
         if (!$this->phpPath) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The php executable could not be found, it\'s needed for executing parable sub processes, so add it to your PATH environment variable and try again'
             );
         }
