@@ -46,19 +46,13 @@ final class DoctrineDatabase extends Gateway
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
-    /**
-     * Language mask generator.
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator */
     private $languageMaskGenerator;
 
     /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
     private $dbPlatform;
 
     /**
-     * Construct from database handler.
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(Connection $connection, MaskGenerator $languageMaskGenerator)
@@ -85,9 +79,6 @@ final class DoctrineDatabase extends Gateway
         throw new NotFound('location', $nodeId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
     {
         $query = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
@@ -381,9 +372,6 @@ final class DoctrineDatabase extends Gateway
         $this->setNodeHidden($pathString);
     }
 
-    /**
-     * @param string $pathString
-     **/
     public function setNodeWithChildrenInvisible(string $pathString): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -407,18 +395,11 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * @param string $pathString
-     **/
     public function setNodeHidden(string $pathString): void
     {
         $this->setNodeHiddenStatus($pathString, true);
     }
 
-    /**
-     * @param string $pathString
-     * @param bool $isHidden
-     */
     private function setNodeHiddenStatus(string $pathString, bool $isHidden): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -444,11 +425,6 @@ final class DoctrineDatabase extends Gateway
         $this->setNodeWithChildrenVisible($pathString);
     }
 
-    /**
-     * Sets a location + children to visible unless a parent is hiding the tree.
-     *
-     * @param string $pathString
-     **/
     public function setNodeWithChildrenVisible(string $pathString): void
     {
         // Check if any parent nodes are explicitly hidden
@@ -568,27 +544,11 @@ final class DoctrineDatabase extends Gateway
         return $query;
     }
 
-    /**
-     * Sets location to be unhidden.
-     *
-     * @param string $pathString
-     **/
     public function setNodeUnhidden(string $pathString): void
     {
         $this->setNodeHiddenStatus($pathString, false);
     }
 
-    /**
-     * Swaps the content object being pointed to by a location object.
-     *
-     * Make the location identified by $locationId1 refer to the Content
-     * referred to by $locationId2 and vice versa.
-     *
-     * @param int $locationId1
-     * @param int $locationId2
-     *
-     * @return bool
-     */
     public function swap(int $locationId1, int $locationId2): bool
     {
         $queryBuilder = $this->connection->createQueryBuilder();
@@ -667,14 +627,6 @@ final class DoctrineDatabase extends Gateway
         return true;
     }
 
-    /**
-     * Creates a new location in given $parentNode.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
-     * @param array $parentNode
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
-     */
     public function create(CreateStruct $createStruct, array $parentNode): Location
     {
         $location = $this->insertLocationIntoContentTree($createStruct, $parentNode);
@@ -769,14 +721,6 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Deletes node assignment for given $contentId and $versionNo.
-     *
-     * If $versionNo is not passed all node assignments for given $contentId are deleted
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
-     */
     public function deleteNodeAssignment(int $contentId, ?int $versionNo = null): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -1398,8 +1342,10 @@ final class DoctrineDatabase extends Gateway
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    private function createNodeQueryBuilder(array $translations = null, bool $useAlwaysAvailable = true): QueryBuilder
-    {
+    private function createNodeQueryBuilder(
+        array $translations = null,
+        bool $useAlwaysAvailable = true
+    ): QueryBuilder {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
             ->select('t.*')

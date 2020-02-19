@@ -168,10 +168,16 @@ abstract class Gateway
 
     abstract public function setNodeWithChildrenInvisible(string $pathString): void;
 
+    /**
+     * Mark a Location and its children as visible unless a parent is hiding the tree.
+     */
     abstract public function setNodeWithChildrenVisible(string $pathString): void;
 
     abstract public function setNodeHidden(string $pathString): void;
 
+    /**
+     * Mark a Location as not hidden.
+     */
     abstract public function setNodeUnhidden(string $pathString): void;
 
     /**
@@ -200,6 +206,8 @@ abstract class Gateway
 
     /**
      * Deletes node assignment for given $contentId and $versionNo.
+     *
+     * If $versionNo is not passed all node assignments for given $contentId are deleted
      */
     abstract public function deleteNodeAssignment(int $contentId, ?int $versionNo = null): void;
 
