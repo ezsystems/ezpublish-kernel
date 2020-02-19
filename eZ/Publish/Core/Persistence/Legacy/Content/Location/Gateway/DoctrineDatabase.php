@@ -144,7 +144,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $query
             ->select('*')
-            ->from('ezcontentobject_tree', 't')
+            ->from(self::CONTENT_TREE_TABLE, 't')
             ->where(
                 $query->expr()->eq(
                     't.contentobject_id',
@@ -174,7 +174,7 @@ final class DoctrineDatabase extends Gateway
         $expr = $query->expr();
         $query
             ->select('DISTINCT t.*')
-            ->from('ezcontentobject_tree', 't')
+            ->from(self::CONTENT_TREE_TABLE, 't')
             ->innerJoin(
                 't',
                 'eznode_assignment',
@@ -234,7 +234,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $query
             ->select($onlyIds ? 'node_id, contentobject_id, depth' : '*')
-            ->from('ezcontentobject_tree', 't')
+            ->from(self::CONTENT_TREE_TABLE, 't')
             ->where($this->getSubtreeLimitationExpression($query, $sourceId))
             ->orderBy('t.depth')
             ->addOrderBy('t.node_id');
@@ -272,7 +272,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('*')->from(
-            'ezcontentobject_tree'
+            self::CONTENT_TREE_TABLE
         )->where(
             $query->expr()->eq(
                 'ezcontentobject_tree.parent_node_id',
@@ -308,7 +308,7 @@ final class DoctrineDatabase extends Gateway
                 'path_identification_string',
                 'is_hidden'
             )
-            ->from('ezcontentobject_tree')
+            ->from(self::CONTENT_TREE_TABLE)
             ->where(
                 $query->expr()->like(
                     'path_string',
@@ -347,7 +347,7 @@ final class DoctrineDatabase extends Gateway
 
             $query = $this->connection->createQueryBuilder();
             $query
-                ->update('ezcontentobject_tree')
+                ->update(self::CONTENT_TREE_TABLE)
                 ->set(
                     'path_string',
                     $query->createPositionalParameter($newPathString, ParameterType::STRING)
@@ -415,7 +415,7 @@ final class DoctrineDatabase extends Gateway
         $nodes = array_filter(explode('/', $pathString));
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezcontentobject_tree')
+            ->update(self::CONTENT_TREE_TABLE)
             ->set(
                 'modified_subnode',
                 $query->createPositionalParameter(
@@ -449,7 +449,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezcontentobject_tree')
+            ->update(self::CONTENT_TREE_TABLE)
             ->set(
                 'is_invisible',
                 $query->createPositionalParameter(1, ParameterType::INTEGER)
@@ -484,7 +484,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezcontentobject_tree')
+            ->update(self::CONTENT_TREE_TABLE)
             ->set(
                 'is_hidden',
                 $query->createPositionalParameter((int) $isHidden, ParameterType::INTEGER)
@@ -532,7 +532,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
         $query
-            ->update('ezcontentobject_tree')
+            ->update(self::CONTENT_TREE_TABLE)
             ->set(
                 'is_invisible',
                 $query->createPositionalParameter(0, ParameterType::INTEGER)
@@ -617,7 +617,7 @@ final class DoctrineDatabase extends Gateway
         $expr = $query->expr();
         $query
             ->select($selectExpr)
-            ->from('ezcontentobject_tree', 't')
+            ->from(self::CONTENT_TREE_TABLE, 't')
             ->leftJoin('t', 'ezcontentobject', 'c', 't.contentobject_id = c.id')
             ->where(
                 $expr->orX(
@@ -662,7 +662,7 @@ final class DoctrineDatabase extends Gateway
         $expr = $queryBuilder->expr();
         $queryBuilder
             ->select('node_id', 'main_node_id', 'contentobject_id', 'contentobject_version')
-            ->from('ezcontentobject_tree')
+            ->from(self::CONTENT_TREE_TABLE)
             ->where(
                 $expr->in(
                     'node_id',
@@ -693,7 +693,7 @@ final class DoctrineDatabase extends Gateway
 
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
-            ->update('ezcontentobject_tree')
+            ->update(self::CONTENT_TREE_TABLE)
             ->set('contentobject_id', ':contentId')
             ->set('contentobject_version', ':versionNo')
             ->set('main_node_id', ':mainNodeId')
@@ -750,7 +750,7 @@ final class DoctrineDatabase extends Gateway
         $location->pathString = $parentNode['path_string'] . $location->id . '/';
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezcontentobject_tree')
+            ->update(self::CONTENT_TREE_TABLE)
             ->set(
                 'path_string',
                 $query->createPositionalParameter($location->pathString, ParameterType::STRING)
@@ -998,7 +998,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query->update(
-            'ezcontentobject_tree'
+            self::CONTENT_TREE_TABLE
         )->set(
             'contentobject_version',
             $query->createPositionalParameter($versionNo, ParameterType::INTEGER)
@@ -1023,7 +1023,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $query
             ->select('node_id')
-            ->from('ezcontentobject_tree')
+            ->from(self::CONTENT_TREE_TABLE)
             ->where(
                 $query->expr()->andX(
                     $query->expr()->eq(
@@ -1059,7 +1059,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
 
         $query
-            ->update('ezcontentobject_tree')
+            ->update(self::CONTENT_TREE_TABLE)
             ->set(
                 'priority',
                 $query->createPositionalParameter($location->priority, ParameterType::INTEGER)
@@ -1102,7 +1102,7 @@ final class DoctrineDatabase extends Gateway
 
         $query = $this->connection->createQueryBuilder();
         $query->update(
-            'ezcontentobject_tree'
+            self::CONTENT_TREE_TABLE
         )->set(
             'path_identification_string',
             $query->createPositionalParameter($newPathIdentificationString, ParameterType::STRING)
@@ -1124,7 +1124,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query->delete(
-            'ezcontentobject_tree'
+            self::CONTENT_TREE_TABLE
         )->where(
             $query->expr()->eq(
                 'node_id',
@@ -1156,7 +1156,7 @@ final class DoctrineDatabase extends Gateway
                 'contentobject_version',
                 'parent_node_id'
             )
-            ->from('ezcontentobject_tree')
+            ->from(self::CONTENT_TREE_TABLE)
             ->where(
                 $expr->eq(
                     'contentobject_id',
@@ -1387,7 +1387,7 @@ final class DoctrineDatabase extends Gateway
         $selectContentIdsQuery = $this->connection->createQueryBuilder();
         $selectContentIdsQuery
             ->select('t.contentobject_id')
-            ->from('ezcontentobject_tree', 't')
+            ->from(self::CONTENT_TREE_TABLE, 't')
             ->where(
                 $selectContentIdsQuery->expr()->like(
                     't.path_string',
@@ -1436,7 +1436,7 @@ final class DoctrineDatabase extends Gateway
             ->select(
                 $this->dbPlatform->getCountExpression('*')
             )
-            ->from('ezcontentobject_tree')
+            ->from(self::CONTENT_TREE_TABLE)
             ->where(
                 $query->expr()->eq(
                     'contentobject_id',
@@ -1465,7 +1465,7 @@ final class DoctrineDatabase extends Gateway
         // Update ezcontentobject_tree table
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezcontentobject_tree')
+            ->update(self::CONTENT_TREE_TABLE)
             ->set(
                 'main_node_id',
                 $query->createPositionalParameter($locationId, ParameterType::INTEGER)
@@ -1555,7 +1555,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $query
             ->select($columns)
-            ->from('ezcontentobject_tree')
+            ->from(self::CONTENT_TREE_TABLE)
             ->where($query->expr()->neq('node_id', 'parent_node_id'))
         ;
 
@@ -1575,7 +1575,7 @@ final class DoctrineDatabase extends Gateway
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
             ->select('t.*')
-            ->from('ezcontentobject_tree', 't');
+            ->from(self::CONTENT_TREE_TABLE, 't');
 
         if (!empty($translations)) {
             $expr = $queryBuilder->expr();
@@ -1646,7 +1646,7 @@ final class DoctrineDatabase extends Gateway
         $location = new Location();
         $query = $this->connection->createQueryBuilder();
         $query
-            ->insert('ezcontentobject_tree')
+            ->insert(self::CONTENT_TREE_TABLE)
             ->values(
                 [
                     'contentobject_id' => ':content_id',
