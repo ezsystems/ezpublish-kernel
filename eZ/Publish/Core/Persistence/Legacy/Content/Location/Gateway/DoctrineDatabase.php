@@ -10,6 +10,7 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
@@ -61,7 +62,7 @@ final class DoctrineDatabase extends Gateway
         array $translations = null,
         bool $useAlwaysAvailable = true
     ): array {
-        $query = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
+        $query = $this->createNodeQueryBuilder(['t.*'], $translations, $useAlwaysAvailable);
         $query->andWhere(
             $query->expr()->eq('t.node_id', $query->createNamedParameter($nodeId, ParameterType::INTEGER))
         );
@@ -75,7 +76,7 @@ final class DoctrineDatabase extends Gateway
 
     public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
     {
-        $query = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
+        $query = $this->createNodeQueryBuilder(['t.*'], $translations, $useAlwaysAvailable);
         $query->andWhere(
             $query->expr()->in(
                 't.node_id',
@@ -91,7 +92,7 @@ final class DoctrineDatabase extends Gateway
         array $translations = null,
         bool $useAlwaysAvailable = true
     ): array {
-        $query = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
+        $query = $this->createNodeQueryBuilder(['t.*'], $translations, $useAlwaysAvailable);
         $query->andWhere(
             $query->expr()->eq('t.remote_id', $query->createNamedParameter($remoteId, ParameterType::STRING))
         );
@@ -1259,16 +1260,11 @@ final class DoctrineDatabase extends Gateway
         );
     }
 
-    /**
-     * Get the total number of all Locations, except the Root node.
-     *
-     * @see loadAllLocationsData
-     *
-     * @return int
-     */
     public function countAllLocations(): int
     {
-        $query = $this->getAllLocationsQueryBuilder(['count(node_id)']);
+        $query = $this->createNodeQueryBuilder(['count(node_id)']);
+        // exclude absolute Root Location (not to be confused with SiteAccess Tree Root)
+        $query->where($query->expr()->neq('node_id', 'parent_node_id'));
 
         $statement = $query->execute();
 
@@ -1278,7 +1274,7 @@ final class DoctrineDatabase extends Gateway
     public function loadAllLocationsData(int $offset, int $limit): array
     {
         $query = $this
-            ->getAllLocationsQueryBuilder(
+            ->createNodeQueryBuilder(
                 [
                     'node_id',
                     'priority',
@@ -1293,7 +1289,10 @@ final class DoctrineDatabase extends Gateway
                     'sort_field',
                     'sort_order',
                 ]
-            )
+            );
+        $query
+            // exclude absolute Root Location (not to be confused with SiteAccess Tree Root)
+            ->where($query->expr()->neq('node_id', 'parent_node_id'))
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->orderBy('depth', 'ASC')
@@ -1306,74 +1305,66 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Get Query Builder for fetching data of all Locations except the Root node.
+     * Create QueryBuilder for selecting Location (node) data.
      *
-     * @todo Align with createNodeQueryBuilder, removing the need for both(?)
-     *
-     * @param array $columns list of columns to fetch
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getAllLocationsQueryBuilder(array $columns): \Doctrine\DBAL\Query\QueryBuilder
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query
-            ->select($columns)
-            ->from(self::CONTENT_TREE_TABLE)
-            ->where($query->expr()->neq('node_id', 'parent_node_id'))
-        ;
-
-        return $query;
-    }
-
-    /**
-     * Create QueryBuilder for selecting node data.
-     *
+     * @param array $columns column or expression list
      * @param array|null $translations Filters on language mask of content if provided.
      * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     private function createNodeQueryBuilder(
+        array $columns,
         array $translations = null,
         bool $useAlwaysAvailable = true
     ): QueryBuilder {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
-            ->select('t.*')
-            ->from(self::CONTENT_TREE_TABLE, 't');
+            ->select($columns)
+            ->from(self::CONTENT_TREE_TABLE, 't')
+        ;
 
         if (!empty($translations)) {
-            $expr = $queryBuilder->expr();
+            $this->appendContentItemTranslationsConstraint($queryBuilder, $translations, $useAlwaysAvailable);
+        }
+
+        return $queryBuilder;
+    }
+
+    private function appendContentItemTranslationsConstraint(
+        QueryBuilder $queryBuilder,
+        array $translations,
+        bool $useAlwaysAvailable
+    ): void {
+        $expr = $queryBuilder->expr();
+        try {
             $mask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
                 $translations,
                 $useAlwaysAvailable
             );
-
-            $queryBuilder->leftJoin(
-                't',
-                'ezcontentobject',
-                'c',
-                $expr->eq('t.contentobject_id', 'c.id')
-            );
-
-            $queryBuilder->where(
-                $expr->orX(
-                    $expr->gt(
-                        $this->dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
-                        0
-                    ),
-                    // Root location doesn't have language mask
-                    $expr->eq(
-                        't.node_id', 't.parent_node_id'
-                    )
-                )
-            );
+        } catch (NotFoundException $e) {
+            return;
         }
 
-        return $queryBuilder;
+        $queryBuilder->leftJoin(
+            't',
+            'ezcontentobject',
+            'c',
+            $expr->eq('t.contentobject_id', 'c.id')
+        );
+
+        $queryBuilder->andWhere(
+            $expr->orX(
+                $expr->gt(
+                    $this->dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
+                    0
+                ),
+                // Root location doesn't have language mask
+                $expr->eq(
+                    't.node_id', 't.parent_node_id'
+                )
+            )
+        );
     }
 
     /**
