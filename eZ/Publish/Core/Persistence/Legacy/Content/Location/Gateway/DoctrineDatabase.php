@@ -1395,6 +1395,8 @@ final class DoctrineDatabase extends Gateway
      * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     private function createNodeQueryBuilder(array $translations = null, bool $useAlwaysAvailable = true): QueryBuilder
     {
