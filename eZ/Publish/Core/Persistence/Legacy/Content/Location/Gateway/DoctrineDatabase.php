@@ -12,7 +12,6 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -44,13 +43,6 @@ final class DoctrineDatabase extends Gateway
         'location_path' => 'path_string',
     ];
 
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
-    protected $handler;
-
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
@@ -67,15 +59,11 @@ final class DoctrineDatabase extends Gateway
     /**
      * Construct from database handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $handler, MaskGenerator $languageMaskGenerator)
+    public function __construct(Connection $connection, MaskGenerator $languageMaskGenerator)
     {
-        $this->handler = $handler;
-        $this->connection = $handler->getConnection();
+        $this->connection = $connection;
         $this->dbPlatform = $this->connection->getDatabasePlatform();
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
