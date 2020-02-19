@@ -495,13 +495,6 @@ class Handler implements BaseLocationHandler
         $this->locationGateway->update($location, $locationId);
     }
 
-    /**
-     * Creates a new location rooted at $location->parentId.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
-     */
     public function create(CreateStruct $createStruct)
     {
         $parentNodeData = $this->locationGateway->getBasicNodeData($createStruct->parentId);

@@ -58,6 +58,8 @@ abstract class Gateway
      * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
      * @return array
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     abstract public function getNodeDataList(
         array $locationIds,
@@ -140,6 +142,8 @@ abstract class Gateway
      * Create locations from node assignments.
      *
      * Convert existing node assignments into real locations.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if parent Location does not exist
      */
     abstract public function createLocationsFromNodeAssignments(
         int $contentId,
@@ -254,6 +258,8 @@ abstract class Gateway
 
     /**
      * Loads trash data specified by location ID.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     abstract public function loadTrashByLocation(int $locationId): array;
 

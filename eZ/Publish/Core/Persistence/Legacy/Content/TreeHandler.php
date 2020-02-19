@@ -95,6 +95,8 @@ class TreeHandler
      * Deletes raw content data.
      *
      * @param int $contentId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function removeRawContent($contentId)
     {
