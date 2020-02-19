@@ -117,6 +117,7 @@ class EzPublishCoreBundle extends Bundle
                 new ConfigParser\Languages(),
                 new ConfigParser\IO(new ComplexSettingParser()),
                 new ConfigParser\UrlChecker(),
+                new ConfigParser\TwigVariablesParser(),
             ]);
         }
 
