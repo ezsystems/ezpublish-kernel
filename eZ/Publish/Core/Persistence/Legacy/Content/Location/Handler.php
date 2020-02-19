@@ -498,14 +498,14 @@ class Handler implements BaseLocationHandler
     public function create(CreateStruct $createStruct)
     {
         $parentNodeData = $this->locationGateway->getBasicNodeData($createStruct->parentId);
-        $locationStruct = $this->locationGateway->create($createStruct, $parentNodeData);
+        $spiLocation = $this->locationGateway->create($createStruct, $parentNodeData);
         $this->locationGateway->createNodeAssignment(
             $createStruct,
             $parentNodeData['node_id'],
             LocationGateway::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
         );
 
-        return $locationStruct;
+        return $spiLocation;
     }
 
     /**
