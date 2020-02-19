@@ -1,8 +1,6 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -58,6 +56,9 @@ class ReindexCommand extends Command
     /** @var bool */
     private $isDebug;
 
+    /** @var string */
+    private $projectDir;
+
     /**
      * @param \eZ\Publish\Core\Search\Common\IncrementalIndexer|\eZ\Publish\Core\Search\Common\Indexer $searchIndexer
      * @param \Doctrine\DBAL\Connection $connection
@@ -76,6 +77,7 @@ class ReindexCommand extends Command
         string $siteaccess,
         string $env,
         bool $isDebug,
+        string $projectDir,
         string $phpPath = null
     ) {
         $this->searchIndexer = $searchIndexer;
@@ -86,6 +88,7 @@ class ReindexCommand extends Command
         $this->siteaccess = $siteaccess;
         $this->env = $env;
         $this->isDebug = $isDebug;
+        $this->projectDir = $projectDir;
         $this->phpPath = $phpPath;
 
         parent::__construct();
@@ -180,9 +183,9 @@ EOT
     }
 
     /**
-     * {@inheritdoc}
+     * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $commit = !$input->getOption('no-commit');
         $iterationCount = $input->getOption('iteration-count');
@@ -216,10 +219,19 @@ EOT
 
             return $return;
         }
+
+        return 0;
     }
 
-    protected function indexIncrementally(InputInterface $input, OutputInterface $output, $iterationCount, $commit)
-    {
+    /**
+     * @throws \Exception
+     */
+    protected function indexIncrementally(
+        InputInterface $input,
+        OutputInterface $output,
+        int $iterationCount,
+        bool $commit
+    ): int {
         if ($contentIds = $input->getOption('content-ids')) {
             $contentIds = explode(',', $contentIds);
             $output->writeln(sprintf(
@@ -227,7 +239,9 @@ EOT
                 \count($contentIds)
             ));
 
-            return $this->searchIndexer->updateSearchIndex($contentIds, $commit);
+            $this->searchIndexer->updateSearchIndex($contentIds, $commit);
+
+            return 0;
         }
 
         if ($since = $input->getOption('since')) {
@@ -283,14 +297,25 @@ EOT
         }
 
         $progress->finish();
+
+        return 0;
     }
 
-    private function runParallelProcess(ProgressBar $progress, Statement $stmt, $processCount, $iterationCount, $commit)
-    {
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function runParallelProcess(
+        ProgressBar $progress,
+        Statement $stmt,
+        int $processCount,
+        int $iterationCount,
+        bool $commit
+    ): void {
         /** @var \Symfony\Component\Process\Process[]|null[] */
         $processes = array_fill(0, $processCount, null);
         $generator = $this->fetchIteration($stmt, $iterationCount);
         do {
+            /** @var \Symfony\Component\Process\Process $process */
             foreach ($processes as $key => $process) {
                 if ($process !== null && $process->isRunning()) {
                     continue;
@@ -301,7 +326,13 @@ EOT
                     $progress->advance(1);
 
                     if (!$process->isSuccessful()) {
-                        $this->logger->error('Child indexer process returned: ' . $process->getExitCodeText());
+                        $this->logger->error(
+                            sprintf(
+                                'Child indexer process returned: %s - %s',
+                                $process->getExitCodeText(),
+                                $process->getOutput()
+                            )
+                        );
                     }
                 }
 
@@ -345,6 +376,8 @@ EOT
      * @param bool $count
      *
      * @return \Doctrine\DBAL\Driver\Statement
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     private function getStatementSubtree($locationId, $count = false)
     {
@@ -403,17 +436,16 @@ EOT
 
     /**
      * @param array $contentIds
-     * @param bool $commit
      *
-     * @return \Symfony\Component\Process\Process
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    private function getPhpProcess(array $contentIds, $commit)
+    private function getPhpProcess(array $contentIds, bool $commit): Process
     {
         if (empty($contentIds)) {
             throw new InvalidArgumentException('--content-ids', '$contentIds cannot be empty');
         }
 
-        $consolePath = file_exists('bin/console') ? 'bin/console' : 'app/console';
+        $consolePath = file_exists(sprintf('%s/bin/console', $this->projectDir)) ? sprintf('%s/bin/console', $this->projectDir) : sprintf('%s/app/console', $this->projectDir);
         $subProcessArgs = [
             $this->getPhpPath(),
             $consolePath,
