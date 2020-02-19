@@ -31,12 +31,6 @@ use function time;
  */
 final class DoctrineDatabase extends Gateway
 {
-    /**
-     * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
-     * on 64 bit systems.
-     */
-    const MAX_LIMIT = 1073741824;
-
     private const SORT_CLAUSE_TARGET_MAP = [
         'location_depth' => 'depth',
         'location_priority' => 'priority',
