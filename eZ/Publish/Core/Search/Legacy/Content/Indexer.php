@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
+use Exception;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
@@ -46,6 +47,12 @@ class Indexer extends IncrementalIndexer
                 }
             } catch (NotFoundException $e) {
                 $this->searchHandler->deleteContent($contentId);
+            } catch (Exception $e) {
+                $context = [
+                    'contentId' => $contentId,
+                    'error' => $e->getMessage(),
+                ];
+                $this->logger->error('Unable to index the content', $context);
             }
         }
     }
