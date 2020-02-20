@@ -1525,15 +1525,15 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
         $urlAliasService = $repository->getURLAliasService();
-        $this->createLanguage('pol-Pl', 'Polski');
+        $this->createLanguage('pol-PL', 'Polski');
 
-        $folder1 = $this->createFolder(['eng-GB' => 'Folder1', 'pol-Pl' => 'Folder1'], 2);
+        $folder1 = $this->createFolder(['eng-GB' => 'Folder1', 'pol-PL' => 'Folder1'], 2);
         $folder2 = $this->createFolder(['eng-GB' => 'Folder2'], 2);
         $location1 = $locationService->loadLocation($folder1->contentInfo->mainLocationId);
         $location2 = $locationService->loadLocation($folder2->contentInfo->mainLocationId);
 
         $urlAlias = $urlAliasService->createUrlAlias($location1, '/custom-location1', 'eng-GB', false, true);
-        $urlAliasService->createUrlAlias($location1, '/custom-location1', 'pol-Pl', false, true);
+        $urlAliasService->createUrlAlias($location1, '/custom-location1', 'pol-PL', false, true);
         $urlAliasService->createUrlAlias($location2, '/custom-location2', 'eng-GB', false, true);
         $location1UrlAliases = $urlAliasService->listLocationAliases($location1);
         $location2UrlAliases = $urlAliasService->listLocationAliases($location2);
