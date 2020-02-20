@@ -1520,7 +1520,7 @@ class LocationServiceTest extends BaseTest
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testSwapLocationCustomAliases()
+    public function testSwapLocationForContentWithCustomUrlAliases(): void
     {
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
