@@ -231,10 +231,8 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    public function moveSubtreeNodes(array $sourceNodeData, array $destinationNodeData): void
+    private function getSubtreeNodesData(string $pathString): array
     {
-        $fromPathString = $sourceNodeData['path_string'];
-
         $query = $this->connection->createQueryBuilder();
         $query
             ->select(
@@ -248,18 +246,27 @@ final class DoctrineDatabase extends Gateway
             ->where(
                 $query->expr()->like(
                     'path_string',
-                    $query->createPositionalParameter($fromPathString . '%', ParameterType::STRING)
+                    $query->createPositionalParameter($pathString . '%', ParameterType::STRING)
                 )
             );
         $statement = $query->execute();
 
-        $rows = $statement->fetchAll();
+        return $statement->fetchAll();
+    }
+
+    public function moveSubtreeNodes(array $sourceNodeData, array $destinationNodeData): void
+    {
+        $fromPathString = $sourceNodeData['path_string'];
+
+        $rows = $this->getSubtreeNodesData($fromPathString);
+
         $oldParentPathString = implode('/', array_slice(explode('/', $fromPathString), 0, -2)) . '/';
         $oldParentPathIdentificationString = implode(
             '/',
             array_slice(explode('/', $sourceNodeData['path_identification_string']), 0, -1)
         );
 
+        $hiddenNodeIds = $this->getHiddenNodeIds($rows);
         foreach ($rows as $row) {
             // Prefixing ensures correct replacement when old parent is root node
             $newPathString = str_replace(
@@ -281,63 +288,113 @@ final class DoctrineDatabase extends Gateway
                 $newParentId = (int)implode('', array_slice(explode('/', $newPathString), -3, 1));
             }
 
-            $query = $this->connection->createQueryBuilder();
-            $query
-                ->update(self::CONTENT_TREE_TABLE)
-                ->set(
-                    'path_string',
-                    $query->createPositionalParameter($newPathString, ParameterType::STRING)
-                )
-                ->set(
-                    'path_identification_string',
-                    $query->createPositionalParameter($newPathIdentificationString, ParameterType::STRING)
-                )
-                ->set(
-                    'depth',
-                    $query->createPositionalParameter(substr_count($newPathString, '/') - 2, ParameterType::STRING)
-                )
-                ->set(
-                    'parent_node_id',
-                    $query->createPositionalParameter($newParentId, ParameterType::STRING)
-                );
-
-            if ($destinationNodeData['is_hidden'] || $destinationNodeData['is_invisible']) {
-                // CASE 1: Mark whole tree as invisible if destination is invisible and/or hidden
-                $query->set(
-                    'is_invisible',
-                    $query->createPositionalParameter(1, ParameterType::STRING)
-                );
-            } elseif (!$sourceNodeData['is_hidden'] && $sourceNodeData['is_invisible']) {
-                // CASE 2: source is only invisible, we will need to re-calculate whole moved tree visibility
-                $query->set(
-                    'is_invisible',
-                    $query->createPositionalParameter($this->isHiddenByParent($newPathString, $rows) ? 1 : 0, ParameterType::STRING)
-                );
-            } else {
-                // CASE 3: keep invisible flags as is (source is either hidden or not hidden/invisible at all)
-            }
-
-            $query->where(
-                    $query->expr()->eq(
-                        'node_id',
-                        $query->createPositionalParameter($row['node_id'], ParameterType::STRING)
-                    )
-                );
-            $query->execute();
+            $this->moveSingleSubtreeNode(
+                (int)$row['node_id'],
+                $sourceNodeData,
+                $destinationNodeData,
+                $newPathString,
+                $newPathIdentificationString,
+                $newParentId,
+                $hiddenNodeIds
+            );
         }
     }
 
-    private function isHiddenByParent($pathString, array $rows): bool
+    private function getHiddenNodeIds(array $rows): array
     {
-        $parentNodeIds = explode('/', trim($pathString, '/'));
+        return array_map(
+            static function (array $row) {
+                return (int)$row['node_id'];
+            },
+            array_filter(
+                $rows,
+                static function (array $row) {
+                    return !empty($row['is_hidden']);
+                }
+            )
+        );
+    }
+
+    /**
+     * @param int[] $hiddenNodeIds
+     */
+    private function isHiddenByParent(string $pathString, array $hiddenNodeIds): bool
+    {
+        $parentNodeIds = array_map('intval', explode('/', trim($pathString, '/')));
         array_pop($parentNodeIds); // remove self
-        foreach ($rows as $row) {
-            if ($row['is_hidden'] && in_array($row['node_id'], $parentNodeIds)) {
+        foreach ($parentNodeIds as $parentNodeId) {
+            if (in_array($parentNodeId, $hiddenNodeIds, true)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param array $sourceNodeData
+     * @param array $destinationNodeData
+     * @param int[] $hiddenNodeIds
+     */
+    private function moveSingleSubtreeNode(
+        int $nodeId,
+        array $sourceNodeData,
+        array $destinationNodeData,
+        string $newPathString,
+        string $newPathIdentificationString,
+        int $newParentId,
+        array $hiddenNodeIds
+    ): void {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(self::CONTENT_TREE_TABLE)
+            ->set(
+                'path_string',
+                $query->createPositionalParameter($newPathString, ParameterType::STRING)
+            )
+            ->set(
+                'path_identification_string',
+                $query->createPositionalParameter(
+                    $newPathIdentificationString,
+                    ParameterType::STRING
+                )
+            )
+            ->set(
+                'depth',
+                $query->createPositionalParameter(
+                    substr_count($newPathString, '/') - 2,
+                    ParameterType::INTEGER
+                )
+            )
+            ->set(
+                'parent_node_id',
+                $query->createPositionalParameter($newParentId, ParameterType::INTEGER)
+            );
+
+        if ($destinationNodeData['is_hidden'] || $destinationNodeData['is_invisible']) {
+            // CASE 1: Mark whole tree as invisible if destination is invisible and/or hidden
+            $query->set(
+                'is_invisible',
+                $query->createPositionalParameter(1, ParameterType::INTEGER)
+            );
+        } elseif (!$sourceNodeData['is_hidden'] && $sourceNodeData['is_invisible']) {
+            // CASE 2: source is only invisible, we will need to re-calculate whole moved tree visibility
+            $query->set(
+                'is_invisible',
+                $query->createPositionalParameter(
+                    $this->isHiddenByParent($newPathString, $hiddenNodeIds) ? 1 : 0,
+                    ParameterType::INTEGER
+                )
+            );
+        }
+
+        $query->where(
+            $query->expr()->eq(
+                'node_id',
+                $query->createPositionalParameter($nodeId, ParameterType::INTEGER)
+            )
+        );
+        $query->execute();
     }
 
     public function updateSubtreeModificationTime(string $pathString, ?int $timestamp = null): void
