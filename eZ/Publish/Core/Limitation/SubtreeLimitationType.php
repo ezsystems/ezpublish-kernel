@@ -196,7 +196,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
             return false;
         }
 
-        $targets = array_filter($targets, function ($target) {
+        $targets = array_filter($targets, static function ($target): bool {
             return $target instanceof Location || $target instanceof LocationCreateStruct;
         });
 
