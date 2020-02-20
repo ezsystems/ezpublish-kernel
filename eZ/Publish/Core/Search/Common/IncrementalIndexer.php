@@ -71,6 +71,8 @@ abstract class IncrementalIndexer extends Indexer
      * - not published (draft or trashed)
      * Then item is removed from index, if not it is added/updated.
      *
+     * If generic unhandled exception is thrown, then item indexing is skipped and warning is logged.
+     *
      * @param int[] $contentIds
      * @param bool $commit
      */
