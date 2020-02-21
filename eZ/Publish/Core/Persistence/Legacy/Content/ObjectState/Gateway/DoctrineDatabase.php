@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase ObjectState Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -51,13 +49,6 @@ final class DoctrineDatabase extends Gateway
         $this->maskGenerator = $maskGenerator;
     }
 
-    /**
-     * Loads data for an object state.
-     *
-     * @param mixed $stateId
-     *
-     * @return array
-     */
     public function loadObjectStateData(int $stateId): array
     {
         $query = $this->createObjectStateFindQuery();
@@ -73,14 +64,6 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads data for an object state by identifier.
-     *
-     * @param string $identifier
-     * @param mixed $groupId
-     *
-     * @return array
-     */
     public function loadObjectStateDataByIdentifier(string $identifier, int $groupId): array
     {
         $query = $this->createObjectStateFindQuery();
@@ -102,13 +85,6 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads data for all object states belonging to group with $groupId ID.
-     *
-     * @param mixed $groupId
-     *
-     * @return array
-     */
     public function loadObjectStateListData(int $groupId): array
     {
         $query = $this->createObjectStateFindQuery();
@@ -129,13 +105,6 @@ final class DoctrineDatabase extends Gateway
         return array_values($rows);
     }
 
-    /**
-     * Loads data for an object state group.
-     *
-     * @param mixed $groupId
-     *
-     * @return array
-     */
     public function loadObjectStateGroupData(int $groupId): array
     {
         $query = $this->createObjectStateGroupFindQuery();
@@ -151,13 +120,6 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads data for an object state group by identifier.
-     *
-     * @param string $identifier
-     *
-     * @return array
-     */
     public function loadObjectStateGroupDataByIdentifier(string $identifier): array
     {
         $query = $this->createObjectStateGroupFindQuery();
@@ -173,14 +135,6 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads data for all object state groups, filtered by $offset and $limit.
-     *
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return array
-     */
     public function loadObjectStateGroupListData(int $offset, int $limit): array
     {
         $query = $this->createObjectStateGroupFindQuery();
@@ -200,10 +154,8 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Inserts a new object state into database.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
-     * @param int $groupId
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function insertObjectState(ObjectState $objectState, int $groupId): void
     {
@@ -262,10 +214,6 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * @param string $tableName
-     * @param int $id
-     * @param string $identifier
-     * @param string $defaultLanguageCode
      * @param string[] $languageCodes
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
@@ -317,11 +265,6 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Updates the stored object state with provided data.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
-     */
     public function updateObjectState(ObjectState $objectState): void
     {
         // First update the state
@@ -339,11 +282,6 @@ final class DoctrineDatabase extends Gateway
         $this->insertObjectStateTranslations($objectState);
     }
 
-    /**
-     * Deletes object state identified by $stateId.
-     *
-     * @param int $stateId
-     */
     public function deleteObjectState(int $stateId): void
     {
         $this->deleteObjectStateTranslations($stateId);
@@ -361,12 +299,6 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Update object state links to $newStateId.
-     *
-     * @param int $oldStateId
-     * @param int $newStateId
-     */
     public function updateObjectStateLinks(int $oldStateId, int $newStateId): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -424,11 +356,6 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Deletes object state links identified by $stateId.
-     *
-     * @param int $stateId
-     */
     public function deleteObjectStateLinks(int $stateId): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -444,11 +371,6 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Inserts a new object state group into database.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
-     */
     public function insertObjectStateGroup(Group $objectStateGroup): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -487,11 +409,6 @@ final class DoctrineDatabase extends Gateway
         $this->insertObjectStateGroupTranslations($objectStateGroup);
     }
 
-    /**
-     * Updates the stored object state group with provided data.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
-     */
     public function updateObjectStateGroup(Group $objectStateGroup): void
     {
         // First update the group
@@ -509,11 +426,6 @@ final class DoctrineDatabase extends Gateway
         $this->insertObjectStateGroupTranslations($objectStateGroup);
     }
 
-    /**
-     * Deletes the object state group identified by $groupId.
-     *
-     * @param mixed $groupId
-     */
     public function deleteObjectStateGroup(int $groupId): void
     {
         $this->deleteObjectStateGroupTranslations($groupId);
@@ -532,13 +444,6 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Sets the object state $stateId to content with $contentId ID.
-     *
-     * @param mixed $contentId
-     * @param mixed $groupId
-     * @param mixed $stateId
-     */
     public function setContentState(int $contentId, int $groupId, int $stateId): void
     {
         // First find out if $contentId is related to existing states in $groupId
@@ -553,14 +458,6 @@ final class DoctrineDatabase extends Gateway
         }
     }
 
-    /**
-     * Loads object state data for $contentId content from $stateGroupId state group.
-     *
-     * @param int $contentId
-     * @param int $stateGroupId
-     *
-     * @return array
-     */
     public function loadObjectStateDataForContent(int $contentId, int $stateGroupId): array
     {
         $query = $this->createObjectStateFindQuery();
@@ -590,13 +487,6 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Returns the number of objects which are in this state.
-     *
-     * @param mixed $stateId
-     *
-     * @return int
-     */
     public function getContentCount(int $stateId): int
     {
         $query = $this->connection->createQueryBuilder();
@@ -615,12 +505,6 @@ final class DoctrineDatabase extends Gateway
         return (int)$query->execute()->fetchColumn();
     }
 
-    /**
-     * Updates the object state priority to provided value.
-     *
-     * @param mixed $stateId
-     * @param int $priority
-     */
     public function updateObjectStatePriority(int $stateId, int $priority): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -700,9 +584,9 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Inserts object state group translations into database.
+     * Insert object state group translations into database.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if Object State language does not exist
      */
     private function insertObjectStateTranslations(ObjectState $objectState): void
     {
@@ -759,9 +643,9 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Inserts object state group translations into database.
+     * Insert object state group translations into database.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if Object State Group language does not exist
      */
     private function insertObjectStateGroupTranslations(Group $objectStateGroup): void
     {
@@ -795,9 +679,7 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Deletes all translations of the $groupId state group.
-     *
-     * @param mixed $groupId
+     * Delete all translations of the $groupId state group.
      */
     private function deleteObjectStateGroupTranslations(int $groupId): void
     {
@@ -864,10 +746,6 @@ final class DoctrineDatabase extends Gateway
         return false !== $stateId ? (int)$stateId : null;
     }
 
-    /**
-     * @param int $contentId
-     * @param int $stateId
-     */
     private function insertContentStateAssignment(int $contentId, int $stateId): void
     {
         $query = $this->connection->createQueryBuilder();
