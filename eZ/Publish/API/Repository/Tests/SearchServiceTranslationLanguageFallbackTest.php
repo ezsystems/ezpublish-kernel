@@ -1476,6 +1476,98 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                     ],
                 ],
             ],
+            40 => [
+                [
+                    'languages' => [
+                        'eng-GB',
+                        'ger-DE',
+                    ],
+                    'useAlwaysAvailable' => true,
+                    'excludeTranslationsFromAlwaysAvailable' => false,
+                ],
+                [
+                    [
+                        1,
+                        'eng-GB',
+                        [
+                            self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
+                            self::SETUP_SHARED => 'localhost:8983/solr/core3',
+                            self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
+                        ],
+                    ],
+                    [
+                        2,
+                        'ger-DE',
+                        [
+                            self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
+                            self::SETUP_SHARED => 'localhost:8983/solr/core2',
+                            self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
+                        ],
+                    ],
+                    [
+                        3,
+                        'por-PT',
+                        [
+                            self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
+                            self::SETUP_SHARED => 'localhost:8983/solr/core0',
+                            self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
+                        ],
+                        [
+                            'searchHitIndex' => 2,
+                            'preparedDataTestIndex' => 2,
+                        ],
+                    ],
+                ],
+            ],
+            41 => [
+                [
+                    'languages' => [
+                        'ger-DE',
+                        'eng-GB',
+                    ],
+                    'useAlwaysAvailable' => true,
+                    'excludeTranslationsFromAlwaysAvailable' => false,
+                ],
+                [
+                    [
+                        1,
+                        'ger-DE',
+                        [
+                            self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
+                            self::SETUP_SHARED => 'localhost:8983/solr/core2',
+                            self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
+                        ],
+                    ],
+                    [
+                        2,
+                        'ger-DE',
+                        [
+                            self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
+                            self::SETUP_SHARED => 'localhost:8983/solr/core2',
+                            self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
+                        ],
+                    ],
+                    [
+                        3,
+                        'por-PT',
+                        [
+                            self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
+                            self::SETUP_SHARED => 'localhost:8983/solr/core0',
+                            self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                            self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
+                        ],
+                        [
+                            'searchHitIndex' => 2,
+                            'preparedDataTestIndex' => 2,
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -1543,6 +1635,8 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         foreach ($contentDataList as $index => $contentData) {
             list($contentNo, $translationLanguageCode, $indexMap) = $contentData;
+            list($index, $contentNo) = $this->getIndexesToMatchData($contentData, $index, $contentNo);
+
             /** @var \eZ\Publish\Api\Repository\Values\Content\Content $content */
             $content = $searchResult->searchHits[$index]->valueObject;
 
@@ -1595,6 +1689,8 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         foreach ($contentDataList as $index => $contentData) {
             list($contentNo, $translationLanguageCode, $indexMap) = $contentData;
+            list($index, $contentNo) = $this->getIndexesToMatchData($contentData, $index, $contentNo);
+
             /** @var \eZ\Publish\Api\Repository\Values\Content\Location $location */
             $location = $searchResult->searchHits[$index]->valueObject;
 
@@ -1643,6 +1739,8 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         foreach ($contentDataList as $index => $contentData) {
             list($contentNo, $translationLanguageCode, $indexMap) = $contentData;
+            list($index, $contentNo) = $this->getIndexesToMatchData($contentData, $index, $contentNo);
+
             /** @var \eZ\Publish\Api\Repository\Values\Content\Location $location */
             $location = $searchResult->searchHits[$index]->valueObject;
 
@@ -1659,6 +1757,8 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         foreach ($contentDataList as $index => $contentData) {
             list($contentNo, $translationLanguageCode, $indexMap) = $contentData;
+            list($index, $contentNo) = $this->getIndexesToMatchData($contentData, $index, $contentNo);
+
             $realIndex = $index + count($contentDataList);
             /** @var \eZ\Publish\Api\Repository\Values\Content\Location $location */
             $location = $searchResult->searchHits[$realIndex]->valueObject;
@@ -1684,5 +1784,25 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         } else {
             $this->assertRegExp('~^' . $indexName . '$~', $searchHit->index);
         }
+    }
+
+    private function getIndexesToMatchData(
+        array $inputContentData,
+        int $currentSearchHitIndex,
+        int $currentPreparedDataTestIndex
+    ): array {
+        if ($customMatchResultIndexData = $inputContentData[3] ?? null) {
+            // return custom indexes
+            return [
+                $customMatchResultIndexData['searchHitIndex'],
+                $customMatchResultIndexData['preparedDataTestIndex'],
+            ];
+        }
+
+        // return original data
+        return [
+            $currentSearchHitIndex,
+            $currentPreparedDataTestIndex,
+        ];
     }
 }
