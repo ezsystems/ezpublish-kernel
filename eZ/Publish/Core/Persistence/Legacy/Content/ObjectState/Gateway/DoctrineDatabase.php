@@ -8,7 +8,9 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 
+use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -68,16 +70,15 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->createObjectStateFindQuery();
         $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id', 'ezcobj_state'),
-                $query->bindValue($stateId, null, \PDO::PARAM_INT)
+            $query->expr()->eq(
+                'state.id',
+                $query->createPositionalParameter($stateId, ParameterType::INTEGER)
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -92,22 +93,21 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->createObjectStateFindQuery();
         $query->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('identifier', 'ezcobj_state'),
-                    $query->bindValue($identifier, null, \PDO::PARAM_STR)
+            $query->expr()->andX(
+                $query->expr()->eq(
+                    'state.identifier',
+                    $query->createPositionalParameter($identifier, ParameterType::STRING)
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('group_id', 'ezcobj_state'),
-                    $query->bindValue($groupId, null, \PDO::PARAM_INT)
+                $query->expr()->eq(
+                    'state.group_id',
+                    $query->createPositionalParameter($groupId, ParameterType::INTEGER)
                 )
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -121,17 +121,16 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->createObjectStateFindQuery();
         $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('group_id', 'ezcobj_state'),
-                $query->bindValue($groupId, null, \PDO::PARAM_INT)
+            $query->expr()->eq(
+                'state.group_id',
+                $query->createPositionalParameter($groupId, ParameterType::INTEGER)
             )
-        )->orderBy($this->dbHandler->quoteColumn('priority', 'ezcobj_state'), $query::ASC);
+        )->orderBy('state.priority', 'ASC');
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
         $rows = [];
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetch(FetchMode::ASSOCIATIVE)) {
             $rows[$row['ezcobj_state_id']][] = $row;
         }
 
@@ -149,16 +148,15 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->createObjectStateGroupFindQuery();
         $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id', 'ezcobj_state_group'),
-                $query->bindValue($groupId, null, \PDO::PARAM_INT)
+            $query->expr()->eq(
+                'state_group.id',
+                $query->createPositionalParameter($groupId, ParameterType::INTEGER)
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -172,16 +170,15 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->createObjectStateGroupFindQuery();
         $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('identifier', 'ezcobj_state_group'),
-                $query->bindValue($identifier, null, \PDO::PARAM_STR)
+            $query->expr()->eq(
+                'state_group.identifier',
+                $query->createPositionalParameter($identifier, ParameterType::STRING)
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -195,13 +192,15 @@ class DoctrineDatabase extends Gateway
     public function loadObjectStateGroupListData($offset, $limit)
     {
         $query = $this->createObjectStateGroupFindQuery();
-        $query->limit($limit > 0 ? $limit : PHP_INT_MAX, $offset);
+        if ($limit > 0) {
+            $query->setMaxResults($limit);
+            $query->setFirstResult($offset);
+        }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
         $rows = [];
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetch(FetchMode::ASSOCIATIVE)) {
             $rows[$row['ezcobj_state_group_id']][] = $row;
         }
 
@@ -216,73 +215,114 @@ class DoctrineDatabase extends Gateway
      */
     public function insertObjectState(ObjectState $objectState, $groupId)
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->expr->max($this->dbHandler->quoteColumn('priority'))
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('group_id'),
-                $query->bindValue($groupId, null, \PDO::PARAM_INT)
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $maxPriority = $statement->fetchColumn();
+        $maxPriority = $this->getMaxPriorityForObjectStatesInGroup($groupId);
 
         $objectState->priority = $maxPriority === null ? 0 : (int)$maxPriority + 1;
         $objectState->groupId = (int)$groupId;
 
-        $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto(
-            $this->dbHandler->quoteTable('ezcobj_state')
-        )->set(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->getAutoIncrementValue('ezcobj_state', 'id')
-        )->set(
-            $this->dbHandler->quoteColumn('group_id'),
-            $query->bindValue($objectState->groupId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('default_language_id'),
-            $query->bindValue(
-                $this->maskGenerator->generateLanguageIndicator($objectState->defaultLanguage, false),
-                null,
-                \PDO::PARAM_INT
-            )
-        )->set(
-            $this->dbHandler->quoteColumn('identifier'),
-            $query->bindValue($objectState->identifier)
-        )->set(
-            $this->dbHandler->quoteColumn('language_mask'),
-            $query->bindValue(
-                $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectState->languageCodes, true),
-                null,
-                ParameterType::INTEGER
-            )
-        )->set(
-            $this->dbHandler->quoteColumn('priority'),
-            $query->bindValue($objectState->priority, null, \PDO::PARAM_INT)
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::OBJECT_STATE_TABLE)
+            ->values(
+                [
+                    'group_id' => $query->createPositionalParameter(
+                        $objectState->groupId,
+                        ParameterType::INTEGER
+                    ),
+                    'default_language_id' => $query->createPositionalParameter(
+                        $this->maskGenerator->generateLanguageIndicator(
+                            $objectState->defaultLanguage,
+                            false
+                        ),
+                        ParameterType::INTEGER
+                    ),
+                    'identifier' => $query->createPositionalParameter(
+                        $objectState->identifier,
+                        ParameterType::STRING
+                    ),
+                    'language_mask' => $query->createPositionalParameter(
+                        $this->maskGenerator->generateLanguageMaskFromLanguageCodes(
+                            $objectState->languageCodes,
+                            true
+                        ),
+                        ParameterType::INTEGER
+                    ),
+                    'priority' => $query->createPositionalParameter(
+                        $objectState->priority,
+                        ParameterType::INTEGER
+                    ),
+                ]
+            );
 
-        $query->prepare()->execute();
+        $query->execute();
 
-        $objectState->id = (int)$this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName('ezcobj_state', 'id')
-        );
+        $objectState->id = (int)$this->connection->lastInsertId(self::OBJECT_STATE_TABLE_SEQ);
 
         $this->insertObjectStateTranslations($objectState);
 
         // If this is a first state in group, assign it to all content objects
         if ($maxPriority === null) {
-            // @todo Hm... How do we perform this with query object?
-            $this->dbHandler->prepare(
-                "INSERT INTO ezcobj_state_link (contentobject_id, contentobject_state_id)
-                SELECT id, {$objectState->id} FROM ezcontentobject"
-            )->execute();
+            $this->connection->executeUpdate(
+                'INSERT INTO ezcobj_state_link (contentobject_id, contentobject_state_id) ' .
+                "SELECT id, {$objectState->id} FROM ezcontentobject"
+            );
         }
+    }
+
+    /**
+     * @param string $tableName
+     * @param int $id
+     * @param string $identifier
+     * @param string $defaultLanguageCode
+     * @param string[] $languageCodes
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function updateObjectStateCommonFields(
+        string $tableName,
+        int $id,
+        string $identifier,
+        string $defaultLanguageCode,
+        array $languageCodes
+    ): void {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update($tableName)
+            ->set(
+                'default_language_id',
+                $query->createPositionalParameter(
+                    $this->maskGenerator->generateLanguageIndicator(
+                        $defaultLanguageCode,
+                        false
+                    ),
+                    ParameterType::INTEGER
+                )
+            )
+            ->set(
+                'identifier',
+                $query->createPositionalParameter(
+                    $identifier,
+                    ParameterType::STRING
+                )
+            )
+            ->set(
+                'language_mask',
+                $query->createPositionalParameter(
+                    $this->maskGenerator->generateLanguageMaskFromLanguageCodes(
+                        $languageCodes,
+                        true
+                    ),
+                    ParameterType::INTEGER
+                )
+            )
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            );
+
+        $query->execute();
     }
 
     /**
@@ -293,34 +333,13 @@ class DoctrineDatabase extends Gateway
     public function updateObjectState(ObjectState $objectState)
     {
         // First update the state
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezcobj_state')
-        )->set(
-            $this->dbHandler->quoteColumn('default_language_id'),
-            $query->bindValue(
-                $this->maskGenerator->generateLanguageIndicator($objectState->defaultLanguage, false),
-                null,
-                \PDO::PARAM_INT
-            )
-        )->set(
-            $this->dbHandler->quoteColumn('identifier'),
-            $query->bindValue($objectState->identifier)
-        )->set(
-            $this->dbHandler->quoteColumn('language_mask'),
-            $query->bindValue(
-                $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectState->languageCodes, true),
-                null,
-                ParameterType::INTEGER
-            )
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($objectState->id, null, \PDO::PARAM_INT)
-            )
+        $this->updateObjectStateCommonFields(
+            self::OBJECT_STATE_TABLE,
+            $objectState->id,
+            $objectState->identifier,
+            $objectState->defaultLanguage,
+            $objectState->languageCodes
         );
-
-        $query->prepare()->execute();
 
         // And then refresh object state translations
         // by removing existing ones and adding new ones
@@ -337,17 +356,17 @@ class DoctrineDatabase extends Gateway
     {
         $this->deleteObjectStateTranslations($stateId);
 
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable('ezcobj_state')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($stateId, null, \PDO::PARAM_INT)
-            )
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::OBJECT_STATE_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($stateId, ParameterType::INTEGER)
+                )
         );
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
     /**
@@ -358,20 +377,56 @@ class DoctrineDatabase extends Gateway
      */
     public function updateObjectStateLinks($oldStateId, $newStateId)
     {
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezcobj_state_link')
-        )->set(
-            $this->dbHandler->quoteColumn('contentobject_state_id'),
-            $query->bindValue($newStateId, null, \PDO::PARAM_INT)
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('contentobject_state_id'),
-                $query->bindValue($oldStateId, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(self::OBJECT_STATE_LINK_TABLE)
+            ->set(
+                'contentobject_state_id',
+                $query->createPositionalParameter($newStateId, ParameterType::INTEGER)
             )
-        );
+            ->where(
+                $query->expr()->eq(
+                    'contentobject_state_id',
+                    $query->createPositionalParameter($oldStateId, ParameterType::INTEGER)
+                )
+            )
+        ;
 
-        $query->prepare()->execute();
+        $query->execute();
+    }
+
+    /**
+     * Change Content to object state assignment.
+     */
+    private function updateContentStateAssignment(int $contentId, int $stateId, int $assignedStateId): void
+    {
+        // no action required if there's no change
+        if ($stateId === $assignedStateId) {
+            return;
+        }
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(self::OBJECT_STATE_LINK_TABLE)
+            ->set(
+                'contentobject_state_id',
+                $query->createPositionalParameter($stateId, ParameterType::INTEGER)
+            )
+            ->where(
+                $query->expr()->eq(
+                    'contentobject_id',
+                    $query->createPositionalParameter($contentId, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $query->expr()->eq(
+                    'contentobject_state_id',
+                    $query->createPositionalParameter($assignedStateId, ParameterType::INTEGER)
+                )
+            )
+        ;
+
+        $query->execute();
     }
 
     /**
@@ -381,17 +436,17 @@ class DoctrineDatabase extends Gateway
      */
     public function deleteObjectStateLinks($stateId)
     {
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable('ezcobj_state_link')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('contentobject_state_id'),
-                $query->bindValue($stateId, null, \PDO::PARAM_INT)
-            )
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::OBJECT_STATE_LINK_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'contentobject_state_id',
+                    $query->createPositionalParameter($stateId, ParameterType::INTEGER)
+                )
         );
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
     /**
@@ -401,35 +456,37 @@ class DoctrineDatabase extends Gateway
      */
     public function insertObjectStateGroup(Group $objectStateGroup)
     {
-        $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto(
-            $this->dbHandler->quoteTable('ezcobj_state_group')
-        )->set(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->getAutoIncrementValue('ezcobj_state_group', 'id')
-        )->set(
-            $this->dbHandler->quoteColumn('default_language_id'),
-            $query->bindValue(
-                $this->maskGenerator->generateLanguageIndicator($objectStateGroup->defaultLanguage, false),
-                null,
-                \PDO::PARAM_INT
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::OBJECT_STATE_GROUP_TABLE)
+            ->values(
+                [
+                    'default_language_id' => $query->createPositionalParameter(
+                        $this->maskGenerator->generateLanguageIndicator(
+                            $objectStateGroup->defaultLanguage,
+                            false
+                        ),
+                        ParameterType::INTEGER
+                    ),
+                    'identifier' => $query->createPositionalParameter(
+                        $objectStateGroup->identifier,
+                        ParameterType::STRING
+                    ),
+                    'language_mask' => $query->createPositionalParameter(
+                        $this->maskGenerator->generateLanguageMaskFromLanguageCodes(
+                            $objectStateGroup->languageCodes,
+                            true
+                        ),
+                        ParameterType::INTEGER
+                    ),
+                ]
             )
-        )->set(
-            $this->dbHandler->quoteColumn('identifier'),
-            $query->bindValue($objectStateGroup->identifier)
-        )->set(
-            $this->dbHandler->quoteColumn('language_mask'),
-            $query->bindValue(
-                $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectStateGroup->languageCodes, true),
-                null,
-                ParameterType::INTEGER
-            )
-        );
+        ;
 
-        $query->prepare()->execute();
+        $query->execute();
 
-        $objectStateGroup->id = (int)$this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName('ezcobj_state_group', 'id')
+        $objectStateGroup->id = (int)$this->connection->lastInsertId(
+            self::OBJECT_STATE_GROUP_TABLE_SEQ
         );
 
         $this->insertObjectStateGroupTranslations($objectStateGroup);
@@ -443,34 +500,13 @@ class DoctrineDatabase extends Gateway
     public function updateObjectStateGroup(Group $objectStateGroup)
     {
         // First update the group
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezcobj_state_group')
-        )->set(
-            $this->dbHandler->quoteColumn('default_language_id'),
-            $query->bindValue(
-                $this->maskGenerator->generateLanguageIndicator($objectStateGroup->defaultLanguage, false),
-                null,
-                \PDO::PARAM_INT
-            )
-        )->set(
-            $this->dbHandler->quoteColumn('identifier'),
-            $query->bindValue($objectStateGroup->identifier)
-        )->set(
-            $this->dbHandler->quoteColumn('language_mask'),
-            $query->bindValue(
-                $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectStateGroup->languageCodes, true),
-                null,
-                ParameterType::INTEGER
-            )
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($objectStateGroup->id, null, \PDO::PARAM_INT)
-            )
+        $this->updateObjectStateCommonFields(
+            self::OBJECT_STATE_GROUP_TABLE,
+            $objectStateGroup->id,
+            $objectStateGroup->identifier,
+            $objectStateGroup->defaultLanguage,
+            $objectStateGroup->languageCodes
         );
-
-        $query->prepare()->execute();
 
         // And then refresh group translations
         // by removing old ones and adding new ones
@@ -487,17 +523,18 @@ class DoctrineDatabase extends Gateway
     {
         $this->deleteObjectStateGroupTranslations($groupId);
 
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable('ezcobj_state_group')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($groupId, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::OBJECT_STATE_GROUP_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($groupId, ParameterType::INTEGER)
+                )
             )
-        );
+        ;
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
     /**
@@ -510,71 +547,14 @@ class DoctrineDatabase extends Gateway
     public function setContentState($contentId, $groupId, $stateId)
     {
         // First find out if $contentId is related to existing states in $groupId
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcobj_state')
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state')
-        )->innerJoin(
-            $this->dbHandler->quoteTable('ezcobj_state_link'),
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id', 'ezcobj_state'),
-                $this->dbHandler->quoteColumn('contentobject_state_id', 'ezcobj_state_link')
-            )
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('group_id', 'ezcobj_state'),
-                    $query->bindValue($groupId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcobj_state_link'),
-                    $query->bindValue($contentId, null, \PDO::PARAM_INT)
-                )
-            )
-        );
+        $assignedStateId = $this->getContentStateId($contentId, $groupId);
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        if (!empty($rows)) {
+        if (null !== $assignedStateId) {
             // We already have a state assigned to $contentId, update to new one
-            $query = $this->dbHandler->createUpdateQuery();
-            $query->update(
-                $this->dbHandler->quoteTable('ezcobj_state_link')
-            )->set(
-                $this->dbHandler->quoteColumn('contentobject_state_id'),
-                $query->bindValue($stateId, null, \PDO::PARAM_INT)
-            )->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn('contentobject_id'),
-                        $query->bindValue($contentId, null, \PDO::PARAM_INT)
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn('contentobject_state_id'),
-                        $query->bindValue($rows[0]['ezcobj_state_id'], null, \PDO::PARAM_INT)
-                    )
-                )
-            );
-
-            $query->prepare()->execute();
+            $this->updateContentStateAssignment($contentId, $stateId, $assignedStateId);
         } else {
             // No state assigned to $contentId from specified group, create assignment
-            $query = $this->dbHandler->createInsertQuery();
-            $query->insertInto(
-                $this->dbHandler->quoteTable('ezcobj_state_link')
-            )->set(
-                $this->dbHandler->quoteColumn('contentobject_id'),
-                $query->bindValue($contentId, null, \PDO::PARAM_INT)
-            )->set(
-                $this->dbHandler->quoteColumn('contentobject_state_id'),
-                $query->bindValue($stateId, null, \PDO::PARAM_INT)
-            );
-
-            $query->prepare()->execute();
+            $this->insertContentStateAssignment($contentId, $stateId);
         }
     }
 
@@ -589,29 +569,30 @@ class DoctrineDatabase extends Gateway
     public function loadObjectStateDataForContent($contentId, $stateGroupId)
     {
         $query = $this->createObjectStateFindQuery();
-        $query->innerJoin(
-            $this->dbHandler->quoteTable('ezcobj_state_link'),
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id', 'ezcobj_state'),
-                $this->dbHandler->quoteColumn('contentobject_state_id', 'ezcobj_state_link')
+        $expr = $query->expr();
+        $query
+            ->innerJoin(
+                'state',
+                'ezcobj_state_link',
+                'link',
+                'state.id = link.contentobject_state_id'
             )
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('group_id', 'ezcobj_state'),
-                    $query->bindValue($stateGroupId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcobj_state_link'),
-                    $query->bindValue($contentId, null, \PDO::PARAM_INT)
+            ->where(
+                $expr->eq(
+                    'state.group_id',
+                    $query->createPositionalParameter($stateGroupId, ParameterType::INTEGER)
                 )
             )
-        );
+            ->andWhere(
+                $expr->eq(
+                    'link.contentobject_id',
+                    $query->createPositionalParameter($contentId, ParameterType::INTEGER)
+                )
+            );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -623,24 +604,20 @@ class DoctrineDatabase extends Gateway
      */
     public function getContentCount($stateId)
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state_link')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('contentobject_state_id'),
-                $query->bindValue($stateId, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(
+                $this->dbPlatform->getCountExpression('contentobject_id')
             )
-        );
+            ->from(self::OBJECT_STATE_LINK_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'contentobject_state_id',
+                    $query->createPositionalParameter($stateId, ParameterType::INTEGER)
+                )
+            );
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $count = $statement->fetchColumn();
-
-        return $count !== null ? (int)$count : 0;
+        return (int)$query->execute()->fetchColumn();
     }
 
     /**
@@ -651,83 +628,78 @@ class DoctrineDatabase extends Gateway
      */
     public function updateObjectStatePriority($stateId, $priority)
     {
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezcobj_state')
-        )->set(
-            $this->dbHandler->quoteColumn('priority'),
-            $query->bindValue($priority, null, \PDO::PARAM_INT)
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($stateId, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(self::OBJECT_STATE_TABLE)
+            ->set('priority', $query->createPositionalParameter($priority, ParameterType::INTEGER))
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($stateId, ParameterType::INTEGER)
+                )
             )
-        );
+        ;
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
     /**
-     * Creates a generalized query for fetching object state(s).
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     * Create a generic query for fetching object state(s).
      */
-    protected function createObjectStateFindQuery()
+    protected function createObjectStateFindQuery(): QueryBuilder
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            // Object state
-            $this->dbHandler->aliasedColumn($query, 'default_language_id', 'ezcobj_state'),
-            $this->dbHandler->aliasedColumn($query, 'group_id', 'ezcobj_state'),
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcobj_state'),
-            $this->dbHandler->aliasedColumn($query, 'identifier', 'ezcobj_state'),
-            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcobj_state'),
-            $this->dbHandler->aliasedColumn($query, 'priority', 'ezcobj_state'),
-            // Object state language
-            $this->dbHandler->aliasedColumn($query, 'description', 'ezcobj_state_language'),
-            $this->dbHandler->aliasedColumn($query, 'language_id', 'ezcobj_state_language'),
-            $this->dbHandler->aliasedColumn($query, 'name', 'ezcobj_state_language')
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state')
-        )->innerJoin(
-            $this->dbHandler->quoteTable('ezcobj_state_language'),
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id', 'ezcobj_state'),
-                $this->dbHandler->quoteColumn('contentobject_state_id', 'ezcobj_state_language')
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(
+                // Object state
+                'state.default_language_id AS ezcobj_state_default_language_id',
+                'state.group_id AS ezcobj_state_group_id',
+                'state.id AS ezcobj_state_id',
+                'state.identifier AS ezcobj_state_identifier',
+                'state.language_mask AS ezcobj_state_language_mask',
+                'state.priority AS ezcobj_state_priority',
+                // Object state language
+                'lang.description AS ezcobj_state_language_description',
+                'lang.language_id AS ezcobj_state_language_language_id',
+                'lang.name AS ezcobj_state_language_name'
             )
-        );
+            ->from(self::OBJECT_STATE_TABLE, 'state')
+            ->innerJoin(
+                'state',
+                self::OBJECT_STATE_LANGUAGE_TABLE,
+                'lang',
+                'state.id = lang.contentobject_state_id',
+                );
 
         return $query;
     }
 
     /**
-     * Creates a generalized query for fetching object state group(s).
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     * Create a generic query for fetching object state group(s).
      */
-    protected function createObjectStateGroupFindQuery()
+    protected function createObjectStateGroupFindQuery(): QueryBuilder
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            // Object state group
-            $this->dbHandler->aliasedColumn($query, 'default_language_id', 'ezcobj_state_group'),
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcobj_state_group'),
-            $this->dbHandler->aliasedColumn($query, 'identifier', 'ezcobj_state_group'),
-            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcobj_state_group'),
-            // Object state group language
-            $this->dbHandler->aliasedColumn($query, 'description', 'ezcobj_state_group_language'),
-            $this->dbHandler->aliasedColumn($query, 'language_id', 'ezcobj_state_group_language'),
-            $this->dbHandler->aliasedColumn($query, 'real_language_id', 'ezcobj_state_group_language'),
-            $this->dbHandler->aliasedColumn($query, 'name', 'ezcobj_state_group_language')
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state_group')
-        )->innerJoin(
-            $this->dbHandler->quoteTable('ezcobj_state_group_language'),
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id', 'ezcobj_state_group'),
-                $this->dbHandler->quoteColumn('contentobject_state_group_id', 'ezcobj_state_group_language')
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(
+                // Object state group
+                'state_group.default_language_id AS ezcobj_state_group_default_language_id',
+                'state_group.id AS ezcobj_state_group_id',
+                'state_group.identifier AS ezcobj_state_group_identifier',
+                'state_group.language_mask AS ezcobj_state_group_language_mask',
+                // Object state group language
+                'state_group_lang.description AS ezcobj_state_group_language_description',
+                'state_group_lang.language_id AS ezcobj_state_group_language_language_id',
+                'state_group_lang.real_language_id AS ezcobj_state_group_language_real_language_id',
+                'state_group_lang.name AS ezcobj_state_group_language_name'
             )
-        );
+            ->from(self::OBJECT_STATE_GROUP_TABLE, 'state_group')
+            ->innerJoin(
+                'state_group',
+                self::OBJECT_STATE_GROUP_LANGUAGE_TABLE,
+                'state_group_lang',
+                'state_group.id = state_group_lang.contentobject_state_group_id'
+            );
 
         return $query;
     }
@@ -740,31 +712,34 @@ class DoctrineDatabase extends Gateway
     protected function insertObjectStateTranslations(ObjectState $objectState)
     {
         foreach ($objectState->languageCodes as $languageCode) {
-            $query = $this->dbHandler->createInsertQuery();
-            $query->insertInto(
-                $this->dbHandler->quoteTable('ezcobj_state_language')
-            )->set(
-                $this->dbHandler->quoteColumn('contentobject_state_id'),
-                $query->bindValue($objectState->id, null, \PDO::PARAM_INT)
-            )->set(
-                $this->dbHandler->quoteColumn('description'),
-                $query->bindValue($objectState->description[$languageCode])
-            )->set(
-                $this->dbHandler->quoteColumn('name'),
-                $query->bindValue($objectState->name[$languageCode])
-            )->set(
-                $this->dbHandler->quoteColumn('language_id'),
-                $query->bindValue(
-                    $this->maskGenerator->generateLanguageIndicator(
-                        $languageCode,
-                        $languageCode === $objectState->defaultLanguage
-                    ),
-                    null,
-                    \PDO::PARAM_INT
-                )
-            );
+            $query = $this->connection->createQueryBuilder();
+            $query
+                ->insert(self::OBJECT_STATE_LANGUAGE_TABLE)
+                ->values(
+                    [
+                        'contentobject_state_id' => $query->createPositionalParameter(
+                            $objectState->id,
+                            ParameterType::INTEGER
+                        ),
+                        'description' => $query->createPositionalParameter(
+                            $objectState->description[$languageCode],
+                            ParameterType::STRING
+                        ),
+                        'name' => $query->createPositionalParameter(
+                            $objectState->name[$languageCode],
+                            ParameterType::STRING
+                        ),
+                        'language_id' => $query->createPositionalParameter(
+                            $this->maskGenerator->generateLanguageIndicator(
+                                $languageCode,
+                                $languageCode === $objectState->defaultLanguage
+                            ),
+                            ParameterType::INTEGER
+                        ),
+                    ]
+                );
 
-            $query->prepare()->execute();
+            $query->execute();
         }
     }
 
@@ -775,17 +750,17 @@ class DoctrineDatabase extends Gateway
      */
     protected function deleteObjectStateTranslations($stateId)
     {
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable('ezcobj_state_language')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('contentobject_state_id'),
-                $query->bindValue($stateId, null, \PDO::PARAM_INT)
-            )
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::OBJECT_STATE_LANGUAGE_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'contentobject_state_id',
+                    $query->createPositionalParameter($stateId, ParameterType::INTEGER)
+                )
         );
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
     /**
@@ -795,33 +770,32 @@ class DoctrineDatabase extends Gateway
      */
     protected function insertObjectStateGroupTranslations(Group $objectStateGroup)
     {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::OBJECT_STATE_GROUP_LANGUAGE_TABLE)
+            ->values(
+                [
+                    'contentobject_state_group_id' => ':contentobject_state_group_id',
+                    'description' => ':description',
+                    'name' => ':name',
+                    'language_id' => ':language_id',
+                    'real_language_id' => ':real_language_id',
+                ]
+            )
+        ;
         foreach ($objectStateGroup->languageCodes as $languageCode) {
             $languageId = $this->maskGenerator->generateLanguageIndicator(
                 $languageCode,
                 $languageCode === $objectStateGroup->defaultLanguage
             );
+            $query
+                ->setParameter('contentobject_state_group_id', $objectStateGroup->id, ParameterType::INTEGER)
+                ->setParameter('description', $objectStateGroup->description[$languageCode], ParameterType::STRING)
+                ->setParameter('name', $objectStateGroup->name[$languageCode], ParameterType::STRING)
+                ->setParameter('language_id', $languageId, ParameterType::INTEGER)
+                ->setParameter('real_language_id', $languageId & ~1, ParameterType::INTEGER);
 
-            $query = $this->dbHandler->createInsertQuery();
-            $query->insertInto(
-                $this->dbHandler->quoteTable('ezcobj_state_group_language')
-            )->set(
-                $this->dbHandler->quoteColumn('contentobject_state_group_id'),
-                $query->bindValue($objectStateGroup->id, null, \PDO::PARAM_INT)
-            )->set(
-                $this->dbHandler->quoteColumn('description'),
-                $query->bindValue($objectStateGroup->description[$languageCode])
-            )->set(
-                $this->dbHandler->quoteColumn('name'),
-                $query->bindValue($objectStateGroup->name[$languageCode])
-            )->set(
-                $this->dbHandler->quoteColumn('language_id'),
-                $query->bindValue($languageId, null, \PDO::PARAM_INT)
-            )->set(
-                $this->dbHandler->quoteColumn('real_language_id'),
-                $query->bindValue($languageId & ~1, null, \PDO::PARAM_INT)
-            );
-
-            $query->prepare()->execute();
+            $query->execute();
         }
     }
 
@@ -832,16 +806,91 @@ class DoctrineDatabase extends Gateway
      */
     protected function deleteObjectStateGroupTranslations($groupId)
     {
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable('ezcobj_state_group_language')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('contentobject_state_group_id'),
-                $query->bindValue($groupId, null, \PDO::PARAM_INT)
-            )
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::OBJECT_STATE_GROUP_LANGUAGE_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'contentobject_state_group_id',
+                    $query->createPositionalParameter($groupId, ParameterType::INTEGER)
+                )
         );
 
-        $query->prepare()->execute();
+        $query->execute();
+    }
+
+    private function getMaxPriorityForObjectStatesInGroup($groupId): ?int
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(
+                $this->dbPlatform->getMaxExpression('priority')
+            )
+            ->from(self::OBJECT_STATE_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'group_id',
+                    $query->createPositionalParameter($groupId, ParameterType::INTEGER)
+                )
+            );
+
+        $priority = $query->execute()->fetchColumn();
+
+        return null !== $priority ? (int)$priority : null;
+    }
+
+    private function getContentStateId(int $contentId, int $groupId): ?int
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('state.id')
+            ->from(self::OBJECT_STATE_TABLE, 'state')
+            ->innerJoin(
+                'state',
+                self::OBJECT_STATE_LINK_TABLE,
+                'link',
+                'state.id = link.contentobject_state_id'
+            )
+            ->where(
+                $query->expr()->eq(
+                    'state.group_id',
+                    $query->createPositionalParameter($groupId, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $query->expr()->eq(
+                    'link.contentobject_id',
+                    $query->createPositionalParameter($contentId, ParameterType::INTEGER)
+                )
+            );
+
+        $stateId = $query->execute()->fetch(FetchMode::COLUMN);
+
+        return false !== $stateId ? (int)$stateId : null;
+    }
+
+    /**
+     * @param int $contentId
+     * @param int $stateId
+     */
+    private function insertContentStateAssignment(int $contentId, int $stateId): void
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::OBJECT_STATE_LINK_TABLE)
+            ->values(
+                [
+                    'contentobject_id' => $query->createPositionalParameter(
+                        $contentId,
+                        ParameterType::INTEGER
+                    ),
+                    'contentobject_state_id' => $query->createPositionalParameter(
+                        $stateId,
+                        ParameterType::INTEGER
+                    ),
+                ]
+            );
+
+        $query->execute();
     }
 }
