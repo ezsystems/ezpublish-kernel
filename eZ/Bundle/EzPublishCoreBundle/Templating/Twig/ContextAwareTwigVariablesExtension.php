@@ -25,8 +25,6 @@ final class ContextAwareTwigVariablesExtension extends AbstractExtension impleme
 
     public function getGlobals(): array
     {
-        return $this->configResolver->hasParameter('twig_variables')
-            ? $this->configResolver->getParameter('twig_variables')
-            : [];
+        return $this->configResolver->getParameter('twig_variables');
     }
 }
