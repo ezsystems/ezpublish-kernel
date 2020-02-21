@@ -17,7 +17,7 @@ use eZ\Publish\Core\MVC\Symfony\View\VariableProviderRegistry;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class ContentViewSubscriber implements EventSubscriberInterface
+final class ContentViewTwigVariablesSubscriber implements EventSubscriberInterface
 {
     private const EXPRESSION_INDICATOR = '@=';
 
@@ -53,14 +53,14 @@ final class ContentViewSubscriber implements EventSubscriberInterface
         $view = $event->getContentView();
         $twigVariables = $view->getConfigHash()[self::PARAMETERS_KEY] ?? [];
 
-        foreach ($twigVariables as $name => &$twigVariable) {
-            $this->recursiveParameterProcessor($twigVariable, $view);
+        foreach ($twigVariables as &$twigVariable) {
+            $this->processParameterRecursive($twigVariable, $view);
         }
 
         $view->setParameters(array_replace($view->getParameters() ?? [], $twigVariables));
     }
 
-    private function recursiveParameterProcessor(&$twigVariable, View $view): void
+    private function processParameterRecursive(&$twigVariable, View $view): void
     {
         if ($this->isExpressionParameter($twigVariable)) {
             $twigVariable = $this->expressionLanguage->evaluate($this->getExpression($twigVariable), [
@@ -73,7 +73,7 @@ final class ContentViewSubscriber implements EventSubscriberInterface
             ]);
         } elseif (is_array($twigVariable)) {
             foreach ($twigVariable as &$nestedTwigVariable) {
-                $this->recursiveParameterProcessor($nestedTwigVariable, $view);
+                $this->processParameterRecursive($nestedTwigVariable, $view);
             }
         }
     }

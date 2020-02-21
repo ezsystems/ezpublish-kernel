@@ -6,21 +6,21 @@
  */
 declare(strict_types=1);
 
-namespace EzSystems\Tests\EzPlatformTemplating\EventListener;
+namespace eZ\Publish\Core\MVC\Symfony\EventListener\Tests;
 
 use ArrayIterator;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
-use eZ\Publish\Core\MVC\Symfony\EventListener\ContentViewSubscriber;
+use eZ\Publish\Core\MVC\Symfony\EventListener\ContentViewTwigVariablesSubscriber;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\View\GenericVariableProviderRegistry;
-use eZ\Publish\Core\MVC\Symfony\View\VariableProvider;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\SPI\MVC\View\VariableProvider;
 use PHPUnit\Framework\TestCase;
 
-final class ContentViewSubscriberTest extends TestCase
+final class ContentViewTwigVariablesSubscriberTest extends TestCase
 {
     /**
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|\PHPUnit\Framework\MockObject\MockObject
@@ -66,9 +66,9 @@ final class ContentViewSubscriberTest extends TestCase
         };
     }
 
-    private function getContentViewMockSubscriber(): ContentViewSubscriber
+    private function getContentViewMockSubscriber(): ContentViewTwigVariablesSubscriber
     {
-        return new ContentViewSubscriber(
+        return new ContentViewTwigVariablesSubscriber(
             $this->getRegistry([
                 $this->getProvider('test_provider'),
             ]),
@@ -97,7 +97,7 @@ final class ContentViewSubscriberTest extends TestCase
 
         $view->method('getConfigHash')
             ->willReturn([
-                ContentViewSubscriber::PARAMETERS_KEY => [
+                ContentViewTwigVariablesSubscriber::PARAMETERS_KEY => [
                     'param_1' => 'scalar_1',
                     'param_2' => 2,
                     'param_3' => 3,
@@ -124,7 +124,7 @@ final class ContentViewSubscriberTest extends TestCase
 
         $view->method('getConfigHash')
             ->willReturn([
-                ContentViewSubscriber::PARAMETERS_KEY => [
+                ContentViewTwigVariablesSubscriber::PARAMETERS_KEY => [
                     'param_1' => 'scalar_1',
                 ],
             ]);
@@ -161,7 +161,7 @@ final class ContentViewSubscriberTest extends TestCase
 
         $view->method('getConfigHash')
             ->willReturn([
-                ContentViewSubscriber::PARAMETERS_KEY => [
+                ContentViewTwigVariablesSubscriber::PARAMETERS_KEY => [
                     'plus_42' => '@=parameters["random_number"] + 42',
                 ],
             ]);
@@ -192,7 +192,7 @@ final class ContentViewSubscriberTest extends TestCase
 
         $view->method('getConfigHash')
             ->willReturn([
-                ContentViewSubscriber::PARAMETERS_KEY => [
+                ContentViewTwigVariablesSubscriber::PARAMETERS_KEY => [
                     'example' => [
                         'plus_42' => '@=parameters["some_number"] + 42',
                         'nested' => [
@@ -221,7 +221,7 @@ final class ContentViewSubscriberTest extends TestCase
         $subscriber->onPreContentView($event);
     }
 
-    public function testWithProviderExpression()
+    public function testWithProviderExpression(): void
     {
         $view = $this->getContentViewMock();
         $event = new PreContentViewEvent($view);
@@ -230,8 +230,8 @@ final class ContentViewSubscriberTest extends TestCase
 
         $view->method('getConfigHash')
             ->willReturn([
-                ContentViewSubscriber::PARAMETERS_KEY => [
-                    'example' => '@=provider("test_provider").test_provider_parameter',
+                ContentViewTwigVariablesSubscriber::PARAMETERS_KEY => [
+                    'example' => '@=twig_variable_provider("test_provider").test_provider_parameter',
                 ],
             ]);
 

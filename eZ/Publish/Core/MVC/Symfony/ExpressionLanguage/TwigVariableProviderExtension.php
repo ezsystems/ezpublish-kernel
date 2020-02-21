@@ -26,7 +26,7 @@ final class TwigVariableProviderExtension implements ExpressionFunctionProviderI
     {
         return [
             new ExpressionFunction(
-                'provider',
+                'twig_variable_provider',
                 function (string $identifier) {
                     return 'Not implemented: Not a Dependency Injection expression';
                 },
@@ -43,9 +43,7 @@ final class TwigVariableProviderExtension implements ExpressionFunctionProviderI
 
                     $provider = $providerRegistry->getTwigVariableProvider($identifier);
 
-                    return !empty($provider)
-                        ? $provider->getTwigVariables($view, $variables)
-                        : [];
+                    return $provider->getTwigVariables($view, $variables);
                 }
             ),
         ];

@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Traversable;
+use eZ\Publish\SPI\MVC\View\VariableProvider;
 
 final class GenericVariableProviderRegistry implements VariableProviderRegistry
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\VariableProvider[] */
+    /** @var \eZ\Publish\SPI\MVC\View\VariableProvider[] */
     private $twigVariableProviders;
 
     public function __construct(Traversable $twigVariableProviders)
@@ -27,9 +29,13 @@ final class GenericVariableProviderRegistry implements VariableProviderRegistry
         $this->twigVariableProviders[$twigVariableProvider->getIdentifier()] = $twigVariableProvider;
     }
 
-    public function getTwigVariableProvider(string $identifier): ?VariableProvider
+    public function getTwigVariableProvider(string $identifier): VariableProvider
     {
-        return $this->twigVariableProviders[$identifier] ?? null;
+        if ($this->hasTwigVariableProvider($identifier)) {
+            return $this->twigVariableProviders[$identifier];
+        }
+
+        throw new NotFoundException(VariableProvider::class, $identifier);
     }
 
     public function hasTwigVariableProvider(string $identifier): bool

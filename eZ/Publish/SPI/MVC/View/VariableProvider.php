@@ -6,7 +6,9 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\MVC\Symfony\View;
+namespace eZ\Publish\SPI\MVC\View;
+
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 interface VariableProvider
 {

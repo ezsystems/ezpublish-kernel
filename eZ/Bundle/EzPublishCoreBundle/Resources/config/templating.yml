@@ -253,10 +253,10 @@ services:
         tags:
             - { name: twig.extension }
 
-    eZ\Publish\Core\MVC\Symfony\EventListener\ContentViewSubscriber: ~
+    eZ\Publish\Core\MVC\Symfony\EventListener\ContentViewTwigVariablesSubscriber: ~
 
     eZ\Publish\Core\MVC\Symfony\View\GenericVariableProviderRegistry:
         arguments:
-            $twigVariableProviders: !tagged ezplatform.view.parameter_provider
+            $twigVariableProviders: !tagged ezplatform.view.variable_provider
 
     eZ\Publish\Core\MVC\Symfony\View\VariableProviderRegistry: '@eZ\Publish\Core\MVC\Symfony\View\GenericVariableProviderRegistry'

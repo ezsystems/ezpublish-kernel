@@ -6,12 +6,13 @@
  */
 declare(strict_types=1);
 
-namespace EzSystems\Tests\EzPlatformTemplating\View;
+namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
 use ArrayIterator;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\View\GenericVariableProviderRegistry;
-use eZ\Publish\Core\MVC\Symfony\View\VariableProvider;
 use eZ\Publish\Core\MVC\Symfony\View\View;
+use eZ\Publish\SPI\MVC\View\VariableProvider;
 use PHPUnit\Framework\TestCase;
 
 final class VariableProviderRegistryTest extends TestCase
@@ -56,11 +57,21 @@ final class VariableProviderRegistryTest extends TestCase
 
         $providerA = $registry->getTwigVariableProvider('provider_a');
         $providerB = $registry->getTwigVariableProvider('provider_b');
-        $providerC = $registry->getTwigVariableProvider('provider_c');
 
         $this->assertEquals($providerA->getIdentifier(), 'provider_a');
         $this->assertEquals($providerB->getIdentifier(), 'provider_b');
-        $this->assertNull($providerC);
+    }
+
+    public function testParameterNotFoundProviderGetter(): void
+    {
+        $this->expectException(NotFoundException::class);
+
+        $registry = $this->getRegistry([
+            $this->getProvider('provider_a'),
+            $this->getProvider('provider_b'),
+        ]);
+
+        $registry->getTwigVariableProvider('provider_c');
     }
 
     public function testParameterProviderSetter(): void
@@ -70,9 +81,9 @@ final class VariableProviderRegistryTest extends TestCase
             $this->getProvider('provider_b'),
         ]);
 
-        $providerC = $registry->getTwigVariableProvider('provider_c');
+        $hasProviderC = $registry->hasTwigVariableProvider('provider_c');
 
-        $this->assertNull($providerC);
+        $this->assertFalse($hasProviderC);
 
         $registry->setTwigVariableProvider($this->getProvider('provider_c'));
 
