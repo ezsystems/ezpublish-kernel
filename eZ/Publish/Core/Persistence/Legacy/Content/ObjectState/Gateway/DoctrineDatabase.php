@@ -8,12 +8,12 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
@@ -22,14 +22,6 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
  */
 class DoctrineDatabase extends Gateway
 {
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
-
     /**
      * Language mask generator.
      *
@@ -44,17 +36,11 @@ class DoctrineDatabase extends Gateway
     private $dbPlatform;
 
     /**
-     * Creates a new Doctrine database ObjectState Gateway.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $dbHandler, MaskGenerator $maskGenerator)
+    public function __construct(Connection $connection, MaskGenerator $maskGenerator)
     {
-        $this->dbHandler = $dbHandler;
-        $this->connection = $dbHandler->getConnection();
+        $this->connection = $connection;
         $this->dbPlatform = $this->connection->getDatabasePlatform();
         $this->maskGenerator = $maskGenerator;
     }
