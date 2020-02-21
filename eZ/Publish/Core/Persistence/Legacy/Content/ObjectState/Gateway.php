@@ -34,7 +34,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadObjectStateData($stateId);
+    abstract public function loadObjectStateData(int $stateId): array;
 
     /**
      * Loads data for an object state by identifier.
@@ -44,7 +44,10 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadObjectStateDataByIdentifier($identifier, $groupId);
+    abstract public function loadObjectStateDataByIdentifier(
+        string $identifier,
+        int $groupId
+    ): array;
 
     /**
      * Loads data for all object states belonging to group with $groupId ID.
@@ -53,7 +56,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadObjectStateListData($groupId);
+    abstract public function loadObjectStateListData(int $groupId): array;
 
     /**
      * Loads data for an object state group.
@@ -62,7 +65,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadObjectStateGroupData($groupId);
+    abstract public function loadObjectStateGroupData(int $groupId): array;
 
     /**
      * Loads data for an object state group by identifier.
@@ -71,7 +74,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadObjectStateGroupDataByIdentifier($identifier);
+    abstract public function loadObjectStateGroupDataByIdentifier(string $identifier): array;
 
     /**
      * Loads data for all object state groups, filtered by $offset and $limit.
@@ -81,7 +84,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadObjectStateGroupListData($offset, $limit);
+    abstract public function loadObjectStateGroupListData(int $offset, int $limit): array;
 
     /**
      * Inserts a new object state into database.
@@ -89,21 +92,21 @@ abstract class Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
      * @param int $groupId
      */
-    abstract public function insertObjectState(ObjectState $objectState, $groupId);
+    abstract public function insertObjectState(ObjectState $objectState, int $groupId): void;
 
     /**
      * Updates the stored object state with provided data.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
      */
-    abstract public function updateObjectState(ObjectState $objectState);
+    abstract public function updateObjectState(ObjectState $objectState): void;
 
     /**
      * Deletes object state identified by $stateId.
      *
      * @param int $stateId
      */
-    abstract public function deleteObjectState($stateId);
+    abstract public function deleteObjectState(int $stateId): void;
 
     /**
      * Update object state links from $oldStateId to $newStateId.
@@ -111,35 +114,35 @@ abstract class Gateway
      * @param int $oldStateId
      * @param int $newStateId
      */
-    abstract public function updateObjectStateLinks($oldStateId, $newStateId);
+    abstract public function updateObjectStateLinks(int $oldStateId, int $newStateId): void;
 
     /**
      * Deletes object state links identified by $stateId.
      *
      * @param int $stateId
      */
-    abstract public function deleteObjectStateLinks($stateId);
+    abstract public function deleteObjectStateLinks(int $stateId): void;
 
     /**
      * Inserts a new object state group into database.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
      */
-    abstract public function insertObjectStateGroup(Group $objectStateGroup);
+    abstract public function insertObjectStateGroup(Group $objectStateGroup): void;
 
     /**
      * Updates the stored object state group with provided data.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
      */
-    abstract public function updateObjectStateGroup(Group $objectStateGroup);
+    abstract public function updateObjectStateGroup(Group $objectStateGroup): void;
 
     /**
      * Deletes the object state group identified by $groupId.
      *
      * @param mixed $groupId
      */
-    abstract public function deleteObjectStateGroup($groupId);
+    abstract public function deleteObjectStateGroup(int $groupId): void;
 
     /**
      * Sets the object state $stateId to content with $contentId ID.
@@ -148,7 +151,7 @@ abstract class Gateway
      * @param mixed $groupId
      * @param mixed $stateId
      */
-    abstract public function setContentState($contentId, $groupId, $stateId);
+    abstract public function setContentState(int $contentId, int $groupId, int $stateId): void;
 
     /**
      * Loads object state data for $contentId content from $stateGroupId state group.
@@ -158,7 +161,10 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadObjectStateDataForContent($contentId, $stateGroupId);
+    abstract public function loadObjectStateDataForContent(
+        int $contentId,
+        int $stateGroupId
+    ): array;
 
     /**
      * Returns the number of objects which are in this state.
@@ -167,7 +173,7 @@ abstract class Gateway
      *
      * @return int
      */
-    abstract public function getContentCount($stateId);
+    abstract public function getContentCount(int $stateId): int;
 
     /**
      * Updates the object state priority to provided value.
@@ -175,5 +181,5 @@ abstract class Gateway
      * @param mixed $stateId
      * @param int $priority
      */
-    abstract public function updateObjectStatePriority($stateId, $priority);
+    abstract public function updateObjectStatePriority(int $stateId, int $priority): void;
 }
