@@ -20,14 +20,14 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 /**
  * ObjectState Doctrine database Gateway.
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * Language mask generator.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
-    protected $maskGenerator;
+    private $maskGenerator;
 
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
@@ -632,7 +632,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Create a generic query for fetching object state(s).
      */
-    protected function createObjectStateFindQuery(): QueryBuilder
+    private function createObjectStateFindQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -663,7 +663,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Create a generic query for fetching object state group(s).
      */
-    protected function createObjectStateGroupFindQuery(): QueryBuilder
+    private function createObjectStateGroupFindQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -695,7 +695,7 @@ class DoctrineDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
      */
-    protected function insertObjectStateTranslations(ObjectState $objectState)
+    private function insertObjectStateTranslations(ObjectState $objectState)
     {
         foreach ($objectState->languageCodes as $languageCode) {
             $query = $this->connection->createQueryBuilder();
@@ -734,7 +734,7 @@ class DoctrineDatabase extends Gateway
      *
      * @param mixed $stateId
      */
-    protected function deleteObjectStateTranslations($stateId)
+    private function deleteObjectStateTranslations($stateId)
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -754,7 +754,7 @@ class DoctrineDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
      */
-    protected function insertObjectStateGroupTranslations(Group $objectStateGroup)
+    private function insertObjectStateGroupTranslations(Group $objectStateGroup)
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -790,7 +790,7 @@ class DoctrineDatabase extends Gateway
      *
      * @param mixed $groupId
      */
-    protected function deleteObjectStateGroupTranslations($groupId)
+    private function deleteObjectStateGroupTranslations($groupId)
     {
         $query = $this->connection->createQueryBuilder();
         $query

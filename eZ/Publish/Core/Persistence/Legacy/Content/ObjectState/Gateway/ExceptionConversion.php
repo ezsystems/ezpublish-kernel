@@ -15,14 +15,14 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 
-class ExceptionConversion extends Gateway
+final class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway
      */
-    protected $innerGateway;
+    private $innerGateway;
 
     /**
      * Creates a new exception conversion gateway around $innerGateway.
