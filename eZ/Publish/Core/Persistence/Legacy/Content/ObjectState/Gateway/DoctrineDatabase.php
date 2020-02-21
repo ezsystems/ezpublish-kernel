@@ -38,16 +38,22 @@ class DoctrineDatabase extends Gateway
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $dbPlatform;
+
     /**
      * Creates a new Doctrine database ObjectState Gateway.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(DatabaseHandler $dbHandler, MaskGenerator $maskGenerator)
     {
         $this->dbHandler = $dbHandler;
         $this->connection = $dbHandler->getConnection();
+        $this->dbPlatform = $this->connection->getDatabasePlatform();
         $this->maskGenerator = $maskGenerator;
     }
 
