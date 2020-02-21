@@ -12,7 +12,9 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
- * ObjectState Gateway.
+ * Base class for Object State gateways.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {

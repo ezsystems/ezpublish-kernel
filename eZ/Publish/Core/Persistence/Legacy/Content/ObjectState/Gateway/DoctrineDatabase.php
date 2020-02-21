@@ -18,7 +18,11 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
- * ObjectState Doctrine database Gateway.
+ * Object State gateway implementation using the Doctrine database.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence Location Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
  */
 final class DoctrineDatabase extends Gateway
 {

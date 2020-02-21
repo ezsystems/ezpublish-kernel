@@ -15,6 +15,9 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 
+/**
+ * @internal Internal exception conversion layer.
+ */
 final class ExceptionConversion extends Gateway
 {
     /**
