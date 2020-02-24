@@ -84,11 +84,16 @@ final class DoctrineDatabase extends Gateway
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $dbPlatform;
+
     /**
      * Creates a new DoctrineDatabase UrlAlias Gateway.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(
         DatabaseHandler $dbHandler,
@@ -98,6 +103,7 @@ final class DoctrineDatabase extends Gateway
         $this->languageMaskGenerator = $languageMaskGenerator;
         $this->table = static::TABLE;
         $this->connection = $dbHandler->getConnection();
+        $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
     public function setTable($name)
