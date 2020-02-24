@@ -15,7 +15,6 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
@@ -51,14 +50,6 @@ final class DoctrineDatabase extends Gateway
     ];
 
     /**
-     * Doctrine database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    private $dbHandler;
-
-    /**
      * Language mask generator.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
@@ -79,21 +70,15 @@ final class DoctrineDatabase extends Gateway
     private $dbPlatform;
 
     /**
-     * Creates a new DoctrineDatabase UrlAlias Gateway.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
-     *
      * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(
-        DatabaseHandler $dbHandler,
+        Connection $connection,
         LanguageMaskGenerator $languageMaskGenerator
     ) {
-        $this->dbHandler = $dbHandler;
+        $this->connection = $connection;
         $this->languageMaskGenerator = $languageMaskGenerator;
         $this->table = static::TABLE;
-        $this->connection = $dbHandler->getConnection();
         $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
