@@ -18,7 +18,10 @@ abstract class Gateway
     /**
      * Default database table.
      */
-    const TABLE = 'ezurlalias_ml';
+    public const TABLE = 'ezurlalias_ml';
+
+    public const INCR_TABLE = 'ezurlalias_ml_incr';
+    public const INCR_TABLE_SEQ = 'ezurlalias_ml_incr_id_seq';
 
     /**
      * Changes the gateway database table.
