@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
 /**
  * UrlAlias Gateway.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {

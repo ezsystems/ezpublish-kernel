@@ -22,7 +22,11 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use RuntimeException;
 
 /**
- * UrlAlias Gateway.
+ * UrlAlias gateway implementation using the Doctrine database.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence UrlAlias Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
  */
 class DoctrineDatabase extends Gateway
 {
