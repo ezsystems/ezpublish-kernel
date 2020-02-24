@@ -28,7 +28,7 @@ use RuntimeException;
  *
  * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
@@ -43,7 +43,7 @@ class DoctrineDatabase extends Gateway
      *
      * @todo remove after testing
      */
-    protected $columns = [
+    private $columns = [
         'ezurlalias_ml' => [
             'action',
             'action_type',
@@ -65,21 +65,21 @@ class DoctrineDatabase extends Gateway
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      * @deprecated Start to use DBAL $connection instead.
      */
-    protected $dbHandler;
+    private $dbHandler;
 
     /**
      * Language mask generator.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
-    protected $languageMaskGenerator;
+    private $languageMaskGenerator;
 
     /**
      * Main URL database table name.
      *
      * @var string
      */
-    protected $table;
+    private $table;
 
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
@@ -413,7 +413,7 @@ class DoctrineDatabase extends Gateway
      * @param string $textMD5
      * @param int $newId
      */
-    protected function historize($parentId, $textMD5, $newId)
+    private function historize($parentId, $textMD5, $newId)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
@@ -456,7 +456,7 @@ class DoctrineDatabase extends Gateway
      * @param string $textMD5
      * @param mixed $languageId
      */
-    protected function removeTranslation($parentId, $textMD5, $languageId)
+    private function removeTranslation($parentId, $textMD5, $languageId)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
@@ -657,7 +657,7 @@ class DoctrineDatabase extends Gateway
      *
      * @throws \Exception
      */
-    protected function setQueryValues(Query $query, $values)
+    private function setQueryValues(Query $query, $values)
     {
         foreach ($values as $column => $value) {
             // @todo remove after testing
@@ -1516,7 +1516,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    protected function getUrlAliasesForLocation(int $locationId): array
+    private function getUrlAliasesForLocation(int $locationId): array
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
