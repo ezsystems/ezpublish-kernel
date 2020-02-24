@@ -1,0 +1,39 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParserDispatcher:
+        arguments:
+            $parsers: !tagged_iterator ezplatform.query_type.sort_clause_parser
+
+    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParser\FieldSortClauseParser:
+        tags:
+            - { name: ezplatform.query_type.sort_clause_parser }
+
+    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParser\MapDistanceSortClauseParser:
+        tags:
+            - { name: ezplatform.query_type.sort_clause_parser }
+
+    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParser\RandomSortClauseParser:
+        tags:
+            - { name: ezplatform.query_type.sort_clause_parser }
+
+    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParser\DefaultSortClauseParser:
+        arguments:
+            $valueObjectClassMap:
+                content_id: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentId
+                content_name: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentName
+                date_modified: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified
+                date_published: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished
+                section_identifier: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionIdentifier
+                section_name: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionName
+                location_depth: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Depth
+                location_id: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Id
+                location_is_main: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\IsMainLocation
+                location_path: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Path
+                location_priority: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Priority
+                location_visibility: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Visibility
+        tags:
+            - { name: ezplatform.query_type.sort_clause_parser }

@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifi
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\QueryType\OptionsResolverBasedQueryType;
 use Symfony\Component\OptionsResolver\Options;
@@ -22,8 +23,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractQueryType extends OptionsResolverBasedQueryType
 {
-    private const SORT_CLAUSE_NAMESPACE = '\eZ\Publish\API\Repository\Values\Content\Query\SortClause\\';
-
     public const DEFAULT_LIMIT = 25;
 
     /** @var \eZ\Publish\API\Repository\Repository */
@@ -32,10 +31,17 @@ abstract class AbstractQueryType extends OptionsResolverBasedQueryType
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-    public function __construct(Repository $repository, ConfigResolverInterface $configResolver)
-    {
+    /** @var \eZ\Publish\Core\QueryType\BuildIn\SortClausesFactoryInterface */
+    private $sortClausesFactory;
+
+    public function __construct(
+        Repository $repository,
+        ConfigResolverInterface $configResolver,
+        SortClausesFactoryInterface $sortSpecParserFactory
+    ) {
         $this->repository = $repository;
         $this->configResolver = $configResolver;
+        $this->sortClausesFactory = $sortSpecParserFactory;
     }
 
     protected function configureOptions(OptionsResolver $resolver): void
@@ -54,24 +60,22 @@ abstract class AbstractQueryType extends OptionsResolverBasedQueryType
             },
             'offset' => 0,
             'limit' => self::DEFAULT_LIMIT,
-            'sort' => static function (OptionsResolver $resolver): void {
-                $resolver->setDefault('target', null);
-                $resolver->setAllowedTypes('target', ['null', 'string']);
-
-                $resolver->setDefault('direction', 'asc');
-                $resolver->setAllowedValues('direction', ['asc', 'desc']);
-                $resolver->setNormalizer('direction', function (Options $options, $direction) {
-                    if (strtolower($direction) === 'desc') {
-                        return Query::SORT_DESC;
-                    }
-
-                    return Query::SORT_ASC;
-                });
-
-                $resolver->setDefault('data', null);
-            },
+            'sort' => [],
         ]);
 
+        $resolver->setNormalizer('sort', function (Options $options, $value) {
+            if (is_string($value)) {
+                $value = $this->sortClausesFactory->createFromSpecification($value);
+            }
+
+            if (!is_array($value)) {
+                $value = [$value];
+            }
+
+            return $value;
+        });
+
+        $resolver->setAllowedTypes('sort', ['string', 'array', SortClause::class]);
         $resolver->setAllowedTypes('offset', 'int');
         $resolver->setAllowedTypes('limit', 'int');
     }
@@ -83,12 +87,8 @@ abstract class AbstractQueryType extends OptionsResolverBasedQueryType
         $query = new Query();
         $query->filter = $this->buildFilters($parameters);
 
-        if ($parameters['sort']['target'] !== null) {
-            $query->sortClauses = $this->buildSortClauses(
-                $parameters['sort']['target'],
-                $parameters['sort']['direction'],
-                $parameters['sort']['data'] ?? []
-            );
+        if ($parameters['sort'] !== null) {
+            $query->sortClauses = $parameters['sort'];
         }
 
         $query->limit = $parameters['limit'];
@@ -117,23 +117,6 @@ abstract class AbstractQueryType extends OptionsResolverBasedQueryType
         }
 
         return new LogicalAnd($criteria);
-    }
-
-    private function buildSortClauses(string $class, ?string $direction, array $args): array
-    {
-        if (substr($class, 0, 1) !== '\\') {
-            $class = self::SORT_CLAUSE_NAMESPACE . $class;
-        }
-
-        if (class_exists($class)) {
-            /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause */
-            $sortClause = new $class(...$args);
-            $sortClause->direction = $direction;
-
-            return [$sortClause];
-        }
-
-        return [];
     }
 
     private function getRootLocationPathString(): string

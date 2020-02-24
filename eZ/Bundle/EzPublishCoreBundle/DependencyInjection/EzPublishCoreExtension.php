@@ -331,6 +331,9 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         // Build-in query types
         $loader->load('query_types.yml');
+
+        // Sorting specification parser
+        $loader->load('sort_spec.yml');
     }
 
     /**

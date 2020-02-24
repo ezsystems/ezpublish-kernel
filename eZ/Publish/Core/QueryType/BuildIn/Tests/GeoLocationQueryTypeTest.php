@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentName;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\QueryType\BuildIn\GeoLocationQueryType;
+use eZ\Publish\Core\QueryType\BuildIn\SortClausesFactoryInterface;
 use eZ\Publish\Core\QueryType\QueryType;
 
 final class GeoLocationQueryTypeTest extends AbstractQueryTypeTest
@@ -126,9 +127,7 @@ final class GeoLocationQueryTypeTest extends AbstractQueryTypeTest
 
         yield 'sort' => [
             $parameters + [
-                'sort' => [
-                    'target' => 'ContentName',
-                ],
+                'sort' => new ContentName(Query::SORT_ASC),
             ],
             new Query([
                 'filter' => new LogicalAnd([
@@ -141,31 +140,14 @@ final class GeoLocationQueryTypeTest extends AbstractQueryTypeTest
                 ],
             ]),
         ];
-
-        yield 'sort by custom clause' => [
-            $parameters + [
-                'sort' => [
-                    'target' => '\eZ\Publish\Core\QueryType\BuildIn\Tests\CustomSortClause',
-                    'direction' => 'desc',
-                    'data' => ['foo', 'bar', 'baz'],
-                ],
-            ],
-            new Query([
-                'filter' => new LogicalAnd([
-                    $criterion,
-                    new Visibility(Visibility::VISIBLE),
-                    new Subtree(self::ROOT_LOCATION_PATH_STRING),
-                ]),
-                'sortClauses' => [
-                    new CustomSortClause('foo', 'bar', 'baz', Query::SORT_DESC),
-                ],
-            ]),
-        ];
     }
 
-    protected function createQueryType(Repository $repository, ConfigResolverInterface $configResolver): QueryType
-    {
-        return new GeoLocationQueryType($repository, $configResolver);
+    protected function createQueryType(
+        Repository $repository,
+        ConfigResolverInterface $configResolver,
+        SortClausesFactoryInterface $sortClausesFactory
+    ): QueryType {
+        return new GeoLocationQueryType($repository, $configResolver, $sortClausesFactory);
     }
 
     protected function getExpectedName(): string

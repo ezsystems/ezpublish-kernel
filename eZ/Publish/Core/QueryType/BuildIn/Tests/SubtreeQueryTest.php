@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Priority;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\QueryType\BuildIn\SortClausesFactoryInterface;
 use eZ\Publish\Core\QueryType\BuildIn\SubtreeQueryType;
 use eZ\Publish\Core\QueryType\QueryType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
@@ -137,9 +138,7 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
         yield 'basic sort' => [
             [
                 'location' => $location,
-                'sort' => [
-                    'target' => 'Location\Priority',
-                ],
+                'sort' => new Priority(Query::SORT_ASC),
             ],
             new Query([
                 'filter' => new LogicalAnd([
@@ -152,32 +151,14 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
                 ],
             ]),
         ];
-
-        yield 'sort by custom clause' => [
-            [
-                'location' => $location,
-                'sort' => [
-                    'target' => '\eZ\Publish\Core\QueryType\BuildIn\Tests\CustomSortClause',
-                    'direction' => 'desc',
-                    'data' => ['foo', 'bar', 'baz'],
-                ],
-            ],
-            new Query([
-                'filter' => new LogicalAnd([
-                    new Subtree(self::EXAMPLE_LOCATION_PATH_STRING),
-                    new Visibility(Visibility::VISIBLE),
-                    new Subtree(self::ROOT_LOCATION_PATH_STRING),
-                ]),
-                'sortClauses' => [
-                    new CustomSortClause('foo', 'bar', 'baz', Query::SORT_DESC),
-                ],
-            ]),
-        ];
     }
 
-    protected function createQueryType(Repository $repository, ConfigResolverInterface $configResolver): QueryType
-    {
-        return new SubtreeQueryType($repository, $configResolver);
+    protected function createQueryType(
+        Repository $repository,
+        ConfigResolverInterface $configResolver,
+        SortClausesFactoryInterface $sortClausesFactory
+    ): QueryType {
+        return new SubtreeQueryType($repository, $configResolver, $sortClausesFactory);
     }
 
     protected function getExpectedName(): string

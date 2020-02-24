@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Priority;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\QueryType\BuildIn\ChildrenQueryType;
+use eZ\Publish\Core\QueryType\BuildIn\SortClausesFactoryInterface;
 use eZ\Publish\Core\QueryType\QueryType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 
@@ -116,12 +117,10 @@ final class ChildrenQueryTypeTest extends AbstractQueryTypeTest
             ]),
         ];
 
-        yield 'basic sort' => [
+        yield 'sort' => [
             [
                 'location' => $location,
-                'sort' => [
-                    'target' => 'Location\Priority',
-                ],
+                'sort' => new Priority(Query::SORT_ASC),
             ],
             new Query([
                 'filter' => new LogicalAnd([
@@ -134,34 +133,14 @@ final class ChildrenQueryTypeTest extends AbstractQueryTypeTest
                 ],
             ]),
         ];
-
-        yield 'sort by custom clause' => [
-            [
-                'location' => $location,
-                'sort' => [
-                    'target' => '\eZ\Publish\Core\QueryType\BuildIn\Tests\CustomSortClause',
-                    'direction' => 'desc',
-                    'data' => ['foo', 'bar', 'baz'],
-                ],
-            ],
-            new Query([
-                'filter' => new LogicalAnd([
-                    new ParentLocationId(self::EXAMPLE_LOCATION_ID),
-                    new Visibility(Visibility::VISIBLE),
-                    new Subtree(self::ROOT_LOCATION_PATH_STRING),
-                ]),
-                'sortClauses' => [
-                    new CustomSortClause('foo', 'bar', 'baz', Query::SORT_DESC),
-                ],
-            ]),
-        ];
     }
 
     protected function createQueryType(
         Repository $repository,
-        ConfigResolverInterface $configResolver
+        ConfigResolverInterface $configResolver,
+        SortClausesFactoryInterface $sortClausesFactory
     ): QueryType {
-        return new ChildrenQueryType($repository, $configResolver);
+        return new ChildrenQueryType($repository, $configResolver, $sortClausesFactory);
     }
 
     protected function getExpectedName(): string

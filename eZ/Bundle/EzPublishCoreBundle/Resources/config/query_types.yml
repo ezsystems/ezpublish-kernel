@@ -27,3 +27,10 @@ services:
     eZ\Publish\Core\QueryType\BuildIn\SubtreeQueryType:
         tags:
             - { name: ezpublish.query_type, alias: 'eZ:Subtree' }
+
+    eZ\Publish\Core\QueryType\BuildIn\SortClausesFactory:
+        arguments:
+            $sortClauseArgsParser: '@eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParserDispatcher'
+
+    eZ\Publish\Core\QueryType\BuildIn\SortClausesFactoryInterface:
+        alias: 'eZ\Publish\Core\QueryType\BuildIn\SortClausesFactory'

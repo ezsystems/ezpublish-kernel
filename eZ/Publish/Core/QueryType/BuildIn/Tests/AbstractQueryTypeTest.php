@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\QueryType\BuildIn\SortClausesFactoryInterface;
 use eZ\Publish\Core\QueryType\QueryType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit\Framework\TestCase;
@@ -21,11 +22,14 @@ abstract class AbstractQueryTypeTest extends TestCase
     protected const ROOT_LOCATION_ID = 2;
     protected const ROOT_LOCATION_PATH_STRING = '/1/2/';
 
-    /** @var \eZ\Publish\API\Repository\Repository */
+    /** @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject */
     private $repository;
 
-    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $configResolver;
+
+    /** @var \eZ\Publish\Core\QueryType\BuildIn\SortClausesFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $sortClausesFactory;
 
     /** @var \eZ\Publish\Core\QueryType\QueryType */
     private $queryType;
@@ -52,7 +56,13 @@ abstract class AbstractQueryTypeTest extends TestCase
             ->with('content.tree_root.location_id')
             ->willReturn(self::ROOT_LOCATION_ID);
 
-        $this->queryType = $this->createQueryType($this->repository, $this->configResolver);
+        $this->sortClausesFactory = $this->createMock(SortClausesFactoryInterface::class);
+
+        $this->queryType = $this->createQueryType(
+            $this->repository,
+            $this->configResolver,
+            $this->sortClausesFactory
+        );
     }
 
     /**
@@ -81,7 +91,11 @@ abstract class AbstractQueryTypeTest extends TestCase
 
     abstract public function dataProviderForGetQuery(): iterable;
 
-    abstract protected function createQueryType(Repository $repository, ConfigResolverInterface $configResolver): QueryType;
+    abstract protected function createQueryType(
+        Repository $repository,
+        ConfigResolverInterface $configResolver,
+        SortClausesFactoryInterface $sortClausesFactory
+    ): QueryType;
 
     abstract protected function getExpectedName(): string;
 

@@ -37,6 +37,9 @@
     <testsuite name="eZ\Publish\Core\QueryType\BuildIn">
       <directory>eZ/Publish/Core/QueryType/BuildIn/Tests</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\QueryType\BuildIn\SortSpec">
+      <directory>eZ/Publish/Core/QueryType/BuildIn/SortSpec/Tests</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\Search\Legacy">
       <directory>eZ/Publish/Core/Search/Legacy/Tests</directory>
     </testsuite>
