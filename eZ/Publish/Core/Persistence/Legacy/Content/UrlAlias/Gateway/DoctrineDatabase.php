@@ -13,9 +13,9 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Database\Query;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
@@ -36,27 +36,18 @@ final class DoctrineDatabase extends Gateway
      */
     const MAX_LIMIT = 1073741824;
 
-    /**
-     * Columns of database tables.
-     *
-     * @var array
-     *
-     * @todo remove after testing
-     */
-    private $columns = [
-        'ezurlalias_ml' => [
-            'action',
-            'action_type',
-            'alias_redirects',
-            'id',
-            'is_alias',
-            'is_original',
-            'lang_mask',
-            'link',
-            'parent',
-            'text',
-            'text_md5',
-        ],
+    private const URL_ALIAS_DATA_COLUMN_TYPE_MAP = [
+        'id' => ParameterType::INTEGER,
+        'link' => ParameterType::INTEGER,
+        'is_alias' => ParameterType::INTEGER,
+        'alias_redirects' => ParameterType::INTEGER,
+        'is_original' => ParameterType::INTEGER,
+        'action' => ParameterType::STRING,
+        'action_type' => ParameterType::STRING,
+        'lang_mask' => ParameterType::INTEGER,
+        'text' => ParameterType::STRING,
+        'parent' => ParameterType::INTEGER,
+        'text_md5' => ParameterType::STRING,
     ];
 
     /**
@@ -122,58 +113,63 @@ final class DoctrineDatabase extends Gateway
      */
     public function loadLocationEntries($locationId, $custom = false, $languageId = false)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->quoteColumn('link'),
-            $this->dbHandler->quoteColumn('is_alias'),
-            $this->dbHandler->quoteColumn('alias_redirects'),
-            $this->dbHandler->quoteColumn('lang_mask'),
-            $this->dbHandler->quoteColumn('is_original'),
-            $this->dbHandler->quoteColumn('parent'),
-            $this->dbHandler->quoteColumn('text'),
-            $this->dbHandler->quoteColumn('text_md5'),
-            $this->dbHandler->quoteColumn('action')
-        )->from(
-            $this->dbHandler->quoteTable($this->table)
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('action'),
-                    $query->bindValue("eznode:{$locationId}", null, \PDO::PARAM_STR)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_original'),
-                    $query->bindValue(1, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_alias'),
-                    $query->bindValue(
-                        $custom ? 1 : 0,
-                        null,
-                        \PDO::PARAM_INT
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select(
+                'id',
+                'link',
+                'is_alias',
+                'alias_redirects',
+                'lang_mask',
+                'is_original',
+                'parent',
+                'text',
+                'text_md5',
+                'action'
+            )
+            ->from($this->connection->quoteIdentifier($this->table))
+            ->where(
+                $expr->eq(
+                    'action',
+                    $query->createPositionalParameter(
+                        "eznode:{$locationId}",
+                        ParameterType::STRING
                     )
                 )
             )
-        );
+            ->andWhere(
+                $expr->eq(
+                    'is_original',
+                    $query->createPositionalParameter(1, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'is_alias',
+                    $query->createPositionalParameter($custom ? 1 : 0, ParameterType::INTEGER)
+                )
+            )
+        ;
 
         if ($languageId !== false) {
-            $query->where(
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('lang_mask'),
-                        $query->bindValue($languageId, null, \PDO::PARAM_INT)
+            $query->andWhere(
+                $expr->gt(
+                    $this->dbPlatform->getBitAndComparisonExpression(
+                        'lang_mask',
+                        $query->createPositionalParameter(
+                            $languageId,
+                            ParameterType::INTEGER
+                        )
                     ),
                     0
                 )
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -189,58 +185,67 @@ final class DoctrineDatabase extends Gateway
     {
         $limit = $limit === -1 ? self::MAX_LIMIT : $limit;
 
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn('action'),
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->quoteColumn('link'),
-            $this->dbHandler->quoteColumn('is_alias'),
-            $this->dbHandler->quoteColumn('alias_redirects'),
-            $this->dbHandler->quoteColumn('lang_mask'),
-            $this->dbHandler->quoteColumn('is_original'),
-            $this->dbHandler->quoteColumn('parent'),
-            $this->dbHandler->quoteColumn('text_md5')
-        )->from(
-            $this->dbHandler->quoteTable($this->table)
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('action_type'),
-                    $query->bindValue('module', null, \PDO::PARAM_STR)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_original'),
-                    $query->bindValue(1, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_alias'),
-                    $query->bindValue(1, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select(
+                'action',
+                'id',
+                'link',
+                'is_alias',
+                'alias_redirects',
+                'lang_mask',
+                'is_original',
+                'parent',
+                'text_md5'
+            )
+            ->from($this->connection->quoteIdentifier($this->table))
+            ->where(
+                $expr->eq(
+                    'action_type',
+                    $query->createPositionalParameter(
+                        'module',
+                        ParameterType::STRING
+                    )
                 )
             )
-        )->limit(
-            $limit,
-            $offset
-        );
+            ->andWhere(
+                $expr->eq(
+                    'is_original',
+                    $query->createPositionalParameter(1, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'is_alias',
+                    $query->createPositionalParameter(1, ParameterType::INTEGER)
+                )
+            )
+            ->setMaxResults(
+                $limit
+            )
+            ->setFirstResult($offset);
+
         if (isset($languageCode)) {
-            $query->where(
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('lang_mask'),
-                        $query->bindValue(
-                            $this->languageMaskGenerator->generateLanguageIndicator($languageCode, false),
-                            null,
-                            \PDO::PARAM_INT
+            $query->andWhere(
+                $expr->gt(
+                    $this->dbPlatform->getBitAndComparisonExpression(
+                        'lang_mask',
+                        $query->createPositionalParameter(
+                            $this->languageMaskGenerator->generateLanguageIndicator(
+                                $languageCode,
+                                false
+                            ),
+                            ParameterType::INTEGER
                         )
                     ),
                     0
                 )
             );
         }
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -255,22 +260,22 @@ final class DoctrineDatabase extends Gateway
      */
     public function isRootEntry($id)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn('text'),
-            $this->dbHandler->quoteColumn('parent')
-        )->from(
-            $this->dbHandler->quoteTable($this->table)
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($id, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(
+                'text',
+                'parent'
             )
-        );
-        $statement = $query->prepare();
-        $statement->execute();
-        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+            ->from($this->connection->quoteIdentifier($this->table))
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            );
+        $statement = $query->execute();
+
+        $row = $statement->fetch(FetchMode::ASSOCIATIVE);
 
         return strlen($row['text']) == 0 && $row['parent'] == 0;
     }
@@ -290,58 +295,72 @@ final class DoctrineDatabase extends Gateway
      */
     public function cleanupAfterPublish($action, $languageId, $newId, $parentId, $textMD5)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn('parent'),
-            $this->dbHandler->quoteColumn('text_md5'),
-            $this->dbHandler->quoteColumn('lang_mask')
-        )->from(
-            $this->dbHandler->quoteTable($this->table)
-        )->where(
-            $query->expr->lAnd(
-                // 1) Autogenerated aliases that match action and language...
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('action'),
-                    $query->bindValue($action, null, \PDO::PARAM_STR)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_original'),
-                    $query->bindValue(1, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_alias'),
-                    $query->bindValue(0, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('lang_mask'),
-                        $query->bindValue($languageId, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select(
+                'parent',
+                'text_md5',
+                'lang_mask'
+            )
+            ->from($this->connection->quoteIdentifier($this->table))
+            // 1) Autogenerated aliases that match action and language...
+            ->where(
+                $expr->eq(
+                    'action',
+                    $query->createPositionalParameter($action, ParameterType::STRING)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'is_original',
+                    $query->createPositionalParameter(1, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'is_alias',
+                    $query->createPositionalParameter(0, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->gt(
+                    $this->dbPlatform->getBitAndComparisonExpression(
+                        'lang_mask',
+                        $query->createPositionalParameter($languageId, ParameterType::INTEGER)
                     ),
                     0
-                ),
-                // 2) ...but not newly published entry
-                $query->expr->not(
-                    $query->expr->lAnd(
-                        $query->expr->eq(
-                            $this->dbHandler->quoteColumn('parent'),
-                            $query->bindValue($parentId, null, \PDO::PARAM_INT)
+                )
+            )
+            // 2) ...but not newly published entry
+            ->andWhere(
+                sprintf(
+                    'NOT (%s)',
+                    $expr->andX(
+                        $expr->eq(
+                            'parent',
+                            $query->createPositionalParameter($parentId, ParameterType::INTEGER)
                         ),
-                        $query->expr->eq(
-                            $this->dbHandler->quoteColumn('text_md5'),
-                            $query->bindValue($textMD5, null, \PDO::PARAM_STR)
+                        $expr->eq(
+                            'text_md5',
+                            $query->createPositionalParameter($textMD5, ParameterType::STRING)
                         )
                     )
                 )
-            )
-        );
+            );
 
-        $statement = $query->prepare();
-        $statement->execute();
-        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        $statement = $query->execute();
+
+        $row = $statement->fetch(FetchMode::ASSOCIATIVE);
 
         if (!empty($row)) {
-            $this->archiveUrlAliasForDeletedTranslation($row['lang_mask'], $languageId, $row['parent'], $row['text_md5'], $newId);
+            $this->archiveUrlAliasForDeletedTranslation(
+                $row['lang_mask'],
+                $languageId,
+                $row['parent'],
+                $row['text_md5'],
+                $newId
+            );
         }
     }
 
@@ -354,8 +373,13 @@ final class DoctrineDatabase extends Gateway
      * @param string $textMD5 checksum
      * @param $linkId
      */
-    private function archiveUrlAliasForDeletedTranslation($languageMask, $languageId, $parent, $textMD5, $linkId)
-    {
+    private function archiveUrlAliasForDeletedTranslation(
+        $languageMask,
+        $languageId,
+        $parent,
+        $textMD5,
+        $linkId
+    ) {
         // If language mask is composite (consists of multiple languages) then remove given language from entry
         if ($languageMask & ~($languageId | 1)) {
             $this->removeTranslation($parent, $textMD5, $languageId);
@@ -367,40 +391,44 @@ final class DoctrineDatabase extends Gateway
 
     public function historizeBeforeSwap($action, $languageMask)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable($this->table)
-        )->set(
-            $this->dbHandler->quoteColumn('is_original'),
-            $query->bindValue(0, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('id'),
-            $query->bindValue(
-                $this->getNextId(),
-                null,
-                \PDO::PARAM_INT
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update($this->connection->quoteIdentifier($this->table))
+            ->set(
+                'is_original',
+                $query->createPositionalParameter(0, ParameterType::INTEGER)
             )
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('action'),
-                    $query->bindValue($action, null, \PDO::PARAM_STR)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_original'),
-                    $query->bindValue(1, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('lang_mask'),
-                        $query->bindValue($languageMask & ~1, null, \PDO::PARAM_INT)
-                    ),
-                    0
+            ->set(
+                'id',
+                $query->createPositionalParameter(
+                    $this->getNextId(),
+                    ParameterType::INTEGER
                 )
             )
-        );
-        $query->prepare()->execute();
+            ->where(
+                $query->expr()->andX(
+                    $query->expr()->eq(
+                        'action',
+                        $query->createPositionalParameter($action, ParameterType::STRING)
+                    ),
+                    $query->expr()->eq(
+                        'is_original',
+                        $query->createPositionalParameter(1, ParameterType::INTEGER)
+                    ),
+                    $query->expr()->gt(
+                        $this->dbPlatform->getBitAndComparisonExpression(
+                            'lang_mask',
+                            $query->createPositionalParameter(
+                                $languageMask & ~1,
+                                ParameterType::INTEGER
+                            )
+                        ),
+                        0
+                    )
+                )
+            );
+
+        $query->execute();
     }
 
     /**
@@ -421,36 +449,37 @@ final class DoctrineDatabase extends Gateway
      */
     private function historize($parentId, $textMD5, $newId)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable($this->table)
-        )->set(
-            $this->dbHandler->quoteColumn('is_original'),
-            $query->bindValue(0, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('link'),
-            $query->bindValue($newId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('id'),
-            $query->bindValue(
-                $this->getNextId(),
-                null,
-                \PDO::PARAM_INT
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update($this->connection->quoteIdentifier($this->table))
+            ->set(
+                'is_original',
+                $query->createPositionalParameter(0, ParameterType::INTEGER)
             )
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('parent'),
-                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('text_md5'),
-                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
+            ->set(
+                'link',
+                $query->createPositionalParameter($newId, ParameterType::INTEGER)
+            )
+            ->set(
+                'id',
+                $query->createPositionalParameter(
+                    $this->getNextId(),
+                    ParameterType::INTEGER
                 )
             )
-        );
-        $query->prepare()->execute();
+            ->where(
+                $query->expr()->andX(
+                    $query->expr()->eq(
+                        'parent',
+                        $query->createPositionalParameter($parentId, ParameterType::INTEGER)
+                    ),
+                    $query->expr()->eq(
+                        'text_md5',
+                        $query->createPositionalParameter($textMD5, ParameterType::STRING)
+                    )
+                )
+            );
+        $query->execute();
     }
 
     /**
@@ -464,29 +493,39 @@ final class DoctrineDatabase extends Gateway
      */
     private function removeTranslation($parentId, $textMD5, $languageId)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable($this->table)
-        )->set(
-            $this->dbHandler->quoteColumn('lang_mask'),
-            $query->expr->bitAnd(
-                $this->dbHandler->quoteColumn('lang_mask'),
-                $query->bindValue(~$languageId, null, \PDO::PARAM_INT)
-            )
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('parent'),
-                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('text_md5'),
-                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update($this->connection->quoteIdentifier($this->table))
+            ->set(
+                'lang_mask',
+                $this->dbPlatform->getBitAndComparisonExpression(
+                    'lang_mask',
+                    $query->createPositionalParameter(
+                        ~$languageId,
+                        ParameterType::INTEGER
+                    )
                 )
             )
-        );
-        $query->prepare()->execute();
+            ->where(
+                $query->expr()->eq(
+                    'parent',
+                    $query->createPositionalParameter(
+                        $parentId,
+                        ParameterType::INTEGER
+                    )
+                )
+            )
+            ->andWhere(
+                $query->expr()->eq(
+                    'text_md5',
+                    $query->createPositionalParameter(
+                        $textMD5,
+                        ParameterType::STRING
+                    )
+                )
+            )
+        ;
+        $query->execute();
     }
 
     /**
@@ -500,38 +539,39 @@ final class DoctrineDatabase extends Gateway
      */
     public function historizeId($id, $link)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query->select(
-            $this->dbHandler->quoteColumn('parent'),
-            $this->dbHandler->quoteColumn('text_md5')
+            'parent',
+            'text_md5'
         )->from(
-            $this->dbHandler->quoteTable($this->table)
+            $this->connection->quoteIdentifier($this->table)
         )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_alias'),
-                    $query->bindValue(0, null, \PDO::PARAM_INT)
+            $query->expr()->andX(
+                $query->expr()->eq(
+                    'is_alias',
+                    $query->createPositionalParameter(0, ParameterType::INTEGER)
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_original'),
-                    $query->bindValue(1, null, \PDO::PARAM_INT)
+                $query->expr()->eq(
+                    'is_original',
+                    $query->createPositionalParameter(1, ParameterType::INTEGER)
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('action_type'),
-                    $query->bindValue('eznode', null, \PDO::PARAM_STR)
+                $query->expr()->eq(
+                    'action_type',
+                    $query->createPositionalParameter(
+                        'eznode',
+                        ParameterType::STRING
+                    )
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('link'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
+                $query->expr()->eq(
+                    'link',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
                 )
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $statement->fetchAll(FetchMode::ASSOCIATIVE);
 
         foreach ($rows as $row) {
             $this->historize($row['parent'], $row['text_md5'], $link);
@@ -548,27 +588,29 @@ final class DoctrineDatabase extends Gateway
      */
     public function reparent($oldParentId, $newParentId)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
-        $query = $this->dbHandler->createUpdateQuery();
+        $query = $this->connection->createQueryBuilder();
         $query->update(
-            $this->dbHandler->quoteTable($this->table)
+            $this->connection->quoteIdentifier($this->table)
         )->set(
-            $this->dbHandler->quoteColumn('parent'),
-            $query->bindValue($newParentId, null, \PDO::PARAM_INT)
+            'parent',
+            $query->createPositionalParameter($newParentId, ParameterType::INTEGER)
         )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_alias'),
-                    $query->bindValue(0, null, \PDO::PARAM_INT)
+            $query->expr()->andX(
+                $query->expr()->eq(
+                    'is_alias',
+                    $query->createPositionalParameter(0, ParameterType::INTEGER)
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('parent'),
-                    $query->bindValue($oldParentId, null, \PDO::PARAM_INT)
+                $query->expr()->eq(
+                    'parent',
+                    $query->createPositionalParameter(
+                        $oldParentId,
+                        ParameterType::INTEGER
+                    )
                 )
             )
         );
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
     /**
@@ -582,23 +624,32 @@ final class DoctrineDatabase extends Gateway
      */
     public function updateRow($parentId, $textMD5, array $values)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update($this->dbHandler->quoteTable($this->table));
-        $this->setQueryValues($query, $values);
-        $query->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('parent'),
-                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('text_md5'),
-                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
+        $query = $this->connection->createQueryBuilder();
+        $query->update($this->connection->quoteIdentifier($this->table));
+        foreach ($values as $columnName => $value) {
+            $query->set(
+                $columnName,
+                $query->createNamedParameter(
+                    $value,
+                    self::URL_ALIAS_DATA_COLUMN_TYPE_MAP[$columnName],
+                    ":{$columnName}"
+                )
+            );
+        }
+        $query
+            ->where(
+                $query->expr()->eq(
+                    'parent',
+                    $query->createNamedParameter($parentId, ParameterType::INTEGER, ':parent')
                 )
             )
-        );
-        $query->prepare()->execute();
+            ->andWhere(
+                $query->expr()->eq(
+                    'text_md5',
+                    $query->createNamedParameter($textMD5, ParameterType::STRING, ':text_md5')
+                )
+            );
+        $query->execute();
     }
 
     /**
@@ -610,15 +661,6 @@ final class DoctrineDatabase extends Gateway
      */
     public function insertRow(array $values)
     {
-        // @todo remove after testing
-        if (
-            !isset($values['text']) ||
-            !isset($values['text_md5']) ||
-            !isset($values['action']) ||
-            !isset($values['parent']) ||
-            !isset($values['lang_mask'])) {
-            throw new \Exception('value set is incomplete: ' . var_export($values, true) . ", can't execute insert");
-        }
         if (!isset($values['id'])) {
             $values['id'] = $this->getNextId();
         }
@@ -634,10 +676,11 @@ final class DoctrineDatabase extends Gateway
         if (!isset($values['alias_redirects'])) {
             $values['alias_redirects'] = 0;
         }
-        if (!isset($values['action_type'])) {
-            if (preg_match('#^(.+):.*#', $values['action'], $matches)) {
-                $values['action_type'] = $matches[1];
-            }
+        if (
+            !isset($values['action_type'])
+            && preg_match('#^(.+):.*#', $values['action'], $matches)
+        ) {
+            $values['action_type'] = $matches[1];
         }
         if ($values['is_alias']) {
             $values['is_original'] = 1;
@@ -646,45 +689,21 @@ final class DoctrineDatabase extends Gateway
             $values['is_original'] = 0;
         }
 
-        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
-        $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto($this->dbHandler->quoteTable($this->table));
-        $this->setQueryValues($query, $values);
-        $query->prepare()->execute();
-
-        return $values['id'];
-    }
-
-    /**
-     * Sets value for insert or update query.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\Query|\eZ\Publish\Core\Persistence\Database\InsertQuery|\eZ\Publish\Core\Persistence\Database\UpdateQuery $query
-     * @param array $values
-     *
-     * @throws \Exception
-     */
-    private function setQueryValues(Query $query, $values)
-    {
-        foreach ($values as $column => $value) {
-            // @todo remove after testing
-            if (!in_array($column, $this->columns['ezurlalias_ml'])) {
-                throw new \Exception("unknown column '$column' in table 'ezurlalias_ml'");
-            }
-            switch ($column) {
-                case 'text':
-                case 'action':
-                case 'text_md5':
-                case 'action_type':
-                    $pdoDataType = \PDO::PARAM_STR;
-                    break;
-                default:
-                    $pdoDataType = \PDO::PARAM_INT;
-            }
-            $query->set(
-                $this->dbHandler->quoteColumn($column),
-                $query->bindValue($value, null, $pdoDataType)
+        $query = $this->connection->createQueryBuilder();
+        $query->insert($this->connection->quoteIdentifier($this->table));
+        foreach ($values as $columnName => $value) {
+            $query->setValue(
+                $columnName,
+                $query->createNamedParameter(
+                    $value,
+                    self::URL_ALIAS_DATA_COLUMN_TYPE_MAP[$columnName],
+                    ":{$columnName}"
+                )
             );
         }
+        $query->execute();
+
+        return $values['id'];
     }
 
     /**
@@ -694,32 +713,20 @@ final class DoctrineDatabase extends Gateway
      */
     public function getNextId()
     {
-        $sequence = $this->dbHandler->getSequenceName('ezurlalias_ml_incr', 'id');
-        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
-        $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto(
-            $this->dbHandler->quoteTable('ezurlalias_ml_incr')
-        );
-        // ezcDatabase does not abstract the "auto increment id"
-        // INSERT INTO ezurlalias_ml_incr VALUES(DEFAULT) is not an option due
-        // to this mysql bug: http://bugs.mysql.com/bug.php?id=42270
-        // as a result we are forced to check which database is currently used
-        // to generate the correct SQL query
-        // see https://jira.ez.no/browse/EZP-20652
-        if ($this->dbHandler->useSequences()) {
-            $query->set(
-                $this->dbHandler->quoteColumn('id'),
-                "nextval('{$sequence}')"
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::INCR_TABLE)
+            ->values(
+                [
+                    'id' => $this->dbPlatform->supportsSequences()
+                        ? sprintf('NEXTVAL(\'%s\')', self::INCR_TABLE_SEQ)
+                        : $query->createPositionalParameter(null, ParameterType::NULL),
+                ]
             );
-        } else {
-            $query->set(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue(null, null, \PDO::PARAM_NULL)
-            );
-        }
-        $query->prepare()->execute();
 
-        return (int)$this->dbHandler->lastInsertId($sequence);
+        $query->execute();
+
+        return (int)$this->connection->lastInsertId(self::INCR_TABLE_SEQ);
     }
 
     /**
@@ -732,27 +739,31 @@ final class DoctrineDatabase extends Gateway
      */
     public function loadRow($parentId, $textMD5)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query->select('*')->from(
-            $this->dbHandler->quoteTable($this->table)
+            $this->connection->quoteIdentifier($this->table)
         )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('parent'),
-                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
+            $query->expr()->andX(
+                $query->expr()->eq(
+                    'parent',
+                    $query->createPositionalParameter(
+                        $parentId,
+                        ParameterType::INTEGER
+                    )
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('text_md5'),
-                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
+                $query->expr()->eq(
+                    'text_md5',
+                    $query->createPositionalParameter(
+                        $textMD5,
+                        ParameterType::STRING
+                    )
                 )
             )
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $result = $query->execute()->fetch(FetchMode::ASSOCIATIVE);
 
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        return false !== $result ? $result : [];
     }
 
     /**
@@ -764,69 +775,54 @@ final class DoctrineDatabase extends Gateway
      */
     public function loadUrlAliasData(array $urlHashes)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
 
         $count = count($urlHashes);
         foreach ($urlHashes as $level => $urlPartHash) {
-            $tableName = $this->table . ($level === $count - 1 ? '' : $level);
+            $tableAlias = $level !== $count - 1 ? $this->table . $level : 'u';
+            $query
+                ->addSelect(
+                    array_map(
+                        function (string $columnName) use ($tableAlias) {
+                            // do not alias data for top level url part
+                            $columnAlias = 'u' === $tableAlias
+                                ? $columnName
+                                : "{$tableAlias}_{$columnName}";
+                            $columnName = "{$tableAlias}.{$columnName}";
 
-            if ($level === $count - 1) {
-                $query->select(
-                    $this->dbHandler->quoteColumn('id', $tableName),
-                    $this->dbHandler->quoteColumn('link', $tableName),
-                    $this->dbHandler->quoteColumn('is_alias', $tableName),
-                    $this->dbHandler->quoteColumn('alias_redirects', $tableName),
-                    $this->dbHandler->quoteColumn('is_original', $tableName),
-                    $this->dbHandler->quoteColumn('action', $tableName),
-                    $this->dbHandler->quoteColumn('action_type', $tableName),
-                    $this->dbHandler->quoteColumn('lang_mask', $tableName),
-                    $this->dbHandler->quoteColumn('text', $tableName),
-                    $this->dbHandler->quoteColumn('parent', $tableName),
-                    $this->dbHandler->quoteColumn('text_md5', $tableName)
-                )->from(
-                    $this->dbHandler->quoteTable($this->table)
-                );
-            } else {
-                $query->select(
-                    $this->dbHandler->aliasedColumn($query, 'id', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'link', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'is_alias', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'alias_redirects', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'is_original', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'action', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'action_type', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'lang_mask', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'text', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'parent', $tableName),
-                    $this->dbHandler->aliasedColumn($query, 'text_md5', $tableName)
-                )->from(
-                    $query->alias($this->table, $tableName)
-                );
-            }
-
-            $query->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn('text_md5', $tableName),
-                        $query->bindValue($urlPartHash, null, \PDO::PARAM_STR)
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn('parent', $tableName),
-                        // root entry has parent column set to 0
-                        isset($previousTableName) ? $this->dbHandler->quoteColumn('link', $previousTableName) : $query->bindValue(0, null, \PDO::PARAM_INT)
+                            return "{$columnName} AS {$columnAlias}";
+                        },
+                        self::URL_ALIAS_DATA_COLUMNS
                     )
                 )
-            );
+                ->from($this->connection->quoteIdentifier($this->table), $tableAlias);
 
-            $previousTableName = $tableName;
+            $query
+                ->andWhere(
+                    $expr->eq(
+                        "{$tableAlias}.text_md5",
+                        $query->createPositionalParameter($urlPartHash, ParameterType::STRING)
+                    )
+                )
+                ->andWhere(
+                    $expr->eq(
+                        "{$tableAlias}.parent",
+                        // root entry has parent column set to 0
+                        isset($previousTableName) ? $previousTableName . '.link' : $query->createPositionalParameter(
+                            0,
+                            ParameterType::INTEGER
+                        )
+                    )
+                );
+
+            $previousTableName = $tableAlias;
         }
-        $query->limit(1);
+        $query->setMaxResults(1);
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $result = $query->execute()->fetch(FetchMode::ASSOCIATIVE);
 
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        return false !== $result ? $result : [];
     }
 
     /**
@@ -839,77 +835,75 @@ final class DoctrineDatabase extends Gateway
      */
     public function loadAutogeneratedEntry($action, $parentId = null)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query->select(
             '*'
         )->from(
-            $this->dbHandler->quoteTable($this->table)
+            $this->connection->quoteIdentifier($this->table)
         )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('action'),
-                    $query->bindValue($action, null, \PDO::PARAM_STR)
+            $query->expr()->andX(
+                $query->expr()->eq(
+                    'action',
+                    $query->createPositionalParameter($action, ParameterType::STRING)
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_original'),
-                    $query->bindValue(1, null, \PDO::PARAM_INT)
+                $query->expr()->eq(
+                    'is_original',
+                    $query->createPositionalParameter(1, ParameterType::INTEGER)
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_alias'),
-                    $query->bindValue(0, null, \PDO::PARAM_INT)
+                $query->expr()->eq(
+                    'is_alias',
+                    $query->createPositionalParameter(0, ParameterType::INTEGER)
                 )
             )
         );
 
         if (isset($parentId)) {
-            $query->where(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('parent'),
-                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
+            $query->andWhere(
+                $query->expr()->eq(
+                    'parent',
+                    $query->createPositionalParameter(
+                        $parentId,
+                        ParameterType::INTEGER
+                    )
                 )
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $entry = $query->execute()->fetch(FetchMode::ASSOCIATIVE);
 
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        return false !== $entry ? $entry : [];
     }
 
     /**
      * Loads all data for the path identified by given $id.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
-     *
      * @param int $id
      *
      * @return array
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function loadPathData($id)
     {
         $pathData = [];
 
         while ($id != 0) {
-            /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-            $query = $this->dbHandler->createSelectQuery();
+            $query = $this->connection->createQueryBuilder();
             $query->select(
-                $this->dbHandler->quoteColumn('parent'),
-                $this->dbHandler->quoteColumn('lang_mask'),
-                $this->dbHandler->quoteColumn('text')
+                'parent',
+                'lang_mask',
+                'text'
             )->from(
-                $this->dbHandler->quoteTable($this->table)
+                $this->connection->quoteIdentifier($this->table)
             )->where(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
                 )
             );
 
-            $statement = $query->prepare();
-            $statement->execute();
+            $statement = $query->execute();
 
-            $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            $rows = $statement->fetchAll(FetchMode::ASSOCIATIVE);
             if (empty($rows)) {
                 // Normally this should never happen
                 $pathDataArray = [];
@@ -950,60 +944,55 @@ final class DoctrineDatabase extends Gateway
      */
     public function loadPathDataByHierarchy(array $hierarchyData)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
 
         $hierarchyConditions = [];
         foreach ($hierarchyData as $levelData) {
-            $hierarchyConditions[] = $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('parent'),
-                    $query->bindValue(
+            $hierarchyConditions[] = $query->expr()->andX(
+                $query->expr()->eq(
+                    'parent',
+                    $query->createPositionalParameter(
                         $levelData['parent'],
-                        null,
-                        \PDO::PARAM_INT
+                        ParameterType::INTEGER
                     )
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('action'),
-                    $query->bindValue(
+                $query->expr()->eq(
+                    'action',
+                    $query->createPositionalParameter(
                         $levelData['action'],
-                        null,
-                        \PDO::PARAM_STR
+                        ParameterType::STRING
                     )
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('id'),
-                    $query->bindValue(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter(
                         $levelData['id'],
-                        null,
-                        \PDO::PARAM_INT
+                        ParameterType::INTEGER
                     )
                 )
             );
         }
 
         $query->select(
-            $this->dbHandler->quoteColumn('action'),
-            $this->dbHandler->quoteColumn('lang_mask'),
-            $this->dbHandler->quoteColumn('text')
+            'action',
+            'lang_mask',
+            'text'
         )->from(
-            $this->dbHandler->quoteTable($this->table)
+            $this->connection->quoteIdentifier($this->table)
         )->where(
-            $query->expr->lOr($hierarchyConditions)
+            $query->expr()->orX(...$hierarchyConditions)
         );
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $statement->fetchAll(FetchMode::ASSOCIATIVE);
         $rowsMap = [];
         foreach ($rows as $row) {
             $rowsMap[$row['action']][] = $row;
         }
 
         if (count($rowsMap) !== count($hierarchyData)) {
-            throw new \RuntimeException('The path is corrupted.');
+            throw new RuntimeException('The path is corrupted.');
         }
 
         $data = [];
@@ -1024,30 +1013,33 @@ final class DoctrineDatabase extends Gateway
      */
     public function removeCustomAlias($parentId, $textMD5)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable($this->table)
+        $query = $this->connection->createQueryBuilder();
+        $query->delete(
+            $this->connection->quoteIdentifier($this->table)
         )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('parent'),
-                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
+            $query->expr()->andX(
+                $query->expr()->eq(
+                    'parent',
+                    $query->createPositionalParameter(
+                        $parentId,
+                        ParameterType::INTEGER
+                    )
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('text_md5'),
-                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
+                $query->expr()->eq(
+                    'text_md5',
+                    $query->createPositionalParameter(
+                        $textMD5,
+                        ParameterType::STRING
+                    )
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_alias'),
-                    $query->bindValue(1, null, \PDO::PARAM_INT)
+                $query->expr()->eq(
+                    'is_alias',
+                    $query->createPositionalParameter(1, ParameterType::INTEGER)
                 )
             )
         );
-        $statement = $query->prepare();
-        $statement->execute();
 
-        return $statement->rowCount() === 1 ?: false;
+        return $query->execute() === 1;
     }
 
     /**
@@ -1062,33 +1054,37 @@ final class DoctrineDatabase extends Gateway
      */
     public function remove($action, $id = null)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable($this->table)
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('action'),
-                $query->bindValue($action, null, \PDO::PARAM_STR)
-            )
-        );
-
-        if ($id !== null) {
-            $query->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn('is_alias'),
-                        $query->bindValue(0, null, \PDO::PARAM_INT)
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn('id'),
-                        $query->bindValue($id, null, \PDO::PARAM_INT)
-                    )
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->delete($this->connection->quoteIdentifier($this->table))
+            ->where(
+                $expr->eq(
+                    'action',
+                    $query->createPositionalParameter($action, ParameterType::STRING)
                 )
             );
+
+        if ($id !== null) {
+            $query
+                ->andWhere(
+                    $expr->eq(
+                        'is_alias',
+                        $query->createPositionalParameter(0, ParameterType::INTEGER)
+                    ),
+                    )
+                ->andWhere(
+                    $expr->eq(
+                        'id',
+                        $query->createPositionalParameter(
+                            $id,
+                            ParameterType::INTEGER
+                        )
+                    )
+                );
         }
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
     /**
@@ -1101,42 +1097,48 @@ final class DoctrineDatabase extends Gateway
      */
     public function loadAutogeneratedEntries($parentId, $includeHistory = false)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            '*'
-        )->from(
-            $this->dbHandler->quoteTable($this->table)
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('parent'),
-                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select('*')
+            ->from($this->connection->quoteIdentifier($this->table))
+            ->where(
+                $expr->eq(
+                    'parent',
+                    $query->createPositionalParameter(
+                        $parentId,
+                        ParameterType::INTEGER
+                    )
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('action_type'),
-                    $query->bindValue('eznode', null, \PDO::PARAM_STR)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_alias'),
-                    $query->bindValue(0, null, \PDO::PARAM_INT)
+                )
+            ->andWhere(
+                $expr->eq(
+                    'action_type',
+                    $query->createPositionalParameter(
+                        'eznode',
+                        ParameterType::STRING
+                    )
                 )
             )
-        );
+            ->andWhere(
+                $expr->eq(
+                    'is_alias',
+                    $query->createPositionalParameter(0, ParameterType::INTEGER)
+                )
+            );
 
         if (!$includeHistory) {
-            $query->where(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_original'),
-                    $query->bindValue(1, null, \PDO::PARAM_INT)
+            $query->andWhere(
+                $expr->eq(
+                    'is_original',
+                    $query->createPositionalParameter(1, ParameterType::INTEGER)
                 )
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     public function getLocationContentMainLanguageId($locationId)
@@ -1150,8 +1152,7 @@ final class DoctrineDatabase extends Gateway
             ->where(
                 $expr->eq('t.node_id', ':locationId')
             )
-            ->setParameter('locationId', $locationId, ParameterType::INTEGER)
-        ;
+            ->setParameter('locationId', $locationId, ParameterType::INTEGER);
 
         $statement = $queryBuilder->execute();
         $languageId = $statement->fetchColumn();
@@ -1173,26 +1174,22 @@ final class DoctrineDatabase extends Gateway
      */
     public function bulkRemoveTranslation($languageId, $actions)
     {
-        $connection = $this->dbHandler->getConnection();
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $query = $connection->createQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
         $query
-            ->update($connection->quoteIdentifier($this->table))
+            ->update($this->connection->quoteIdentifier($this->table))
             // parameter for bitwise operation has to be placed verbatim (w/o binding) for this to work cross-DBMS
             ->set('lang_mask', 'lang_mask & ~ ' . $languageId)
             ->where('action IN (:actions)')
-            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY)
-        ;
+            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY);
         $query->execute();
 
         // cleanup: delete single language rows (including alwaysAvailable)
-        $query = $connection->createQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
         $query
-            ->delete($this->table)
+            ->delete($this->connection->quoteIdentifier($this->table))
             ->where('action IN (:actions)')
             ->andWhere('lang_mask IN (0, 1)')
-            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY)
-        ;
+            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY);
         $query->execute();
     }
 
@@ -1203,8 +1200,11 @@ final class DoctrineDatabase extends Gateway
      * @param int $parentId
      * @param int[] $languageIds Language IDs of removed Translations
      */
-    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentId, array $languageIds)
-    {
+    public function archiveUrlAliasesForDeletedTranslations(
+        $locationId,
+        $parentId,
+        array $languageIds
+    ) {
         // determine proper parent for linking historized entry
         $existingLocationEntry = $this->loadAutogeneratedEntry(
             'eznode:' . $locationId,
@@ -1220,7 +1220,7 @@ final class DoctrineDatabase extends Gateway
         // remove specific languages from a bit mask
         foreach ($rows as $row) {
             // filter mask to reduce the number of calls to storage engine
-            $rowLanguageMask = (int) $row['lang_mask'];
+            $rowLanguageMask = (int)$row['lang_mask'];
             $languageIdsToBeRemoved = array_filter(
                 $languageIds,
                 function ($languageId) use ($rowLanguageMask) {
@@ -1262,23 +1262,20 @@ final class DoctrineDatabase extends Gateway
             false
         );
 
-        $connection = $this->dbHandler->getConnection();
         /** @var \Doctrine\DBAL\Connection $connection */
-        $query = $connection->createQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
         $query
             ->select('id', 'lang_mask', 'parent', 'text_md5')
-            ->from($this->table)
+            ->from($this->connection->quoteIdentifier($this->table))
             ->where('action = :action')
             // fetch rows matching any of the given Languages
             ->andWhere('lang_mask & :languageMask <> 0')
             ->setParameter(':action', 'eznode:' . $locationId)
-            ->setParameter(':languageMask', $languageMask)
-        ;
+            ->setParameter(':languageMask', $languageMask);
 
         $statement = $query->execute();
-        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        return $rows ?: [];
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -1292,25 +1289,27 @@ final class DoctrineDatabase extends Gateway
     {
         $dbPlatform = $this->connection->getDatabasePlatform();
 
-        $subquery = $this->connection->createQueryBuilder();
-        $subquery
+        $subQuery = $this->connection->createQueryBuilder();
+        $subQuery
             ->select('node_id')
             ->from('ezcontentobject_tree', 't')
             ->where(
-                $subquery->expr()->eq(
+                $subQuery->expr()->eq(
                     't.node_id',
                     sprintf(
                         'CAST(%s as %s)',
-                        $dbPlatform->getSubstringExpression($this->table . '.action', 8),
+                        $dbPlatform->getSubstringExpression(
+                            $this->connection->quoteIdentifier($this->table) . '.action',
+                            8
+                        ),
                         $this->getIntegerType($dbPlatform)
                     )
                 )
-            )
-        ;
+            );
 
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
-            ->delete($this->table)
+            ->delete($this->connection->quoteIdentifier($this->table))
             ->where(
                 $deleteQuery->expr()->eq(
                     'action_type',
@@ -1319,8 +1318,7 @@ final class DoctrineDatabase extends Gateway
             )
             ->andWhere(
                 sprintf('NOT EXISTS (%s)', $subquery->getSQL())
-            )
-        ;
+            );
 
         return $deleteQuery->execute();
     }
@@ -1336,11 +1334,11 @@ final class DoctrineDatabase extends Gateway
 
         $query = $this->connection->createQueryBuilder();
         $query
-            ->delete($this->table)
+            ->delete($this->connection->quoteIdentifier($this->table))
             ->where(
                 $query->expr()->neq(
                     'parent',
-                    $query->createPositionalParameter(0, \PDO::PARAM_INT)
+                    $query->createPositionalParameter(0, ParameterType::INTEGER)
                 )
             )
             ->andWhere(
@@ -1348,8 +1346,7 @@ final class DoctrineDatabase extends Gateway
                     'parent',
                     $existingAliasesQuery
                 )
-            )
-        ;
+            );
 
         return $query->execute();
     }
@@ -1365,7 +1362,7 @@ final class DoctrineDatabase extends Gateway
 
         $query = $this->connection->createQueryBuilder();
         $query
-            ->delete($this->table)
+            ->delete($this->connection->quoteIdentifier($this->table))
             ->where(
                 $query->expr()->neq('id', 'link')
             )
@@ -1374,8 +1371,7 @@ final class DoctrineDatabase extends Gateway
                     'link',
                     $existingAliasesQuery
                 )
-            )
-        ;
+            );
 
         return $query->execute();
     }
@@ -1400,7 +1396,7 @@ final class DoctrineDatabase extends Gateway
         $updateQueryBuilder = $this->connection->createQueryBuilder();
         $expr = $updateQueryBuilder->expr();
         $updateQueryBuilder
-            ->update('ezurlalias_ml')
+            ->update($this->connection->quoteIdentifier($this->table))
             ->set('link', ':linkId')
             ->set('parent', ':newParentId')
             ->where(
@@ -1471,6 +1467,7 @@ final class DoctrineDatabase extends Gateway
                 return (bool)$urlAliasData['is_original'] && $urlAliasData['existing_parent'] !== null;
             }
         );
+
         // return language_mask-indexed array
         return array_combine(
             array_column($originalUrlAliases, 'lang_mask'),
@@ -1491,8 +1488,10 @@ final class DoctrineDatabase extends Gateway
         return $existingAliasesQueryBuilder
             ->select('tmp.id')
             ->from(
-                // nest subquery to avoid same-table update error
-                '(' . $innerQueryBuilder->select('id')->from($this->table)->getSQL() . ')',
+            // nest subquery to avoid same-table update error
+                '(' . $innerQueryBuilder->select('id')->from(
+                    $this->connection->quoteIdentifier($this->table)
+                )->getSQL() . ')',
                 'tmp'
             )
             ->getSQL();
@@ -1500,19 +1499,10 @@ final class DoctrineDatabase extends Gateway
 
     /**
      * Get DBMS-specific integer type.
-     *
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $databasePlatform
-     *
-     * @return string
      */
-    private function getIntegerType(AbstractPlatform $databasePlatform): string
+    private function getIntegerType(): string
     {
-        switch ($databasePlatform->getName()) {
-            case 'mysql':
-                return 'signed';
-            default:
-                return 'integer';
-        }
+        return $this->dbPlatform->getName() === 'mysql' ? 'signed' : 'integer';
     }
 
     /**
@@ -1536,9 +1526,14 @@ final class DoctrineDatabase extends Gateway
                 'CASE t1.parent WHEN 0 THEN 0 ELSE t2.id END AS existing_parent',
                 't1.text_md5'
             )
-            ->from($this->table, 't1')
+            ->from($this->connection->quoteIdentifier($this->table), 't1')
             // selecting t2.id above will result in null if parent is broken
-            ->leftJoin('t1', $this->table, 't2', $queryBuilder->expr()->eq('t1.parent', 't2.id'))
+            ->leftJoin(
+                't1',
+                $this->connection->quoteIdentifier($this->table),
+                't2',
+                $queryBuilder->expr()->eq('t1.parent', 't2.id')
+            )
             ->where(
                 $queryBuilder->expr()->eq(
                     't1.action',
@@ -1562,19 +1557,20 @@ final class DoctrineDatabase extends Gateway
         $queryBuilder = $this->connection->createQueryBuilder();
         $expr = $queryBuilder->expr();
         $queryBuilder
-            ->delete($this->table)
+            ->delete($this->connection->quoteIdentifier($this->table))
             ->where(
-                $expr->andX(
-                    $expr->eq(
-                        'parent',
-                        $queryBuilder->createPositionalParameter($parentId, ParameterType::INTEGER)
-                    ),
-                    $expr->eq(
-                        'text_md5',
-                        $queryBuilder->createPositionalParameter($textMD5)
-                    )
+                $expr->eq(
+                    'parent',
+                    $queryBuilder->createPositionalParameter($parentId, ParameterType::INTEGER)
                 )
-            );
+            )
+            ->andWhere(
+                $expr->eq(
+                    'text_md5',
+                    $queryBuilder->createPositionalParameter($textMD5)
+                )
+            )
+        ;
 
         return $queryBuilder->execute();
     }
