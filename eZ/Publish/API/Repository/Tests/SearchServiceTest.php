@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
+use InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -4781,6 +4782,8 @@ class SearchServiceTest extends BaseTest
      * @param array $languages
      * @param bool $useAlwaysAvailable
      *
+     * @throws \InvalidArgumentException
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     private function find(
@@ -4790,7 +4793,7 @@ class SearchServiceTest extends BaseTest
         bool $useAlwaysAvailable
     ): SearchResult {
         if (false === in_array($findMethod, self::AVAILABLE_FIND_METHODS, true)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Allowed find methods are: '
                 . implode(',', self::AVAILABLE_FIND_METHODS)
             );
@@ -4859,6 +4862,8 @@ class SearchServiceTest extends BaseTest
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $searchResult
      * @param string[] $translationsToMatch
+     *
+     * @throws \InvalidArgumentException
      */
     private function assertSearchResultMatchTranslations(
         SearchResult $searchResult,
@@ -4869,7 +4874,7 @@ class SearchServiceTest extends BaseTest
         if ($searchResult->totalCount < $translationsToMatchCount
             || $searchResult->totalCount > $translationsToMatchCount
         ) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Argument `translationsToMatch` must be equal to the search result total count!'
             );
         }

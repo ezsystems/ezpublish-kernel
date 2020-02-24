@@ -17,7 +17,7 @@ class ContentSearchAdapterTest extends ContentSearchHitAdapterTest
     /**
      * @param Query $query
      * @param SearchService $searchService
-     * @param array
+     * @param array $languageFilter
      *
      * @return ContentSearchAdapter
      */
