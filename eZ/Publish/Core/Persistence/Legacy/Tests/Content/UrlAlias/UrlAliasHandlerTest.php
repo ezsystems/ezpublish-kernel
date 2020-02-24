@@ -5366,15 +5366,16 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getHandler(): UrlAlias\Handler
+    protected function getHandler(): Handler
     {
         $languageHandler = $this->getLanguageHandler();
         $languageMaskGenerator = $this->getLanguageMaskGenerator();
-        $databaseHandler = $this->getDatabaseHandler();
         $gateway = new DoctrineDatabase(
-            $databaseHandler,
+            $this->getDatabaseConnection(),
             $languageMaskGenerator
         );
         $mapper = new Mapper($languageMaskGenerator);

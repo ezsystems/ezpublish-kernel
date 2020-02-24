@@ -512,7 +512,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * Return the DoctrineDatabase gateway to test.
+     * Return the DoctrineDatabase gateway implementation to test.
      *
      * @throws \Doctrine\DBAL\DBALException
      */
@@ -524,7 +524,7 @@ class DoctrineDatabaseTest extends TestCase
                 new LanguageMapper()
             );
             $this->gateway = new DoctrineDatabase(
-                $this->getDatabaseHandler(),
+                $this->getDatabaseConnection(),
                 new LanguageMaskGenerator($languageHandler)
             );
         }
