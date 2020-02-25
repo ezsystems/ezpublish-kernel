@@ -30,7 +30,7 @@ final class ProxyDomainMapper implements ProxyDomainMapperInterface
     /** @var \ProxyManager\Factory\LazyLoadingValueHolderFactory */
     private $proxyGenerator;
 
-    public function __construct(Repository $repository, ProxyGenerator $proxyGenerator)
+    public function __construct(Repository $repository, ProxyGeneratorInterface $proxyGenerator)
     {
         $this->repository = $repository;
         $this->proxyGenerator = $proxyGenerator;

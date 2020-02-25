@@ -15,10 +15,10 @@ use eZ\Publish\API\Repository\Repository;
  */
 final class ProxyDomainMapperFactory implements ProxyDomainMapperFactoryInterface
 {
-    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator */
+    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface */
     private $proxyGenerator;
 
-    public function __construct(ProxyGenerator $proxyGenerator)
+    public function __construct(ProxyGeneratorInterface $proxyGenerator)
     {
         $this->proxyGenerator = $proxyGenerator;
     }
