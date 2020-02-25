@@ -127,6 +127,7 @@ services:
         calls:
             - ['setLogger', ['@?logger']]
 
+    # Domain mappers and proxies
     eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator:
         arguments:
             $proxyCacheDir: '%ezplatform.kernel.proxy_cache_dir%'
@@ -138,19 +139,31 @@ services:
         arguments:
             $proxyGenerator: '@eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface'
 
-    # Permission-related
-    eZ\Publish\Core\Repository\Permission\LimitationService:
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper:
+        factory: ['@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory', 'create']
         arguments:
-            $limitationTypes: !tagged_iterator { tag: ezpublish.limitationType, index_by: alias }
+            $repository: '@ezpublish.api.inner_repository'
+
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface:
+        alias: 'eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper'
 
     # Mappers
+    eZ\Publish\Core\Repository\Mapper\ProxyAwareDomainMapper:
+        abstract: true
+        calls:
+            -   method: setProxyFactory
+                arguments:
+                    $proxyFactory: '@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface'
+
     eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper:
+        parent: eZ\Publish\Core\Repository\Mapper\ProxyAwareDomainMapper
         arguments:
             $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
             $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
             $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
 
     eZ\Publish\Core\Repository\Mapper\ContentDomainMapper:
+        parent: eZ\Publish\Core\Repository\Mapper\ProxyAwareDomainMapper
         arguments:
             $contentHandler: '@ezpublish.spi.persistence.content_handler'
             $locationHandler: '@ezpublish.spi.persistence.location_handler'
@@ -159,3 +172,8 @@ services:
             $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
             $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
             $thumbnailStrategy: '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
+
+    # Permission-related
+    eZ\Publish\Core\Repository\Permission\LimitationService:
+        arguments:
+            $limitationTypes: !tagged_iterator { tag: ezpublish.limitationType, index_by: alias }

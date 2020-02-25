@@ -42,7 +42,7 @@ use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
  *
  * @internal Meant for internal use by Repository.
  */
-class ContentDomainMapper
+class ContentDomainMapper extends ProxyAwareDomainMapper
 {
     const MAX_LOCATION_PRIORITY = 2147483647;
     const MIN_LOCATION_PRIORITY = -2147483648;
@@ -68,21 +68,6 @@ class ContentDomainMapper
     /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy */
     private $thumbnailStrategy;
 
-    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface */
-    private $proxyFactory;
-
-    /**
-     * Setups service with reference to repository.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper $contentTypeDomainMapper
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
-     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
-     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface $proxyFactory
-     */
     public function __construct(
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
@@ -91,7 +76,7 @@ class ContentDomainMapper
         LanguageHandler $contentLanguageHandler,
         FieldTypeRegistry $fieldTypeRegistry,
         ThumbnailStrategy $thumbnailStrategy,
-        ProxyDomainMapperInterface $proxyFactory
+        ?ProxyDomainMapperInterface $proxyFactory = null
     ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
@@ -100,7 +85,7 @@ class ContentDomainMapper
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->thumbnailStrategy = $thumbnailStrategy;
-        $this->proxyFactory = $proxyFactory;
+        parent::__construct($proxyFactory);
     }
 
     /**
