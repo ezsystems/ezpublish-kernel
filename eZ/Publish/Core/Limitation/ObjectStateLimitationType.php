@@ -122,14 +122,12 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
             $object = $object->getVersionInfo()->getContentInfo();
         } elseif ($object instanceof VersionInfo) {
             $object = $object->getContentInfo();
-        } elseif ($object instanceof ContentCreateStruct) {
-            return true;
-        } elseif (!$object instanceof ContentInfo) {
+        } elseif (!$object instanceof ContentInfo && !$object instanceof ContentCreateStruct) {
             throw new InvalidArgumentException('$object', 'Must be of type: Content, VersionInfo, ContentInfo or ContentCreateStruct');
         }
 
         // Skip evaluating for RootLocation
-        if (1 === $object->mainLocationId) {
+        if (isset($object->mainLocationId) && 1 === $object->mainLocationId) {
             return true;
         }
 
