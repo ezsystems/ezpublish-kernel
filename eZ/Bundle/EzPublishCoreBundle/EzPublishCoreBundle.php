@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the EzPublishCoreBundle class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -38,7 +36,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use eZ\Publish\Core\Base\Container\Compiler\GenericFieldTypeConverterPass;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Persistence\FieldTypeRegistryPass as PersistenceFieldTypeRegistryPass;
-use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\RoleLimitationConverterPass;
@@ -61,7 +58,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new FieldTypeParameterProviderRegistryPass());
         $container->addCompilerPass(new ChainRoutingPass());
         $container->addCompilerPass(new ChainConfigResolverPass());
-        $container->addCompilerPass(new RegisterLimitationTypePass());
         $container->addCompilerPass(new RegisterStorageEnginePass());
         $container->addCompilerPass(new RegisterSearchEnginePass());
         $container->addCompilerPass(new RegisterSearchEngineIndexerPass());

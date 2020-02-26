@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
 use eZ\Publish\API\Repository\Values\User\UserReference;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Limitation\TargetOnlyLimitationType;
 use RuntimeException;
 
@@ -25,14 +24,14 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
     /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\LimitationService */
+    /** @var \eZ\Publish\Core\Repository\Permission\LimitationService */
     private $limitationService;
 
     /**
      * Constructor.
      *
      * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
-     * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
+     * @param \eZ\Publish\Core\Repository\Permission\LimitationService $limitationService
      */
     public function __construct(
         PermissionResolverInterface $permissionResolver,

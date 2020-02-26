@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the RememberMeRepositoryAuthenticationProviderTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -13,7 +11,7 @@ use eZ\Publish\API\Repository\Values\User\User as ApiUser;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RememberMeRepositoryAuthenticationProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use PHPUnit\Framework\TestCase;

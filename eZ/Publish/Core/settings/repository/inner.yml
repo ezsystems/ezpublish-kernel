@@ -24,6 +24,7 @@ services:
             - '@eZ\Publish\Core\Repository\User\PasswordHashService'
             - '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
             - '@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory'
+            - '@eZ\Publish\Core\Repository\Permission\LimitationService'
         lazy: true
 
     ezpublish.api.service.inner_content:
@@ -134,3 +135,8 @@ services:
     eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory:
         arguments:
             $proxyGenerator: '@eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface'
+
+    # Permission-related
+    eZ\Publish\Core\Repository\Permission\LimitationService:
+        arguments:
+            $limitationTypes: !tagged_iterator { tag: ezpublish.limitationType, index_by: alias }

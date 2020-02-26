@@ -1,16 +1,18 @@
 <?php
 
 /**
- * File containing LimitationService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Repository\Helper;
+declare(strict_types=1);
+
+namespace eZ\Publish\Core\Repository\Permission;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\SPI\Limitation\Type;
+use Traversable;
 
 /**
  * Internal service to deal with limitations and limitation types.
@@ -19,16 +21,14 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
  */
 class LimitationService
 {
-    /** @var array */
-    protected $settings;
+    /** @var \eZ\Publish\SPI\Limitation\Type[] */
+    private $limitationTypes;
 
-    /**
-     * @param array $settings
-     */
-    public function __construct(array $settings = [])
+    public function __construct(?Traversable $limitationTypes = null)
     {
-        // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + ['limitationTypes' => []];
+        $this->limitationTypes = null !== $limitationTypes
+            ? iterator_to_array($limitationTypes) :
+            [];
     }
 
     /**
@@ -37,31 +37,28 @@ class LimitationService
      * Returns the correct implementation of API Limitation value object
      * based on provided identifier
      *
-     * @param string $identifier
-     *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException
-     *
-     * @return \eZ\Publish\SPI\Limitation\Type
      */
-    public function getLimitationType($identifier)
+    public function getLimitationType(string $identifier): Type
     {
-        if (!isset($this->settings['limitationTypes'][$identifier])) {
+        if (!isset($this->limitationTypes[$identifier])) {
             throw new LimitationNotFoundException($identifier);
         }
 
-        return $this->settings['limitationTypes'][$identifier];
+        return $this->limitationTypes[$identifier];
     }
 
     /**
      * Validates an array of Limitations.
      *
-     * @uses ::validateLimitation()
-     *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
      *
-     * @return \eZ\Publish\Core\FieldType\ValidationError[][]
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[][]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function validateLimitations(array $limitations)
+    public function validateLimitations(array $limitations): array
     {
         $allErrors = [];
         foreach ($limitations as $limitation) {
@@ -77,24 +74,22 @@ class LimitationService
     /**
      * Validates single Limitation.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException If the Role settings is in a bad state
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
-     *
-     * @return \eZ\Publish\Core\FieldType\ValidationError[]
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the Role settings is in a bad state*@throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function validateLimitation(Limitation $limitation)
+    public function validateLimitation(Limitation $limitation): array
     {
         $identifier = $limitation->getIdentifier();
-        if (!isset($this->settings['limitationTypes'][$identifier])) {
+        if (!isset($this->limitationTypes[$identifier])) {
             throw new BadStateException(
                 '$identifier',
                 "limitationType[{$identifier}] is not configured"
             );
         }
 
-        /** @var \eZ\Publish\SPI\Limitation\Type */
-        $type = $this->settings['limitationTypes'][$identifier];
+        $type = $this->limitationTypes[$identifier];
 
         // This will throw if it does not pass
         $type->acceptValue($limitation);

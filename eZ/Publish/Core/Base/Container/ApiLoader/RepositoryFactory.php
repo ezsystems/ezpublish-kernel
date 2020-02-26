@@ -1,14 +1,13 @@
 <?php
 
 /**
- * File containing the RepositoryFactory class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
@@ -16,7 +15,6 @@ use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
-use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -28,13 +26,6 @@ class RepositoryFactory implements ContainerAwareInterface
 
     /** @var string */
     private $repositoryClass;
-
-    /**
-     * Collection of limitation types for the RoleService.
-     *
-     * @var \eZ\Publish\SPI\Limitation\Type[]
-     */
-    protected $roleLimitations = [];
 
     /**
      * Policies map.
@@ -56,17 +47,6 @@ class RepositoryFactory implements ContainerAwareInterface
      *
      * This always returns the true inner Repository, please depend on ezpublish.api.repository and not this method
      * directly to make sure you get an instance wrapped inside Event / Cache / * functionality.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
-     * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
-     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
-     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashService
-     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
-     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory $proxyDomainMapperFactory
-     *
-     * @return \eZ\Publish\API\Repository\Repository
      */
     public function buildRepository(
         PersistenceHandler $persistenceHandler,
@@ -76,9 +56,10 @@ class RepositoryFactory implements ContainerAwareInterface
         FieldTypeRegistry $fieldTypeRegistry,
         PasswordHashServiceInterface $passwordHashService,
         ThumbnailStrategy $thumbnailStrategy,
-        ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory
-    ) {
-        $repository = new $this->repositoryClass(
+        ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
+        LimitationService $limitationService
+    ): Repository {
+        return new $this->repositoryClass(
             $persistenceHandler,
             $searchHandler,
             $backgroundIndexer,
@@ -87,27 +68,14 @@ class RepositoryFactory implements ContainerAwareInterface
             $passwordHashService,
             $thumbnailStrategy,
             $proxyDomainMapperFactory,
+            $limitationService,
             [
                 'role' => [
-                    'limitationTypes' => $this->roleLimitations,
                     'policyMap' => $this->policyMap,
                 ],
                 'languages' => $this->container->getParameter('languages'),
             ],
         );
-
-        return $repository;
-    }
-
-    /**
-     * Registers a limitation type for the RoleService.
-     *
-     * @param string $limitationName
-     * @param \eZ\Publish\SPI\Limitation\Type $limitationType
-     */
-    public function registerLimitationType($limitationName, SPILimitationType $limitationType)
-    {
-        $this->roleLimitations[$limitationName] = $limitationType;
     }
 
     /**

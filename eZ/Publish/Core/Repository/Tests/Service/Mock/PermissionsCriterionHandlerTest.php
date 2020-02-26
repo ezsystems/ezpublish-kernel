@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\PermissionCriterionHandlerTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -14,7 +12,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitation;
 use eZ\Publish\Core\Repository\Values\User\Policy;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
 
 /**
  * Mock test case for PermissionCriterionHandler.
@@ -290,7 +287,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     {
         $userMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
         $limitationTypeMock = $this->createMock('eZ\\Publish\\SPI\\Limitation\\Type');
-        $limitationServiceMock = $this->getLimitationServiceMock(['getLimitationType']);
+        $limitationServiceMock = $this->getLimitationServiceMock();
         $permissionResolverMock = $this->getPermissionResolverMock(
             [
                 'hasAccess',
@@ -406,20 +403,5 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
         }
 
         return $this->permissionResolverMock;
-    }
-
-    protected $limitationServiceMock;
-
-    protected function getLimitationServiceMock($methods = [])
-    {
-        if ($this->limitationServiceMock === null) {
-            $this->limitationServiceMock = $this
-                ->getMockBuilder(LimitationService::class)
-                ->setMethods($methods)
-                ->disableOriginalConstructor()
-                ->getMock();
-        }
-
-        return $this->limitationServiceMock;
     }
 }

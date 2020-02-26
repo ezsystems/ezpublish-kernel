@@ -8,6 +8,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
@@ -187,11 +188,7 @@ class Repository implements RepositoryInterface
      */
     protected $serviceSettings;
 
-    /**
-     * Instance of role service.
-     *
-     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
-     */
+    /** @var \eZ\Publish\Core\Repository\Permission\LimitationService */
     protected $limitationService;
 
     /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
@@ -236,20 +233,6 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface|null */
     private $proxyDomainMapper;
 
-    /**
-     * Construct repository object with provided storage engine.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
-     * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
-     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
-     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
-     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory
-     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
-     * @param array $serviceSettings
-     * @param \Psr\Log\LoggerInterface|null $logger
-     */
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
@@ -259,8 +242,9 @@ class Repository implements RepositoryInterface
         PasswordHashServiceInterface $passwordHashGenerator,
         ThumbnailStrategy $thumbnailStrategy,
         ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
+        LimitationService $limitationService,
         array $serviceSettings = [],
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->searchHandler = $searchHandler;
@@ -270,6 +254,7 @@ class Repository implements RepositoryInterface
         $this->passwordHashService = $passwordHashGenerator;
         $this->thumbnailStrategy = $thumbnailStrategy;
         $this->proxyDomainMapperFactory = $proxyDomainMapperFactory;
+        $this->limitationService = $limitationService;
 
         $this->serviceSettings = $serviceSettings + [
                 'content' => [],
@@ -620,28 +605,12 @@ class Repository implements RepositoryInterface
         $this->roleService = new RoleService(
             $this,
             $this->persistenceHandler->userHandler(),
-            $this->getLimitationService(),
+            $this->limitationService,
             $this->getRoleDomainMapper(),
             $this->serviceSettings['role']
         );
 
         return $this->roleService;
-    }
-
-    /**
-     * Get LimitationService.
-     *
-     * @return \eZ\Publish\Core\Repository\Helper\LimitationService
-     */
-    protected function getLimitationService()
-    {
-        if ($this->limitationService !== null) {
-            return $this->limitationService;
-        }
-
-        $this->limitationService = new Helper\LimitationService($this->serviceSettings['role']);
-
-        return $this->limitationService;
     }
 
     /**
@@ -655,7 +624,7 @@ class Repository implements RepositoryInterface
             return $this->roleDomainMapper;
         }
 
-        $this->roleDomainMapper = new Helper\RoleDomainMapper($this->getLimitationService());
+        $this->roleDomainMapper = new Helper\RoleDomainMapper($this->limitationService);
 
         return $this->roleDomainMapper;
     }
@@ -713,11 +682,12 @@ class Repository implements RepositoryInterface
      * Get NameSchemaResolverService.
      *
      *
-     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
      * @internal
      * @private
      *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
     public function getNameSchemaService()
     {
@@ -756,8 +726,9 @@ class Repository implements RepositoryInterface
      * Get RelationProcessor.
      *
      *
-     * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor
      */
     protected function getRelationProcessor()
     {
@@ -767,8 +738,9 @@ class Repository implements RepositoryInterface
     /**
      * Get Content Domain Mapper.
      *
-     * @return \eZ\Publish\Core\Repository\Helper\DomainMapper
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected function getDomainMapper()
     {
@@ -827,6 +799,8 @@ class Repository implements RepositoryInterface
     /**
      * Get PermissionCriterionResolver.
      *
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
      * @return \eZ\Publish\API\Repository\PermissionCriterionResolver
      */
     protected function getPermissionCriterionResolver()
@@ -843,14 +817,14 @@ class Repository implements RepositoryInterface
             $this->permissionsHandler = new CachedPermissionService(
                 $permissionResolver = new Permission\PermissionResolver(
                     $this->getRoleDomainMapper(),
-                    $this->getLimitationService(),
+                    $this->limitationService,
                     $this->persistenceHandler->userHandler(),
                     new UserReference($this->serviceSettings['user']['anonymousUserID']),
                     $this->serviceSettings['role']['policyMap']
                 ),
                 new PermissionCriterionResolver(
                     $permissionResolver,
-                    $this->getLimitationService()
+                    $this->limitationService
                 )
             );
         }

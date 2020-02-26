@@ -1,13 +1,12 @@
 <?php
 
 /**
- * File containing the RoleDomainMapper class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
+use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\Values\User\Policy;
 use eZ\Publish\Core\Repository\Values\User\PolicyDraft;
 use eZ\Publish\Core\Repository\Values\User\Role;
@@ -30,11 +29,11 @@ use eZ\Publish\SPI\Persistence\User\RoleCreateStruct as SPIRoleCreateStruct;
  */
 class RoleDomainMapper
 {
-    /** @var \eZ\Publish\Core\Repository\Helper\LimitationService */
+    /** @var \eZ\Publish\Core\Repository\Permission\LimitationService */
     protected $limitationService;
 
     /**
-     * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
+     * @param \eZ\Publish\Core\Repository\Permission\LimitationService $limitationService
      */
     public function __construct(LimitationService $limitationService)
     {
