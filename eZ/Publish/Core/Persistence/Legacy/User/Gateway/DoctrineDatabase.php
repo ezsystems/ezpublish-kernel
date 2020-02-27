@@ -12,6 +12,10 @@ use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 
 /**
  * User gateway implementation using the Doctrine database.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence User Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\User\Handler
  */
 final class DoctrineDatabase extends Gateway
 {

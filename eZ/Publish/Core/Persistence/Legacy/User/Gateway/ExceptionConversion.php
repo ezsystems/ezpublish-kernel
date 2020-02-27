@@ -13,7 +13,7 @@ use PDOException;
 use RuntimeException;
 
 /**
- * Base class for user gateways.
+ * @internal Internal exception conversion layer.
  */
 final class ExceptionConversion extends Gateway
 {
