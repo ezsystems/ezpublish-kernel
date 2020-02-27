@@ -120,10 +120,12 @@ class GlobalHelperTest extends TestCase
     public function testGetSystemUriString()
     {
         $locationId = 123;
+        $contentId = 456;
         $viewType = 'full';
-        $expectedSystemUriString = '/content/location/123/full';
+        $expectedSystemUriString = '/view/content/456/full/1/123';
         $request = Request::create('/ezdemo_site/foo/bar');
         $request->attributes->set('_route', UrlAliasRouter::URL_ALIAS_ROUTE_NAME);
+        $request->attributes->set('contentId', $contentId);
         $request->attributes->set('locationId', $locationId);
         $request->attributes->set('viewType', $viewType);
         $requestStack = new RequestStack();
@@ -132,7 +134,11 @@ class GlobalHelperTest extends TestCase
         $this->router
             ->expects($this->once())
             ->method('generate')
-            ->with('_ezpublishLocation', ['locationId' => $locationId, 'viewType' => $viewType])
+            ->with('_ez_content_view', [
+                'contentId' => $contentId,
+                'locationId' => $locationId,
+                'viewType' => $viewType,
+            ])
             ->will($this->returnValue($expectedSystemUriString));
 
         $this->helper->setRequestStack($requestStack);

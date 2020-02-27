@@ -20,7 +20,6 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\View\EmbedView;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
  * Builds ContentView objects.
@@ -152,15 +151,6 @@ class ContentViewBuilder implements ViewBuilder
 
         $this->viewParametersInjector->injectViewParameters($view, $parameters);
         $this->viewConfigurator->configure($view);
-
-        // deprecated controller actions are replaced with their new equivalent, viewAction and embedAction
-        if (!$view->getControllerReference() instanceof ControllerReference) {
-            if (\in_array($parameters['_controller'], ['ez_content:viewLocation', 'ez_content:viewContent'])) {
-                $view->setControllerReference(new ControllerReference('ez_content:viewAction'));
-            } elseif (\in_array($parameters['_controller'], ['ez_content:embedLocation', 'ez_content:embedContent'])) {
-                $view->setControllerReference(new ControllerReference('ez_content:embedAction'));
-            }
-        }
 
         return $view;
     }

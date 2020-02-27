@@ -134,7 +134,7 @@ services:
               - { name: controller.service_arguments }
 
     # This alias allows easier management for subrequests
-    # {{ render( controller( "ez_content:viewLocation", {"locationId": 123, "viewType": "line"} ) ) }
+    # {{ render( controller( "ez_content:viewAction", {"contentId": 12, "locationId": 123, "viewType": "line"} ) ) }
     ez_content:
         public: true
         alias: ezpublish.controller.content.view

@@ -239,6 +239,10 @@ Changes affecting version compatibility with former or future versions.
   To properly decorate a Symfony service, use the `decorates` attribute instead.
   For the full list of the dropped parameters please see the
   [8.0/dropped-container-parameters.md](8.0/dropped-container-parameters.md) document.
+  
+* Deprecated `viewLocation` and `embedLocation` actions of `ViewController` have been dropped, along with
+  related route `_ezpublishLocation`. As stated in controller, use `viewAction` in place of `viewLocation` and
+  `embedAction` in place od `embedLocation`.   
 
 ## Deprecated features
 

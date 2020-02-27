@@ -120,7 +120,8 @@ class ViewControllerListenerTest extends TestCase
 
     public function testGetControllerMatchedView()
     {
-        $id = 123;
+        $contentId = 12;
+        $locationId = 123;
         $viewType = 'full';
 
         $templateIdentifier = 'FooBundle:full:template.twig.html';
@@ -128,8 +129,9 @@ class ViewControllerListenerTest extends TestCase
 
         $this->request->attributes->add(
             [
-                '_controller' => 'ez_content:viewLocation',
-                'locationId' => $id,
+                '_controller' => 'ez_content:viewAction',
+                'contentId' => $contentId,
+                'locationId' => $locationId,
                 'viewType' => $viewType,
             ]
         );

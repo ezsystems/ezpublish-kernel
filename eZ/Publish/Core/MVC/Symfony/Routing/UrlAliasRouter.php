@@ -34,14 +34,6 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
     const URL_ALIAS_ROUTE_NAME = 'ez_urlalias';
 
-    /**
-     * @deprecated since 6.0.0.
-     */
-    const LOCATION_VIEW_CONTROLLER = 'ez_content:viewLocation';
-
-    /**
-     * @since 6.0.0
-     */
     const VIEW_ACTION = 'ez_content:viewAction';
 
     /** @var \Symfony\Component\Routing\RequestContext */

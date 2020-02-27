@@ -30,7 +30,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class PreviewController
 {
     const PREVIEW_PARAMETER_NAME = 'isPreview';
-    const INTERNAL_LOCATION_VIEW_ROUTE = '_ezpublishLocation';
+    const CONTENT_VIEW_ROUTE = '_ez_content_view';
 
     /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
@@ -159,8 +159,8 @@ EOF;
 
         if ($this->controllerChecker->usesCustomController($content, $location)) {
             $forwardRequestParameters = [
-                '_controller' => 'ez_content:viewLocation',
-                '_route' => self::INTERNAL_LOCATION_VIEW_ROUTE,
+                '_controller' => 'ez_content:viewAction',
+                '_route' => self::CONTENT_VIEW_ROUTE,
             ] + $forwardRequestParameters;
         }
 
