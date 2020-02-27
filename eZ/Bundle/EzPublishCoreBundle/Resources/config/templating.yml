@@ -253,7 +253,9 @@ services:
         tags:
             - { name: twig.extension }
 
-    eZ\Publish\Core\MVC\Symfony\EventListener\ContentViewTwigVariablesSubscriber: ~
+    eZ\Publish\Core\MVC\Symfony\EventListener\ContentViewTwigVariablesSubscriber:
+        autoconfigure: true
+        autowire: true
 
     eZ\Publish\Core\MVC\Symfony\View\GenericVariableProviderRegistry:
         arguments:
