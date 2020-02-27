@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
 
+use DateInterval;
+use DateTime;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
@@ -56,7 +59,7 @@ class UserHandlerTest extends TestCase
         $userToken = new Persistence\User\UserTokenUpdateStruct();
         $userToken->userId = self::TEST_USER_ID;
         $userToken->hashKey = md5('hash');
-        $userToken->time = $time ?? (new \DateTime())->add(new \DateInterval('P1D'))->getTimestamp();
+        $userToken->time = $time ?? (new DateTime())->add(new DateInterval('P1D'))->getTimestamp();
 
         return $userToken;
     }
@@ -107,7 +110,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadUnknownUser()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
         $gatewayMock = $this
             ->createMock(User\Gateway::class);
 
@@ -143,7 +146,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadUserByEmailNotFound()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
 
         $handler = $this->getUserHandler();
         $user = $this->getValidUser();
@@ -173,7 +176,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadUserByTokenNotFound()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
 
         $handler = $this->getUserHandler();
         $handler->updateUserToken($this->getValidUserToken());
