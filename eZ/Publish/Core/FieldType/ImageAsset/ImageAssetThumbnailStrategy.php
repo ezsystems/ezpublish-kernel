@@ -11,21 +11,33 @@ namespace eZ\Publish\Core\FieldType\ImageAsset;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Thumbnail;
+use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\FieldTypeBasedThumbnailStrategy;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy as ContentThumbnailStrategy;
-use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\ThumbnailStrategy;
 
-class ImageAssetThumbnailStrategy implements ThumbnailStrategy
+class ImageAssetThumbnailStrategy implements FieldTypeBasedThumbnailStrategy
 {
+    /** @var string */
+    private $fieldTypeIdentifier;
+
     /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
     /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy */
     private $thumbnailStrategy;
 
-    public function __construct(ContentThumbnailStrategy $thumbnailStrategy, ContentService $contentService)
-    {
+    public function __construct(
+        string $fieldTypeIdentifier,
+        ContentThumbnailStrategy $thumbnailStrategy,
+        ContentService $contentService
+    ) {
+        $this->fieldTypeIdentifier = $fieldTypeIdentifier;
         $this->contentService = $contentService;
         $this->thumbnailStrategy = $thumbnailStrategy;
+    }
+
+    public function getFieldTypeIdentifier(): string
+    {
+        return $this->fieldTypeIdentifier;
     }
 
     public function getThumbnail(Field $field): ?Thumbnail
