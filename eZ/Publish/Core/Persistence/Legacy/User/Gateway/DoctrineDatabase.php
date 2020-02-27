@@ -167,72 +167,29 @@ final class DoctrineDatabase extends Gateway
     public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct)
     {
         $query = $this->connection->createQueryBuilder();
-        $expr = $query->expr();
-        $query->select(
-            'token.id'
-        )->from(
-            'ezuser_accountkey', 'token'
-        )->where(
-            $expr->eq(
-                'token.user_id',
-                $query->createPositionalParameter(
-                    $userTokenUpdateStruct->userId,
-                    ParameterType::INTEGER
-                )
-            )
-        );
-
-        $statement = $query->execute();
-
-        if (empty($statement->fetchAll(FetchMode::ASSOCIATIVE))) {
-            $query = $this->connection->createQueryBuilder();
+        if (false === $this->userHasToken($userTokenUpdateStruct->userId)) {
             $query
                 ->insert('ezuser_accountkey')
                 ->values(
                     [
-                        'hash_key' => $query->createPositionalParameter(
-                            $userTokenUpdateStruct->hashKey,
-                            ParameterType::STRING
-                        ),
-                        'time' => $query->createPositionalParameter(
-                            $userTokenUpdateStruct->time,
-                            ParameterType::INTEGER
-                        ),
-                        'user_id' => $query->createPositionalParameter(
-                            $userTokenUpdateStruct->userId,
-                            ParameterType::INTEGER
-                        ),
+                        'hash_key' => ':hash_key',
+                        'time' => ':time',
+                        'user_id' => ':user_id',
                     ]
                 );
-
-            $query->execute();
         } else {
-            $query = $this->connection->createQueryBuilder();
             $query
                 ->update('ezuser_accountkey')
-                ->set(
-                    'hash_key',
-                    $query->createPositionalParameter(
-                        $userTokenUpdateStruct->hashKey,
-                        ParameterType::STRING
-                    )
-                )->set(
-                    'time',
-                    $query->createPositionalParameter(
-                        $userTokenUpdateStruct->time,
-                        ParameterType::INTEGER
-                    )
-                )->where(
-                    $expr->eq(
-                        'user_id',
-                        $query->createPositionalParameter(
-                            $userTokenUpdateStruct->userId,
-                            ParameterType::INTEGER
-                        )
-                    )
-                );
-            $query->execute();
+                ->set('hash_key', ':hash_key')
+                ->set('time', ':time')
+                ->where('user_id = :user_id');
         }
+
+        $query->setParameter('hash_key', $userTokenUpdateStruct->hashKey, ParameterType::STRING);
+        $query->setParameter('time', $userTokenUpdateStruct->time, ParameterType::INTEGER);
+        $query->setParameter('user_id', $userTokenUpdateStruct->userId, ParameterType::INTEGER);
+
+        $query->execute();
     }
 
     /**
@@ -369,5 +326,25 @@ final class DoctrineDatabase extends Gateway
             );
 
         return $query;
+    }
+
+    private function userHasToken(int $userId): bool
+    {
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select('token.id')
+            ->from('ezuser_accountkey', 'token')
+            ->where(
+                $expr->eq(
+                    'token.user_id',
+                    $query->createPositionalParameter(
+                        $userId,
+                        ParameterType::INTEGER
+                    )
+                )
+            );
+
+        return !empty($query->execute()->fetch(FetchMode::ASSOCIATIVE));
     }
 }
