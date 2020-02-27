@@ -15,14 +15,14 @@ use RuntimeException;
 /**
  * Base class for user gateways.
  */
-class ExceptionConversion extends Gateway
+final class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway.
      *
      * @var Gateway
      */
-    protected $innerGateway;
+    private $innerGateway;
 
     /**
      * Creates a new exception conversion gateway around $innerGateway.

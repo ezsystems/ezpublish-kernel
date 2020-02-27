@@ -88,7 +88,7 @@ class UserHandlerTest extends TestCase
     public function testLoadUser()
     {
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $gatewayMock
             ->method('load')
@@ -109,7 +109,7 @@ class UserHandlerTest extends TestCase
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $gatewayMock
             ->method('load')
@@ -124,7 +124,7 @@ class UserHandlerTest extends TestCase
     public function testLoadUserByLogin()
     {
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $gatewayMock
             ->method('loadByLogin')
@@ -154,7 +154,7 @@ class UserHandlerTest extends TestCase
     public function testLoadUserByEmail()
     {
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $gatewayMock
             ->method('loadByEmail')
@@ -184,7 +184,7 @@ class UserHandlerTest extends TestCase
     public function testLoadUserByToken()
     {
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $userToken = $this->getValidUserToken();
         $gatewayMock
