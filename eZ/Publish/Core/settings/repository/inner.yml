@@ -24,6 +24,8 @@ services:
             - '@eZ\Publish\Core\Repository\User\PasswordHashService'
             - '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
             - '@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory'
+            - '@eZ\Publish\Core\Repository\Mapper\ContentDomainMapper'
+            - '@eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper'
             - '@eZ\Publish\Core\Repository\Permission\LimitationService'
         lazy: true
 
@@ -125,6 +127,7 @@ services:
         calls:
             - ['setLogger', ['@?logger']]
 
+    # Domain mappers and proxies
     eZ\Publish\Core\Repository\ProxyFactory\ProxyGenerator:
         arguments:
             $proxyCacheDir: '%ezplatform.kernel.proxy_cache_dir%'
@@ -135,6 +138,40 @@ services:
     eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory:
         arguments:
             $proxyGenerator: '@eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface'
+
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper:
+        factory: ['@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory', 'create']
+        arguments:
+            $repository: '@ezpublish.api.inner_repository'
+
+    eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface:
+        alias: 'eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper'
+
+    # Mappers
+    eZ\Publish\Core\Repository\Mapper\ProxyAwareDomainMapper:
+        abstract: true
+        calls:
+            -   method: setProxyFactory
+                arguments:
+                    $proxyFactory: '@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface'
+
+    eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper:
+        parent: eZ\Publish\Core\Repository\Mapper\ProxyAwareDomainMapper
+        arguments:
+            $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+            $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
+            $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
+
+    eZ\Publish\Core\Repository\Mapper\ContentDomainMapper:
+        parent: eZ\Publish\Core\Repository\Mapper\ProxyAwareDomainMapper
+        arguments:
+            $contentHandler: '@ezpublish.spi.persistence.content_handler'
+            $locationHandler: '@ezpublish.spi.persistence.location_handler'
+            $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+            $contentTypeDomainMapper: '@eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper'
+            $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
+            $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
+            $thumbnailStrategy: '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
 
     # Permission-related
     eZ\Publish\Core\Repository\Permission\LimitationService:

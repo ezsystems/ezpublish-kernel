@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -51,7 +52,7 @@ class NameSchemaService
     /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
     /** @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry */
@@ -64,7 +65,7 @@ class NameSchemaService
      * Constructs a object to resolve $nameSchema with $contentVersion fields values.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
+     * @param \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper $contentTypeDomainMapper
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param array $settings
      */

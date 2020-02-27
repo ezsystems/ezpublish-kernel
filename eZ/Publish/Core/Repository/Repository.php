@@ -194,18 +194,10 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
     protected $roleDomainMapper;
 
-    /**
-     * Instance of domain mapper.
-     *
-     * @var \eZ\Publish\Core\Repository\Helper\DomainMapper
-     */
-    protected $domainMapper;
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper */
+    protected $contentDomainMapper;
 
-    /**
-     * Instance of content type domain mapper.
-     *
-     * @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
-     */
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
     /**
@@ -242,6 +234,8 @@ class Repository implements RepositoryInterface
         PasswordHashServiceInterface $passwordHashGenerator,
         ThumbnailStrategy $thumbnailStrategy,
         ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
+        Mapper\ContentDomainMapper $contentDomainMapper,
+        Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
         LimitationService $limitationService,
         array $serviceSettings = [],
         ?LoggerInterface $logger = null
@@ -254,6 +248,8 @@ class Repository implements RepositoryInterface
         $this->passwordHashService = $passwordHashGenerator;
         $this->thumbnailStrategy = $thumbnailStrategy;
         $this->proxyDomainMapperFactory = $proxyDomainMapperFactory;
+        $this->contentDomainMapper = $contentDomainMapper;
+        $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->limitationService = $limitationService;
 
         $this->serviceSettings = $serviceSettings + [
@@ -308,7 +304,7 @@ class Repository implements RepositoryInterface
         $this->contentService = new ContentService(
             $this,
             $this->persistenceHandler,
-            $this->getDomainMapper(),
+            $this->contentDomainMapper,
             $this->getRelationProcessor(),
             $this->getNameSchemaService(),
             $this->fieldTypeRegistry,
@@ -360,8 +356,8 @@ class Repository implements RepositoryInterface
             $this,
             $this->persistenceHandler->contentTypeHandler(),
             $this->persistenceHandler->userHandler(),
-            $this->getDomainMapper(),
-            $this->getContentTypeDomainMapper(),
+            $this->contentDomainMapper,
+            $this->contentTypeDomainMapper,
             $this->fieldTypeRegistry,
             $this->getPermissionResolver(),
             $this->serviceSettings['contentType']
@@ -386,7 +382,7 @@ class Repository implements RepositoryInterface
         $this->locationService = new LocationService(
             $this,
             $this->persistenceHandler,
-            $this->getDomainMapper(),
+            $this->contentDomainMapper,
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
             $this->getPermissionResolver(),
@@ -643,7 +639,7 @@ class Repository implements RepositoryInterface
         $this->searchService = new SearchService(
             $this,
             $this->searchHandler,
-            $this->getDomainMapper(),
+            $this->contentDomainMapper,
             $this->getPermissionCriterionResolver(),
             $this->backgroundIndexer,
             $this->serviceSettings['search']
@@ -697,7 +693,7 @@ class Repository implements RepositoryInterface
 
         $this->nameSchemaService = new Helper\NameSchemaService(
             $this->persistenceHandler->contentTypeHandler(),
-            $this->getContentTypeDomainMapper(),
+            $this->contentTypeDomainMapper,
             $this->fieldTypeRegistry,
             $this->serviceSettings['nameSchema']
         );
@@ -735,33 +731,6 @@ class Repository implements RepositoryInterface
         return $this->relationProcessor;
     }
 
-    /**
-     * Get Content Domain Mapper.
-     *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
-     * @return \eZ\Publish\Core\Repository\Helper\DomainMapper
-     */
-    protected function getDomainMapper()
-    {
-        if ($this->domainMapper !== null) {
-            return $this->domainMapper;
-        }
-
-        $this->domainMapper = new Helper\DomainMapper(
-            $this->persistenceHandler->contentHandler(),
-            $this->persistenceHandler->locationHandler(),
-            $this->persistenceHandler->contentTypeHandler(),
-            $this->getContentTypeDomainMapper(),
-            $this->persistenceHandler->contentLanguageHandler(),
-            $this->fieldTypeRegistry,
-            $this->thumbnailStrategy,
-            $this->getProxyDomainMapper()
-        );
-
-        return $this->domainMapper;
-    }
-
     protected function getProxyDomainMapper(): ProxyDomainMapperInterface
     {
         if ($this->proxyDomainMapper !== null) {
@@ -771,29 +740,6 @@ class Repository implements RepositoryInterface
         $this->proxyDomainMapper = $this->proxyDomainMapperFactory->create($this);
 
         return $this->proxyDomainMapper;
-    }
-
-    /**
-     * Get ContentType Domain Mapper.
-     *
-     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
-     * @return \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
-     */
-    protected function getContentTypeDomainMapper()
-    {
-        if ($this->contentTypeDomainMapper !== null) {
-            return $this->contentTypeDomainMapper;
-        }
-
-        $this->contentTypeDomainMapper = new Helper\ContentTypeDomainMapper(
-            $this->persistenceHandler->contentTypeHandler(),
-            $this->persistenceHandler->contentLanguageHandler(),
-            $this->fieldTypeRegistry,
-            $this->getProxyDomainMapper()
-        );
-
-        return $this->contentTypeDomainMapper;
     }
 
     /**

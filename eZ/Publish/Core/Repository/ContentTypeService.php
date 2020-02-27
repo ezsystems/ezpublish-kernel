@@ -61,10 +61,10 @@ class ContentTypeService implements ContentTypeServiceInterface
     /** @var array */
     protected $settings;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\DomainMapper */
-    protected $domainMapper;
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper */
+    protected $contentDomainMapper;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
     /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
@@ -79,8 +79,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
-     * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
+     * @param \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper $contentDomainMapper
+     * @param \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper $contentTypeDomainMapper
      * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
      * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      * @param array $settings
@@ -89,8 +89,8 @@ class ContentTypeService implements ContentTypeServiceInterface
         RepositoryInterface $repository,
         Handler $contentTypeHandler,
         UserHandler $userHandler,
-        Helper\DomainMapper $domainMapper,
-        Helper\ContentTypeDomainMapper $contentTypeDomainMapper,
+        Mapper\ContentDomainMapper $contentDomainMapper,
+        Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
         FieldTypeRegistry $fieldTypeRegistry,
         PermissionResolver $permissionResolver,
         array $settings = []
@@ -98,7 +98,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->userHandler = $userHandler;
-        $this->domainMapper = $domainMapper;
+        $this->contentDomainMapper = $contentDomainMapper;
         $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         // Union makes sure default settings are ignored if provided in argument
@@ -363,7 +363,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         if ($contentTypeCreateStruct->names !== null) {
-            $this->domainMapper->validateTranslatedList(
+            $this->contentDomainMapper->validateTranslatedList(
                 $contentTypeCreateStruct->names,
                 '$contentTypeCreateStruct->names'
             );
@@ -381,20 +381,20 @@ class ContentTypeService implements ContentTypeServiceInterface
         // Optional properties
 
         if ($contentTypeCreateStruct->descriptions !== null) {
-            $this->domainMapper->validateTranslatedList(
+            $this->contentDomainMapper->validateTranslatedList(
                 $contentTypeCreateStruct->descriptions,
                 '$contentTypeCreateStruct->descriptions'
             );
         }
 
-        if ($contentTypeCreateStruct->defaultSortField !== null && !$this->domainMapper->isValidLocationSortField($contentTypeCreateStruct->defaultSortField)) {
+        if ($contentTypeCreateStruct->defaultSortField !== null && !$this->contentDomainMapper->isValidLocationSortField($contentTypeCreateStruct->defaultSortField)) {
             throw new InvalidArgumentValue(
                 '$contentTypeCreateStruct->defaultSortField',
                 $contentTypeCreateStruct->defaultSortField
             );
         }
 
-        if ($contentTypeCreateStruct->defaultSortOrder !== null && !$this->domainMapper->isValidLocationSortOrder($contentTypeCreateStruct->defaultSortOrder)) {
+        if ($contentTypeCreateStruct->defaultSortOrder !== null && !$this->contentDomainMapper->isValidLocationSortOrder($contentTypeCreateStruct->defaultSortOrder)) {
             throw new InvalidArgumentValue(
                 '$contentTypeCreateStruct->defaultSortOrder',
                 $contentTypeCreateStruct->defaultSortOrder
@@ -554,14 +554,14 @@ class ContentTypeService implements ContentTypeServiceInterface
         // Optional properties
 
         if ($fieldDefinitionCreateStruct->names !== null) {
-            $this->domainMapper->validateTranslatedList(
+            $this->contentDomainMapper->validateTranslatedList(
                 $fieldDefinitionCreateStruct->names,
                 $argumentName . '->names'
             );
         }
 
         if ($fieldDefinitionCreateStruct->descriptions !== null) {
-            $this->domainMapper->validateTranslatedList(
+            $this->contentDomainMapper->validateTranslatedList(
                 $fieldDefinitionCreateStruct->descriptions,
                 $argumentName . '->descriptions'
             );
@@ -777,7 +777,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         if ($contentTypeCreateStruct->remoteId === null) {
-            $contentTypeCreateStruct->remoteId = $this->domainMapper->getUniqueHash($contentTypeCreateStruct);
+            $contentTypeCreateStruct->remoteId = $this->contentDomainMapper->getUniqueHash($contentTypeCreateStruct);
         }
 
         $spiContentTypeCreateStruct = new SPIContentTypeCreateStruct(

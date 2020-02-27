@@ -1,12 +1,10 @@
 <?php
 
 /**
- * File containing the DomainMapper class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Repository\Helper;
+namespace eZ\Publish\Core\Repository\Mapper;
 
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
@@ -40,11 +38,11 @@ use DateTime;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 
 /**
- * DomainMapper is an internal service.
+ * ContentDomainMapper is an internal service.
  *
  * @internal Meant for internal use by Repository.
  */
-class DomainMapper
+class ContentDomainMapper extends ProxyAwareDomainMapper
 {
     const MAX_LOCATION_PRIORITY = 2147483647;
     const MIN_LOCATION_PRIORITY = -2147483648;
@@ -58,7 +56,7 @@ class DomainMapper
     /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
     /** @var \eZ\Publish\SPI\Persistence\Content\Language\Handler */
@@ -70,21 +68,6 @@ class DomainMapper
     /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy */
     private $thumbnailStrategy;
 
-    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface */
-    private $proxyFactory;
-
-    /**
-     * Setups service with reference to repository.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
-     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy $thumbnailStrategy
-     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface $proxyFactory
-     */
     public function __construct(
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
@@ -93,7 +76,7 @@ class DomainMapper
         LanguageHandler $contentLanguageHandler,
         FieldTypeRegistry $fieldTypeRegistry,
         ThumbnailStrategy $thumbnailStrategy,
-        ProxyDomainMapperInterface $proxyFactory
+        ?ProxyDomainMapperInterface $proxyFactory = null
     ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
@@ -102,7 +85,7 @@ class DomainMapper
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->thumbnailStrategy = $thumbnailStrategy;
-        $this->proxyFactory = $proxyFactory;
+        parent::__construct($proxyFactory);
     }
 
     /**

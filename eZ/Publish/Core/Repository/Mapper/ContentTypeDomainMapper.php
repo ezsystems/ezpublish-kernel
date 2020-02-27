@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Repository\Helper;
+namespace eZ\Publish\Core\Repository\Mapper;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
@@ -39,7 +39,7 @@ use DateTime;
  *
  * @internal Meant for internal use by Repository.
  */
-class ContentTypeDomainMapper
+class ContentTypeDomainMapper extends ProxyAwareDomainMapper
 {
     /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
@@ -50,27 +50,16 @@ class ContentTypeDomainMapper
     /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
-    /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper */
-    protected $proxyFactory;
-
-    /**
-     * Setups service with reference to repository.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
-     * @param \eZ\Publish\Core\FieldType\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapper $proxyFactory
-     */
     public function __construct(
         SPITypeHandler $contentTypeHandler,
         SPILanguageHandler $contentLanguageHandler,
         FieldTypeRegistry $fieldTypeRegistry,
-        ProxyDomainMapperInterface $proxyFactory
+        ?ProxyDomainMapperInterface $proxyFactory = null
     ) {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
-        $this->proxyFactory = $proxyFactory;
+        parent::__construct($proxyFactory);
     }
 
     /**
@@ -260,7 +249,7 @@ class ContentTypeDomainMapper
      * Builds SPIFieldDefinition object using API FieldDefinitionUpdateStruct
      * and API FieldDefinition.
      *
-     * @deprecated use \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper::buildSPIFieldDefinitionFromUpdateStruct()
+     * @deprecated use \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper::buildSPIFieldDefinitionFromUpdateStruct()
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
      *         field setting do not validate
@@ -445,7 +434,7 @@ class ContentTypeDomainMapper
     /**
      * Builds SPIFieldDefinition object using API FieldDefinitionCreateStruct.
      *
-     * @deprecated use \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper::buildSPIFieldDefinitionFromCreateStruct()
+     * @deprecated use \eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper::buildSPIFieldDefinitionFromCreateStruct()
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
      *         field setting do not validate

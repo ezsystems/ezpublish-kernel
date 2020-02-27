@@ -31,7 +31,6 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Helper\DomainMapper;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Helper\NameSchemaService;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -55,6 +54,7 @@ use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdate
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Mock test case for Content service.
@@ -76,7 +76,7 @@ class ContentTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandlerMock */
         $persistenceHandlerMock = $this->getPersistenceMockHandler('Handler');
-        $domainMapperMock = $this->getDomainMapperMock();
+        $contentDomainMapperMock = $this->getContentDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
         $fieldTypeRegistryMock = $this->getFieldTypeRegistryMock();
@@ -86,7 +86,7 @@ class ContentTest extends BaseServiceMockTest
         $service = new ContentService(
             $repositoryMock,
             $persistenceHandlerMock,
-            $domainMapperMock,
+            $contentDomainMapperMock,
             $relationProcessorMock,
             $nameSchemaServiceMock,
             $fieldTypeRegistryMock,
@@ -105,7 +105,7 @@ class ContentTest extends BaseServiceMockTest
         $contentServiceMock = $this->getPartlyMockedContentService(['loadContentInfo']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
         $permissionResolver = $this->getPermissionResolverMock();
 
@@ -155,7 +155,7 @@ class ContentTest extends BaseServiceMockTest
         $contentServiceMock = $this->getPartlyMockedContentService(['loadContentInfo']);
         /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock->expects($this->any())
@@ -236,7 +236,7 @@ class ContentTest extends BaseServiceMockTest
         $contentServiceMock = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
         $permissionResolver = $this->getPermissionResolverMock();
 
@@ -279,7 +279,7 @@ class ContentTest extends BaseServiceMockTest
         $contentServiceMock = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
         $permissionResolver = $this->getPermissionResolverMock();
 
@@ -324,7 +324,7 @@ class ContentTest extends BaseServiceMockTest
         $contentServiceMock = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
         $permissionResolver = $this->getPermissionResolverMock();
 
@@ -1181,7 +1181,7 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $objectStateHandlerMock */
         $objectStateHandlerMock = $this->getPersistenceMock()->objectStateHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
         $permissionResolverMock = $this->getPermissionResolverMock();
@@ -1815,7 +1815,7 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $permissionResolver = $this->getPermissionResolverMock();
 
         $contentType = new ContentType(
@@ -2056,7 +2056,7 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
         $permissionResolver = $this->getPermissionResolverMock();
 
@@ -2248,7 +2248,7 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
         $languageCodes = $this->determineLanguageCodesForCreate($mainLanguageCode, $structFields);
@@ -2476,7 +2476,7 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock = $this->getLocationServiceMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->contentHandler();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $spiLocationCreateStruct = new SPILocation\CreateStruct();
         $parentLocation = new Location(['contentInfo' => new ContentInfo(['sectionId' => 1])]);
 
@@ -2589,7 +2589,7 @@ class ContentTest extends BaseServiceMockTest
         $mockedService = $this->getPartlyMockedContentService();
         $locationServiceMock = $this->getLocationServiceMock();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $permissionResolver = $this->getPermissionResolverMock();
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
@@ -2746,7 +2746,7 @@ class ContentTest extends BaseServiceMockTest
         $mockedService = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->contentHandler();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
 
         $this->mockGetDefaultObjectStates();
         $this->mockSetDefaultObjectStates();
@@ -3120,7 +3120,7 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
@@ -5555,7 +5555,7 @@ class ContentTest extends BaseServiceMockTest
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
         $repositoryMock->expects($this->once())->method('commit');
@@ -5683,7 +5683,7 @@ class ContentTest extends BaseServiceMockTest
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
-        $domainMapperMock = $this->getDomainMapperMock();
+        $domainMapperMock = $this->getContentDomainMapperMock();
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
         $repositoryMock->expects($this->once())->method('commit');
@@ -5844,7 +5844,7 @@ class ContentTest extends BaseServiceMockTest
 
         $content = $this->createMock(APIContent::class);
 
-        $this->getDomainMapperMock()
+        $this->getContentDomainMapperMock()
             ->expects($this->once())
             ->method('buildContentDomainObject')
             ->with($spiContent, $contentType, $translations ?? [], $useAlwaysAvailable)
@@ -6047,20 +6047,6 @@ class ContentTest extends BaseServiceMockTest
             ->with(123, 456, ['eng-GB']);
     }
 
-    protected $domainMapperMock;
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\DomainMapper
-     */
-    protected function getDomainMapperMock()
-    {
-        if (!isset($this->domainMapperMock)) {
-            $this->domainMapperMock = $this->createMock(DomainMapper::class);
-        }
-
-        return $this->domainMapperMock;
-    }
-
     protected $relationProcessorMock;
 
     /**
@@ -6138,7 +6124,7 @@ class ContentTest extends BaseServiceMockTest
                     [
                         $this->getRepositoryMock(),
                         $this->getPersistenceMock(),
-                        $this->getDomainMapperMock(),
+                        $this->getContentDomainMapperMock(),
                         $this->getRelationProcessorMock(),
                         $this->getNameSchemaServiceMock(),
                         $this->getFieldTypeRegistryMock(),
