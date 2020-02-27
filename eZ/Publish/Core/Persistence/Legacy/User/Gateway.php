@@ -9,7 +9,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 
 /**
- * Base class for user gateways.
+ * User Gateway.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
