@@ -13,14 +13,14 @@ use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 /**
  * User gateway implementation using the Doctrine database.
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * Database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
-    protected $handler;
+    private $handler;
 
     /**
      * Construct from database handler.
