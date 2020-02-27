@@ -15,15 +15,20 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  */
 class Sibling extends AggregateCriterion
 {
-    public function __construct(Location $location)
+    public function __construct(int $id, int $parentLocationId)
     {
         $criteria = new LogicalAnd([
-            new ParentLocationId($location->parentLocationId),
+            new ParentLocationId($parentLocationId),
             new LogicalNot(
-                new LocationId($location->id)
+                new LocationId($id)
             ),
         ]);
 
         parent::__construct($criteria);
+    }
+
+    public static function fromLocation(Location $location): self
+    {
+        return new self($location->id, $location->parentLocationId);
     }
 }
