@@ -54,6 +54,12 @@ services:
             - "@ezpublish.api.storage_engine.transformation_processor"
 
     # Criterion handlers
+    ezpublish.search.legacy.gateway.criterion_handler.common.aggregate:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\AggregateCriterion
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
 
     ezpublish.search.legacy.gateway.criterion_handler.common.content_id:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
