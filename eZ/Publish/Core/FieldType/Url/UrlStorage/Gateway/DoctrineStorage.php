@@ -163,9 +163,9 @@ class DoctrineStorage extends Gateway
      *
      * @param int $fieldId
      * @param int $versionNo
-     * @param array|null $excludeUrlIds
+     * @param int[] $excludeUrlIds
      */
-    public function unlinkUrl($fieldId, $versionNo, $excludeUrlIds = null)
+    public function unlinkUrl($fieldId, $versionNo, array $excludeUrlIds = [])
     {
         $deleteQuery = $this->connection->createQueryBuilder();
 
@@ -184,8 +184,7 @@ class DoctrineStorage extends Gateway
                 )
             )
             ->setParameter(':contentobject_attribute_id', $fieldId, ParameterType::INTEGER)
-            ->setParameter(':contentobject_attribute_version', $versionNo, ParameterType::INTEGER)
-        ;
+            ->setParameter(':contentobject_attribute_version', $versionNo, ParameterType::INTEGER);
 
         if (empty($excludeUrlIds) === false) {
             $deleteQuery
@@ -194,7 +193,8 @@ class DoctrineStorage extends Gateway
                         'url_id',
                         ':url_ids'
                     )
-                )->setParameter(':url_ids', implode(', ', $excludeUrlIds), ParameterType::STRING);
+                )
+                ->setParameter('url_ids', $excludeUrlIds, Connection::PARAM_INT_ARRAY);
         }
 
         $deleteQuery->execute();

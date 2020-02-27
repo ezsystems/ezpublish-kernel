@@ -61,7 +61,7 @@ abstract class Gateway extends StorageGateway
      *
      * @param int|string $fieldId
      * @param int $versionNo
-     * @param array|null $excludeUrlIds
+     * @param int[] $excludeUrlIds
      */
-    abstract public function unlinkUrl($fieldId, $versionNo, $excludeUrlIds);
+    abstract public function unlinkUrl($fieldId, $versionNo, array $excludeUrlIds = []);
 }
