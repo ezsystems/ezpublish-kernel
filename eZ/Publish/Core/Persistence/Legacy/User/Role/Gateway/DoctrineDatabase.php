@@ -28,14 +28,22 @@ final class DoctrineDatabase extends Gateway
      */
     private $handler;
 
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
+
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $dbPlatform;
+
     /**
      * Construct from database handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(DatabaseHandler $handler)
     {
         $this->handler = $handler;
+        $this->connection = $handler->getConnection();
+        $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
     /**
