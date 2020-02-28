@@ -17,6 +17,10 @@ use eZ\Publish\SPI\Persistence\User\Role;
  */
 abstract class Gateway
 {
+    public const ROLE_SEQ = 'ezrole_id_seq';
+    public const POLICY_SEQ = 'ezpolicy_id_seq';
+    public const POLICY_LIMITATION_SEQ = 'ezpolicy_limitation_id_seq';
+
     /**
      * Create new role.
      *
