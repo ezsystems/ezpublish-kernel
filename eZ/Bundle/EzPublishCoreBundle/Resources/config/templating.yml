@@ -246,3 +246,19 @@ services:
     eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\DataAttributesExtension:
         autoconfigure: true
         public: false
+
+    eZ\Bundle\EzPublishCoreBundle\Templating\Twig\ContextAwareTwigVariablesExtension:
+        arguments:
+            $configResolver: "@ezpublish.config.resolver"
+        tags:
+            - { name: twig.extension }
+
+    eZ\Publish\Core\MVC\Symfony\EventListener\ContentViewTwigVariablesSubscriber:
+        autoconfigure: true
+        autowire: true
+
+    eZ\Publish\Core\MVC\Symfony\View\GenericVariableProviderRegistry:
+        arguments:
+            $twigVariableProviders: !tagged ezplatform.view.variable_provider
+
+    eZ\Publish\Core\MVC\Symfony\View\VariableProviderRegistry: '@eZ\Publish\Core\MVC\Symfony\View\GenericVariableProviderRegistry'

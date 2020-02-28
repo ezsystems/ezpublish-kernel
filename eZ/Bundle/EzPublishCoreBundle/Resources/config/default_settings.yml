@@ -11,6 +11,8 @@ parameters:
     ezsettings.default.content_view: {}
     ezsettings.default.block_view: {}
 
+    # Default Twig variables
+    ezsettings.default.twig_variables: {}
 
     # Default view templates
     ezplatform.default_view_templates.content.full: '@@EzPublishCore/default/content/full.html.twig'
