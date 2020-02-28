@@ -112,7 +112,7 @@ class CopySubtreeCommand extends Command
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $sourceLocationId = $input->getArgument('source-location-id');
         $targetLocationId = $input->getArgument('target-location-id');

@@ -46,7 +46,7 @@ class FullTextData extends ValueObject
     /**
      * List of FullTextValue objects corresponding to content object fields (per translation).
      *
-     * @var \eZ\Publish\Core\Search\Legacy\Content\FullTextValue[];
+     * @var \eZ\Publish\Core\Search\Legacy\Content\FullTextValue[] ;
      */
     public $values;
 }

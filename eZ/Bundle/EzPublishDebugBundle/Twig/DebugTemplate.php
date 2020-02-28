@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishDebugBundle\Twig;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Twig\Source;
 use Twig\Template;
 
 /**
@@ -78,7 +79,7 @@ class DebugTemplate extends Template
     /**
      * {@inheritdoc}
      */
-    public function getSource()
+    public function getSourceContext()
     {
         return '';
     }

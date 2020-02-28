@@ -598,7 +598,7 @@ abstract class BaseIntegrationTest extends TestCase
 
         $containerBuilder->addCompilerPass(new SetAllServicesPublicPass());
 
-        $containerBuilder->compile();
+        $containerBuilder->compile(true);
 
         return $containerBuilder;
     }

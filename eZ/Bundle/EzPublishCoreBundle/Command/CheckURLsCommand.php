@@ -74,7 +74,7 @@ class CheckURLsCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->permissionResolver->setCurrentUserReference(
             $this->userService->loadUserByLogin($input->getOption('user'))
@@ -106,6 +106,7 @@ class CheckURLsCommand extends Command
             $query->offset += $limit;
         }
         $progress->finish();
+        return 0;
     }
 
     private function getTotalCount(): int

@@ -11,8 +11,8 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use RuntimeException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Process\Process;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Process\PhpExecutableFinder;
 use PDO;
 
-class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
+class UpdateTimestampsToUTCCommand extends Command
 {
     const MAX_TIMESTAMP_VALUE = 2147483647;
     const DEFAULT_ITERATION_COUNT = 100;
@@ -55,6 +55,12 @@ class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
 
     /** @var bool */
     private $dryRun;
+
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+        parent::__construct();
+    }
 
     protected function configure()
     {
@@ -128,12 +134,6 @@ Since this script can potentially run for a very long time, to avoid memory
 exhaustion run it in production environment using <info>--env=prod</info> switch.
 EOT
             );
-    }
-
-    protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-        /* @var \Doctrine\DBAL\Connection $databaseHandler */
-        $this->connection = $this->getContainer()->get('ezpublish.api.search_engine.legacy.connection');
     }
 
     /**

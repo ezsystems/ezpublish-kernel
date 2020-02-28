@@ -8,11 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Exceptions;
 
-use Throwable;
-
 /**
  * Marker interface for all Repository related exceptions.
  */
-interface Exception extends Throwable
+interface Exception extends \Throwable
 {
 }

@@ -35,7 +35,7 @@ class CoreExtension extends AbstractExtension implements GlobalsInterface
     /**
      * @return array
      */
-    public function getGlobals()
+    public function getGlobals(): array
     {
         return ['ezplatform' => $this->globalHelper];
     }

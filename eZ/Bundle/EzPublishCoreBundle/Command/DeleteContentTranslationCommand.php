@@ -85,7 +85,7 @@ class DeleteContentTranslationCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $contentId = (int) ($input->getArgument('content-id'));
         $languageCode = $input->getArgument('language-code');
@@ -126,7 +126,7 @@ class DeleteContentTranslationCommand extends Command
                 $this->repository->rollback();
                 $this->output->writeln('Reverting and aborting.');
 
-                return;
+                return 0;
             }
 
             // Delete Translation
@@ -142,6 +142,7 @@ class DeleteContentTranslationCommand extends Command
             $this->repository->rollback();
             throw $e;
         }
+        return 0;
     }
 
     /**

@@ -133,7 +133,7 @@ class ResizeOriginalImagesCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $contentTypeIdentifier = $input->getArgument('contentTypeIdentifier');
         $imageFieldIdentifier = $input->getArgument('imageFieldIdentifier');
@@ -152,7 +152,7 @@ class ResizeOriginalImagesCommand extends Command
                 )
             );
 
-            return;
+            return 0;
         }
 
         try {
@@ -165,7 +165,7 @@ class ResizeOriginalImagesCommand extends Command
                 )
             );
 
-            return;
+            return 0;
         }
 
         $query = new Query();
@@ -190,13 +190,13 @@ class ResizeOriginalImagesCommand extends Command
                 )
             );
 
-            return;
+            return 0;
         }
 
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('<question>The changes you are going to perform cannot be undone. Remember to do a proper backup before. Would you like to continue?</question> ', false);
         if (!$helper->ask($input, $output, $question)) {
-            return;
+            return 0;
         }
 
         $progressBar = new ProgressBar($output, $totalCount);
@@ -222,6 +222,7 @@ class ResizeOriginalImagesCommand extends Command
                 $filter
             )
         );
+        return 0;
     }
 
     /**
