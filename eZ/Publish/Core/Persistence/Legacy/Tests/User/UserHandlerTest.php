@@ -16,6 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\SPI\Persistence;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIHandler;
 use eZ\Publish\SPI\Persistence\User\Role;
 
 /**
@@ -25,12 +26,15 @@ class UserHandlerTest extends TestCase
 {
     private const TEST_USER_ID = 42;
 
-    protected function getUserHandler(User\Gateway $userGateway = null)
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    protected function getUserHandler(User\Gateway $userGateway = null): SPIHandler
     {
         $dbHandler = $this->getDatabaseHandler();
 
         return new User\Handler(
-            $userGateway ?? new User\Gateway\DoctrineDatabase($dbHandler),
+            $userGateway ?? new User\Gateway\DoctrineDatabase($this->getDatabaseConnection()),
             new User\Role\Gateway\DoctrineDatabase($dbHandler),
             new User\Mapper(),
             new LimitationConverter([new ObjectStateLimitationHandler($dbHandler)])
