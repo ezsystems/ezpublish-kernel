@@ -45,4 +45,11 @@ class FullTextValue extends ValueObject
      * @var string
      */
     public $value;
+
+    /**
+     * Is value from main language and always available.
+     *
+     * @var bool
+     */
+    public $isMainAndAlwaysAvailable;
 }

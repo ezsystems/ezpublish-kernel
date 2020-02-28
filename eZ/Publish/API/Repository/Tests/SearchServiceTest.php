@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
+use InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -31,6 +32,14 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 class SearchServiceTest extends BaseTest
 {
     const QUERY_CLASS = Query::class;
+
+    const FIND_CONTENT_METHOD = 'findContent';
+    const FIND_LOCATION_METHOD = 'findLocations';
+
+    const AVAILABLE_FIND_METHODS = [
+        self::FIND_CONTENT_METHOD,
+        self::FIND_LOCATION_METHOD,
+    ];
 
     use Common\FacetedSearchProvider;
 
@@ -4344,6 +4353,17 @@ class SearchServiceTest extends BaseTest
             )->versionInfo
         );
 
+        $contentCreateStruct->setField('name', 'four');
+        $contentCreateStruct->setField('name', 'german red apple', 'ger-DE');
+        $contentCreateStruct->setField('short_name', 'four');
+        $contentCreateStruct->setField('short_name', 'german red apple', 'ger-DE');
+        $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
         $this->refreshSearch($repository);
 
         $criterion = new Criterion\FullText(
@@ -4385,12 +4405,7 @@ class SearchServiceTest extends BaseTest
         // Legacy search engine does have scoring, sorting the results by ID in that case
         $setupFactory = $this->getSetupFactory();
         if (get_class($setupFactory) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
-            usort(
-                $searchHits,
-                function ($a, $b) {
-                    return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
-                }
-            );
+            $this->sortSearchHitsById($searchHits);
 
             $this->assertEquals($content1->id, $searchHits[0]->valueObject->id);
             $this->assertEquals($content2->id, $searchHits[1]->valueObject->id);
@@ -4407,6 +4422,22 @@ class SearchServiceTest extends BaseTest
         $this->assertEquals($content1->id, $searchHits[0]->valueObject->id);
         $this->assertEquals($content3->id, $searchHits[1]->valueObject->id);
         $this->assertEquals($content2->id, $searchHits[2]->valueObject->id);
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @covers \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends testFulltextComplex
+     *
+     * @param array $data
+     */
+    public function testFulltextContentTranslationSearch(array $data)
+    {
+        $criterion = $data[0];
+        $query = new Query(['query' => $criterion]);
+
+        $this->assertFulltextSearchForTranslations(self::FIND_CONTENT_METHOD, $query);
     }
 
     /**
@@ -4446,12 +4477,7 @@ class SearchServiceTest extends BaseTest
         // Legacy search engine does have scoring, sorting the results by ID in that case
         $setupFactory = $this->getSetupFactory();
         if (get_class($setupFactory) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
-            usort(
-                $searchHits,
-                function ($a, $b) {
-                    return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
-                }
-            );
+            $this->sortSearchHitsById($searchHits);
 
             $this->assertEquals($content1->id, $searchHits[0]->valueObject->contentId);
             $this->assertEquals($content2->id, $searchHits[1]->valueObject->contentId);
@@ -4468,6 +4494,21 @@ class SearchServiceTest extends BaseTest
         $this->assertEquals($content1->id, $searchHits[0]->valueObject->contentId);
         $this->assertEquals($content3->id, $searchHits[1]->valueObject->contentId);
         $this->assertEquals($content2->id, $searchHits[2]->valueObject->contentId);
+    }
+
+    /**
+     * Test for the findLocations() method.
+     * @covers \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends testFulltextComplex
+     *
+     * @param array $data
+     */
+    public function testFulltextLocationTranslationSearch(array $data): void
+    {
+        $criterion = $data[0];
+        $query = new LocationQuery(['query' => $criterion]);
+
+        $this->assertFulltextSearchForTranslations(self::FIND_LOCATION_METHOD, $query);
     }
 
     /**
@@ -4733,5 +4774,129 @@ class SearchServiceTest extends BaseTest
         $this->refreshSearch($repository);
 
         return $content;
+    }
+
+    /**
+     * @param string $findMethod
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param array $languages
+     * @param bool $useAlwaysAvailable
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    private function find(
+        string $findMethod,
+        Query $query,
+        array $languages,
+        bool $useAlwaysAvailable
+    ): SearchResult {
+        if (false === in_array($findMethod, self::AVAILABLE_FIND_METHODS, true)) {
+            throw new InvalidArgumentException(
+                'Allowed find methods are: '
+                . implode(',', self::AVAILABLE_FIND_METHODS)
+            );
+        }
+
+        $repository = $this->getRepository(false);
+        $searchService = $repository->getSearchService();
+
+        return $searchService->{$findMethod}(
+            $query,
+            [
+                'languages' => $languages,
+                'useAlwaysAvailable' => $useAlwaysAvailable,
+            ]
+        );
+    }
+
+    /**
+     * @param string $findMethod
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     */
+    private function assertFulltextSearchForTranslations(string $findMethod, Query $query): void
+    {
+        /*
+         * Search in German translations without always available
+         */
+        $searchResult = $this->find($findMethod, $query, ['ger-DE'], false);
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertSearchResultMatchTranslations($searchResult, ['ger-DE']);
+
+        /*
+         * Search in German translations with always available
+         */
+        $searchResult = $this->find($findMethod, $query, ['ger-DE'], true);
+        $this->assertEquals(4, $searchResult->totalCount);
+        $this->assertSearchResultMatchTranslations($searchResult, ['eng-GB', 'eng-GB', 'eng-GB', 'ger-DE']);
+
+        /*
+         * Search in multiple (ger-DE, eng-GB) translations without always available
+         */
+        $searchResult = $this->find($findMethod, $query, ['ger-DE', 'eng-GB'], false);
+        $this->assertEquals(4, $searchResult->totalCount);
+        $this->assertSearchResultMatchTranslations($searchResult, ['eng-GB', 'eng-GB', 'eng-GB', 'ger-DE']);
+
+        /*
+         * Search in multiple (eng-US, ger-DE) translations without always available
+         */
+        $searchResult = $this->find($findMethod, $query, ['eng-US', 'ger-DE'], false);
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertSearchResultMatchTranslations($searchResult, ['ger-DE']);
+
+        /*
+         * Search in eng-US translations without always available
+         */
+        $searchResult = $this->find($findMethod, $query, ['eng-US'], false);
+        $this->assertEquals(0, $searchResult->totalCount);
+
+        /*
+         * Search in eng-US translations with always available
+         */
+        $searchResult = $this->find($findMethod, $query, ['eng-US'], true);
+        $this->assertEquals(3, $searchResult->totalCount);
+        $this->assertSearchResultMatchTranslations($searchResult, ['eng-GB', 'eng-GB', 'eng-GB']);
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $searchResult
+     * @param string[] $translationsToMatch
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function assertSearchResultMatchTranslations(
+        SearchResult $searchResult,
+        array $translationsToMatch
+    ): void {
+        $translationsToMatchCount = count($translationsToMatch);
+
+        if ($searchResult->totalCount < $translationsToMatchCount
+            || $searchResult->totalCount > $translationsToMatchCount
+        ) {
+            throw new InvalidArgumentException(
+                'Argument `translationsToMatch` must be equal to the search result total count!'
+            );
+        }
+
+        $searchHits = $searchResult->searchHits;
+        $this->sortSearchHitsById($searchHits);
+
+        for ($i = 0; $i < $searchResult->totalCount; ++$i) {
+            $this->assertEquals(
+                $translationsToMatch[$i],
+                $searchHits[$i]->matchedTranslation
+            );
+        }
+    }
+
+    private function sortSearchHitsById(array &$searchHits): void
+    {
+        usort(
+           $searchHits,
+           static function (SearchHit $a, SearchHit $b): int {
+               return $a->valueObject->id <=> $b->valueObject->id;
+           }
+        );
     }
 }

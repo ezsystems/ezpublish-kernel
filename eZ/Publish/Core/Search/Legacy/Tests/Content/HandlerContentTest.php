@@ -113,6 +113,7 @@ class HandlerContentTest extends AbstractTestCase
                         new Content\Common\Gateway\CriterionHandler\FullText(
                             $this->getDatabaseHandler(),
                             $transformationProcessor,
+                            $this->getLanguageMaskGenerator(),
                             $fullTextSearchConfiguration
                         ),
                         new Content\Common\Gateway\CriterionHandler\Field(
@@ -175,6 +176,7 @@ class HandlerContentTest extends AbstractTestCase
                 $this->getContentTypeHandler(),
                 $this->getDefinitionBasedTransformationProcessor(),
                 new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler()),
+                $this->getLanguageMaskGenerator(),
                 $this->getFullTextSearchConfiguration()
             ),
             $this->getContentMapperMock(),
