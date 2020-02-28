@@ -11,7 +11,9 @@ use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\Role;
 
 /**
- * Base class for content type gateways.
+ * User Role Gateway.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
