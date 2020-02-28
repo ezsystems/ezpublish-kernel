@@ -19,14 +19,14 @@ use eZ\Publish\SPI\Persistence\User\Role;
  *
  * @see \eZ\Publish\SPI\Persistence\User\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * Database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
-    protected $handler;
+    private $handler;
 
     /**
      * Construct from database handler.
@@ -563,7 +563,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    protected function fetchUserGroups($userId)
+    private function fetchUserGroups($userId)
     {
         $query = $this->handler->createSelectQuery();
         $query->select(
