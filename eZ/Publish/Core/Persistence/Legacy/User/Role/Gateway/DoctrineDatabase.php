@@ -14,6 +14,10 @@ use eZ\Publish\SPI\Persistence\User\Role;
 
 /**
  * User Role gateway implementation using the Doctrine database.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence User Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\User\Handler
  */
 class DoctrineDatabase extends Gateway
 {

@@ -15,7 +15,7 @@ use PDOException;
 use RuntimeException;
 
 /**
- * Base class for content type gateways.
+ * @internal Internal exception conversion layer.
  */
 class ExceptionConversion extends Gateway
 {
