@@ -26,6 +26,11 @@ class ObjectStateIdentifier extends CriterionHandler
         Criterion $criterion,
         array $languageSettings
     ) {
+        $matchStateIdentifier = $query->expr->in(
+            $this->dbHandler->quoteColumn('identifier', 't2'),
+            $criterion->value
+        );
+
         $subSelect = $query->subSelect();
         $subSelect
             ->select(
@@ -44,12 +49,26 @@ class ObjectStateIdentifier extends CriterionHandler
                     $this->dbHandler->quoteColumn('contentobject_state_id', 't1'),
                     $this->dbHandler->quoteColumn('id', 't2')
                 )
-            )->where(
-                $query->expr->in(
-                    $this->dbHandler->quoteColumn('identifier', 't2'),
-                    $criterion->value
+            )->leftJoin(
+                $query->alias(
+                    $this->dbHandler->quoteTable('ezcobj_state_group'),
+                    't3'
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('group_id', 't2'),
+                    $this->dbHandler->quoteColumn('id', 't3')
                 )
-            );
+            )->where(
+                null !== $criterion->target
+                    ? $query->expr->lAnd(
+                            $query->expr->in(
+                                $this->dbHandler->quoteColumn('identifier', 't3'),
+                                $criterion->target
+                            ),
+                            $matchStateIdentifier
+                        )
+                    : $matchStateIdentifier
+        );
 
         return $query->expr->in(
             $this->dbHandler->quoteColumn('id', 'ezcontentobject'),

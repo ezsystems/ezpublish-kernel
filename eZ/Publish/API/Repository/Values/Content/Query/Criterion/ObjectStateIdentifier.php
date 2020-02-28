@@ -15,10 +15,11 @@ class ObjectStateIdentifier extends Criterion
 {
     /**
      * @param string|string[] $value
+     * @param string|null $target
      */
-    public function __construct($value)
+    public function __construct($value, ?string $target = null)
     {
-        parent::__construct(null, null, $value);
+        parent::__construct($target, null, $value);
     }
 
     /**
