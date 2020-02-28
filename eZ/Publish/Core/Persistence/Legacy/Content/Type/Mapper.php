@@ -106,7 +106,7 @@ class Mapper
      * @param array $rows
      * @param bool $keepTypeIdAsKey
      *
-     * @return array(Type)
+     * @return array (Type)
      */
     public function extractTypesFromRows(array $rows, bool $keepTypeIdAsKey = false)
     {

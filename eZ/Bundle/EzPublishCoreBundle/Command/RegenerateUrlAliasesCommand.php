@@ -101,7 +101,7 @@ EOT
      *
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $iterationCount = (int)$input->getOption('iteration-count');
         $locationIds = $input->getOption('location-id');
@@ -120,7 +120,7 @@ EOT
         if ($locationsCount === 0) {
             $output->writeln('<info>No location was found. Exiting.</info>');
 
-            return;
+            return 0;
         }
 
         $helper = $this->getHelper('question');
@@ -133,7 +133,7 @@ EOT
             false
         );
         if (!$helper->ask($input, $output, $question)) {
-            return;
+            return 0;
         }
 
         $this->regenerateSystemUrlAliases($output, $locationsCount, $locationIds, $iterationCount);
@@ -146,6 +146,7 @@ EOT
         );
         $output->writeln("<info>Done. Deleted {$corruptedAliasesCount} entries.</info>");
         $output->writeln('<comment>Make sure to clear HTTP cache.</comment>');
+        return 0;
     }
 
     /**

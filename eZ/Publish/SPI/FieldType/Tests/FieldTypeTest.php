@@ -473,8 +473,8 @@ abstract class FieldTypeTest extends TestCase
      *              ),
      *          )
      *      ),
-     *      array(
-     *          new ValidationError(
+     *          array(
+     *              new ValidationError(
      *              "Field definition does not allow multiple countries to be selected."
      *          ),
      *      ),

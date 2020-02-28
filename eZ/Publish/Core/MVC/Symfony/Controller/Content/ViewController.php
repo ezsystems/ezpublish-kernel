@@ -124,7 +124,7 @@ class ViewController extends Controller
                 'viewType' => $viewType,
             ]
         );
-        $this->getEventDispatcher()->dispatch(MVCEvents::API_CONTENT_EXCEPTION, $event);
+        $this->getEventDispatcher()->dispatch($event, MVCEvents::API_CONTENT_EXCEPTION);
         if ($event->hasContentView()) {
             $response->setContent(
                 $this->viewManager->renderContentView(

@@ -36,14 +36,14 @@ abstract class AbstractDoctrineQuery
      *
      * Format: array( ':name' => &mixed )
      *
-     * @var array(string=>&mixed)
+     * @var array (string=>&mixed)
      */
     private $boundParameters = [];
 
     /**
      * Stores the type of a value which will we used when the value is bound.
      *
-     * @var array(string=>int)
+     * @var array (string=>int)
      */
     private $boundParametersType = [];
 
@@ -52,14 +52,14 @@ abstract class AbstractDoctrineQuery
      *
      * Format: array( ':name' => mixed )
      *
-     * @var array(string=>mixed)
+     * @var array (string=>mixed)
      */
     private $boundValues = [];
 
     /**
      * Stores the type of a value which will we used when the value is bound.
      *
-     * @var array(string=>int)
+     * @var array (string=>int)
      */
     private $boundValuesType = [];
 

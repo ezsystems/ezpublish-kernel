@@ -36,7 +36,7 @@ abstract class AbstractRandom extends SortClauseHandler
      */
     public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\RandomTarget $sortClause->targetData */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\RandomTarget $sortClause ->targetData */
         $query
             ->select(
                 $query->alias(

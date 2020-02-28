@@ -26,7 +26,7 @@ class PersistenceCacheCollector extends DataCollector
         $this->logger = $logger;
     }
 
-    public function collect(Request $request, Response $response, \Exception $exception = null)
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         $this->data = [
             'stats' => $this->logger->getStats(),
@@ -58,7 +58,7 @@ class PersistenceCacheCollector extends DataCollector
      *
      * @since 7.5
      *
-     * @return int[<string>]
+     * @return int [<string>]
      */
     public function getStats()
     {

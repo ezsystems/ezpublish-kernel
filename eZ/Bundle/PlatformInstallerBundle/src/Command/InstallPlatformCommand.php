@@ -76,7 +76,7 @@ final class InstallPlatformCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->output = $output;
         $this->checkPermissions();
@@ -104,6 +104,7 @@ final class InstallPlatformCommand extends Command
         if (!$input->getOption('skip-indexing')) {
             $this->indexData($output, $siteaccess);
         }
+        return 0;
     }
 
     private function checkPermissions()
@@ -248,7 +249,7 @@ final class InstallPlatformCommand extends Command
 
         $console .= ' --env=' . escapeshellarg($this->environment);
 
-        $process = new Process($php . ' ' . $console . ' ' . $cmd, null, null, null, $timeout);
+        $process = new Process([$php, $console, $cmd], null, null, null, $timeout);
         $process->run(function ($type, $buffer) use ($output) { $output->write($buffer, false); });
         if (!$process->isSuccessful()) {
             throw new \RuntimeException(sprintf('An error occurred when executing the "%s" command.', escapeshellarg($cmd)));

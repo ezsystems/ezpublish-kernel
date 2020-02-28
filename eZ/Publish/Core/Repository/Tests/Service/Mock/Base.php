@@ -254,7 +254,7 @@ abstract class Base extends TestCase
     /**
      * Returns a SPI Handler mock.
      *
-     * @param string $handler For instance "Content\\Type\\Handler" or "Search\\Handler", must be relative to "eZ\Publish\SPI"
+     * @param string $handler For instance "Content\Type\Handler" or "Search\Handler", must be relative to "eZ\Publish\SPI"
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
@@ -274,7 +274,7 @@ abstract class Base extends TestCase
     /**
      * Returns a persistence Handler mock.
      *
-     * @param string $handler For instance "Content\\Type\\Handler", must be relative to "eZ\Publish\SPI\Persistence"
+     * @param string $handler For instance "Content\Type\Handler", must be relative to "eZ\Publish\SPI\Persistence"
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */

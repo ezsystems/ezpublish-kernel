@@ -244,7 +244,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
-     * @param string $table2,... The table to join with, followed by either the
+     * @param string $table2 ,... The table to join with, followed by either the
      *                           two join columns, or a join condition.
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
@@ -332,7 +332,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
-     * @param string $table2,... The table to join with, followed by either the
+     * @param string $table2 ,... The table to join with, followed by either the
      *                           two join columns, or a join condition.
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
@@ -388,7 +388,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
-     * @param string $table2,... The table to join with, followed by either the
+     * @param string $table2 ,... The table to join with, followed by either the
      *                           two join columns, or a join condition.
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
@@ -415,8 +415,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
      *
-     * @param string|array(string) $... Either a string with a logical expression name
-     * or an array with logical expressions.
+     * @param string|array(string) $... Either a string with a logical expression name or an array with logical expressions.
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
@@ -537,8 +536,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException
      *         if called with no parameters.
      *
-     * @param string|array(string) $... Either a string with a logical expression name
-     *                             or an array with logical expressions.
+     * @param string|array(string) $... Either a string with a logical expression name                             or an array with logical expressions.
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery a pointer to $this
      */

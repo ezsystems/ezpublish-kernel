@@ -155,7 +155,7 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(string $prefix = '')
     {
         $this->clearInMemoryPools();
 
@@ -164,7 +164,7 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
         $this->deferredItemsDeletion = [];
         $this->deferredTagsInvalidation = [];
 
-        return $this->sharedPool->clear();
+        return $this->sharedPool->clear($prefix);
     }
 
     /**
@@ -289,7 +289,7 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
             return true;
         }
 
-        foreach ($item->getPreviousTags() as $tag) {
+        foreach ($item->getMetadata() as $tag) {
             if (isset($this->deferredTagsInvalidation[$tag])) {
                 return true;
             }

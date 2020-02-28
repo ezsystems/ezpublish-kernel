@@ -40,8 +40,8 @@ class ComplexSettingValueResolver
      * Can receive as many tuples of array( argumentName ), argumentValue as necessary.
      *
      * @param $argumentString
-     * @param string $dynamicSettingName..
-     * @param string $dynamicSettingValue..
+     * @param string $dynamicSettingName ..
+     * @param string $dynamicSettingValue ..
      *
      * @return string
      */
