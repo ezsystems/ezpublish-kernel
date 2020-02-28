@@ -38,14 +38,7 @@ final class DoctrineDatabase extends Gateway
         $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
-    /**
-     * Loads user with user ID.
-     *
-     * @param mixed $userId
-     *
-     * @return array
-     */
-    public function load($userId)
+    public function load(int $userId): array
     {
         $query = $this->getLoadUserQueryBuilder();
         $query
@@ -61,14 +54,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads user with user login.
-     *
-     * @param string $login
-     *
-     * @return array
-     */
-    public function loadByLogin($login)
+    public function loadByLogin(string $login): array
     {
         $query = $this->getLoadUserQueryBuilder();
         $expr = $query->expr();
@@ -87,14 +73,7 @@ final class DoctrineDatabase extends Gateway
         return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads user with user email.
-     *
-     * @param string $email
-     *
-     * @return array
-     */
-    public function loadByEmail($email)
+    public function loadByEmail(string $email): array
     {
         $query = $this->getLoadUserQueryBuilder();
         $query->where(
@@ -109,14 +88,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads a user with user hash key.
-     *
-     * @param string $hash
-     *
-     * @return array
-     */
-    public function loadUserByToken($hash)
+    public function loadUserByToken(string $hash): array
     {
         $query = $this->getLoadUserQueryBuilder();
         $query
@@ -147,12 +119,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Update or insert the user token information specified by the user token struct.
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct $userTokenUpdateStruct
-     */
-    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct)
+    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct): void
     {
         $query = $this->connection->createQueryBuilder();
         if (false === $this->userHasToken($userTokenUpdateStruct->userId)) {
@@ -180,12 +147,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Expires user token with user hash.
-     *
-     * @param string $hash
-     */
-    public function expireUserToken($hash)
+    public function expireUserToken(string $hash): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -202,14 +164,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Assigns role to user with given limitation.
-     *
-     * @param mixed $contentId
-     * @param mixed $roleId
-     * @param array $limitation
-     */
-    public function assignRole($contentId, $roleId, array $limitation)
+    public function assignRole(int $contentId, int $roleId, array $limitation): void
     {
         foreach ($limitation as $identifier => $values) {
             foreach ($values as $value) {
@@ -241,13 +196,7 @@ final class DoctrineDatabase extends Gateway
         }
     }
 
-    /**
-     * Remove role from user or user group.
-     *
-     * @param mixed $contentId
-     * @param mixed $roleId
-     */
-    public function removeRole($contentId, $roleId)
+    public function removeRole(int $contentId, int $roleId): void
     {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
@@ -268,12 +217,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Remove role from user or user group, by assignment ID.
-     *
-     * @param mixed $roleAssignmentId
-     */
-    public function removeRoleAssignmentById($roleAssignmentId)
+    public function removeRoleAssignmentById(int $roleAssignmentId): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
