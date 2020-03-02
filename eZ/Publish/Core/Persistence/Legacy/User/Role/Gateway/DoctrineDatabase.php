@@ -41,14 +41,7 @@ final class DoctrineDatabase extends Gateway
         $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
-    /**
-     * Create new role.
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\Role $role
-     *
-     * @return Role
-     */
-    public function createRole(Role $role)
+    public function createRole(Role $role): Role
     {
         // Role original ID is set when creating a draft from an existing role
         if ($role->status === Role::STATUS_DRAFT && $role->id) {
@@ -115,15 +108,7 @@ final class DoctrineDatabase extends Gateway
         return $query;
     }
 
-    /**
-     * Loads a specified role by id.
-     *
-     * @param mixed $roleId
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
-     *
-     * @return array
-     */
-    public function loadRole($roleId, $status = Role::STATUS_DEFINED)
+    public function loadRole(int $roleId, int $status = Role::STATUS_DEFINED): array
     {
         $query = $this->getLoadRoleQueryBuilder();
         $query
@@ -140,16 +125,10 @@ final class DoctrineDatabase extends Gateway
         return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads a specified role by $identifier.
-     *
-     * @param string $identifier
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
-     *
-     * @return array
-     */
-    public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED)
-    {
+    public function loadRoleByIdentifier(
+        string $identifier,
+        int $status = Role::STATUS_DEFINED
+    ): array {
         $query = $this->getLoadRoleQueryBuilder();
         $query
             ->where(
@@ -167,14 +146,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads a role draft by the original role ID.
-     *
-     * @param mixed $roleId ID of the role the draft was created from.
-     *
-     * @return array
-     */
-    public function loadRoleDraftByRoleId($roleId)
+    public function loadRoleDraftByRoleId(int $roleId): array
     {
         $query = $this->getLoadRoleQueryBuilder();
         $query
@@ -192,14 +164,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads all roles.
-     *
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
-     *
-     * @return array
-     */
-    public function loadRoles($status = Role::STATUS_DEFINED)
+    public function loadRoles(int $status = Role::STATUS_DEFINED): array
     {
         $query = $this->getLoadRoleQueryBuilder();
         $query->where(
@@ -211,16 +176,10 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads all roles associated with the given content objects.
-     *
-     * @param array $contentIds
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
-     *
-     * @return array
-     */
-    public function loadRolesForContentObjects($contentIds, $status = Role::STATUS_DEFINED)
-    {
+    public function loadRolesForContentObjects(
+        array $contentIds,
+        int $status = Role::STATUS_DEFINED
+    ): array {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
         $query
@@ -261,14 +220,7 @@ final class DoctrineDatabase extends Gateway
         return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads role assignment for specified assignment ID.
-     *
-     * @param mixed $roleAssignmentId
-     *
-     * @return array
-     */
-    public function loadRoleAssignment($roleAssignmentId)
+    public function loadRoleAssignment(int $roleAssignmentId): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(
@@ -291,15 +243,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads role assignments for specified content ID.
-     *
-     * @param mixed $groupId
-     * @param bool $inherited
-     *
-     * @return array
-     */
-    public function loadRoleAssignmentsByGroupId($groupId, $inherited = false)
+    public function loadRoleAssignmentsByGroupId(int $groupId, bool $inherited = false): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(
@@ -335,14 +279,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads role assignments for given role ID.
-     *
-     * @param mixed $roleId
-     *
-     * @return array
-     */
-    public function loadRoleAssignmentsByRoleId($roleId)
+    public function loadRoleAssignmentsByRoleId(int $roleId): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(
@@ -365,14 +302,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Returns the user policies associated with the user.
-     *
-     * @param mixed $userId
-     *
-     * @return UserPolicy[]
-     */
-    public function loadPoliciesByUserId($userId)
+    public function loadPoliciesByUserId(int $userId): array
     {
         $groupIds = $this->fetchUserGroups($userId);
         $groupIds[] = $userId;
@@ -391,7 +321,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    private function fetchUserGroups($userId)
+    private function fetchUserGroups(int $userId): array
     {
         $nodeIDs = $this->getAncestorLocationIdsForUser($userId);
 
@@ -416,16 +346,7 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::COLUMN);
     }
 
-    /**
-     * Update role (draft).
-     *
-     * Will not throw anything if location id is invalid.
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
-     *
-     * @return array
-     */
-    public function updateRole(RoleUpdateStruct $role)
+    public function updateRole(RoleUpdateStruct $role): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -443,14 +364,7 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Delete the specified role (draft).
-     * If it's not a draft, the role assignments will also be deleted.
-     *
-     * @param mixed $roleId
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
-     */
-    public function deleteRole($roleId, $status = Role::STATUS_DEFINED)
+    public function deleteRole(int $roleId, int $status = Role::STATUS_DEFINED): void
     {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
@@ -472,28 +386,13 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
     }
 
-    /**
-     * Publish the specified role draft.
-     * If the draft was created from an existing role, published version will take the original role ID.
-     *
-     * @param mixed $roleDraftId
-     * @param mixed|null $originalRoleId ID of role the draft was created from. Will be null if the role draft was completely new.
-     */
-    public function publishRoleDraft($roleDraftId, $originalRoleId = null)
+    public function publishRoleDraft(int $roleDraftId, ?int $originalRoleId = null): void
     {
         $this->markRoleAsPublished($roleDraftId, $originalRoleId);
         $this->publishRolePolicies($roleDraftId, $originalRoleId);
     }
 
-    /**
-     * Adds a policy to a role.
-     *
-     * @param mixed $roleId
-     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
-     *
-     * @return Policy
-     */
-    public function addPolicy($roleId, Policy $policy)
+    public function addPolicy(int $roleId, Policy $policy): Policy
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -530,13 +429,7 @@ final class DoctrineDatabase extends Gateway
         return $policy;
     }
 
-    /**
-     * Adds limitations to an existing policy.
-     *
-     * @param int $policyId
-     * @param array $limitations
-     */
-    public function addPolicyLimitations($policyId, array $limitations)
+    public function addPolicyLimitations(int $policyId, array $limitations): void
     {
         foreach ($limitations as $identifier => $values) {
             $query = $this->connection->createQueryBuilder();
@@ -579,12 +472,7 @@ final class DoctrineDatabase extends Gateway
         }
     }
 
-    /**
-     * Removes a policy from a role.
-     *
-     * @param mixed $policyId
-     */
-    public function removePolicy($policyId)
+    public function removePolicy(int $policyId): void
     {
         $this->removePolicyLimitations($policyId);
 
@@ -661,12 +549,7 @@ final class DoctrineDatabase extends Gateway
         return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Remove all limitations for a policy.
-     *
-     * @param mixed $policyId
-     */
-    public function removePolicyLimitations($policyId)
+    public function removePolicyLimitations(int $policyId): void
     {
         $limitationValues = $this->loadPolicyLimitationValues($policyId);
 
