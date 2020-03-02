@@ -31,14 +31,14 @@ use PDO;
  *
  * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * Columns of database tables.
      *
      * @var array
      */
-    protected $columns = [
+    private $columns = [
         'ezcontentclass' => [
             'id',
             'always_available',
@@ -96,7 +96,7 @@ class DoctrineDatabase extends Gateway
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      * @deprecated Start to use DBAL $connection instead.
      */
-    protected $dbHandler;
+    private $dbHandler;
 
     /**
      * The native Doctrine connection.
@@ -105,14 +105,14 @@ class DoctrineDatabase extends Gateway
      *
      * @var \Doctrine\DBAL\Connection
      */
-    protected $connection;
+    private $connection;
 
     /**
      * Language mask generator.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
-    protected $languageMaskGenerator;
+    private $languageMaskGenerator;
 
     /**
      * Creates a new gateway based on $db.
@@ -293,7 +293,7 @@ class DoctrineDatabase extends Gateway
      * @param int $typeStatus
      * @param string[] $languages
      */
-    protected function insertTypeNameData($typeId, $typeStatus, array $languages)
+    private function insertTypeNameData($typeId, $typeStatus, array $languages)
     {
         $tmpLanguages = $languages;
         if (isset($tmpLanguages['always-available'])) {
@@ -373,7 +373,7 @@ class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\Core\Persistence\Database\InsertQuery|\eZ\Publish\Core\Persistence\Database\UpdateQuery $q
      * @param \eZ\Publish\SPI\Persistence\ValueObject|\eZ\Publish\SPI\Persistence\Content\Type $type
      */
-    protected function setCommonTypeColumns(Query $q, ValueObject $type)
+    private function setCommonTypeColumns(Query $q, ValueObject $type)
     {
         $q->set(
             $this->dbHandler->quoteColumn('serialized_name_list'),
@@ -548,7 +548,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    protected function createGroupLoadQuery()
+    private function createGroupLoadQuery()
     {
         $q = $this->dbHandler->createSelectQuery();
         $q->select(
@@ -671,7 +671,7 @@ class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      */
-    protected function setCommonFieldColumns(
+    private function setCommonFieldColumns(
         Query $q,
         FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
@@ -974,7 +974,7 @@ class DoctrineDatabase extends Gateway
      * @param int $typeId
      * @param int $typeStatus
      */
-    protected function deleteTypeNameData($typeId, $typeStatus)
+    private function deleteTypeNameData($typeId, $typeStatus)
     {
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom('ezcontentclass_name')
@@ -1463,7 +1463,7 @@ class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $q
      * @param string $tableName
      */
-    protected function selectColumns(SelectQuery $q, $tableName)
+    private function selectColumns(SelectQuery $q, $tableName)
     {
         foreach ($this->columns[$tableName] as $col) {
             $q->select(
