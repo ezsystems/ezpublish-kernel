@@ -36,6 +36,9 @@ final class DoctrineDatabase extends Gateway
      */
     private $dbHandler;
 
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
+
     /**
      * Creates a new DoctrineDatabase Section Gateway.
      *
@@ -44,6 +47,7 @@ final class DoctrineDatabase extends Gateway
     public function __construct(DatabaseHandler $dbHandler)
     {
         $this->dbHandler = $dbHandler;
+        $this->connection = $dbHandler->getConnection();
     }
 
     /**
