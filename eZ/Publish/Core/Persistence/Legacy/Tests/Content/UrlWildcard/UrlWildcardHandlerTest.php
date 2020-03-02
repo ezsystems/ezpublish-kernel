@@ -200,16 +200,16 @@ class UrlWildcardHandlerTest extends TestCase
     /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper */
     protected $mapper;
 
-    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler */
+    /** @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler */
     protected $urlWildcardHandler;
 
     /**
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getHandler()
+    protected function getHandler(): UrlWildcard\Handler
     {
         if (!isset($this->urlWildcardHandler)) {
-            $this->gateway = new DoctrineDatabase($this->getDatabaseHandler());
+            $this->gateway = new DoctrineDatabase($this->getDatabaseConnection());
             $this->mapper = new Mapper();
 
             $this->urlWildcardHandler = new Handler(
