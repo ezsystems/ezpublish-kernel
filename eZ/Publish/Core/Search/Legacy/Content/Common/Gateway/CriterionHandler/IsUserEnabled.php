@@ -47,7 +47,7 @@ class IsUserEnabled extends CriterionHandler
             )->where(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('is_enabled', 't2'),
-                    $query->bindValue(reset($criterion->value))
+                    (int) reset($criterion->value)
                 )
             );
 
