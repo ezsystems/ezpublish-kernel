@@ -59,7 +59,7 @@ final class DoctrineDatabase extends Gateway
 
         $query = $this->connection->createQueryBuilder();
         $query
-            ->insert('ezrole')
+            ->insert(self::ROLE_TABLE)
             ->values(
                 [
                     'is_new' => $query->createPositionalParameter(0, ParameterType::INTEGER),
@@ -102,10 +102,10 @@ final class DoctrineDatabase extends Gateway
                 'l.identifier AS ezpolicy_limitation_identifier',
                 'v.value AS ezpolicy_limitation_value_value'
             )
-            ->from('ezrole', 'r')
-            ->leftJoin('r', 'ezpolicy', 'p', 'p.role_id = r.id')
-            ->leftJoin('p', 'ezpolicy_limitation', 'l', 'l.policy_id = p.id')
-            ->leftJoin('l', 'ezpolicy_limitation_value', 'v', 'v.limitation_id = l.id');
+            ->from(self::ROLE_TABLE, 'r')
+            ->leftJoin('r', self::POLICY_TABLE, 'p', 'p.role_id = r.id')
+            ->leftJoin('p', self::POLICY_LIMITATION_TABLE, 'l', 'l.policy_id = p.id')
+            ->leftJoin('l', self::POLICY_LIMITATION_VALUE_TABLE, 'v', 'v.limitation_id = l.id');
 
         return $query;
     }
@@ -197,10 +197,10 @@ final class DoctrineDatabase extends Gateway
                 'l.identifier AS ezpolicy_limitation_identifier',
                 'v.value AS ezpolicy_limitation_value_value'
             )
-            ->from('ezuser_role', 'urs')
+            ->from(self::USER_ROLE_TABLE, 'urs')
             ->leftJoin(
                 'urs',
-                'ezrole',
+                self::ROLE_TABLE,
                 'r',
                 $expr->eq(
                 // for drafts the "version" column contains the original role ID...
@@ -208,10 +208,10 @@ final class DoctrineDatabase extends Gateway
                     'urs.role_id'
                 )
             )
-            ->leftJoin('r', 'ezuser_role', 'ur', 'ur.role_id = r.id')
-            ->leftJoin('r', 'ezpolicy', 'p', 'p.role_id = r.id')
-            ->leftJoin('p', 'ezpolicy_limitation', 'l', 'l.policy_id = p.id')
-            ->leftJoin('l', 'ezpolicy_limitation_value', 'v', 'v.limitation_id = l.id')
+            ->leftJoin('r', self::USER_ROLE_TABLE, 'ur', 'ur.role_id = r.id')
+            ->leftJoin('r', self::POLICY_TABLE, 'p', 'p.role_id = r.id')
+            ->leftJoin('p', self::POLICY_LIMITATION_TABLE, 'l', 'l.policy_id = p.id')
+            ->leftJoin('l', self::POLICY_LIMITATION_VALUE_TABLE, 'v', 'v.limitation_id = l.id')
             ->where(
                 $expr->in(
                     'urs.contentobject_id',
@@ -232,7 +232,7 @@ final class DoctrineDatabase extends Gateway
             'limit_value',
             'role_id'
         )->from(
-            'ezuser_role'
+            self::USER_ROLE_TABLE
         )->where(
             $query->expr()->eq(
                 'id',
@@ -255,7 +255,7 @@ final class DoctrineDatabase extends Gateway
             'limit_value',
             'role_id'
         )->from(
-            'ezuser_role'
+            self::USER_ROLE_TABLE
         );
 
         if ($inherited) {
@@ -291,7 +291,7 @@ final class DoctrineDatabase extends Gateway
             'limit_value',
             'role_id'
         )->from(
-            'ezuser_role'
+            self::USER_ROLE_TABLE
         )->where(
             $query->expr()->eq(
                 'role_id',
@@ -352,7 +352,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezrole')
+            ->update(self::ROLE_TABLE)
             ->set(
                 'name',
                 $query->createPositionalParameter($role->identifier, ParameterType::STRING)
@@ -371,7 +371,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
         $query
-            ->delete('ezrole')
+            ->delete(self::ROLE_TABLE)
             ->where(
                 $expr->eq(
                     'id',
@@ -379,7 +379,7 @@ final class DoctrineDatabase extends Gateway
                 )
             )
             ->andWhere(
-                $this->buildRoleDraftQueryConstraint($status, $query, 'ezrole')
+                $this->buildRoleDraftQueryConstraint($status, $query, self::ROLE_TABLE)
             );
 
         if ($status !== Role::STATUS_DRAFT) {
@@ -398,7 +398,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->insert('ezpolicy')
+            ->insert(self::POLICY_TABLE)
             ->values(
                 [
                     'function_name' => $query->createPositionalParameter(
@@ -436,7 +436,7 @@ final class DoctrineDatabase extends Gateway
         foreach ($limitations as $identifier => $values) {
             $query = $this->connection->createQueryBuilder();
             $query
-                ->insert('ezpolicy_limitation')
+                ->insert(self::POLICY_LIMITATION_TABLE)
                 ->values(
                     [
                         'identifier' => $query->createPositionalParameter(
@@ -456,7 +456,7 @@ final class DoctrineDatabase extends Gateway
             foreach ($values as $value) {
                 $query = $this->connection->createQueryBuilder();
                 $query
-                    ->insert('ezpolicy_limitation_value')
+                    ->insert(self::POLICY_LIMITATION_VALUE_TABLE)
                     ->values(
                         [
                             'value' => $query->createPositionalParameter(
@@ -480,7 +480,7 @@ final class DoctrineDatabase extends Gateway
 
         $query = $this->connection->createQueryBuilder();
         $query
-            ->delete('ezpolicy')
+            ->delete(self::POLICY_TABLE)
             ->where(
                 $query->expr()->eq(
                     'id',
@@ -497,7 +497,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->delete('ezpolicy_limitation')
+            ->delete(self::POLICY_LIMITATION_TABLE)
             ->where(
                 $query->expr()->in(
                     'id',
@@ -517,7 +517,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->delete('ezpolicy_limitation_value')
+            ->delete(self::POLICY_LIMITATION_VALUE_TABLE)
             ->where(
                 $query->expr()->in(
                     'id',
@@ -538,9 +538,9 @@ final class DoctrineDatabase extends Gateway
                 'l.id AS ezpolicy_limitation_id',
                 'v.id AS ezpolicy_limitation_value_id'
             )
-            ->from('ezpolicy', 'p')
-            ->leftJoin('p', 'ezpolicy_limitation', 'l', 'l.policy_id = p.id')
-            ->leftJoin('l', 'ezpolicy_limitation_value', 'v', 'v.limitation_id = l.id')
+            ->from(self::POLICY_TABLE, 'p')
+            ->leftJoin('p', self::POLICY_LIMITATION_TABLE, 'l', 'l.policy_id = p.id')
+            ->leftJoin('l', self::POLICY_LIMITATION_VALUE_TABLE, 'v', 'v.limitation_id = l.id')
             ->where(
                 $query->expr()->eq(
                     'p.id',
@@ -580,7 +580,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->delete('ezuser_role')
+            ->delete(self::USER_ROLE_TABLE)
             ->where(
                 $query->expr()->eq(
                     'role_id',
@@ -652,7 +652,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezrole')
+            ->update(self::ROLE_TABLE)
             ->set(
                 'version',
                 $query->createPositionalParameter(Role::STATUS_DEFINED, ParameterType::INTEGER)
@@ -678,7 +678,7 @@ final class DoctrineDatabase extends Gateway
     {
         $policyQuery = $this->connection->createQueryBuilder();
         $policyQuery
-            ->update('ezpolicy')
+            ->update(self::POLICY_TABLE)
             ->set(
                 'original_id',
                 $policyQuery->createPositionalParameter(0, ParameterType::INTEGER)
