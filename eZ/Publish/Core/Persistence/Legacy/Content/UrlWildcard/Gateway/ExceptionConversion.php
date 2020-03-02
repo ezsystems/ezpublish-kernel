@@ -12,6 +12,9 @@ use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 
+/**
+ * @internal Internal exception conversion layer.
+ */
 class ExceptionConversion extends Gateway
 {
     /**

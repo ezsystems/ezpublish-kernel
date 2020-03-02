@@ -12,6 +12,8 @@ use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
  * UrlWildcard Gateway.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {

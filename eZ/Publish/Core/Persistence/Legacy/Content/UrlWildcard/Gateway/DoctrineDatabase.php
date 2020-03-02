@@ -14,7 +14,11 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
- * UrlWildcard Gateway.
+ * URL wildcard gateway implementation using the Doctrine database.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence UrlWildcard Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
  */
 class DoctrineDatabase extends Gateway
 {
