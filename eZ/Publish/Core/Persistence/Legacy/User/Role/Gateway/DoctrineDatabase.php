@@ -610,11 +610,46 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Remove all limitations for a policy.
-     *
-     * @param mixed $policyId
+     * @param int[] $limitationIds
      */
-    public function removePolicyLimitations($policyId)
+    private function deletePolicyLimitations(array $limitationIds): void
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete('ezpolicy_limitation')
+            ->where(
+                $query->expr()->in(
+                    'id',
+                    $query->createPositionalParameter(
+                        $limitationIds,
+                        Connection::PARAM_INT_ARRAY
+                    )
+                )
+            );
+        $query->execute();
+    }
+
+    /**
+     * @param int[] $limitationValueIds
+     */
+    private function deletePolicyLimitationValues(array $limitationValueIds): void
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete('ezpolicy_limitation_value')
+            ->where(
+                $query->expr()->in(
+                    'id',
+                    $query->createPositionalParameter(
+                        $limitationValueIds,
+                        Connection::PARAM_INT_ARRAY
+                    )
+                )
+            );
+        $query->execute();
+    }
+
+    private function loadPolicyLimitationValues(int $policyId): array
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -632,51 +667,33 @@ final class DoctrineDatabase extends Gateway
                 )
             );
 
-        $statement = $query->execute();
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+    }
 
-        $limitationIdsSet = [];
-        $limitationValuesSet = [];
-        // @todo optimize
-        while ($row = $statement->fetch(FetchMode::ASSOCIATIVE)) {
-            if ($row['ezpolicy_limitation_id'] !== null) {
-                $limitationIdsSet[$row['ezpolicy_limitation_id']] = true;
-            }
+    /**
+     * Remove all limitations for a policy.
+     *
+     * @param mixed $policyId
+     */
+    public function removePolicyLimitations($policyId)
+    {
+        $limitationValues = $this->loadPolicyLimitationValues($policyId);
 
-            if ($row['ezpolicy_limitation_value_id'] !== null) {
-                $limitationValuesSet[$row['ezpolicy_limitation_value_id']] = true;
-            }
+        $limitationIds = array_map(
+            'intval',
+            array_column($limitationValues, 'ezpolicy_limitation_id')
+        );
+        $limitationValueIds = array_map(
+            'intval',
+            array_column($limitationValues, 'ezpolicy_limitation_value_id')
+        );
+
+        if (!empty($limitationValueIds)) {
+            $this->deletePolicyLimitationValues($limitationValueIds);
         }
 
-        if (!empty($limitationIdsSet)) {
-            $query = $this->connection->createQueryBuilder();
-            $query
-                ->delete('ezpolicy_limitation')
-                ->where(
-                    $query->expr()->in(
-                        'id',
-                        $query->createPositionalParameter(
-                            array_keys($limitationIdsSet),
-                            Connection::PARAM_INT_ARRAY
-                        )
-                    )
-                );
-            $query->execute();
-        }
-
-        if (!empty($limitationValuesSet)) {
-            $query = $this->connection->createQueryBuilder();
-            $query
-                ->delete('ezpolicy_limitation_value')
-                ->where(
-                    $query->expr()->in(
-                        'id',
-                        $query->createPositionalParameter(
-                            array_keys($limitationValuesSet),
-                            Connection::PARAM_INT_ARRAY
-                        )
-                    )
-                );
-            $query->execute();
+        if (!empty($limitationIds)) {
+            $this->deletePolicyLimitations($limitationIds);
         }
     }
 
