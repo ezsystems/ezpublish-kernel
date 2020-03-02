@@ -34,7 +34,7 @@ final class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    public function insertUrlWildcard(UrlWildcard $urlWildcard)
+    public function insertUrlWildcard(UrlWildcard $urlWildcard): int
     {
         try {
             return $this->innerGateway->insertUrlWildcard($urlWildcard);
@@ -43,25 +43,25 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function deleteUrlWildcard($id)
+    public function deleteUrlWildcard(int $id): void
     {
         try {
-            return $this->innerGateway->deleteUrlWildcard($id);
+            $this->innerGateway->deleteUrlWildcard($id);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function loadUrlWildcardData($parentId)
+    public function loadUrlWildcardData(int $id): array
     {
         try {
-            return $this->innerGateway->loadUrlWildcardData($parentId);
+            return $this->innerGateway->loadUrlWildcardData($id);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function loadUrlWildcardsData($offset = 0, $limit = -1)
+    public function loadUrlWildcardsData(int $offset = 0, int $limit = -1): array
     {
         try {
             return $this->innerGateway->loadUrlWildcardsData($offset, $limit);
