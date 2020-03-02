@@ -17,6 +17,8 @@ use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
  */
 abstract class Gateway
 {
+    public const URL_WILDCARD_SEQ = 'ezurlwildcard_id_seq';
+
     /**
      * Inserts the given UrlWildcard.
      *
