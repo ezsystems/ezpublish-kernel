@@ -27,14 +27,14 @@ abstract class Gateway
      *
      * @return mixed UrlWildcard id
      */
-    abstract public function insertUrlWildcard(UrlWildcard $urlWildcard);
+    abstract public function insertUrlWildcard(UrlWildcard $urlWildcard): int;
 
     /**
      * Deletes the UrlWildcard with given $id.
      *
      * @param mixed $id
      */
-    abstract public function deleteUrlWildcard($id);
+    abstract public function deleteUrlWildcard(int $id): void;
 
     /**
      * Loads an array with data about UrlWildcard with $id.
@@ -43,7 +43,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadUrlWildcardData($id);
+    abstract public function loadUrlWildcardData(int $id): array;
 
     /**
      * Loads an array with data about UrlWildcards (paged).
@@ -53,7 +53,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadUrlWildcardsData($offset = 0, $limit = -1);
+    abstract public function loadUrlWildcardsData(int $offset = 0, int $limit = -1): array;
 
     /**
      * Loads the UrlWildcard by source url $sourceUrl.

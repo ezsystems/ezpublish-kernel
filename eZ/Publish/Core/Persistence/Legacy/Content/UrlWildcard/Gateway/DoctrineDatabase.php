@@ -45,7 +45,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return mixed
      */
-    public function insertUrlWildcard(UrlWildcard $urlWildcard)
+    public function insertUrlWildcard(UrlWildcard $urlWildcard): int
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -77,7 +77,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @param mixed $id
      */
-    public function deleteUrlWildcard($id)
+    public function deleteUrlWildcard(int $id): void
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -108,7 +108,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function loadUrlWildcardData($id)
+    public function loadUrlWildcardData(int $id): array
     {
         $query = $this->buildLoadUrlWildcardDataQuery();
         $query
@@ -131,7 +131,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function loadUrlWildcardsData($offset = 0, $limit = -1)
+    public function loadUrlWildcardsData(int $offset = 0, int $limit = -1): array
     {
         $query = $this->buildLoadUrlWildcardDataQuery();
         $query
