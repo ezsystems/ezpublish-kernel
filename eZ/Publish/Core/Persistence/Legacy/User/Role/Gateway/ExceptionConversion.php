@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
 
+use eZ\Publish\Core\Base\Exceptions\DatabaseException;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Role;
 use Doctrine\DBAL\DBALException;
 use PDOException;
-use RuntimeException;
 
 /**
  * @internal Internal exception conversion layer.
@@ -42,10 +42,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->createRole($role);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -53,10 +51,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadRole($roleId, $status);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -66,10 +62,8 @@ final class ExceptionConversion extends Gateway
     ): array {
         try {
             return $this->innerGateway->loadRoleByIdentifier($identifier, $status);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -77,10 +71,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadRoleDraftByRoleId($roleId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -88,10 +80,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadRoles();
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -101,10 +91,8 @@ final class ExceptionConversion extends Gateway
     ): array {
         try {
             return $this->innerGateway->loadRolesForContentObjects($contentIds);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -112,10 +100,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadRoleAssignment($roleAssignmentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -123,10 +109,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadRoleAssignmentsByGroupId($groupId, $inherited);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -134,10 +118,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadRoleAssignmentsByRoleId($roleId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -145,10 +127,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadPoliciesByUserId($userId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -156,10 +136,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->updateRole($role);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -167,10 +145,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->deleteRole($roleId, $status);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -178,10 +154,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->publishRoleDraft($roleDraftId, $originalRoleId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -189,10 +163,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->addPolicy($roleId, $policy);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -200,10 +172,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->addPolicyLimitations($policyId, $limitations);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -211,10 +181,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->removePolicy($policyId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -222,10 +190,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->removePolicyLimitations($policyId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 }
