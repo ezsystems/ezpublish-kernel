@@ -107,6 +107,9 @@ final class DoctrineDatabase extends Gateway
      */
     private $connection;
 
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $dbPlatform;
+
     /**
      * Language mask generator.
      *
@@ -115,16 +118,16 @@ final class DoctrineDatabase extends Gateway
     private $languageMaskGenerator;
 
     /**
-     * Creates a new gateway based on $db.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $db, Connection $connection, MaskGenerator $languageMaskGenerator)
-    {
+    public function __construct(
+        DatabaseHandler $db,
+        Connection $connection,
+        MaskGenerator $languageMaskGenerator
+    ) {
         $this->dbHandler = $db;
         $this->connection = $connection;
+        $this->dbPlatform = $connection->getDatabasePlatform();
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
