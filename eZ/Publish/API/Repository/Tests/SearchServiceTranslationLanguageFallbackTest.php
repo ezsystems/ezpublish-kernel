@@ -1498,9 +1498,28 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                                 1,
                                 'eng-GB',
                                 [
+                                    self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
                                     self::SETUP_SHARED => 'localhost:8983/solr/core3',
                                     self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
                                     self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
+                                ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
                                 ],
                             ],
                             [
@@ -1511,6 +1530,24 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                                     self::SETUP_SHARED => 'localhost:8983/solr/core2',
                                     self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
                                     self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
+                                ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
                                 ],
                             ],
                             [
@@ -1523,8 +1560,22 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                                     self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
                                 ],
                                 [
-                                    'searchHitIndex' => 2,
-                                    'preparedDataTestIndex' => 2,
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
                                 ],
                             ],
                         ],
@@ -1548,6 +1599,24 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                                     self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
                                     self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
                                 ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                ],
                             ],
                             [
                                 2,
@@ -1557,6 +1626,24 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                                     self::SETUP_SHARED => 'localhost:8983/solr/core2',
                                     self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
                                     self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
+                                ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
                                 ],
                             ],
                             [
@@ -1569,8 +1656,22 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                                     self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
                                 ],
                                 [
-                                    'searchHitIndex' => 2,
-                                    'preparedDataTestIndex' => 2,
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
                                 ],
                             ],
                         ],
@@ -1802,7 +1903,18 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         int $currentSearchHitIndex,
         int $currentPreparedDataTestIndex
     ): array {
-        if ($customMatchResultIndexData = $inputContentData[3] ?? null) {
+        $originalData = [
+            $currentSearchHitIndex,
+            $currentPreparedDataTestIndex,
+        ];
+
+        if (false === ($this->getSetupFactory() instanceof LegacySolrSetupFactory)) {
+            return $originalData;
+        }
+
+        $setupType = $this->getSetupType();
+
+        if ($customMatchResultIndexData = $inputContentData[3][$setupType] ?? null) {
             // return custom indexes
             return [
                 $customMatchResultIndexData['searchHitIndex'],
@@ -1810,10 +1922,6 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
             ];
         }
 
-        // return original data
-        return [
-            $currentSearchHitIndex,
-            $currentPreparedDataTestIndex,
-        ];
+        return $originalData;
     }
 }
