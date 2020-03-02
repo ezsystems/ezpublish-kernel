@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
@@ -30,26 +30,12 @@ final class DoctrineDatabase extends Gateway
      */
     private const MAX_LIMIT = 1073741824;
 
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    private $dbHandler;
-
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
-    /**
-     * Creates a new DoctrineDatabase Section Gateway.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     */
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
-        $this->connection = $dbHandler->getConnection();
+        $this->connection = $connection;
     }
 
     /**
