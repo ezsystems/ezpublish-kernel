@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase Content Type Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -27,7 +25,11 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use PDO;
 
 /**
- * Doctrine database based content type gateway.
+ * Content Type gateway implementation using the Doctrine database.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence Content Type Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
  */
 class DoctrineDatabase extends Gateway
 {

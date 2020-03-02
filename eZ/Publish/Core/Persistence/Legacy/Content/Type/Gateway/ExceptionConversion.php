@@ -16,6 +16,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 
+/**
+ * @internal Internal exception conversion layer.
+ */
 class ExceptionConversion extends Gateway
 {
     /**

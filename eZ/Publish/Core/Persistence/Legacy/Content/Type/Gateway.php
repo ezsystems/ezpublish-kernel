@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Content Type Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -15,7 +13,9 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStr
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 /**
- * Base class for content type gateways.
+ * Content Type Gateway.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
