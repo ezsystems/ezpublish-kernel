@@ -22,153 +22,122 @@ abstract class Gateway
     public const POLICY_LIMITATION_SEQ = 'ezpolicy_limitation_id_seq';
 
     /**
-     * Create new role.
-     *
-     * @param Role $role
-     *
-     * @return Role
+     * Create a new role.
      */
-    abstract public function createRole(Role $role);
+    abstract public function createRole(Role $role): Role;
 
     /**
-     * Loads a specified role by $roleId.
-     *
-     * @param mixed $roleId
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
-     *
-     * @return array
-     */
-    abstract public function loadRole($roleId, $status = Role::STATUS_DEFINED);
-
-    /**
-     * Loads a specified role by $identifier.
-     *
-     * @param string $identifier
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
-     *
-     * @return array
-     */
-    abstract public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED);
-
-    /**
-     * Loads a role draft by the original role ID.
-     *
-     * @param mixed $roleId ID of the role the draft was created from.
-     *
-     * @return array
-     */
-    abstract public function loadRoleDraftByRoleId($roleId);
-
-    /**
-     * Loads all roles.
+     * Load a specified role by $roleId.
      *
      * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @return array
      */
-    abstract public function loadRoles($status = Role::STATUS_DEFINED);
+    abstract public function loadRole(int $roleId, int $status = Role::STATUS_DEFINED): array;
 
     /**
-     * Loads all roles associated with the given content objects.
+     * Load a specified role by $identifier.
      *
-     * @param array $contentIds
      * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    abstract public function loadRoleByIdentifier(
+        string $identifier,
+        int $status = Role::STATUS_DEFINED
+    ): array;
+
+    /**
+     * Load a role draft by the original role ID.
+     *
+     * @param int $roleId ID of the role the draft was created from.
+     */
+    abstract public function loadRoleDraftByRoleId(int $roleId): array;
+
+    /**
+     * Load all roles.
+     *
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    abstract public function loadRoles(int $status = Role::STATUS_DEFINED): array;
+
+    /**
+     * Load all roles associated with the given Content items.
+     *
+     * @param int[] $contentIds
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    abstract public function loadRolesForContentObjects(
+        array $contentIds,
+        int $status = Role::STATUS_DEFINED
+    ): array;
+
+    /**
+     * Load a role assignment for specified assignment ID.
+     */
+    abstract public function loadRoleAssignment(int $roleAssignmentId): array;
+
+    /**
+     * Load role assignment for specified User Group Content ID.
+     */
+    abstract public function loadRoleAssignmentsByGroupId(
+        int $groupId,
+        bool $inherited = false
+    ): array;
+
+    /**
+     * Load a Role assignments for given Role ID.
+     */
+    abstract public function loadRoleAssignmentsByRoleId(int $roleId): array;
+
+    /**
+     * Return User Policies data associated with User.
      *
      * @return array
      */
-    abstract public function loadRolesForContentObjects($contentIds, $status = Role::STATUS_DEFINED);
-
-    /**
-     * Loads role assignment for specified assignment ID.
-     *
-     * @param mixed $roleAssignmentId
-     *
-     * @return array
-     */
-    abstract public function loadRoleAssignment($roleAssignmentId);
-
-    /**
-     * Loads role assignments for specified content ID.
-     *
-     * @param mixed $groupId
-     * @param bool $inherited
-     *
-     * @return array
-     */
-    abstract public function loadRoleAssignmentsByGroupId($groupId, $inherited = false);
-
-    /**
-     * Loads role assignments for given role ID.
-     *
-     * @param mixed $roleId
-     *
-     * @return array
-     */
-    abstract public function loadRoleAssignmentsByRoleId($roleId);
-
-    /**
-     * Returns the user policies associated with the user.
-     *
-     * @param mixed $userId
-     *
-     * @return UserPolicy[]
-     */
-    abstract public function loadPoliciesByUserId($userId);
+    abstract public function loadPoliciesByUserId(int $userId): array;
 
     /**
      * Update role (draft).
      *
      * Will not throw anything if location id is invalid.
-     *
-     * @param RoleUpdateStruct $role
      */
-    abstract public function updateRole(RoleUpdateStruct $role);
+    abstract public function updateRole(RoleUpdateStruct $role): void;
 
     /**
      * Delete the specified role (draft).
      * If it's not a draft, the role assignments will also be deleted.
      *
-     * @param mixed $roleId
      * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function deleteRole($roleId, $status = Role::STATUS_DEFINED);
+    abstract public function deleteRole(int $roleId, int $status = Role::STATUS_DEFINED): void;
 
     /**
      * Publish the specified role draft.
      * If the draft was created from an existing role, published version will take the original role ID.
      *
-     * @param mixed $roleDraftId
-     * @param mixed|null $originalRoleId ID of role the draft was created from. Will be null if the role draft was completely new.
+     * @param int|null $originalRoleId ID of role the draft was created from. Will be null
+     *                                 if the role draft was completely new.
      */
-    abstract public function publishRoleDraft($roleDraftId, $originalRoleId = null);
+    abstract public function publishRoleDraft(int $roleDraftId, ?int $originalRoleId = null): void;
 
     /**
-     * Adds a policy to a role.
-     *
-     * @param mixed $roleId
-     * @param Policy $policy
+     * Add a Policy to Role.
      */
-    abstract public function addPolicy($roleId, Policy $policy);
+    abstract public function addPolicy(int $roleId, Policy $policy): Policy;
 
     /**
-     * Adds limitations to an existing policy.
+     * Add Limitations to an existing Policy.
      *
-     * @param int $policyId
-     * @param array $limitations
+     * @param array $limitations a map of Limitation identifiers to their raw values
      */
-    abstract public function addPolicyLimitations($policyId, array $limitations);
+    abstract public function addPolicyLimitations(int $policyId, array $limitations): void;
 
     /**
-     * Removes a policy from a role.
-     *
-     * @param mixed $policyId
+     * Remove a Policy from Role.
      */
-    abstract public function removePolicy($policyId);
+    abstract public function removePolicy(int $policyId): void;
 
     /**
-     * Removes a policy from a role.
-     *
-     * @param mixed $policyId
+     * Remove a Policy from Role.
      */
-    abstract public function removePolicyLimitations($policyId);
+    abstract public function removePolicyLimitations(int $policyId): void;
 }
