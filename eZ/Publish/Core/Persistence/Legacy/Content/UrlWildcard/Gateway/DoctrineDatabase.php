@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase UrlWildcard Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -40,13 +38,6 @@ final class DoctrineDatabase extends Gateway
         $this->connection = $connection;
     }
 
-    /**
-     * Inserts the given UrlWildcard.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard $urlWildcard
-     *
-     * @return mixed
-     */
     public function insertUrlWildcard(UrlWildcard $urlWildcard): int
     {
         $query = $this->connection->createQueryBuilder();
@@ -74,11 +65,6 @@ final class DoctrineDatabase extends Gateway
         return (int)$this->connection->lastInsertId(self::URL_WILDCARD_SEQ);
     }
 
-    /**
-     * Deletes the UrlWildcard with given $id.
-     *
-     * @param mixed $id
-     */
     public function deleteUrlWildcard(int $id): void
     {
         $query = $this->connection->createQueryBuilder();
@@ -103,13 +89,6 @@ final class DoctrineDatabase extends Gateway
         return $query;
     }
 
-    /**
-     * Loads an array with data about UrlWildcard with $id.
-     *
-     * @param mixed $id
-     *
-     * @return array
-     */
     public function loadUrlWildcardData(int $id): array
     {
         $query = $this->buildLoadUrlWildcardDataQuery();
@@ -125,14 +104,6 @@ final class DoctrineDatabase extends Gateway
         return false !== $result ? $result : [];
     }
 
-    /**
-     * Loads an array with data about UrlWildcards (paged).
-     *
-     * @param mixed $offset
-     * @param mixed $limit
-     *
-     * @return array
-     */
     public function loadUrlWildcardsData(int $offset = 0, int $limit = -1): array
     {
         $query = $this->buildLoadUrlWildcardDataQuery();
@@ -145,13 +116,6 @@ final class DoctrineDatabase extends Gateway
         return $stmt->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Loads the UrlWildcard with given $sourceUrl.
-     *
-     * @param string $sourceUrl
-     *
-     * @return array
-     */
     public function loadUrlWildcardBySourceUrl(string $sourceUrl): array
     {
         $query = $this->buildLoadUrlWildcardDataQuery();

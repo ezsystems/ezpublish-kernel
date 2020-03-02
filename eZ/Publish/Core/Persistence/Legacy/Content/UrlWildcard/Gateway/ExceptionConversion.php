@@ -27,7 +27,7 @@ final class ExceptionConversion extends Gateway
     private $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway.
+     * Create a new exception conversion gateway around $innerGateway.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway $innerGateway
      */
