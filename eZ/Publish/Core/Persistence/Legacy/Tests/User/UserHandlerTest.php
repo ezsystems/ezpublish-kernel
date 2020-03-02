@@ -35,7 +35,7 @@ class UserHandlerTest extends TestCase
 
         return new User\Handler(
             $userGateway ?? new User\Gateway\DoctrineDatabase($this->getDatabaseConnection()),
-            new User\Role\Gateway\DoctrineDatabase($dbHandler),
+            new User\Role\Gateway\DoctrineDatabase($this->getDatabaseConnection()),
             new User\Mapper(),
             new LimitationConverter([new ObjectStateLimitationHandler($dbHandler)])
         );
