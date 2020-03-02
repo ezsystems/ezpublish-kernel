@@ -20,7 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
  *
  * @see \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
@@ -34,7 +34,7 @@ class DoctrineDatabase extends Gateway
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      * @deprecated Start to use DBAL $connection instead.
      */
-    protected $dbHandler;
+    private $dbHandler;
 
     /**
      * Creates a new DoctrineDatabase Section Gateway.
