@@ -11,7 +11,6 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Role;
@@ -25,13 +24,6 @@ use eZ\Publish\SPI\Persistence\User\Role;
  */
 final class DoctrineDatabase extends Gateway
 {
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
-    private $handler;
-
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
@@ -43,10 +35,9 @@ final class DoctrineDatabase extends Gateway
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $handler)
+    public function __construct(Connection $connection)
     {
-        $this->handler = $handler;
-        $this->connection = $handler->getConnection();
+        $this->connection = $connection;
         $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
