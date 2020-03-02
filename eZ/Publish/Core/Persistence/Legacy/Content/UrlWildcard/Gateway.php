@@ -17,6 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
  */
 abstract class Gateway
 {
+    public const URL_WILDCARD_TABLE = 'ezurlwildcard';
     public const URL_WILDCARD_SEQ = 'ezurlwildcard_id_seq';
 
     /**

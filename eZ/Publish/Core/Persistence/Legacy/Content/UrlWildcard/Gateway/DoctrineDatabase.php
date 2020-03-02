@@ -63,7 +63,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->insert('ezurlwildcard')
+            ->insert(self::URL_WILDCARD_TABLE)
             ->values(
                 [
                     'destination_url' => $query->createPositionalParameter(
@@ -95,7 +95,7 @@ final class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->delete('ezurlwildcard')
+            ->delete(self::URL_WILDCARD_TABLE)
             ->where(
                 $query->expr()->eq(
                     'id',
@@ -110,7 +110,7 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $query
             ->select('id', 'destination_url', 'source_url', 'type')
-            ->from('ezurlwildcard');
+            ->from(self::URL_WILDCARD_TABLE);
 
         return $query;
     }
