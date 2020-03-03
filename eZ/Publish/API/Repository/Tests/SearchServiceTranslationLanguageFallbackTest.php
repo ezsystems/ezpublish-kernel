@@ -1903,25 +1903,23 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         int $currentSearchHitIndex,
         int $currentPreparedDataTestIndex
     ): array {
-        $originalData = [
+        $indexesToMatchData = [
             $currentSearchHitIndex,
             $currentPreparedDataTestIndex,
         ];
 
-        if (false === ($this->getSetupFactory() instanceof LegacySolrSetupFactory)) {
-            return $originalData;
+        if ($this->getSetupFactory() instanceof LegacySolrSetupFactory) {
+            $setupType = $this->getSetupType();
+
+            if ($customMatchResultIndexData = $inputContentData[3][$setupType] ?? null) {
+                // Use custom indexes
+                $indexesToMatchData = [
+                    $customMatchResultIndexData['searchHitIndex'],
+                    $customMatchResultIndexData['preparedDataTestIndex'],
+                ];
+            }
         }
 
-        $setupType = $this->getSetupType();
-
-        if ($customMatchResultIndexData = $inputContentData[3][$setupType] ?? null) {
-            // return custom indexes
-            return [
-                $customMatchResultIndexData['searchHitIndex'],
-                $customMatchResultIndexData['preparedDataTestIndex'],
-            ];
-        }
-
-        return $originalData;
+        return $indexesToMatchData;
     }
 }
