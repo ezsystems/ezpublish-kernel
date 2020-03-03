@@ -1444,6 +1444,81 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function deleteUrlNopAliasesWithoutChildren(): int
+    {
+        $platform = $this->connection->getDatabasePlatform();
+        $qb = $this->connection->createQueryBuilder();
+
+        $selectQb = clone $qb;
+        $subQbForSelect = clone $qb;
+
+        $subQbForSelect
+            ->select($platform->getCountExpression('id'))
+            ->from($this->table)
+            ->where(
+                $subQbForSelect->expr()->eq(
+                    'parent',
+                    'al1.id'
+                )
+            );
+
+        $selectQb
+            ->select('id')
+            ->from($this->table, 'al1')
+            ->where(
+                $qb->expr()->eq(
+                    'action_type',
+                    ':actionType'
+                )
+            )->andWhere(
+                $qb->expr()->eq(
+                    sprintf('(%s)', $subQbForSelect),
+                    0
+                )
+            );
+
+        $qb
+            ->delete($this->table)
+            ->where(
+                $qb->expr()->in(
+                    'id',
+                    sprintf('(%s)', $selectQb)
+                )
+            )
+            ->setParameter('actionType', 'nop');
+
+        return $qb->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countAllChildAliases(int $parentId): int
+    {
+        $platform = $this->connection->getDatabasePlatform();
+        $qb = $this->connection->createQueryBuilder();
+
+        $qb
+            ->select($platform->getCountExpression('id'))
+            ->from($this->table)
+            ->where(
+                $qb->expr()->eq(
+                    'parent',
+                    $qb->createPositionalParameter($parentId, ParameterType::INTEGER)
+                )
+            )->andWhere(
+                $qb->expr()->eq(
+                    'is_alias',
+                    $qb->createPositionalParameter(1, ParameterType::INTEGER)
+                )
+            );
+
+        return $qb->execute()->fetchColumn();
+    }
+
+    /**
      * Filter from the given result set original (current) only URL aliases and index them by language_mask.
      *
      * Note: each language_mask can have one URL Alias.
