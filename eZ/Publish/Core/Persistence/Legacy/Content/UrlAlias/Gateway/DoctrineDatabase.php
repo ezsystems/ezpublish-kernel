@@ -1451,6 +1451,8 @@ class DoctrineDatabase extends Gateway
         $platform = $this->connection->getDatabasePlatform();
         $qb = $this->connection->createQueryBuilder();
 
+        // The wrapper select is needed for SQL "Derived Table Merge" issue for deleting
+        $wrapperQb = clone $qb;
         $selectQb = clone $qb;
         $subQbForSelect = clone $qb;
 
@@ -1477,6 +1479,12 @@ class DoctrineDatabase extends Gateway
                     sprintf('(%s)', $subQbForSelect),
                     0
                 )
+            )->orderBy('id', 'ASC');
+
+        $wrapperQb
+            ->select('wrapper.id')
+            ->from(
+                sprintf('(%s) wrapper', $selectQb)
             );
 
         $qb
@@ -1484,7 +1492,7 @@ class DoctrineDatabase extends Gateway
             ->where(
                 $qb->expr()->in(
                     'id',
-                    sprintf('(%s)', $selectQb)
+                    sprintf('(%s)', $wrapperQb)
                 )
             )
             ->setParameter('actionType', 'nop');
