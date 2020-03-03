@@ -4,23 +4,23 @@ services:
         autoconfigure: true
         public: false
 
-    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParserDispatcher:
+    eZ\Publish\Core\QueryType\BuiltIn\SortSpec\SortClauseParserDispatcher:
         arguments:
             $parsers: !tagged_iterator ezplatform.query_type.sort_clause_parser
 
-    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParser\FieldSortClauseParser:
+    eZ\Publish\Core\QueryType\BuiltIn\SortSpec\SortClauseParser\FieldSortClauseParser:
         tags:
             - { name: ezplatform.query_type.sort_clause_parser }
 
-    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParser\MapDistanceSortClauseParser:
+    eZ\Publish\Core\QueryType\BuiltIn\SortSpec\SortClauseParser\MapDistanceSortClauseParser:
         tags:
             - { name: ezplatform.query_type.sort_clause_parser }
 
-    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParser\RandomSortClauseParser:
+    eZ\Publish\Core\QueryType\BuiltIn\SortSpec\SortClauseParser\RandomSortClauseParser:
         tags:
             - { name: ezplatform.query_type.sort_clause_parser }
 
-    eZ\Publish\Core\QueryType\BuildIn\SortSpec\SortClauseParser\DefaultSortClauseParser:
+    eZ\Publish\Core\QueryType\BuiltIn\SortSpec\SortClauseParser\DefaultSortClauseParser:
         arguments:
             $valueObjectClassMap:
                 content_id: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentId
