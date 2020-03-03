@@ -22,7 +22,7 @@ class SiteAccessGroupConfigResolver extends SiteAccessConfigResolver
 {
     use ContainerAwareTrait;
 
-    /** @var array */
+    /** @var string[][] */
     protected $siteAccessGroups;
 
     public function __construct(
@@ -34,7 +34,7 @@ class SiteAccessGroupConfigResolver extends SiteAccessConfigResolver
         $this->siteAccessGroups = $siteAccessGroups;
     }
 
-    public function hasParameter(string $paramName, ?string $namespace = null, ?string $scope = null): bool
+    final public function hasParameter(string $paramName, ?string $namespace = null, ?string $scope = null): bool
     {
         [$namespace, $scope] = $this->resolveNamespaceAndScope($namespace, $scope);
 
@@ -89,11 +89,8 @@ class SiteAccessGroupConfigResolver extends SiteAccessConfigResolver
     protected function resolverHasParameterForGroup(SiteAccessGroup $siteAccessGroup, string $paramName, string $namespace): bool
     {
         $groupScopeParamName = $this->resolveScopeRelativeParamName($paramName, $namespace, $siteAccessGroup->getName());
-        if ($this->container->hasParameter($groupScopeParamName)) {
-            return true;
-        }
 
-        return false;
+        return $this->container->hasParameter($groupScopeParamName);
     }
 
     protected function getParameterFromResolver(SiteAccess $siteAccess, string $paramName, string $namespace)
@@ -115,11 +112,12 @@ class SiteAccessGroupConfigResolver extends SiteAccessConfigResolver
     protected function getParameterFromResolverForGroup(SiteAccessGroup $siteAccessGroup, string $paramName, string $namespace)
     {
         $groupScopeParamName = $this->resolveScopeRelativeParamName($paramName, $namespace, $siteAccessGroup->getName());
-        if ($this->container->hasParameter($groupScopeParamName)) {
-            return $this->container->getParameter($groupScopeParamName);
+
+        if (!$this->container->hasParameter($groupScopeParamName)) {
+            throw new ParameterNotFoundException($paramName, $namespace, [$siteAccessGroup]);
         }
 
-        throw new ParameterNotFoundException($paramName, $namespace, [$siteAccessGroup]);
+        return $this->container->getParameter($groupScopeParamName);
     }
 
     private function isSiteAccessGroupScope($scope): bool

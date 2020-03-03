@@ -20,6 +20,8 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 
 abstract class AbstractParserTestCase extends AbstractExtensionTestCase
 {
+    protected const EMPTY_SA_GROUP = 'empty_group';
+
     /**
      * Asserts a parameter from ConfigResolver has expected value for given scope.
      *
@@ -42,7 +44,7 @@ abstract class AbstractParserTestCase extends AbstractExtensionTestCase
 
         $configResolvers = [
             new DefaultScopeConfigResolver('default'),
-            new SiteAccessGroupConfigResolver($siteAccessProvider, 'default'),
+            new SiteAccessGroupConfigResolver($siteAccessProvider, 'default', [self::EMPTY_SA_GROUP => []]),
             new StaticSiteAccessConfigResolver($siteAccessProvider, 'default'),
             new GlobalScopeConfigResolver('default'),
         ];

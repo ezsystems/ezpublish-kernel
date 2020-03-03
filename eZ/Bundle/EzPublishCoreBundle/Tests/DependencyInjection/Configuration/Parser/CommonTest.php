@@ -15,8 +15,6 @@ use Symfony\Component\Yaml\Yaml;
 
 class CommonTest extends AbstractParserTestCase
 {
-    private const EMPTY_SA_GROUP = 'empty_group';
-
     private $minimalConfig;
 
     /** @var \PHPUnit\Framework\MockObject\MockObject */
