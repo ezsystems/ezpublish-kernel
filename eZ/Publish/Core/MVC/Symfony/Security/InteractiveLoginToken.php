@@ -35,7 +35,7 @@ class InteractiveLoginToken extends UsernamePasswordToken
 
     public function __serialize(): array
     {
-        return [$this->originalTokenType, parent::serialize()];
+        return [$this->originalTokenType, parent::__serialize()];
     }
 
     public function __unserialize($serialized): void

@@ -42,16 +42,16 @@ class ExceptionListener implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         if ($exception instanceof NotFoundException) {
-            $event->setException(new NotFoundHttpException($this->getTranslatedMessage($exception), $exception));
+            $event->setThrowable(new NotFoundHttpException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof UnauthorizedException) {
-            $event->setException(new AccessDeniedException($this->getTranslatedMessage($exception), $exception));
+            $event->setThrowable(new AccessDeniedException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof BadStateException || $exception instanceof InvalidArgumentException) {
-            $event->setException(new BadRequestHttpException($this->getTranslatedMessage($exception), $exception));
+            $event->setThrowable(new BadRequestHttpException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof Translatable) {
-            $event->setException(
+            $event->setThrowable(
                 new HttpException(
                     Response::HTTP_INTERNAL_SERVER_ERROR,
                     get_class($exception) . ': ' . $this->getTranslatedMessage($exception),
