@@ -835,13 +835,6 @@ final class DoctrineDatabase extends Gateway
         }
     }
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param int $languageId
-     * @param int $status
-     *
-     * @return bool
-     */
     private function fieldDefinitionMultilingualDataExist(
         FieldDefinition $fieldDefinition,
         int $languageId,
@@ -849,23 +842,18 @@ final class DoctrineDatabase extends Gateway
     ): bool {
         $existQuery = $this->connection->createQueryBuilder();
         $existQuery
-            ->select('COUNT(1)')
-            ->from('ezcontentclass_attribute_ml')
-            ->where('contentclass_attribute_id = :fieldDefinitionId')
+            ->select($this->dbPlatform->getCountExpression('1'))
+            ->from(self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
+            ->where('contentclass_attribute_id = :field_definition_id')
             ->andWhere('version = :status')
-            ->andWhere('language_id = :languageId')
-            ->setParameter('fieldDefinitionId', $fieldDefinition->id, ParameterType::INTEGER)
+            ->andWhere('language_id = :language_id')
+            ->setParameter('field_definition_id', $fieldDefinition->id, ParameterType::INTEGER)
             ->setParameter('status', $status, ParameterType::INTEGER)
-            ->setParameter('languageId', $languageId, ParameterType::INTEGER);
+            ->setParameter('language_id', $languageId, ParameterType::INTEGER);
 
         return 0 < (int)$existQuery->execute()->fetchColumn();
     }
 
-    /**
-     * @param int $fieldDefinitionId
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition $multilingualData
-     * @param int $status
-     */
     private function updateFieldDefinitionMultilingualData(
         int $fieldDefinitionId,
         MultilingualStorageFieldDefinition $multilingualData,
@@ -873,19 +861,19 @@ final class DoctrineDatabase extends Gateway
     ): void {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezcontentclass_attribute_ml')
-            ->set('data_text', ':dataText')
-            ->set('data_json', ':dataJson')
+            ->update(self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
+            ->set('data_text', ':data_text')
+            ->set('data_json', ':data_json')
             ->set('name', ':name')
             ->set('description', ':description')
-            ->where('contentclass_attribute_id = :fieldDefinitionId')
+            ->where('contentclass_attribute_id = :field_definition_id')
             ->andWhere('version = :status')
             ->andWhere('language_id = :languageId')
-            ->setParameter(':dataText', $multilingualData->dataText)
-            ->setParameter(':dataJson', $multilingualData->dataJson)
-            ->setParameter(':name', $multilingualData->name)
-            ->setParameter(':description', $multilingualData->description)
-            ->setParameter('fieldDefinitionId', $fieldDefinitionId, ParameterType::INTEGER)
+            ->setParameter('data_text', $multilingualData->dataText)
+            ->setParameter('data_json', $multilingualData->dataJson)
+            ->setParameter('name', $multilingualData->name)
+            ->setParameter('description', $multilingualData->description)
+            ->setParameter('field_definition_id', $fieldDefinitionId, ParameterType::INTEGER)
             ->setParameter('status', $status, ParameterType::INTEGER)
             ->setParameter('languageId', $multilingualData->languageId, ParameterType::INTEGER);
 
@@ -955,76 +943,52 @@ final class DoctrineDatabase extends Gateway
 
     public function loadTypesListData(array $typeIds): array
     {
-        $q = $this->getLoadTypeQueryBuilder();
+        $query = $this->getLoadTypeQueryBuilder();
 
-        $q
-            ->where($q->expr()->in('c.id', ':ids'))
-            ->andWhere($q->expr()->eq('c.version', Type::STATUS_DEFINED))
+        $query
+            ->where($query->expr()->in('c.id', ':ids'))
+            ->andWhere($query->expr()->eq('c.version', Type::STATUS_DEFINED))
             ->setParameter('ids', $typeIds, Connection::PARAM_INT_ARRAY);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
-    /**
-     * Loads an array with data about $typeId in $status.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     *
-     * @return array Data rows.
-     */
-    public function loadTypeData($typeId, $status)
+    public function loadTypeData(int $typeId, int $status): array
     {
-        $q = $this->getLoadTypeQueryBuilder();
-        $q
-            ->where($q->expr()->eq('c.id', ':id'))
-            ->andWhere($q->expr()->eq('c.version', ':version'))
+        $query = $this->getLoadTypeQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->where($expr->eq('c.id', ':id'))
+            ->andWhere($expr->eq('c.version', ':version'))
             ->setParameter('id', $typeId, ParameterType::INTEGER)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
-    /**
-     * Loads an array with data about the type referred to by $identifier in
-     * $status.
-     *
-     * @param string $identifier
-     * @param int $status
-     *
-     * @return array(int=>array(string=>mixed)) Data rows.
-     */
-    public function loadTypeDataByIdentifier($identifier, $status)
+    public function loadTypeDataByIdentifier(string $identifier, int $status): array
     {
-        $q = $this->getLoadTypeQueryBuilder();
-        $q
-            ->where($q->expr()->eq('c.identifier', ':identifier'))
-            ->andWhere($q->expr()->eq('c.version', ':version'))
+        $query = $this->getLoadTypeQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->where($expr->eq('c.identifier', ':identifier'))
+            ->andWhere($expr->eq('c.version', ':version'))
             ->setParameter('identifier', $identifier, ParameterType::STRING)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
-    /**
-     * Loads an array with data about the type referred to by $remoteId in
-     * $status.
-     *
-     * @param mixed $remoteId
-     * @param int $status
-     *
-     * @return array(int=>array(string=>mixed)) Data rows.
-     */
-    public function loadTypeDataByRemoteId($remoteId, $status)
+    public function loadTypeDataByRemoteId(string $remoteId, int $status): array
     {
-        $q = $this->getLoadTypeQueryBuilder();
-        $q
-            ->where($q->expr()->eq('c.remote_id', ':remote'))
-            ->andWhere($q->expr()->eq('c.version', ':version'))
+        $query = $this->getLoadTypeQueryBuilder();
+        $query
+            ->where($query->expr()->eq('c.remote_id', ':remote'))
+            ->andWhere($query->expr()->eq('c.version', ':version'))
             ->setParameter('remote', $remoteId, ParameterType::STRING)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
     /**
@@ -1092,10 +1056,10 @@ final class DoctrineDatabase extends Gateway
                     'ml.data_json AS ezcontentclass_attribute_multilingual_data_json',
                 ]
             )
-            ->from('ezcontentclass', 'c')
+            ->from(self::CONTENT_TYPE_TABLE, 'c')
             ->leftJoin(
                 'c',
-                'ezcontentclass_attribute',
+                self::FIELD_DEFINITION_TABLE,
                 'a',
                 $expr->andX(
                     $expr->eq('c.id', 'a.contentclass_id'),
@@ -1104,7 +1068,7 @@ final class DoctrineDatabase extends Gateway
             )
             ->leftJoin(
                 'c',
-                'ezcontentclass_classgroup',
+                self::CONTENT_TYPE_TO_GROUP_ASSIGNMENT_TABLE,
                 'g',
                 $expr->andX(
                     $expr->eq('c.id', 'g.contentclass_id'),
@@ -1113,7 +1077,7 @@ final class DoctrineDatabase extends Gateway
             )
             ->leftJoin(
                 'a',
-                'ezcontentclass_attribute_ml',
+                self::MULTILINGUAL_FIELD_DEFINITION_TABLE,
                 'ml',
                 $expr->andX(
                     $expr->eq('a.id', 'ml.contentclass_attribute_id'),
@@ -1185,13 +1149,7 @@ final class DoctrineDatabase extends Gateway
         $deleteQuery->execute();
     }
 
-    /**
-     * Deletes a Type completely.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     */
-    public function delete($typeId, $status)
+    public function delete(int $typeId, int $status): void
     {
         $this->deleteGroupAssignmentsForType($typeId, $status);
         $this->deleteFieldDefinitionsForType($typeId, $status);
@@ -1388,21 +1346,14 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Removes fieldDefinition data from multilingual table.
-     *
-     * @param int $fieldDefinitionId
-     * @param string $languageCode
-     * @param int $status
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
     public function removeFieldDefinitionTranslation(
         int $fieldDefinitionId,
         string $languageCode,
         int $status
     ): void {
-        $languageId = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes([$languageCode]);
+        $languageId = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+            [$languageCode]
+        );
 
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
@@ -1418,12 +1369,12 @@ final class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Removes types created or modified by the user.
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function removeByUserAndVersion(int $userId, int $version): void
     {
         $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->delete('ezcontentclass')
+        $queryBuilder->delete(self::CONTENT_TYPE_TABLE)
             ->where('creator_id = :user or modifier_id = :user')
             ->andWhere('version = :version')
             ->setParameter('user', $userId, ParameterType::INTEGER)
@@ -1437,13 +1388,16 @@ final class DoctrineDatabase extends Gateway
             $this->cleanupAssociations();
 
             $this->connection->commit();
-        } catch (DBALException | PDOException $e) {
+        } catch (DBALException $e) {
             $this->connection->rollBack();
 
             throw $e;
         }
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupAssociations(): void
     {
         $this->cleanupClassAttributeTable();
@@ -1452,6 +1406,9 @@ final class DoctrineDatabase extends Gateway
         $this->cleanupClassNameTable();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupClassAttributeTable(): void
     {
         $sql = <<<SQL
@@ -1465,6 +1422,9 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupClassAttributeMLTable(): void
     {
         $sql = <<<SQL
@@ -1478,6 +1438,9 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupClassGroupTable(): void
     {
         $sql = <<<SQL
@@ -1491,6 +1454,9 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupClassNameTable(): void
     {
         $sql = <<< SQL

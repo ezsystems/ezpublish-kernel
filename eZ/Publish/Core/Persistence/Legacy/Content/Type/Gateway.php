@@ -145,7 +145,7 @@ abstract class Gateway
     abstract public function updateType(int $typeId, int $status, Type $type): void;
 
     /**
-     * Loads an array with data about several Types in defined status.
+     * Bulk-load an array with data about the given Content Types.
      *
      * @param array $typeIds
      *
@@ -156,34 +156,19 @@ abstract class Gateway
     /**
      * Loads an array with data about $typeId in $status.
      *
-     * @param mixed $typeId
-     * @param int $status
-     *
      * @return array Data rows.
      */
-    abstract public function loadTypeData($typeId, $status);
+    abstract public function loadTypeData(int $typeId, int $status): array;
 
     /**
-     * Loads an array with data about the type referred to by $identifier in
-     * $status.
-     *
-     * @param string $identifier
-     * @param int $status
-     *
-     * @return array(int=>array(string=>mixed)) Data rows.
+     * Load an array with data about the Content Type of the given identifier and status.
      */
-    abstract public function loadTypeDataByIdentifier($identifier, $status);
+    abstract public function loadTypeDataByIdentifier(string $identifier, int $status): array;
 
     /**
-     * Loads an array with data about the type referred to by $remoteId in
-     * $status.
-     *
-     * @param mixed $remoteId
-     * @param int $status
-     *
-     * @return array(int=>array(string=>mixed)) Data rows.
+     * Load an array with data about the Content Type of a given Remote ID and status.
      */
-    abstract public function loadTypeDataByRemoteId($remoteId, $status);
+    abstract public function loadTypeDataByRemoteId(string $remoteId, int $status): array;
 
     /**
      * Count the number of existing instances a Content Type.
@@ -191,12 +176,9 @@ abstract class Gateway
     abstract public function countInstancesOfType(int $typeId): int;
 
     /**
-     * Deletes a Type completely.
-     *
-     * @param mixed $typeId
-     * @param int $status
+     * Permanently delete a Content Type of the given status.
      */
-    abstract public function delete($typeId, $status);
+    abstract public function delete(int $typeId, int $status): void;
 
     /**
      * Delete all Field Definitions definitions of Content Type.
