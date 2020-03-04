@@ -34,17 +34,24 @@ class ContentSearchHitAdapterTest extends TestCase
      *
      * @param Query $query
      * @param SearchService $searchService
+     * @param array $languageFilter
      *
      * @return ContentSearchHitAdapter
      */
-    protected function getAdapter(Query $query, SearchService $searchService)
+    protected function getAdapter(Query $query, SearchService $searchService, array $languageFilter = [])
     {
-        return new ContentSearchHitAdapter($query, $searchService);
+        return new ContentSearchHitAdapter($query, $searchService, $languageFilter);
     }
 
     public function testGetNbResults()
     {
         $nbResults = 123;
+
+        $languageFilter = [
+            'languages' => ['eng-GB', 'pol-PL'],
+            'useAlwaysAvailable' => true,
+        ];
+
         $query = new Query();
         $query->query = $this->createMock(CriterionInterface::class);
         $query->sortClauses = $this
@@ -60,10 +67,13 @@ class ContentSearchHitAdapterTest extends TestCase
         $this->searchService
             ->expects($this->once())
             ->method('findContent')
-            ->with($this->equalTo($countQuery))
+            ->with(
+                $this->equalTo($countQuery),
+                $this->equalTo($languageFilter)
+            )
             ->will($this->returnValue($searchResult));
 
-        $adapter = $this->getAdapter($query, $this->searchService);
+        $adapter = $this->getAdapter($query, $this->searchService, $languageFilter);
         $this->assertSame($nbResults, $adapter->getNbResults());
         // Running a 2nd time to ensure SearchService::findContent() is called only once.
         $this->assertSame($nbResults, $adapter->getNbResults());
@@ -74,6 +84,11 @@ class ContentSearchHitAdapterTest extends TestCase
         $offset = 20;
         $limit = 25;
         $nbResults = 123;
+
+        $languageFilter = [
+            'languages' => ['eng-GB', 'pol-PL'],
+            'useAlwaysAvailable' => true,
+        ];
 
         $query = new Query();
         $query->query = $this->createMock(CriterionInterface::class);
@@ -100,10 +115,13 @@ class ContentSearchHitAdapterTest extends TestCase
             ->searchService
             ->expects($this->once())
             ->method('findContent')
-            ->with($this->equalTo($searchQuery))
+            ->with(
+                $this->equalTo($searchQuery),
+                $this->equalTo($languageFilter)
+            )
             ->will($this->returnValue($searchResult));
 
-        $adapter = $this->getAdapter($query, $this->searchService);
+        $adapter = $this->getAdapter($query, $this->searchService, $languageFilter);
         $this->assertSame($finalResult, $adapter->getSlice($offset, $limit));
         $this->assertSame($nbResults, $adapter->getNbResults());
     }

@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
@@ -80,18 +81,23 @@ class FullText extends CriterionHandler
      */
     protected $processor;
 
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator */
+    private $languageMaskGenerator;
+
     /**
      * Construct from full text search configuration.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $processor
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      * @param array $configuration
      *
-     * @throws InvalidArgumentException On invalid $configuration values
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException On invalid $configuration values
      */
     public function __construct(
         DatabaseHandler $dbHandler,
         TransformationProcessor $processor,
+        MaskGenerator $languageMaskGenerator,
         array $configuration = []
     ) {
         parent::__construct($dbHandler);
@@ -108,6 +114,7 @@ class FullText extends CriterionHandler
                 'Stop Word Threshold Factor needs to be between 0 and 1, got: ' . $this->configuration['stopWordThresholdFactor']
             );
         }
+        $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
     /**
@@ -242,6 +249,23 @@ class FullText extends CriterionHandler
                     $this->getWordIdSubquery($subSelect, $criterion->value)
                 )
             );
+
+        if (!empty($languageSettings['languages'])) {
+            $languageMask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                $languageSettings['languages'],
+                $languageSettings['useAlwaysAvailable'] ?? true
+            );
+
+            $subSelect->where(
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn('language_mask', 'ezsearch_object_word_link'),
+                        $query->bindValue($languageMask, null, \PDO::PARAM_INT)
+                    ),
+                    $query->bindValue(0, null, \PDO::PARAM_INT)
+                )
+            );
+        }
 
         return $query->expr->in(
             $this->dbHandler->quoteColumn('id', 'ezcontentobject'),

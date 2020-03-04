@@ -123,6 +123,7 @@ services:
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.api.storage_engine.transformation_processor"
+            - "@ezpublish.persistence.legacy.language.mask_generator"
             - "%ezpublish.search.legacy.criterion_handler.full_text.configuration%"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}

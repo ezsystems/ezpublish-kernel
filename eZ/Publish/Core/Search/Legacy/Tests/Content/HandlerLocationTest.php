@@ -115,6 +115,7 @@ class HandlerLocationTest extends AbstractTestCase
                         new CommonCriterionHandler\FullText(
                             $this->getDatabaseHandler(),
                             $transformationProcessor,
+                            $this->getLanguageMaskGenerator(),
                             $fullTextSearchConfiguration
                         ),
                         new CommonCriterionHandler\LanguageCode(
@@ -154,6 +155,7 @@ class HandlerLocationTest extends AbstractTestCase
                 $this->getContentTypeHandler(),
                 $transformationProcessor,
                 new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler()),
+                $this->getLanguageMaskGenerator(),
                 $this->getFullTextSearchConfiguration()
             ),
             $this->createMock(ContentMapper::class),

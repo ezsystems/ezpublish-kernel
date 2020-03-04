@@ -94,6 +94,7 @@ class HandlerLocationSortTest extends AbstractTestCase
                 $this->getContentTypeHandler(),
                 $this->getDefinitionBasedTransformationProcessor(),
                 new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler()),
+                $this->getLanguageMaskGenerator(),
                 $this->getFullTextSearchConfiguration()
             ),
             $this->createMock(ContentMapper::class),
