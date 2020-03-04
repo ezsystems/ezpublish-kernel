@@ -531,13 +531,14 @@ final class DoctrineDatabase extends Gateway
         );
 
         /* this part allows set status `published` only if there is no other published version of the content */
-        $notExistPublishedVersion = <<< HEREDOC
+        $notExistPublishedVersion = <<<SQL
             NOT EXISTS (
                 SELECT 1 FROM (
-                    SELECT 1 FROM ezcontentobject_version  WHERE contentobject_id = :contentId AND status = :status 
+                    SELECT 1 FROM ezcontentobject_version
+                    WHERE contentobject_id = :contentId AND status = :status
                 ) as V
             )
-HEREDOC;
+            SQL;
 
         $query->andWhere($notExistPublishedVersion);
         if (0 === $query->execute()) {
