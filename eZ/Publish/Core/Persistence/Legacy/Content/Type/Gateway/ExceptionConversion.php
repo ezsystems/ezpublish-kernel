@@ -29,7 +29,7 @@ final class ExceptionConversion extends Gateway
     private $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway.
+     * Create a new exception conversion gateway around $innerGateway.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $innerGateway
      */
@@ -216,7 +216,7 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadTypeData($typeId, $status)
+    public function loadTypeData(int $typeId, int $status): array
     {
         try {
             return $this->innerGateway->loadTypeData($typeId, $status);
@@ -234,7 +234,7 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadTypeDataByRemoteId($remoteId, $status)
+    public function loadTypeDataByRemoteId(string $remoteId, int $status): array
     {
         try {
             return $this->innerGateway->loadTypeDataByRemoteId($remoteId, $status);
@@ -252,10 +252,10 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function delete($typeId, $status)
+    public function delete(int $typeId, int $status): void
     {
         try {
-            return $this->innerGateway->delete($typeId, $status);
+            $this->innerGateway->delete($typeId, $status);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
