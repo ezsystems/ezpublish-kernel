@@ -35,8 +35,6 @@ abstract class Gateway
     /**
      * Insert a new Content item.
      *
-     * @return int ID
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     abstract public function insertContentObject(
@@ -48,8 +46,6 @@ abstract class Gateway
      * Insert a new Version.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
-     *
-     * @return int ID
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
@@ -108,8 +104,6 @@ abstract class Gateway
      * Only used when a new field is created (i.e. a new object or a field in a
      * new language!). After that, field IDs need to stay the same, only the
      * version number changes.
-     *
-     * @return int ID
      */
     abstract public function insertNewField(
         Content $content,
@@ -393,8 +387,6 @@ abstract class Gateway
 
     /**
      * Insert a new content relation.
-     *
-     * @return int the inserted ID
      */
     abstract public function insertRelation(RelationCreateStruct $createStruct): int;
 
