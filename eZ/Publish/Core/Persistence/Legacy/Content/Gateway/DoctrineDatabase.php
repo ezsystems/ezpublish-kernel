@@ -31,7 +31,6 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use DOMXPath;
 use DOMDocument;
-use PDO;
 
 /**
  * Doctrine database based content gateway.
