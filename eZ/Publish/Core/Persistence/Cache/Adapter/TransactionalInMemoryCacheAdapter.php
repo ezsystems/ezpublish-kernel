@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Cache\Adapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Cache\CacheItem;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Internal proxy adapter invalidating our isolated in-memory cache, and defer shared pool changes during transactions.
@@ -289,7 +290,7 @@ class TransactionalInMemoryCacheAdapter implements TransactionAwareAdapterInterf
             return true;
         }
 
-        foreach ($item->getMetadata() as $tag) {
+        foreach ($item->getMetadata()[ItemInterface::METADATA_TAGS] as $tag) {
             if (isset($this->deferredTagsInvalidation[$tag])) {
                 return true;
             }

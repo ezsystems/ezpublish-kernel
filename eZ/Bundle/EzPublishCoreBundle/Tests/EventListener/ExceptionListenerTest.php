@@ -90,7 +90,7 @@ class ExceptionListenerTest extends TestCase
             ->willReturn($translatedMessage);
 
         $this->listener->onKernelException($event);
-        $convertedException = $event->getException();
+        $convertedException = $event->getThrowable();
         self::assertInstanceOf(NotFoundHttpException::class, $convertedException);
         self::assertSame($exception, $convertedException->getPrevious());
         self::assertSame($translatedMessage, $convertedException->getMessage());
@@ -113,7 +113,7 @@ class ExceptionListenerTest extends TestCase
             ->willReturn($translatedMessage);
 
         $this->listener->onKernelException($event);
-        $convertedException = $event->getException();
+        $convertedException = $event->getThrowable();
         self::assertInstanceOf(AccessDeniedException::class, $convertedException);
         self::assertSame($exception, $convertedException->getPrevious());
         self::assertSame($translatedMessage, $convertedException->getMessage());
@@ -140,7 +140,7 @@ class ExceptionListenerTest extends TestCase
             ->willReturn($translatedMessage);
 
         $this->listener->onKernelException($event);
-        $convertedException = $event->getException();
+        $convertedException = $event->getThrowable();
         self::assertInstanceOf(BadRequestHttpException::class, $convertedException);
         self::assertSame($exception, $convertedException->getPrevious());
         self::assertSame($translatedMessage, $convertedException->getMessage());
@@ -177,7 +177,7 @@ class ExceptionListenerTest extends TestCase
             ->willReturn($translatedMessage);
 
         $this->listener->onKernelException($event);
-        $convertedException = $event->getException();
+        $convertedException = $event->getThrowable();
         self::assertInstanceOf(HttpException::class, $convertedException);
         self::assertSame($exception, $convertedException->getPrevious());
         self::assertSame(get_class($exception) . ': ' . $translatedMessage, $convertedException->getMessage());
@@ -208,6 +208,6 @@ class ExceptionListenerTest extends TestCase
             ->method('trans');
 
         $this->listener->onKernelException($event);
-        self::assertSame($exception, $event->getException());
+        self::assertSame($exception, $event->getThrowable());
     }
 }
