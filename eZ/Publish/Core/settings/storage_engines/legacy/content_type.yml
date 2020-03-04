@@ -4,6 +4,7 @@ services:
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.api.storage_engine.legacy.connection"
+            - '@eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway'
             - "@ezpublish.persistence.legacy.language.mask_generator"
 
     ezpublish.persistence.legacy.content_type.gateway.exception_conversion:

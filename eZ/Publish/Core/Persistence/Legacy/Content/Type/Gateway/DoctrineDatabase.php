@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinitio
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway as SharedGateway;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
@@ -110,6 +111,9 @@ final class DoctrineDatabase extends Gateway
     /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
     private $dbPlatform;
 
+    /** @var \eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway */
+    private $sharedGateway;
+
     /**
      * Language mask generator.
      *
@@ -123,11 +127,13 @@ final class DoctrineDatabase extends Gateway
     public function __construct(
         DatabaseHandler $db,
         Connection $connection,
+        SharedGateway $sharedGateway,
         MaskGenerator $languageMaskGenerator
     ) {
         $this->dbHandler = $db;
         $this->connection = $connection;
         $this->dbPlatform = $connection->getDatabasePlatform();
+        $this->sharedGateway = $sharedGateway;
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
