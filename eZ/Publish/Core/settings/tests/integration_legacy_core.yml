@@ -25,5 +25,10 @@ services:
             - []
             - 'ezsettings'
         calls:
+            - [setSiteAccess, ['@ezpublish.siteaccess']]
             - [setContainer, ['@service_container']]
             - [setDefaultScope, ['default']]
+
+    ezpublish.siteaccess:
+        class: eZ\Publish\Core\MVC\Symfony\SiteAccess
+        arguments: ['default', 'uninitialized']
