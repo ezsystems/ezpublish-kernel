@@ -360,20 +360,9 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
         $query
-            ->update(self::CONTENT_ITEM_TABLE)
-            ->set(
-                'language_mask',
-                $alwaysAvailable
-                    ? $this->databasePlatform->getBitOrComparisonExpression(
-                    'language_mask',
-                    ':languageMaskOperand'
-                )
-                    : $this->databasePlatform->getBitAndComparisonExpression(
-                    'language_mask',
-                    ':languageMaskOperand'
-                )
-            )
-            ->setParameter('languageMaskOperand', $alwaysAvailable ? 1 : -2)
+            ->update(self::CONTENT_ITEM_TABLE);
+        $this
+            ->setLanguageMaskForUpdateQuery($alwaysAvailable, $query, 'language_mask')
             ->where(
                 $expr->eq(
                     'id',
@@ -391,20 +380,9 @@ final class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
         $query
-            ->update(self::CONTENT_NAME_TABLE)
-            ->set(
-                'language_id',
-                $alwaysAvailable
-                    ? $this->databasePlatform->getBitOrComparisonExpression(
-                    'language_id',
-                    ':languageMaskOperand'
-                )
-                    : $this->databasePlatform->getBitAndComparisonExpression(
-                    'language_id',
-                    ':languageMaskOperand'
-                )
-            )
-            ->setParameter('languageMaskOperand', $alwaysAvailable ? 1 : -2)
+            ->update(self::CONTENT_NAME_TABLE);
+        $this
+            ->setLanguageMaskForUpdateQuery($alwaysAvailable, $query, 'language_id')
             ->where(
                 $expr->eq(
                     'contentobject_id',
@@ -446,20 +424,7 @@ final class DoctrineDatabase extends Gateway
 
         // If there is only a single language, update all fields and return
         if (!$this->languageMaskGenerator->isLanguageMaskComposite($languageMask)) {
-            $query
-                ->set(
-                    'language_id',
-                    $alwaysAvailable
-                        ? $this->databasePlatform->getBitOrComparisonExpression(
-                        'language_id',
-                        ':languageMaskOperand'
-                    )
-                        : $this->databasePlatform->getBitAndComparisonExpression(
-                        'language_id',
-                        ':languageMaskOperand'
-                    )
-                )
-                ->setParameter('languageMaskOperand', $alwaysAvailable ? 1 : -2);
+            $this->setLanguageMaskForUpdateQuery($alwaysAvailable, $query, 'language_id');
 
             $query->execute();
 
@@ -1961,5 +1926,34 @@ final class DoctrineDatabase extends Gateway
                 'The provided translation is the only translation in this version'
             );
         }
+    }
+
+    /**
+     * Compute language mask and append it to a QueryBuilder (both column and parameter).
+     *
+     * **Can be used on UPDATE queries only!**
+     */
+    private function setLanguageMaskForUpdateQuery(
+        bool $alwaysAvailable,
+        DoctrineQueryBuilder $query,
+        string $languageMaskColumnName
+    ): DoctrineQueryBuilder {
+        if ($alwaysAvailable) {
+            $languageMaskExpr = $this->databasePlatform->getBitOrComparisonExpression(
+                $languageMaskColumnName,
+                ':languageMaskOperand'
+            );
+        } else {
+            $languageMaskExpr = $this->databasePlatform->getBitAndComparisonExpression(
+                $languageMaskColumnName,
+                ':languageMaskOperand'
+            );
+        }
+
+        $query
+            ->set($languageMaskColumnName, $languageMaskExpr)
+            ->setParameter('languageMaskOperand', $alwaysAvailable ? 1 : -2);
+
+        return $query;
     }
 }
