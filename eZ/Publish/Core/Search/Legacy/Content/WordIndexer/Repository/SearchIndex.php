@@ -137,6 +137,7 @@ class SearchIndex
      * @param $sectionId
      * @param $identifier
      * @param $integerValue
+     * @param $languageMask
      */
     public function addObjectWordLink($wordId,
                                       $contentId,
@@ -149,7 +150,8 @@ class SearchIndex
                                       $published,
                                       $sectionId,
                                       $identifier,
-                                      $integerValue
+                                      $integerValue,
+                                      $languageMask
     ) {
         $assoc = [
             'word_id' => $wordId,
@@ -164,6 +166,7 @@ class SearchIndex
             'section_id' => $sectionId,
             'identifier' => $identifier,
             'integer_value' => $integerValue,
+            'language_mask' => $languageMask,
         ];
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto('ezsearch_object_word_link');

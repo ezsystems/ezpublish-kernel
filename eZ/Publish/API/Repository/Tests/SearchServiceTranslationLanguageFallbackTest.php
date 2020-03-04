@@ -192,7 +192,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
     public function providerForTestFind()
     {
-        return [
+        $data = [
             0 => [
                 [
                     'languages' => [
@@ -1469,6 +1469,210 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 ],
             ],
         ];
+
+        $setupFactory = $this->getSetupFactory();
+
+        if ($setupFactory instanceof LegacySolrSetupFactory) {
+            $data = array_merge(
+                $data,
+                [
+                    [
+                        [
+                            'languages' => [
+                                'eng-GB',
+                                'ger-DE',
+                            ],
+                            'useAlwaysAvailable' => true,
+                            'excludeTranslationsFromAlwaysAvailable' => false,
+                        ],
+                        [
+                            [
+                                1,
+                                'eng-GB',
+                                [
+                                    self::SETUP_DEDICATED => 'localhost:8983/solr/core0',
+                                    self::SETUP_SHARED => 'localhost:8983/solr/core3',
+                                    self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                                    self::SETUP_CLOUD => 'http://localhost:8983/solr/core0_shard1_replica(_n)?1/',
+                                ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                ],
+                            ],
+                            [
+                                2,
+                                'ger-DE',
+                                [
+                                    self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
+                                    self::SETUP_SHARED => 'localhost:8983/solr/core2',
+                                    self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                                    self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
+                                ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                ],
+                            ],
+                            [
+                                3,
+                                'por-PT',
+                                [
+                                    self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
+                                    self::SETUP_SHARED => 'localhost:8983/solr/core0',
+                                    self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                                    self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
+                                ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        [
+                            'languages' => [
+                                'ger-DE',
+                                'eng-GB',
+                            ],
+                            'useAlwaysAvailable' => true,
+                            'excludeTranslationsFromAlwaysAvailable' => false,
+                        ],
+                        [
+                            [
+                                1,
+                                'ger-DE',
+                                [
+                                    self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
+                                    self::SETUP_SHARED => 'localhost:8983/solr/core2',
+                                    self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                                    self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
+                                ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 0,
+                                        'preparedDataTestIndex' => 1,
+                                    ],
+                                ],
+                            ],
+                            [
+                                2,
+                                'ger-DE',
+                                [
+                                    self::SETUP_DEDICATED => 'localhost:8983/solr/core3',
+                                    self::SETUP_SHARED => 'localhost:8983/solr/core2',
+                                    self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                                    self::SETUP_CLOUD => 'http://localhost:8983/solr/core1_shard1_replica(_n)?1/',
+                                ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                ],
+                            ],
+                            [
+                                3,
+                                'por-PT',
+                                [
+                                    self::SETUP_DEDICATED => 'localhost:8983/solr/core2',
+                                    self::SETUP_SHARED => 'localhost:8983/solr/core0',
+                                    self::SETUP_SINGLE => 'localhost:8983/solr/collection1',
+                                    self::SETUP_CLOUD => 'http://localhost:8983/solr/core3_shard1_replica(_n)?1/',
+                                ],
+                                [
+                                    self::SETUP_DEDICATED => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SHARED => [
+                                        'searchHitIndex' => 1,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_SINGLE => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                    self::SETUP_CLOUD => [
+                                        'searchHitIndex' => 2,
+                                        'preparedDataTestIndex' => 2,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ]
+            );
+        }
+
+        return $data;
     }
 
     protected function getSetupType()
@@ -1535,6 +1739,8 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         foreach ($contentDataList as $index => $contentData) {
             list($contentNo, $translationLanguageCode, $indexMap) = $contentData;
+            list($index, $contentNo) = $this->getIndexesToMatchData($contentData, $index, $contentNo);
+
             /** @var \eZ\Publish\Api\Repository\Values\Content\Content $content */
             $content = $searchResult->searchHits[$index]->valueObject;
 
@@ -1587,6 +1793,8 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         foreach ($contentDataList as $index => $contentData) {
             list($contentNo, $translationLanguageCode, $indexMap) = $contentData;
+            list($index, $contentNo) = $this->getIndexesToMatchData($contentData, $index, $contentNo);
+
             /** @var \eZ\Publish\Api\Repository\Values\Content\Location $location */
             $location = $searchResult->searchHits[$index]->valueObject;
 
@@ -1635,6 +1843,8 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         foreach ($contentDataList as $index => $contentData) {
             list($contentNo, $translationLanguageCode, $indexMap) = $contentData;
+            list($index, $contentNo) = $this->getIndexesToMatchData($contentData, $index, $contentNo);
+
             /** @var \eZ\Publish\Api\Repository\Values\Content\Location $location */
             $location = $searchResult->searchHits[$index]->valueObject;
 
@@ -1651,6 +1861,8 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         foreach ($contentDataList as $index => $contentData) {
             list($contentNo, $translationLanguageCode, $indexMap) = $contentData;
+            list($index, $contentNo) = $this->getIndexesToMatchData($contentData, $index, $contentNo);
+
             $realIndex = $index + count($contentDataList);
             /** @var \eZ\Publish\Api\Repository\Values\Content\Location $location */
             $location = $searchResult->searchHits[$realIndex]->valueObject;
@@ -1676,5 +1888,30 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
         } else {
             $this->assertRegExp('~^' . $indexName . '$~', $searchHit->index);
         }
+    }
+
+    private function getIndexesToMatchData(
+        array $inputContentData,
+        int $currentSearchHitIndex,
+        int $currentPreparedDataTestIndex
+    ): array {
+        $indexesToMatchData = [
+            $currentSearchHitIndex,
+            $currentPreparedDataTestIndex,
+        ];
+
+        if ($this->getSetupFactory() instanceof LegacySolrSetupFactory) {
+            $setupType = $this->getSetupType();
+
+            if ($customMatchResultIndexData = $inputContentData[3][$setupType] ?? null) {
+                // Use custom indexes
+                $indexesToMatchData = [
+                    $customMatchResultIndexData['searchHitIndex'],
+                    $customMatchResultIndexData['preparedDataTestIndex'],
+                ];
+            }
+        }
+
+        return $indexesToMatchData;
     }
 }
