@@ -9564,6 +9564,7 @@ Country�</literallayout></para></section>
       'published' => '1033917596',
       'section_id' => '2',
       'word_id' => '930',
+      'language_mask' => 9223372036854775807,
     ),
     1 => array(
       'contentclass_attribute_id' => '7',
@@ -9579,6 +9580,7 @@ Country�</literallayout></para></section>
       'published' => '1033917596',
       'section_id' => '2',
       'word_id' => '951',
+      'language_mask' => 9223372036854775807,
     ),
     2 => array(
       'contentclass_attribute_id' => '7',
@@ -9594,6 +9596,7 @@ Country�</literallayout></para></section>
       'published' => '1033917596',
       'section_id' => '2',
       'word_id' => '952',
+      'language_mask' => 9223372036854775807,
     ),
     3 => array(
       'contentclass_attribute_id' => '8',
@@ -9609,6 +9612,7 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '953',
+      'language_mask' => 9223372036854775807,
     ),
     4 => array(
       'contentclass_attribute_id' => '9',
@@ -9624,6 +9628,7 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '954',
+      'language_mask' => 9223372036854775807,
     ),
     5 => array(
       'contentclass_attribute_id' => '12',
@@ -9639,6 +9644,7 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '953',
+      'language_mask' => 9223372036854775807,
     ),
     6 => array(
       'contentclass_attribute_id' => '12',
@@ -9654,6 +9660,7 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '955',
+      'language_mask' => 9223372036854775807,
     ),
     7 => array(
       'contentclass_attribute_id' => '12',
@@ -9669,6 +9676,7 @@ Country�</literallayout></para></section>
       'published' => '1033920665',
       'section_id' => '2',
       'word_id' => '927',
+      'language_mask' => 9223372036854775807,
     ),
     8 => array(
       'contentclass_attribute_id' => '6',
@@ -9684,6 +9692,7 @@ Country�</literallayout></para></section>
       'published' => '1033920775',
       'section_id' => '2',
       'word_id' => '958',
+      'language_mask' => 9223372036854775807,
     ),
     9 => array(
       'contentclass_attribute_id' => '6',
@@ -9699,6 +9708,7 @@ Country�</literallayout></para></section>
       'published' => '1033920775',
       'section_id' => '2',
       'word_id' => '930',
+      'language_mask' => 9223372036854775807,
     ),
     10 => array(
       'contentclass_attribute_id' => '6',
@@ -9714,6 +9724,7 @@ Country�</literallayout></para></section>
       'published' => '1033920794',
       'section_id' => '2',
       'word_id' => '959',
+      'language_mask' => 9223372036854775807,
     ),
     11 => array(
       'contentclass_attribute_id' => '4',
@@ -9729,6 +9740,7 @@ Country�</literallayout></para></section>
       'published' => '1060695457',
       'section_id' => '3',
       'word_id' => '961',
+      'language_mask' => 9223372036854775807,
     ),
     12 => array(
       'contentclass_attribute_id' => '6',
@@ -9744,6 +9756,7 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '953',
+      'language_mask' => 9223372036854775807,
     ),
     13 => array(
       'contentclass_attribute_id' => '6',
@@ -9759,6 +9772,7 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '930',
+      'language_mask' => 9223372036854775807,
     ),
     14 => array(
       'contentclass_attribute_id' => '7',
@@ -9774,6 +9788,7 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '954',
+      'language_mask' => 9223372036854775807,
     ),
     15 => array(
       'contentclass_attribute_id' => '7',
@@ -9789,6 +9804,7 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '952',
+      'language_mask' => 9223372036854775807,
     ),
     16 => array(
       'contentclass_attribute_id' => '7',
@@ -9804,6 +9820,7 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '816',
+      'language_mask' => 9223372036854775807,
     ),
     17 => array(
       'contentclass_attribute_id' => '7',
@@ -9819,6 +9836,7 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '814',
+      'language_mask' => 9223372036854775807,
     ),
     18 => array(
       'contentclass_attribute_id' => '7',
@@ -9834,6 +9852,7 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '953',
+      'language_mask' => 9223372036854775807,
     ),
     19 => array(
       'contentclass_attribute_id' => '7',
@@ -9849,6 +9868,7 @@ Country�</literallayout></para></section>
       'published' => '1072180330',
       'section_id' => '2',
       'word_id' => '954',
+      'language_mask' => 9223372036854775807,
     ),
     20 => array(
       'contentclass_attribute_id' => '4',
@@ -9864,6 +9884,7 @@ Country�</literallayout></para></section>
       'published' => '1079684190',
       'section_id' => '4',
       'word_id' => '812',
+      'language_mask' => 9223372036854775807,
     ),
     21 => array(
       'contentclass_attribute_id' => '4',
@@ -9879,6 +9900,7 @@ Country�</literallayout></para></section>
       'published' => '1080220197',
       'section_id' => '3',
       'word_id' => '962',
+      'language_mask' => 9223372036854775807,
     ),
     22 => array(
       'contentclass_attribute_id' => '4',
@@ -9894,6 +9916,7 @@ Country�</literallayout></para></section>
       'published' => '1080220220',
       'section_id' => '3',
       'word_id' => '963',
+      'language_mask' => 9223372036854775807,
     ),
     23 => array(
       'contentclass_attribute_id' => '4',
@@ -9909,6 +9932,7 @@ Country�</literallayout></para></section>
       'published' => '1080220233',
       'section_id' => '3',
       'word_id' => '964',
+      'language_mask' => 9223372036854775807,
     ),
     24 => array(
       'contentclass_attribute_id' => '159',
@@ -9924,6 +9948,7 @@ Country�</literallayout></para></section>
       'published' => '1082016591',
       'section_id' => '4',
       'word_id' => '877',
+      'language_mask' => 9223372036854775807,
     ),
     25 => array(
       'contentclass_attribute_id' => '159',
@@ -9939,6 +9964,7 @@ Country�</literallayout></para></section>
       'published' => '1082016591',
       'section_id' => '4',
       'word_id' => '965',
+      'language_mask' => 9223372036854775807,
     ),
     26 => array(
       'contentclass_attribute_id' => '159',
@@ -9954,6 +9980,7 @@ Country�</literallayout></para></section>
       'published' => '1082016591',
       'section_id' => '4',
       'word_id' => '966',
+      'language_mask' => 9223372036854775807,
     ),
     27 => array(
       'contentclass_attribute_id' => '176',
@@ -9969,6 +9996,7 @@ Country�</literallayout></para></section>
       'published' => '1082016652',
       'section_id' => '5',
       'word_id' => '967',
+      'language_mask' => 9223372036854775807,
     ),
     28 => array(
       'contentclass_attribute_id' => '4',
@@ -9984,6 +10012,7 @@ Country�</literallayout></para></section>
       'published' => '1103023132',
       'section_id' => '5',
       'word_id' => '968',
+      'language_mask' => 9223372036854775807,
     ),
     29 => array(
       'contentclass_attribute_id' => '219',
@@ -9999,6 +10028,7 @@ Country�</literallayout></para></section>
       'published' => '1343140537',
       'section_id' => '1',
       'word_id' => '969',
+      'language_mask' => 9223372036854775807,
     ),
     30 => array(
       'contentclass_attribute_id' => '212',
@@ -10014,6 +10044,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '970',
+      'language_mask' => 9223372036854775807,
     ),
     31 => array(
       'contentclass_attribute_id' => '212',
@@ -10029,6 +10060,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '971',
+      'language_mask' => 9223372036854775807,
     ),
     32 => array(
       'contentclass_attribute_id' => '213',
@@ -10044,6 +10076,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '819',
+      'language_mask' => 9223372036854775807,
     ),
     33 => array(
       'contentclass_attribute_id' => '213',
@@ -10059,6 +10092,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '972',
+      'language_mask' => 9223372036854775807,
     ),
     34 => array(
       'contentclass_attribute_id' => '213',
@@ -10074,6 +10108,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '863',
+      'language_mask' => 9223372036854775807,
     ),
     35 => array(
       'contentclass_attribute_id' => '213',
@@ -10089,6 +10124,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '814',
+      'language_mask' => 9223372036854775807,
     ),
     36 => array(
       'contentclass_attribute_id' => '213',
@@ -10104,6 +10140,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '973',
+      'language_mask' => 9223372036854775807,
     ),
     37 => array(
       'contentclass_attribute_id' => '213',
@@ -10119,6 +10156,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '974',
+      'language_mask' => 9223372036854775807,
     ),
     38 => array(
       'contentclass_attribute_id' => '213',
@@ -10134,6 +10172,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '801',
+      'language_mask' => 9223372036854775807,
     ),
     39 => array(
       'contentclass_attribute_id' => '213',
@@ -10149,6 +10188,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '970',
+      'language_mask' => 9223372036854775807,
     ),
     40 => array(
       'contentclass_attribute_id' => '213',
@@ -10164,6 +10204,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '971',
+      'language_mask' => 9223372036854775807,
     ),
     41 => array(
       'contentclass_attribute_id' => '213',
@@ -10179,6 +10220,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '894',
+      'language_mask' => 9223372036854775807,
     ),
     42 => array(
       'contentclass_attribute_id' => '213',
@@ -10194,6 +10236,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '843',
+      'language_mask' => 9223372036854775807,
     ),
     43 => array(
       'contentclass_attribute_id' => '213',
@@ -10209,6 +10252,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '882',
+      'language_mask' => 9223372036854775807,
     ),
     44 => array(
       'contentclass_attribute_id' => '213',
@@ -10224,6 +10268,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '975',
+      'language_mask' => 9223372036854775807,
     ),
     45 => array(
       'contentclass_attribute_id' => '213',
@@ -10239,6 +10284,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '971',
+      'language_mask' => 9223372036854775807,
     ),
     46 => array(
       'contentclass_attribute_id' => '213',
@@ -10254,6 +10300,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '825',
+      'language_mask' => 9223372036854775807,
     ),
     47 => array(
       'contentclass_attribute_id' => '213',
@@ -10269,6 +10316,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '976',
+      'language_mask' => 9223372036854775807,
     ),
     48 => array(
       'contentclass_attribute_id' => '213',
@@ -10284,6 +10332,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '977',
+      'language_mask' => 9223372036854775807,
     ),
     49 => array(
       'contentclass_attribute_id' => '213',
@@ -10299,6 +10348,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '978',
+      'language_mask' => 9223372036854775807,
     ),
     50 => array(
       'contentclass_attribute_id' => '213',
@@ -10314,6 +10364,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '979',
+      'language_mask' => 9223372036854775807,
     ),
     51 => array(
       'contentclass_attribute_id' => '213',
@@ -10329,6 +10380,7 @@ Country�</literallayout></para></section>
       'published' => '1343140539',
       'section_id' => '1',
       'word_id' => '980',
+      'language_mask' => 9223372036854775807,
     ),
     52 => array(
       'contentclass_attribute_id' => '8',
@@ -10344,6 +10396,7 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '958',
+      'language_mask' => 9223372036854775807,
     ),
     53 => array(
       'contentclass_attribute_id' => '9',
@@ -10359,6 +10412,7 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '954',
+      'language_mask' => 9223372036854775807,
     ),
     54 => array(
       'contentclass_attribute_id' => '12',
@@ -10374,6 +10428,7 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '981',
+      'language_mask' => 9223372036854775807,
     ),
     55 => array(
       'contentclass_attribute_id' => '12',
@@ -10389,6 +10444,7 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '982',
+      'language_mask' => 9223372036854775807,
     ),
     56 => array(
       'contentclass_attribute_id' => '12',
@@ -10404,6 +10460,7 @@ Country�</literallayout></para></section>
       'published' => '1033920830',
       'section_id' => '2',
       'word_id' => '927',
+      'language_mask' => 9223372036854775807,
     ),
     57 => array(
       'contentclass_attribute_id' => '6',
@@ -10419,6 +10476,7 @@ Country�</literallayout></para></section>
       'published' => '1343140541',
       'section_id' => '2',
       'word_id' => '983',
+      'language_mask' => 9223372036854775807,
     ),
     58 => array(
       'contentclass_attribute_id' => '6',
@@ -10434,6 +10492,7 @@ Country�</literallayout></para></section>
       'published' => '1033920746',
       'section_id' => '2',
       'word_id' => '984',
+      'language_mask' => 9223372036854775807,
     ),
   ),
   'ezsearch_word' => array(
