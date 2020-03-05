@@ -68,9 +68,8 @@ final class DoctrineDatabase extends Gateway
                         ParameterType::STRING
                     ),
                     'value' => $query->createPositionalParameter(0, ParameterType::INTEGER),
+                    // BC: "version" stores originalId when creating a draft from an existing role
                     'version' => $query->createPositionalParameter(
-                    // Column name "version" is misleading here as it stores originalId when creating a draft from an existing role.
-                    // But hey, this is legacy! :-)
                         $roleOriginalId,
                         ParameterType::STRING
                     ),
@@ -151,11 +150,10 @@ final class DoctrineDatabase extends Gateway
     public function loadRoleDraftByRoleId(int $roleId): array
     {
         $query = $this->getLoadRoleQueryBuilder();
+        // BC: "version" stores originalId when creating a draft from an existing role
         $query
             ->where(
                 $query->expr()->eq(
-                // Column name "version" is misleading as it stores originalId when creating a draft from an existing role.
-                // But hey, this is legacy! :-)
                     'r.version',
                     $query->createPositionalParameter($roleId, ParameterType::STRING)
                 )
@@ -202,8 +200,8 @@ final class DoctrineDatabase extends Gateway
                 'urs',
                 self::ROLE_TABLE,
                 'r',
+                // BC: for drafts the "version" column contains the original role ID
                 $expr->eq(
-                // for drafts the "version" column contains the original role ID...
                     $status === Role::STATUS_DEFINED ? 'r.id' : 'r.version',
                     'urs.role_id'
                 )
