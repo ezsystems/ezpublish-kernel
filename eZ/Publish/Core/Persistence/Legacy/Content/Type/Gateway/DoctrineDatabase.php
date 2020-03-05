@@ -770,13 +770,7 @@ final class DoctrineDatabase extends Gateway
                     $query->createPositionalParameter($status, ParameterType::INTEGER)
                 )
             )
-            ->andWhere(
-            // @todo FIXME: Actually not needed
-                $query->expr()->eq(
-                    'contentclass_id',
-                    $query->createPositionalParameter($typeId, ParameterType::INTEGER)
-                )
-            );
+        ;
 
         $query->execute();
     }
@@ -792,11 +786,8 @@ final class DoctrineDatabase extends Gateway
             ->update(self::FIELD_DEFINITION_TABLE)
             ->where('id = :field_definition_id')
             ->andWhere('version = :status')
-            // @todo FIXME: Actually not needed
-            ->andWhere('contentclass_id = :content_type_id')
             ->setParameter('field_definition_id', $fieldDefinition->id, ParameterType::INTEGER)
-            ->setParameter('status', $status, ParameterType::INTEGER)
-            ->setParameter('content_type_id', $typeId, ParameterType::INTEGER);
+            ->setParameter('status', $status, ParameterType::INTEGER);
 
         $fieldDefinitionValueAndTypeMap = $this->mapCommonFieldDefinitionColumnsToQueryValuesAndTypes(
             $fieldDefinition,
