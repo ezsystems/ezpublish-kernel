@@ -242,7 +242,13 @@ Changes affecting version compatibility with former or future versions.
   
 * Deprecated `viewLocation` and `embedLocation` actions of `ViewController` have been dropped, along with
   related route `_ezpublishLocation`. As stated in controller, use `viewAction` in place of `viewLocation` and
-  `embedAction` in place od `embedLocation`.   
+  `embedAction` in place od `embedLocation`.
+
+* Obsolete DeferredLegacy Content Type Update handler
+  (`eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DeferredLegacy`) and its optional
+  Symfony Container Service (`ezpublish.persistence.legacy.content_type.update_handler.deferred`)
+  have been removed. Subscribe to eZ Platform Symfony Events to handle deferring of updating
+  of Content items after their Content Type update instead.
 
 ## Deprecated features
 
