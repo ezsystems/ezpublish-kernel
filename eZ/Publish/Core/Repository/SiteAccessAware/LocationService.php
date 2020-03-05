@@ -1,16 +1,17 @@
 <?php
 
 /**
- * LocationService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
@@ -43,12 +44,12 @@ class LocationService implements LocationServiceInterface
         $this->languageResolver = $languageResolver;
     }
 
-    public function copySubtree(Location $subtree, Location $targetParentLocation)
+    public function copySubtree(Location $subtree, Location $targetParentLocation): Location
     {
         return $this->service->copySubtree($subtree, $targetParentLocation);
     }
 
-    public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
+    public function loadLocation(int $locationId, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): Location
     {
         return $this->service->loadLocation(
             $locationId,
@@ -57,7 +58,7 @@ class LocationService implements LocationServiceInterface
         );
     }
 
-    public function loadLocationList(array $locationIds, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null): iterable
+    public function loadLocationList(array $locationIds, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): iterable
     {
         return $this->service->loadLocationList(
             $locationIds,
@@ -66,7 +67,7 @@ class LocationService implements LocationServiceInterface
         );
     }
 
-    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
+    public function loadLocationByRemoteId(string $remoteId, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): Location
     {
         return $this->service->loadLocationByRemoteId(
             $remoteId,
@@ -75,7 +76,7 @@ class LocationService implements LocationServiceInterface
         );
     }
 
-    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null, array $prioritizedLanguages = null)
+    public function loadLocations(ContentInfo $contentInfo, ?Location $rootLocation = null, ?array $prioritizedLanguages = null): iterable
     {
         return $this->service->loadLocations(
             $contentInfo,
@@ -84,7 +85,7 @@ class LocationService implements LocationServiceInterface
         );
     }
 
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
+    public function loadLocationChildren(Location $location, int $offset = 0, int $limit = 25, ?array $prioritizedLanguages = null): LocationList
     {
         return $this->service->loadLocationChildren(
             $location,
@@ -94,7 +95,7 @@ class LocationService implements LocationServiceInterface
         );
     }
 
-    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, array $prioritizedLanguages = null)
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, ?array $prioritizedLanguages = null): iterable
     {
         return $this->service->loadParentLocationsForDraftContent(
             $versionInfo,
@@ -102,52 +103,52 @@ class LocationService implements LocationServiceInterface
         );
     }
 
-    public function getLocationChildCount(Location $location)
+    public function getLocationChildCount(Location $location): int
     {
         return $this->service->getLocationChildCount($location);
     }
 
-    public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct)
+    public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct): Location
     {
         return $this->service->createLocation($contentInfo, $locationCreateStruct);
     }
 
-    public function updateLocation(Location $location, LocationUpdateStruct $locationUpdateStruct)
+    public function updateLocation(Location $location, LocationUpdateStruct $locationUpdateStruct): Location
     {
         return $this->service->updateLocation($location, $locationUpdateStruct);
     }
 
-    public function swapLocation(Location $location1, Location $location2)
+    public function swapLocation(Location $location1, Location $location2): void
     {
-        return $this->service->swapLocation($location1, $location2);
+        $this->service->swapLocation($location1, $location2);
     }
 
-    public function hideLocation(Location $location)
+    public function hideLocation(Location $location): Location
     {
         return $this->service->hideLocation($location);
     }
 
-    public function unhideLocation(Location $location)
+    public function unhideLocation(Location $location): Location
     {
         return $this->service->unhideLocation($location);
     }
 
-    public function moveSubtree(Location $location, Location $newParentLocation)
+    public function moveSubtree(Location $location, Location $newParentLocation): void
     {
-        return $this->service->moveSubtree($location, $newParentLocation);
+        $this->service->moveSubtree($location, $newParentLocation);
     }
 
-    public function deleteLocation(Location $location)
+    public function deleteLocation(Location $location): void
     {
         $this->service->deleteLocation($location);
     }
 
-    public function newLocationCreateStruct($parentLocationId)
+    public function newLocationCreateStruct(int $parentLocationId): LocationCreateStruct
     {
         return $this->service->newLocationCreateStruct($parentLocationId);
     }
 
-    public function newLocationUpdateStruct()
+    public function newLocationUpdateStruct(): LocationUpdateStruct
     {
         return $this->service->newLocationUpdateStruct();
     }

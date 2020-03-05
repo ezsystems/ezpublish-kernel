@@ -5449,6 +5449,7 @@ class ContentTest extends BaseServiceMockTest
         $contentService = $this->getPartlyMockedContentService(['internalLoadContentInfo']);
         $contentInfo = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
+        $locationCreateStruct->parentLocationId = 1;
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
         $locationServiceMock = $this->getLocationServiceMock();
         $permissionResolver = $this->getPermissionResolverMock();
@@ -5501,6 +5502,7 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
+        $locationCreateStruct->parentLocationId = 2;
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
         $user = $this->getStubbedUser(14);
 
@@ -5632,6 +5634,7 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
+        $locationCreateStruct->parentLocationId = 2;
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
         $user = $this->getStubbedUser(14);
 
@@ -5759,6 +5762,7 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
         $locationCreateStruct = new LocationCreateStruct();
+        $locationCreateStruct->parentLocationId = 2;
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
         $locationServiceMock = $this->getLocationServiceMock();
         $user = $this->getStubbedUser(14);

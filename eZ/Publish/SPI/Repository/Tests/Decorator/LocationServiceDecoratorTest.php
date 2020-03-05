@@ -20,6 +20,10 @@ use eZ\Publish\SPI\Repository\Decorator\LocationServiceDecorator;
 
 class LocationServiceDecoratorTest extends TestCase
 {
+    private const EXAMPLE_LOCATION_ID = 54;
+    private const EXAMPLE_OFFSET = 10;
+    private const EXAMPLE_LIMIT = 100;
+
     protected function createDecorator(MockObject $service): LocationService
     {
         return new class($service) extends LocationServiceDecorator {
@@ -52,7 +56,7 @@ class LocationServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce1602d0.64616917',
+            self::EXAMPLE_LOCATION_ID,
             ['random_value_5ced05ce160308.46670993'],
             true,
         ];
@@ -117,8 +121,8 @@ class LocationServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(Location::class),
-            'random_value_5ced05ce160433.57357140',
-            'random_value_5ced05ce160445.32403509',
+            self::EXAMPLE_OFFSET,
+            self::EXAMPLE_LIMIT,
             ['random_value_5ced05ce160459.73858583'],
         ];
 
@@ -255,7 +259,7 @@ class LocationServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = ['random_value_5ced05ce160cb7.56822559'];
+        $parameters = [self::EXAMPLE_LOCATION_ID];
 
         $serviceMock->expects($this->once())->method('newLocationCreateStruct')->with(...$parameters);
 
