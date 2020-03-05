@@ -2,10 +2,9 @@ services:
     ezpublish.persistence.legacy.content_type.gateway.inner:
         class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase
         arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
-            - "@ezpublish.api.storage_engine.legacy.connection"
+            - '@ezpublish.api.storage_engine.legacy.connection'
             - '@eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway'
-            - "@ezpublish.persistence.legacy.language.mask_generator"
+            - '@ezpublish.persistence.legacy.language.mask_generator'
 
     ezpublish.persistence.legacy.content_type.gateway.exception_conversion:
         class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\ExceptionConversion

@@ -82,7 +82,6 @@ class AbstractTestCase extends LanguageAwareTestCase
         if (!isset($this->contentTypeHandler)) {
             $this->contentTypeHandler = new ContentTypeHandler(
                 new ContentTypeGateway(
-                    $this->getDatabaseHandler(),
                     $this->getDatabaseConnection(),
                     $this->getSharedGateway(),
                     $this->getLanguageMaskGenerator()

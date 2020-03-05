@@ -16,7 +16,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway as SharedGateway;
 use eZ\Publish\SPI\Persistence\Content\Type;
@@ -93,14 +92,6 @@ final class DoctrineDatabase extends Gateway
     ];
 
     /**
-     * DoctrineDatabase handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    private $dbHandler;
-
-    /**
      * The native Doctrine connection.
      *
      * Meant to be used to transition from eZ/Zeta interface to Doctrine.
@@ -126,12 +117,10 @@ final class DoctrineDatabase extends Gateway
      * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(
-        DatabaseHandler $db,
         Connection $connection,
         SharedGateway $sharedGateway,
         MaskGenerator $languageMaskGenerator
     ) {
-        $this->dbHandler = $db;
         $this->connection = $connection;
         $this->dbPlatform = $connection->getDatabasePlatform();
         $this->sharedGateway = $sharedGateway;
