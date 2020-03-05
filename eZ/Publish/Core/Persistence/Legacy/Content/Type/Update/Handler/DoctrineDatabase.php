@@ -61,7 +61,7 @@ class DoctrineDatabase extends Handler
      */
     public function deleteOldType(Type $fromType)
     {
-        $this->contentTypeGateway->delete($fromType->id, $fromType->status, $fromType->fieldDefinitions);
+        $this->contentTypeGateway->delete($fromType->id, $fromType->status);
     }
 
     /**
