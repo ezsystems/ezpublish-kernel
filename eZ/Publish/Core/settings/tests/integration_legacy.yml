@@ -41,3 +41,4 @@ services:
         factory: 'eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory:createConnection'
         arguments:
             $databaseURL: '%legacy_dsn%'
+
