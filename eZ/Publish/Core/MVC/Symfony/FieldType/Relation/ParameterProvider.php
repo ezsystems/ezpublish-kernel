@@ -45,9 +45,9 @@ class ParameterProvider implements ParameterProviderInterface
             return [
                 'available' => $contentInfo !== null && !$contentInfo->isTrashed(),
             ];
-        } catch (NotFoundException|UnauthorizedException $exception) {
+        } catch (NotFoundException | UnauthorizedException $exception) {
             return [
-                'available' => false
+                'available' => false,
             ];
         }
     }
