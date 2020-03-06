@@ -32,18 +32,23 @@ class ParameterProvider implements ParameterProviderInterface
      *
      * @return array
      */
-    public function getViewParameters(Field $field)
+    public function getViewParameters(Field $field): array
     {
         try {
-            $contentInfo = $this->contentService->loadContentInfo($field->value->destinationContentId);
+            $contentInfo = null;
+            if ($field->value->destinationContentId !== null) {
+                $contentInfo = $this->contentService->loadContentInfo(
+                    $field->value->destinationContentId
+                );
+            }
 
             return [
-                'available' => !$contentInfo->isTrashed(),
+                'available' => $contentInfo !== null && !$contentInfo->isTrashed(),
             ];
-        } catch (NotFoundException $exception) {
-            return ['available' => false];
-        } catch (UnauthorizedException $exception) {
-            return ['available' => false];
+        } catch (NotFoundException|UnauthorizedException $exception) {
+            return [
+                'available' => false
+            ];
         }
     }
 }

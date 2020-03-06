@@ -71,10 +71,14 @@ class Type extends FieldType
             return $errors;
         }
 
-        $content = $this->contentService->loadContent($fieldValue->destinationContentId);
+        $content = $this->contentService->loadContent(
+            (int)$fieldValue->destinationContentId
+        );
 
         if (!$this->assetMapper->isAsset($content)) {
-            $currentContentType = $this->contentTypeService->loadContentType($content->contentInfo->contentTypeId);
+            $currentContentType = $this->contentTypeService->loadContentType(
+                (int)$content->contentInfo->contentTypeId
+            );
 
             $errors[] = new ValidationError(
                 'Content %type% is not a valid asset target',
@@ -207,11 +211,16 @@ class Type extends FieldType
      */
     public function fromHash($hash): Value
     {
-        if ($hash) {
-            return new Value($hash['destinationContentId'], $hash['alternativeText']);
+        if (!$hash) {
+            return new Value();
         }
 
-        return new Value();
+        $destinationContentId = $hash['destinationContentId'];
+        if ($destinationContentId !== null) {
+            $destinationContentId = (int)$destinationContentId;
+        }
+
+        return new Value($destinationContentId, $hash['alternativeText']);
     }
 
     /**
@@ -223,8 +232,13 @@ class Type extends FieldType
      */
     public function toHash(SPIValue $value): array
     {
+        $destinationContentId = null;
+        if ($value->destinationContentId !== null) {
+            $destinationContentId = (int)$value->destinationContentId;
+        }
+
         return [
-            'destinationContentId' => $value->destinationContentId,
+            'destinationContentId' => $destinationContentId,
             'alternativeText' => $value->alternativeText,
         ];
     }
