@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 /**
  * A criterion that matches content that is sibling to the given Location.
  */
-class Sibling extends AggregateCriterion
+class Sibling extends CompositeCriterion
 {
     public function __construct(int $id, int $parentLocationId)
     {

@@ -13,11 +13,11 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
-class AggregateCriterion extends CriterionHandler
+class CompositeCriterion extends CriterionHandler
 {
     public function accept(Criterion $criterion): bool
     {
-        return $criterion instanceof Criterion\AggregateCriterion;
+        return $criterion instanceof Criterion\CompositeCriterion;
     }
 
     public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion, array $languageSettings)

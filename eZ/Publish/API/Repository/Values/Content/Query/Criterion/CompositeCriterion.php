@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
-abstract class AggregateCriterion extends Criterion
+abstract class CompositeCriterion extends Criterion
 {
     /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion */
     public $criteria;
