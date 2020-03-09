@@ -107,7 +107,7 @@ class ChainConfigResolverTest extends TestCase
     /**
      * @dataProvider parameterProvider
      */
-    public function testGetParameterSpecificScope(string $paramName, $expectedValue)
+    public function testGetParameterSpecificScope(string $paramName, $expectedValue): void
     {
         $specificScopeParameter = $this->getParameter($paramName, self::FIRST_SA_NAME);
         $this->containerMock
@@ -136,7 +136,7 @@ class ChainConfigResolverTest extends TestCase
     /**
      * @dataProvider parameterProvider
      */
-    public function testGetParameterGlobalScope(string $paramName, $expectedValue)
+    public function testGetParameterGlobalScope(string $paramName, $expectedValue): void
     {
         $globalScopeParameter = $this->getParameter($paramName, self::SCOPE_GLOBAL);
         $this->containerMock
@@ -162,7 +162,7 @@ class ChainConfigResolverTest extends TestCase
          bool $scopeMatch,
          bool $globalMatch,
          bool $expectedResult
-     ) {
+     ): void {
         $paramName = 'foo.bar';
         $groupName = self::SA_GROUP;
 
@@ -191,7 +191,7 @@ class ChainConfigResolverTest extends TestCase
          bool $scopeMatch,
          bool $globalMatch,
          bool $expectedResult
-     ) {
+     ): void {
         $paramName = 'foo.bar';
         $namespace = 'my.namespace';
         $scope = self::SECOND_SA_NAME;
