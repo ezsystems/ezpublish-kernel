@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * Location service, used for complex subtree operations.
@@ -216,10 +217,11 @@ interface LocationService
      * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId);
+    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null);
 
     /**
      * Instantiates a new location update class.
