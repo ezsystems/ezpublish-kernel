@@ -40,15 +40,6 @@ services:
             - "@ezpublish.persistence.legacy.content_type.gateway"
             - "@ezpublish.persistence.legacy.content_type.content_updater"
 
-    # Note: if deferred ContentType update handler is required uncomment this service and override
-    # 'ezpublish.persistence.legacy.content_type.update_handler' alias so that it points to it
-    #
-    #ezpublish.persistence.legacy.content_type.update_handler.deferred:
-    #    parent: ezpublish.persistence.legacy.content_type.update_handler.base
-    #    class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DeferredLegacy
-    #    arguments:
-    #        - "@ezpublish.persistence.legacy.content_type.gateway"
-
     ezpublish.persistence.legacy.content_type.update_handler:
         alias: ezpublish.persistence.legacy.content_type.update_handler.basic
 
