@@ -56,7 +56,6 @@ services:
     # Criterion handlers
     eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\CompositeCriterion:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
-        class: eZ\Publish\API\Repository\Values\Content\Query\Criterion\CompositeCriterion
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
