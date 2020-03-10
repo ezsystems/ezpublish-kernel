@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
@@ -29,7 +33,7 @@ class QueryRenderingExtension extends AbstractExtension
         return [
             new TwigFunction(
                 'ez_render_*_query',
-                function (string $type, array $options) {
+                function (string $type, array $options): ?string {
                     return $this->fragmentHandler->render(
                         $this->createControllerReference($type, $options)
                     );
@@ -38,7 +42,7 @@ class QueryRenderingExtension extends AbstractExtension
             ),
             new TwigFunction(
                 'ez_render_*_query_*',
-                function (string $type, string $renderer, array $options) {
+                function (string $type, string $renderer, array $options): ?string {
                     return $this->fragmentHandler->render(
                         $this->createControllerReference($type, $options),
                         $renderer

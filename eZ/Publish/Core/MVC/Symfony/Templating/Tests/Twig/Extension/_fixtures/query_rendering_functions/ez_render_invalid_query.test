@@ -1,0 +1,8 @@
+--TEST--
+"ez_render_invalid_query" function
+--TEMPLATE--
+{{ ez_render_invalid_query({}) }}
+--DATA--
+return array()
+--EXPECT--
+Twig\Error\Error: Twig\Error\RuntimeError: An exception has been thrown during the rendering of a template ("Argument '$type' is invalid: Expected value to be of content,content_info,location") in "index.twig" at line 2 in "ez_render_invalid_query.test".

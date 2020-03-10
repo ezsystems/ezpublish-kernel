@@ -1,0 +1,36 @@
+--TEST--
+"ez_render_content_query" function
+--TEMPLATE--
+{{ ez_render_content_query({
+    'query': {
+        'query_type': 'LatestBlogPost',
+    },
+    'template': 'latest_blog_post.html.twig',
+}) }}
+--DATA--
+return array()
+--EXPECT--
+array (
+  0 => 
+  Symfony\Component\HttpKernel\Controller\ControllerReference::__set_state(array(
+     'controller' => 'ez_query_render::renderContentQueryAction',
+     'attributes' => 
+    array (
+      'options' => 
+      array (
+        'query' => 
+        array (
+          'query_type' => 'LatestBlogPost',
+        ),
+        'template' => 'latest_blog_post.html.twig',
+      ),
+    ),
+     'query' => 
+    array (
+    ),
+  )),
+  1 => 'inline',
+  2 => 
+  array (
+  ),
+)
