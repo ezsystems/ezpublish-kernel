@@ -42,16 +42,7 @@ class SiteAccessGroupConfigResolver extends SiteAccessConfigResolver
             return $this->resolverHasParameterForGroup(new SiteAccessGroup($scope), $paramName, $namespace);
         }
 
-        if (!$this->isSiteAccessScope($scope)) {
-            return false;
-        }
-
-        $siteAccess = $this->siteAccessProvider->getSiteAccess($scope);
-        if (!$this->isSiteAccessSupported($siteAccess)) {
-            return false;
-        }
-
-        return $this->resolverHasParameter($siteAccess, $paramName, $namespace);
+        return parent::hasParameter($paramName, $namespace, $scope);
     }
 
     final public function getParameter(string $paramName, ?string $namespace = null, ?string $scope = null)
@@ -62,16 +53,7 @@ class SiteAccessGroupConfigResolver extends SiteAccessConfigResolver
             return $this->getParameterFromResolverForGroup(new SiteAccessGroup($scope), $paramName, $namespace);
         }
 
-        if (!$this->isSiteAccessScope($scope)) {
-            throw new ParameterNotFoundException($paramName, $namespace, [$scope]);
-        }
-
-        $siteAccess = $this->siteAccessProvider->getSiteAccess($scope);
-        if (!$this->isSiteAccessSupported($siteAccess)) {
-            throw new ParameterNotFoundException($paramName, $namespace, [$scope]);
-        }
-
-        return $this->getParameterFromResolver($siteAccess, $paramName, $namespace);
+        return parent::getParameter($paramName, $namespace, $scope);
     }
 
     protected function resolverHasParameter(SiteAccess $siteAccess, string $paramName, string $namespace): bool
