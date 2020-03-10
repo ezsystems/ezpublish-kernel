@@ -32,48 +32,23 @@ abstract class Gateway
     public const CONTENT_TYPE_SEQ = 'ezcontentclass_id_seq';
     public const FIELD_DEFINITION_SEQ = 'ezcontentclass_attribute_id_seq';
 
-    /**
-     * Insert the given $group.
-     *
-     * @return int Group ID
-     */
     abstract public function insertGroup(Group $group): int;
 
-    /**
-     * Update a group based on the given GroupUpdateStruct.
-     */
     abstract public function updateGroup(GroupUpdateStruct $group): void;
 
-    /**
-     * Return a number of Types in Group.
-     */
     abstract public function countTypesInGroup(int $groupId): int;
 
-    /**
-     * Return the number of Groups the Type is assigned to.
-     */
     abstract public function countGroupsForType(int $typeId, int $status): int;
 
-    /**
-     * Delete the Group with the given $groupId.
-     */
     abstract public function deleteGroup(int $groupId): void;
 
     /**
-     * Return an array with data about the Group(s) with $groupIds.
-     *
      * @param int[] $groupIds
      */
     abstract public function loadGroupData(array $groupIds): array;
 
-    /**
-     * Return an array with data about the Group of the given identifier.
-     */
     abstract public function loadGroupDataByIdentifier(string $identifier): array;
 
-    /**
-     * Return an array with data about all Group objects.
-     */
     abstract public function loadAllGroupsData(): array;
 
     /**
@@ -82,10 +57,6 @@ abstract class Gateway
     abstract public function loadTypesDataForGroup(int $groupId, int $status): array;
 
     /**
-     * Insert a new Content Type.
-     *
-     * @return int Content Type ID
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the given language does not exist
      */
     abstract public function insertType(Type $type, ?int $typeId = null): int;
@@ -103,8 +74,6 @@ abstract class Gateway
     abstract public function deleteGroupAssignment(int $groupId, int $typeId, int $status): void;
 
     /**
-     * Load Field Definition data for the given ID and status.
-     *
      * @param int $id Field Definition ID
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
@@ -120,18 +89,12 @@ abstract class Gateway
         StorageFieldDefinition $storageFieldDef
     ): int;
 
-    /**
-     * Delete a Field Definition.
-     */
     abstract public function deleteFieldDefinition(
         int $typeId,
         int $status,
         int $fieldDefinitionId
     ): void;
 
-    /**
-     * Update a Field Definition.
-     */
     abstract public function updateFieldDefinition(
         int $typeId,
         int $status,
@@ -149,32 +112,16 @@ abstract class Gateway
     /**
      * Bulk-load an array with data about the given Content Types.
      *
-     * @param array $typeIds
-     *
-     * @return array Data rows.
+     * @param int[] $typeIds
      */
     abstract public function loadTypesListData(array $typeIds): array;
 
-    /**
-     * Loads an array with data about $typeId in $status.
-     *
-     * @return array Data rows.
-     */
     abstract public function loadTypeData(int $typeId, int $status): array;
 
-    /**
-     * Load an array with data about the Content Type of the given identifier and status.
-     */
     abstract public function loadTypeDataByIdentifier(string $identifier, int $status): array;
 
-    /**
-     * Load an array with data about the Content Type of a given Remote ID and status.
-     */
     abstract public function loadTypeDataByRemoteId(string $remoteId, int $status): array;
 
-    /**
-     * Count the number of existing instances a Content Type.
-     */
     abstract public function countInstancesOfType(int $typeId): int;
 
     /**
@@ -182,9 +129,6 @@ abstract class Gateway
      */
     abstract public function delete(int $typeId, int $status): void;
 
-    /**
-     * Delete all Field Definitions definitions of Content Type.
-     */
     abstract public function deleteFieldDefinitionsForType(int $typeId, int $status): void;
 
     /**
@@ -194,9 +138,6 @@ abstract class Gateway
      */
     abstract public function deleteType(int $typeId, int $status): void;
 
-    /**
-     * Delete all Content Type Group assignments for a Content Type.
-     */
     abstract public function deleteGroupAssignmentsForType(int $typeId, int $status): void;
 
     /**
@@ -208,9 +149,6 @@ abstract class Gateway
         int $targetStatus
     ): void;
 
-    /**
-     * Return searchable Fields mapping data.
-     */
     abstract public function getSearchableFieldMapData(): array;
 
     /**
