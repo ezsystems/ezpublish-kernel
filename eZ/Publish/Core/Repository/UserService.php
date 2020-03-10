@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\UserService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use DateInterval;
@@ -24,6 +24,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as Cr
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\User\PasswordInfo;
@@ -57,8 +58,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * This service provides methods for managing users and user groups.
- *
- * @example Examples/user.php
  */
 class UserService implements UserServiceInterface
 {
@@ -126,7 +125,7 @@ class UserService implements UserServiceInterface
      * - the content type is determined via configuration and can be set to null.
      * The returned version is published.
      *
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct $userGroupCreateStruct a structure for setting all necessary data to create this user group
+     * @param APIUserGroupCreateStruct $userGroupCreateStruct a structure for setting all necessary data to create this user group
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $parentGroup
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
@@ -136,7 +135,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userGroupCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set to an empty value
      */
-    public function createUserGroup(APIUserGroupCreateStruct $userGroupCreateStruct, APIUserGroup $parentGroup)
+    public function createUserGroup(APIUserGroupCreateStruct $userGroupCreateStruct, APIUserGroup $parentGroup): APIUserGroup
     {
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
@@ -181,7 +180,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
-    public function loadUserGroup($id, array $prioritizedLanguages = [])
+    public function loadUserGroup(int $id, array $prioritizedLanguages = []): APIUserGroup
     {
         $content = $this->repository->getContentService()->loadContent($id, $prioritizedLanguages);
 
@@ -200,7 +199,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(APIUserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
+    public function loadSubUserGroups(APIUserGroup $userGroup, int $offset = 0, int $limit = 25, array $prioritizedLanguages = []): iterable
     {
         $locationService = $this->repository->getLocationService();
 
@@ -244,7 +243,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function searchSubGroups(Location $location, $offset = 0, $limit = 25)
+    protected function searchSubGroups(Location $location, int $offset = 0, int $limit = 25): SearchResult
     {
         $searchQuery = new LocationQuery();
 
@@ -270,7 +269,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      */
-    public function deleteUserGroup(APIUserGroup $userGroup)
+    public function deleteUserGroup(APIUserGroup $userGroup): iterable
     {
         $loadedUserGroup = $this->loadUserGroup($userGroup->id);
 
@@ -295,7 +294,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
      */
-    public function moveUserGroup(APIUserGroup $userGroup, APIUserGroup $newParent)
+    public function moveUserGroup(APIUserGroup $userGroup, APIUserGroup $newParent): void
     {
         $loadedUserGroup = $this->loadUserGroup($userGroup->id);
         $loadedNewParent = $this->loadUserGroup($newParent->id);
@@ -334,7 +333,7 @@ class UserService implements UserServiceInterface
      * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct
+     * @param UserGroupUpdateStruct $userGroupUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
@@ -342,7 +341,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userGroupUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
      */
-    public function updateUserGroup(APIUserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct)
+    public function updateUserGroup(APIUserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct): APIUserGroup
     {
         if ($userGroupUpdateStruct->contentUpdateStruct === null &&
             $userGroupUpdateStruct->contentMetadataUpdateStruct === null) {
@@ -387,7 +386,7 @@ class UserService implements UserServiceInterface
     /**
      * Create a new user. The created user is published by this method.
      *
-     * @param \eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct the data used for creating the user
+     * @param APIUserCreateStruct $userCreateStruct the data used for creating the user
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup[] $parentGroups the groups which are assigned to the user after creation
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -397,7 +396,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a user with provided login already exists
      */
-    public function createUser(APIUserCreateStruct $userCreateStruct, array $parentGroups)
+    public function createUser(APIUserCreateStruct $userCreateStruct, array $parentGroups): APIUser
     {
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
@@ -448,14 +447,14 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user.
      *
-     * @param mixed $userId
+     * @param int $userId
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      */
-    public function loadUser($userId, array $prioritizedLanguages = [])
+    public function loadUser(int $userId, array $prioritizedLanguages = []): APIUser
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
         $content = $this->repository->getContentService()->internalLoadContentById($userId, $prioritizedLanguages);
@@ -509,7 +508,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException if the password is not correctly saved, in which case the update is reverted
      */
-    private function updatePasswordHash($login, $password, SPIUser $spiUser)
+    private function updatePasswordHash(string $login, string $password, SPIUser $spiUser)
     {
         $hashType = $this->passwordHashService->getDefaultHashType();
         if ($spiUser->hashAlgorithm === $hashType) {
@@ -551,9 +550,9 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login, array $prioritizedLanguages = [])
+    public function loadUserByLogin(string $login, array $prioritizedLanguages = []): APIUser
     {
-        if (!is_string($login) || empty($login)) {
+        if (empty($login)) {
             throw new InvalidArgumentValue('login', $login);
         }
 
@@ -597,7 +596,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function loadUsersByEmail(string $email, array $prioritizedLanguages = []): array
+    public function loadUsersByEmail(string $email, array $prioritizedLanguages = []): iterable
     {
         if (empty($email)) {
             throw new InvalidArgumentValue('email', $email);
@@ -624,9 +623,9 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
-    public function loadUserByToken($hash, array $prioritizedLanguages = [])
+    public function loadUserByToken(string $hash, array $prioritizedLanguages = []): APIUser
     {
-        if (!is_string($hash) || empty($hash)) {
+        if (empty($hash)) {
             throw new InvalidArgumentValue('hash', $hash);
         }
 
@@ -642,7 +641,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete the user
      */
-    public function deleteUser(APIUser $user)
+    public function deleteUser(APIUser $user): iterable
     {
         $loadedUser = $this->loadUser($user->id);
 
@@ -658,7 +657,7 @@ class UserService implements UserServiceInterface
             throw $e;
         }
 
-        return $affectedLocationIds;
+        return $affectedLocationIds ?? [];
     }
 
     /**
@@ -668,15 +667,13 @@ class UserService implements UserServiceInterface
      * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
+     * @param UserUpdateStruct $userUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function updateUser(APIUser $user, UserUpdateStruct $userUpdateStruct)
+    public function updateUser(APIUser $user, UserUpdateStruct $userUpdateStruct): APIUser
     {
         $loadedUser = $this->loadUser($user->id);
 
@@ -786,7 +783,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function updateUserToken(APIUser $user, UserTokenUpdateStruct $userTokenUpdateStruct)
+    public function updateUserToken(APIUser $user, UserTokenUpdateStruct $userTokenUpdateStruct): APIUser
     {
         $loadedUser = $this->loadUser($user->id);
 
@@ -823,7 +820,7 @@ class UserService implements UserServiceInterface
      *
      * @param string $hash
      */
-    public function expireUserToken($hash)
+    public function expireUserToken(string $hash): void
     {
         $this->repository->beginTransaction();
         try {
@@ -844,7 +841,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is already in the given user group
      */
-    public function assignUserToUserGroup(APIUser $user, APIUserGroup $userGroup)
+    public function assignUserToUserGroup(APIUser $user, APIUserGroup $userGroup): void
     {
         $loadedUser = $this->loadUser($user->id);
         $loadedGroup = $this->loadUserGroup($userGroup->id);
@@ -892,7 +889,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $userGroup is the last assigned user group
      */
-    public function unAssignUserFromUserGroup(APIUser $user, APIUserGroup $userGroup)
+    public function unAssignUserFromUserGroup(APIUser $user, APIUserGroup $userGroup): void
     {
         $loadedUser = $this->loadUser($user->id);
         $loadedGroup = $this->loadUserGroup($userGroup->id);
@@ -942,7 +939,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(APIUser $user, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
+    public function loadUserGroupsOfUser(APIUser $user, int $offset = 0, int $limit = 25, array $prioritizedLanguages = []): iterable
     {
         $locationService = $this->repository->getLocationService();
 
@@ -1003,10 +1000,10 @@ class UserService implements UserServiceInterface
      */
     public function loadUsersOfUserGroup(
         APIUserGroup $userGroup,
-        $offset = 0,
-        $limit = 25,
+        int $offset = 0,
+        int $limit = 25,
         array $prioritizedLanguages = []
-    ) {
+    ): iterable {
         $loadedUserGroup = $this->loadUserGroup($userGroup->id);
 
         if ($loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
@@ -1087,7 +1084,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserCreateStruct
      */
-    public function newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType = null)
+    public function newUserCreateStruct(string $login, string $email, string $password, string $mainLanguageCode, ?ContentType $contentType = null): APIUserCreateStruct
     {
         if ($contentType === null) {
             $contentType = $this->repository->getContentTypeService()->loadContentType(
@@ -1137,7 +1134,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      */
-    public function newUserGroupCreateStruct($mainLanguageCode, $contentType = null)
+    public function newUserGroupCreateStruct(string $mainLanguageCode, ?ContentType $contentType = null): APIUserGroupCreateStruct
     {
         if ($contentType === null) {
             $contentType = $this->repository->getContentTypeService()->loadContentType(
@@ -1159,7 +1156,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
      */
-    public function newUserUpdateStruct()
+    public function newUserUpdateStruct(): UserUpdateStruct
     {
         return new UserUpdateStruct();
     }
@@ -1169,7 +1166,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
      */
-    public function newUserGroupUpdateStruct()
+    public function newUserGroupUpdateStruct(): UserGroupUpdateStruct
     {
         return new UserGroupUpdateStruct();
     }
@@ -1223,7 +1220,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      */
-    protected function buildDomainUserGroupObject(APIContent $content)
+    protected function buildDomainUserGroupObject(APIContent $content): APIUserGroup
     {
         $locationService = $this->repository->getLocationService();
 
@@ -1255,7 +1252,7 @@ class UserService implements UserServiceInterface
         SPIUser $spiUser,
         APIContent $content = null,
         array $prioritizedLanguages = []
-    ) {
+    ): APIUser {
         if ($content === null) {
             $content = $this->repository->getContentService()->internalLoadContentById(
                 $spiUser->id,

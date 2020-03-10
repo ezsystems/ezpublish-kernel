@@ -29,7 +29,7 @@ class Mapper
     public function mapUser(array $data)
     {
         $user = new User();
-        $user->id = $data['contentobject_id'];
+        $user->id = (int)$data['contentobject_id'];
         $user->login = $data['login'];
         $user->email = $data['email'];
         $user->passwordHash = $data['password_hash'];

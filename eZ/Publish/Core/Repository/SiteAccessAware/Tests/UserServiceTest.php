@@ -11,6 +11,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\Repository\SiteAccessAware\UserService;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
@@ -33,11 +34,14 @@ class UserServiceTest extends AbstractServiceTest
         $userGroupCreateStruct = new UserGroupCreateStruct();
         $userGroupUpdateStruct = new UserGroupUpdateStruct();
         $userGroup = new UserGroup();
+        $userGroupId = 1;
 
         $userCreateStruct = new UserCreateStruct();
         $userUpdateStruct = new UserUpdateStruct();
         $userTokenUpdateStruct = new UserTokenUpdateStruct();
         $user = new User();
+        $userId = 14;
+        $contentType = $this->createMock(ContentType::class);
 
         $passwordValidationContext = new PasswordValidationContext();
         $passwordExpirationDate = (new DateTime())->add(new DateInterval('P30D'));
@@ -45,25 +49,25 @@ class UserServiceTest extends AbstractServiceTest
 
         // string $method, array $arguments, bool $return = true
         return [
-            ['createUserGroup', [$userGroupCreateStruct, $userGroup]],
-            ['deleteUserGroup', [$userGroup]],
-            ['moveUserGroup', [$userGroup, $userGroup]],
-            ['updateUserGroup', [$userGroup, $userGroupUpdateStruct]],
+            ['createUserGroup', [$userGroupCreateStruct, $userGroup], $userGroup],
+            ['deleteUserGroup', [$userGroup], [$userGroupId]],
+            ['moveUserGroup', [$userGroup, $userGroup], null],
+            ['updateUserGroup', [$userGroup, $userGroupUpdateStruct], $userGroup],
 
-            ['createUser', [$userCreateStruct, [$userGroup]]],
-            ['deleteUser', [$user]],
-            ['updateUser', [$user, $userUpdateStruct]],
+            ['createUser', [$userCreateStruct, [$userGroup]], $user],
+            ['deleteUser', [$user], [$userId]],
+            ['updateUser', [$user, $userUpdateStruct], $user],
 
-            ['assignUserToUserGroup', [$user, $userGroup]],
-            ['unAssignUserFromUserGroup', [$user, $userGroup]],
+            ['assignUserToUserGroup', [$user, $userGroup], null],
+            ['unAssignUserFromUserGroup', [$user, $userGroup], null],
 
-            ['updateUserToken', [$user, $userTokenUpdateStruct]],
-            ['expireUserToken', ['43ir43jrt43']],
+            ['updateUserToken', [$user, $userTokenUpdateStruct], $user],
+            ['expireUserToken', ['43ir43jrt43'], null],
 
-            ['newUserCreateStruct', ['adam', 'adam@gmail.com', 'Eve', 'eng-AU', 4]],
-            ['newUserGroupCreateStruct', ['eng-AU', 7]],
-            ['newUserUpdateStruct', []],
-            ['newUserGroupUpdateStruct', []],
+            ['newUserCreateStruct', ['adam', 'adam@gmail.com', 'Eve', 'eng-AU', $contentType], $userCreateStruct],
+            ['newUserGroupCreateStruct', ['eng-AU', $contentType], $userGroupCreateStruct],
+            ['newUserUpdateStruct', [], $userUpdateStruct],
+            ['newUserGroupUpdateStruct', [], $userGroupUpdateStruct],
 
             ['isUser', [$userGroup]],
             ['isUserGroup', [$userGroup]],
@@ -81,15 +85,15 @@ class UserServiceTest extends AbstractServiceTest
 
         // string $method, array $arguments, bool $return, int $languageArgumentIndex
         return [
-            ['loadUserGroup', [4, self::LANG_ARG], true, 1],
-            ['loadSubUserGroups', [$userGroup, 50, 50, self::LANG_ARG], true, 3],
-            ['loadUser', [14, self::LANG_ARG], true, 1],
-            ['loadUserByLogin', ['admin', self::LANG_ARG], true, 1],
+            ['loadUserGroup', [4, self::LANG_ARG], $userGroup, 1],
+            ['loadSubUserGroups', [$userGroup, 50, 50, self::LANG_ARG], [$userGroup], 3],
+            ['loadUser', [14, self::LANG_ARG], $user, 1],
+            ['loadUserByLogin', ['admin', self::LANG_ARG], $user, 1],
             ['loadUserByEmail', ['nospam@ez.no', self::LANG_ARG], $user, 1],
-            ['loadUsersByEmail', ['nospam@ez.no', self::LANG_ARG], [], 1],
-            ['loadUserGroupsOfUser', [$user, 50, 50, self::LANG_ARG], true, 3],
-            ['loadUsersOfUserGroup', [$userGroup, 50, 50, self::LANG_ARG], true, 3],
-            ['loadUserByToken', ['43ir43jrt43', self::LANG_ARG], true, 1],
+            ['loadUsersByEmail', ['nospam@ez.no', self::LANG_ARG], [$user], 1],
+            ['loadUserGroupsOfUser', [$user, 50, 50, self::LANG_ARG], [$userGroup], 3],
+            ['loadUsersOfUserGroup', [$userGroup, 50, 50, self::LANG_ARG], [$user], 3],
+            ['loadUserByToken', ['43ir43jrt43', self::LANG_ARG], $user, 1],
         ];
     }
 }
