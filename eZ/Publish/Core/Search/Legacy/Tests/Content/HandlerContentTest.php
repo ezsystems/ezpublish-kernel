@@ -18,6 +18,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
+use eZ\Publish\SPI\Persistence\Content\Type;
 
 /**
  * Content Search test case for ContentSearchHandler.
@@ -1441,5 +1442,12 @@ class HandlerContentTest extends AbstractTestCase
                 )
             )
         );
+    }
+
+    public function testGetNonExistingFieldDefinition()
+    {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
+
+        $this->getContentTypeHandler()->getFieldDefinition(0, Type::STATUS_DEFINED);
     }
 }

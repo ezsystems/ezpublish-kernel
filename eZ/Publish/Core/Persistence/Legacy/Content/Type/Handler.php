@@ -489,7 +489,7 @@ class Handler implements BaseContentTypeHandler
     {
         $rows = $this->contentTypeGateway->loadFieldDefinition($id, $status);
 
-        if ($rows === false) {
+        if ($rows === false || (is_array($rows) && count($rows) === 0)) {
             throw new NotFoundException(
                 'FieldDefinition',
                 [
