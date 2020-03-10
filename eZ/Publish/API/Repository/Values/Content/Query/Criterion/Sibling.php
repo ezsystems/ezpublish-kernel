@@ -15,12 +15,12 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  */
 class Sibling extends CompositeCriterion
 {
-    public function __construct(int $id, int $parentLocationId)
+    public function __construct(int $locationId, int $parentLocationId)
     {
         $criteria = new LogicalAnd([
             new ParentLocationId($parentLocationId),
             new LogicalNot(
-                new LocationId($id)
+                new LocationId($locationId)
             ),
         ]);
 
