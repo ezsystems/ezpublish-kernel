@@ -42,6 +42,12 @@ use DOMDocument;
 final class DoctrineDatabase extends Gateway
 {
     /**
+     * Pre-computed integer constant which, when combined with proper bit-wise operator,
+     * removes always available flag from the mask.
+     */
+    private const REMOVE_ALWAYS_AVAILABLE_LANG_MASK_OPERAND = -2;
+
+    /**
      * The native Doctrine connection.
      *
      * Meant to be used to transition from eZ/Zeta interface to Doctrine.
@@ -441,7 +447,7 @@ final class DoctrineDatabase extends Gateway
                     ':languageMaskOperand'
                 )
             )
-            ->setParameter('languageMaskOperand', -2)
+            ->setParameter('languageMaskOperand', self::REMOVE_ALWAYS_AVAILABLE_LANG_MASK_OPERAND)
         ;
         $query->execute();
         $query->resetQueryPart('set');
@@ -456,7 +462,10 @@ final class DoctrineDatabase extends Gateway
                         ':languageMaskOperand'
                     )
                 )
-                ->setParameter('languageMaskOperand', $alwaysAvailable ? 1 : -2);
+                ->setParameter(
+                    'languageMaskOperand',
+                    $alwaysAvailable ? 1 : self::REMOVE_ALWAYS_AVAILABLE_LANG_MASK_OPERAND
+                );
 
             $query->andWhere(
                 $expr->gt(
@@ -1952,7 +1961,10 @@ final class DoctrineDatabase extends Gateway
 
         $query
             ->set($languageMaskColumnName, $languageMaskExpr)
-            ->setParameter('languageMaskOperand', $alwaysAvailable ? 1 : -2);
+            ->setParameter(
+                'languageMaskOperand',
+                $alwaysAvailable ? 1 : self::REMOVE_ALWAYS_AVAILABLE_LANG_MASK_OPERAND
+            );
 
         return $query;
     }
