@@ -752,8 +752,8 @@ final class DoctrineDatabase extends Gateway
                     $query->createPositionalParameter($fieldDefinitionId, ParameterType::INTEGER)
                 )
             )
-            ->andWhere(
             // in Legacy Storage Field Definition table the "version" column stores status (e.g. draft, published, modified)
+            ->andWhere(
                 $query->expr()->eq(
                     'version',
                     $query->createPositionalParameter($status, ParameterType::INTEGER)
