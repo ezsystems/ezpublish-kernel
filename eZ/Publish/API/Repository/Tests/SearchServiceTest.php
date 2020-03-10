@@ -785,6 +785,14 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'ObjectStateIdentifier.php',
             ],
+            [
+                [
+                    'query' => new Criterion\ObjectStateIdentifier(['not_locked'], 'ez_lock'),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'ObjectStateIdentifier.php',
+            ],
         ];
     }
 
