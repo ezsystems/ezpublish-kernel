@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Events\URLAlias\CreateGlobalUrlAliasEvent;
 use eZ\Publish\API\Repository\Events\URLAlias\CreateUrlAliasEvent;
 use eZ\Publish\API\Repository\Events\URLAlias\RefreshSystemUrlAliasesForLocationEvent;
 use eZ\Publish\API\Repository\Events\URLAlias\RemoveAliasesEvent;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\SPI\Repository\Decorator\URLAliasServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -37,11 +38,11 @@ class URLAliasService extends URLAliasServiceDecorator
 
     public function createUrlAlias(
         Location $location,
-        $path,
-        $languageCode,
-        $forwarding = false,
-        $alwaysAvailable = false
-    ) {
+        string $path,
+        string $languageCode,
+        bool $forwarding = false,
+        bool $alwaysAvailable = false
+    ): URLAlias {
         $eventData = [
             $location,
             $path,
@@ -69,12 +70,12 @@ class URLAliasService extends URLAliasServiceDecorator
     }
 
     public function createGlobalUrlAlias(
-        $resource,
-        $path,
-        $languageCode,
-        $forwarding = false,
-        $alwaysAvailable = false
-    ) {
+        string $resource,
+        string $path,
+        string $languageCode,
+        bool $forwarding = false,
+        bool $alwaysAvailable = false
+    ): URLAlias {
         $eventData = [
             $resource,
             $path,

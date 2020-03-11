@@ -3,6 +3,7 @@
 namespace eZ\Publish\Core\Repository\SiteAccessAware\Tests;
 
 use eZ\Publish\API\Repository\URLAliasService as APIService;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\Repository\SiteAccessAware\URLAliasService;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 
@@ -21,15 +22,16 @@ class UrlAliasServiceTest extends AbstractServiceTest
     public function providerForPassTroughMethods()
     {
         $location = new Location();
+        $urlAlias = new URLAlias();
 
         // string $method, array $arguments, bool $return = true
         return [
-            ['createUrlAlias', [$location, '/Tomb/Raider', 'eng-AU', true, true]],
-            ['createGlobalUrlAlias', ['root:bla', '/Tomb/Raider', 'eng-AU', true, true]],
-            ['listGlobalAliases', ['eng-AU', 50, 50]],
-            ['removeAliases', [[555]]],
-            ['lookup', [['/James', 'eng-GB']]],
-            ['load', [[555]]],
+            ['createUrlAlias', [$location, '/Tomb/Raider', 'eng-AU', true, true], $urlAlias],
+            ['createGlobalUrlAlias', ['root:bla', '/Tomb/Raider', 'eng-AU', true, true], $urlAlias],
+            ['listGlobalAliases', ['eng-AU', 50, 50], [$urlAlias]],
+            ['removeAliases', [[555]], null],
+            ['lookup', ['/James', 'eng-GB'], $urlAlias],
+            ['load', ['555'], $urlAlias],
             ['refreshSystemUrlAliasesForLocation', [$location], null],
             ['deleteCorruptedUrlAliases', [], 50],
         ];
@@ -38,6 +40,7 @@ class UrlAliasServiceTest extends AbstractServiceTest
     public function providerForLanguagesLookupMethods()
     {
         $location = new Location();
+        $urlAlias = new URLAlias();
 
         $callback = function ($languageLookup) {
             $this->languageResolverMock
@@ -49,8 +52,8 @@ class UrlAliasServiceTest extends AbstractServiceTest
 
         // string $method, array $arguments, bool $return, int $languageArgumentIndex, callable $callback
         return [
-            ['listLocationAliases', [$location, false, 'eng-AU', null, self::LANG_ARG], true, 4, $callback],
-            ['reverseLookup', [$location, 'eng-AU', null, self::LANG_ARG], true, 3, $callback],
+            ['listLocationAliases', [$location, false, 'eng-AU', null, self::LANG_ARG], [$urlAlias], 4, $callback],
+            ['reverseLookup', [$location, 'eng-AU', null, self::LANG_ARG], $urlAlias, 3, $callback],
         ];
     }
 

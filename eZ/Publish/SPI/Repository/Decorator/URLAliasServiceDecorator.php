@@ -10,6 +10,7 @@ namespace eZ\Publish\SPI\Repository\Decorator;
 
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
 
 abstract class URLAliasServiceDecorator implements URLAliasService
 {
@@ -23,60 +24,75 @@ abstract class URLAliasServiceDecorator implements URLAliasService
 
     public function createUrlAlias(
         Location $location,
-        $path,
-        $languageCode,
-        $forwarding = false,
-        $alwaysAvailable = false
-    ) {
+        string $path,
+        string $languageCode,
+        bool $forwarding = false,
+        bool $alwaysAvailable = false
+    ): URLAlias {
         return $this->innerService->createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
     }
 
     public function createGlobalUrlAlias(
-        $resource,
-        $path,
-        $languageCode,
-        $forwarding = false,
-        $alwaysAvailable = false
-    ) {
+        string $resource,
+        string $path,
+        string $languageCode,
+        bool $forwarding = false,
+        bool $alwaysAvailable = false
+    ): URLAlias {
         return $this->innerService->createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
     }
 
     public function listLocationAliases(
         Location $location,
-        $custom = true,
-        $languageCode = null
-    ) {
-        return $this->innerService->listLocationAliases($location, $custom, $languageCode);
+        bool $custom = true,
+        ?string $languageCode = null,
+        ?bool $showAllTranslations = null,
+        ?array $prioritizedLanguages = null
+    ): iterable {
+        return $this->innerService->listLocationAliases(
+            $location,
+            $custom,
+            $languageCode,
+            $showAllTranslations,
+            $prioritizedLanguages
+        );
     }
 
     public function listGlobalAliases(
-        $languageCode = null,
-        $offset = 0,
-        $limit = -1
-    ) {
+        ?string $languageCode = null,
+        int $offset = 0,
+        int $limit = -1
+    ): iterable {
         return $this->innerService->listGlobalAliases($languageCode, $offset, $limit);
     }
 
-    public function removeAliases(array $aliasList)
+    public function removeAliases(array $aliasList): void
     {
-        return $this->innerService->removeAliases($aliasList);
+        $this->innerService->removeAliases($aliasList);
     }
 
     public function lookup(
-        $url,
-        $languageCode = null
-    ) {
+        string $url,
+        ?string $languageCode = null
+    ): URLAlias {
         return $this->innerService->lookup($url, $languageCode);
     }
 
     public function reverseLookup(
         Location $location,
-        $languageCode = null
-    ) {
-        return $this->innerService->reverseLookup($location, $languageCode);
+        ?string $languageCode = null,
+        ?bool $showAllTranslations = null,
+        ?array $prioritizedLanguages = null
+    ): URLAlias {
+        return $this->innerService->reverseLookup(
+            $location,
+            $languageCode,
+            $showAllTranslations,
+            $prioritizedLanguages
+        );
     }
 
-    public function load($id)
+    public function load(string $id): URLAlias
     {
         return $this->innerService->load($id);
     }
