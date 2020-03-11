@@ -137,9 +137,9 @@ interface URLAliasService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if no url alias exist for the given language
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param string|null $languageCode
-     * @param bool|null $showAllTranslations
-     * @param string[]|null $prioritizedLanguages
+     * @param string|null $languageCode filters those which are valid for the given language
+     * @param bool|null $showAllTranslations If enabled will include all alias as if they where always available.
+     * @param string[]|null $prioritizedLanguages If set used as prioritized language codes, returning first match.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
