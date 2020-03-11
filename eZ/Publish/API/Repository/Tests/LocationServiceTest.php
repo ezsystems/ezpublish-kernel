@@ -11,7 +11,9 @@ namespace eZ\Publish\API\Repository\Tests;
 use Exception;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -19,6 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\Core\FieldType\RichText\Value as RichTextValue;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -2108,6 +2111,88 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     */
+    public function testDeleteUnusedLocationWhichPreviousHadContentWithRelativeAlias(): void
+    {
+        $repository = $this->getRepository(false);
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $homeLocationCreateStruct = $locationService->newLocationCreateStruct(2);
+
+        $originalFolder = $contentService->publishVersion(
+            $contentService->createContent(
+                $this->createFolderStruct('Original folder'),
+                [$homeLocationCreateStruct]
+            )->versionInfo
+        );
+
+        $newFolder = $contentService->publishVersion(
+            $contentService->createContent(
+                $this->createFolderStruct('New folder'),
+                [$homeLocationCreateStruct]
+            )->versionInfo
+        );
+
+        $originalFolderLocationId = $originalFolder->contentInfo->mainLocationId;
+
+        $article = $contentService->publishVersion(
+            $contentService->createContent(
+                $this->createSampleArticleStruct(),
+                [
+                    $locationService->newLocationCreateStruct($originalFolderLocationId),
+                ]
+            )->versionInfo
+        );
+
+        $articleMainLocation = $locationService->loadLocation(
+            $article->contentInfo->mainLocationId
+        );
+
+        $customRelativeAliasPath = '/Original-folder/some-article-alias';
+
+        $urlAliasService->createUrlAlias(
+            $articleMainLocation,
+            $customRelativeAliasPath,
+            'eng-GB',
+            true,
+            true
+        );
+
+        $locationService->moveSubtree(
+            $articleMainLocation,
+            $locationService->loadLocation(
+                $newFolder->contentInfo->mainLocationId
+            )
+        );
+
+        $this->assertIsAliasExists(
+            $customRelativeAliasPath,
+            $articleMainLocation,
+            $urlAliasService
+        );
+
+        $urlAliasService->lookup($customRelativeAliasPath);
+
+        $locationService->deleteLocation(
+            $locationService->loadLocation(
+                $originalFolder->contentInfo->mainLocationId
+            )
+        );
+
+        $this->assertIsAliasExists(
+            $customRelativeAliasPath,
+            $articleMainLocation,
+            $urlAliasService
+        );
+
+        $urlAliasService->lookup($customRelativeAliasPath);
+    }
+
+    /**
      * Test for the copySubtree() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
@@ -2949,5 +3034,78 @@ class LocationServiceTest extends BaseTest
         );
 
         return $contentService->publishVersion($contentDraft->versionInfo);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function createFolderStruct(string $name): ContentCreateStruct
+    {
+        $repository = $this->getRepository(false);
+
+        $contentTypeFolder = $repository->getContentTypeService()
+            ->loadContentTypeByIdentifier('folder');
+
+        $folderCreateStruct = $repository->getContentService()
+            ->newContentCreateStruct($contentTypeFolder, 'eng-GB');
+        $folderCreateStruct->setField('name', $name);
+
+        return $folderCreateStruct;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
+     *
+     * @throws NotFoundException
+     */
+    private function createSampleArticleStruct(): ContentCreateStruct
+    {
+        $repository = $this->getRepository();
+
+        $introDocument = new \DOMDocument();
+        $introDocument->loadXML(
+            <<<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+<para>some paragraph</para>
+</section>
+EOT
+        );
+
+        $contentTypeArticle = $repository->getContentTypeService()
+            ->loadContentTypeByIdentifier('article');
+
+        $articleCreateStruct = $repository->getContentService()
+            ->newContentCreateStruct($contentTypeArticle, 'eng-GB');
+
+        $articleCreateStruct->setField('title', 'Some article');
+        $articleCreateStruct->setField('intro', new RichTextValue($introDocument));
+
+        return $articleCreateStruct;
+    }
+
+    /**
+     * @param string $expectedAliasPath
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     */
+    private function assertIsAliasExists(
+        string $expectedAliasPath,
+        Location $location,
+        URLAliasServiceInterface $urlAliasService
+    ): void {
+        $articleAliasesBeforeDelete = $urlAliasService
+            ->listLocationAliases($location);
+
+        foreach ($articleAliasesBeforeDelete as $alias) {
+            if ($alias->path === $expectedAliasPath) {
+                $this->assertTrue(true);
+                return;
+            }
+        }
     }
 }

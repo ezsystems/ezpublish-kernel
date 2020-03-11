@@ -1444,86 +1444,78 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * {@inheritdoc}
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function deleteUrlNopAliasesWithoutChildren(): int
     {
         $platform = $this->connection->getDatabasePlatform();
-        $qb = $this->connection->createQueryBuilder();
+        $queryBuilder = $this->connection->createQueryBuilder();
 
         // The wrapper select is needed for SQL "Derived Table Merge" issue for deleting
-        $wrapperQb = clone $qb;
-        $selectQb = clone $qb;
-        $subQbForSelect = clone $qb;
+        $wrapperQueryBuilder = clone $queryBuilder;
+        $selectQueryBuilder = clone $queryBuilder;
+        $expressionBuilder = $queryBuilder->expr();
 
-        $subQbForSelect
-            ->select($platform->getCountExpression('id'))
-            ->from($this->table)
-            ->where(
-                $subQbForSelect->expr()->eq(
-                    'parent',
-                    'al1.id'
-                )
-            );
-
-        $selectQb
-            ->select('id')
+        $selectQueryBuilder
+            ->select('al1.id AS inner_id')
             ->from($this->table, 'al1')
+            ->leftJoin(
+                'al1',
+                $this->table,
+                'al2',
+                $expressionBuilder->eq('inner_id', 'al2.parent')
+            )
             ->where(
-                $qb->expr()->eq(
-                    'action_type',
+                $expressionBuilder->eq(
+                    'al1.action_type',
                     ':actionType'
                 )
-            )->andWhere(
-                $qb->expr()->eq(
-                    sprintf('(%s)', $subQbForSelect),
-                    0
-                )
-            )->orderBy('id', 'ASC');
+            )
+            ->groupBy('inner_id')
+            ->having($platform->getCountExpression('al2.id').' = 0');
 
-        $wrapperQb
-            ->select('wrapper.id')
+        $wrapperQueryBuilder
+            ->select('inner_id')
             ->from(
-                sprintf('(%s) wrapper', $selectQb)
-            );
+                sprintf('(%s) wrapper', $selectQueryBuilder)
+            )
+            ->where('id = inner_id');
 
-        $qb
+        $queryBuilder
             ->delete($this->table)
             ->where(
-                $qb->expr()->in(
-                    'id',
-                    sprintf('(%s)', $wrapperQb)
-                )
+                sprintf('EXISTS (%s)', $wrapperQueryBuilder)
             )
             ->setParameter('actionType', 'nop');
 
-        return $qb->execute();
+        return $queryBuilder->execute();
     }
 
     /**
-     * {@inheritdoc}
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function countAllChildAliases(int $parentId): int
     {
         $platform = $this->connection->getDatabasePlatform();
-        $qb = $this->connection->createQueryBuilder();
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expressionBuilder = $queryBuilder->expr();
 
-        $qb
+        $queryBuilder
             ->select($platform->getCountExpression('id'))
             ->from($this->table)
             ->where(
-                $qb->expr()->eq(
+                $expressionBuilder->eq(
                     'parent',
-                    $qb->createPositionalParameter($parentId, ParameterType::INTEGER)
+                    $queryBuilder->createPositionalParameter($parentId, ParameterType::INTEGER)
                 )
             )->andWhere(
-                $qb->expr()->eq(
+                $expressionBuilder->eq(
                     'is_alias',
-                    $qb->createPositionalParameter(1, ParameterType::INTEGER)
+                    $queryBuilder->createPositionalParameter(1, ParameterType::INTEGER)
                 )
             );
 
-        return $qb->execute()->fetchColumn();
+        return $queryBuilder->execute()->fetchColumn();
     }
 
     /**
