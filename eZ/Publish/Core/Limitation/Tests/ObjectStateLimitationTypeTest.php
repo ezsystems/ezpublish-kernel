@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Limitation\ObjectStateLimitationType;
+use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as SPIHandler;
@@ -141,6 +142,12 @@ class ObjectStateLimitationTypeTest extends Base
             [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [1, 3]]),
                 'object' => new ContentInfo(['id' => 0, 'mainLocationId' => 1, 'published' => true]),
+                'expected' => true,
+            ],
+            // ContentCreateStruct, with access
+            [
+                'limitation' => new ObjectStateLimitation(['limitationValues' => [1, 3]]),
+                'object' => new ContentCreateStruct(),
                 'expected' => true,
             ],
         ];
