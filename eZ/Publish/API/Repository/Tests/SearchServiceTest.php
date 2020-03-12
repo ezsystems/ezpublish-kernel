@@ -802,6 +802,14 @@ class SearchServiceTest extends BaseTest
                 ],
                 $fixtureDir . 'ObjectStateIdentifier.php',
             ],
+            [
+                [
+                    'query' => new Criterion\Sibling(58, 1),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'Sibling.php',
+            ],
         ];
     }
 
