@@ -71,7 +71,7 @@ services:
 
     ezpublish.api.role.limitation_type.siteaccess:
         class: eZ\Publish\Core\Limitation\SiteAccessLimitationType
-        arguments: ["%ezpublish.siteaccess.list%"]
+        arguments: ['@ezpublish.siteaccess_service']
         tags:
             - {name: ezpublish.limitationType, alias: SiteAccess}
 

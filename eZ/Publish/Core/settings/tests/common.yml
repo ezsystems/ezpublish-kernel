@@ -60,3 +60,19 @@ services:
     ezpublish.siteaccess:
         class: eZ\Publish\Core\MVC\Symfony\SiteAccess
         arguments: ['default', 'uninitialized']
+
+    ezpublish.siteaccess_service:
+        class: eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessService
+        arguments:
+            - "@ezpublish.siteaccess.provider"
+            - "@ezpublish.config.resolver"
+        calls:
+            - [setSiteAccess, ['@ezpublish.siteaccess']]
+
+    ezpublish.siteaccess.provider.chain:
+        class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider\ChainSiteAccessProvider
+        arguments:
+            $providers: !tagged ezplatform.siteaccess.provider
+
+    ezpublish.siteaccess.provider:
+        alias: ezpublish.siteaccess.provider.chain
