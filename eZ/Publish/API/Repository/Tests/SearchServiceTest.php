@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -664,6 +665,142 @@ class SearchServiceTest extends BaseTest
                     'limit' => 50,
                 ],
                 $fixtureDir . 'Visibility.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\IsUserEnabled(true),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 5,
+                ],
+                $fixtureDir . 'IsUserEnabledTrue.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\IsUserEnabled(false),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 5,
+                ],
+                $fixtureDir . 'IsUserEnabledFalse.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\IsUserBased(true),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'IsUserBasedTrue.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\IsUserBased(false),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 1,
+                ],
+                $fixtureDir . 'IsUserBasedFalse.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\UserId(14),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserIdEq.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\UserId([14, 10]),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserIdIn.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\UserLogin('*adm*', Operator::LIKE),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserLogin.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\UserLogin('admin', Operator::EQ),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserLogin.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\UserLogin(['admin'], Operator::IN),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserLogin.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\UserEmail('*nospam*', Operator::LIKE),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserEmail.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\UserEmail('nospam@ez.no', Operator::EQ),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserEmail.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\UserEmail(['nospam@ez.no'], Operator::IN),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserEmail.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\SectionIdentifier('users'),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'SectionIdentifier.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\SectionIdentifier(['users']),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'SectionIdentifier.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\ObjectStateIdentifier('not_locked'),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'ObjectStateIdentifier.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\ObjectStateIdentifier(['not_locked']),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'ObjectStateIdentifier.php',
+            ],
+            [
+                [
+                    'query' => new Criterion\ObjectStateIdentifier(['not_locked'], 'ez_lock'),
+                    'sortClauses' => [new SortClause\ContentId()],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'ObjectStateIdentifier.php',
             ],
         ];
     }
