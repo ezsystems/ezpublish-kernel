@@ -13,7 +13,7 @@ use eZ\Publish\Core\FieldType\Value;
 class ImageValidator extends Validator
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function validateConstraints($constraints)
     {
@@ -21,7 +21,7 @@ class ImageValidator extends Validator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function validate(Value $value)
     {
