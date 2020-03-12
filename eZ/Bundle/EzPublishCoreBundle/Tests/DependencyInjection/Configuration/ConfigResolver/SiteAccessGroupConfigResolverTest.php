@@ -29,7 +29,8 @@ class SiteAccessGroupConfigResolverTest extends ConfigResolverTest
         );
         $configResolver = new SiteAccessGroupConfigResolver(
             $staticSiteAccessProvider,
-            $defaultNamespace
+            $defaultNamespace,
+            []
         );
         $configResolver->setContainer($this->containerMock);
         $configResolver->setSiteAccess($siteAccess);

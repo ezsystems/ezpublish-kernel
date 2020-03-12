@@ -240,7 +240,8 @@ class ChainConfigResolverTest extends TestCase
          );
         $configResolver = new SiteAccessGroupConfigResolver(
              $this->getStaticSiteAccessProvider(),
-             $defaultNamespace
+             $defaultNamespace,
+             []
          );
         $configResolver->setContainer($this->containerMock);
         $configResolver->setSiteAccess($siteAccess);
