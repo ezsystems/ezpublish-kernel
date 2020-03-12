@@ -35,7 +35,7 @@ abstract class SiteAccessConfigResolver implements VersatileScopeInterface, Site
         $this->defaultNamespace = $defaultNamespace;
     }
 
-    final public function hasParameter(string $paramName, ?string $namespace = null, ?string $scope = null): bool
+    public function hasParameter(string $paramName, ?string $namespace = null, ?string $scope = null): bool
     {
         [$namespace, $scope] = $this->resolveNamespaceAndScope($namespace, $scope);
         if (!$this->isSiteAccessScope($scope)) {
@@ -50,7 +50,7 @@ abstract class SiteAccessConfigResolver implements VersatileScopeInterface, Site
         return $this->resolverHasParameter($siteAccess, $paramName, $namespace);
     }
 
-    final public function getParameter(string $paramName, ?string $namespace = null, ?string $scope = null)
+    public function getParameter(string $paramName, ?string $namespace = null, ?string $scope = null)
     {
         [$namespace, $scope] = $this->resolveNamespaceAndScope($namespace, $scope);
 

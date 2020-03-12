@@ -14,8 +14,6 @@ use Symfony\Component\Yaml\Yaml;
 
 class LanguagesTest extends AbstractParserTestCase
 {
-    private const EMPTY_SA_GROUP = 'empty_group';
-
     protected function getContainerExtensions(): array
     {
         return [new EzPublishCoreExtension([new Languages()])];
@@ -30,14 +28,17 @@ class LanguagesTest extends AbstractParserTestCase
     {
         $langDemoSite = ['eng-GB'];
         $langFre = ['fre-FR', 'eng-GB'];
+        $langEmptyGroup = ['pol-PL'];
         $config = [
             'siteaccess' => [
                 'list' => ['fre2'],
+                'groups' => [self::EMPTY_SA_GROUP => []],
             ],
             'system' => [
                 'ezdemo_site' => ['languages' => $langDemoSite],
                 'fre' => ['languages' => $langFre],
                 'fre2' => ['languages' => $langFre],
+                self::EMPTY_SA_GROUP => ['languages' => $langEmptyGroup],
             ],
         ];
         $this->load($config);
@@ -45,11 +46,12 @@ class LanguagesTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue('languages', $langDemoSite, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('languages', $langFre, 'fre');
         $this->assertConfigResolverParameterValue('languages', $langFre, 'fre2');
-        $this->assertConfigResolverParameterValue('languages', [], self::EMPTY_SA_GROUP);
+        $this->assertConfigResolverParameterValue('languages', $langEmptyGroup, self::EMPTY_SA_GROUP);
         $this->assertSame(
             [
                 'eng-GB' => ['ezdemo_site'],
                 'fre-FR' => ['fre', 'fre2'],
+                'pol-PL' => [self::EMPTY_SA_GROUP],
             ],
             $this->container->getParameter('ezpublish.siteaccesses_by_language')
         );

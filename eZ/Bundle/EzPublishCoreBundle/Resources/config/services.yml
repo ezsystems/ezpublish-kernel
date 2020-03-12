@@ -28,6 +28,7 @@ services:
         arguments:
             - '@ezpublish.siteaccess.provider'
             - '%ezpublish.config.default_scope%'
+            - '%ezpublish.siteaccess.groups%'
         calls:
             - [setSiteAccess, ['@ezpublish.siteaccess']]
             - [setContainer, ['@service_container']]
