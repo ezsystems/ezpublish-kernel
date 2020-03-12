@@ -9,7 +9,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleDownOnlyFilterLoader;
-use Imagine\Image\ImageInterface;
 use PHPUnit\Framework\TestCase;
 
 class ScaleDownOnlyFilterLoaderTest extends TestCase

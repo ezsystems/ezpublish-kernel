@@ -11,14 +11,16 @@ then
         exit 0;
     fi
     echo "> Code Style check: checking the following files: ${FILES_LIST}";
+    PATH_MODE=intersection
 else
     # for non-PR builds check entire codebase
     FILES_LIST=""
+    PATH_MODE=override
     echo "> Code Style check: checking the entire codebase";
 fi
 
 php ./vendor/bin/php-cs-fixer fix \
     --config=.php_cs \
-    --path-mode=intersection \
+    --path-mode=${PATH_MODE} \
     --dry-run -v \
     --show-progress=estimating ${FILES_LIST};

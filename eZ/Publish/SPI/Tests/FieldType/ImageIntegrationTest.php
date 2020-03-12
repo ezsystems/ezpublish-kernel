@@ -75,7 +75,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         $fieldType = new FieldType\Image\Type([
             $this->getContainer()->get('ezpublish.fieldType.validator.black_list'),
-            $this->getContainer()->get('ezpublish.fieldType.validator.image')
+            $this->getContainer()->get('ezpublish.fieldType.validator.image'),
         ]);
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
