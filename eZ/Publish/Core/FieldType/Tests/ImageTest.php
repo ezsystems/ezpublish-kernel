@@ -65,7 +65,7 @@ class ImageTest extends FieldTypeTest
     {
         $fieldType = new ImageType([
             $this->getBlackListValidatorMock(),
-            $this->getImageValidatorMock()
+            $this->getImageValidatorMock(),
         ]);
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
@@ -77,7 +77,7 @@ class ImageTest extends FieldTypeTest
         return $this
             ->getMockBuilder(FileExtensionBlackListValidator::class)
             ->setConstructorArgs([
-                $this->getConfigResolverMock()
+                $this->getConfigResolverMock(),
             ])
             ->setMethods(null)
             ->getMock();

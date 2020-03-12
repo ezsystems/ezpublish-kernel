@@ -35,7 +35,7 @@ class FileExtensionBlackListValidator extends Validator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function validateConstraints($constraints)
     {
@@ -43,7 +43,7 @@ class FileExtensionBlackListValidator extends Validator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function validate(BaseValue $value)
     {
