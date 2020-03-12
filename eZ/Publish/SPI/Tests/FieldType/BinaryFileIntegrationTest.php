@@ -68,7 +68,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     public function getCustomHandler()
     {
         $fieldType = new FieldType\BinaryFile\Type([
-            self::$container->get('ezpublish.fieldType.validator.black_list')
+            self::$container->get('ezpublish.fieldType.validator.black_list'),
         ]);
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 

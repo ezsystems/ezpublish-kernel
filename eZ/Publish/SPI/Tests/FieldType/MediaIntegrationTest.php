@@ -68,7 +68,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     public function getCustomHandler()
     {
         $fieldType = new FieldType\Media\Type([
-            $this->getContainer()->get('ezpublish.fieldType.validator.black_list')
+            $this->getContainer()->get('ezpublish.fieldType.validator.black_list'),
         ]);
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 

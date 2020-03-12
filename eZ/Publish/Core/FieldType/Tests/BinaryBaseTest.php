@@ -60,7 +60,7 @@ abstract class BinaryBaseTest extends FieldTypeTest
         return $this
             ->getMockBuilder(FileExtensionBlackListValidator::class)
             ->setConstructorArgs([
-                $this->getConfigResolverMock()
+                $this->getConfigResolverMock(),
             ])
             ->setMethods(null)
             ->getMock();
