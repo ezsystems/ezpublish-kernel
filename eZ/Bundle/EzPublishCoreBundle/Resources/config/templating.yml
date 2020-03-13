@@ -157,7 +157,7 @@ services:
 
     eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\QueryRenderingExtension:
         arguments:
-            - "@fragment.handler"
+            - '@fragment.handler'
         tags:
             - { name: twig.extension }
 
