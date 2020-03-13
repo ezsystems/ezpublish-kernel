@@ -8,10 +8,6 @@ parameters:
     ezpublish.content_view.content_block_name: "content"
 
     ezpublish.twig.extension.filesize.suffixes: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB']
-    ezpublish.twig.extension.query_rendering.controller_map:
-        content: 'ez_query_render::renderContentQueryAction'
-        content_info: 'ez_query_render::renderContentInfoQueryAction'
-        location: 'ez_query_render::renderLocationQueryAction'
 
 services:
     # Enable Twig intl extension
@@ -159,11 +155,9 @@ services:
         tags:
             - { name: twig.extension }
 
-    ezpublish.twig.extension.query_rendering:
-        class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\QueryRenderingExtension
+    eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\QueryRenderingExtension:
         arguments:
             - "@fragment.handler"
-            - "%ezpublish.twig.extension.query_rendering.controller_map%"
         tags:
             - { name: twig.extension }
 

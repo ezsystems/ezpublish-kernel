@@ -16,16 +16,14 @@ use Twig\TwigFunction;
 
 class QueryRenderingExtension extends AbstractExtension
 {
+    private const VALID_TYPES = ['content', 'location'];
+
     /** @var \Symfony\Component\HttpKernel\Fragment\FragmentHandler */
     private $fragmentHandler;
 
-    /** @var string[] */
-    private $controllerMap;
-
-    public function __construct(FragmentHandler $fragmentHandler, array $controllerMap)
+    public function __construct(FragmentHandler $fragmentHandler)
     {
         $this->fragmentHandler = $fragmentHandler;
-        $this->controllerMap = $controllerMap;
     }
 
     public function getFunctions(): array
@@ -34,8 +32,10 @@ class QueryRenderingExtension extends AbstractExtension
             new TwigFunction(
                 'ez_render_*_query',
                 function (string $type, array $options): ?string {
+                    $this->assertTypeIsValid($type);
+
                     return $this->fragmentHandler->render(
-                        $this->createControllerReference($type, $options)
+                        $this->createControllerReference($options)
                     );
                 },
                 ['is_safe' => ['html']]
@@ -43,8 +43,10 @@ class QueryRenderingExtension extends AbstractExtension
             new TwigFunction(
                 'ez_render_*_query_*',
                 function (string $type, string $renderer, array $options): ?string {
+                    $this->assertTypeIsValid($type);
+
                     return $this->fragmentHandler->render(
-                        $this->createControllerReference($type, $options),
+                        $this->createControllerReference($options),
                         $renderer
                     );
                 },
@@ -53,19 +55,23 @@ class QueryRenderingExtension extends AbstractExtension
         ];
     }
 
-    private function createControllerReference(string $type, array $options): ControllerReference
+    private function createControllerReference(array $options): ControllerReference
     {
-        $controller = $this->controllerMap[$type] ?? null;
-
-        if ($controller === null) {
-            throw new InvalidArgumentException(
-                '$type',
-                'Expected value to be of ' . implode(',', array_keys($this->controllerMap))
-            );
-        }
-
-        return new ControllerReference($controller, [
+        return new ControllerReference('ez_query_render::renderQuery', [
             'options' => $options,
         ]);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function assertTypeIsValid(string $type): void
+    {
+        if (!in_array($type, self::VALID_TYPES)) {
+            throw new InvalidArgumentException(
+                '$type',
+                'Expected value to be of ' . implode(', ', self::VALID_TYPES)
+            );
+        }
     }
 }

@@ -8,15 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests;
 
-use eZ\Publish\API\Repository\SearchService;
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\MVC\Symfony\Controller\QueryRenderController;
 use eZ\Publish\Core\MVC\Symfony\View\QueryView;
-use eZ\Publish\Core\Pagination\Pagerfanta\ContentSearchHitAdapter;
-use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchHitAdapter;
-use eZ\Publish\Core\QueryType\QueryType;
-use eZ\Publish\Core\QueryType\QueryTypeRegistry;
+use eZ\Publish\Core\Pagination\Pagerfanta\AdapterFactory\SearchHitAdapterFactoryInterface;
+use eZ\Publish\Core\Query\QueryFactoryInterface;
+use Pagerfanta\Adapter\AdapterInterface;
 use Pagerfanta\Pagerfanta;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,34 +48,34 @@ final class QueryRenderControllerTest extends TestCase
         ],
     ];
 
-    /** @var \eZ\Publish\API\Repository\SearchService */
-    private $searchService;
+    /** @var \eZ\Publish\Core\Query\QueryFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $queryFactory;
 
-    /** @var \eZ\Publish\Core\QueryType\QueryTypeRegistry */
-    private $queryTypeRegistry;
+    /** @var \eZ\Publish\Core\Pagination\Pagerfanta\AdapterFactory\SearchHitAdapterFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $searchHitAdapterFactory;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\Controller\QueryRenderController */
     private $controller;
 
     protected function setUp(): void
     {
-        $this->searchService = $this->createMock(SearchService::class);
-        $this->queryTypeRegistry = $this->createMock(QueryTypeRegistry::class);
+        $this->queryFactory = $this->createMock(QueryFactoryInterface::class);
+        $this->searchHitAdapterFactory = $this->createMock(SearchHitAdapterFactoryInterface::class);
 
         $this->controller = new QueryRenderController(
-            $this->searchService,
-            $this->queryTypeRegistry
+            $this->queryFactory,
+            $this->searchHitAdapterFactory
         );
     }
 
-    public function testRenderContentQueryActionWithMinOptions(): void
+    public function testRenderQueryWithMinOptions(): void
     {
-        $query = $this->configureQueryTypeRegistryMock(self::MIN_OPTIONS);
+        $adapter = $this->configureMocks(self::MIN_OPTIONS);
 
-        $items = new Pagerfanta(new ContentSearchHitAdapter($query, $this->searchService));
+        $items = new Pagerfanta($adapter);
         $items->setAllowOutOfRangePages(true);
 
-        $this->assertContentQueryRenderResult(
+        $this->assertRenderQueryResult(
             new QueryView('example.html.twig', [
                 'items' => $items,
             ]),
@@ -86,16 +83,16 @@ final class QueryRenderControllerTest extends TestCase
         );
     }
 
-    public function testRenderContentQueryActionWithAllOptions(): void
+    public function testRenderQueryWithAllOptions(): void
     {
-        $query = $this->configureQueryTypeRegistryMock(self::ALL_OPTIONS);
+        $adapter = $this->configureMocks(self::ALL_OPTIONS);
 
-        $items = new Pagerfanta(new ContentSearchHitAdapter($query, $this->searchService));
+        $items = new Pagerfanta($adapter);
         $items->setAllowOutOfRangePages(true);
         $items->setCurrentPage(self::EXAMPLE_CURRENT_PAGE);
         $items->setMaxPerPage(self::EXAMPLE_MAX_PER_PAGE);
 
-        $this->assertContentQueryRenderResult(
+        $this->assertRenderQueryResult(
             new QueryView('example.html.twig', [
                 'results' => $items,
             ]),
@@ -104,128 +101,36 @@ final class QueryRenderControllerTest extends TestCase
         );
     }
 
-    public function testRenderContentInfoQueryActionWithMinOptions(): void
+    private function configureMocks(array $options): AdapterInterface
     {
-        $query = $this->configureQueryTypeRegistryMock(self::MIN_OPTIONS);
+        $query = new Query();
 
-        $items = new Pagerfanta(new ContentSearchHitAdapter($query, $this->searchService));
-        $items->setAllowOutOfRangePages(true);
-
-        $this->assertContentInfoQueryRenderResult(
-            new QueryView('example.html.twig', [
-                'items' => $items,
-            ]),
-            self::MIN_OPTIONS
-        );
-    }
-
-    public function testRenderContentInfoQueryActionWithAllOptions(): void
-    {
-        $query = $this->configureQueryTypeRegistryMock(self::ALL_OPTIONS, new LocationQuery());
-
-        $items = new Pagerfanta(new LocationSearchHitAdapter($query, $this->searchService));
-        $items->setAllowOutOfRangePages(true);
-        $items->setCurrentPage(self::EXAMPLE_CURRENT_PAGE);
-        $items->setMaxPerPage(self::EXAMPLE_MAX_PER_PAGE);
-
-        $this->assertContentInfoQueryRenderResult(
-            new QueryView('example.html.twig', [
-                'results' => $items,
-            ]),
-            self::ALL_OPTIONS,
-            new Request(['p' => self::EXAMPLE_CURRENT_PAGE])
-        );
-    }
-
-    public function testRenderLocationQueryActionWithMinOptions(): void
-    {
-        $query = $this->configureQueryTypeRegistryMock(self::MIN_OPTIONS, new LocationQuery());
-
-        $items = new Pagerfanta(new LocationSearchHitAdapter($query, $this->searchService));
-        $items->setAllowOutOfRangePages(true);
-
-        $this->assertContentInfoQueryRenderResult(
-            new QueryView('example.html.twig', [
-                'items' => $items,
-            ]),
-            self::MIN_OPTIONS
-        );
-    }
-
-    public function testRenderLocationQueryActionWithAllOptions(): void
-    {
-        $query = $this->configureQueryTypeRegistryMock(self::ALL_OPTIONS, new LocationQuery());
-
-        $items = new Pagerfanta(new LocationSearchHitAdapter($query, $this->searchService));
-        $items->setAllowOutOfRangePages(true);
-        $items->setCurrentPage(self::EXAMPLE_CURRENT_PAGE);
-        $items->setMaxPerPage(self::EXAMPLE_MAX_PER_PAGE);
-
-        $this->assertLocationQueryRenderResult(
-            new QueryView('example.html.twig', [
-                'results' => $items,
-            ]),
-            self::ALL_OPTIONS,
-            new Request(['p' => self::EXAMPLE_CURRENT_PAGE])
-        );
-    }
-
-    private function configureQueryTypeRegistryMock(array $options, ?Query $query = null): Query
-    {
-        if ($query === null) {
-            $query = new Query();
-        }
-
-        $queryType = $this->createMock(QueryType::class);
-        $queryType
-            ->method('getQuery')
-            ->with($options['query']['parameters'] ?? [])
+        $this->queryFactory
+            ->method('create')
+            ->with(
+                $options['query']['query_type'],
+                $options['query']['parameters'] ?? []
+            )
             ->willReturn($query);
 
-        $this->queryTypeRegistry
-            ->method('getQueryType')
-            ->with($options['query']['query_type'] ?? null)
-            ->willReturn($queryType);
+        $adapter = $this->createMock(AdapterInterface::class);
 
-        return $query;
+        $this->searchHitAdapterFactory
+            ->method('createAdapter')
+            ->with($query)
+            ->willReturn($adapter);
+
+        return $adapter;
     }
 
-    private function assertContentQueryRenderResult(
+    private function assertRenderQueryResult(
         QueryView $expectedView,
         array $options,
         Request $request = null
     ): void {
         $this->assertEquals(
             $expectedView,
-            $this->controller->renderContentQueryAction(
-                $request ?? new Request(),
-                $options
-            )
-        );
-    }
-
-    private function assertContentInfoQueryRenderResult(
-        QueryView $expectedView,
-        array $options,
-        Request $request = null
-    ): void {
-        $this->assertEquals(
-            $expectedView,
-            $this->controller->renderContentInfoQueryAction(
-                $request ?? new Request(),
-                $options
-            )
-        );
-    }
-
-    private function assertLocationQueryRenderResult(
-        QueryView $expectedView,
-        array $options,
-        Request $request = null
-    ): void {
-        $this->assertEquals(
-            $expectedView,
-            $this->controller->renderLocationQueryAction(
+            $this->controller->renderQuery(
                 $request ?? new Request(),
                 $options
             )

@@ -13,7 +13,7 @@ return array()
 array (
   0 => 
   Symfony\Component\HttpKernel\Controller\ControllerReference::__set_state(array(
-     'controller' => 'ez_query_render::renderContentQueryAction',
+     'controller' => 'ez_query_render::renderQuery',
      'attributes' => 
     array (
       'options' => 

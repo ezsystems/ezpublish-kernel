@@ -22,14 +22,8 @@ final class QueryRenderingExtensionTest extends FileSystemTwigIntegrationTestCas
                 return var_export($args, true);
             });
 
-        $controllerMap = [
-            'content' => 'ez_query_render::renderContentQueryAction',
-            'content_info' => 'ez_query_render::renderContentInfoQueryAction',
-            'location' => 'ez_query_render::renderLocationQueryAction',
-        ];
-
         return [
-            new QueryRenderingExtension($fragmentHandler, $controllerMap),
+            new QueryRenderingExtension($fragmentHandler),
         ];
     }
 
