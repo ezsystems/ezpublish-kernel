@@ -1,3 +1,4 @@
+UPDATE ezsite_data SET value='7.5.5' WHERE name='ezpublish-version';
 --
 -- EZP-30797: As an administrator, I want to configure a password expiration for users
 --
