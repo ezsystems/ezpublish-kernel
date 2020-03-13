@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Permission;
 
 use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
@@ -77,12 +79,12 @@ class PermissionResolver implements PermissionResolverInterface
         $this->policyMap = $policyMap;
     }
 
-    public function getCurrentUserReference()
+    public function getCurrentUserReference(): APIUserReference
     {
         return $this->currentUserRef;
     }
 
-    public function setCurrentUserReference(APIUserReference $userReference)
+    public function setCurrentUserReference(APIUserReference $userReference): void
     {
         $id = $userReference->getUserId();
         if (!$id) {
@@ -92,7 +94,7 @@ class PermissionResolver implements PermissionResolverInterface
         $this->currentUserRef = $userReference;
     }
 
-    public function hasAccess($module, $function, APIUserReference $userReference = null)
+    public function hasAccess(string $module, string $function, ?APIUserReference $userReference = null)
     {
         if (!isset($this->policyMap[$module])) {
             throw new InvalidArgumentValue('module', "module: {$module}/ function: {$function}");
@@ -158,7 +160,7 @@ class PermissionResolver implements PermissionResolverInterface
         return false; // No policies matching $module and $function, or they contained limitations
     }
 
-    public function canUser($module, $function, ValueObject $object, array $targets = [])
+    public function canUser(string $module, string $function, ValueObject $object, array $targets = []): bool
     {
         $permissionSets = $this->hasAccess($module, $function);
         if ($permissionSets === false || $permissionSets === true) {

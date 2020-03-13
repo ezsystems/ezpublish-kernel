@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Permission;
 
 use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriterionResolver;
@@ -53,7 +55,7 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
      *
      * @return bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    public function getPermissionsCriterion($module = 'content', $function = 'read', ?array $targets = null)
+    public function getPermissionsCriterion(string $module = 'content', string $function = 'read', ?array $targets = null)
     {
         $permissionSets = $this->permissionResolver->hasAccess($module, $function);
         if (is_bool($permissionSets)) {

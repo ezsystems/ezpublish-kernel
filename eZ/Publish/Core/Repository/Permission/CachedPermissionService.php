@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Permission;
 
 use eZ\Publish\API\Repository\PermissionResolver as APIPermissionResolver;
@@ -69,31 +71,30 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
     public function __construct(
         APIPermissionResolver $permissionResolver,
         APIPermissionCriterionResolver $permissionCriterionResolver,
-        $cacheTTL = 5
+        int $cacheTTL = 5
     ) {
         $this->permissionResolver = $permissionResolver;
         $this->permissionCriterionResolver = $permissionCriterionResolver;
         $this->cacheTTL = $cacheTTL;
     }
 
-    public function getCurrentUserReference()
+    public function getCurrentUserReference(): UserReference
     {
         return $this->permissionResolver->getCurrentUserReference();
     }
 
-    public function setCurrentUserReference(UserReference $userReference)
+    public function setCurrentUserReference(UserReference $userReference): void
     {
         $this->permissionCriterion = null;
-
-        return $this->permissionResolver->setCurrentUserReference($userReference);
+        $this->permissionResolver->setCurrentUserReference($userReference);
     }
 
-    public function hasAccess($module, $function, UserReference $userReference = null)
+    public function hasAccess(string $module, string $function, ?UserReference $userReference = null)
     {
         return $this->permissionResolver->hasAccess($module, $function, $userReference);
     }
 
-    public function canUser($module, $function, ValueObject $object, array $targets = [])
+    public function canUser(string $module, string $function, ValueObject $object, array $targets = []): bool
     {
         return $this->permissionResolver->canUser($module, $function, $object, $targets);
     }
@@ -111,7 +112,7 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
         return $this->permissionResolver->lookupLimitations($module, $function, $object, $targets, $limitations);
     }
 
-    public function getPermissionsCriterion($module = 'content', $function = 'read', ?array $targets = null)
+    public function getPermissionsCriterion(string $module = 'content', string $function = 'read', ?array $targets = null)
     {
         // We only cache content/read lookup as those are the once frequently done, and it's only one we can safely
         // do that won't harm the system if it becomes stale (but user might experience permissions exceptions if it do)

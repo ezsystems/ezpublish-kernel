@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\User\LookupLimitationResult;
@@ -20,14 +22,14 @@ interface PermissionResolver
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserReference
      */
-    public function getCurrentUserReference();
+    public function getCurrentUserReference(): UserReference;
 
     /**
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $userReference
      */
-    public function setCurrentUserReference(UserReference $userReference);
+    public function setCurrentUserReference(UserReference $userReference): void;
 
     /**
      * Low level permission function: Returns boolean value, or an array of limitations that user permission depends on.
@@ -47,7 +49,7 @@ interface PermissionResolver
      *
      * @return bool|array if limitations are on this function an array of limitations is returned
      */
-    public function hasAccess($module, $function, UserReference $userReference = null);
+    public function hasAccess(string $module, string $function, ?UserReference $userReference = null);
 
     /**
      * Indicates if the current user is allowed to perform an action given by the function on the given
@@ -70,7 +72,7 @@ interface PermissionResolver
      *
      * @return bool
      */
-    public function canUser($module, $function, ValueObject $object, array $targets = []);
+    public function canUser(string $module, string $function, ValueObject $object, array $targets = []): bool;
 
     /**
      * @param string $module The module, aka controller identifier to check permissions on
