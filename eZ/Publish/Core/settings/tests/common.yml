@@ -64,8 +64,8 @@ services:
     ezpublish.siteaccess_service:
         class: eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessService
         arguments:
-            - "@ezpublish.siteaccess.provider"
-            - "@ezpublish.config.resolver"
+            - '@ezpublish.siteaccess.provider'
+            - '@ezpublish.config.resolver'
         calls:
             - [setSiteAccess, ['@ezpublish.siteaccess']]
 

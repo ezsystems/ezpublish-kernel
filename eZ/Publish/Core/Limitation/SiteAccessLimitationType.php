@@ -80,8 +80,9 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
     public function validate(APILimitationValue $limitationValue)
     {
         $validationErrors = [];
+        $siteAccessList = $this->getSiteAccessList();
         foreach ($limitationValue->limitationValues as $key => $value) {
-            if (!isset($this->getSiteAccessList()[$value])) {
+            if (!isset($siteAccessList[$value])) {
                 $validationErrors[] = new ValidationError(
                     "\$limitationValue->limitationValues[%key%] => Invalid SiteAccess value \"$value\"",
                     null,
