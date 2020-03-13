@@ -197,9 +197,6 @@ VALUES (8,2,0,4,1,2,5,'','0',1,1,0,0),
        (51,1,0,29,1,2,43,'','0',9,1,0,0),
        (14,3,-1,38,1,2,13,'','0',1,1,0,0);
 
-INSERT INTO "ezpackage" ("id", "install_date", "name", "version")
-VALUES (1,1301057838,'plain_site_data','1.0-1');
-
 INSERT INTO "ezpolicy" ("function_name", "id", "module_name", "original_id", "role_id")
 VALUES ('*',317,'content',0,3),
        ('login',319,'user',0,3),
