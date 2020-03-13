@@ -236,7 +236,8 @@ VALUES (1,'standard','','Standard','ezcontentnavigationpart'),
        (3,'media','','Media','ezmedianavigationpart');
 
 INSERT INTO "ezsite_data" ("name", "value")
-VALUES ('ezpublish-release','1'), ('ezpublish-version','6.4.0');
+VALUES ('ezplatform-release','3.0.0'),
+       ('ezpublish-version','8.0.0');
 
 INSERT INTO "ezurl" ("created", "id", "is_valid", "last_checked", "modified", "original_url_md5", "url")
 VALUES (1448832197,23,1,0,1448832197,'f76e41d421b2a72232264943026a6ee5','https://doc.ez.no/display/USER/'),
