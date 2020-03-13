@@ -33,9 +33,9 @@ final class SearchHitAdapterFactory implements SearchHitAdapterFactoryInterface
     {
         if ($query instanceof LocationQuery) {
             return new LocationSearchHitAdapter($query, $this->searchService, $languageFilter);
-        } else {
-            return new ContentSearchHitAdapter($query, $this->searchService, $languageFilter);
         }
+
+        return new ContentSearchHitAdapter($query, $this->searchService, $languageFilter);
     }
 
     public function createFixedAdapter(Query $query, array $languageFilter = []): AdapterInterface
