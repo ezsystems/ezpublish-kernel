@@ -1059,7 +1059,13 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         //Merge new translations into existing before update
         $contentTypeUpdateStruct->names = array_merge($contentTypeDraft->getNames(), $contentTypeUpdateStruct->names ?? []);
-        $contentTypeUpdateStruct->descriptions = array_merge($contentTypeDraft->getDescriptions(), $contentTypeUpdateStruct->descriptions ?? []);
+
+        $existingDescriptions = $contentTypeDraft->getDescriptions();
+        $newDescriptions = $contentTypeUpdateStruct->descriptions ?? [];
+        if (in_array($contentTypeUpdateStruct->languageCode, array_keys($existingDescriptions)) && empty($newDescriptions)) {
+            unset($existingDescriptions[$contentTypeUpdateStruct->languageCode]);
+        }
+        $contentTypeUpdateStruct->descriptions = array_merge($existingDescriptions, $newDescriptions);
 
         $this->repository->beginTransaction();
         try {

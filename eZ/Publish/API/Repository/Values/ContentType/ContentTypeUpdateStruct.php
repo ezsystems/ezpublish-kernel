@@ -44,11 +44,18 @@ class ContentTypeUpdateStruct extends ValueObject
     public $nameSchema;
 
     /**
-     * If set the container fllag is set to this value.
+     * If set the container flag is set to this value.
      *
      * @var bool
      */
     public $isContainer;
+
+    /**
+     * Language code of this struct.
+     *
+     * @var string
+     */
+    public $languageCode;
 
     /**
      * If set the main language is changed to this value.
