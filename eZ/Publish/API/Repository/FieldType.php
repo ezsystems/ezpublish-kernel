@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\FieldType class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -23,7 +23,7 @@ interface FieldType
      *
      * @return string
      */
-    public function getFieldTypeIdentifier();
+    public function getFieldTypeIdentifier(): string;
 
     /**
      * Returns a human readable string representation from the given $value.
@@ -97,21 +97,21 @@ interface FieldType
      *
      * @return bool
      */
-    public function isSearchable();
+    public function isSearchable(): bool;
 
     /**
      * Indicates if the field definition of this type can appear only once in the same ContentType.
      *
      * @return bool
      */
-    public function isSingular();
+    public function isSingular(): bool;
 
     /**
      * Indicates if the field definition of this type can be added to a ContentType with Content instances.
      *
      * @return bool
      */
-    public function onlyEmptyInstance();
+    public function onlyEmptyInstance(): bool;
 
     /**
      * Returns the empty value for this field type.
@@ -133,7 +133,7 @@ interface FieldType
      *
      * @return bool
      */
-    public function isEmptyValue($value);
+    public function isEmptyValue($value): bool;
 
     /**
      * Converts an $hash to the Value defined by the field type.
@@ -204,7 +204,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration($validatorConfiguration);
+    public function validateValidatorConfiguration($validatorConfiguration): iterable;
 
     /**
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
@@ -216,7 +216,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings($fieldSettings);
+    public function validateFieldSettings($fieldSettings): iterable;
 
     /**
      * Validates a field value based on the validator configuration in the field definition.
@@ -226,5 +226,5 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValue(FieldDefinition $fieldDef, Value $value);
+    public function validateValue(FieldDefinition $fieldDef, Value $value): iterable;
 }
