@@ -1,10 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\PolicyDraft as APIPolicyDraft;
@@ -56,7 +57,7 @@ class PolicyDraft extends APIPolicyDraft
     /**
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    public function getLimitations()
+    public function getLimitations(): iterable
     {
         return $this->innerPolicy->getLimitations();
     }
