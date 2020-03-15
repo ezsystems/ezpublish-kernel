@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\User\RoleCreateStruct class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
@@ -30,7 +30,7 @@ class RoleCreateStruct extends APIRoleCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
      */
-    public function getPolicies()
+    public function getPolicies(): iterable
     {
         return $this->policies;
     }
@@ -38,10 +38,10 @@ class RoleCreateStruct extends APIRoleCreateStruct
     /**
      * Adds a policy to this role.
      *
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreate
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
      */
-    public function addPolicy(APIPolicyCreateStruct $policyCreate)
+    public function addPolicy(APIPolicyCreateStruct $policyCreateStruct): void
     {
-        $this->policies[] = $policyCreate;
+        $this->policies[] = $policyCreateStruct;
     }
 }
