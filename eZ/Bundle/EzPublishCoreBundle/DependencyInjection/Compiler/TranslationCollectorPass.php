@@ -43,7 +43,7 @@ class TranslationCollectorPass implements CompilerPassInterface
             return;
         }
 
-        $collector = new GlobCollector($container->getParameterBag()->get('kernel.root_dir'));
+        $collector = new GlobCollector($container->getParameterBag()->get('kernel.project_dir'));
 
         $availableTranslations = [self::ORIGINAL_TRANSLATION];
         foreach ($collector->collect() as $file) {

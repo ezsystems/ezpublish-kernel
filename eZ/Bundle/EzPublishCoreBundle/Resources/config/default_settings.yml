@@ -1,6 +1,6 @@
 parameters:
     # Kernel related params
-    webroot_dir: "%kernel.root_dir%/../public"
+    webroot_dir: "%kernel.project_dir%/public"
 
     ###
     # ezsettings namespace, default scope
