@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository\Values\User;
 
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation as APIRoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\User\UserRoleAssignment as APIUserRoleAssignment;
 
@@ -44,7 +46,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null
      */
-    public function getRoleLimitation()
+    public function getRoleLimitation(): ?APIRoleLimitation
     {
         return $this->limitation;
     }
@@ -54,7 +56,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function getRole()
+    public function getRole(): APIRole
     {
         return $this->role;
     }
