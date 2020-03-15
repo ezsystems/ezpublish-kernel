@@ -23,7 +23,7 @@ class TranslationCollectorPassTest extends AbstractCompilerPassTestCase
     public function testTranslationCollector(): void
     {
         $this->setDefinition('translator.default', new Definition());
-        $this->setParameter('kernel.root_dir', __DIR__ . $this->normalizePath('/../Fixtures/vendor'));
+        $this->setParameter('kernel.project_dir', __DIR__ . $this->normalizePath('/../Fixtures'));
 
         $this->compile();
 

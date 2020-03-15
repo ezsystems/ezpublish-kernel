@@ -533,7 +533,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
 
         $fileSystem = new Filesystem();
-        $translationsPath = $container->getParameterBag()->get('kernel.root_dir') . '/../vendor/ezplatform-i18n';
+        $translationsPath = $container->getParameterBag()->get('kernel.project_dir') . '/vendor/ezplatform-i18n';
 
         if ($fileSystem->exists($translationsPath)) {
             $container->prependExtensionConfig('framework', ['translator' => ['paths' => [$translationsPath]]]);
