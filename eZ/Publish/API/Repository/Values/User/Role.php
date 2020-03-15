@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Role class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -13,10 +13,10 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class represents a role.
  *
- * @property-read mixed $id the internal id of the role
+ * @property-read int $id the internal id of the role
  * @property-read string $identifier the identifier of the role
  *
- * @property-read array $policies an array of the policies {@link \eZ\Publish\API\Repository\Values\User\Policy} of the role.
+ * @property-read \eZ\Publish\API\Repository\Values\User\Policy[] $policies an array of the policies {@link \eZ\Publish\API\Repository\Values\User\Policy} of the role.
  */
 abstract class Role extends ValueObject
 {
@@ -29,7 +29,7 @@ abstract class Role extends ValueObject
     /**
      * ID of the user role.
      *
-     * @var mixed
+     * @var int
      */
     protected $id;
 
@@ -53,5 +53,5 @@ abstract class Role extends ValueObject
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
-    abstract public function getPolicies();
+    abstract public function getPolicies(): iterable;
 }
