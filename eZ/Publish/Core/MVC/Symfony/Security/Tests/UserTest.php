@@ -94,7 +94,7 @@ class UserTest extends TestCase
 
     public function testIsEqualToNotSameUserType()
     {
-        $user = new User();
+        $user = new User($this->createMock(APIUser::class));
         $user2 = $this->createMock(ReferenceUserInterface::class);
         $user2
             ->expects($this->once())
@@ -105,10 +105,12 @@ class UserTest extends TestCase
 
     public function testSetAPIUser()
     {
-        $apiUser = $this->createMock(APIUser::class);
-        $user = new User();
-        $user->setAPIUser($apiUser);
-        $this->assertSame($apiUser, $user->getAPIUser());
+        $apiUserA = $this->createMock(APIUser::class);
+        $apiUserB = $this->createMock(APIUser::class);
+
+        $user = new User($apiUserA);
+        $user->setAPIUser($apiUserB);
+        $this->assertSame($apiUserB, $user->getAPIUser());
     }
 
     public function testToString()

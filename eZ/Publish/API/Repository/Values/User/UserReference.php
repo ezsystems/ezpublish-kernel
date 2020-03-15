@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\UserReference interface.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\User;
 
 /**
@@ -16,7 +16,7 @@ interface UserReference
     /**
      * The User id of the User this reference represent.
      *
-     * @return mixed
+     * @return int
      */
-    public function getUserId();
+    public function getUserId(): int;
 }
