@@ -68,9 +68,9 @@
 {% apply spaceless %}
     {% if not ez_field_is_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
-            {% set field_value = field.value.value|localizeddate( 'short', 'medium', parameters.locale ) %}
+            {% set field_value = field.value.value|format_datetime( 'short', 'medium', locale=parameters.locale ) %}
         {% else %}
-            {% set field_value = field.value.value|localizeddate( 'short', 'short', parameters.locale ) %}
+            {% set field_value = field.value.value|format_datetime( 'short', 'short', locale=parameters.locale ) %}
         {% endif %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
@@ -80,7 +80,7 @@
 {% block ezdate_field %}
 {% apply spaceless %}
     {% if not ez_field_is_empty( content, field ) %}
-        {% set field_value = field.value.date|localizeddate( 'short', 'none', parameters.locale, false ) %}
+        {% set field_value = field.value.date|format_date( 'short', locale=parameters.locale ) %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
 {% endapply %}
@@ -90,9 +90,9 @@
 {% apply spaceless %}
     {% if not ez_field_is_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
-            {% set field_value = field.value.time|localizeddate( 'none', 'medium', parameters.locale, 'UTC' ) %}
+            {% set field_value = field.value.time|format_time( 'medium', locale=parameters.locale, timezone='UTC' ) %}
         {% else %}
-            {% set field_value = field.value.time|localizeddate( 'none', 'short', parameters.locale, 'UTC' ) %}
+            {% set field_value = field.value.time|format_time( 'short', locale=parameters.locale, timezone='UTC' ) %}
         {% endif %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
