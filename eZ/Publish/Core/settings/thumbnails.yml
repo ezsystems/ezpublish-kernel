@@ -6,20 +6,24 @@ services:
 
     eZ\Publish\Core\FieldType\Image\ImageThumbnailStrategy:
         arguments:
+            $fieldTypeIdentifier: 'ezimage'
             $variationHandler: '@eZ\Publish\SPI\Variation\VariationHandler'
             $variationName: 'medium'
+        tags:
+            - { name: ezplatform.spi.field.thumbnail_strategy, priority: 0 }
 
     eZ\Publish\Core\FieldType\ImageAsset\ImageAssetThumbnailStrategy:
         lazy: true
         arguments:
+            $fieldTypeIdentifier: 'ezimageasset'
             $thumbnailStrategy: '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
             $contentService: '@ezpublish.api.service.content'
+        tags:
+            - { name: ezplatform.spi.field.thumbnail_strategy, priority: 0 }
 
     eZ\Publish\Core\Repository\Strategy\ContentThumbnail\Field\ContentFieldStrategy:
         arguments:
-            $strategies:
-                ezimage: '@eZ\Publish\Core\FieldType\Image\ImageThumbnailStrategy'
-                ezimageasset: '@eZ\Publish\Core\FieldType\ImageAsset\ImageAssetThumbnailStrategy'
+            $strategies: !tagged_iterator ezplatform.spi.field.thumbnail_strategy
 
     eZ\Publish\Core\Repository\Strategy\ContentThumbnail\FirstMatchingFieldStrategy:
         arguments:

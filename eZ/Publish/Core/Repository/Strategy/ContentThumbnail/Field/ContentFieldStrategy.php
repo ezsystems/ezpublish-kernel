@@ -11,16 +11,25 @@ namespace eZ\Publish\Core\Repository\Strategy\ContentThumbnail\Field;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Thumbnail;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\FieldTypeBasedThumbnailStrategy;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\ThumbnailStrategy;
+use Traversable;
 
 final class ContentFieldStrategy implements ThumbnailStrategy
 {
-    /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\ThumbnailStrategy[] */
+    /** @var \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\FieldTypeBasedThumbnailStrategy[] */
     private $strategies = [];
 
-    public function __construct(array $strategies = [])
+    /**
+     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\FieldTypeBasedThumbnailStrategy[]|Traversable $strategies
+     */
+    public function __construct(Traversable $strategies)
     {
-        $this->setStrategies($strategies);
+        foreach ($strategies as $strategy) {
+            if ($strategy instanceof FieldTypeBasedThumbnailStrategy) {
+                $this->addStrategy($strategy->getFieldTypeIdentifier(), $strategy);
+            }
+        }
     }
 
     /**
@@ -32,23 +41,39 @@ final class ContentFieldStrategy implements ThumbnailStrategy
             throw new NotFoundException('Field\ThumbnailStrategy', $field->fieldTypeIdentifier);
         }
 
-        return $this->strategies[$field->fieldTypeIdentifier]->getThumbnail($field);
+        $fieldStrategies = $this->strategies[$field->fieldTypeIdentifier];
+
+        /** @var FieldTypeBasedThumbnailStrategy $fieldStrategy */
+        foreach ($fieldStrategies as $fieldStrategy) {
+            $thumbnail = $fieldStrategy->getThumbnail($field);
+
+            if ($thumbnail !== null) {
+                return $thumbnail;
+            }
+        }
+
+        return null;
     }
 
     public function hasStrategy(string $fieldTypeIdentifier): bool
     {
-        return isset($this->strategies[$fieldTypeIdentifier]);
+        return !empty($this->strategies[$fieldTypeIdentifier]);
     }
 
-    public function addStrategy(string $fieldTypeIdentifier, ThumbnailStrategy $thumbnailStrategy): void
+    public function addStrategy(string $fieldTypeIdentifier, FieldTypeBasedThumbnailStrategy $thumbnailStrategy): void
     {
-        $this->strategies[$fieldTypeIdentifier] = $thumbnailStrategy;
+        $this->strategies[$fieldTypeIdentifier][] = $thumbnailStrategy;
     }
 
+    /**
+     * @param \eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\FieldTypeBasedThumbnailStrategy[]|Traversable $thumbnailStrategies
+     */
     public function setStrategies(array $thumbnailStrategies): void
     {
-        foreach ($thumbnailStrategies as $fieldTypeIdentifier => $thumbnailStrategy) {
-            $this->addStrategy($fieldTypeIdentifier, $thumbnailStrategy);
+        $this->strategies = [];
+
+        foreach ($thumbnailStrategies as $thumbnailStrategy) {
+            $this->addStrategy($thumbnailStrategy->getFieldTypeIdentifier(), $thumbnailStrategy);
         }
     }
 }
