@@ -16,7 +16,7 @@ final class SubtreeQueryType extends AbstractLocationQueryType
 {
     public static function getName(): string
     {
-        return 'eZ:Subtree';
+        return 'Subtree';
     }
 
     protected function configureOptions(OptionsResolver $resolver): void

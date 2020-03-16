@@ -15,7 +15,7 @@ final class SiblingsQueryType extends AbstractLocationQueryType
 {
     public static function getName(): string
     {
-        return 'eZ:Siblings';
+        return 'Siblings';
     }
 
     protected function getQueryFilter(array $parameters): Criterion

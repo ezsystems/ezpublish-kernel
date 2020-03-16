@@ -179,7 +179,7 @@ final class AncestorsQueryTypeTest extends AbstractQueryTypeTest
 
     protected function getExpectedName(): string
     {
-        return 'eZ:Ancestors';
+        return 'Ancestors';
     }
 
     protected function getExpectedSupportedParameters(): array

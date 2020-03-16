@@ -152,7 +152,7 @@ final class GeoLocationQueryTypeTest extends AbstractQueryTypeTest
 
     protected function getExpectedName(): string
     {
-        return 'eZ:GeoLocation';
+        return 'GeoLocation';
     }
 
     protected function getExpectedSupportedParameters(): array

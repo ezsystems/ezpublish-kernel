@@ -148,7 +148,7 @@ final class RelatedToContentQueryTypeTest extends AbstractQueryTypeTest
 
     protected function getExpectedName(): string
     {
-        return 'eZ:RelatedToContent';
+        return 'RelatedToContent';
     }
 
     protected function getExpectedSupportedParameters(): array

@@ -163,7 +163,7 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
 
     protected function getExpectedName(): string
     {
-        return 'eZ:Subtree';
+        return 'Subtree';
     }
 
     protected function getExpectedSupportedParameters(): array

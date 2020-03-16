@@ -146,7 +146,7 @@ final class SiblingsQueryTypeTest extends AbstractQueryTypeTest
 
     protected function getExpectedName(): string
     {
-        return 'eZ:Siblings';
+        return 'Siblings';
     }
 
     protected function getExpectedSupportedParameters(): array

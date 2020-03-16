@@ -19,7 +19,7 @@ final class GeoLocationQueryType extends AbstractQueryType
 {
     public static function getName(): string
     {
-        return 'eZ:GeoLocation';
+        return 'GeoLocation';
     }
 
     protected function configureOptions(OptionsResolver $resolver): void

@@ -145,7 +145,7 @@ final class ChildrenQueryTypeTest extends AbstractQueryTypeTest
 
     protected function getExpectedName(): string
     {
-        return 'eZ:Children';
+        return 'Children';
     }
 
     protected function getExpectedSupportedParameters(): array

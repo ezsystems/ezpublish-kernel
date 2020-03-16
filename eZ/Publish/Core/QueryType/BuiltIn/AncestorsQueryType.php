@@ -19,7 +19,7 @@ final class AncestorsQueryType extends AbstractLocationQueryType
 {
     public static function getName(): string
     {
-        return 'eZ:Ancestors';
+        return 'Ancestors';
     }
 
     protected function getQueryFilter(array $parameters): Criterion

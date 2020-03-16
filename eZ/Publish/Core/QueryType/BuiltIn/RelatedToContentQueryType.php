@@ -20,7 +20,7 @@ final class RelatedToContentQueryType extends AbstractQueryType
 {
     public static function getName(): string
     {
-        return 'eZ:RelatedToContent';
+        return 'RelatedToContent';
     }
 
     protected function configureOptions(OptionsResolver $resolver): void
