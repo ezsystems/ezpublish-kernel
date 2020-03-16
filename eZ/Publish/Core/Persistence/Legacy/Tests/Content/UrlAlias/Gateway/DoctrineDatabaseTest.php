@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -514,22 +512,19 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * Returns the DoctrineDatabase gateway to test.
+     * Return the DoctrineDatabase gateway to test.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getGateway()
+    protected function getGateway(): DoctrineDatabase
     {
         if (!isset($this->gateway)) {
-            $databaseHandler = $this->getDatabaseHandler();
             $languageHandler = new LanguageHandler(
-                new LanguageGateway(
-                    $databaseHandler
-                ),
+                new LanguageGateway($this->getDatabaseConnection()),
                 new LanguageMapper()
             );
             $this->gateway = new DoctrineDatabase(
-                $databaseHandler,
+                $this->getDatabaseHandler(),
                 new LanguageMaskGenerator($languageHandler)
             );
         }

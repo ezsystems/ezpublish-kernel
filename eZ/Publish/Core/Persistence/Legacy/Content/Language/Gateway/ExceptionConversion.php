@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 
 use eZ\Publish\Core\Base\Exceptions\DatabaseException;
@@ -12,12 +14,15 @@ use eZ\Publish\SPI\Persistence\Content\Language;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 
-class ExceptionConversion extends Gateway
+/**
+ * @internal Internal exception conversion layer.
+ */
+final class ExceptionConversion extends Gateway
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway
      */
-    protected $innerGateway;
+    private $innerGateway;
 
     /**
      * Creates a new exception conversion gateway around $innerGateway.
@@ -29,7 +34,7 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    public function insertLanguage(Language $language)
+    public function insertLanguage(Language $language): int
     {
         try {
             return $this->innerGateway->insertLanguage($language);
@@ -38,10 +43,10 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function updateLanguage(Language $language)
+    public function updateLanguage(Language $language): void
     {
         try {
-            return $this->innerGateway->updateLanguage($language);
+            $this->innerGateway->updateLanguage($language);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
@@ -65,7 +70,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadAllLanguagesData()
+    public function loadAllLanguagesData(): array
     {
         try {
             return $this->innerGateway->loadAllLanguagesData();
@@ -74,16 +79,16 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function deleteLanguage($id)
+    public function deleteLanguage(int $id): void
     {
         try {
-            return $this->innerGateway->deleteLanguage($id);
+            $this->innerGateway->deleteLanguage($id);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function canDeleteLanguage($id)
+    public function canDeleteLanguage(int $id): bool
     {
         try {
             return $this->innerGateway->canDeleteLanguage($id);

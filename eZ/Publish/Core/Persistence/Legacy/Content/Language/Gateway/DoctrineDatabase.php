@@ -1,68 +1,58 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase Language Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Language;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Database\Query;
 use RuntimeException;
 
 /**
  * Doctrine database based Language Gateway.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence Language Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
-
     /**
      * The native Doctrine connection.
      *
      * @var \Doctrine\DBAL\Connection
      */
-    protected $connection;
+    private $connection;
+
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $dbPlatform;
 
     /**
-     * Creates a new Doctrine database Section Gateway.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
-        $this->connection = $dbHandler->getConnection();
+        $this->connection = $connection;
+        $this->dbPlatform = $this->connection->getDatabasePlatform();
     }
 
-    /**
-     * Inserts the given $language.
-     *
-     * @param Language $language
-     *
-     * @return int ID of the new language
-     */
-    public function insertLanguage(Language $language)
+    public function insertLanguage(Language $language): int
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->expr->max($this->dbHandler->quoteColumn('id'))
-        )->from($this->dbHandler->quoteTable('ezcontent_language'));
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(
+                $this->dbPlatform->getMaxExpression('id')
+            )
+            ->from(self::CONTENT_LANGUAGE_TABLE);
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
         $lastId = (int)$statement->fetchColumn();
 
@@ -75,69 +65,58 @@ class DoctrineDatabase extends Gateway
         // Next power of 2 for bit masks
         $nextId = ($lastId !== 0 ? $lastId << 1 : 2);
 
-        $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto(
-            $this->dbHandler->quoteTable('ezcontent_language')
-        )->set(
-            $this->dbHandler->quoteColumn('id'),
-            $query->bindValue($nextId, null, \PDO::PARAM_INT)
-        );
-        $this->setCommonLanguageColumns($query, $language);
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::CONTENT_LANGUAGE_TABLE)
+            ->values(
+                [
+                    'id' => ':id',
+                    'locale' => ':language_code',
+                    'name' => ':name',
+                    'disabled' => ':disabled',
+                ]
+            )
+            ->setParameter('id', $nextId, ParameterType::INTEGER);
 
-        $query->prepare()->execute();
+        $this->setLanguageQueryParameters($query, $language);
+
+        $query->execute();
 
         return $nextId;
     }
 
     /**
-     * Sets columns in $query from $language.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\Query $query
-     * @param \eZ\Publish\SPI\Persistence\Content\Language $language
+     * Set columns for $query based on $language.
      */
-    protected function setCommonLanguageColumns(Query $query, Language $language)
+    private function setLanguageQueryParameters(QueryBuilder $query, Language $language): void
     {
-        $query->set(
-            $this->dbHandler->quoteColumn('locale'),
-            $query->bindValue($language->languageCode)
-        )->set(
-            $this->dbHandler->quoteColumn('name'),
-            $query->bindValue($language->name)
-        )->set(
-            $this->dbHandler->quoteColumn('disabled'),
-            $query->bindValue(
-                ((int)(!$language->isEnabled)),
-                null,
-                \PDO::PARAM_INT
-            )
-        );
+        $query
+            ->setParameter('language_code', $language->languageCode, ParameterType::STRING)
+            ->setParameter('name', $language->name, ParameterType::STRING)
+            ->setParameter('disabled', (int)!$language->isEnabled, ParameterType::INTEGER);
     }
 
-    /**
-     * Updates the data of the given $language.
-     *
-     * @param Language $language
-     */
-    public function updateLanguage(Language $language)
+    public function updateLanguage(Language $language): void
     {
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update($this->dbHandler->quoteTable('ezcontent_language'));
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(self::CONTENT_LANGUAGE_TABLE)
+            ->set('locale', ':language_code')
+            ->set('name', ':name')
+            ->set('disabled', ':disabled');
 
-        $this->setCommonLanguageColumns($query, $language);
+        $this->setLanguageQueryParameters($query, $language);
 
         $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($language->id, null, \PDO::PARAM_INT)
+            $query->expr()->eq(
+                'id',
+                $query->createNamedParameter($language->id, ParameterType::INTEGER, ':id')
             )
         );
 
-        $query->prepare()->execute();
+        $query->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadLanguageListData(array $ids): iterable
     {
         $query = $this->createFindQuery();
@@ -148,9 +127,6 @@ class DoctrineDatabase extends Gateway
         return $query->execute()->fetchAll();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadLanguageListDataByLanguageCode(array $languageCodes): iterable
     {
         $query = $this->createFindQuery();
@@ -162,327 +138,89 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Creates a Language find query.
+     * Build a Language find (fetch) query.
      */
-    protected function createFindQuery(): QueryBuilder
+    private function createFindQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query
             ->select('id', 'locale', 'name', 'disabled')
-            ->from('ezcontent_language');
+            ->from(self::CONTENT_LANGUAGE_TABLE);
 
         return $query;
     }
 
-    /**
-     * Loads the data for all languages.
-     *
-     * @return string[][]
-     */
-    public function loadAllLanguagesData()
+    public function loadAllLanguagesData(): array
     {
-        $query = $this->createFindQuery();
+        return $this->createFindQuery()->execute()->fetchAll();
+    }
 
-        return $query->execute()->fetchAll();
+    public function deleteLanguage(int $id): void
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::CONTENT_LANGUAGE_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            );
+
+        $query->execute();
+    }
+
+    public function canDeleteLanguage(int $id): bool
+    {
+        // note: at some point this should be delegated to specific gateways
+        foreach (self::MULTILINGUAL_TABLES_COLUMNS as $tableName => $columns) {
+            $languageMaskColumn = $columns[0];
+            $languageIdColumn = $columns[1] ?? null;
+            if (
+                $this->countTableData($id, $tableName, $languageMaskColumn, $languageIdColumn) > 0
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
-     * Deletes the language with $id.
+     * Count table data rows related to the given language.
      *
-     * @param int $id
+     * @param string|null $languageIdColumn optional column name containing explicit language id
      */
-    public function deleteLanguage($id)
-    {
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable('ezcontent_language')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($id, null, \PDO::PARAM_INT)
-            )
-        );
-
-        $query->prepare()->execute();
-    }
-
-    /**
-     * Check whether a language may be deleted.
-     *
-     * @param int $id
-     *
-     * @return bool
-     */
-    public function canDeleteLanguage($id)
-    {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state')
-        )->where(
-            $query->expr->lOr(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('default_language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('language_mask'),
-                        $query->bindValue($id, null, \PDO::PARAM_INT)
+    private function countTableData(
+        int $languageId,
+        string $tableName,
+        string $languageMaskColumn,
+        ?string $languageIdColumn = null
+    ): int {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            // avoiding using "*" as count argument, but don't specify column name because it varies
+            ->select($this->dbPlatform->getCountExpression(1))
+            ->from($tableName)
+            ->where(
+                $query->expr()->gt(
+                    $this->dbPlatform->getBitAndComparisonExpression(
+                        $languageMaskColumn,
+                        $query->createPositionalParameter($languageId, ParameterType::INTEGER)
                     ),
                     0
                 )
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
+            );
+        if (null !== $languageIdColumn) {
+            $query
+                ->orWhere(
+                    $query->expr()->eq(
+                        $languageIdColumn,
+                        $query->createPositionalParameter($languageId, ParameterType::INTEGER)
+                    )
+                );
         }
 
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state_group')
-        )->where(
-            $query->expr->lOr(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('default_language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('language_mask'),
-                        $query->bindValue($id, null, \PDO::PARAM_INT)
-                    ),
-                    0
-                )
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state_group_language')
-        )->where(
-            $query->expr->gt(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn('language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                0
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state_language')
-        )->where(
-            $query->expr->gt(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn('language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                0
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentclass')
-        )->where(
-            $query->expr->lOr(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('initial_language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('language_mask'),
-                        $query->bindValue($id, null, \PDO::PARAM_INT)
-                    ),
-                    0
-                )
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentclass_name')
-        )->where(
-            $query->expr->gt(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn('language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                0
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject')
-        )->where(
-            $query->expr->lOr(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('initial_language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('language_mask'),
-                        $query->bindValue($id, null, \PDO::PARAM_INT)
-                    ),
-                    0
-                )
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject_attribute')
-        )->where(
-            $query->expr->gt(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn('language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                0
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject_name')
-        )->where(
-            $query->expr->gt(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn('language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                0
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject_version')
-        )->where(
-            $query->expr->lOr(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('initial_language_id'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('language_mask'),
-                        $query->bindValue($id, null, \PDO::PARAM_INT)
-                    ),
-                    0
-                )
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        if ($statement->fetchColumn() > 0) {
-            return false;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $query->alias($query->expr->count('*'), 'count')
-        )->from(
-            $this->dbHandler->quoteTable('ezurlalias_ml')
-        )->where(
-            $query->expr->gt(
-                $query->expr->bitAnd(
-                    $this->dbHandler->quoteColumn('lang_mask'),
-                    $query->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                0
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchColumn() == 0;
+        return (int)$query->execute()->fetchColumn();
     }
 }

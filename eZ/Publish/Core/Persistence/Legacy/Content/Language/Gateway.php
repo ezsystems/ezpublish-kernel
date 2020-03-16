@@ -1,38 +1,60 @@
 <?php
 
 /**
- * File containing the Language Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 
 use eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
- * Language Handler.
+ * Content Model language gateway.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
-    /**
-     * Inserts the given $language.
-     *
-     * @param Language $language
-     *
-     * @return int ID of the new language
-     */
-    abstract public function insertLanguage(Language $language);
+    public const CONTENT_LANGUAGE_TABLE = 'ezcontent_language';
 
     /**
-     * Updates the data of the given $language.
+     * A map of language-related table name to its language column.
      *
-     * @param Language $language
+     * The first column is considered to be a language bitmask.
+     * The second, optional, column is an explicit language id.
+     *
+     * It depends on the schema defined in
+     * <code>eZ/Bundle/EzPublishCoreBundle/Resources/config/storage/legacy/schema.yaml</code>
      */
-    abstract public function updateLanguage(Language $language);
+    public const MULTILINGUAL_TABLES_COLUMNS = [
+        'ezcobj_state' => ['language_mask', 'default_language_id'],
+        'ezcobj_state_group_language' => ['language_id'],
+        'ezcobj_state_group' => ['language_mask', 'default_language_id'],
+        'ezcobj_state_language' => ['language_id'],
+        'ezcontentclass_attribute_ml' => ['language_id'],
+        'ezcontentclass_name' => ['language_id'],
+        'ezcontentclass' => ['language_mask', 'initial_language_id'],
+        'ezcontentobject_attribute' => ['language_id'],
+        'ezcontentobject_name' => ['language_id'],
+        'ezcontentobject_version' => ['language_mask', 'initial_language_id'],
+        'ezcontentobject' => ['language_mask', 'initial_language_id'],
+        'ezurlalias_ml' => ['lang_mask'],
+    ];
 
     /**
-     * Loads data list for the Language with $ids.
+     * Insert the given $language.
+     */
+    abstract public function insertLanguage(Language $language): int;
+
+    /**
+     * Update the data of the given $language.
+     */
+    abstract public function updateLanguage(Language $language): void;
+
+    /**
+     * Load data list for the Language with $ids.
      *
      * @param int[] $ids
      *
@@ -41,7 +63,7 @@ abstract class Gateway
     abstract public function loadLanguageListData(array $ids): iterable;
 
     /**
-     * Loads data list for Languages by $languageCodes (eg: eng-GB).
+     * Load data list for Languages by $languageCodes (eg: eng-GB).
      *
      * @param string[] $languageCodes
      *
@@ -50,25 +72,17 @@ abstract class Gateway
     abstract public function loadLanguageListDataByLanguageCode(array $languageCodes): iterable;
 
     /**
-     * Loads the data for all languages.
-     *
-     * @return string[][]
+     * Load the data for all languages.
      */
-    abstract public function loadAllLanguagesData();
+    abstract public function loadAllLanguagesData(): array;
 
     /**
-     * Deletes the language with $id.
-     *
-     * @param int $id
+     * Delete the language with $id.
      */
-    abstract public function deleteLanguage($id);
+    abstract public function deleteLanguage(int $id): void;
 
     /**
      * Check whether a language may be deleted.
-     *
-     * @param int $id
-     *
-     * @return bool
      */
-    abstract public function canDeleteLanguage($id);
+    abstract public function canDeleteLanguage(int $id): bool;
 }
