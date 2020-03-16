@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\User\Role\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User\Role\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
@@ -26,6 +26,8 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * Inserts DB fixture.
+     *
+     * @throws \Exception
      */
     protected function setUp(): void
     {
@@ -38,8 +40,10 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::createRole
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function testCreateRole()
+    public function testCreateRole(): void
     {
         $gateway = $this->getDatabaseGateway();
 
@@ -67,8 +71,10 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignment
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function testLoadRoleAssignment()
+    public function testLoadRoleAssignment(): void
     {
         $gateway = $this->getDatabaseGateway();
 
@@ -88,8 +94,10 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignmentsByGroupId
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function testLoadRoleAssignmentsByGroupId()
+    public function testLoadRoleAssignmentsByGroupId(): void
     {
         $gateway = $this->getDatabaseGateway();
 
@@ -123,8 +131,10 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignmentsByRoleId
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function testLoadRoleAssignmentsByRoleId()
+    public function testLoadRoleAssignmentsByRoleId(): void
     {
         $gateway = $this->getDatabaseGateway();
 
@@ -160,12 +170,14 @@ class DoctrineDatabaseTest extends TestCase
      * Returns a ready to test DoctrineDatabase gateway.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getDatabaseGateway()
+    protected function getDatabaseGateway(): DoctrineDatabase
     {
         if (!isset($this->databaseGateway)) {
             $this->databaseGateway = new DoctrineDatabase(
-                $this->getDatabaseHandler()
+                $this->getDatabaseConnection()
             );
         }
 

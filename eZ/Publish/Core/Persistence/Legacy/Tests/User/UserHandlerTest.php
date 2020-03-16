@@ -16,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\SPI\Persistence;
-use eZ\Publish\SPI\Persistence\User\Handler as SPIHandler;
+use eZ\Publish\SPI\Persistence\User\Handler;
 use eZ\Publish\SPI\Persistence\User\Role;
 
 /**
@@ -29,13 +29,13 @@ class UserHandlerTest extends TestCase
     /**
      * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getUserHandler(User\Gateway $userGateway = null): SPIHandler
+    protected function getUserHandler(User\Gateway $userGateway = null): Handler
     {
         $dbHandler = $this->getDatabaseHandler();
 
         return new User\Handler(
             $userGateway ?? new User\Gateway\DoctrineDatabase($this->getDatabaseConnection()),
-            new User\Role\Gateway\DoctrineDatabase($dbHandler),
+            new User\Role\Gateway\DoctrineDatabase($this->getDatabaseConnection()),
             new User\Mapper(),
             new LimitationConverter([new ObjectStateLimitationHandler($dbHandler)])
         );
@@ -334,7 +334,7 @@ class UserHandlerTest extends TestCase
 
         $roleDraft = $handler->createRole($createStruct);
 
-        $this->assertSame('1', $roleDraft->id);
+        $this->assertSame(1, $roleDraft->id);
     }
 
     public function testLoadRole()
