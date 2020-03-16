@@ -94,6 +94,13 @@ abstract class UserServiceDecorator implements UserService
         return $this->innerService->loadUserByCredentials($login, $password, $prioritizedLanguages);
     }
 
+    public function checkUserCredentials(
+        User $user,
+        string $credentials
+    ): bool {
+        return $this->innerService->checkUserCredentials($user, $credentials);
+    }
+
     public function loadUserByLogin(
         $login,
         array $prioritizedLanguages = []
