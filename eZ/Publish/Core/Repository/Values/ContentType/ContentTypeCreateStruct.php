@@ -32,7 +32,7 @@ class ContentTypeCreateStruct extends APIContentTypeCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDef
      */
-    public function addFieldDefinition(FieldDefinitionCreateStruct $fieldDef)
+    public function addFieldDefinition(FieldDefinitionCreateStruct $fieldDef): void
     {
         $this->fieldDefinitions[] = $fieldDef;
     }

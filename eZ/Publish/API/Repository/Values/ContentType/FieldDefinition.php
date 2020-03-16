@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\ContentType\FieldDefinition class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -15,8 +15,8 @@ use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
 /**
  * This class represents a field definition.
  *
- * @property-read mixed $fieldSettings calls getFieldSettings()
- * @property-read mixed $validatorConfiguration calls getValidatorConfiguration()
+ * @property-read array $fieldSettings calls getFieldSettings()
+ * @property-read array $validatorConfiguration calls getValidatorConfiguration()
  * @property-read mixed $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
@@ -98,16 +98,16 @@ abstract class FieldDefinition extends ValueObject implements MultiLanguageName,
     /**
      * This method returns the validator configuration of this field definition supported by the field type.
      *
-     * @return mixed
+     * @return array
      */
-    abstract public function getValidatorConfiguration();
+    abstract public function getValidatorConfiguration(): array;
 
     /**
      * This method returns settings for the field definition supported by the field type.
      *
-     * @return mixed
+     * @return array
      */
-    abstract public function getFieldSettings();
+    abstract public function getFieldSettings(): array;
 
     /**
      * Default value of the field.

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
@@ -18,8 +18,8 @@ use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
  *
  * @property-read string[] $names calls getNames() or on access getName($language)
  * @property-read string[] $descriptions calls getDescriptions() or on access getDescription($language)
- * @property-read mixed $fieldSettings calls getFieldSettings()
- * @property-read mixed $validatorConfiguration calls getValidatorConfiguration()
+ * @property-read array $fieldSettings calls getFieldSettings()
+ * @property-read array $validatorConfiguration calls getValidatorConfiguration()
  * @property-read mixed $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
@@ -44,21 +44,21 @@ class FieldDefinition extends APIFieldDefinition
      *
      * @var array
      */
-    protected $fieldSettings;
+    protected $fieldSettings = [];
 
     /**
      * Holds validator configuration of this field definition supported by the field type.
      *
-     * @var mixed
+     * @var array
      */
-    protected $validatorConfiguration;
+    protected $validatorConfiguration = [];
 
     /**
      * This method returns the validator configuration of this field definition supported by the field type.
      *
-     * @return mixed
+     * @return array
      */
-    public function getValidatorConfiguration()
+    public function getValidatorConfiguration(): array
     {
         return $this->validatorConfiguration;
     }
@@ -68,7 +68,7 @@ class FieldDefinition extends APIFieldDefinition
      *
      * @return array
      */
-    public function getFieldSettings()
+    public function getFieldSettings(): array
     {
         return $this->fieldSettings;
     }
