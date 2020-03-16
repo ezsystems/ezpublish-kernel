@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -133,16 +132,19 @@ class RepositoryAuthenticationProviderTest extends TestCase
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\BadCredentialsException::class);
 
+        $apiUser = $this->createMock(APIUser::class);
         $user = $this->createMock(User::class);
+        $user->method('getAPIUser')
+            ->willReturn($apiUser);
         $userName = 'my_username';
         $password = 'foo';
         $token = new UsernamePasswordToken($userName, $password, 'bar');
 
         $this->userService
             ->expects($this->once())
-            ->method('loadUserByCredentials')
-            ->with($userName, $password)
-            ->will($this->throwException(new NotFoundException('what', 'identifier')));
+            ->method('checkUserCredentials')
+            ->with($apiUser, $password)
+            ->willReturn(false);
 
         $method = new \ReflectionMethod($this->authProvider, 'checkAuthentication');
         $method->setAccessible(true);
@@ -151,17 +153,20 @@ class RepositoryAuthenticationProviderTest extends TestCase
 
     public function testCheckAuthentication()
     {
-        $user = $this->createMock(User::class);
         $userName = 'my_username';
         $password = 'foo';
         $token = new UsernamePasswordToken($userName, $password, 'bar');
 
-        $apiUser = $this->createMock(APIUser::class);
+        $apiUser = $this->getMockForAbstractClass(APIUser::class);
+        $user = $this->createMock(User::class);
+        $user->method('getAPIUser')
+            ->willReturn($apiUser);
+
         $this->userService
             ->expects($this->once())
-            ->method('loadUserByCredentials')
-            ->with($userName, $password)
-            ->will($this->returnValue($apiUser));
+            ->method('checkUserCredentials')
+            ->with($apiUser, $password)
+            ->willReturn(true);
 
         $this->permissionResolver
             ->expects($this->once())

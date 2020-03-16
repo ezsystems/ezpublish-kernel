@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface as EzUserInterface;
@@ -41,20 +40,22 @@ class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
             return parent::checkAuthentication($user, $token);
         }
 
+        $apiUser = $user->getAPIUser();
+
         // $currentUser can either be an instance of UserInterface or just the username (e.g. during form login).
         /** @var EzUserInterface|string $currentUser */
         $currentUser = $token->getUser();
         if ($currentUser instanceof UserInterface) {
-            if ($currentUser->getAPIUser()->passwordHash !== $user->getAPIUser()->passwordHash) {
+            if ($currentUser->getAPIUser()->passwordHash !== $apiUser->passwordHash) {
                 throw new BadCredentialsException('The credentials were changed in another session.');
             }
 
             $apiUser = $currentUser->getAPIUser();
         } else {
-            try {
-                $apiUser = $this->userService->loadUserByCredentials($token->getUsername(), $token->getCredentials());
-            } catch (NotFoundException $e) {
-                throw new BadCredentialsException('Invalid credentials', 0, $e);
+            $credentialsValid = $this->userService->checkUserCredentials($apiUser, $token->getCredentials());
+
+            if (!$credentialsValid) {
+                throw new BadCredentialsException('Invalid credentials', 0);
             }
         }
 

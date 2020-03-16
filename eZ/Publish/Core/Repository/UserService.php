@@ -506,6 +506,11 @@ class UserService implements UserServiceInterface
      */
     public function loadUserByCredentials($login, $password, array $prioritizedLanguages = [])
     {
+        @trigger_error(
+            sprintf('%s method will be removed in eZ Platform 3.0. Use UserService::checkUserCredentials instead.', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
         if (!is_string($login) || empty($login)) {
             throw new InvalidArgumentValue('login', $login);
         }
@@ -523,6 +528,19 @@ class UserService implements UserServiceInterface
         $this->updatePasswordHash($login, $password, $spiUser);
 
         return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
+    }
+
+    /**
+     * Checks if credentials are valid for provided User.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param string $credentials
+     *
+     * @return bool
+     */
+    public function checkUserCredentials(APIUser $user, string $credentials): bool
+    {
+        return $this->comparePasswordHashForAPIUser($user->login, $credentials, $user);
     }
 
     /**
