@@ -1,13 +1,14 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\User\UserHandlerTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
 
+use DateInterval;
+use DateTime;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
@@ -15,6 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\SPI\Persistence;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIHandler;
 use eZ\Publish\SPI\Persistence\User\Role;
 
 /**
@@ -24,12 +26,15 @@ class UserHandlerTest extends TestCase
 {
     private const TEST_USER_ID = 42;
 
-    protected function getUserHandler(User\Gateway $userGateway = null)
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    protected function getUserHandler(User\Gateway $userGateway = null): SPIHandler
     {
         $dbHandler = $this->getDatabaseHandler();
 
         return new User\Handler(
-            $userGateway ?? new User\Gateway\DoctrineDatabase($dbHandler),
+            $userGateway ?? new User\Gateway\DoctrineDatabase($this->getDatabaseConnection()),
             new User\Role\Gateway\DoctrineDatabase($dbHandler),
             new User\Mapper(),
             new LimitationConverter([new ObjectStateLimitationHandler($dbHandler)])
@@ -56,7 +61,7 @@ class UserHandlerTest extends TestCase
         $userToken = new Persistence\User\UserTokenUpdateStruct();
         $userToken->userId = self::TEST_USER_ID;
         $userToken->hashKey = md5('hash');
-        $userToken->time = $time ?? (new \DateTime())->add(new \DateInterval('P1D'))->getTimestamp();
+        $userToken->time = $time ?? (new DateTime())->add(new DateInterval('P1D'))->getTimestamp();
 
         return $userToken;
     }
@@ -88,7 +93,7 @@ class UserHandlerTest extends TestCase
     public function testLoadUser()
     {
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $gatewayMock
             ->method('load')
@@ -107,9 +112,9 @@ class UserHandlerTest extends TestCase
 
     public function testLoadUnknownUser()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $gatewayMock
             ->method('load')
@@ -124,7 +129,7 @@ class UserHandlerTest extends TestCase
     public function testLoadUserByLogin()
     {
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $gatewayMock
             ->method('loadByLogin')
@@ -143,7 +148,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadUserByEmailNotFound()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
 
         $handler = $this->getUserHandler();
         $user = $this->getValidUser();
@@ -154,7 +159,7 @@ class UserHandlerTest extends TestCase
     public function testLoadUserByEmail()
     {
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $gatewayMock
             ->method('loadByEmail')
@@ -173,7 +178,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadUserByTokenNotFound()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
 
         $handler = $this->getUserHandler();
         $handler->updateUserToken($this->getValidUserToken());
@@ -184,7 +189,7 @@ class UserHandlerTest extends TestCase
     public function testLoadUserByToken()
     {
         $gatewayMock = $this
-            ->createMock(User\Gateway\DoctrineDatabase::class);
+            ->createMock(User\Gateway::class);
 
         $userToken = $this->getValidUserToken();
         $gatewayMock

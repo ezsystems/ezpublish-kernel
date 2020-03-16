@@ -1,92 +1,68 @@
 <?php
 
 /**
- * File containing the User Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\User;
 
-use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 
 /**
- * Base class for user gateways.
+ * User Gateway.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
     /**
-     * Loads user with user ID.
-     *
-     * @param mixed $userId
-     *
-     * @return array
+     * Load a User by User ID.
      */
-    abstract public function load($userId);
+    abstract public function load(int $userId): array;
 
     /**
-     * Loads user with user login.
-     *
-     * @param string $login
-     *
-     * @return array
+     * Load a User by User login.
      */
-    abstract public function loadByLogin($login);
+    abstract public function loadByLogin(string $login): array;
 
     /**
-     * Loads user with user email.
-     *
-     * @param string $email
-     *
-     * @return array
+     * Load a User by User e-mail.
      */
-    abstract public function loadByEmail($email);
+    abstract public function loadByEmail(string $email): array;
 
     /**
-     * Loads user with user hash.
-     *
-     * @param string $hash
-     *
-     * @return array
+     * Load a User by User token.
      */
-    abstract public function loadUserByToken($hash);
+    abstract public function loadUserByToken(string $hash): array;
 
     /**
-     * Update the user acoount key specified by the user account key struct.
+     * Update a User token specified by UserTokenUpdateStruct.
      *
-     * @param \eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     * @see \eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct
      */
-    abstract public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct);
+    abstract public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct): void;
 
     /**
-     * Expires user account key with user hash.
-     *
-     * @param string $hash
+     * Expire the given User token.
      */
-    abstract public function expireUserToken($hash);
+    abstract public function expireUserToken(string $hash): void;
 
     /**
-     * Assigns role to user with given limitation.
+     * Assign, with the given Limitation, a Role to a User.
      *
-     * @param mixed $contentId
-     * @param mixed $roleId
-     * @param array $limitation
+     * @param array $limitation a map of the Limitation identifiers to raw Limitation values.
      */
-    abstract public function assignRole($contentId, $roleId, array $limitation);
+    abstract public function assignRole(int $contentId, int $roleId, array $limitation): void;
 
     /**
-     * Remove role from user or user group.
-     *
-     * @param mixed $contentId
-     * @param mixed $roleId
+     * Remove a Role from User or User group.
      */
-    abstract public function removeRole($contentId, $roleId);
+    abstract public function removeRole(int $contentId, int $roleId): void;
 
     /**
-     * Remove role from user or user group, by assignment ID.
-     *
-     * @param mixed $roleAssignmentId
+     * Remove a Role from User or User group, by assignment ID.
      */
-    abstract public function removeRoleAssignmentById($roleAssignmentId);
+    abstract public function removeRoleAssignmentById(int $roleAssignmentId): void;
 }

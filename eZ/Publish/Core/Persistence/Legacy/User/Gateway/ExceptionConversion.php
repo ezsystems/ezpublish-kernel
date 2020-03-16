@@ -1,34 +1,33 @@
 <?php
 
 /**
- * File containing the User Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 
+use eZ\Publish\Core\Base\Exceptions\DatabaseException;
 use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
-use eZ\Publish\SPI\Persistence\User;
 use Doctrine\DBAL\DBALException;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 use PDOException;
-use RuntimeException;
 
 /**
- * Base class for user gateways.
+ * @internal Internal exception conversion layer.
  */
-class ExceptionConversion extends Gateway
+final class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway.
      *
-     * @var Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\User\Gateway
      */
-    protected $innerGateway;
+    private $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway.
+     * Create a new exception conversion gateway around $innerGateway.
      *
      * @param Gateway $innerGateway
      */
@@ -37,158 +36,84 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    /**
-     * Loads user with user ID.
-     *
-     * @param mixed $userId
-     *
-     * @return array
-     */
-    public function load($userId)
+    public function load(int $userId): array
     {
         try {
             return $this->innerGateway->load($userId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Loads user with user login.
-     *
-     * @param string $login
-     *
-     * @return array
-     */
-    public function loadByLogin($login)
+    public function loadByLogin(string $login): array
     {
         try {
             return $this->innerGateway->loadByLogin($login);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Loads user with user email.
-     *
-     * @param string $email
-     *
-     * @return array
-     */
-    public function loadByEmail($email)
+    public function loadByEmail(string $email): array
     {
         try {
             return $this->innerGateway->loadByEmail($email);
-        } catch (\DBALException $e) {
-            throw new \RuntimeException('Database error', 0, $e);
-        } catch (\PDOException $e) {
-            throw new \RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Loads a user with user hash key.
-     *
-     * @param string $hash
-     *
-     * @return array
-     */
-    public function loadUserByToken($hash)
+    public function loadUserByToken(string $hash): array
     {
         try {
             return $this->innerGateway->loadUserByToken($hash);
-        } catch (DBALException $e) {
-            throw new \RuntimeException('Database error', 0, $e);
-        } catch (\PDOException $e) {
-            throw new \RuntimeException('Database error', 0, $e);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Update the user token information specified by the user token struct.
-     *
-     * @param UserTokenUpdateStruct $userTokenUpdateStruct
-     */
-    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct)
+    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct): void
     {
         try {
-            return $this->innerGateway->updateUserToken($userTokenUpdateStruct);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+            $this->innerGateway->updateUserToken($userTokenUpdateStruct);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Expires user token with user hash.
-     *
-     * @param string $hash
-     */
-    public function expireUserToken($hash)
+    public function expireUserToken(string $hash): void
     {
         try {
-            return $this->innerGateway->expireUserToken($hash);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+            $this->innerGateway->expireUserToken($hash);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Assigns role to user with given limitation.
-     *
-     * @param mixed $contentId
-     * @param mixed $roleId
-     * @param array $limitation
-     */
-    public function assignRole($contentId, $roleId, array $limitation)
+    public function assignRole(int $contentId, int $roleId, array $limitation): void
     {
         try {
-            return $this->innerGateway->assignRole($contentId, $roleId, $limitation);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+            $this->innerGateway->assignRole($contentId, $roleId, $limitation);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Remove role from user or user group.
-     *
-     * @param mixed $contentId
-     * @param mixed $roleId
-     */
-    public function removeRole($contentId, $roleId)
+    public function removeRole(int $contentId, int $roleId): void
     {
         try {
-            return $this->innerGateway->removeRole($contentId, $roleId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+            $this->innerGateway->removeRole($contentId, $roleId);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Remove role from user or user group, by assignment ID.
-     *
-     * @param mixed $roleAssignmentId
-     */
-    public function removeRoleAssignmentById($roleAssignmentId)
+    public function removeRoleAssignmentById(int $roleAssignmentId): void
     {
         try {
-            return $this->innerGateway->removeRoleAssignmentById($roleAssignmentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+            $this->innerGateway->removeRoleAssignmentById($roleAssignmentId);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 }

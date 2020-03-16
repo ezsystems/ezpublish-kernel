@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\User\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
@@ -38,7 +38,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase::removeRoleAssignmentById
      */
-    public function testRemoveRoleByAssignmentId()
+    public function testRemoveRoleByAssignmentId(): void
     {
         $gateway = $this->getDatabaseGateway();
 
@@ -79,13 +79,13 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Returns a ready to test DoctrineDatabase gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getDatabaseGateway()
+    protected function getDatabaseGateway(): DoctrineDatabase
     {
         if (!isset($this->databaseGateway)) {
             $this->databaseGateway = new DoctrineDatabase(
-                $this->getDatabaseHandler()
+                $this->getDatabaseConnection()
             );
         }
 
