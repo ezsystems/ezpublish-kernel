@@ -34,6 +34,12 @@
     <testsuite name="eZ\Publish\Core\Persistence\Legacy">
       <directory>eZ/Publish/Core/Persistence/Legacy/Tests</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\QueryType\BuiltIn">
+      <directory>eZ/Publish/Core/QueryType/BuiltIn/Tests</directory>
+    </testsuite>
+    <testsuite name="eZ\Publish\Core\QueryType\BuiltIn\SortSpec">
+      <directory>eZ/Publish/Core/QueryType/BuiltIn/SortSpec/Tests</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\Search\Legacy">
       <directory>eZ/Publish/Core/Search/Legacy/Tests</directory>
     </testsuite>

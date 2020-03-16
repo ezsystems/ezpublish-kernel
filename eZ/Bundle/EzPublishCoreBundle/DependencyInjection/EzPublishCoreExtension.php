@@ -328,6 +328,9 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         // Storage engine
         $loader->load('storage_engines.yml');
+
+        $loader->load('query_types.yml');
+        $loader->load('sort_spec.yml');
     }
 
     /**
