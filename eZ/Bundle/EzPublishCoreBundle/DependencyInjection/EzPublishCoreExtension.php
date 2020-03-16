@@ -84,6 +84,11 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         $configuration = $this->getConfiguration($configs, $container);
 
+        $environment = $container->getParameter('kernel.environment');
+        if (in_array($environment, ['behat', 'test'])) {
+            $loader->load('feature_contexts.yml');
+        }
+
         // Note: this is where the transformation occurs
         $config = $this->processConfiguration($configuration, $configs);
 

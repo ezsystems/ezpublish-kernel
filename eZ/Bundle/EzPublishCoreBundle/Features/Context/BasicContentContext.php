@@ -34,11 +34,6 @@ class BasicContentContext implements Context
     /** @var eZ\Publish\API\Repository\Repository */
     private $repository;
 
-    /**
-     * @injectService $repository @ezpublish.api.repository
-     * @injectService $contentTypeService @ezpublish.api.service.content_type
-     * @injectService $contentService @ezpublish.api.service.content
-     */
     public function __construct(
         Repository $repository,
         ContentTypeService $contentTypeService,
