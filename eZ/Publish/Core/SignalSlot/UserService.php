@@ -282,6 +282,19 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Checks if credentials are valid for provided User.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param string $credentials
+     *
+     * @return bool
+     */
+    public function checkUserCredentials(User $user, string $credentials): bool
+    {
+        return $this->service->checkUserCredentials($user, $credentials);
+    }
+
+    /**
      * Loads a user for the given login.
      *
      * {@inheritdoc}

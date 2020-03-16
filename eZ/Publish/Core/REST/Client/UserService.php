@@ -210,6 +210,14 @@ class UserService implements APIUserService, Sessionable
     /**
      * {@inheritdoc}
      */
+    public function checkUserCredentials(User $user, string $credentials): bool
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadUserByLogin($login, array $prioritizedLanguages = [])
     {
         throw new \Exception('@todo: Implement.');

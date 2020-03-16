@@ -158,6 +158,9 @@ interface UserService
      * Since 6.1 login is case-insensitive across all storage engines and database backends, however if login
      * is part of the password hash this method will essentially be case sensitive.
      *
+     * @deprecated since eZ Platform 2.5, will be dropped in the next major version as authentication
+     *             may depend on various user providers. Use UserService::checkUserCredentials() instead.
+     *
      * @param string $login
      * @param string $password the plain password
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
@@ -168,6 +171,16 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
     public function loadUserByCredentials($login, $password, array $prioritizedLanguages = []);
+
+    /**
+     * Checks if credentials are valid for provided User.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param string $credentials
+     *
+     * @return bool
+     */
+    public function checkUserCredentials(User $user, string $credentials): bool;
 
     /**
      * Loads a user for the given login.

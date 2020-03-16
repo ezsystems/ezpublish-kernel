@@ -106,6 +106,11 @@ class UserService implements UserServiceInterface
         return $this->service->loadUserByCredentials($login, $password, $prioritizedLanguages);
     }
 
+    public function checkUserCredentials(User $user, string $credentials): bool
+    {
+        return $this->service->checkUserCredentials($user, $credentials);
+    }
+
     public function loadUserByLogin($login, array $prioritizedLanguages = null)
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
