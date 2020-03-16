@@ -25,7 +25,7 @@ abstract class Criterion implements CriterionInterface
     /**
      * The value(s) matched by the criteria.
      *
-     * @var array (int|string)
+     * @var array(int|string)
      */
     public $value;
 

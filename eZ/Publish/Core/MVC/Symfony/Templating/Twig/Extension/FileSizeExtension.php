@@ -37,7 +37,7 @@ class FileSizeExtension extends AbstractExtension
     protected $configResolver;
 
     /**
-     * @param     LocaleConverterInterface $localeConverter
+     * @param  LocaleConverterInterface $localeConverter
      */
     protected $localeConverter;
 

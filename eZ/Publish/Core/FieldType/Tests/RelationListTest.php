@@ -742,8 +742,8 @@ class RelationListTest extends FieldTypeTest
      *              ),
      *          )
      *      ),
-     *          array(
-     *              new ValidationError(
+     *      array(
+     *          new ValidationError(
      *              "Field definition does not allow multiple countries to be selected."
      *          ),
      *      ),

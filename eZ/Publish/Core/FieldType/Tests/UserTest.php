@@ -244,7 +244,7 @@ class UserTest extends FieldTypeTest
      *                  'mimeType' => 'image/jpeg',
      *              )
      *          ),
-     *      array(
+     *          array(
      *              'path' => 'some/file/here',
      *              'fileName' => 'sindelfingen.jpg',
      *              'fileSize' => 2342,
