@@ -16,6 +16,9 @@ return PhpCsFixer\Config::create()
         'single_blank_line_before_namespace' => false,
         'phpdoc_annotation_without_dot' => false,
         'phpdoc_no_alias_tag' => false,
+        'phpdoc_trim_consecutive_blank_line_separation' => false,
+        'no_superfluous_phpdoc_tags' => false,
+        'single_line_throw' => false,
         'space_after_semicolon' => false,
         'yoda_style' => false,
         'no_break_comment' => false,
@@ -29,6 +32,7 @@ return PhpCsFixer\Config::create()
         'standardize_increment' => false,
         'fopen_flags' => false,
         'self_accessor' => false,
+        'ordered_imports' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder(
