@@ -83,7 +83,7 @@ Changes affecting version compatibility with former or future versions.
     * `\eZ\Publish\API\Repository\RoleService::unassignRoleFromUser`
     * `\eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup`
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion::createFromQueryBuilder`
-    * `\eZ\Publish\API\R\Values\Content\Query\Criterion\Ancestor::createFromQueryBuilder`
+    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Ancestor::createFromQueryBuilder`
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId::createFromQueryBuilder`
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeGroupId::createFromQueryBuilder`
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId::createFromQueryBuilder`
