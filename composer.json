@@ -52,7 +52,7 @@
         "oneup/flysystem-bundle": "^3.4",
         "friendsofsymfony/http-cache-bundle": "^2.8",
         "sensio/framework-extra-bundle": "^5.5",
-        "jms/translation-bundle": "dev-symfony5 as 2.0.x-dev",
+        "jms/translation-bundle": "^1.5",
         "twig/twig": "^3.0",
         "twig/extra-bundle": "^3.0",
         "friendsofsymfony/jsrouting-bundle": "^2.5",
@@ -63,8 +63,7 @@
         "jenner/simple_fork": "^1.2",
         "friendsofphp/php-cs-fixer": "^2.16",
         "phpunit/phpunit": "^8.2",
-        "matthiasnoback/symfony-dependency-injection-test": "^4.1",
-        "rector/rector": "^0.7.2"
+        "matthiasnoback/symfony-dependency-injection-test": "^4.1"
     },
     "conflict": {
         "doctrine/dbal": "2.7.0",
