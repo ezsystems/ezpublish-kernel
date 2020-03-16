@@ -347,6 +347,10 @@ class LocationHandlerTest extends TestCase
 
         $createStruct = new CreateStruct();
         $createStruct->parentId = 77;
+        $spiLocation = new Location();
+        $spiLocation->id = 78;
+        $spiLocation->parentId = 77;
+        $spiLocation->pathString = '/1/2/77/78/';
 
         $this->locationGateway
             ->expects($this->once())
@@ -365,7 +369,7 @@ class LocationHandlerTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->with($createStruct, $parentInfo)
-            ->will($this->returnValue($createStruct));
+            ->will($this->returnValue($spiLocation));
 
         $this->locationGateway
             ->expects($this->once())

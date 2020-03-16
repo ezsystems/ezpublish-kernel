@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Location Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -10,22 +8,23 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\Core\Base\Exceptions\DatabaseException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 
 /**
- * Base class for location gateways.
+ * @internal Internal exception conversion layer.
  */
-class ExceptionConversion extends Gateway
+final class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
-    protected $innerGateway;
+    private $innerGateway;
 
     /**
      * Creates a new exception conversion gateway around $innerGateway.
@@ -37,8 +36,11 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    public function getBasicNodeData($nodeId, array $translations = null, bool $useAlwaysAvailable = true)
-    {
+    public function getBasicNodeData(
+        int $nodeId,
+        array $translations = null,
+        bool $useAlwaysAvailable = true
+    ): array {
         try {
             return $this->innerGateway->getBasicNodeData($nodeId, $translations, $useAlwaysAvailable);
         } catch (DBALException | PDOException $e) {
@@ -55,8 +57,11 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
-    {
+    public function getBasicNodeDataByRemoteId(
+        string $remoteId,
+        array $translations = null,
+        bool $useAlwaysAvailable = true
+    ): array {
         try {
             return $this->innerGateway->getBasicNodeDataByRemoteId($remoteId, $translations, $useAlwaysAvailable);
         } catch (DBALException | PDOException $e) {
@@ -64,7 +69,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadLocationDataByContent($contentId, $rootLocationId = null)
+    public function loadLocationDataByContent(int $contentId, ?int $rootLocationId = null): array
     {
         try {
             return $this->innerGateway->loadLocationDataByContent($contentId, $rootLocationId);
@@ -73,7 +78,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadParentLocationsDataForDraftContent($contentId)
+    public function loadParentLocationsDataForDraftContent(int $contentId): array
     {
         try {
             return $this->innerGateway->loadParentLocationsDataForDraftContent($contentId);
@@ -82,7 +87,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function getSubtreeContent($sourceId, $onlyIds = false)
+    public function getSubtreeContent(int $sourceId, bool $onlyIds = false): array
     {
         try {
             return $this->innerGateway->getSubtreeContent($sourceId, $onlyIds);
@@ -91,7 +96,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function getChildren($locationId)
+    public function getChildren(int $locationId): array
     {
         try {
             return $this->innerGateway->getChildren($locationId);
@@ -100,64 +105,68 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function moveSubtreeNodes(array $fromPathString, array $toPathString)
+    public function moveSubtreeNodes(array $fromPathString, array $toPathString): void
     {
         try {
-            return $this->innerGateway->moveSubtreeNodes($fromPathString, $toPathString);
+            $this->innerGateway->moveSubtreeNodes($fromPathString, $toPathString);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function updateSubtreeModificationTime($pathString, $timestamp = null)
+    public function updateSubtreeModificationTime(string $pathString, ?int $timestamp = null): void
     {
         try {
-            return $this->innerGateway->updateSubtreeModificationTime($pathString, $timestamp);
+            $this->innerGateway->updateSubtreeModificationTime($pathString, $timestamp);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function updateNodeAssignment($contentObjectId, $oldParent, $newParent, $opcode)
-    {
+    public function updateNodeAssignment(
+        int $contentObjectId,
+        int $oldParent,
+        int $newParent,
+        int $opcode
+    ): void {
         try {
-            return $this->innerGateway->updateNodeAssignment($contentObjectId, $oldParent, $newParent, $opcode);
+            $this->innerGateway->updateNodeAssignment($contentObjectId, $oldParent, $newParent, $opcode);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function createLocationsFromNodeAssignments($contentId, $versionNo)
+    public function createLocationsFromNodeAssignments(int $contentId, int $versionNo): void
     {
         try {
-            return $this->innerGateway->createLocationsFromNodeAssignments($contentId, $versionNo);
+            $this->innerGateway->createLocationsFromNodeAssignments($contentId, $versionNo);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function updateLocationsContentVersionNo($contentId, $versionNo)
+    public function updateLocationsContentVersionNo(int $contentId, int $versionNo): void
     {
         try {
-            return $this->innerGateway->updateLocationsContentVersionNo($contentId, $versionNo);
+            $this->innerGateway->updateLocationsContentVersionNo($contentId, $versionNo);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function hideSubtree($pathString)
+    public function hideSubtree(string $pathString): void
     {
         try {
-            return $this->innerGateway->hideSubtree($pathString);
+            $this->innerGateway->hideSubtree($pathString);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function unHideSubtree($pathString)
+    public function unHideSubtree(string $pathString): void
     {
         try {
-            return $this->innerGateway->unHideSubtree($pathString);
+            $this->innerGateway->unHideSubtree($pathString);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
@@ -208,7 +217,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function create(CreateStruct $createStruct, array $parentNode)
+    public function create(CreateStruct $createStruct, array $parentNode): Location
     {
         try {
             return $this->innerGateway->create($createStruct, $parentNode);
@@ -217,52 +226,58 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function createNodeAssignment(CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP)
-    {
+    public function createNodeAssignment(
+        CreateStruct $createStruct,
+        int $parentNodeId,
+        int $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
+    ): void {
         try {
-            return $this->innerGateway->createNodeAssignment($createStruct, $parentNodeId, $type);
+            $this->innerGateway->createNodeAssignment($createStruct, $parentNodeId, $type);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function deleteNodeAssignment($contentId, $versionNo = null)
+    public function deleteNodeAssignment(int $contentId, ?int $versionNo = null): void
     {
         try {
-            return $this->innerGateway->deleteNodeAssignment($contentId, $versionNo);
+            $this->innerGateway->deleteNodeAssignment($contentId, $versionNo);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function update(UpdateStruct $location, $locationId)
+    public function update(UpdateStruct $location, int $locationId): void
     {
         try {
-            return $this->innerGateway->update($location, $locationId);
+            $this->innerGateway->update($location, $locationId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function updatePathIdentificationString($locationId, $parentLocationId, $text)
-    {
+    public function updatePathIdentificationString(
+        int $locationId,
+        int $parentLocationId,
+        string $text
+    ): void {
         try {
-            return $this->innerGateway->updatePathIdentificationString($locationId, $parentLocationId, $text);
+            $this->innerGateway->updatePathIdentificationString($locationId, $parentLocationId, $text);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function removeLocation($locationId)
+    public function removeLocation(int $locationId): void
     {
         try {
-            return $this->innerGateway->removeLocation($locationId);
+            $this->innerGateway->removeLocation($locationId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function getFallbackMainNodeData($contentId, $locationId)
+    public function getFallbackMainNodeData(int $contentId, int $locationId): array
     {
         try {
             return $this->innerGateway->getFallbackMainNodeData($contentId, $locationId);
@@ -271,16 +286,16 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function trashLocation($locationId)
+    public function trashLocation(int $locationId): void
     {
         try {
-            return $this->innerGateway->trashLocation($locationId);
+            $this->innerGateway->trashLocation($locationId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function untrashLocation($locationId, $newParentId = null)
+    public function untrashLocation(int $locationId, ?int $newParentId = null): Location
     {
         try {
             return $this->innerGateway->untrashLocation($locationId, $newParentId);
@@ -289,7 +304,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadTrashByLocation($locationId)
+    public function loadTrashByLocation(int $locationId): array
     {
         try {
             return $this->innerGateway->loadTrashByLocation($locationId);
@@ -298,16 +313,16 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function cleanupTrash()
+    public function cleanupTrash(): void
     {
         try {
-            return $this->innerGateway->cleanupTrash();
+            $this->innerGateway->cleanupTrash();
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function listTrashed($offset, $limit, array $sort = null)
+    public function listTrashed(int $offset, ?int $limit, array $sort = null): array
     {
         try {
             return $this->innerGateway->listTrashed($offset, $limit, $sort);
@@ -325,16 +340,16 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function removeElementFromTrash($id)
+    public function removeElementFromTrash(int $id): void
     {
         try {
-            return $this->innerGateway->removeElementFromTrash($id);
+            $this->innerGateway->removeElementFromTrash($id);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function setSectionForSubtree($pathString, $sectionId)
+    public function setSectionForSubtree(string $pathString, int $sectionId): bool
     {
         try {
             return $this->innerGateway->setSectionForSubtree($pathString, $sectionId);
@@ -343,7 +358,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function countLocationsByContentId($contentId)
+    public function countLocationsByContentId(int $contentId): int
     {
         try {
             return $this->innerGateway->countLocationsByContentId($contentId);
@@ -352,16 +367,20 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId)
-    {
+    public function changeMainLocation(
+        int $contentId,
+        int $locationId,
+        int $versionNo,
+        int $parentLocationId
+    ): void {
         try {
-            return $this->innerGateway->changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId);
+            $this->innerGateway->changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function countAllLocations()
+    public function countAllLocations(): int
     {
         try {
             return $this->innerGateway->countAllLocations();
@@ -370,7 +389,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadAllLocationsData($offset, $limit)
+    public function loadAllLocationsData(int $offset, int $limit): array
     {
         try {
             return $this->innerGateway->loadAllLocationsData($offset, $limit);

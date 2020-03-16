@@ -21,10 +21,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 {
     protected function getLocationGateway()
     {
-        $dbHandler = $this->getDatabaseHandler();
-
         return new DoctrineDatabase(
-            $dbHandler,
+            $this->getDatabaseConnection(),
             $this->getLanguageMaskGenerator()
         );
     }

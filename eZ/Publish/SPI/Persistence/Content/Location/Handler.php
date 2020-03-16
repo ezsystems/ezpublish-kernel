@@ -187,6 +187,8 @@ interface Handler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $location
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if parent Location does not exist
      */
     public function create(CreateStruct $location);
 
