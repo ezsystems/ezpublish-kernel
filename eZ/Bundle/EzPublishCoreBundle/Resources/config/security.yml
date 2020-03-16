@@ -1,6 +1,12 @@
 services:
-    ezpublish.security.user_provider:
-        class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
+    ezpublish.security.user_provider.username:
+        class: eZ\Publish\Core\MVC\Symfony\Security\User\UsernameProvider
+        arguments:
+            - '@eZ\Publish\API\Repository\UserService'
+            - '@eZ\Publish\API\Repository\PermissionResolver'
+
+    ezpublish.security.user_provider.email:
+        class: eZ\Publish\Core\MVC\Symfony\Security\User\EmailProvider
         arguments:
             - '@eZ\Publish\API\Repository\UserService'
             - '@eZ\Publish\API\Repository\PermissionResolver'
@@ -40,3 +46,5 @@ services:
             - "%fragment.path%"
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish.security.user_provider: '@ezpublish.security.user_provider.username'

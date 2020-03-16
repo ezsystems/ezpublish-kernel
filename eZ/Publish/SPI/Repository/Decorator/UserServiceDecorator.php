@@ -86,14 +86,6 @@ abstract class UserServiceDecorator implements UserService
         return $this->innerService->loadUser($userId, $prioritizedLanguages);
     }
 
-    public function loadUserByCredentials(
-        $login,
-        $password,
-        array $prioritizedLanguages = []
-    ) {
-        return $this->innerService->loadUserByCredentials($login, $password, $prioritizedLanguages);
-    }
-
     public function checkUserCredentials(
         User $user,
         string $credentials
@@ -108,10 +100,17 @@ abstract class UserServiceDecorator implements UserService
         return $this->innerService->loadUserByLogin($login, $prioritizedLanguages);
     }
 
-    public function loadUsersByEmail(
-        $email,
+    public function loadUserByEmail(
+        string $email,
         array $prioritizedLanguages = []
-    ) {
+    ): User {
+        return $this->innerService->loadUserByEmail($email, $prioritizedLanguages);
+    }
+
+    public function loadUsersByEmail(
+        string $email,
+        array $prioritizedLanguages = []
+    ): array {
         return $this->innerService->loadUsersByEmail($email, $prioritizedLanguages);
     }
 

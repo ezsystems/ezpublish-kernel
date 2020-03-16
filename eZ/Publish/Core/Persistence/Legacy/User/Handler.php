@@ -117,8 +117,31 @@ class Handler implements BaseUserHandler
 
         if (empty($data)) {
             throw new NotFound('user', $login);
-        } elseif (isset($data[1])) {
+        } elseif (count($data) > 1) {
             throw new LogicException("Found more then one user with login '{$login}'");
+        }
+
+        return $this->mapper->mapUser($data[0]);
+    }
+
+    /**
+     * Loads user(s) with user email.
+     *
+     * As earlier eZ Publish versions supported several users having same email (ini config),
+     * this function may return several users.
+     *
+     * @param string $email
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
+     */
+    public function loadByEmail(string $email): User
+    {
+        $data = $this->userGateway->loadByEmail($email);
+
+        if (empty($data)) {
+            throw new NotFound('user', $email);
+        } elseif (count($data) > 1) {
+            throw new LogicException("Found more then one user with login '{$email}'");
         }
 
         return $this->mapper->mapUser($data[0]);
@@ -134,7 +157,7 @@ class Handler implements BaseUserHandler
      *
      * @return \eZ\Publish\SPI\Persistence\User[]
      */
-    public function loadByEmail($email)
+    public function loadUsersByEmail(string $email): array
     {
         $data = $this->userGateway->loadByEmail($email);
 

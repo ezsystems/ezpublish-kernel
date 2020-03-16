@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the ProviderTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User;
 
 use eZ\Publish\API\Repository\PermissionResolver;
@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\MVC\Symfony\Security\User\Provider;
+use eZ\Publish\Core\MVC\Symfony\Security\User\EmailProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
@@ -23,23 +23,23 @@ use eZ\Publish\Core\Repository\Values\User\UserReference;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
-class ProviderTest extends TestCase
+class EmailProviderTest extends TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\API\Repository\UserService|\PHPUnit\Framework\MockObject\MockObject */
     private $userService;
-
-    /** @var \eZ\Publish\Core\MVC\Symfony\Security\User\Provider */
-    private $userProvider;
 
     /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionResolver;
+
+    /** @var \eZ\Publish\Core\MVC\Symfony\Security\User\EmailProvider */
+    private $userProvider;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->userService = $this->createMock(UserService::class);
         $this->permissionResolver = $this->createMock(PermissionResolver::class);
-        $this->userProvider = new Provider($this->userService, $this->permissionResolver);
+        $this->userProvider = new EmailProvider($this->userService, $this->permissionResolver);
     }
 
     public function testLoadUserByUsernameAlreadyUserObject()
@@ -52,10 +52,10 @@ class ProviderTest extends TestCase
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\UsernameNotFoundException::class);
 
-        $username = 'foobar';
+        $username = 'foobar@example.org';
         $this->userService
             ->expects($this->once())
-            ->method('loadUserByLogin')
+            ->method('loadUserByEmail')
             ->with($username)
             ->will($this->throwException(new NotFoundException('user', $username)));
         $this->userProvider->loadUserByUsername($username);
@@ -63,12 +63,12 @@ class ProviderTest extends TestCase
 
     public function testLoadUserByUsername()
     {
-        $username = 'foobar';
+        $username = 'foobar@example.org';
         $apiUser = $this->createMock(APIUser::class);
 
         $this->userService
             ->expects($this->once())
-            ->method('loadUserByLogin')
+            ->method('loadUserByEmail')
             ->with($username)
             ->will($this->returnValue($apiUser));
 

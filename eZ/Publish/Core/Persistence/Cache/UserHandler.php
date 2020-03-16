@@ -52,6 +52,8 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             return [
                 'ez-user-' . $user->id,
                 'ez-user-' . $this->escapeForCacheKey($user->login) . '-by-login',
+                'ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email',
+                'ez-users-' . $this->escapeForCacheKey($user->email) . '-by-email',
                 //'ez-user-' . $hash . '-by-account-key',
             ];
         };
@@ -91,6 +93,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             'ez-user-' . $user->id,
             'ez-user-' . $this->escapeForCacheKey($user->login) . '-by-login',
             'ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email',
+            'ez-users-' . $this->escapeForCacheKey($user->email) . '-by-email',
         ]);
 
         return $user;
@@ -132,13 +135,33 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     /**
      * {@inheritdoc}
      */
-    public function loadByEmail($email)
+    public function loadByEmail(string $email): User
+    {
+        /** @var \eZ\Publish\SPI\Persistence\User $cachedValue */
+        $cachedValue = $this->getCacheValue(
+            $this->escapeForCacheKey($email),
+            'ez-user-',
+            function () use ($email) {
+                return $this->persistenceHandler->userHandler()->loadByEmail($email);
+            },
+            $this->getUserTags,
+            $this->getUserKeys,
+            '-by-email'
+        );
+
+        return $cachedValue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadUsersByEmail(string $email): array
     {
         // As load by email can return several items we threat it like a list here.
         return $this->getListCacheValue(
-            'ez-user-' . $this->escapeForCacheKey($email) . '-by-email',
+            'ez-users-' . $this->escapeForCacheKey($email) . '-by-email',
             function () use ($email) {
-                return $this->persistenceHandler->userHandler()->loadByEmail($email);
+                return $this->persistenceHandler->userHandler()->loadUsersByEmail($email);
             },
             $this->getUserTags,
             $this->getUserKeys
@@ -186,7 +209,10 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         // Clear corresponding content cache as update of the User changes it's external data
         $this->cache->invalidateTags(['content-' . $user->id, 'user-' . $user->id]);
         // Clear especially by email key as it might already be cached and this might represent change to email
-        $this->cache->deleteItems(['ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email']);
+        $this->cache->deleteItems([
+            'ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email',
+            'ez-users-' . $this->escapeForCacheKey($user->email) . '-by-email',
+        ]);
 
         return $user;
     }

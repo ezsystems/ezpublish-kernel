@@ -157,7 +157,7 @@ class RepositoryAuthenticationProviderTest extends TestCase
         $password = 'foo';
         $token = new UsernamePasswordToken($userName, $password, 'bar');
 
-        $apiUser = $this->getMockForAbstractClass(APIUser::class);
+        $apiUser = $this->createMock(APIUser::class);
         $user = $this->createMock(User::class);
         $user->method('getAPIUser')
             ->willReturn($apiUser);

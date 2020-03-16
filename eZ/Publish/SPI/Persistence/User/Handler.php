@@ -52,6 +52,17 @@ interface Handler
     public function loadByLogin($login);
 
     /**
+     * Loads user with user email.
+     *
+     * Note: This method loads user by $email case in-sensitive on certain storage engines!
+     *
+     * @param string $email
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
+     */
+    public function loadByEmail(string $email): User;
+
+    /**
      * Loads user(s) with user email.
      *
      * As earlier eZ Publish versions supported several users having same email (ini config),
@@ -63,7 +74,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\User[]
      */
-    public function loadByEmail($email);
+    public function loadUsersByEmail(string $email): array;
 
     /**
      * Loads user with user hash.
