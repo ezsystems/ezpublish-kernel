@@ -179,6 +179,7 @@ EOT
             $input->getOption('dry-run'),
             $output
         );
+
         return 0;
     }
 

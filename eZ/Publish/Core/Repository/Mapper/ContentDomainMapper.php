@@ -171,7 +171,7 @@ class ContentDomainMapper extends ProxyAwareDomainMapper
      * @param string[] $prioritizedLanguages
      * @param bool $useAlwaysAvailable
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content [<int>]
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      */
     public function buildContentProxyList(
         array $infoList,

@@ -142,6 +142,7 @@ class DeleteContentTranslationCommand extends Command
             $this->repository->rollback();
             throw $e;
         }
+
         return 0;
     }
 

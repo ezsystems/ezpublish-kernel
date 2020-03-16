@@ -222,6 +222,7 @@ class ResizeOriginalImagesCommand extends Command
                 $filter
             )
         );
+
         return 0;
     }
 
