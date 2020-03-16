@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\UserFacetBuilder class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
@@ -20,17 +20,17 @@ class UserFacetBuilder extends FacetBuilder
     /**
      * Owner user.
      */
-    const OWNER = 'owner';
+    public const OWNER = 'owner';
 
     /**
      * Owner user group.
      */
-    const GROUP = 'group';
+    public const GROUP = 'group';
 
     /**
      * Modifier.
      */
-    const MODIFIER = 'modifier';
+    public const MODIFIER = 'modifier';
 
     /**
      * The type of the user facet.

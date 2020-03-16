@@ -1,16 +1,19 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\User\User class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\User;
 
+use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Thumbnail;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\SPI\FieldType\Value;
 
 /**
  * This class represents a user value.
@@ -31,7 +34,7 @@ class User extends APIUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    public function getVersionInfo()
+    public function getVersionInfo(): APIVersionInfo
     {
         return $this->content->getVersionInfo();
     }
@@ -53,7 +56,7 @@ class User extends APIUser
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
-    public function getFieldValue($fieldDefIdentifier, $languageCode = null)
+    public function getFieldValue(string $fieldDefIdentifier, ?string $languageCode = null): ?Value
     {
         return $this->content->getFieldValue($fieldDefIdentifier, $languageCode);
     }
@@ -63,7 +66,7 @@ class User extends APIUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
-    public function getFields()
+    public function getFields(): iterable
     {
         return $this->content->getFields();
     }
@@ -75,9 +78,9 @@ class User extends APIUser
      *
      * @param string $languageCode
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Field[] with field identifier as keys
+     * @return Field[] with field identifier as keys
      */
-    public function getFieldsByLanguage($languageCode = null)
+    public function getFieldsByLanguage(?string $languageCode = null): iterable
     {
         return $this->content->getFieldsByLanguage($languageCode);
     }
@@ -92,7 +95,7 @@ class User extends APIUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
      */
-    public function getField($fieldDefIdentifier, $languageCode = null)
+    public function getField(string $fieldDefIdentifier, ?string $languageCode = null): ?Field
     {
         return $this->content->getField($fieldDefIdentifier, $languageCode);
     }

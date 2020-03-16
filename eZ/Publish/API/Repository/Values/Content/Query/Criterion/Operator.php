@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -15,19 +15,19 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  */
 abstract class Operator
 {
-    const EQ = '=';
-    const GT = '>';
-    const GTE = '>=';
-    const LT = '<';
-    const LTE = '<=';
-    const IN = 'in';
-    const BETWEEN = 'between';
+    public const EQ = '=';
+    public const GT = '>';
+    public const GTE = '>=';
+    public const LT = '<';
+    public const LTE = '<=';
+    public const IN = 'in';
+    public const BETWEEN = 'between';
 
     /**
      * Does a lookup where a the value _can_ contain a "*" (a wildcard) in order to match a pattern.
      *
      * E.g: $criterion->value = "Oper*or";
      */
-    const LIKE = 'like';
-    const CONTAINS = 'contains';
+    public const LIKE = 'like';
+    public const CONTAINS = 'contains';
 }

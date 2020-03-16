@@ -28,7 +28,7 @@ class IsFieldEmpty extends Criterion
         parent::__construct($fieldDefinitionIdentifier, null, $value);
     }
 
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [
             new Specifications(Operator::EQ, Specifications::FORMAT_SINGLE, Specifications::TYPE_BOOLEAN),

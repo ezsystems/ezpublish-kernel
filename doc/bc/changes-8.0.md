@@ -83,7 +83,7 @@ Changes affecting version compatibility with former or future versions.
     * `\eZ\Publish\API\Repository\RoleService::unassignRoleFromUser`
     * `\eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup`
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion::createFromQueryBuilder`
-    * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Ancestor::createFromQueryBuilder`
+    * `\eZ\Publish\API\R\Values\Content\Query\Criterion\Ancestor::createFromQueryBuilder`
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId::createFromQueryBuilder`
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeGroupId::createFromQueryBuilder`
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId::createFromQueryBuilder`
@@ -320,3 +320,5 @@ site:
 * `eZ\Bundle\EzPublishCoreBundle\Controller` extends `Symfony\Bundle\FrameworkBundle\Controller\AbstractController` instead of `Symfony\Bundle\FrameworkBundle\Controller\Controller` which has limited access to the dependency injection container. See https://symfony.com/doc/current/service_container/service_subscribers_locators.html
 
 * SiteAccessAware Repository layer is now used by default. If you need to load repository object in all translations, explicitly pass `\eZ\Publish\API\Repository\Values\Content\Language::ALL` as as prioritized languages list.
+
+* Changed `$valueFormat` type from `string` to `int` in `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications::__construct`  

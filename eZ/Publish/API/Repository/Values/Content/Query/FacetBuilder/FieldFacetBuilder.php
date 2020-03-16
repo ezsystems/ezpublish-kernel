@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\FieldFacetBuilder class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
@@ -19,10 +19,10 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  */
 class FieldFacetBuilder extends FacetBuilder
 {
-    const COUNT_ASC = 0;
-    const COUNT_DESC = 1;
-    const TERM_ASC = 2;
-    const TERM_DESC = 3;
+    public const COUNT_ASC = 0;
+    public const COUNT_DESC = 1;
+    public const TERM_ASC = 2;
+    public const TERM_DESC = 3;
 
     /**
      * The field paths starts with a field identifier and a sub path (for complex types).

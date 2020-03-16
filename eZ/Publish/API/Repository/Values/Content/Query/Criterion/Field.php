@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -26,7 +26,7 @@ class Field extends Criterion implements CustomFieldInterface
      */
     protected $customFields = [];
 
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [
             new Specifications(Operator::IN, Specifications::FORMAT_ARRAY),
@@ -50,7 +50,7 @@ class Field extends Criterion implements CustomFieldInterface
      * @param string $field
      * @param string $customField
      */
-    public function setCustomField($type, $field, $customField)
+    public function setCustomField(string $type, string $field, string $customField): void
     {
         $this->customFields[$type][$field] = $customField;
     }
@@ -63,9 +63,9 @@ class Field extends Criterion implements CustomFieldInterface
      * @param string $type
      * @param string $field
      *
-     * @return mixed
+     * @return string|null
      */
-    public function getCustomField($type, $field)
+    public function getCustomField(string $type, string $field): ?string
     {
         if (!isset($this->customFields[$type]) ||
              !isset($this->customFields[$type][$field])) {

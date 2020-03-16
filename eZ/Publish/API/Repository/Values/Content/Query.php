@@ -15,9 +15,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 class Query extends ValueObject
 {
-    const SORT_ASC = 'ascending';
-
-    const SORT_DESC = 'descending';
+    public const SORT_ASC = 'ascending';
+    public const SORT_DESC = 'descending';
 
     /**
      * The Query filter.
