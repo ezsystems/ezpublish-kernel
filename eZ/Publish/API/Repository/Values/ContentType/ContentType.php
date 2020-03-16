@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\ContentType\ContentType class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -38,13 +38,13 @@ use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
 abstract class ContentType extends ValueObject implements MultiLanguageName, MultiLanguageDescription
 {
     /** @var int Status constant for defined (aka "published") Type */
-    const STATUS_DEFINED = 0;
+    public const STATUS_DEFINED = 0;
 
     /** @var int Status constant for draft (aka "temporary") Type */
-    const STATUS_DRAFT = 1;
+    public const STATUS_DRAFT = 1;
 
     /** @var int Status constant for modified (aka "deferred for publishing") Type */
-    const STATUS_MODIFIED = 2;
+    public const STATUS_MODIFIED = 2;
 
     /**
      * Content type ID.

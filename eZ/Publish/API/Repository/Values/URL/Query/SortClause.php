@@ -15,8 +15,8 @@ use InvalidArgumentException;
  */
 abstract class SortClause
 {
-    const SORT_ASC = 'ascending';
-    const SORT_DESC = 'descending';
+    public const SORT_ASC = 'ascending';
+    public const SORT_DESC = 'descending';
 
     /**
      * Sort direction.

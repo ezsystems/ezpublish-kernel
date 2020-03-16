@@ -28,7 +28,7 @@ class BlockingLimitation extends Limitation
      * @param string $identifier The identifier of the limitation
      * @param array $limitationValues
      */
-    public function __construct($identifier, array $limitationValues)
+    public function __construct(string $identifier, array $limitationValues)
     {
         if (empty($identifier)) {
             throw new \InvalidArgumentException('Argument $identifier cannot be empty');
