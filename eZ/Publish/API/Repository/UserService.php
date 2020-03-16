@@ -101,7 +101,7 @@ interface UserService
      * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param UserGroupUpdateStruct $userGroupUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
