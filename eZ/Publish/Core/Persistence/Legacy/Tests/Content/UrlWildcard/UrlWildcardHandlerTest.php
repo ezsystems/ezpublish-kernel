@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcardHandlerTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
@@ -200,16 +200,16 @@ class UrlWildcardHandlerTest extends TestCase
     /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper */
     protected $mapper;
 
-    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler */
+    /** @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler */
     protected $urlWildcardHandler;
 
     /**
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getHandler()
+    protected function getHandler(): UrlWildcard\Handler
     {
         if (!isset($this->urlWildcardHandler)) {
-            $this->gateway = new DoctrineDatabase($this->getDatabaseHandler());
+            $this->gateway = new DoctrineDatabase($this->getDatabaseConnection());
             $this->mapper = new Mapper();
 
             $this->urlWildcardHandler = new Handler(

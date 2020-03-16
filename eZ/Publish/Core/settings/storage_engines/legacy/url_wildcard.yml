@@ -2,7 +2,7 @@ services:
     ezpublish.persistence.legacy.url_wildcard.gateway.inner:
         class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
         arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - '@ezpublish.api.storage_engine.legacy.connection'
 
     ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion:
         class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\ExceptionConversion

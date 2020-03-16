@@ -1,198 +1,135 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase UrlWildcard Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
- * UrlWildcard Gateway.
+ * URL wildcard gateway implementation using the Doctrine database.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence UrlWildcard Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
      * on 64 bit systems.
      */
-    const MAX_LIMIT = 1073741824;
+    private const MAX_LIMIT = 1073741824;
 
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
 
-    /**
-     * Creates a new DoctrineDatabase Section Gateway.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     */
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
+        $this->connection = $connection;
     }
 
-    /**
-     * Inserts the given UrlWildcard.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard $urlWildcard
-     *
-     * @return mixed
-     */
-    public function insertUrlWildcard(UrlWildcard $urlWildcard)
+    public function insertUrlWildcard(UrlWildcard $urlWildcard): int
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
-        $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto(
-            $this->dbHandler->quoteTable('ezurlwildcard')
-        )->set(
-            $this->dbHandler->quoteColumn('destination_url'),
-            $query->bindValue(
-                trim($urlWildcard->destinationUrl, '/ '),
-                null,
-                \PDO::PARAM_STR
-            )
-        )->set(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->getAutoIncrementValue('ezurlwildcard', 'id')
-        )->set(
-            $this->dbHandler->quoteColumn('source_url'),
-            $query->bindValue(
-                trim($urlWildcard->sourceUrl, '/ '),
-                null,
-                \PDO::PARAM_STR
-            )
-        )->set(
-            $this->dbHandler->quoteColumn('type'),
-            $query->bindValue(
-                $urlWildcard->forward ? 1 : 2,
-                null,
-                \PDO::PARAM_INT
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::URL_WILDCARD_TABLE)
+            ->values(
+                [
+                    'destination_url' => $query->createPositionalParameter(
+                        trim($urlWildcard->destinationUrl, '/ '),
+                        ParameterType::STRING
+                    ),
+                    'source_url' => $query->createPositionalParameter(
+                        trim($urlWildcard->sourceUrl, '/ '),
+                        ParameterType::STRING
+                    ),
+                    'type' => $query->createPositionalParameter(
+                        $urlWildcard->forward ? 1 : 2,
+                        ParameterType::INTEGER
+                    ),
+                ]
+            );
 
-        $query->prepare()->execute();
+        $query->execute();
 
-        return (int)$this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName('ezurlwildcard', 'id')
-        );
+        return (int)$this->connection->lastInsertId(self::URL_WILDCARD_SEQ);
     }
 
-    /**
-     * Deletes the UrlWildcard with given $id.
-     *
-     * @param mixed $id
-     */
-    public function deleteUrlWildcard($id)
+    public function deleteUrlWildcard(int $id): void
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom(
-            $this->dbHandler->quoteTable('ezurlwildcard')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($id, null, \PDO::PARAM_INT)
-            )
-        );
-        $query->prepare()->execute();
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::URL_WILDCARD_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            );
+        $query->execute();
     }
 
-    /**
-     * Loads an array with data about UrlWildcard with $id.
-     *
-     * @param mixed $id
-     *
-     * @return array
-     */
-    public function loadUrlWildcardData($id)
+    private function buildLoadUrlWildcardDataQuery(): QueryBuilder
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            '*'
-        )->from(
-            $this->dbHandler->quoteTable('ezurlwildcard')
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($id, null, \PDO::PARAM_INT)
-            )
-        );
-        $stmt = $query->prepare();
-        $stmt->execute();
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('id', 'destination_url', 'source_url', 'type')
+            ->from(self::URL_WILDCARD_TABLE);
 
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $query;
     }
 
-    /**
-     * Loads an array with data about UrlWildcards (paged).
-     *
-     * @param mixed $offset
-     * @param mixed $limit
-     *
-     * @return array
-     */
-    public function loadUrlWildcardsData($offset = 0, $limit = -1)
+    public function loadUrlWildcardData(int $id): array
     {
-        $limit = $limit === -1 ? self::MAX_LIMIT : $limit;
+        $query = $this->buildLoadUrlWildcardDataQuery();
+        $query
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            );
+        $result = $query->execute()->fetch(FetchMode::ASSOCIATIVE);
 
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            '*'
-        )->from(
-            $this->dbHandler->quoteTable('ezurlwildcard')
-        )->limit(
-            $limit > 0 ? $limit : self::MAX_LIMIT,
-            $offset
-        );
-
-        $stmt = $query->prepare();
-        $stmt->execute();
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return false !== $result ? $result : [];
     }
 
-    /**
-     * Loads the UrlWildcard with given $sourceUrl.
-     *
-     * @param string $sourceUrl
-     *
-     * @return array
-     */
+    public function loadUrlWildcardsData(int $offset = 0, int $limit = -1): array
+    {
+        $query = $this->buildLoadUrlWildcardDataQuery();
+        $query
+            ->setMaxResults($limit > 0 ? $limit : self::MAX_LIMIT)
+            ->setFirstResult($offset);
+
+        $stmt = $query->execute();
+
+        return $stmt->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
     public function loadUrlWildcardBySourceUrl(string $sourceUrl): array
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->dbHandler->getConnection();
-        $queryBuilder = $connection->createQueryBuilder();
-        $expr = $queryBuilder->expr();
-        $queryBuilder->select(
-            'id',
-            'destination_url',
-            'source_url',
-            'type'
-        )
-        ->from('ezurlwildcard')
-        ->where(
-            $expr->eq(
-                'source_url',
-                $queryBuilder->createNamedParameter($sourceUrl)
-            )
-        );
+        $query = $this->buildLoadUrlWildcardDataQuery();
+        $expr = $query->expr();
+        $query
+            ->where(
+                $expr->eq(
+                    'source_url',
+                    $query->createPositionalParameter($sourceUrl)
+                )
+            );
 
-        $result = $queryBuilder->execute()->fetch(FetchMode::ASSOCIATIVE);
+        $result = $query->execute()->fetch(FetchMode::ASSOCIATIVE);
 
-        return $result ?: [];
+        return false !== $result ? $result : [];
     }
 }

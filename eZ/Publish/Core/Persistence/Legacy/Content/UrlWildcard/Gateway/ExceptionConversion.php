@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
 use eZ\Publish\Core\Base\Exceptions\DatabaseException;
@@ -12,17 +14,20 @@ use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 
-class ExceptionConversion extends Gateway
+/**
+ * @internal Internal exception conversion layer.
+ */
+final class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway
      */
-    protected $innerGateway;
+    private $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway.
+     * Create a new exception conversion gateway around $innerGateway.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway $innerGateway
      */
@@ -31,7 +36,7 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    public function insertUrlWildcard(UrlWildcard $urlWildcard)
+    public function insertUrlWildcard(UrlWildcard $urlWildcard): int
     {
         try {
             return $this->innerGateway->insertUrlWildcard($urlWildcard);
@@ -40,25 +45,25 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function deleteUrlWildcard($id)
+    public function deleteUrlWildcard(int $id): void
     {
         try {
-            return $this->innerGateway->deleteUrlWildcard($id);
+            $this->innerGateway->deleteUrlWildcard($id);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function loadUrlWildcardData($parentId)
+    public function loadUrlWildcardData(int $id): array
     {
         try {
-            return $this->innerGateway->loadUrlWildcardData($parentId);
+            return $this->innerGateway->loadUrlWildcardData($id);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function loadUrlWildcardsData($offset = 0, $limit = -1)
+    public function loadUrlWildcardsData(int $offset = 0, int $limit = -1): array
     {
         try {
             return $this->innerGateway->loadUrlWildcardsData($offset, $limit);

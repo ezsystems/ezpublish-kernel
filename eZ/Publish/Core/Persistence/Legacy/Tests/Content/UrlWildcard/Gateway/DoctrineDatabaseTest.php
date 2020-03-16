@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
@@ -171,14 +171,14 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * Returns the DoctrineDatabase gateway to test.
+     * Return the DoctrineDatabase gateway to test.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getGateway()
+    protected function getGateway(): DoctrineDatabase
     {
         if (!isset($this->gateway)) {
-            $this->gateway = new DoctrineDatabase($this->getDatabaseHandler());
+            $this->gateway = new DoctrineDatabase($this->getDatabaseConnection());
         }
 
         return $this->gateway;
