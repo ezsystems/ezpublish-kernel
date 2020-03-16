@@ -104,6 +104,7 @@ final class InstallPlatformCommand extends Command
         if (!$input->getOption('skip-indexing')) {
             $this->indexData($output, $siteaccess);
         }
+
         return 0;
     }
 

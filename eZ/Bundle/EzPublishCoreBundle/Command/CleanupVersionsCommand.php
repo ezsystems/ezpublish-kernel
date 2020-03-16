@@ -230,6 +230,7 @@ EOT
             $removedVersionsCounter,
             $contentIdsCount
         ));
+
         return 0;
     }
 

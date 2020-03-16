@@ -2,7 +2,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 
 use Behat\Behat\Context\Context;
-use Behat\Symfony2Extension\Context\KernelDictionary;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;

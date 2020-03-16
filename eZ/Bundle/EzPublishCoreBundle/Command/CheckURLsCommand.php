@@ -106,6 +106,7 @@ class CheckURLsCommand extends Command
             $query->offset += $limit;
         }
         $progress->finish();
+
         return 0;
     }
 

@@ -146,6 +146,7 @@ EOT
         );
         $output->writeln("<info>Done. Deleted {$corruptedAliasesCount} entries.</info>");
         $output->writeln('<comment>Make sure to clear HTTP cache.</comment>');
+
         return 0;
     }
 

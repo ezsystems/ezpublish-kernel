@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 use eZ\Publish\Core\MVC\Symfony\Security\InteractiveLoginToken;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Security\Core\Role\Role;
 
 class InteractiveLoginTokenTest extends TestCase
 {
