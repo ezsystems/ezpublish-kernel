@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing a Test Case for LimitationType class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -20,14 +18,30 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
  */
 class SiteAccessLimitationTypeTest extends Base
 {
-    private $siteAccessList = ['ezdemo_site', 'eng', 'fre'];
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $siteAccessServiceMock;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->siteAccessServiceMock = $this->createMock(SiteAccess\SiteAccessServiceInterface::class);
+        $this->siteAccessServiceMock
+            ->method('getAll')
+            ->willReturn([
+                new SiteAccess('ezdemo_site'),
+                new SiteAccess('eng'),
+                new SiteAccess('fre'),
+            ]);
+    }
 
     /**
      * @return \eZ\Publish\Core\Limitation\SiteAccessLimitationType
      */
     public function testConstruct()
     {
-        return new SiteAccessLimitationType($this->siteAccessList);
+        return new SiteAccessLimitationType(
+            $this->siteAccessServiceMock
+        );
     }
 
     /**

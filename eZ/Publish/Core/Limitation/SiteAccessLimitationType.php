@@ -23,14 +23,13 @@ use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
  */
 class SiteAccessLimitationType implements SPILimitationTypeInterface
 {
-    /** @var array */
-    private $siteAccessList = [];
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface */
+    private $siteAccessService;
 
-    public function __construct(array $siteAccessList = [])
-    {
-        foreach ($siteAccessList as $sa) {
-            $this->siteAccessList[$this->generateSiteAccessValue($sa)] = $sa;
-        }
+    public function __construct(
+        SiteAccess\SiteAccessServiceInterface $siteAccessService
+    ) {
+        $this->siteAccessService = $siteAccessService;
     }
 
     /**
@@ -81,8 +80,9 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
     public function validate(APILimitationValue $limitationValue)
     {
         $validationErrors = [];
+        $siteAccessList = $this->getSiteAccessList();
         foreach ($limitationValue->limitationValues as $key => $value) {
-            if (!isset($this->siteAccessList[$value])) {
+            if (!isset($siteAccessList[$value])) {
                 $validationErrors[] = new ValidationError(
                     "\$limitationValue->limitationValues[%key%] => Invalid SiteAccess value \"$value\"",
                     null,
@@ -172,5 +172,18 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
     public function valueSchema()
     {
         throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getSiteAccessList(): array
+    {
+        $siteAccessList = [];
+        foreach ($this->siteAccessService->getAll() as $sa) {
+            $siteAccessList[$this->generateSiteAccessValue($sa->name)] = $sa->name;
+        }
+
+        return $siteAccessList;
     }
 }
