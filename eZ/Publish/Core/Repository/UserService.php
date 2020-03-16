@@ -125,7 +125,7 @@ class UserService implements UserServiceInterface
      * - the content type is determined via configuration and can be set to null.
      * The returned version is published.
      *
-     * @param APIUserGroupCreateStruct $userGroupCreateStruct a structure for setting all necessary data to create this user group
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct $userGroupCreateStruct a structure for setting all necessary data to create this user group
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $parentGroup
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
