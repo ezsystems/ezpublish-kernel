@@ -1,14 +1,15 @@
 <?php
 
 /**
- * File containing the ObjectState class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as APIObjectStateGroup;
 use eZ\Publish\Core\Repository\Values\MultiLanguageDescriptionTrait;
 use eZ\Publish\Core\Repository\Values\MultiLanguageNameTrait;
 use eZ\Publish\Core\Repository\Values\MultiLanguageTrait;
@@ -40,7 +41,7 @@ class ObjectState extends APIObjectState
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function getObjectStateGroup()
+    public function getObjectStateGroup(): APIObjectStateGroup
     {
         return $this->objectStateGroup;
     }
