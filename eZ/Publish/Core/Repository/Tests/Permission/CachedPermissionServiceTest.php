@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\PermissionCriterionHandlerTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Permission;
 
 /**
@@ -73,11 +73,18 @@ class CachedPermissionServiceTest extends TestCase
      */
     public function testPermissionResolverPassTrough($method, array $arguments, $expectedReturn)
     {
-        $this->getPermissionResolverMock([$method])
-            ->expects($this->once())
-            ->method($method)
-            ->with(...$arguments)
-            ->willReturn($expectedReturn);
+        if ($expectedReturn !== null) {
+            $this->getPermissionResolverMock([$method])
+                ->expects($this->once())
+                ->method($method)
+                ->with(...$arguments)
+                ->willReturn($expectedReturn);
+        } else {
+            $this->getPermissionResolverMock([$method])
+                ->expects($this->once())
+                ->method($method)
+                ->with(...$arguments);
+        }
 
         $cachedService = $this->getCachedPermissionService();
 
