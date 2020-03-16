@@ -155,6 +155,12 @@ services:
         tags:
             - { name: twig.extension }
 
+    eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\QueryRenderingExtension:
+        arguments:
+            - '@fragment.handler'
+        tags:
+            - { name: twig.extension }
+
     ezpublish.twig.extension.image:
         class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
         arguments:

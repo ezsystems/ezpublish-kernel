@@ -188,6 +188,20 @@ services:
     ezpublish.query_type.registry:
         class: eZ\Publish\Core\QueryType\ArrayQueryTypeRegistry
 
+    eZ\Publish\Core\Query\QueryFactory:
+        arguments:
+            $queryTypeRegistry: '@ezpublish.query_type.registry'
+
+    eZ\Publish\Core\Query\QueryFactoryInterface:
+        alias: eZ\Publish\Core\Query\QueryFactory
+
+    eZ\Publish\Core\Pagination\Pagerfanta\AdapterFactory\SearchHitAdapterFactory:
+        arguments:
+            $searchService: '@ezpublish.api.service.search'
+
+    eZ\Publish\Core\Pagination\Pagerfanta\AdapterFactory\SearchHitAdapterFactoryInterface:
+        alias: eZ\Publish\Core\Pagination\Pagerfanta\AdapterFactory\SearchHitAdapterFactory
+
     ezpublish.fields_groups.list:
         class: eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList
         factory: ["@ezpublish.fields_groups.list.repository_settings_factory", "build"]
@@ -212,8 +226,19 @@ services:
         tags:
             - { name: controller.service_arguments }
 
+    eZ\Publish\Core\MVC\Symfony\Controller\QueryRenderController:
+        arguments:
+            $queryFactory: '@eZ\Publish\Core\Query\QueryFactoryInterface'
+            $searchHitAdapterFactory: '@eZ\Publish\Core\Pagination\Pagerfanta\AdapterFactory\SearchHitAdapterFactoryInterface'
+        tags:
+            - { name: controller.service_arguments }
+
     ez_query:
         alias: ezpublish.controller.query
+        public: true
+
+    ez_query_render:
+        alias: 'eZ\Publish\Core\MVC\Symfony\Controller\QueryRenderController'
         public: true
 
     ezplatform.core.jms_translation.catalog_mapper_file_writer:
