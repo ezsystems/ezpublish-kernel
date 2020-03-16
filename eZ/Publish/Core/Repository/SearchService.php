@@ -243,11 +243,10 @@ class SearchService implements SearchServiceInterface
 
         $contentInfo = $this->searchHandler->findSingle($filter, $languageFilter);
 
-        return $this->repository->getContentService()->internalLoadContent(
+        return $this->repository->getContentService()->internalLoadContentById(
             $contentInfo->id,
             (!empty($languageFilter['languages']) ? $languageFilter['languages'] : null),
             null,
-            false,
             (isset($languageFilter['useAlwaysAvailable']) ? $languageFilter['useAlwaysAvailable'] : true)
         );
     }

@@ -49,9 +49,7 @@ class AliasGeneratorTest extends TestCase
     public function testGetVariationOfImageAsset()
     {
         $assetField = new Field([
-            'value' => new ImageAsset\Value([
-                'destinationContentId' => 486,
-            ]),
+            'value' => new ImageAsset\Value(486),
         ]);
         $imageField = new Field([
             'value' => new Image\Value([

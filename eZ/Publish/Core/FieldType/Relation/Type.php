@@ -241,7 +241,12 @@ class Type extends FieldType
      */
     public function fromHash($hash)
     {
-        return new Value($hash['destinationContentId']);
+        $destinationContentId = $hash['destinationContentId'];
+        if ($destinationContentId !== null) {
+            $destinationContentId = (int)$destinationContentId;
+        }
+
+        return new Value($destinationContentId);
     }
 
     /**
@@ -253,7 +258,14 @@ class Type extends FieldType
      */
     public function toHash(SPIValue $value)
     {
-        return ['destinationContentId' => $value->destinationContentId];
+        $destinationContentId = null;
+        if ($value->destinationContentId !== null) {
+            $destinationContentId = (int)$value->destinationContentId;
+        }
+
+        return [
+            'destinationContentId' => $destinationContentId,
+        ];
     }
 
     /**

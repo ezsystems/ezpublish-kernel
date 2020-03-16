@@ -226,7 +226,7 @@ class UserService implements UserServiceInterface
         $subUserGroups = [];
         foreach ($searchResult->searchHits as $searchHit) {
             $subUserGroups[] = $this->buildDomainUserGroupObject(
-                $this->repository->getContentService()->internalLoadContent(
+                $this->repository->getContentService()->internalLoadContentById(
                     $searchHit->valueObject->contentInfo->id,
                     $prioritizedLanguages
                 )
@@ -459,7 +459,7 @@ class UserService implements UserServiceInterface
     public function loadUser($userId, array $prioritizedLanguages = [])
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
-        $content = $this->repository->getContentService()->internalLoadContent($userId, $prioritizedLanguages);
+        $content = $this->repository->getContentService()->internalLoadContentById($userId, $prioritizedLanguages);
         // Get spiUser value from Field Value
         foreach ($content->getFields() as $field) {
             if (!$field->value instanceof UserValue) {
@@ -979,7 +979,7 @@ class UserService implements UserServiceInterface
         $userGroups = [];
         foreach ($searchResult->searchHits as $resultItem) {
             $userGroups[] = $this->buildDomainUserGroupObject(
-                $this->repository->getContentService()->internalLoadContent(
+                $this->repository->getContentService()->internalLoadContentById(
                     $resultItem->valueObject->contentInfo->id,
                     $prioritizedLanguages
                 )
@@ -1037,7 +1037,7 @@ class UserService implements UserServiceInterface
         foreach ($searchResult->searchHits as $resultItem) {
             $users[] = $this->buildDomainUserObject(
                 $this->userHandler->load($resultItem->valueObject->contentInfo->id),
-                $this->repository->getContentService()->internalLoadContent(
+                $this->repository->getContentService()->internalLoadContentById(
                     $resultItem->valueObject->contentInfo->id,
                     $prioritizedLanguages
                 )
@@ -1257,7 +1257,7 @@ class UserService implements UserServiceInterface
         array $prioritizedLanguages = []
     ) {
         if ($content === null) {
-            $content = $this->repository->getContentService()->internalLoadContent(
+            $content = $this->repository->getContentService()->internalLoadContentById(
                 $spiUser->id,
                 $prioritizedLanguages
             );
