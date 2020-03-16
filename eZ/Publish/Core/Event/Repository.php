@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
@@ -10,7 +16,7 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
-use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
@@ -118,7 +124,7 @@ final class Repository implements RepositoryInterface
         $this->userService = $userService;
     }
 
-    public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
+    public function sudo(callable $callback, ?RepositoryInterface $outerRepository = null)
     {
         return $this->repository->sudo($callback, $outerRepository);
     }
@@ -138,7 +144,7 @@ final class Repository implements RepositoryInterface
         $this->repository->rollback();
     }
 
-    public function getPermissionResolver(): PermissionResolver
+    public function getPermissionResolver(): PermissionResolverInterface
     {
         return $this->repository->getPermissionResolver();
     }

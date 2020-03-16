@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
 /**
@@ -32,7 +34,7 @@ interface Repository
      *
      * @return mixed
      */
-    public function sudo(callable $callback, Repository $outerRepository = null);
+    public function sudo(callable $callback, ?Repository $outerRepository = null);
 
     /**
      * Get Content Service.
@@ -41,7 +43,7 @@ interface Repository
      *
      * @return \eZ\Publish\API\Repository\ContentService
      */
-    public function getContentService();
+    public function getContentService(): ContentService;
 
     /**
      * Get Content Language Service.
@@ -50,7 +52,7 @@ interface Repository
      *
      * @return \eZ\Publish\API\Repository\LanguageService
      */
-    public function getContentLanguageService();
+    public function getContentLanguageService(): LanguageService;
 
     /**
      * Get Content Type Service.
@@ -60,7 +62,7 @@ interface Repository
      *
      * @return \eZ\Publish\API\Repository\ContentTypeService
      */
-    public function getContentTypeService();
+    public function getContentTypeService(): ContentTypeService;
 
     /**
      * Get Content Location Service.
@@ -69,7 +71,7 @@ interface Repository
      *
      * @return \eZ\Publish\API\Repository\LocationService
      */
-    public function getLocationService();
+    public function getLocationService(): LocationService;
 
     /**
      * Get Content Trash service.
@@ -79,7 +81,7 @@ interface Repository
      *
      * @return \eZ\Publish\API\Repository\TrashService
      */
-    public function getTrashService();
+    public function getTrashService(): TrashService;
 
     /**
      * Get Content Section Service.
@@ -88,7 +90,7 @@ interface Repository
      *
      * @return \eZ\Publish\API\Repository\SectionService
      */
-    public function getSectionService();
+    public function getSectionService(): SectionService;
 
     /**
      * Get Search Service.
@@ -97,7 +99,7 @@ interface Repository
      *
      * @return \eZ\Publish\API\Repository\SearchService
      */
-    public function getSearchService();
+    public function getSearchService(): SearchService;
 
     /**
      * Get User Service.
@@ -106,77 +108,77 @@ interface Repository
      *
      * @return \eZ\Publish\API\Repository\UserService
      */
-    public function getUserService();
+    public function getUserService(): UserService;
 
     /**
      * Get URLAliasService.
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
      */
-    public function getURLAliasService();
+    public function getURLAliasService(): URLAliasService;
 
     /**
      * Get URLWildcardService.
      *
      * @return \eZ\Publish\API\Repository\URLWildcardService
      */
-    public function getURLWildcardService();
+    public function getURLWildcardService(): URLWildcardService;
 
     /**
      * Get ObjectStateService.
      *
      * @return \eZ\Publish\API\Repository\ObjectStateService
      */
-    public function getObjectStateService();
+    public function getObjectStateService(): ObjectStateService;
 
     /**
      * Get RoleService.
      *
      * @return \eZ\Publish\API\Repository\RoleService
      */
-    public function getRoleService();
+    public function getRoleService(): RoleService;
 
     /**
      * Get FieldTypeService.
      *
      * @return \eZ\Publish\API\Repository\FieldTypeService
      */
-    public function getFieldTypeService();
+    public function getFieldTypeService(): FieldTypeService;
 
     /**
      * Get PermissionResolver.
      *
      * @return \eZ\Publish\API\Repository\PermissionResolver
      */
-    public function getPermissionResolver();
+    public function getPermissionResolver(): PermissionResolver;
 
     /**
      * Get URLService.
      *
      * @return \eZ\Publish\API\Repository\URLService
      */
-    public function getURLService();
+    public function getURLService(): URLService;
 
     /**
      * Get BookmarkService.
      *
      * @return \eZ\Publish\API\Repository\BookmarkService
      */
-    public function getBookmarkService();
+    public function getBookmarkService(): BookmarkService;
 
     /**
      * Get NotificationService.
      *
      * @return \eZ\Publish\API\Repository\NotificationService
      */
-    public function getNotificationService();
+    public function getNotificationService(): NotificationService;
 
     /**
      * Get UserPreferenceService.
      *
      * @return \eZ\Publish\API\Repository\UserPreferenceService
      */
-    public function getUserPreferenceService();
+    public function getUserPreferenceService(): UserPreferenceService;
 
     /**
      * Begin transaction.
@@ -184,7 +186,7 @@ interface Repository
      * Begins an transaction, make sure you'll call commit or rollback when done,
      * otherwise work will be lost.
      */
-    public function beginTransaction();
+    public function beginTransaction(): void;
 
     /**
      * Commit transaction.
@@ -193,7 +195,7 @@ interface Repository
      *
      * @throws \RuntimeException If no transaction has been started
      */
-    public function commit();
+    public function commit(): void;
 
     /**
      * Rollback transaction.
@@ -202,5 +204,5 @@ interface Repository
      *
      * @throws \RuntimeException If no transaction has been started
      */
-    public function rollback();
+    public function rollback(): void;
 }

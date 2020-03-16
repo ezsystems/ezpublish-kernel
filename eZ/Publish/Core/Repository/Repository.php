@@ -4,10 +4,32 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\PermissionCriterionResolver as PermissionCriterionResolverInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
+use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
+use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
+use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
+use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
+use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
+use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
+use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
+use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
+use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
+use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
+use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
+use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
+use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
+use eZ\Publish\API\Repository\URLService as URLServiceInterface;
+use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
+use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
+use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\Helper\NameSchemaService;
 use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
@@ -24,7 +46,6 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RuntimeException;
-use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 
 /**
  * Repository class.
@@ -283,7 +304,7 @@ class Repository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
+    public function sudo(callable $callback, ?RepositoryInterface $outerRepository = null)
     {
         return $this->getPermissionResolver()->sudo($callback, $outerRepository ?? $this);
     }
@@ -295,7 +316,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\ContentService
      */
-    public function getContentService()
+    public function getContentService(): ContentServiceInterface
     {
         if ($this->contentService !== null) {
             return $this->contentService;
@@ -322,7 +343,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\LanguageService
      */
-    public function getContentLanguageService()
+    public function getContentLanguageService(): LanguageServiceInterface
     {
         if ($this->languageService !== null) {
             return $this->languageService;
@@ -346,7 +367,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\ContentTypeService
      */
-    public function getContentTypeService()
+    public function getContentTypeService(): ContentTypeServiceInterface
     {
         if ($this->contentTypeService !== null) {
             return $this->contentTypeService;
@@ -373,7 +394,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\LocationService
      */
-    public function getLocationService()
+    public function getLocationService(): LocationServiceInterface
     {
         if ($this->locationService !== null) {
             return $this->locationService;
@@ -401,7 +422,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\TrashService
      */
-    public function getTrashService()
+    public function getTrashService(): TrashServiceInterface
     {
         if ($this->trashService !== null) {
             return $this->trashService;
@@ -427,7 +448,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\SectionService
      */
-    public function getSectionService()
+    public function getSectionService(): SectionServiceInterface
     {
         if ($this->sectionService !== null) {
             return $this->sectionService;
@@ -451,7 +472,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\UserService
      */
-    public function getUserService()
+    public function getUserService(): UserServiceInterface
     {
         if ($this->userService !== null) {
             return $this->userService;
@@ -474,7 +495,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
      */
-    public function getURLAliasService()
+    public function getURLAliasService(): URLAliasServiceInterface
     {
         if ($this->urlAliasService !== null) {
             return $this->urlAliasService;
@@ -496,7 +517,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\URLWildcardService
      */
-    public function getURLWildcardService()
+    public function getURLWildcardService(): URLWildcardServiceInterface
     {
         if ($this->urlWildcardService !== null) {
             return $this->urlWildcardService;
@@ -517,7 +538,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\URLService
      */
-    public function getURLService()
+    public function getURLService(): URLServiceInterface
     {
         if ($this->urlService !== null) {
             return $this->urlService;
@@ -537,7 +558,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\BookmarkService
      */
-    public function getBookmarkService()
+    public function getBookmarkService(): BookmarkServiceInterface
     {
         if ($this->bookmarkService === null) {
             $this->bookmarkService = new BookmarkService(
@@ -554,7 +575,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\UserPreferenceService
      */
-    public function getUserPreferenceService()
+    public function getUserPreferenceService(): UserPreferenceServiceInterface
     {
         if ($this->userPreferenceService === null) {
             $this->userPreferenceService = new UserPreferenceService(
@@ -571,7 +592,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\ObjectStateService
      */
-    public function getObjectStateService()
+    public function getObjectStateService(): ObjectStateServiceInterface
     {
         if ($this->objectStateService !== null) {
             return $this->objectStateService;
@@ -592,7 +613,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\RoleService
      */
-    public function getRoleService()
+    public function getRoleService(): RoleServiceInterface
     {
         if ($this->roleService !== null) {
             return $this->roleService;
@@ -630,7 +651,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\SearchService
      */
-    public function getSearchService()
+    public function getSearchService(): SearchServiceInterface
     {
         if ($this->searchService !== null) {
             return $this->searchService;
@@ -653,7 +674,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\FieldTypeService
      */
-    public function getFieldTypeService()
+    public function getFieldTypeService(): FieldTypeServiceInterface
     {
         if ($this->fieldTypeService !== null) {
             return $this->fieldTypeService;
@@ -669,7 +690,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\PermissionResolver
      */
-    public function getPermissionResolver()
+    public function getPermissionResolver(): PermissionResolverInterface
     {
         return $this->getCachedPermissionsResolver();
     }
@@ -685,7 +706,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
-    public function getNameSchemaService()
+    public function getNameSchemaService(): NameSchemaService
     {
         if ($this->nameSchemaService !== null) {
             return $this->nameSchemaService;
@@ -726,7 +747,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor
      */
-    protected function getRelationProcessor()
+    protected function getRelationProcessor(): RelationProcessor
     {
         return $this->relationProcessor;
     }
@@ -746,10 +767,8 @@ class Repository implements RepositoryInterface
      * Get PermissionCriterionResolver.
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
-     *
-     * @return \eZ\Publish\API\Repository\PermissionCriterionResolver
      */
-    protected function getPermissionCriterionResolver()
+    protected function getPermissionCriterionResolver(): PermissionCriterionResolverInterface
     {
         return $this->getCachedPermissionsResolver();
     }
@@ -784,7 +803,7 @@ class Repository implements RepositoryInterface
      * Begins an transaction, make sure you'll call commit or rollback when done,
      * otherwise work will be lost.
      */
-    public function beginTransaction()
+    public function beginTransaction(): void
     {
         $this->persistenceHandler->beginTransaction();
     }
@@ -794,9 +813,9 @@ class Repository implements RepositoryInterface
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
-    public function commit()
+    public function commit(): void
     {
         try {
             $this->persistenceHandler->commit();
@@ -810,9 +829,9 @@ class Repository implements RepositoryInterface
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
-    public function rollback()
+    public function rollback(): void
     {
         try {
             $this->persistenceHandler->rollback();
