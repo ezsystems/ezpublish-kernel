@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Content Gateway base class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -22,9 +20,9 @@ use Doctrine\DBAL\DBALException;
 use PDOException;
 
 /**
- * Base class for content gateways.
+ * @internal Internal exception conversion layer.
  */
-class ExceptionConversion extends Gateway
+final class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway.
@@ -43,29 +41,7 @@ class ExceptionConversion extends Gateway
         $this->innerGateway = $innerGateway;
     }
 
-    /**
-     * Get context definition for external storage layers.
-     *
-     * @return array
-     */
-    public function getContext()
-    {
-        try {
-            return $this->innerGateway->getContext();
-        } catch (DBALException | PDOException $e) {
-            throw DatabaseException::wrap($e);
-        }
-    }
-
-    /**
-     * Inserts a new content object.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
-     * @param mixed $currentVersionNo
-     *
-     * @return int ID
-     */
-    public function insertContentObject(CreateStruct $struct, $currentVersionNo = 1)
+    public function insertContentObject(CreateStruct $struct, int $currentVersionNo = 1): int
     {
         try {
             return $this->innerGateway->insertContentObject($struct, $currentVersionNo);
@@ -74,15 +50,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Inserts a new version.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
-     *
-     * @return int ID
-     */
-    public function insertVersion(VersionInfo $versionInfo, array $fields)
+    public function insertVersion(VersionInfo $versionInfo, array $fields): int
     {
         try {
             return $this->innerGateway->insertVersion($versionInfo, $fields);
@@ -91,17 +59,13 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Updates an existing content identified by $contentId in respect to $struct.
-     *
-     * @param int $contentId
-     * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $prePublishVersionInfo Provided on publish
-     */
-    public function updateContent($contentId, MetadataUpdateStruct $struct, VersionInfo $prePublishVersionInfo = null)
-    {
+    public function updateContent(
+        int $contentId,
+        MetadataUpdateStruct $struct,
+        ?VersionInfo $prePublishVersionInfo = null
+    ): void {
         try {
-            return $this->innerGateway->updateContent($contentId, $struct, $prePublishVersionInfo);
+            $this->innerGateway->updateContent($contentId, $struct, $prePublishVersionInfo);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
@@ -109,47 +73,28 @@ class ExceptionConversion extends Gateway
 
     /**
      * Updates version $versionNo for content identified by $contentId, in respect to $struct.
-     *
-     * @param int $contentId
-     * @param int $versionNo
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $struct
      */
-    public function updateVersion($contentId, $versionNo, UpdateStruct $struct)
+    public function updateVersion(int $contentId, int $versionNo, UpdateStruct $struct): void
     {
         try {
-            return $this->innerGateway->updateVersion($contentId, $versionNo, $struct);
+            $this->innerGateway->updateVersion($contentId, $versionNo, $struct);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Updates "always available" flag for content identified by $contentId, in respect to $alwaysAvailable.
-     *
-     * @param int $contentId
-     * @param bool $newAlwaysAvailable New "always available" value
-     */
-    public function updateAlwaysAvailableFlag($contentId, $newAlwaysAvailable)
-    {
+    public function updateAlwaysAvailableFlag(
+        int $contentId,
+        ?bool $newAlwaysAvailable = null
+    ): void {
         try {
-            return $this->innerGateway->updateAlwaysAvailableFlag($contentId, $newAlwaysAvailable);
+            $this->innerGateway->updateAlwaysAvailableFlag($contentId, $newAlwaysAvailable);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Sets the state of object identified by $contentId and $version to $state.
-     *
-     * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
-     *
-     * @param int $contentId
-     * @param int $version
-     * @param int $status
-     *
-     * @return bool
-     */
-    public function setStatus($contentId, $version, $status)
+    public function setStatus(int $contentId, int $version, int $status): bool
     {
         try {
             return $this->innerGateway->setStatus($contentId, $version, $status);
@@ -167,20 +112,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Inserts a new field.
-     *
-     * Only used when a new field is created (i.e. a new object or a field in a
-     * new language!). After that, field IDs need to stay the same, only the
-     * version number changes.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
-     *
-     * @return int ID
-     */
-    public function insertNewField(Content $content, Field $field, StorageFieldValue $value)
+    public function insertNewField(Content $content, Field $field, StorageFieldValue $value): int
     {
         try {
             return $this->innerGateway->insertNewField($content, $field, $value);
@@ -189,62 +121,40 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Inserts an existing field.
-     *
-     * Used to insert a field with an exsting ID but a new version number.
-     *
-     * @param Content $content
-     * @param Field $field
-     * @param StorageFieldValue $value
-     */
-    public function insertExistingField(Content $content, Field $field, StorageFieldValue $value)
-    {
+    public function insertExistingField(
+        Content $content,
+        Field $field,
+        StorageFieldValue $value
+    ): void {
         try {
-            return $this->innerGateway->insertExistingField($content, $field, $value);
+            $this->innerGateway->insertExistingField($content, $field, $value);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Updates an existing field.
-     *
-     * @param Field $field
-     * @param StorageFieldValue $value
-     */
-    public function updateField(Field $field, StorageFieldValue $value)
+    public function updateField(Field $field, StorageFieldValue $value): void
     {
         try {
-            return $this->innerGateway->updateField($field, $value);
+            $this->innerGateway->updateField($field, $value);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Updates an existing, non-translatable field.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
-     * @param int $contentId
-     */
     public function updateNonTranslatableField(
         Field $field,
         StorageFieldValue $value,
-        $contentId
-    ) {
+        int $contentId
+    ): void {
         try {
-            return $this->innerGateway->updateNonTranslatableField($field, $value, $contentId);
+            $this->innerGateway->updateNonTranslatableField($field, $value, $contentId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load($contentId, $version = null, array $translations = null)
+    public function load(int $contentId, ?int $version = null, ?array $translations = null): array
     {
         try {
             return $this->innerGateway->load($contentId, $version, $translations);
@@ -253,10 +163,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentList(array $contentIds, array $translations = null): array
+    public function loadContentList(array $contentIds, ?array $translations = null): array
     {
         try {
             return $this->innerGateway->loadContentList($contentIds, $translations);
@@ -265,16 +172,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Loads data for a content object identified by its remote ID.
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param mixed $remoteId
-     *
-     * @return array
-     */
-    public function loadContentInfoByRemoteId($remoteId)
+    public function loadContentInfoByRemoteId(string $remoteId): array
     {
         try {
             return $this->innerGateway->loadContentInfoByRemoteId($remoteId);
@@ -283,18 +181,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Loads info for a content object identified by its location ID (node ID).
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param int $locationId
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return array
-     */
-    public function loadContentInfoByLocationId($locationId)
+    public function loadContentInfoByLocationId(int $locationId): array
     {
         try {
             return $this->innerGateway->loadContentInfoByLocationId($locationId);
@@ -303,19 +190,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Loads info for content identified by $contentId.
-     * Will basically return a hash containing all field values for ezcontentobject table plus following keys:
-     *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
-     *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB".
-     *
-     * @param int $contentId
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     *
-     * @return array
-     */
-    public function loadContentInfo($contentId)
+    public function loadContentInfo(int $contentId): array
     {
         try {
             return $this->innerGateway->loadContentInfo($contentId);
@@ -324,7 +199,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadContentInfoList(array $contentIds)
+    public function loadContentInfoList(array $contentIds): array
     {
         try {
             return $this->innerGateway->loadContentInfoList($contentIds);
@@ -333,19 +208,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Loads version info for content identified by $contentId and $versionNo.
-     * Will basically return a hash containing all field values from ezcontentobject_version table plus following keys:
-     *  - names => Hash of content object names. Key is the language code, value is the name.
-     *  - languages => Hash of language ids. Key is the language code (e.g. "eng-GB"), value is the language numeric id without the always available bit.
-     *  - initial_language_code => Language code for initial language in this version.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
-     *
-     * @return array
-     */
-    public function loadVersionInfo($contentId, $versionNo = null)
+    public function loadVersionInfo(int $contentId, ?int $versionNo = null): array
     {
         try {
             return $this->innerGateway->loadVersionInfo($contentId, $versionNo);
@@ -354,14 +217,6 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns the number of all versions with given status created by the given $userId.
-     *
-     * @param int $userId
-     * @param int $status
-     *
-     * @return int
-     */
     public function countVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): int
     {
         try {
@@ -372,27 +227,23 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Returns data for all versions with given status created by the given $userId.
-     *
-     * @param int $userId
-     * @param int $status
-     *
      * @return string[][]
      */
-    public function listVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1)
+    public function listVersionsForUser(int $userId, int $status = VersionInfo::STATUS_DRAFT): array
     {
         try {
-            return $this->innerGateway->listVersionsForUser($userId, $status, $offset, $limit);
+            return $this->innerGateway->listVersionsForUser($userId, $status);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function loadVersionsForUser($userId, $status = VersionInfo::STATUS_DRAFT, int $offset = 0, int $limit = -1): array
-    {
+    public function loadVersionsForUser(
+        int $userId,
+        int $status = VersionInfo::STATUS_DRAFT,
+        int $offset = 0,
+        int $limit = -1
+    ): array {
         try {
             return $this->innerGateway->loadVersionsForUser($userId, $status, $offset, $limit);
         } catch (DBALException | PDOException $e) {
@@ -400,18 +251,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns all version data for the given $contentId.
-     *
-     * Result is returned with oldest version first (using version id as it has index and is auto increment).
-     *
-     * @param mixed $contentId
-     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
-     * @param int $limit Limit for items returned, -1 means none.
-     *
-     * @return string[][]
-     */
-    public function listVersions($contentId, $status = null, $limit = -1)
+    public function listVersions(int $contentId, ?int $status = null, int $limit = -1): array
     {
         try {
             return $this->innerGateway->listVersions($contentId, $status, $limit);
@@ -420,14 +260,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns all version numbers for the given $contentId.
-     *
-     * @param mixed $contentId
-     *
-     * @return int[]
-     */
-    public function listVersionNumbers($contentId)
+    public function listVersionNumbers(int $contentId): array
     {
         try {
             return $this->innerGateway->listVersionNumbers($contentId);
@@ -436,14 +269,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns last version number for content identified by $contentId.
-     *
-     * @param int $contentId
-     *
-     * @return int
-     */
-    public function getLastVersionNumber($contentId)
+    public function getLastVersionNumber(int $contentId): int
     {
         try {
             return $this->innerGateway->getLastVersionNumber($contentId);
@@ -452,14 +278,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns all IDs for locations that refer to $contentId.
-     *
-     * @param int $contentId
-     *
-     * @return int[]
-     */
-    public function getAllLocationIds($contentId)
+    public function getAllLocationIds(int $contentId): array
     {
         try {
             return $this->innerGateway->getAllLocationIds($contentId);
@@ -468,19 +287,11 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns all field IDs of $contentId grouped by their type.
-     * If $versionNo is set only field IDs for that version are returned.
-     * If $languageCode is set, only field IDs for that language are returned.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
-     * @param string|null $languageCode
-     *
-     * @return int[][]
-     */
-    public function getFieldIdsByType($contentId, $versionNo = null, $languageCode = null)
-    {
+    public function getFieldIdsByType(
+        int $contentId,
+        ?int $versionNo = null,
+        ?string $languageCode = null
+    ): array {
         try {
             return $this->innerGateway->getFieldIdsByType($contentId, $versionNo, $languageCode);
         } catch (DBALException | PDOException $e) {
@@ -488,140 +299,83 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Deletes relations to and from $contentId.
-     * If $versionNo is set only relations for that version are deleted.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
-     */
-    public function deleteRelations($contentId, $versionNo = null)
+    public function deleteRelations(int $contentId, ?int $versionNo = null): void
     {
         try {
-            return $this->innerGateway->deleteRelations($contentId, $versionNo);
+            $this->innerGateway->deleteRelations($contentId, $versionNo);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Removes relations to Content with $contentId from Relation and RelationList field type fields.
-     *
-     * @param int $contentId
-     */
-    public function removeReverseFieldRelations($contentId)
+    public function removeReverseFieldRelations(int $contentId): void
     {
         try {
-            return $this->innerGateway->removeReverseFieldRelations($contentId);
+            $this->innerGateway->removeReverseFieldRelations($contentId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Deletes the field with the given $fieldId.
-     *
-     * @param int $fieldId
-     */
-    public function deleteField($fieldId)
+    public function deleteField(int $fieldId): void
     {
         try {
-            return $this->innerGateway->deleteField($fieldId);
+            $this->innerGateway->deleteField($fieldId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Deletes all fields of $contentId in all versions.
-     * If $versionNo is set only fields for that version are deleted.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
-     */
-    public function deleteFields($contentId, $versionNo = null)
+    public function deleteFields(int $contentId, ?int $versionNo = null): void
     {
         try {
-            return $this->innerGateway->deleteFields($contentId, $versionNo);
+            $this->innerGateway->deleteFields($contentId, $versionNo);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Deletes all versions of $contentId.
-     * If $versionNo is set only that version is deleted.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
-     */
-    public function deleteVersions($contentId, $versionNo = null)
+    public function deleteVersions(int $contentId, ?int $versionNo = null): void
     {
         try {
-            return $this->innerGateway->deleteVersions($contentId, $versionNo);
+            $this->innerGateway->deleteVersions($contentId, $versionNo);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Deletes all names of $contentId.
-     * If $versionNo is set only names for that version are deleted.
-     *
-     * @param int $contentId
-     * @param int|null $versionNo
-     */
-    public function deleteNames($contentId, $versionNo = null)
+    public function deleteNames(int $contentId, ?int $versionNo = null): void
     {
         try {
-            return $this->innerGateway->deleteNames($contentId, $versionNo);
+            $this->innerGateway->deleteNames($contentId, $versionNo);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Sets the content object name.
-     *
-     * @param int $contentId
-     * @param int $version
-     * @param string $name
-     * @param string $language
-     */
-    public function setName($contentId, $version, $name, $language)
+    public function setName(int $contentId, int $version, string $name, string $languageCode): void
     {
         try {
-            return $this->innerGateway->setName($contentId, $version, $name, $language);
+            $this->innerGateway->setName($contentId, $version, $name, $languageCode);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Deletes the actual content object referred to by $contentId.
-     *
-     * @param int $contentId
-     */
-    public function deleteContent($contentId)
+    public function deleteContent(int $contentId): void
     {
         try {
-            return $this->innerGateway->deleteContent($contentId);
+            $this->innerGateway->deleteContent($contentId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Loads data of related to/from $contentId.
-     *
-     * @param int $contentId
-     * @param int $contentVersionNo
-     * @param int $relationType
-     *
-     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
-     */
-    public function loadRelations($contentId, $contentVersionNo = null, $relationType = null)
-    {
+    public function loadRelations(
+        int $contentId,
+        ?int $contentVersionNo = null,
+        ?int $relationType = null
+    ): array {
         try {
             return $this->innerGateway->loadRelations($contentId, $contentVersionNo, $relationType);
         } catch (DBALException | PDOException $e) {
@@ -629,9 +383,6 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function countReverseRelations(int $contentId, ?int $relationType = null): int
     {
         try {
@@ -641,15 +392,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Loads data of related to/from $contentId.
-     *
-     * @param int $contentId
-     * @param int $relationType
-     *
-     * @return mixed[][] Content data, array structured like {@see \eZ\Publish\Core\Persistence\Legacy\Content\Gateway::load()}
-     */
-    public function loadReverseRelations($contentId, $relationType = null)
+    public function loadReverseRelations(int $contentId, ?int $relationType = null): array
     {
         try {
             return $this->innerGateway->loadReverseRelations($contentId, $relationType);
@@ -658,44 +401,34 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function listReverseRelations(int $contentId, int $offset = 0, int $limit = -1, ?int $relationType = null): array
-    {
+    public function listReverseRelations(
+        int $contentId,
+        int $offset = 0,
+        int $limit = -1,
+        ?int $relationType = null
+    ): array {
         try {
-            return $this->innerGateway->listReverseRelations($contentId, $offset, $limit, $relationType);
-        } catch (DBALException | PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        }
-    }
-
-    /**
-     * Deletes the relation with the given $relationId.
-     *
-     * @param int $relationId
-     * @param int $type {@see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
-     *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
-     */
-    public function deleteRelation($relationId, $type)
-    {
-        try {
-            return $this->innerGateway->deleteRelation($relationId, $type);
+            return $this->innerGateway->listReverseRelations(
+                $contentId,
+                $offset,
+                $limit,
+                $relationType
+            );
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Inserts a new relation database record.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $struct
-     *
-     * @return int ID the inserted ID
-     */
-    public function insertRelation(RelationCreateStruct $struct)
+    public function deleteRelation(int $relationId, int $type): void
+    {
+        try {
+            $this->innerGateway->deleteRelation($relationId, $type);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
+        }
+    }
+
+    public function insertRelation(RelationCreateStruct $struct): int
     {
         try {
             return $this->innerGateway->insertRelation($struct);
@@ -704,14 +437,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns all Content IDs for a given $contentTypeId.
-     *
-     * @param int $contentTypeId
-     *
-     * @return int[]
-     */
-    public function getContentIdsByContentTypeId($contentTypeId)
+    public function getContentIdsByContentTypeId($contentTypeId): array
     {
         try {
             return $this->innerGateway->getContentIdsByContentTypeId($contentTypeId);
@@ -720,14 +446,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Load name data for set of content id's and corresponding version number.
-     *
-     * @param array[] $rows array of hashes with 'id' and 'version' to load names for
-     *
-     * @return array
-     */
-    public function loadVersionedNameData($rows)
+    public function loadVersionedNameData(array $rows): array
     {
         try {
             return $this->innerGateway->loadVersionedNameData($rows);
@@ -736,67 +455,54 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Batch method for copying all relation meta data for copied Content object.
-     *
-     * {@inheritdoc}
-     *
-     * @param int $originalContentId
-     * @param int $copiedContentId
-     * @param int|null $versionNo If specified only copy for a given version number, otherwise all.
-     */
-    public function copyRelations($originalContentId, $copiedContentId, $versionNo = null)
-    {
+    public function copyRelations(
+        int $originalContentId,
+        int $copiedContentId,
+        ?int $versionNo = null
+    ): void {
         try {
-            return $this->innerGateway->copyRelations($originalContentId, $copiedContentId, $versionNo);
+            $this->innerGateway->copyRelations($originalContentId, $copiedContentId, $versionNo);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Remove the specified translation from all the Versions of a Content Object.
-     *
-     * @param int $contentId
-     * @param string $languageCode language code of the translation
-     */
-    public function deleteTranslationFromContent($contentId, $languageCode)
+    public function deleteTranslationFromContent(int $contentId, string $languageCode): void
     {
         try {
-            return $this->innerGateway->deleteTranslationFromContent($contentId, $languageCode);
+            $this->innerGateway->deleteTranslationFromContent($contentId, $languageCode);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Delete Content fields (attributes) for the given Translation.
-     * If $versionNo is given, fields for that Version only will be deleted.
-     *
-     * @param string $languageCode
-     * @param int $contentId
-     * @param int $versionNo (optional) filter by versionNo
-     */
-    public function deleteTranslatedFields($languageCode, $contentId, $versionNo = null)
-    {
+    public function deleteTranslatedFields(
+        string $languageCode,
+        int $contentId,
+        ?int $versionNo = null
+    ): void {
         try {
-            return $this->innerGateway->deleteTranslatedFields($languageCode, $contentId, $versionNo);
+            $this->innerGateway->deleteTranslatedFields(
+                $languageCode,
+                $contentId,
+                $versionNo
+            );
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    /**
-     * Delete the specified Translation from the given Version.
-     *
-     * @param int $contentId
-     * @param int $versionNo
-     * @param string $languageCode
-     */
-    public function deleteTranslationFromVersion($contentId, $versionNo, $languageCode)
-    {
+    public function deleteTranslationFromVersion(
+        int $contentId,
+        int $versionNo,
+        string $languageCode
+    ): void {
         try {
-            return $this->innerGateway->deleteTranslationFromVersion($contentId, $versionNo, $languageCode);
+            $this->innerGateway->deleteTranslationFromVersion(
+                $contentId,
+                $versionNo,
+                $languageCode
+            );
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }

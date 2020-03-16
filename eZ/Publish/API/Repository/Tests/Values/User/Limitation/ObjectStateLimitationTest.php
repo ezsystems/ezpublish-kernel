@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
@@ -28,14 +29,14 @@ class ObjectStateLimitationTest extends BaseLimitationTest
     /**
      * Tests a ObjectStateLimitation.
      *
-     * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
-     *
      * @throws \ErrorException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
      */
     public function testObjectStateLimitationAllow()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
-
         $repository = $this->getRepository();
         $permissionResolver = $repository->getPermissionResolver();
 
@@ -98,6 +99,8 @@ class ObjectStateLimitationTest extends BaseLimitationTest
 
         $contentService->deleteContent($draft->contentInfo);
         /* END: Use Case */
+
+        $this->expectException(NotFoundException::class);
 
         $contentService->loadContent($draft->id);
     }

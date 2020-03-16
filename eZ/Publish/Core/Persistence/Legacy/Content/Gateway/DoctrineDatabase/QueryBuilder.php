@@ -1,272 +1,155 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase query builder class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase;
 
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use function time;
 
-class QueryBuilder
+/**
+ * @internal For internal use by the Content gateway.
+ */
+final class QueryBuilder
 {
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
 
-    /**
-     * The native Doctrine connection.
-     *
-     * Meant to be used to transition from eZ/Zeta interface to Doctrine.
-     *
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
-
-    /**
-     * Creates a new query builder.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     */
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
-        $this->connection = $dbHandler->getConnection();
-    }
-
-    /**
-     * Creates a select query for full content objects, used by Content `load`.
-     *
-     * Creates a select query with all necessary joins to fetch a complete
-     * content object. Does not apply any WHERE conditions unless
-     * translations are provided, and does not contain name data as it will
-     * lead to very large result set {@see createNamesQuery}.
-     *
-     * @param string[] $translations
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
-     */
-    public function createFindQuery(array $translations = null)
-    {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            // Content object
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'contentclass_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'section_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'owner_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'remote_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'current_version', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'initial_language_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'modified', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'published', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'status', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcontentobject'),
-            // Content object version
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'version', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'modified', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'creator_id', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'created', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'status', 'ezcontentobject_version'),
-            // @todo: remove ezcontentobject_version.contentobject_id from query as it duplicates ezcontentobject.id
-            $this->dbHandler->aliasedColumn($query, 'contentobject_id', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'initial_language_id', 'ezcontentobject_version'),
-            // Content object fields
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcontentobject_attribute'),
-            $this->dbHandler->aliasedColumn($query, 'contentclassattribute_id', 'ezcontentobject_attribute'),
-            $this->dbHandler->aliasedColumn($query, 'data_type_string', 'ezcontentobject_attribute'),
-            $this->dbHandler->aliasedColumn($query, 'language_code', 'ezcontentobject_attribute'),
-            $this->dbHandler->aliasedColumn($query, 'language_id', 'ezcontentobject_attribute'),
-            // @todo: remove ezcontentobject_attribute.version from query as it duplicates ezcontentobject_version.version
-            $this->dbHandler->aliasedColumn($query, 'version', 'ezcontentobject_attribute'),
-            // Content object field data
-            $this->dbHandler->aliasedColumn($query, 'data_float', 'ezcontentobject_attribute'),
-            $this->dbHandler->aliasedColumn($query, 'data_int', 'ezcontentobject_attribute'),
-            $this->dbHandler->aliasedColumn($query, 'data_text', 'ezcontentobject_attribute'),
-            $this->dbHandler->aliasedColumn($query, 'sort_key_int', 'ezcontentobject_attribute'),
-            $this->dbHandler->aliasedColumn($query, 'sort_key_string', 'ezcontentobject_attribute'),
-            // Content object locations
-            $this->dbHandler->aliasedColumn($query, 'main_node_id', 'ezcontentobject_tree')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject')
-        )->innerJoin(
-            $this->dbHandler->quoteTable('ezcontentobject_version'),
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_version'),
-                $this->dbHandler->quoteColumn('id', 'ezcontentobject')
-            )
-        )->innerJoin(
-            $this->dbHandler->quoteTable('ezcontentobject_attribute'),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_attribute'),
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_version')
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_attribute'),
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_version')
-                )
-            )
-        )->leftJoin(
-            $this->dbHandler->quoteTable('ezcontentobject_tree'),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_tree'),
-                    $this->dbHandler->quoteColumn('id', 'ezcontentobject')
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree'),
-                    $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree')
-                )
-            )
-        );
-
-        if (!empty($translations)) {
-            $query->where(
-                $query->expr->in(
-                    $this->dbHandler->quoteColumn('language_code', 'ezcontentobject_attribute'),
-                    $translations
-                )
-            );
-        }
-
-        return $query;
+        $this->connection = $connection;
     }
 
     /**
      * Create select query to query content name data.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    public function createNamesQuery()
+    public function createNamesQuery(): DoctrineQueryBuilder
     {
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query
             ->select(
-                $this->dbHandler->aliasedColumn($query, 'contentobject_id', 'ezcontentobject_name'),
-                $this->dbHandler->aliasedColumn($query, 'content_version', 'ezcontentobject_name'),
-                $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject_name'),
-                $this->dbHandler->aliasedColumn($query, 'content_translation', 'ezcontentobject_name')
+                'contentobject_id AS ezcontentobject_name_contentobject_id',
+                'content_version AS ezcontentobject_name_content_version',
+                'name AS ezcontentobject_name_name',
+                'content_translation AS ezcontentobject_name_content_translation'
             )
-            ->from($this->dbHandler->quoteTable('ezcontentobject_name'));
+            ->from(Gateway::CONTENT_NAME_TABLE);
 
         return $query;
     }
 
     /**
-     * Creates a select query for content relations.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     * Create a select query for content relations.
      */
-    public function createRelationFindQuery()
+    public function createRelationFindQueryBuilder(): DoctrineQueryBuilder
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'contentclassattribute_id', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'from_contentobject_id', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'from_contentobject_version', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'relation_type', 'ezcontentobject_link'),
-            $this->dbHandler->aliasedColumn($query, 'to_contentobject_id', 'ezcontentobject_link')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject_link')
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(
+                'l.id AS ezcontentobject_link_id',
+                'l.contentclassattribute_id AS ezcontentobject_link_contentclassattribute_id',
+                'l.from_contentobject_id AS ezcontentobject_link_from_contentobject_id',
+                'l.from_contentobject_version AS ezcontentobject_link_from_contentobject_version',
+                'l.relation_type AS ezcontentobject_link_relation_type',
+                'l.to_contentobject_id AS ezcontentobject_link_to_contentobject_id'
+            )
+            ->from(
+                Gateway::CONTENT_RELATION_TABLE, 'l'
+            );
 
         return $query;
     }
 
     /**
-     * Creates a select query for content version objects, used for version loading w/o fields.
+     * Create an update query for setting Content item Version status.
+     */
+    public function getSetVersionStatusQuery(
+        int $contentId,
+        int $versionNo,
+        int $versionStatus
+    ): DoctrineQueryBuilder {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(Gateway::CONTENT_VERSION_TABLE)
+            ->set('status', ':status')
+            ->set('modified', ':modified')
+            ->where('contentobject_id = :contentId')
+            ->andWhere('version = :versionNo')
+            ->setParameter('status', $versionStatus, ParameterType::INTEGER)
+            ->setParameter('modified', time(), ParameterType::INTEGER)
+            ->setParameter('contentId', $contentId, ParameterType::INTEGER)
+            ->setParameter('versionNo', $versionNo, ParameterType::INTEGER);
+
+        return $query;
+    }
+
+    /**
+     * Create a select query to load Content Info data.
+     *
+     * @see Gateway::loadContentInfo()
+     * @see Gateway::loadContentInfoList()
+     * @see Gateway::loadContentInfoByRemoteId()
+     * @see Gateway::loadContentInfoByLocationId()
+     */
+    public function createLoadContentInfoQueryBuilder(
+        bool $joinMainLocation = true
+    ): DoctrineQueryBuilder {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+
+        $joinCondition = $expr->eq('c.id', 't.contentobject_id');
+        if ($joinMainLocation) {
+            // wrap join condition with AND operator and join by a Main Location
+            $joinCondition = $expr->andX(
+                $joinCondition,
+                $expr->eq('t.node_id', 't.main_node_id')
+            );
+        }
+
+        $queryBuilder
+            ->select('c.*', 't.main_node_id AS ezcontentobject_tree_main_node_id')
+            ->from(Gateway::CONTENT_ITEM_TABLE, 'c')
+            ->leftJoin(
+                'c',
+                'ezcontentobject_tree',
+                't',
+                $joinCondition
+            );
+
+        return $queryBuilder;
+    }
+
+    /**
+     * Get query builder for content version objects, used for version loading w/o fields.
      *
      * Creates a select query with all necessary joins to fetch a complete
      * content object. Does not apply any WHERE conditions, and does not contain
      * name data as it will lead to large result set {@see createNamesQuery}.
-     *
-     * @deprecated Move to Doctrine based query builder {@see createVersionInfoQueryBuilder}.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    public function createVersionInfoFindQuery()
+    public function createVersionInfoFindQueryBuilder(): DoctrineQueryBuilder
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            // Content object version
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'version', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'modified', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'creator_id', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'created', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'status', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'contentobject_id', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'initial_language_id', 'ezcontentobject_version'),
-            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcontentobject_version'),
-            // Content main location
-            $this->dbHandler->aliasedColumn($query, 'main_node_id', 'ezcontentobject_tree'),
-            // Content object
-            // @todo: remove ezcontentobject.d from query as it duplicates ezcontentobject_version.contentobject_id
-            $this->dbHandler->aliasedColumn($query, 'id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'contentclass_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'section_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'owner_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'remote_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'current_version', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'initial_language_id', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'modified', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'published', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'status', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'is_hidden', 'ezcontentobject')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject_version')
-        )->innerJoin(
-            $this->dbHandler->quoteTable('ezcontentobject'),
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-                $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_version')
-            )
-        )->leftJoin(
-            $this->dbHandler->quoteTable('ezcontentobject_tree'),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_tree'),
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_version')
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree'),
-                    $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree')
-                )
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
 
-        return $query;
-    }
-
-    /**
-     * Create a doctrine query builder with db fields needed to populate VersionInfo.
-     *
-     * @param int|null $versionNo Selects current version number if left undefined as null.
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    public function createVersionInfoQueryBuilder($versionNo = null)
-    {
-        $queryBuilder = $this->connection->createQueryBuilder();
-        $expr = $queryBuilder->expr();
-        $queryBuilder
+        $query
             ->select(
+                'v.id AS ezcontentobject_version_id',
+                'v.version AS ezcontentobject_version_version',
+                'v.modified AS ezcontentobject_version_modified',
+                'v.creator_id AS ezcontentobject_version_creator_id',
+                'v.created AS ezcontentobject_version_created',
+                'v.status AS ezcontentobject_version_status',
+                'v.contentobject_id AS ezcontentobject_version_contentobject_id',
+                'v.initial_language_id AS ezcontentobject_version_initial_language_id',
+                'v.language_mask AS ezcontentobject_version_language_mask',
+                // Content main location
+                't.main_node_id AS ezcontentobject_tree_main_node_id',
+                // Content object
                 'c.id AS ezcontentobject_id',
                 'c.contentclass_id AS ezcontentobject_contentclass_id',
                 'c.section_id AS ezcontentobject_section_id',
@@ -279,37 +162,25 @@ class QueryBuilder
                 'c.status AS ezcontentobject_status',
                 'c.name AS ezcontentobject_name',
                 'c.language_mask AS ezcontentobject_language_mask',
-                'c.is_hidden AS ezcontentobject_is_hidden',
-                'v.id AS ezcontentobject_version_id',
-                'v.version AS ezcontentobject_version_version',
-                'v.modified AS ezcontentobject_version_modified',
-                'v.creator_id AS ezcontentobject_version_creator_id',
-                'v.created AS ezcontentobject_version_created',
-                'v.status AS ezcontentobject_version_status',
-                'v.language_mask AS ezcontentobject_version_language_mask',
-                'v.initial_language_id AS ezcontentobject_version_initial_language_id',
-                't.main_node_id AS ezcontentobject_tree_main_node_id'
+                'c.is_hidden AS ezcontentobject_is_hidden'
             )
-            ->from('ezcontentobject', 'c')
+            ->from(Gateway::CONTENT_VERSION_TABLE, 'v')
             ->innerJoin(
-                'c',
-                'ezcontentobject_version',
                 'v',
-                $expr->andX(
-                    $expr->eq('c.id', 'v.contentobject_id'),
-                    $expr->eq('v.version', $versionNo ?: 'c.current_version')
-                )
+                Gateway::CONTENT_ITEM_TABLE,
+                'c',
+                $expr->eq('c.id', 'v.contentobject_id')
             )
             ->leftJoin(
-                'c',
+                'v',
                 'ezcontentobject_tree',
                 't',
                 $expr->andX(
-                    $expr->eq('c.id', 't.contentobject_id'),
-                    $expr->eq('t.node_id', 't.main_node_id')
+                    $expr->eq('t.contentobject_id', 'v.contentobject_id'),
+                    $expr->eq('t.main_node_id', 't.node_id')
                 )
             );
 
-        return $queryBuilder;
+        return $query;
     }
 }

@@ -969,23 +969,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @param string $expectedException
      *
      * @dataProvider provideInvalidUpdateFieldData
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentFails($failingValue, $expectedException)
     {
-        try {
-            $this->updateContent($failingValue);
-
-            $this->fail('Expected exception not thrown.');
-        } catch (PHPUnit_Framework_AssertionFailedError $e) {
-            throw $e;
-        } catch (Exception $e) {
-            $this->assertInstanceOf(
-                $expectedException,
-                $e,
-                get_class($e) . ': ' . $e->getMessage()
-            );
-        }
+        $this->expectException($expectedException);
+        $this->updateContent($failingValue);
     }
 
     protected function removeFieldDefinition()
