@@ -606,13 +606,13 @@ class Handler implements UrlAliasHandlerInterface
     public function loadUrlAlias($id)
     {
         list($parentId, $textMD5) = explode('-', $id);
-        $data = $this->gateway->loadRow($parentId, $textMD5);
+        $data = $this->gateway->loadRow((int)$parentId, $textMD5);
 
         if (empty($data)) {
             throw new NotFoundException('URLAlias', $id);
         }
 
-        $data['raw_path_data'] = $this->gateway->loadPathData($data['id']);
+        $data['raw_path_data'] = $this->gateway->loadPathData((int)$data['id']);
 
         return $this->mapper->extractUrlAliasFromData($data);
     }
