@@ -601,13 +601,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a ready to test DoctrineDatabase gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getDatabaseGateway()
+    protected function getDatabaseGateway(): DoctrineDatabase
     {
         if (!isset($this->databaseGateway)) {
             $this->databaseGateway = new DoctrineDatabase(
-                $this->getDatabaseHandler(),
+                $this->getDatabaseConnection(),
                 $this->getLanguageMaskGenerator()
             );
         }

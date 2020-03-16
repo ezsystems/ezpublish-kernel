@@ -1,168 +1,133 @@
 <?php
 
 /**
- * File containing the ObjectState Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
- * ObjectState Gateway.
+ * Base class for Object State gateways.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
-    /**
-     * Loads data for an object state.
-     *
-     * @param mixed $stateId
-     *
-     * @return array
-     */
-    abstract public function loadObjectStateData($stateId);
+    public const OBJECT_STATE_TABLE = 'ezcobj_state';
+    public const OBJECT_STATE_LANGUAGE_TABLE = 'ezcobj_state_language';
+    public const OBJECT_STATE_GROUP_TABLE = 'ezcobj_state_group';
+    public const OBJECT_STATE_GROUP_LANGUAGE_TABLE = 'ezcobj_state_group_language';
+    public const OBJECT_STATE_LINK_TABLE = 'ezcobj_state_link';
+
+    public const OBJECT_STATE_TABLE_SEQ = 'ezcobj_state_id_seq';
+    public const OBJECT_STATE_GROUP_TABLE_SEQ = 'ezcobj_state_group_id_seq';
 
     /**
-     * Loads data for an object state by identifier.
-     *
-     * @param string $identifier
-     * @param mixed $groupId
-     *
-     * @return array
+     * Load data for an object state.
      */
-    abstract public function loadObjectStateDataByIdentifier($identifier, $groupId);
+    abstract public function loadObjectStateData(int $stateId): array;
 
     /**
-     * Loads data for all object states belonging to group with $groupId ID.
-     *
-     * @param mixed $groupId
-     *
-     * @return array
+     * Load data for an object state by identifier.
      */
-    abstract public function loadObjectStateListData($groupId);
+    abstract public function loadObjectStateDataByIdentifier(
+        string $identifier,
+        int $groupId
+    ): array;
 
     /**
-     * Loads data for an object state group.
-     *
-     * @param mixed $groupId
-     *
-     * @return array
+     * Load data for all object states belonging to group with $groupId ID.
      */
-    abstract public function loadObjectStateGroupData($groupId);
+    abstract public function loadObjectStateListData(int $groupId): array;
 
     /**
-     * Loads data for an object state group by identifier.
-     *
-     * @param string $identifier
-     *
-     * @return array
+     * Load data for an object state group.
      */
-    abstract public function loadObjectStateGroupDataByIdentifier($identifier);
+    abstract public function loadObjectStateGroupData(int $groupId): array;
 
     /**
-     * Loads data for all object state groups, filtered by $offset and $limit.
-     *
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return array
+     * Load data for an object state group by identifier.
      */
-    abstract public function loadObjectStateGroupListData($offset, $limit);
+    abstract public function loadObjectStateGroupDataByIdentifier(string $identifier): array;
 
     /**
-     * Inserts a new object state into database.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
-     * @param int $groupId
+     * Load data for all object state groups, filtered by $offset and $limit.
      */
-    abstract public function insertObjectState(ObjectState $objectState, $groupId);
+    abstract public function loadObjectStateGroupListData(int $offset, int $limit): array;
 
     /**
-     * Updates the stored object state with provided data.
+     * Insert a new object state into database.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState $objectState
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function updateObjectState(ObjectState $objectState);
+    abstract public function insertObjectState(ObjectState $objectState, int $groupId): void;
 
     /**
-     * Deletes object state identified by $stateId.
+     * Update the stored object state with provided data.
      *
-     * @param int $stateId
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function deleteObjectState($stateId);
+    abstract public function updateObjectState(ObjectState $objectState): void;
+
+    /**
+     * Delete object state identified by $stateId.
+     */
+    abstract public function deleteObjectState(int $stateId): void;
 
     /**
      * Update object state links from $oldStateId to $newStateId.
-     *
-     * @param int $oldStateId
-     * @param int $newStateId
      */
-    abstract public function updateObjectStateLinks($oldStateId, $newStateId);
+    abstract public function updateObjectStateLinks(int $oldStateId, int $newStateId): void;
 
     /**
-     * Deletes object state links identified by $stateId.
-     *
-     * @param int $stateId
+     * Delete object state links identified by $stateId.
      */
-    abstract public function deleteObjectStateLinks($stateId);
+    abstract public function deleteObjectStateLinks(int $stateId): void;
 
     /**
-     * Inserts a new object state group into database.
+     * Insert a new object state group into database.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if Object State Group language does not exist
      */
-    abstract public function insertObjectStateGroup(Group $objectStateGroup);
+    abstract public function insertObjectStateGroup(Group $objectStateGroup): void;
 
     /**
-     * Updates the stored object state group with provided data.
+     * Update the stored object state group with provided data.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Group $objectStateGroup
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    abstract public function updateObjectStateGroup(Group $objectStateGroup);
+    abstract public function updateObjectStateGroup(Group $objectStateGroup): void;
 
     /**
-     * Deletes the object state group identified by $groupId.
-     *
-     * @param mixed $groupId
+     * Delete the object state group identified by $groupId.
      */
-    abstract public function deleteObjectStateGroup($groupId);
+    abstract public function deleteObjectStateGroup(int $groupId): void;
 
     /**
-     * Sets the object state $stateId to content with $contentId ID.
-     *
-     * @param mixed $contentId
-     * @param mixed $groupId
-     * @param mixed $stateId
+     * Set the object state $stateId to content with $contentId ID.
      */
-    abstract public function setContentState($contentId, $groupId, $stateId);
+    abstract public function setContentState(int $contentId, int $groupId, int $stateId): void;
 
     /**
-     * Loads object state data for $contentId content from $stateGroupId state group.
-     *
-     * @param int $contentId
-     * @param int $stateGroupId
-     *
-     * @return array
+     * Load object state data for $contentId content from $stateGroupId state group.
      */
-    abstract public function loadObjectStateDataForContent($contentId, $stateGroupId);
+    abstract public function loadObjectStateDataForContent(
+        int $contentId,
+        int $stateGroupId
+    ): array;
 
     /**
-     * Returns the number of objects which are in this state.
-     *
-     * @param mixed $stateId
-     *
-     * @return int
+     * Return the number of objects which are in this state.
      */
-    abstract public function getContentCount($stateId);
+    abstract public function getContentCount(int $stateId): int;
 
     /**
-     * Updates the object state priority to provided value.
-     *
-     * @param mixed $stateId
-     * @param int $priority
+     * Update the object state priority to provided value.
      */
-    abstract public function updateObjectStatePriority($stateId, $priority);
+    abstract public function updateObjectStatePriority(int $stateId, int $priority): void;
 }
