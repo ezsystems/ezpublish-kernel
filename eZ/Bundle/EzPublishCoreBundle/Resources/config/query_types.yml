@@ -6,27 +6,27 @@ services:
 
     eZ\Publish\Core\QueryType\BuiltIn\AncestorsQueryType:
         tags:
-            - { name: ezpublish.query_type, alias: 'eZ:Ancestors' }
+            - { name: ezpublish.query_type, alias: 'Ancestors' }
 
     eZ\Publish\Core\QueryType\BuiltIn\ChildrenQueryType:
         tags:
-            - { name: ezpublish.query_type, alias: 'eZ:Children' }
+            - { name: ezpublish.query_type, alias: 'Children' }
 
     eZ\Publish\Core\QueryType\BuiltIn\SiblingsQueryType:
         tags:
-            - { name: ezpublish.query_type, alias: 'eZ:Siblings' }
+            - { name: ezpublish.query_type, alias: 'Siblings' }
 
     eZ\Publish\Core\QueryType\BuiltIn\RelatedToContentQueryType:
         tags:
-            - { name: ezpublish.query_type, alias: 'eZ:RelatedTo' }
+            - { name: ezpublish.query_type, alias: 'RelatedTo' }
 
     eZ\Publish\Core\QueryType\BuiltIn\GeoLocationQueryType:
         tags:
-            - { name: ezpublish.query_type, alias: 'eZ:GeoLocation' }
+            - { name: ezpublish.query_type, alias: 'GeoLocation' }
 
     eZ\Publish\Core\QueryType\BuiltIn\SubtreeQueryType:
         tags:
-            - { name: ezpublish.query_type, alias: 'eZ:Subtree' }
+            - { name: ezpublish.query_type, alias: 'Subtree' }
 
     eZ\Publish\Core\QueryType\BuiltIn\SortClausesFactory:
         arguments:
