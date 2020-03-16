@@ -225,7 +225,7 @@ interface UserService
      * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param UserUpdateStruct $userUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *@throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
