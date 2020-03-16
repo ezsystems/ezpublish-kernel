@@ -27,10 +27,6 @@ class QueryControllerContext extends RawMinkContext implements Context
      */
     private $matchedContent;
 
-    /**
-     * QueryControllerContext constructor.
-     * @injectService $repository @ezpublish.api.repository
-     */
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;
