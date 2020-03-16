@@ -45,8 +45,8 @@ class Application extends BaseApplication
 
         // @todo Contribute a console.init event to Symfony4 in order to rather use that in v3 to drop doRun() overload
         $this->kernel->getContainer()->get('event_dispatcher')->dispatch(
-            MVCEvents::CONSOLE_INIT,
-            new ConsoleInitEvent($input, $output)
+            new ConsoleInitEvent($input, $output),
+            MVCEvents::CONSOLE_INIT
         );
 
         return parent::doRun($input, $output);
