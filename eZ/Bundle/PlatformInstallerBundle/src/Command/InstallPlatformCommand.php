@@ -251,7 +251,7 @@ final class InstallPlatformCommand extends Command
 
         $process = new Process([$php, $console, $cmd], null, null, null, $timeout);
         $process->run(function ($type, $buffer) use ($output) { $output->write($buffer, false); });
-        if (!$process->isSuccessful()) {
+        if (!$process->getExitCode() === 1) {
             throw new \RuntimeException(sprintf('An error occurred when executing the "%s" command.', escapeshellarg($cmd)));
         }
     }
