@@ -10,12 +10,6 @@ parameters:
     ezpublish.twig.extension.filesize.suffixes: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB']
 
 services:
-    # Enable Twig intl extension
-    twig.extension.intl:
-        class: Twig\Extensions\IntlExtension
-        tags:
-            - {name: twig.extension}
-
     ezpublish.twig.extension.content:
         class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
         arguments:
