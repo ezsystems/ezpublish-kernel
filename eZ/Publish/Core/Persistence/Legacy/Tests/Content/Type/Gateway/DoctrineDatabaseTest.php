@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -476,7 +474,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     /**
      * @dataProvider getTypeCreationExpectations
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertType
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertTypeNameData
      */
     public function testInsertType($column, $expectation)
@@ -515,7 +512,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     /**
      * @dataProvider getTypeCreationContentClassNameExpectations
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertType
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
      */
     public function testInsertTypeContentClassName($column, $expectation)
     {
@@ -604,7 +600,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'can_translate' => '1',
                     'is_required' => '1',
                     'is_information_collector' => '1',
-                    'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
                     'version' => '1',
 
                     'data_float1' => '0.1',
@@ -636,7 +631,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'can_translate',
                     'is_required',
                     'is_information_collector',
-                    'serialized_data_text',
                     'version',
                     'data_float1',
                     'data_float2',
@@ -882,7 +876,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateType
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
      * @dataProvider getTypeUpdateExpectations
      */
     public function testUpdateType($fieldName, $expectedValue)
@@ -1259,16 +1252,16 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns the DoctrineDatabase gateway to test.
+     * Return the DoctrineDatabase gateway to test.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getGateway()
+    protected function getGateway(): DoctrineDatabase
     {
         if (!isset($this->gateway)) {
             $this->gateway = new DoctrineDatabase(
-                $this->getDatabaseHandler(),
                 $this->getDatabaseConnection(),
+                $this->getSharedGateway(),
                 $this->getLanguageMaskGenerator()
             );
         }

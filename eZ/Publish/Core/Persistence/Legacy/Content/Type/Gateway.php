@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the Content Type Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
@@ -15,282 +15,146 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStr
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 /**
- * Base class for content type gateways.
+ * Content Type Gateway.
+ *
+ * @internal For internal use by Persistence Handlers.
  */
 abstract class Gateway
 {
-    /**
-     * Inserts the given $group.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $group
-     *
-     * @return mixed Group ID
-     */
-    abstract public function insertGroup(Group $group);
+    public const CONTENT_TYPE_TO_GROUP_ASSIGNMENT_TABLE = 'ezcontentclass_classgroup';
+    public const CONTENT_TYPE_GROUP_TABLE = 'ezcontentclassgroup';
+    public const CONTENT_TYPE_TABLE = 'ezcontentclass';
+    public const CONTENT_TYPE_NAME_TABLE = 'ezcontentclass_name';
+    public const FIELD_DEFINITION_TABLE = 'ezcontentclass_attribute';
+    public const MULTILINGUAL_FIELD_DEFINITION_TABLE = 'ezcontentclass_attribute_ml';
+
+    public const CONTENT_TYPE_GROUP_SEQ = 'ezcontentclassgroup_id_seq';
+    public const CONTENT_TYPE_SEQ = 'ezcontentclass_id_seq';
+    public const FIELD_DEFINITION_SEQ = 'ezcontentclass_attribute_id_seq';
+
+    abstract public function insertGroup(Group $group): int;
+
+    abstract public function updateGroup(GroupUpdateStruct $group): void;
+
+    abstract public function countTypesInGroup(int $groupId): int;
+
+    abstract public function countGroupsForType(int $typeId, int $status): int;
+
+    abstract public function deleteGroup(int $groupId): void;
 
     /**
-     * Updates a group with data in $group.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $group
-     */
-    abstract public function updateGroup(GroupUpdateStruct $group);
-
-    /**
-     * Returns the number of types in a certain group.
-     *
-     * @param int $groupId
-     *
-     * @return int
-     */
-    abstract public function countTypesInGroup($groupId);
-
-    /**
-     * Returns the number of Groups the type is assigned to.
-     *
-     * @param int $typeId
-     * @param int $status
-     *
-     * @return int
-     */
-    abstract public function countGroupsForType($typeId, $status);
-
-    /**
-     * Deletes the Group with the given $groupId.
-     *
-     * @param int $groupId
-     */
-    abstract public function deleteGroup($groupId);
-
-    /**
-     * Returns an array with data about the Group(s) with $groupIds.
-     *
      * @param int[] $groupIds
-     *
-     * @return array
      */
-    abstract public function loadGroupData(array $groupIds);
+    abstract public function loadGroupData(array $groupIds): array;
+
+    abstract public function loadGroupDataByIdentifier(string $identifier): array;
+
+    abstract public function loadAllGroupsData(): array;
 
     /**
-     * Returns an array with data about the Group with $identifier.
-     *
-     * @param string $identifier
-     *
-     * @return array
+     * Load data for all Content Types of the given status, belonging to the given Group.
      */
-    abstract public function loadGroupDataByIdentifier($identifier);
+    abstract public function loadTypesDataForGroup(int $groupId, int $status): array;
 
     /**
-     * Returns an array with data about all Group objects.
-     *
-     * @return array
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the given language does not exist
      */
-    abstract public function loadAllGroupsData();
+    abstract public function insertType(Type $type, ?int $typeId = null): int;
 
     /**
-     * Loads data for all Types in $status in $groupId.
+     * Assign a Content Type of the given status (published, draft) to Content Type Group.
      *
-     * @param mixed $groupId
-     * @param int $status
-     *
-     * @return string[][]
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the given Group does not exist
      */
-    abstract public function loadTypesDataForGroup($groupId, $status);
+    abstract public function insertGroupAssignment(int $groupId, int $typeId, int $status): void;
 
     /**
-     * Inserts a new content type.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
-     * @param mixed|null $typeId
-     *
-     * @return mixed Type ID
+     * Delete a Group assignments for Content Type of the given status (published, draft).
      */
-    abstract public function insertType(Type $type, $typeId = null);
+    abstract public function deleteGroupAssignment(int $groupId, int $typeId, int $status): void;
 
     /**
-     * Insert assignment of $typeId to $groupId.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     * @param mixed $groupId
+     * @param int $id Field Definition ID
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
-    abstract public function insertGroupAssignment($typeId, $status, $groupId);
+    abstract public function loadFieldDefinition(int $id, int $status): array;
 
     /**
-     * Deletes a group assignments for a Type.
-     *
-     * @param mixed $groupId
-     * @param mixed $typeId
-     * @param int $status
-     */
-    abstract public function deleteGroupAssignment($groupId, $typeId, $status);
-
-    /**
-     * Loads an array with data about field definition referred $id and $status.
-     *
-     * @param mixed $id field definition id
-     * @param int $status field definition status
-     *
-     * @return array Data rows.
-     */
-    abstract public function loadFieldDefinition($id, $status);
-
-    /**
-     * Inserts a $fieldDefinition for $typeId.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
-     *
-     * @return mixed Field definition ID
+     * Insert a Field Definition into Content Type.
      */
     abstract public function insertFieldDefinition(
-        $typeId,
-        $status,
+        int $typeId,
+        int $status,
         FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
-    );
+    ): int;
 
-    /**
-     * Deletes a field definition.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     * @param mixed $fieldDefinitionId
-     */
-    abstract public function deleteFieldDefinition($typeId, $status, $fieldDefinitionId);
+    abstract public function deleteFieldDefinition(
+        int $typeId,
+        int $status,
+        int $fieldDefinitionId
+    ): void;
 
-    /**
-     * Updates a $fieldDefinition for $typeId.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
-     */
     abstract public function updateFieldDefinition(
-        $typeId,
-        $status,
+        int $typeId,
+        int $status,
         FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
-    );
+    ): void;
 
     /**
-     * Update a type with $updateStruct.
+     * Update a Content Type based on the given SPI Persistence Type Value Object.
      *
-     * @param mixed $typeId
-     * @param int $status
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if at least one of the used languages does not exist
      */
-    abstract public function updateType($typeId, $status, Type $type);
+    abstract public function updateType(int $typeId, int $status, Type $type): void;
 
     /**
-     * Loads an array with data about several Types in defined status.
+     * Bulk-load an array with data about the given Content Types.
      *
-     * @param array $typeIds
-     *
-     * @return array Data rows.
+     * @param int[] $typeIds
      */
     abstract public function loadTypesListData(array $typeIds): array;
 
-    /**
-     * Loads an array with data about $typeId in $status.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     *
-     * @return array Data rows.
-     */
-    abstract public function loadTypeData($typeId, $status);
+    abstract public function loadTypeData(int $typeId, int $status): array;
+
+    abstract public function loadTypeDataByIdentifier(string $identifier, int $status): array;
+
+    abstract public function loadTypeDataByRemoteId(string $remoteId, int $status): array;
+
+    abstract public function countInstancesOfType(int $typeId): int;
 
     /**
-     * Loads an array with data about the type referred to by $identifier in
-     * $status.
-     *
-     * @param string $identifier
-     * @param int $status
-     *
-     * @return array(int=>array(string=>mixed)) Data rows.
+     * Permanently delete a Content Type of the given status.
      */
-    abstract public function loadTypeDataByIdentifier($identifier, $status);
+    abstract public function delete(int $typeId, int $status): void;
+
+    abstract public function deleteFieldDefinitionsForType(int $typeId, int $status): void;
 
     /**
-     * Loads an array with data about the type referred to by $remoteId in
-     * $status.
+     * Delete a Content Type.
      *
-     * @param mixed $remoteId
-     * @param int $status
-     *
-     * @return array(int=>array(string=>mixed)) Data rows.
+     * Does not delete Field Definitions!
      */
-    abstract public function loadTypeDataByRemoteId($remoteId, $status);
+    abstract public function deleteType(int $typeId, int $status): void;
+
+    abstract public function deleteGroupAssignmentsForType(int $typeId, int $status): void;
 
     /**
-     * Counts the number of instances that exists of the identified type.
-     *
-     * @param int $typeId
-     *
-     * @return int
+     * Publish a Content Type including its Field Definitions.
      */
-    abstract public function countInstancesOfType($typeId);
+    abstract public function publishTypeAndFields(
+        int $typeId,
+        int $sourceStatus,
+        int $targetStatus
+    ): void;
+
+    abstract public function getSearchableFieldMapData(): array;
 
     /**
-     * Deletes a Type completely.
+     * Remove Field Definition data from multilingual table.
      *
-     * @param mixed $typeId
-     * @param int $status
-     */
-    abstract public function delete($typeId, $status);
-
-    /**
-     * Deletes all field definitions of a Type.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     */
-    abstract public function deleteFieldDefinitionsForType($typeId, $status);
-
-    /**
-     * Deletes a the Type.
-     *
-     * Does no delete the field definitions!
-     *
-     * @param mixed $typeId
-     * @param int $status
-     */
-    abstract public function deleteType($typeId, $status);
-
-    /**
-     * Deletes all group assignments for a Type.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     */
-    abstract public function deleteGroupAssignmentsForType($typeId, $status);
-
-    /**
-     * Publishes the Type with $typeId from $sourceVersion to $targetVersion,
-     * including its fields.
-     *
-     * @param int $typeId
-     * @param int $sourceStatus
-     * @param int $targetStatus
-     */
-    abstract public function publishTypeAndFields($typeId, $sourceStatus, $targetStatus);
-
-    /**
-     * Returns searchable fields mapping data.
-     *
-     * @return array
-     */
-    abstract public function getSearchableFieldMapData();
-
-    /**
-     * Removes fieldDefinition data from multilingual table.
-     *
-     * @param int $fieldDefinitionId
-     * @param string $languageCode
-     * @param int $status
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the given language does not exist
      */
     abstract public function removeFieldDefinitionTranslation(
         int $fieldDefinitionId,
@@ -299,10 +163,7 @@ abstract class Gateway
     ): void;
 
     /**
-     * Removes items created or modified by the user.
-     *
-     * @param int $userId
-     * @param int $version
+     * Remove items created or modified by User.
      */
     abstract public function removeByUserAndVersion(int $userId, int $version): void;
 }

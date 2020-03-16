@@ -1,8 +1,6 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -15,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as ContentTypeUpdateHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPIContentTypeHandler;
 
 /**
  * Abstract test suite for legacy search.
@@ -75,13 +74,16 @@ class AbstractTestCase extends LanguageAwareTestCase
         return $ids;
     }
 
-    protected function getContentTypeHandler()
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    protected function getContentTypeHandler(): SPIContentTypeHandler
     {
         if (!isset($this->contentTypeHandler)) {
             $this->contentTypeHandler = new ContentTypeHandler(
                 new ContentTypeGateway(
-                    $this->getDatabaseHandler(),
                     $this->getDatabaseConnection(),
+                    $this->getSharedGateway(),
                     $this->getLanguageMaskGenerator()
                 ),
                 new ContentTypeMapper($this->getConverterRegistry(), $this->getLanguageMaskGenerator()),

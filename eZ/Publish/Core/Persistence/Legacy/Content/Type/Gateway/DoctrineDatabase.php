@@ -1,42 +1,45 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase Content Type Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway as SharedGateway;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\SPI\Persistence\ValueObject;
-use eZ\Publish\Core\Persistence\Database\Query;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use PDO;
+use function sprintf;
 
 /**
- * Doctrine database based content type gateway.
+ * Content Type gateway implementation using the Doctrine database.
+ *
+ * @internal Gateway implementation is considered internal. Use Persistence Content Type Handler instead.
+ *
+ * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * Columns of database tables.
      *
      * @var array
      */
-    protected $columns = [
+    private $columns = [
         'ezcontentclass' => [
             'id',
             'always_available',
@@ -89,209 +92,159 @@ class DoctrineDatabase extends Gateway
     ];
 
     /**
-     * DoctrineDatabase handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
-
-    /**
      * The native Doctrine connection.
      *
      * Meant to be used to transition from eZ/Zeta interface to Doctrine.
      *
      * @var \Doctrine\DBAL\Connection
      */
-    protected $connection;
+    private $connection;
+
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $dbPlatform;
+
+    /** @var \eZ\Publish\Core\Persistence\Legacy\SharedGateway\Gateway */
+    private $sharedGateway;
 
     /**
      * Language mask generator.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
-    protected $languageMaskGenerator;
+    private $languageMaskGenerator;
 
     /**
-     * Creates a new gateway based on $db.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $db, Connection $connection, MaskGenerator $languageMaskGenerator)
-    {
-        $this->dbHandler = $db;
+    public function __construct(
+        Connection $connection,
+        SharedGateway $sharedGateway,
+        MaskGenerator $languageMaskGenerator
+    ) {
         $this->connection = $connection;
+        $this->dbPlatform = $connection->getDatabasePlatform();
+        $this->sharedGateway = $sharedGateway;
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
-    /**
-     * Inserts the given $group.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $group
-     *
-     * @return int Group ID
-     */
-    public function insertGroup(Group $group)
+    public function insertGroup(Group $group): int
     {
-        $q = $this->dbHandler->createInsertQuery();
-        $q->insertInto(
-            $this->dbHandler->quoteTable('ezcontentclassgroup')
-        )->set(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->getAutoIncrementValue('ezcontentclassgroup', 'id')
-        )->set(
-            $this->dbHandler->quoteColumn('created'),
-            $q->bindValue($group->created, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('creator_id'),
-            $q->bindValue($group->creatorId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('modified'),
-            $q->bindValue($group->modified, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('modifier_id'),
-            $q->bindValue($group->modifierId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('name'),
-            $q->bindValue($group->identifier)
-        );
-        $q->prepare()->execute();
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::CONTENT_TYPE_GROUP_TABLE)
+            ->values(
+                [
+                    'created' => $query->createPositionalParameter(
+                        $group->created,
+                        ParameterType::INTEGER
+                    ),
+                    'creator_id' => $query->createPositionalParameter(
+                        $group->creatorId,
+                        ParameterType::INTEGER
+                    ),
+                    'modified' => $query->createPositionalParameter(
+                        $group->modified,
+                        ParameterType::INTEGER
+                    ),
+                    'modifier_id' => $query->createPositionalParameter(
+                        $group->modifierId,
+                        ParameterType::INTEGER
+                    ),
+                    'name' => $query->createPositionalParameter(
+                        $group->identifier,
+                        ParameterType::STRING
+                    ),
+                ]
+            );
+        $query->execute();
 
-        return (int)$this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName('ezcontentclassgroup', 'id')
-        );
+        return (int)$this->connection->lastInsertId(self::CONTENT_TYPE_GROUP_SEQ);
     }
 
-    /**
-     * Updates a group with data in $group.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $group
-     */
-    public function updateGroup(GroupUpdateStruct $group)
+    public function updateGroup(GroupUpdateStruct $group): void
     {
-        $q = $this->dbHandler->createUpdateQuery();
-        $q->update(
-            $this->dbHandler->quoteColumn('ezcontentclassgroup')
-        )->set(
-            $this->dbHandler->quoteColumn('modified'),
-            $q->bindValue($group->modified, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('modifier_id'),
-            $q->bindValue($group->modifierId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('name'),
-            $q->bindValue($group->identifier)
-        )->where(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $q->bindValue($group->id, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(self::CONTENT_TYPE_GROUP_TABLE)
+            ->set(
+                'modified',
+                $query->createPositionalParameter($group->modified, ParameterType::INTEGER)
             )
-        );
-
-        $q->prepare()->execute();
-    }
-
-    /**
-     * Returns the number of types in a certain group.
-     *
-     * @param int $groupId
-     *
-     * @return int
-     */
-    public function countTypesInGroup($groupId)
-    {
-        $q = $this->dbHandler->createSelectQuery();
-        $q->select(
-            $q->alias(
-                $q->expr->count(
-                    $this->dbHandler->quoteColumn('contentclass_id')
-                ),
-                'count'
+            ->set(
+                'modifier_id',
+                $query->createPositionalParameter($group->modifierId, ParameterType::INTEGER)
             )
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentclass_classgroup')
-        )->where(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn('group_id'),
-                $q->bindValue($groupId, null, \PDO::PARAM_INT)
-            )
-        );
-
-        $stmt = $q->prepare();
-        $stmt->execute();
-
-        return (int)$stmt->fetchColumn();
-    }
-
-    /**
-     * Returns the number of Groups the type is assigned to.
-     *
-     * @param int $typeId
-     * @param int $status
-     *
-     * @return int
-     */
-    public function countGroupsForType($typeId, $status)
-    {
-        $q = $this->dbHandler->createSelectQuery();
-        $q->select(
-            $q->alias(
-                $q->expr->count(
-                    $this->dbHandler->quoteColumn('group_id')
-                ),
-                'count'
-            )
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentclass_classgroup')
-        )->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                )
-            ),
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_version'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
-                )
-            )
-        );
-
-        $stmt = $q->prepare();
-        $stmt->execute();
-
-        return (int)$stmt->fetchColumn();
-    }
-
-    /**
-     * Deletes the Group with the given $groupId.
-     *
-     * @param int $groupId
-     */
-    public function deleteGroup($groupId)
-    {
-        $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom($this->dbHandler->quoteTable('ezcontentclassgroup'))
-            ->where(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('id'),
-                    $q->bindValue($groupId, null, \PDO::PARAM_INT)
+            ->set(
+                'name',
+                $query->createPositionalParameter($group->identifier, ParameterType::STRING)
+            )->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($group->id, ParameterType::INTEGER)
                 )
             );
-        $q->prepare()->execute();
+
+        $query->execute();
+    }
+
+    public function countTypesInGroup(int $groupId): int
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select($this->dbPlatform->getCountExpression('contentclass_id'))
+            ->from(self::CONTENT_TYPE_TO_GROUP_ASSIGNMENT_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'group_id',
+                    $query->createPositionalParameter($groupId, ParameterType::INTEGER)
+                )
+            );
+
+        return (int)$query->execute()->fetchColumn();
+    }
+
+    public function countGroupsForType(int $typeId, int $status): int
+    {
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select($this->dbPlatform->getCountExpression('group_id'))
+            ->from(self::CONTENT_TYPE_TO_GROUP_ASSIGNMENT_TABLE)
+            ->where(
+                $expr->eq(
+                    'contentclass_id',
+                    $query->createPositionalParameter($typeId, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'contentclass_version',
+                    $query->createPositionalParameter($status, ParameterType::INTEGER)
+                )
+            );
+
+        return (int)$query->execute()->fetchColumn();
+    }
+
+    public function deleteGroup(int $groupId): void
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->delete(self::CONTENT_TYPE_GROUP_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($groupId, ParameterType::INTEGER)
+                )
+            );
+        $query->execute();
     }
 
     /**
-     * Inserts data into contentclass_name.
-     *
-     * @param int $typeId
-     * @param int $typeStatus
      * @param string[] $languages
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if at least one of the used languages does not exist
      */
-    protected function insertTypeNameData($typeId, $typeStatus, array $languages)
+    private function insertTypeNameData(int $typeId, int $typeStatus, array $languages): void
     {
         $tmpLanguages = $languages;
         if (isset($tmpLanguages['always-available'])) {
@@ -299,64 +252,121 @@ class DoctrineDatabase extends Gateway
         }
 
         foreach ($tmpLanguages as $language => $name) {
-            $query = $this->dbHandler->createInsertQuery();
+            $query = $this->connection->createQueryBuilder();
             $query
-                ->insertInto($this->dbHandler->quoteTable('ezcontentclass_name'))
-                ->set('contentclass_id', $query->bindValue($typeId, null, \PDO::PARAM_INT))
-                ->set('contentclass_version', $query->bindValue($typeStatus, null, \PDO::PARAM_INT))
-                ->set(
-                    'language_id',
-                    $query->bindValue(
-                        $this->languageMaskGenerator->generateLanguageIndicator(
-                            $language,
-                            $this->languageMaskGenerator->isLanguageAlwaysAvailable(
-                                $language,
-                                $languages
-                            )
+                ->insert(self::CONTENT_TYPE_NAME_TABLE)
+                ->values(
+                    [
+                        'contentclass_id' => $query->createPositionalParameter(
+                            $typeId,
+                            ParameterType::INTEGER
                         ),
-                        null,
-                        \PDO::PARAM_INT
-                    )
-                )
-                ->set('language_locale', $query->bindValue($language))
-                ->set('name', $query->bindValue($name));
-            $query->prepare()->execute();
+                        'contentclass_version' => $query->createPositionalParameter(
+                            $typeStatus,
+                            ParameterType::INTEGER
+                        ),
+                        'language_id' => $query->createPositionalParameter(
+                            $this->languageMaskGenerator->generateLanguageIndicator(
+                                $language,
+                                $this->languageMaskGenerator->isLanguageAlwaysAvailable(
+                                    $language,
+                                    $languages
+                                )
+                            ),
+                            ParameterType::INTEGER
+                        ),
+                        'language_locale' => $query->createPositionalParameter(
+                            $language,
+                            ParameterType::STRING
+                        ),
+                        'name' => $query->createPositionalParameter($name, ParameterType::STRING),
+                    ]
+                );
+            $query->execute();
         }
     }
 
-    /**
-     * Inserts a new content type.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
-     * @param mixed|null $typeId
-     *
-     * @return mixed Type ID
-     */
-    public function insertType(Type $type, $typeId = null)
-    {
-        $q = $this->dbHandler->createInsertQuery();
-        $q->insertInto($this->dbHandler->quoteTable('ezcontentclass'));
-        $q->set(
-            $this->dbHandler->quoteColumn('id'),
-            isset($typeId) ? $q->bindValue($typeId, null, \PDO::PARAM_INT) : $this->dbHandler->getAutoIncrementValue('ezcontentclass', 'id')
-        )->set(
-            $this->dbHandler->quoteColumn('version'),
-            $q->bindValue($type->status, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('created'),
-            $q->bindValue($type->created, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('creator_id'),
-            $q->bindValue($type->creatorId, null, \PDO::PARAM_INT)
-        );
-        $this->setCommonTypeColumns($q, $type);
+    private function setNextAutoIncrementedValueIfAvailable(
+        QueryBuilder $queryBuilder,
+        string $tableName,
+        string $idColumnName,
+        string $sequenceName,
+        ?int $defaultValue = null
+    ): void {
+        if (null === $defaultValue) {
+            // usually returns null to trigger default column value behavior
+            $defaultValue = $this->sharedGateway->getColumnNextIntegerValue(
+                $tableName,
+                $idColumnName,
+                $sequenceName
+            );
+        }
+        // avoid trying to insert NULL to trigger default column value behavior
+        if (null !== $defaultValue) {
+            $queryBuilder->setValue(
+                $idColumnName,
+                $queryBuilder->createNamedParameter(
+                    $defaultValue,
+                    ParameterType::INTEGER,
+                    ":{$idColumnName}"
+                )
+            );
+        }
+    }
 
-        $q->prepare()->execute();
+    public function insertType(Type $type, ?int $typeId = null): int
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::CONTENT_TYPE_TABLE)
+            ->values(
+                [
+                    // Legacy Storage: "version" stores CT status (draft, published)
+                    'version' => $query->createNamedParameter(
+                        $type->status,
+                        ParameterType::INTEGER,
+                        ':status'
+                    ),
+                    'created' => $query->createNamedParameter(
+                        $type->created,
+                        ParameterType::INTEGER,
+                        ':created'
+                    ),
+                    'creator_id' => $query->createNamedParameter(
+                        $type->creatorId,
+                        ParameterType::INTEGER,
+                        ':creator_id'
+                    ),
+                ]
+            );
+        $this->setNextAutoIncrementedValueIfAvailable(
+            $query,
+            self::CONTENT_TYPE_TABLE,
+            'id',
+            self::CONTENT_TYPE_SEQ,
+            $typeId
+        );
+
+        $columnQueryValueAndTypeMap = $this->mapCommonContentTypeColumnsToQueryValuesAndTypes(
+            $type
+        );
+        foreach ($columnQueryValueAndTypeMap as $columnName => $data) {
+            [$value, $parameterType] = $data;
+            $query
+                ->setValue(
+                    $columnName,
+                    $query->createNamedParameter($value, $parameterType, ":{$columnName}")
+                );
+        }
+
+        $query->setParameter('status', $type->status, ParameterType::INTEGER);
+        $query->setParameter('created', $type->created, ParameterType::INTEGER);
+        $query->setParameter('creator_id', $type->creatorId, ParameterType::INTEGER);
+
+        $query->execute();
 
         if (empty($typeId)) {
-            $typeId = (int)$this->dbHandler->lastInsertId(
-                $this->dbHandler->getSequenceName('ezcontentclass', 'id')
-            );
+            $typeId = $this->sharedGateway->getLastInsertedId(self::CONTENT_TYPE_SEQ);
         }
 
         $this->insertTypeNameData($typeId, $type->status, $type->name);
@@ -366,274 +376,220 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Set common columns for insert/update of a Type.
+     * Get a map of Content Type storage column name to its value and parameter type.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\InsertQuery|\eZ\Publish\Core\Persistence\Database\UpdateQuery $q
-     * @param \eZ\Publish\SPI\Persistence\ValueObject|\eZ\Publish\SPI\Persistence\Content\Type $type
+     * Key value of the map is represented as a two-elements array with column value and its type.
      */
-    protected function setCommonTypeColumns(Query $q, ValueObject $type)
+    private function mapCommonContentTypeColumnsToQueryValuesAndTypes(Type $type): array
     {
-        $q->set(
-            $this->dbHandler->quoteColumn('serialized_name_list'),
-            $q->bindValue(serialize($type->name))
-        )->set(
-            $this->dbHandler->quoteColumn('serialized_description_list'),
-            $q->bindValue(serialize($type->description))
-        )->set(
-            $this->dbHandler->quoteColumn('identifier'),
-            $q->bindValue($type->identifier)
-        )->set(
-            $this->dbHandler->quoteColumn('modified'),
-            $q->bindValue($type->modified, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('modifier_id'),
-            $q->bindValue($type->modifierId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('remote_id'),
-            $q->bindValue($type->remoteId)
-        )->set(
-            $this->dbHandler->quoteColumn('url_alias_name'),
-            $q->bindValue($type->urlAliasSchema)
-        )->set(
-            $this->dbHandler->quoteColumn('contentobject_name'),
-            $q->bindValue($type->nameSchema)
-        )->set(
-            $this->dbHandler->quoteColumn('is_container'),
-            $q->bindValue($type->isContainer ? 1 : 0, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('language_mask'),
-            $q->bindValue(
-                $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes($type->languageCodes, array_key_exists('always-available', $type->name)),
-                null,
-                \PDO::PARAM_INT
-            )
-        )->set(
-            $this->dbHandler->quoteColumn('initial_language_id'),
-            $q->bindValue($type->initialLanguageId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('sort_field'),
-            $q->bindValue($type->sortField, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('sort_order'),
-            $q->bindValue($type->sortOrder, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('always_available'),
-            $q->bindValue((int)$type->defaultAlwaysAvailable, null, \PDO::PARAM_INT)
-        );
+        return [
+            'serialized_name_list' => [serialize($type->name), ParameterType::STRING],
+            'serialized_description_list' => [serialize($type->description), ParameterType::STRING],
+            'identifier' => [$type->identifier, ParameterType::STRING],
+            'modified' => [$type->modified, ParameterType::INTEGER],
+            'modifier_id' => [$type->modifierId, ParameterType::INTEGER],
+            'remote_id' => [$type->remoteId, ParameterType::STRING],
+            'url_alias_name' => [$type->urlAliasSchema, ParameterType::STRING],
+            'contentobject_name' => [$type->nameSchema, ParameterType::STRING],
+            'is_container' => [(int)$type->isContainer, ParameterType::INTEGER],
+            'language_mask' => [
+                $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                    $type->languageCodes,
+                    array_key_exists('always-available', $type->name)
+                ),
+                ParameterType::INTEGER,
+            ],
+            'initial_language_id' => [$type->initialLanguageId, ParameterType::INTEGER],
+            'sort_field' => [$type->sortField, ParameterType::INTEGER],
+            'sort_order' => [$type->sortOrder, ParameterType::INTEGER],
+            'always_available' => [(int)$type->defaultAlwaysAvailable, ParameterType::INTEGER],
+        ];
     }
 
-    /**
-     * Insert assignment of $typeId to $groupId.
-     *
-     * @param mixed $groupId
-     * @param mixed $typeId
-     * @param int $status
-     */
-    public function insertGroupAssignment($groupId, $typeId, $status)
+    public function insertGroupAssignment(int $groupId, int $typeId, int $status): void
     {
         $groups = $this->loadGroupData([$groupId]);
+        if (empty($groups)) {
+            throw new NotFoundException('Content Type Group', $groupId);
+        }
         $group = $groups[0];
 
-        $q = $this->dbHandler->createInsertQuery();
-        $q->insertInto(
-            $this->dbHandler->quoteTable('ezcontentclass_classgroup')
-        )->set(
-            $this->dbHandler->quoteColumn('contentclass_id'),
-            $q->bindValue($typeId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('contentclass_version'),
-            $q->bindValue($status, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('group_id'),
-            $q->bindValue($groupId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('group_name'),
-            $q->bindValue($group['name'])
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::CONTENT_TYPE_TO_GROUP_ASSIGNMENT_TABLE)
+            ->values(
+                [
+                    'contentclass_id' => $query->createPositionalParameter(
+                        $typeId,
+                        ParameterType::INTEGER
+                    ),
+                    'contentclass_version' => $query->createPositionalParameter(
+                        $status,
+                        ParameterType::INTEGER
+                    ),
+                    'group_id' => $query->createPositionalParameter(
+                        $groupId,
+                        ParameterType::INTEGER
+                    ),
+                    'group_name' => $query->createPositionalParameter(
+                        $group['name'],
+                        ParameterType::STRING
+                    ),
+                ]
+            );
 
-        $q->prepare()->execute();
+        $query->execute();
     }
 
-    /**
-     * Deletes a group assignments for a Type.
-     *
-     * @param mixed $groupId
-     * @param mixed $typeId
-     * @param int $status
-     */
-    public function deleteGroupAssignment($groupId, $typeId, $status)
+    public function deleteGroupAssignment(int $groupId, int $typeId, int $status): void
     {
-        $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom(
-            $this->dbHandler->quoteTable('ezcontentclass_classgroup')
-        )->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_version'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('group_id'),
-                    $q->bindValue($groupId, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->delete(self::CONTENT_TYPE_TO_GROUP_ASSIGNMENT_TABLE)
+            ->where(
+                $expr->eq(
+                    'contentclass_id',
+                    $query->createPositionalParameter($typeId, ParameterType::INTEGER)
                 )
             )
-        );
-        $q->prepare()->execute();
+            ->andWhere(
+                $expr->eq(
+                    'contentclass_version',
+                    $query->createPositionalParameter($status, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'group_id',
+                    $query->createPositionalParameter($groupId, ParameterType::INTEGER)
+                )
+            );
+        $query->execute();
     }
 
-    /**
-     * Loads data about Groups with $groupIds.
-     *
-     * @param int[] $groupIds
-     *
-     * @return string[][]
-     */
-    public function loadGroupData(array $groupIds)
+    public function loadGroupData(array $groupIds): array
     {
-        $q = $this->connection->createQueryBuilder();
-        $q
+        $query = $this->connection->createQueryBuilder();
+        $query
             ->select('created', 'creator_id', 'id', 'modified', 'modifier_id', 'name')
-            ->from('ezcontentclassgroup')
-            ->where($q->expr()->in('id', ':ids'))
+            ->from(self::CONTENT_TYPE_GROUP_TABLE)
+            ->where($query->expr()->in('id', ':ids'))
             ->setParameter('ids', $groupIds, Connection::PARAM_INT_ARRAY);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
-    /**
-     * Loads data about Group with $identifier.
-     *
-     * @param mixed $identifier
-     *
-     * @return string[][]
-     */
-    public function loadGroupDataByIdentifier($identifier)
+    public function loadGroupDataByIdentifier(string $identifier): array
     {
-        $q = $this->createGroupLoadQuery();
-        $q->where(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn('name'),
-                $q->bindValue($identifier, null, \PDO::PARAM_STR)
+        $query = $this->createGroupLoadQuery();
+        $query->where(
+            $query->expr()->eq(
+                'name',
+                $query->createPositionalParameter($identifier, ParameterType::STRING)
             )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    public function loadAllGroupsData(): array
+    {
+        $query = $this->createGroupLoadQuery();
+
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
-     * Returns an array with data about all Group objects.
-     *
-     * @return string[][]
+     * Create the basic query to load Group data.
      */
-    public function loadAllGroupsData()
+    private function createGroupLoadQuery(): QueryBuilder
     {
-        $q = $this->createGroupLoadQuery();
+        $query = $this->connection->createQueryBuilder();
+        $query->select(
+            'created',
+            'creator_id',
+            'id',
+            'modified',
+            'modifier_id',
+            'name'
+        )->from(self::CONTENT_TYPE_GROUP_TABLE);
 
-        $stmt = $q->prepare();
-        $stmt->execute();
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $query;
     }
 
-    /**
-     * Creates the basic query to load Group data.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
-     */
-    protected function createGroupLoadQuery()
+    public function loadTypesDataForGroup(int $groupId, int $status): array
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $q->select(
-            $this->dbHandler->quoteColumn('created'),
-            $this->dbHandler->quoteColumn('creator_id'),
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->quoteColumn('modified'),
-            $this->dbHandler->quoteColumn('modifier_id'),
-            $this->dbHandler->quoteColumn('name')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentclassgroup')
-        );
-
-        return $q;
-    }
-
-    /**
-     * Loads data for all Types in $status in $groupId.
-     *
-     * @param mixed $groupId
-     * @param int $status
-     *
-     * @return string[][]
-     */
-    public function loadTypesDataForGroup($groupId, $status)
-    {
-        $q = $this->getLoadTypeQueryBuilder();
-        $q
-            ->where($q->expr()->eq('g.group_id', ':gid'))
-            ->andWhere($q->expr()->eq('c.version', ':version'))
+        $query = $this->getLoadTypeQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->where($expr->eq('g.group_id', ':gid'))
+            ->andWhere($expr->eq('c.version', ':version'))
             ->addOrderBy('c.identifier')
             ->setParameter('gid', $groupId, ParameterType::INTEGER)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
-    /**
-     * Inserts a $fieldDefinition for $typeId.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
-     *
-     * @return mixed Field definition ID
-     */
     public function insertFieldDefinition(
-        $typeId,
-        $status,
+        int $typeId,
+        int $status,
         FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
-    ) {
-        $q = $this->dbHandler->createInsertQuery();
-        $q->insertInto($this->dbHandler->quoteTable('ezcontentclass_attribute'));
-        $q->set(
-            $this->dbHandler->quoteColumn('id'),
-            isset($fieldDefinition->id) ? $q->bindValue($fieldDefinition->id, null, \PDO::PARAM_INT) : $this->dbHandler->getAutoIncrementValue('ezcontentclass_attribute', 'id')
-        )->set(
-            $this->dbHandler->quoteColumn('contentclass_id'),
-            $q->bindValue($typeId, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('version'),
-            $q->bindValue($status, null, \PDO::PARAM_INT)
+    ): int {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::FIELD_DEFINITION_TABLE)
+            ->values(
+                [
+                    'contentclass_id' => $query->createNamedParameter(
+                        $typeId,
+                        ParameterType::INTEGER,
+                        ':content_type_id'
+                    ),
+                    'version' => $query->createNamedParameter(
+                        $status,
+                        ParameterType::INTEGER,
+                        ':status'
+                    ),
+                ]
+            );
+        $this->setNextAutoIncrementedValueIfAvailable(
+            $query,
+            self::FIELD_DEFINITION_TABLE,
+            'id',
+            self::FIELD_DEFINITION_SEQ,
+            $fieldDefinition->id
         );
-        $this->setCommonFieldColumns($q, $fieldDefinition, $storageFieldDef);
+        $columnValueAndTypeMap = $this->mapCommonFieldDefinitionColumnsToQueryValuesAndTypes(
+            $fieldDefinition,
+            $storageFieldDef
+        );
+        foreach ($columnValueAndTypeMap as $columnName => $data) {
+            [$columnValue, $parameterType] = $data;
+            $query
+                ->setValue($columnName, ":{$columnName}")
+                ->setParameter($columnName, $columnValue, $parameterType);
+        }
 
-        $q->prepare()->execute();
+        $query->execute();
 
-        $fieldDefinitionId = (int)($fieldDefinition->id ?? $this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName('ezcontentclass_attribute', 'id')
-        ));
+        $fieldDefinitionId = $fieldDefinition->id ?? $this->sharedGateway->getLastInsertedId(
+            self::FIELD_DEFINITION_SEQ
+        );
 
         foreach ($storageFieldDef->multilingualData as $multilingualData) {
-            $this->insertFieldDefinitionMultilingualData($fieldDefinitionId, $multilingualData, $status);
+            $this->insertFieldDefinitionMultilingualData(
+                $fieldDefinitionId,
+                $multilingualData,
+                $status
+            );
         }
 
         return $fieldDefinitionId;
     }
 
-    /**
-     * @param int $fieldDefinitionId
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition $multilingualData
-     * @param int $status
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     */
     private function insertFieldDefinitionMultilingualData(
         int $fieldDefinitionId,
         MultilingualStorageFieldDefinition $multilingualData,
@@ -641,258 +597,210 @@ class DoctrineDatabase extends Gateway
     ): void {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->insert('ezcontentclass_attribute_ml')
-            ->values([
-                'data_text' => ':dataText',
-                'data_json' => ':dataJson',
-                'name' => ':name',
-                'description' => ':description',
-                'contentclass_attribute_id' => ':fieldDefinitionId',
-                'version' => ':status',
-                'language_id' => ':languageId',
-            ])
-            ->setParameter('dataText', $multilingualData->dataText)
-            ->setParameter('dataJson', $multilingualData->dataJson)
+            ->insert(self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
+            ->values(
+                [
+                    'data_text' => ':data_text',
+                    'data_json' => ':data_json',
+                    'name' => ':name',
+                    'description' => ':description',
+                    'contentclass_attribute_id' => ':field_definition_id',
+                    'version' => ':status',
+                    'language_id' => ':language_id',
+                ]
+            )
+            ->setParameter('data_text', $multilingualData->dataText)
+            ->setParameter('data_json', $multilingualData->dataJson)
             ->setParameter('name', $multilingualData->name)
             ->setParameter('description', $multilingualData->description)
-            ->setParameter('fieldDefinitionId', $fieldDefinitionId, ParameterType::INTEGER)
+            ->setParameter('field_definition_id', $fieldDefinitionId, ParameterType::INTEGER)
             ->setParameter('status', $status, ParameterType::INTEGER)
-            ->setParameter('languageId', $multilingualData->languageId, ParameterType::INTEGER);
+            ->setParameter('language_id', $multilingualData->languageId, ParameterType::INTEGER);
 
         $query->execute();
     }
 
     /**
-     * Set common columns for insert/update of FieldDefinition.
+     * Get a map of Field Definition storage column name to its value and parameter type.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\InsertQuery|\eZ\Publish\Core\Persistence\Database\UpdateQuery $q
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     * Key value of the map is represented as a two-elements array with column value and its type.
      */
-    protected function setCommonFieldColumns(
-        Query $q,
+    private function mapCommonFieldDefinitionColumnsToQueryValuesAndTypes(
         FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
-    ) {
-        $q->set(
-            $this->dbHandler->quoteColumn('serialized_name_list'),
-            $q->bindValue(serialize($fieldDefinition->name))
-        )->set(
-            $this->dbHandler->quoteColumn('serialized_description_list'),
-            $q->bindValue(serialize($fieldDefinition->description))
-        )->set(
-            $this->dbHandler->quoteColumn('identifier'),
-            $q->bindValue($fieldDefinition->identifier)
-        )->set(
-            $this->dbHandler->quoteColumn('category'),
-            $q->bindValue($fieldDefinition->fieldGroup, null, \PDO::PARAM_STR)
-        )->set(
-            $this->dbHandler->quoteColumn('placement'),
-            $q->bindValue($fieldDefinition->position, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('data_type_string'),
-            $q->bindValue($fieldDefinition->fieldType)
-        )->set(
-            $this->dbHandler->quoteColumn('can_translate'),
-            $q->bindValue(($fieldDefinition->isTranslatable ? 1 : 0), null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('is_thumbnail'),
-            $q->bindValue((bool)$fieldDefinition->isThumbnail, null, \PDO::PARAM_BOOL)
-        )->set(
-            $this->dbHandler->quoteColumn('is_required'),
-            $q->bindValue(($fieldDefinition->isRequired ? 1 : 0), null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('is_information_collector'),
-            $q->bindValue(($fieldDefinition->isInfoCollector ? 1 : 0), null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('data_float1'),
-            $q->bindValue($storageFieldDef->dataFloat1)
-        )->set(
-            $this->dbHandler->quoteColumn('data_float2'),
-            $q->bindValue($storageFieldDef->dataFloat2)
-        )->set(
-            $this->dbHandler->quoteColumn('data_float3'),
-            $q->bindValue($storageFieldDef->dataFloat3)
-        )->set(
-            $this->dbHandler->quoteColumn('data_float4'),
-            $q->bindValue($storageFieldDef->dataFloat4)
-        )->set(
-            $this->dbHandler->quoteColumn('data_int1'),
-            $q->bindValue($storageFieldDef->dataInt1, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('data_int2'),
-            $q->bindValue($storageFieldDef->dataInt2, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('data_int3'),
-            $q->bindValue($storageFieldDef->dataInt3, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('data_int4'),
-            $q->bindValue($storageFieldDef->dataInt4, null, \PDO::PARAM_INT)
-        )->set(
-            $this->dbHandler->quoteColumn('data_text1'),
-            $q->bindValue($storageFieldDef->dataText1)
-        )->set(
-            $this->dbHandler->quoteColumn('data_text2'),
-            $q->bindValue($storageFieldDef->dataText2)
-        )->set(
-            $this->dbHandler->quoteColumn('data_text3'),
-            $q->bindValue($storageFieldDef->dataText3)
-        )->set(
-            $this->dbHandler->quoteColumn('data_text4'),
-            $q->bindValue($storageFieldDef->dataText4)
-        )->set(
-            $this->dbHandler->quoteColumn('data_text5'),
-            $q->bindValue($storageFieldDef->dataText5)
-        )->set(
-            $this->dbHandler->quoteColumn('serialized_data_text'),
-            $q->bindValue(serialize($storageFieldDef->serializedDataText))
-        )->set(
-            $this->dbHandler->quoteColumn('is_searchable'),
-            $q->bindValue(($fieldDefinition->isSearchable ? 1 : 0), null, \PDO::PARAM_INT)
-        );
+    ): array {
+        return [
+            'serialized_name_list' => [serialize($fieldDefinition->name), ParameterType::STRING],
+            'serialized_description_list' => [
+                serialize($fieldDefinition->description),
+                ParameterType::STRING,
+            ],
+            'serialized_data_text' => [
+                serialize($storageFieldDef->serializedDataText),
+                ParameterType::STRING,
+            ],
+            'identifier' => [$fieldDefinition->identifier, ParameterType::STRING],
+            'category' => [$fieldDefinition->fieldGroup, ParameterType::STRING],
+            'placement' => [$fieldDefinition->position, ParameterType::INTEGER],
+            'data_type_string' => [$fieldDefinition->fieldType, ParameterType::STRING],
+            'can_translate' => [(int)$fieldDefinition->isTranslatable, ParameterType::INTEGER],
+            'is_thumbnail' => [(bool)$fieldDefinition->isThumbnail, ParameterType::INTEGER],
+            'is_required' => [(int)$fieldDefinition->isRequired, ParameterType::INTEGER],
+            'is_information_collector' => [
+                (int)$fieldDefinition->isInfoCollector,
+                ParameterType::INTEGER,
+            ],
+            'is_searchable' => [(int)$fieldDefinition->isSearchable, ParameterType::INTEGER],
+            'data_float1' => [$storageFieldDef->dataFloat1, null],
+            'data_float2' => [$storageFieldDef->dataFloat2, null],
+            'data_float3' => [$storageFieldDef->dataFloat3, null],
+            'data_float4' => [$storageFieldDef->dataFloat4, null],
+            'data_int1' => [$storageFieldDef->dataInt1, ParameterType::INTEGER],
+            'data_int2' => [$storageFieldDef->dataInt2, ParameterType::INTEGER],
+            'data_int3' => [$storageFieldDef->dataInt3, ParameterType::INTEGER],
+            'data_int4' => [$storageFieldDef->dataInt4, ParameterType::INTEGER],
+            'data_text1' => [$storageFieldDef->dataText1, ParameterType::STRING],
+            'data_text2' => [$storageFieldDef->dataText2, ParameterType::STRING],
+            'data_text3' => [$storageFieldDef->dataText3, ParameterType::STRING],
+            'data_text4' => [$storageFieldDef->dataText4, ParameterType::STRING],
+            'data_text5' => [$storageFieldDef->dataText5, ParameterType::STRING],
+        ];
     }
 
-    /**
-     * Loads an array with data about field definition referred $id and $status.
-     *
-     * @param mixed $id field definition id
-     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     *
-     * @return array Data rows.
-     */
-    public function loadFieldDefinition($id, $status)
+    public function loadFieldDefinition(int $id, int $status): array
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $this->selectColumns($q, 'ezcontentclass_attribute');
-        $q->select([
-                'ezcontentclass.initial_language_id AS ezcontentclass_initial_language_id',
-                'ezcontentclass_attribute_ml.name AS ezcontentclass_attribute_multilingual_name',
-                'ezcontentclass_attribute_ml.description AS ezcontentclass_attribute_multilingual_description',
-                'ezcontentclass_attribute_ml.language_id AS ezcontentclass_attribute_multilingual_language_id',
-                'ezcontentclass_attribute_ml.data_text AS ezcontentclass_attribute_multilingual_data_text',
-                'ezcontentclass_attribute_ml.data_json AS ezcontentclass_attribute_multilingual_data_json',
-            ]);
-        $q->from(
-            $this->dbHandler->quoteTable('ezcontentclass_attribute')
-        )->leftJoin(
-            'ezcontentclass',
-            $q->expr->lAnd(
-                $q->expr->eq('ezcontentclass_attribute.contentclass_id', 'ezcontentclass.id'),
-                $q->expr->eq('ezcontentclass_attribute.version', 'ezcontentclass.version')
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $this
+            ->selectColumns($query, self::FIELD_DEFINITION_TABLE, 'f_def')
+            ->addSelect(
+                [
+                    'ct.initial_language_id AS ezcontentclass_initial_language_id',
+                    'transl_f_def.name AS ezcontentclass_attribute_multilingual_name',
+                    'transl_f_def.description AS ezcontentclass_attribute_multilingual_description',
+                    'transl_f_def.language_id AS ezcontentclass_attribute_multilingual_language_id',
+                    'transl_f_def.data_text AS ezcontentclass_attribute_multilingual_data_text',
+                    'transl_f_def.data_json AS ezcontentclass_attribute_multilingual_data_json',
+                ]
             )
-        )->leftJoin(
-            'ezcontentclass_attribute_ml',
-            $q->expr->lAnd(
-                $q->expr->eq('ezcontentclass_attribute.id', 'ezcontentclass_attribute_ml.contentclass_attribute_id'),
-                $q->expr->eq('ezcontentclass_attribute.version', 'ezcontentclass_attribute_ml.version')
-            )
-        )->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('id', 'ezcontentclass_attribute'),
-                    $q->bindValue($id, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentclass_attribute'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
+            ->from(self::FIELD_DEFINITION_TABLE, 'f_def')
+            ->leftJoin(
+                'f_def',
+                self::CONTENT_TYPE_TABLE,
+                'ct',
+                $expr->andX(
+                    $expr->eq('f_def.contentclass_id', 'ct.id'),
+                    $expr->eq('f_def.version', 'ct.version')
                 )
             )
-        );
+            ->leftJoin(
+                'f_def',
+                self::MULTILINGUAL_FIELD_DEFINITION_TABLE,
+                'transl_f_def',
+                $expr->andX(
+                    $expr->eq(
+                        'f_def.id',
+                        'transl_f_def.contentclass_attribute_id'
+                    ),
+                    $expr->eq(
+                        'f_def.version',
+                        'transl_f_def.version'
+                    )
+                )
+            )
+            ->where(
+                $expr->eq(
+                    'f_def.id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'f_def.version',
+                    $query->createPositionalParameter($status, ParameterType::INTEGER)
+                )
+            );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $stmt = $query->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Deletes a field definition.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     * @param mixed $fieldDefinitionId
-     */
-    public function deleteFieldDefinition($typeId, $status, $fieldDefinitionId)
-    {
-        $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom(
-            $this->dbHandler->quoteTable('ezcontentclass_attribute')
-        )->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('id'),
-                    $q->bindValue($fieldDefinitionId, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
-                ),
-                // @todo FIXME: Actually not needed
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                )
-            )
-        );
-
-        $q->prepare()->execute();
-
+    public function deleteFieldDefinition(
+        int $typeId,
+        int $status,
+        int $fieldDefinitionId
+    ): void {
+        // Delete multilingual data first to keep DB integrity
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
-            ->delete('ezcontentclass_attribute_ml')
-            ->where('contentclass_attribute_id = :fieldDefinitionId')
+            ->delete(self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
+            ->where('contentclass_attribute_id = :field_definition_id')
             ->andWhere('version = :status')
-            ->setParameter('fieldDefinitionId', $fieldDefinitionId, ParameterType::INTEGER)
+            ->setParameter('field_definition_id', $fieldDefinitionId, ParameterType::INTEGER)
             ->setParameter('status', $status, ParameterType::INTEGER);
 
         $deleteQuery->execute();
+
+        // Delete legacy Field Definition data
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::FIELD_DEFINITION_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'id',
+                    $query->createPositionalParameter($fieldDefinitionId, ParameterType::INTEGER)
+                )
+            )
+            // in Legacy Storage Field Definition table the "version" column stores status (e.g. draft, published, modified)
+            ->andWhere(
+                $query->expr()->eq(
+                    'version',
+                    $query->createPositionalParameter($status, ParameterType::INTEGER)
+                )
+            )
+        ;
+
+        $query->execute();
     }
 
-    /**
-     * Updates a $fieldDefinition for $typeId.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
-     */
     public function updateFieldDefinition(
-        $typeId,
-        $status,
+        int $typeId,
+        int $status,
         FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
-    ) {
-        $q = $this->dbHandler->createUpdateQuery();
-        $q
-            ->update(
-                $this->dbHandler->quoteTable('ezcontentclass_attribute')
-            )->where(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('id'),
-                    $q->bindValue($fieldDefinition->id, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
-                ),
-                // @todo FIXME: Actually not needed
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                )
-            );
-        $this->setCommonFieldColumns($q, $fieldDefinition, $storageFieldDef);
+    ): void {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(self::FIELD_DEFINITION_TABLE)
+            ->where('id = :field_definition_id')
+            ->andWhere('version = :status')
+            ->setParameter('field_definition_id', $fieldDefinition->id, ParameterType::INTEGER)
+            ->setParameter('status', $status, ParameterType::INTEGER);
 
-        $q->prepare()->execute();
+        $fieldDefinitionValueAndTypeMap = $this->mapCommonFieldDefinitionColumnsToQueryValuesAndTypes(
+            $fieldDefinition,
+            $storageFieldDef
+        );
+        foreach ($fieldDefinitionValueAndTypeMap as $columnName => $data) {
+            [$value, $parameterType] = $data;
+            $query
+                ->set(
+                    $columnName,
+                    $query->createNamedParameter($value, $parameterType, ":{$columnName}")
+                );
+        }
 
-        foreach ($storageFieldDef->multilingualData as $languageCode => $data) {
-            $dataExist = $this->fieldDefinitionMultilingualDataExist(
+        $query->execute();
+
+        foreach ($storageFieldDef->multilingualData as $data) {
+            $dataExists = $this->fieldDefinitionMultilingualDataExist(
                 $fieldDefinition,
                 $data->languageId,
                 $status
             );
 
-            if ($dataExist) {
+            if ($dataExists) {
                 $this->updateFieldDefinitionMultilingualData(
                     $fieldDefinition->id,
                     $data,
@@ -909,13 +817,6 @@ class DoctrineDatabase extends Gateway
         }
     }
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param int $languageId
-     * @param int $status
-     *
-     * @return bool
-     */
     private function fieldDefinitionMultilingualDataExist(
         FieldDefinition $fieldDefinition,
         int $languageId,
@@ -923,23 +824,18 @@ class DoctrineDatabase extends Gateway
     ): bool {
         $existQuery = $this->connection->createQueryBuilder();
         $existQuery
-            ->select('COUNT(1)')
-            ->from('ezcontentclass_attribute_ml')
-            ->where('contentclass_attribute_id = :fieldDefinitionId')
+            ->select($this->dbPlatform->getCountExpression('1'))
+            ->from(self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
+            ->where('contentclass_attribute_id = :field_definition_id')
             ->andWhere('version = :status')
-            ->andWhere('language_id = :languageId')
-            ->setParameter('fieldDefinitionId', $fieldDefinition->id, ParameterType::INTEGER)
+            ->andWhere('language_id = :language_id')
+            ->setParameter('field_definition_id', $fieldDefinition->id, ParameterType::INTEGER)
             ->setParameter('status', $status, ParameterType::INTEGER)
-            ->setParameter('languageId', $languageId, ParameterType::INTEGER);
+            ->setParameter('language_id', $languageId, ParameterType::INTEGER);
 
         return 0 < (int)$existQuery->execute()->fetchColumn();
     }
 
-    /**
-     * @param int $fieldDefinitionId
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition $multilingualData
-     * @param int $status
-     */
     private function updateFieldDefinitionMultilingualData(
         int $fieldDefinitionId,
         MultilingualStorageFieldDefinition $multilingualData,
@@ -947,19 +843,19 @@ class DoctrineDatabase extends Gateway
     ): void {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->update('ezcontentclass_attribute_ml')
-            ->set('data_text', ':dataText')
-            ->set('data_json', ':dataJson')
+            ->update(self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
+            ->set('data_text', ':data_text')
+            ->set('data_json', ':data_json')
             ->set('name', ':name')
             ->set('description', ':description')
-            ->where('contentclass_attribute_id = :fieldDefinitionId')
+            ->where('contentclass_attribute_id = :field_definition_id')
             ->andWhere('version = :status')
             ->andWhere('language_id = :languageId')
-            ->setParameter(':dataText', $multilingualData->dataText)
-            ->setParameter(':dataJson', $multilingualData->dataJson)
-            ->setParameter(':name', $multilingualData->name)
-            ->setParameter(':description', $multilingualData->description)
-            ->setParameter('fieldDefinitionId', $fieldDefinitionId, ParameterType::INTEGER)
+            ->setParameter('data_text', $multilingualData->dataText)
+            ->setParameter('data_json', $multilingualData->dataJson)
+            ->setParameter('name', $multilingualData->name)
+            ->setParameter('description', $multilingualData->description)
+            ->setParameter('field_definition_id', $fieldDefinitionId, ParameterType::INTEGER)
             ->setParameter('status', $status, ParameterType::INTEGER)
             ->setParameter('languageId', $multilingualData->languageId, ParameterType::INTEGER);
 
@@ -967,58 +863,61 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Deletes all name data for $typeId in $typeStatus.
-     *
-     * @param int $typeId
-     * @param int $typeStatus
+     * Delete entire name data for the given Content Type of the given status.
      */
-    protected function deleteTypeNameData($typeId, $typeStatus)
+    private function deleteTypeNameData(int $typeId, int $typeStatus): void
     {
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom('ezcontentclass_name')
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->delete(self::CONTENT_TYPE_NAME_TABLE)
             ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn('contentclass_id'),
-                        $query->bindValue($typeId, null, \PDO::PARAM_INT)
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn('contentclass_version'),
-                        $query->bindValue($typeStatus, null, \PDO::PARAM_INT)
-                    )
-                )
-            );
-        $query->prepare()->execute();
-    }
-
-    /**
-     * Update a type with $updateStruct.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
-     */
-    public function updateType($typeId, $status, Type $type)
-    {
-        $q = $this->dbHandler->createUpdateQuery();
-        $q->update($this->dbHandler->quoteTable('ezcontentclass'));
-
-        $this->setCommonTypeColumns($q, $type);
-
-        $q->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('id'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
+                $expr->eq(
+                    'contentclass_id',
+                    $query->createPositionalParameter($typeId, ParameterType::INTEGER)
                 )
             )
-        );
+            ->andWhere(
+                $expr->eq(
+                    'contentclass_version',
+                    $query->createPositionalParameter($typeStatus, ParameterType::INTEGER)
+                )
+            );
+        $query->execute();
+    }
 
-        $q->prepare()->execute();
+    public function updateType(int $typeId, int $status, Type $type): void
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->update(self::CONTENT_TYPE_TABLE);
+
+        $columnQueryValueAndTypeMap = $this->mapCommonContentTypeColumnsToQueryValuesAndTypes(
+            $type
+        );
+        foreach ($columnQueryValueAndTypeMap as $columnName => $data) {
+            [$value, $parameterType] = $data;
+            $query
+                ->set(
+                    $columnName,
+                    $query->createNamedParameter($value, $parameterType, ":{$columnName}")
+                );
+        }
+        $expr = $query->expr();
+        $query
+            ->where(
+                $expr->eq(
+                    'id',
+                    $query->createNamedParameter($typeId, ParameterType::INTEGER, ':id')
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'version',
+                    $query->createNamedParameter($status, ParameterType::INTEGER, ':status')
+                )
+            );
+
+        $query->execute();
 
         $this->deleteTypeNameData($typeId, $status);
         $this->insertTypeNameData($typeId, $status, $type->name);
@@ -1026,145 +925,123 @@ class DoctrineDatabase extends Gateway
 
     public function loadTypesListData(array $typeIds): array
     {
-        $q = $this->getLoadTypeQueryBuilder();
+        $query = $this->getLoadTypeQueryBuilder();
 
-        $q
-            ->where($q->expr()->in('c.id', ':ids'))
-            ->andWhere($q->expr()->eq('c.version', Type::STATUS_DEFINED))
+        $query
+            ->where($query->expr()->in('c.id', ':ids'))
+            ->andWhere($query->expr()->eq('c.version', Type::STATUS_DEFINED))
             ->setParameter('ids', $typeIds, Connection::PARAM_INT_ARRAY);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
-    /**
-     * Loads an array with data about $typeId in $status.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     *
-     * @return array Data rows.
-     */
-    public function loadTypeData($typeId, $status)
+    public function loadTypeData(int $typeId, int $status): array
     {
-        $q = $this->getLoadTypeQueryBuilder();
-        $q
-            ->where($q->expr()->eq('c.id', ':id'))
-            ->andWhere($q->expr()->eq('c.version', ':version'))
+        $query = $this->getLoadTypeQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->where($expr->eq('c.id', ':id'))
+            ->andWhere($expr->eq('c.version', ':version'))
             ->setParameter('id', $typeId, ParameterType::INTEGER)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
-    /**
-     * Loads an array with data about the type referred to by $identifier in
-     * $status.
-     *
-     * @param string $identifier
-     * @param int $status
-     *
-     * @return array(int=>array(string=>mixed)) Data rows.
-     */
-    public function loadTypeDataByIdentifier($identifier, $status)
+    public function loadTypeDataByIdentifier(string $identifier, int $status): array
     {
-        $q = $this->getLoadTypeQueryBuilder();
-        $q
-            ->where($q->expr()->eq('c.identifier', ':identifier'))
-            ->andWhere($q->expr()->eq('c.version', ':version'))
+        $query = $this->getLoadTypeQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->where($expr->eq('c.identifier', ':identifier'))
+            ->andWhere($expr->eq('c.version', ':version'))
             ->setParameter('identifier', $identifier, ParameterType::STRING)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
-    /**
-     * Loads an array with data about the type referred to by $remoteId in
-     * $status.
-     *
-     * @param mixed $remoteId
-     * @param int $status
-     *
-     * @return array(int=>array(string=>mixed)) Data rows.
-     */
-    public function loadTypeDataByRemoteId($remoteId, $status)
+    public function loadTypeDataByRemoteId(string $remoteId, int $status): array
     {
-        $q = $this->getLoadTypeQueryBuilder();
-        $q
-            ->where($q->expr()->eq('c.remote_id', ':remote'))
-            ->andWhere($q->expr()->eq('c.version', ':version'))
+        $query = $this->getLoadTypeQueryBuilder();
+        $query
+            ->where($query->expr()->eq('c.remote_id', ':remote'))
+            ->andWhere($query->expr()->eq('c.version', ':version'))
             ->setParameter('remote', $remoteId, ParameterType::STRING)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $q->execute()->fetchAll();
+        return $query->execute()->fetchAll();
     }
 
     /**
-     * Returns a basic query to retrieve Type data.
+     * Return a basic query to retrieve Type data.
      */
     private function getLoadTypeQueryBuilder(): QueryBuilder
     {
-        $q = $this->connection->createQueryBuilder();
-        $expr = $q->expr();
-        $q
-            ->select([
-                'c.id AS ezcontentclass_id',
-                'c.version AS ezcontentclass_version',
-                'c.serialized_name_list AS ezcontentclass_serialized_name_list',
-                'c.serialized_description_list AS ezcontentclass_serialized_description_list',
-                'c.identifier AS ezcontentclass_identifier',
-                'c.created AS ezcontentclass_created',
-                'c.modified AS ezcontentclass_modified',
-                'c.modifier_id AS ezcontentclass_modifier_id',
-                'c.creator_id AS ezcontentclass_creator_id',
-                'c.remote_id AS ezcontentclass_remote_id',
-                'c.url_alias_name AS ezcontentclass_url_alias_name',
-                'c.contentobject_name AS ezcontentclass_contentobject_name',
-                'c.is_container AS ezcontentclass_is_container',
-                'c.initial_language_id AS ezcontentclass_initial_language_id',
-                'c.always_available AS ezcontentclass_always_available',
-                'c.sort_field AS ezcontentclass_sort_field',
-                'c.sort_order AS ezcontentclass_sort_order',
-                'c.language_mask AS ezcontentclass_language_mask',
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select(
+                [
+                    'c.id AS ezcontentclass_id',
+                    'c.version AS ezcontentclass_version',
+                    'c.serialized_name_list AS ezcontentclass_serialized_name_list',
+                    'c.serialized_description_list AS ezcontentclass_serialized_description_list',
+                    'c.identifier AS ezcontentclass_identifier',
+                    'c.created AS ezcontentclass_created',
+                    'c.modified AS ezcontentclass_modified',
+                    'c.modifier_id AS ezcontentclass_modifier_id',
+                    'c.creator_id AS ezcontentclass_creator_id',
+                    'c.remote_id AS ezcontentclass_remote_id',
+                    'c.url_alias_name AS ezcontentclass_url_alias_name',
+                    'c.contentobject_name AS ezcontentclass_contentobject_name',
+                    'c.is_container AS ezcontentclass_is_container',
+                    'c.initial_language_id AS ezcontentclass_initial_language_id',
+                    'c.always_available AS ezcontentclass_always_available',
+                    'c.sort_field AS ezcontentclass_sort_field',
+                    'c.sort_order AS ezcontentclass_sort_order',
+                    'c.language_mask AS ezcontentclass_language_mask',
 
-                'a.id AS ezcontentclass_attribute_id',
-                'a.serialized_name_list AS ezcontentclass_attribute_serialized_name_list',
-                'a.serialized_description_list AS ezcontentclass_attribute_serialized_description_list',
-                'a.identifier AS ezcontentclass_attribute_identifier',
-                'a.category AS ezcontentclass_attribute_category',
-                'a.data_type_string AS ezcontentclass_attribute_data_type_string',
-                'a.can_translate AS ezcontentclass_attribute_can_translate',
-                'a.is_required AS ezcontentclass_attribute_is_required',
-                'a.is_information_collector AS ezcontentclass_attribute_is_information_collector',
-                'a.is_searchable AS ezcontentclass_attribute_is_searchable',
-                'a.is_thumbnail AS ezcontentclass_attribute_is_thumbnail',
-                'a.placement AS ezcontentclass_attribute_placement',
-                'a.data_float1 AS ezcontentclass_attribute_data_float1',
-                'a.data_float2 AS ezcontentclass_attribute_data_float2',
-                'a.data_float3 AS ezcontentclass_attribute_data_float3',
-                'a.data_float4 AS ezcontentclass_attribute_data_float4',
-                'a.data_int1 AS ezcontentclass_attribute_data_int1',
-                'a.data_int2 AS ezcontentclass_attribute_data_int2',
-                'a.data_int3 AS ezcontentclass_attribute_data_int3',
-                'a.data_int4 AS ezcontentclass_attribute_data_int4',
-                'a.data_text1 AS ezcontentclass_attribute_data_text1',
-                'a.data_text2 AS ezcontentclass_attribute_data_text2',
-                'a.data_text3 AS ezcontentclass_attribute_data_text3',
-                'a.data_text4 AS ezcontentclass_attribute_data_text4',
-                'a.data_text5 AS ezcontentclass_attribute_data_text5',
-                'a.serialized_data_text AS ezcontentclass_attribute_serialized_data_text',
+                    'a.id AS ezcontentclass_attribute_id',
+                    'a.serialized_name_list AS ezcontentclass_attribute_serialized_name_list',
+                    'a.serialized_description_list AS ezcontentclass_attribute_serialized_description_list',
+                    'a.identifier AS ezcontentclass_attribute_identifier',
+                    'a.category AS ezcontentclass_attribute_category',
+                    'a.data_type_string AS ezcontentclass_attribute_data_type_string',
+                    'a.can_translate AS ezcontentclass_attribute_can_translate',
+                    'a.is_required AS ezcontentclass_attribute_is_required',
+                    'a.is_information_collector AS ezcontentclass_attribute_is_information_collector',
+                    'a.is_searchable AS ezcontentclass_attribute_is_searchable',
+                    'a.is_thumbnail AS ezcontentclass_attribute_is_thumbnail',
+                    'a.placement AS ezcontentclass_attribute_placement',
+                    'a.data_float1 AS ezcontentclass_attribute_data_float1',
+                    'a.data_float2 AS ezcontentclass_attribute_data_float2',
+                    'a.data_float3 AS ezcontentclass_attribute_data_float3',
+                    'a.data_float4 AS ezcontentclass_attribute_data_float4',
+                    'a.data_int1 AS ezcontentclass_attribute_data_int1',
+                    'a.data_int2 AS ezcontentclass_attribute_data_int2',
+                    'a.data_int3 AS ezcontentclass_attribute_data_int3',
+                    'a.data_int4 AS ezcontentclass_attribute_data_int4',
+                    'a.data_text1 AS ezcontentclass_attribute_data_text1',
+                    'a.data_text2 AS ezcontentclass_attribute_data_text2',
+                    'a.data_text3 AS ezcontentclass_attribute_data_text3',
+                    'a.data_text4 AS ezcontentclass_attribute_data_text4',
+                    'a.data_text5 AS ezcontentclass_attribute_data_text5',
+                    'a.serialized_data_text AS ezcontentclass_attribute_serialized_data_text',
 
-                'g.group_id AS ezcontentclass_classgroup_group_id',
+                    'g.group_id AS ezcontentclass_classgroup_group_id',
 
-                'ml.name AS ezcontentclass_attribute_multilingual_name',
-                'ml.description AS ezcontentclass_attribute_multilingual_description',
-                'ml.language_id AS ezcontentclass_attribute_multilingual_language_id',
-                'ml.data_text AS ezcontentclass_attribute_multilingual_data_text',
-                'ml.data_json AS ezcontentclass_attribute_multilingual_data_json',
-            ])
-            ->from('ezcontentclass', 'c')
+                    'ml.name AS ezcontentclass_attribute_multilingual_name',
+                    'ml.description AS ezcontentclass_attribute_multilingual_description',
+                    'ml.language_id AS ezcontentclass_attribute_multilingual_language_id',
+                    'ml.data_text AS ezcontentclass_attribute_multilingual_data_text',
+                    'ml.data_json AS ezcontentclass_attribute_multilingual_data_json',
+                ]
+            )
+            ->from(self::CONTENT_TYPE_TABLE, 'c')
             ->leftJoin(
                 'c',
-                'ezcontentclass_attribute',
+                self::FIELD_DEFINITION_TABLE,
                 'a',
                 $expr->andX(
                     $expr->eq('c.id', 'a.contentclass_id'),
@@ -1173,7 +1050,7 @@ class DoctrineDatabase extends Gateway
             )
             ->leftJoin(
                 'c',
-                'ezcontentclass_classgroup',
+                self::CONTENT_TYPE_TO_GROUP_ASSIGNMENT_TABLE,
                 'g',
                 $expr->andX(
                     $expr->eq('c.id', 'g.contentclass_id'),
@@ -1182,7 +1059,7 @@ class DoctrineDatabase extends Gateway
             )
             ->leftJoin(
                 'a',
-                'ezcontentclass_attribute_ml',
+                self::MULTILINGUAL_FIELD_DEFINITION_TABLE,
                 'ml',
                 $expr->andX(
                     $expr->eq('a.id', 'ml.contentclass_attribute_id'),
@@ -1191,93 +1068,70 @@ class DoctrineDatabase extends Gateway
             )
             ->orderBy('a.placement');
 
-        return $q;
+        return $query;
     }
 
-    /**
-     * Counts the number of instances that exists of the identified type.
-     *
-     * @param int $typeId
-     *
-     * @return int
-     */
-    public function countInstancesOfType($typeId)
+    public function countInstancesOfType(int $typeId): int
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $q->select(
-            $q->alias(
-                $q->expr->count(
-                    $this->dbHandler->quoteColumn('id')
-                ),
-                'count'
-            )
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject')
-        )->where(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn('contentclass_id'),
-                $q->bindValue($typeId, null, \PDO::PARAM_INT)
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select($this->dbPlatform->getCountExpression('id'))
+            ->from('ezcontentobject')
+            ->where(
+                $query->expr()->eq(
+                    'contentclass_id',
+                    $query->createPositionalParameter($typeId, ParameterType::INTEGER)
+                )
+            );
 
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $stmt = $query->execute();
 
         return (int)$stmt->fetchColumn();
     }
 
-    /**
-     * Deletes all field definitions of a Type.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     */
-    public function deleteFieldDefinitionsForType($typeId, $status)
+    public function deleteFieldDefinitionsForType(int $typeId, int $status): void
     {
-        $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom(
-            $this->dbHandler->quoteTable('ezcontentclass_attribute')
-        )->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->delete(self::FIELD_DEFINITION_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'contentclass_id',
+                    $query->createPositionalParameter($typeId, ParameterType::INTEGER)
                 )
             )
-        );
+            ->andWhere(
+                $expr->eq(
+                    'version',
+                    $query->createPositionalParameter($status, ParameterType::INTEGER)
+                )
+            );
 
-        $q->prepare()->execute();
+        $query->execute();
+
         $subQuery = $this->connection->createQueryBuilder();
         $subQuery
-            ->select('attr.id as ezcontentclass_attribute_id')
-            ->from('ezcontentclass_attribute', 'attr')
-            ->where('attr.contentclass_id = :typeId')
-            ->andWhere('attr.id = ezcontentclass_attribute_ml.contentclass_attribute_id');
+            ->select('f_def.id as ezcontentclass_attribute_id')
+            ->from(self::FIELD_DEFINITION_TABLE, 'f_def')
+            ->where('f_def.contentclass_id = :content_type_id')
+            ->andWhere('f_def.id = ezcontentclass_attribute_ml.contentclass_attribute_id');
 
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
-            ->delete('ezcontentclass_attribute_ml')
+            ->delete(self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
             ->where(
                 sprintf('EXISTS (%s)', $subQuery->getSQL())
             )
-            ->andWhere('ezcontentclass_attribute_ml.version = :status')
-            ->setParameter('typeId', $typeId, ParameterType::INTEGER)
+            // note: not all drivers support aliasing tables in DELETE query, hence the following:
+            ->andWhere(sprintf('%s.version = :status', self::MULTILINGUAL_FIELD_DEFINITION_TABLE))
+            ->setParameter('content_type_id', $typeId, ParameterType::INTEGER)
             ->setParameter('status', $status, ParameterType::INTEGER);
 
         $deleteQuery->execute();
     }
 
-    /**
-     * Deletes a Type completely.
-     *
-     * @param mixed $typeId
-     * @param int $status
-     */
-    public function delete($typeId, $status)
+    public function delete(int $typeId, int $status): void
     {
         $this->deleteGroupAssignmentsForType($typeId, $status);
         $this->deleteFieldDefinitionsForType($typeId, $status);
@@ -1285,276 +1139,224 @@ class DoctrineDatabase extends Gateway
         $this->deleteType($typeId, $status);
     }
 
-    /**
-     * Deletes a the Type.
-     *
-     * Does no delete the field definitions!
-     *
-     * @param mixed $typeId
-     * @param int $status
-     */
-    public function deleteType($typeId, $status)
+    public function deleteType(int $typeId, int $status): void
     {
-        $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom(
-            $this->dbHandler->quoteTable('ezcontentclass')
-        )->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('id'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::CONTENT_TYPE_TABLE)
+            ->where(
+                $query->expr()->andX(
+                    $query->expr()->eq(
+                        'id',
+                        $query->createPositionalParameter($typeId, ParameterType::INTEGER)
+                    ),
+                    $query->expr()->eq(
+                        'version',
+                        $query->createPositionalParameter($status, ParameterType::INTEGER)
+                    )
                 )
-            )
-        );
-        $q->prepare()->execute();
+            );
+        $query->execute();
+    }
+
+    public function deleteGroupAssignmentsForType(int $typeId, int $status): void
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::CONTENT_TYPE_TO_GROUP_ASSIGNMENT_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'contentclass_id',
+                    $query->createPositionalParameter($typeId, ParameterType::INTEGER)
+                )
+            )->andWhere(
+                $query->expr()->eq(
+                    'contentclass_version',
+                    $query->createPositionalParameter($status, ParameterType::INTEGER)
+                )
+            );
+        $query->execute();
     }
 
     /**
-     * Deletes all group assignments for a Type.
+     * Append all columns of a given table to the SELECT part of a query.
      *
-     * @param mixed $typeId
-     * @param int $status
+     * Each column is aliased in the form of
+     * <code><column_name> AS <table_name>_<column_name></code>.
      */
-    public function deleteGroupAssignmentsForType($typeId, $status)
-    {
-        $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom(
-            $this->dbHandler->quoteTable('ezcontentclass_classgroup')
-        )->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_version'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
+    private function selectColumns(
+        QueryBuilder $queryBuilder,
+        string $tableName,
+        string $tableAlias = ''
+    ): QueryBuilder {
+        if (empty($tableAlias)) {
+            $tableAlias = $tableName;
+        }
+        $queryBuilder
+            ->addSelect(
+                array_map(
+                    function (string $columnName) use ($tableName, $tableAlias): string {
+                        return sprintf(
+                            '%s.%s as %s_%s',
+                            $tableAlias,
+                            $this->connection->quoteIdentifier($columnName),
+                            $tableName,
+                            $columnName
+                        );
+                    },
+                    $this->columns[$tableName]
                 )
-            )
-        );
-        $q->prepare()->execute();
+            );
+
+        return $queryBuilder;
     }
 
-    /**
-     * Publishes the Type with $typeId from $sourceVersion to $targetVersion,
-     * including its fields.
-     *
-     * @param int $typeId
-     * @param int $sourceVersion
-     * @param int $targetVersion
-     */
-    public function publishTypeAndFields($typeId, $sourceVersion, $targetVersion)
+    public function internalChangeContentTypeStatus(
+        int $typeId,
+        int $sourceStatus,
+        int $targetStatus,
+        string $tableName,
+        string $typeIdColumnName,
+        string $statusColumnName
+    ): void {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update($tableName)
+            ->set(
+                $statusColumnName,
+                $query->createPositionalParameter($targetStatus, ParameterType::INTEGER)
+            )
+            ->where(
+                $query->expr()->eq(
+                    $typeIdColumnName,
+                    $query->createPositionalParameter($typeId, ParameterType::INTEGER)
+                )
+            )->andWhere(
+                $query->expr()->eq(
+                    $statusColumnName,
+                    $query->createPositionalParameter($sourceStatus, ParameterType::INTEGER)
+                )
+            );
+
+        $query->execute();
+    }
+
+    public function publishTypeAndFields(int $typeId, int $sourceStatus, int $targetStatus): void
     {
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezcontentclass')
-        )->set(
-            $this->dbHandler->quoteColumn('version'),
-            $query->bindValue($targetVersion, null, \PDO::PARAM_INT)
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('id'),
-                    $query->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('version'),
-                    $query->bindValue($sourceVersion, null, \PDO::PARAM_INT)
-                )
-            )
+        $this->internalChangeContentTypeStatus(
+            $typeId,
+            $sourceStatus,
+            $targetStatus,
+            self::CONTENT_TYPE_TABLE,
+            'id',
+            'version'
         );
 
-        $query->prepare()->execute();
-
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezcontentclass_classgroup')
-        )->set(
-            $this->dbHandler->quoteColumn('contentclass_version'),
-            $query->bindValue($targetVersion, null, \PDO::PARAM_INT)
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $query->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_version'),
-                    $query->bindValue($sourceVersion, null, \PDO::PARAM_INT)
-                )
-            )
+        $this->internalChangeContentTypeStatus(
+            $typeId,
+            $sourceStatus,
+            $targetStatus,
+            self::CONTENT_TYPE_TO_GROUP_ASSIGNMENT_TABLE,
+            'contentclass_id',
+            'contentclass_version'
         );
 
-        $query->prepare()->execute();
-
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezcontentclass_attribute')
-        )->set(
-            $this->dbHandler->quoteColumn('version'),
-            $query->bindValue($targetVersion, null, \PDO::PARAM_INT)
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $query->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('version'),
-                    $query->bindValue($sourceVersion, null, \PDO::PARAM_INT)
-                )
-            )
+        $this->internalChangeContentTypeStatus(
+            $typeId,
+            $sourceStatus,
+            $targetStatus,
+            self::FIELD_DEFINITION_TABLE,
+            'contentclass_id',
+            'version'
         );
 
-        $query->prepare()->execute();
-
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update(
-            $this->dbHandler->quoteTable('ezcontentclass_name')
-        )->set(
-            $this->dbHandler->quoteColumn('contentclass_version'),
-            $query->bindValue($targetVersion, null, \PDO::PARAM_INT)
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $query->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_version'),
-                    $query->bindValue($sourceVersion, null, \PDO::PARAM_INT)
-                )
-            )
+        $this->internalChangeContentTypeStatus(
+            $typeId,
+            $sourceStatus,
+            $targetStatus,
+            self::CONTENT_TYPE_NAME_TABLE,
+            'contentclass_id',
+            'contentclass_version'
         );
-
-        $query->prepare()->execute();
 
         $subQuery = $this->connection->createQueryBuilder();
         $subQuery
-            ->select('attr.id as ezcontentclass_attribute_id')
-            ->from('ezcontentclass_attribute', 'attr')
-            ->where('attr.contentclass_id = :typeId')
-            ->andWhere('attr.id = ezcontentclass_attribute_ml.contentclass_attribute_id');
+            ->select('f_def.id as ezcontentclass_attribute_id')
+            ->from(self::FIELD_DEFINITION_TABLE, 'f_def')
+            ->where('f_def.contentclass_id = :type_id')
+            ->andWhere('f_def.id = ezcontentclass_attribute_ml.contentclass_attribute_id');
 
         $mlDataPublishQuery = $this->connection->createQueryBuilder();
         $mlDataPublishQuery
-            ->update('ezcontentclass_attribute_ml')
-            ->set('version', ':newVersion')
+            ->update(self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
+            ->set('version', ':target_status')
             ->where(
                 sprintf('EXISTS (%s)', $subQuery->getSQL())
             )
-            ->andWhere('ezcontentclass_attribute_ml.version = :sourceVersion')
-            ->setParameter('typeId', $typeId, ParameterType::INTEGER)
-            ->setParameter('newVersion', $targetVersion, ParameterType::INTEGER)
-            ->setParameter('sourceVersion', $sourceVersion, ParameterType::INTEGER);
+            // note: not all drivers support aliasing tables in UPDATE query, hence the following:
+            ->andWhere(
+                sprintf('%s.version = :source_status', self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
+            )
+            ->setParameter('type_id', $typeId, ParameterType::INTEGER)
+            ->setParameter('target_status', $targetStatus, ParameterType::INTEGER)
+            ->setParameter('source_status', $sourceStatus, ParameterType::INTEGER);
 
         $mlDataPublishQuery->execute();
     }
 
-    /**
-     * Creates an array of select columns for $tableName.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $q
-     * @param string $tableName
-     */
-    protected function selectColumns(SelectQuery $q, $tableName)
+    public function getSearchableFieldMapData(): array
     {
-        foreach ($this->columns[$tableName] as $col) {
-            $q->select(
-                $this->dbHandler->aliasedColumn($q, $col, $tableName)
-            );
-        }
-    }
-
-    /**
-     * Returns searchable field mapping data.
-     *
-     * @return array
-     */
-    public function getSearchableFieldMapData()
-    {
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query
             ->select(
-                $this->dbHandler->alias(
-                    $this->dbHandler->quoteColumn('identifier', 'ezcontentclass_attribute'),
-                    $this->dbHandler->quoteIdentifier('field_definition_identifier')
-                ),
-                $this->dbHandler->alias(
-                    $this->dbHandler->quoteColumn('identifier', 'ezcontentclass'),
-                    $this->dbHandler->quoteIdentifier('content_type_identifier')
-                ),
-                $this->dbHandler->alias(
-                    $this->dbHandler->quoteColumn('id', 'ezcontentclass_attribute'),
-                    $this->dbHandler->quoteIdentifier('field_definition_id')
-                ),
-                $this->dbHandler->alias(
-                    $this->dbHandler->quoteColumn('data_type_string', 'ezcontentclass_attribute'),
-                    $this->dbHandler->quoteIdentifier('field_type_identifier')
-                )
+                'f_def.identifier AS field_definition_identifier',
+                'ct.identifier AS content_type_identifier',
+                'f_def.id AS field_definition_id',
+                'f_def.data_type_string AS field_type_identifier'
             )
-            ->from(
-                $this->dbHandler->quoteTable('ezcontentclass_attribute')
-            )
-            ->innerJoin(
-                $this->dbHandler->quoteTable('ezcontentclass'),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id', 'ezcontentclass_attribute'),
-                    $this->dbHandler->quoteColumn('id', 'ezcontentclass')
-                )
-            )->where(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_searchable', 'ezcontentclass_attribute'),
-                    $query->bindValue(1, null, PDO::PARAM_INT)
+            ->from(self::FIELD_DEFINITION_TABLE, 'f_def')
+            ->innerJoin('f_def', self::CONTENT_TYPE_TABLE, 'ct', 'f_def.contentclass_id = ct.id')
+            ->where(
+                $query->expr()->eq(
+                    'f_def.is_searchable',
+                    $query->createPositionalParameter(1, ParameterType::INTEGER)
                 )
             );
 
-        $statement = $query->prepare($query);
-        $statement->execute();
+        $statement = $query->execute($query);
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    /**
-     * Removes fieldDefinition data from multilingual table.
-     *
-     * @param int $fieldDefinitionId
-     * @param string $languageCode
-     * @param int $status
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
     public function removeFieldDefinitionTranslation(
         int $fieldDefinitionId,
         string $languageCode,
         int $status
     ): void {
-        $languageId = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes([$languageCode]);
+        $languageId = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+            [$languageCode]
+        );
 
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
-            ->delete('ezcontentclass_attribute_ml')
-            ->where('contentclass_attribute_id = :fieldDefinitionId')
+            ->delete(self::MULTILINGUAL_FIELD_DEFINITION_TABLE)
+            ->where('contentclass_attribute_id = :field_definition_id')
             ->andWhere('version = :status')
-            ->andWhere('language_id = :languageId')
-            ->setParameter('fieldDefinitionId', $fieldDefinitionId, ParameterType::INTEGER)
+            ->andWhere('language_id = :language_id')
+            ->setParameter('field_definition_id', $fieldDefinitionId, ParameterType::INTEGER)
             ->setParameter('status', $status, ParameterType::INTEGER)
-            ->setParameter('languageId', $languageId, ParameterType::INTEGER);
+            ->setParameter('language_id', $languageId, ParameterType::INTEGER);
 
         $deleteQuery->execute();
     }
 
     /**
-     * Removes types created or modified by the user.
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function removeByUserAndVersion(int $userId, int $version): void
     {
         $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->delete('ezcontentclass')
+        $queryBuilder->delete(self::CONTENT_TYPE_TABLE)
             ->where('creator_id = :user or modifier_id = :user')
             ->andWhere('version = :version')
             ->setParameter('user', $userId, ParameterType::INTEGER)
@@ -1568,13 +1370,16 @@ class DoctrineDatabase extends Gateway
             $this->cleanupAssociations();
 
             $this->connection->commit();
-        } catch (DBALException | PDOException $e) {
+        } catch (DBALException $e) {
             $this->connection->rollBack();
 
             throw $e;
         }
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupAssociations(): void
     {
         $this->cleanupClassAttributeTable();
@@ -1583,6 +1388,9 @@ class DoctrineDatabase extends Gateway
         $this->cleanupClassNameTable();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupClassAttributeTable(): void
     {
         $sql = <<<SQL
@@ -1596,6 +1404,9 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupClassAttributeMLTable(): void
     {
         $sql = <<<SQL
@@ -1609,6 +1420,9 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupClassGroupTable(): void
     {
         $sql = <<<SQL
@@ -1622,6 +1436,9 @@ SQL;
         $this->connection->executeUpdate($sql);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function cleanupClassNameTable(): void
     {
         $sql = <<< SQL
