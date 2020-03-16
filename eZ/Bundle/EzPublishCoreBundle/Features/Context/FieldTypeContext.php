@@ -66,11 +66,6 @@ class FieldTypeContext implements Context
     /** @var eZ\Publish\B\Repository\LocationService */
     private $locationService;
 
-    /**
-     * @injectService $contentTypeService @ezpublish.api.service.content_type
-     * @injectService $contentService @ezpublish.api.service.content
-     * @injectService $locationService @ezpublish.api.service.location
-     */
     public function __construct(
         ContentTypeService $contentTypeService,
         ContentService $contentService,

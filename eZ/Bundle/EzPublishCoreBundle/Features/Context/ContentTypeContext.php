@@ -32,9 +32,6 @@ class ContentTypeContext implements Context
     /** @var \EzSystems\BehatBundle\Context\Object\ContentTypeGroup */
     protected $contentTypeGroupContext;
 
-    /**
-     * @injectService $contentTypeService @ezpublish.api.service.content_type
-     */
     public function __construct(ContentTypeService $contentTypeService)
     {
         $this->contentTypeService = $contentTypeService;

@@ -38,10 +38,6 @@ class UserContext implements Context
     /** @var \eZ\Publish\API\Repository\SearchService */
     protected $searchService;
 
-    /**
-     * @injectService $userService @ezpublish.api.service.user
-     * @injectService $searchService @ezpublish.api.service.search
-     */
     public function __construct(UserService $userService, SearchService $searchService)
     {
         $this->userService = $userService;
