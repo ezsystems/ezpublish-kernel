@@ -31,7 +31,7 @@ class YamlConfigurationContext implements Context
 
     public function addConfiguration(array $configuration)
     {
-        $env = $this->kernel->getEnvironment();
+        $env = $this->getEnvironment();
 
         $yamlString = Yaml::dump($configuration, 5, 4);
         $destinationFileName = 'ezplatform_behat_' . sha1($yamlString) . '.yaml';
@@ -43,14 +43,19 @@ class YamlConfigurationContext implements Context
 
         $this->addImportToPlatformYaml($destinationFileName, $env);
 
-        $application = new Application($this->kernel);
-        $application->setAutoExit(false);
+        if ($this->isSymfonyCacheClearRequired()) {
+            $this->clearSymfonyCache();
+        }
+    }
 
-        $input = new ArrayInput([
-            'command' => 'cache:clear',
-        ]);
+    public function getEnvironment(): string
+    {
+        return $this->kernel->getEnvironment();
+    }
 
-        $application->run($input);
+    public function isSymfonyCacheClearRequired(): string
+    {
+        return 'prod' === $this->getEnvironment();
     }
 
     private function addImportToPlatformYaml(string $importedFileName, string $env): void
@@ -76,5 +81,19 @@ class YamlConfigurationContext implements Context
                 Yaml::dump($platformConfig, 5, 4)
             );
         }
+    }
+
+    public function clearSymfonyCache(): void
+    {
+        $application = new Application($this->kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput(
+            [
+                'command' => 'cache:clear',
+            ]
+        );
+
+        $application->run($input);
     }
 }
