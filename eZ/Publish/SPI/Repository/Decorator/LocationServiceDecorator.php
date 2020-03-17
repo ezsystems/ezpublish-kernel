@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
@@ -28,59 +29,59 @@ abstract class LocationServiceDecorator implements LocationService
     public function copySubtree(
         Location $subtree,
         Location $targetParentLocation
-    ) {
+    ): Location {
         return $this->innerService->copySubtree($subtree, $targetParentLocation);
     }
 
     public function loadLocation(
-        $locationId,
-        array $prioritizedLanguages = null,
-        bool $useAlwaysAvailable = null
-    ) {
+        int $locationId,
+        ?array $prioritizedLanguages = null,
+        ?bool $useAlwaysAvailable = null
+    ): Location {
         return $this->innerService->loadLocation($locationId, $prioritizedLanguages, $useAlwaysAvailable);
     }
 
     public function loadLocationList(
         array $locationIds,
-        array $prioritizedLanguages = null,
-        bool $useAlwaysAvailable = null
+        ?array $prioritizedLanguages = null,
+        ?bool $useAlwaysAvailable = null
     ): iterable {
         return $this->innerService->loadLocationList($locationIds, $prioritizedLanguages, $useAlwaysAvailable);
     }
 
     public function loadLocationByRemoteId(
-        $remoteId,
-        array $prioritizedLanguages = null,
-        bool $useAlwaysAvailable = null
-    ) {
+        string $remoteId,
+        ?array $prioritizedLanguages = null,
+        ?bool $useAlwaysAvailable = null
+    ): Location {
         return $this->innerService->loadLocationByRemoteId($remoteId, $prioritizedLanguages, $useAlwaysAvailable);
     }
 
     public function loadLocations(
         ContentInfo $contentInfo,
-        Location $rootLocation = null,
-        array $prioritizedLanguages = null
-    ) {
+        ?Location $rootLocation = null,
+        ?array $prioritizedLanguages = null
+    ): iterable {
         return $this->innerService->loadLocations($contentInfo, $rootLocation, $prioritizedLanguages);
     }
 
     public function loadLocationChildren(
         Location $location,
-        $offset = 0,
-        $limit = 25,
-        array $prioritizedLanguages = null
-    ) {
+        int $offset = 0,
+        int $limit = 25,
+        ?array $prioritizedLanguages = null
+    ): LocationList {
         return $this->innerService->loadLocationChildren($location, $offset, $limit, $prioritizedLanguages);
     }
 
     public function loadParentLocationsForDraftContent(
         VersionInfo $versionInfo,
-        array $prioritizedLanguages = null
-    ) {
+        ?array $prioritizedLanguages = null
+    ): iterable {
         return $this->innerService->loadParentLocationsForDraftContent($versionInfo, $prioritizedLanguages);
     }
 
-    public function getLocationChildCount(Location $location)
+    public function getLocationChildCount(Location $location): int
     {
         return $this->innerService->getLocationChildCount($location);
     }
@@ -88,30 +89,28 @@ abstract class LocationServiceDecorator implements LocationService
     public function createLocation(
         ContentInfo $contentInfo,
         LocationCreateStruct $locationCreateStruct
-    ) {
+    ): Location {
         return $this->innerService->createLocation($contentInfo, $locationCreateStruct);
     }
 
     public function updateLocation(
         Location $location,
         LocationUpdateStruct $locationUpdateStruct
-    ) {
+    ): Location {
         return $this->innerService->updateLocation($location, $locationUpdateStruct);
     }
 
-    public function swapLocation(
-        Location $location1,
-        Location $location2
-    ) {
-        return $this->innerService->swapLocation($location1, $location2);
+    public function swapLocation(Location $location1, Location $location2): void
+    {
+        $this->innerService->swapLocation($location1, $location2);
     }
 
-    public function hideLocation(Location $location)
+    public function hideLocation(Location $location): Location
     {
         return $this->innerService->hideLocation($location);
     }
 
-    public function unhideLocation(Location $location)
+    public function unhideLocation(Location $location): Location
     {
         return $this->innerService->unhideLocation($location);
     }
@@ -119,21 +118,21 @@ abstract class LocationServiceDecorator implements LocationService
     public function moveSubtree(
         Location $location,
         Location $newParentLocation
-    ) {
-        return $this->innerService->moveSubtree($location, $newParentLocation);
+    ): void {
+        $this->innerService->moveSubtree($location, $newParentLocation);
     }
 
-    public function deleteLocation(Location $location)
+    public function deleteLocation(Location $location): void
     {
-        return $this->innerService->deleteLocation($location);
+        $this->innerService->deleteLocation($location);
     }
 
-    public function newLocationCreateStruct($parentLocationId)
+    public function newLocationCreateStruct(int $parentLocationId): LocationCreateStruct
     {
         return $this->innerService->newLocationCreateStruct($parentLocationId);
     }
 
-    public function newLocationUpdateStruct()
+    public function newLocationUpdateStruct(): LocationUpdateStruct
     {
         return $this->innerService->newLocationUpdateStruct();
     }

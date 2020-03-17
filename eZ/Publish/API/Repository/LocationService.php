@@ -1,13 +1,14 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\LocationService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -16,8 +17,6 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Location service, used for complex subtree operations.
- *
- * @example Examples/location.php
  */
 interface LocationService
 {
@@ -35,7 +34,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
      */
-    public function copySubtree(Location $subtree, Location $targetParentLocation);
+    public function copySubtree(Location $subtree, Location $targetParentLocation): Location;
 
     /**
      * Loads a location object from its $locationId.
@@ -49,7 +48,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null);
+    public function loadLocation(int $locationId, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): Location;
 
     /**
      * Loads several location objects from its $locationIds.
@@ -62,7 +61,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]|iterable
      */
-    public function loadLocationList(array $locationIds, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null): iterable;
+    public function loadLocationList(array $locationIds, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): iterable;
 
     /**
      * Loads a location object from its $remoteId.
@@ -76,7 +75,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null);
+    public function loadLocationByRemoteId(string $remoteId, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): Location;
 
     /**
      * Loads the locations for the given content object.
@@ -92,7 +91,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
      */
-    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null, array $prioritizedLanguages = null);
+    public function loadLocations(ContentInfo $contentInfo, ?Location $rootLocation = null, ?array $prioritizedLanguages = null): iterable;
 
     /**
      * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder.
@@ -104,7 +103,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25, array $prioritizedLanguages = null);
+    public function loadLocationChildren(Location $location, int $offset = 0, int $limit = 25, ?array $prioritizedLanguages = null): LocationList;
 
     /**
      * Load parent Locations for Content Draft.
@@ -114,7 +113,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] List of parent Locations
      */
-    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, array $prioritizedLanguages = null);
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, ?array $prioritizedLanguages = null): iterable;
 
     /**
      * Returns the number of children which are readable by the current user of a location object.
@@ -123,7 +122,7 @@ interface LocationService
      *
      * @return int
      */
-    public function getLocationChildCount(Location $location);
+    public function getLocationChildCount(Location $location): int;
 
     /**
      * Creates the new $location in the content repository for the given content.
@@ -138,7 +137,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      */
-    public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct);
+    public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct): Location;
 
     /**
      * Updates $location in the content repository.
@@ -151,7 +150,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the updated Location
      */
-    public function updateLocation(Location $location, LocationUpdateStruct $locationUpdateStruct);
+    public function updateLocation(Location $location, LocationUpdateStruct $locationUpdateStruct): Location;
 
     /**
      * Swaps the contents held by $location1 and $location2.
@@ -161,7 +160,7 @@ interface LocationService
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location1
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location2
      */
-    public function swapLocation(Location $location1, Location $location2);
+    public function swapLocation(Location $location1, Location $location2): void;
 
     /**
      * Hides the $location and marks invisible all descendants of $location.
@@ -172,7 +171,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
-    public function hideLocation(Location $location);
+    public function hideLocation(Location $location): Location;
 
     /**
      * Unhides the $location.
@@ -186,7 +185,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
-    public function unhideLocation(Location $location);
+    public function unhideLocation(Location $location): Location;
 
     /**
      * Moves the subtree to $newParentLocation.
@@ -201,7 +200,7 @@ interface LocationService
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      */
-    public function moveSubtree(Location $location, Location $newParentLocation);
+    public function moveSubtree(Location $location, Location $newParentLocation): void;
 
     /**
      * Deletes $location and all its descendants.
@@ -210,7 +209,7 @@ interface LocationService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
-    public function deleteLocation(Location $location);
+    public function deleteLocation(Location $location): void;
 
     /**
      * Instantiates a new location create class.
@@ -219,14 +218,14 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId);
+    public function newLocationCreateStruct(int $parentLocationId): LocationCreateStruct;
 
     /**
      * Instantiates a new location update class.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
      */
-    public function newLocationUpdateStruct();
+    public function newLocationUpdateStruct(): LocationUpdateStruct;
 
     /**
      * Get the total number of all existing Locations. Can be combined with loadAllLocations.

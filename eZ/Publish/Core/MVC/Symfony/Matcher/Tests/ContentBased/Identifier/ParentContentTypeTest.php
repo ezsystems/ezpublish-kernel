@@ -17,6 +17,9 @@ use eZ\Publish\API\Repository\Repository;
 
 class ParentContentTypeTest extends BaseTest
 {
+    private const EXAMPLE_LOCATION_ID = 54;
+    private const EXAMPLE_PARENT_LOCATION_ID = 2;
+
     /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\ParentContentType */
     private $matcher;
 
@@ -35,8 +38,13 @@ class ParentContentTypeTest extends BaseTest
      */
     private function generateRepositoryMockForContentTypeIdentifier($contentTypeIdentifier)
     {
-        $parentContentInfo = $this->getContentInfoMock(['contentTypeId' => 42]);
-        $parentLocation = $this->getLocationMock();
+        $parentContentInfo = $this->getContentInfoMock([
+            'mainLocationId' => self::EXAMPLE_LOCATION_ID,
+            'contentTypeId' => 42,
+        ]);
+        $parentLocation = $this->getLocationMock([
+            'parentLocationId' => self::EXAMPLE_PARENT_LOCATION_ID,
+        ]);
         $parentLocation->expects($this->once())
             ->method('getContentInfo')
             ->will(
@@ -106,7 +114,9 @@ class ParentContentTypeTest extends BaseTest
         $this->matcher->setMatchingConfig($matchingConfig);
         $this->assertSame(
             $expectedResult,
-            $this->matcher->matchLocation($this->getLocationMock())
+            $this->matcher->matchLocation($this->getLocationMock([
+                'parentLocationId' => self::EXAMPLE_LOCATION_ID,
+            ]))
         );
     }
 
@@ -152,7 +162,9 @@ class ParentContentTypeTest extends BaseTest
         $this->matcher->setMatchingConfig($matchingConfig);
         $this->assertSame(
             $expectedResult,
-            $this->matcher->matchContentInfo($this->getContentInfoMock())
+            $this->matcher->matchContentInfo($this->getContentInfoMock([
+                'mainLocationId' => self::EXAMPLE_LOCATION_ID,
+            ]))
         );
     }
 }
