@@ -24,6 +24,8 @@ use DateTimeImmutable;
 
 final class UserCheckerTest extends TestCase
 {
+    private const EXAMPLE_USER_ID = 14;
+
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $userServiceMock;
 
@@ -44,7 +46,11 @@ final class UserCheckerTest extends TestCase
                     [
                         'versionInfo' => new VersionInfo(
                             [
-                                'contentInfo' => new ContentInfo(),
+                                'contentInfo' => new ContentInfo(
+                                    [
+                                        'id' => self::EXAMPLE_USER_ID,
+                                    ]
+                                ),
                             ]
                         ),
                     ]
@@ -68,7 +74,11 @@ final class UserCheckerTest extends TestCase
                     [
                         'versionInfo' => new VersionInfo(
                             [
-                                'contentInfo' => new ContentInfo(),
+                                'contentInfo' => new ContentInfo(
+                                    [
+                                        'id' => self::EXAMPLE_USER_ID,
+                                    ]
+                                ),
                             ]
                         ),
                     ]
@@ -91,7 +101,11 @@ final class UserCheckerTest extends TestCase
                     [
                         'versionInfo' => new VersionInfo(
                             [
-                                'contentInfo' => new ContentInfo(),
+                                'contentInfo' => new ContentInfo(
+                                    [
+                                        'id' => self::EXAMPLE_USER_ID,
+                                    ]
+                                ),
                             ]
                         ),
                     ]
@@ -120,7 +134,11 @@ final class UserCheckerTest extends TestCase
                     [
                         'versionInfo' => new VersionInfo(
                             [
-                                'contentInfo' => new ContentInfo(),
+                                'contentInfo' => new ContentInfo(
+                                    [
+                                        'id' => self::EXAMPLE_USER_ID,
+                                    ]
+                                ),
                             ]
                         ),
                     ]

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the custom field interface.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
@@ -27,7 +27,7 @@ interface CustomFieldInterface
      * @param string $field
      * @param string $customField
      */
-    public function setCustomField($type, $field, $customField);
+    public function setCustomField(string $type, string $field, string $customField): void;
 
     /**
      * Return the custom field to query or sort on if set.
@@ -35,7 +35,7 @@ interface CustomFieldInterface
      * @param string $type
      * @param string $field
      *
-     * @return mixed If no custom field is set, return null
+     * @return string|null If no custom field is set, return null
      */
-    public function getCustomField($type, $field);
+    public function getCustomField(string $type, string $field): ?string;
 }

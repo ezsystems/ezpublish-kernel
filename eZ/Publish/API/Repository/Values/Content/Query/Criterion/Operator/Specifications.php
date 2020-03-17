@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
@@ -18,16 +18,16 @@ class Specifications
     /**
      * Criterion input type description constants.
      */
-    const FORMAT_SINGLE = 'single';
-    const FORMAT_ARRAY = 'array';
+    public const FORMAT_SINGLE = 1;
+    public const FORMAT_ARRAY = 2;
 
     /**
      * Criterion input value type description constants.
      * Used by {@see getDescription()} to say which type of values an operator expects.
      */
-    const TYPE_INTEGER = 1;
-    const TYPE_STRING = 2;
-    const TYPE_BOOLEAN = 4;
+    public const TYPE_INTEGER = 1;
+    public const TYPE_STRING = 2;
+    public const TYPE_BOOLEAN = 4;
 
     /**
      * Specified operator, as one of the Operator::* constants.
@@ -40,7 +40,7 @@ class Specifications
      *
      * @see self::FORMAT_*
      *
-     * @var string
+     * @var int
      */
     public $valueFormat;
 
@@ -67,11 +67,11 @@ class Specifications
      * Creates a new Specifications object.
      *
      * @param string $operator The specified operator, as one of the Operator::* constants
-     * @param string $valueFormat The accepted value format, either {@see self::FORMAT_ARRAY} or {@see self::FORMAT_SINGLE}
+     * @param int $valueFormat The accepted value format, either {@see self::FORMAT_ARRAY} or {@see self::FORMAT_SINGLE}
      * @param int $valueTypes The supported value types, as a bit field of the {@see self::TYPE_*} constants
      * @param int $valueCount The required number of values, when the accepted format is {@see self::FORMAT_ARRAY}
      */
-    public function __construct($operator, $valueFormat, $valueTypes = null, $valueCount = null)
+    public function __construct(string $operator, int $valueFormat, ?int $valueTypes = null, ?int $valueCount = null)
     {
         $this->operator = $operator;
         $this->valueFormat = $valueFormat;

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\User\User class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
@@ -17,13 +17,10 @@ use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
  */
 class UserReference implements APIUserReference
 {
-    /** @var mixed */
+    /** @var int */
     private $userId;
 
-    /**
-     * @param mixed $userId
-     */
-    public function __construct($userId)
+    public function __construct(int $userId)
     {
         $this->userId = $userId;
     }
@@ -31,9 +28,9 @@ class UserReference implements APIUserReference
     /**
      * The User id of the User this reference represent.
      *
-     * @return mixed
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }

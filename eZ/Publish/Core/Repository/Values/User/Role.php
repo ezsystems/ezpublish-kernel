@@ -31,7 +31,7 @@ class Role extends APIRole
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
-    public function getPolicies()
+    public function getPolicies(): iterable
     {
         return $this->policies;
     }

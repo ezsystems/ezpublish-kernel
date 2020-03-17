@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Values\Notification;
 use ArrayIterator;
 use IteratorAggregate;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use Traversable;
 
 class NotificationList extends ValueObject implements IteratorAggregate
 {
@@ -23,7 +24,7 @@ class NotificationList extends ValueObject implements IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
     }

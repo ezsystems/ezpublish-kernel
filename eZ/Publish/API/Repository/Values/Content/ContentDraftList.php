@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use ArrayIterator;
-use Iterator;
 use IteratorAggregate;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use Traversable;
 
 /**
  * List of content drafts.
@@ -31,7 +31,7 @@ class ContentDraftList extends ValueObject implements IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator(): Iterator
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
     }

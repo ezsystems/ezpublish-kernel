@@ -80,7 +80,7 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
             /** @var \eZ\Publish\API\Repository\Values\User\Policy */
             foreach ($permissionSet['policies'] as $policy) {
                 $limitations = $policy->getLimitations();
-                if ($limitations === '*' || empty($limitations)) {
+                if (empty($limitations)) {
                     // Given policy gives full access, optimize away all role policies (but not role limitation if any)
                     // This should be optimized on create/update of Roles, however we keep this here for bc with older data
                     $policyOrCriteria = [];

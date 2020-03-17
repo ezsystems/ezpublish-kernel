@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\SortClause\MapLocationDistance class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -35,11 +35,11 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
      * @param string $sortDirection
      */
     public function __construct(
-        $typeIdentifier,
-        $fieldIdentifier,
-        $latitude,
-        $longitude,
-        $sortDirection = Query::SORT_ASC
+        string $typeIdentifier,
+        string $fieldIdentifier,
+        float $latitude,
+        float $longitude,
+        string $sortDirection = Query::SORT_ASC
     ) {
         parent::__construct(
             'maplocation_distance',
@@ -62,7 +62,7 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
      * @param string $field
      * @param string $customField
      */
-    public function setCustomField($type, $field, $customField)
+    public function setCustomField(string $type, string $field, string $customField): void
     {
         $this->customFields[$type][$field] = $customField;
     }
@@ -77,7 +77,7 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
      *
      * @return mixed
      */
-    public function getCustomField($type, $field)
+    public function getCustomField(string $type, string $field): ?string
     {
         if (!isset($this->customFields[$type]) ||
             !isset($this->customFields[$type][$field])) {

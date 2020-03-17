@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value;
@@ -57,7 +57,7 @@ abstract class Criterion implements CriterionInterface
      *
      * @throws \InvalidArgumentException if the provided operator isn't supported
      */
-    public function __construct($target, $operator, $value, Value $valueData = null)
+    public function __construct(?string $target, ?string $operator, $value, ?Value $valueData = null)
     {
         if ($operator === null) {
             $operator = is_array($value) ? Operator::IN : Operator::EQ;
@@ -143,16 +143,16 @@ abstract class Criterion implements CriterionInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications[]
      */
-    abstract public function getSpecifications();
+    abstract public function getSpecifications(): array;
 
     /**
      * Returns a callback that checks the values types depending on the operator specifications.
      *
      * @param int $valueTypes The accepted values, as a bit field of Specifications::TYPE_* constants
      *
-     * @return \Closure
+     * @return callable
      */
-    private function getValueTypeCheckCallback($valueTypes)
+    private function getValueTypeCheckCallback(int $valueTypes): callable
     {
         $callback = function ($value) {
             return false;

@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\DateRangeFacetBuilder class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -18,9 +16,9 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  */
 abstract class DateRangeFacetBuilder extends FacetBuilder
 {
-    const PUBLISHED = 0;
-    const CREATED = 1;
-    const MODIFIED = 2;
+    public const PUBLISHED = 0;
+    public const CREATED = 1;
+    public const MODIFIED = 2;
 
     public $type = self::PUBLISHED;
 

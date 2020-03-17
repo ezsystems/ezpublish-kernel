@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 
 /**
@@ -23,7 +25,7 @@ class Validity extends Matcher
      *
      * @param bool $isValid
      */
-    public function __construct($isValid)
+    public function __construct(bool $isValid)
     {
         $this->isValid = $isValid;
     }

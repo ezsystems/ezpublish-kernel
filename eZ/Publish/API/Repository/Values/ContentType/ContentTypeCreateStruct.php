@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -109,9 +109,9 @@ abstract class ContentTypeCreateStruct extends ValueObject
     /**
      * Adds a new field definition.
      *
-     * @param FieldDefinitionCreateStruct $fieldDef
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDef
      */
-    abstract public function addFieldDefinition(FieldDefinitionCreateStruct $fieldDef);
+    abstract public function addFieldDefinition(FieldDefinitionCreateStruct $fieldDef): void;
 
     /**
      * If set this value overrides the current user as creator.

@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Values\Bookmark;
 use ArrayIterator;
 use IteratorAggregate;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use Traversable;
 
 /**
  * List of bookmarked locations.
@@ -34,7 +35,7 @@ class BookmarkList extends ValueObject implements IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
     }

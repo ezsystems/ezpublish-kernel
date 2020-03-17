@@ -1,13 +1,14 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\Content\Relation class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\Content;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
 
 /**
@@ -43,7 +44,7 @@ class Relation extends APIRelation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function getSourceContentInfo()
+    public function getSourceContentInfo(): APIContentInfo
     {
         return $this->sourceContentInfo;
     }
@@ -53,7 +54,7 @@ class Relation extends APIRelation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function getDestinationContentInfo()
+    public function getDestinationContentInfo(): APIContentInfo
     {
         return $this->destinationContentInfo;
     }

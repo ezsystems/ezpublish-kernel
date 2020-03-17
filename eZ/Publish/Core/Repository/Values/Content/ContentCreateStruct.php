@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCreateStruct;
@@ -39,7 +39,7 @@ class ContentCreateStruct extends APIContentCreateStruct
      *                     field type or an instance of a Value class provided by the field type
      * @param string|null $language If not given on a translatable field the initial language is used
      */
-    public function setField($fieldDefIdentifier, $value, $language = null)
+    public function setField(string $fieldDefIdentifier, $value, ?string $language = null): void
     {
         if (!isset($language)) {
             $language = $this->mainLanguageCode;

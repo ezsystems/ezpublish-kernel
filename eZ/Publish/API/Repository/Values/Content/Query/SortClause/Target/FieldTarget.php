@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
 
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
@@ -29,7 +29,7 @@ class FieldTarget extends Target
      */
     public $fieldIdentifier;
 
-    public function __construct($typeIdentifier, $fieldIdentifier)
+    public function __construct(string $typeIdentifier, string $fieldIdentifier)
     {
         $this->typeIdentifier = $typeIdentifier;
         $this->fieldIdentifier = $fieldIdentifier;

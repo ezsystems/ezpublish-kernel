@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -15,9 +15,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 class Query extends ValueObject
 {
-    const SORT_ASC = 'ascending';
-
-    const SORT_DESC = 'descending';
+    public const SORT_ASC = 'ascending';
+    public const SORT_DESC = 'descending';
 
     /**
      * The Query filter.

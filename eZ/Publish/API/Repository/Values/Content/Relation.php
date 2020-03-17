@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Relation class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -78,14 +78,14 @@ abstract class Relation extends ValueObject
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    abstract public function getSourceContentInfo();
+    abstract public function getSourceContentInfo(): ContentInfo;
 
     /**
      * the content of the destination content of the relation.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    abstract public function getDestinationContentInfo();
+    abstract public function getDestinationContentInfo(): ContentInfo;
 
     /**
      * The relation type bitmask.

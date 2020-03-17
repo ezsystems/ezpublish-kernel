@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -38,7 +38,7 @@ class LanguageCode extends Criterion
      * @throws \InvalidArgumentException if non string value is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct($value, $matchAlwaysAvailable = true)
+    public function __construct($value, bool $matchAlwaysAvailable = true)
     {
         if (!is_bool($matchAlwaysAvailable)) {
             throw new InvalidArgumentType('matchAlwaysAvailable', 'boolean', $matchAlwaysAvailable);
@@ -48,7 +48,7 @@ class LanguageCode extends Criterion
         parent::__construct(null, null, $value);
     }
 
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [
             new Specifications(
