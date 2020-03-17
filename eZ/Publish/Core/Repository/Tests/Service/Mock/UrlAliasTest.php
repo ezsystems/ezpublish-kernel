@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\UrlAliasTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
@@ -27,6 +27,12 @@ use Exception;
  */
 class UrlAliasTest extends BaseServiceMockTest
 {
+    private const EXAMPLE_ID = 'eznode:42';
+    private const EXAMPLE_LANGUAGE_CODE = 'pol-PL';
+    private const EXAMPLE_PATH = 'folder/article';
+    private const EXAMPLE_OFFSET = 10;
+    private const EXAMPLE_LIMIT = 100;
+
     /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionResolver;
 
@@ -77,7 +83,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $urlAliasHandlerMock
             ->expects($this->once())
             ->method('loadUrlAlias')
-            ->with(42)
+            ->with(self::EXAMPLE_ID)
             ->will($this->returnValue(new SPIUrlAlias()));
 
         $mockedService
@@ -86,7 +92,7 @@ class UrlAliasTest extends BaseServiceMockTest
             ->with($this->isInstanceOf(SPIUrlAlias::class), null)
             ->will($this->returnValue('path'));
 
-        $urlAlias = $mockedService->load(42);
+        $urlAlias = $mockedService->load(self::EXAMPLE_ID);
 
         self::assertInstanceOf(URLAlias::class, $urlAlias);
     }
@@ -103,11 +109,11 @@ class UrlAliasTest extends BaseServiceMockTest
         $urlAliasHandlerMock
             ->expects($this->once())
             ->method('loadUrlAlias')
-            ->with(42)
-            ->will($this->throwException(new NotFoundException('UrlAlias', 42)));
+            ->with(self::EXAMPLE_ID)
+            ->will($this->throwException(new NotFoundException('UrlAlias', self::EXAMPLE_ID)));
 
         $this->expectException(ApiNotFoundException::class);
-        $mockedService->load(42);
+        $mockedService->load(self::EXAMPLE_ID);
     }
 
     protected function getSpiUrlAlias()
@@ -160,12 +166,12 @@ class UrlAliasTest extends BaseServiceMockTest
         $this->urlAliasHandler
             ->expects($this->once())
             ->method('loadUrlAlias')
-            ->with(42)
+            ->with(self::EXAMPLE_ID)
             ->will($this->returnValue($spiUrlAlias));
 
         $this->expectException(ApiNotFoundException::class);
 
-        $urlAliasService->load(42);
+        $urlAliasService->load(self::EXAMPLE_ID);
     }
 
     /**
@@ -2525,14 +2531,18 @@ class UrlAliasTest extends BaseServiceMockTest
         )->method(
             'listGlobalURLAliases'
         )->with(
-            $this->equalTo('languageCode'),
-            $this->equalTo('offset'),
-            $this->equalTo('limit')
+            $this->equalTo(self::EXAMPLE_LANGUAGE_CODE),
+            $this->equalTo(self::EXAMPLE_OFFSET),
+            $this->equalTo(self::EXAMPLE_LIMIT)
         )->will(
             $this->returnValue([])
         );
 
-        $urlAliases = $urlAliasService->listGlobalAliases('languageCode', 'offset', 'limit');
+        $urlAliases = $urlAliasService->listGlobalAliases(
+            self::EXAMPLE_LANGUAGE_CODE,
+            self::EXAMPLE_OFFSET,
+            self::EXAMPLE_LIMIT
+        );
 
         self::assertEmpty($urlAliases);
     }
@@ -2949,20 +2959,20 @@ class UrlAliasTest extends BaseServiceMockTest
             'createCustomUrlAlias'
         )->with(
             $this->equalTo($location->id),
-            $this->equalTo('path'),
-            $this->equalTo('forwarding'),
-            $this->equalTo('languageCode'),
-            $this->equalTo('alwaysAvailable')
+            $this->equalTo(self::EXAMPLE_PATH),
+            $this->equalTo(true),
+            $this->equalTo(self::EXAMPLE_LANGUAGE_CODE),
+            $this->equalTo(true)
         )->will(
             $this->returnValue(new SPIUrlAlias())
         );
 
         $urlAlias = $mockedService->createUrlAlias(
             $location,
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
 
         self::assertInstanceOf(URLAlias::class, $urlAlias);
@@ -3007,20 +3017,20 @@ class UrlAliasTest extends BaseServiceMockTest
             'createCustomUrlAlias'
         )->with(
             $this->equalTo($location->id),
-            $this->equalTo('path'),
-            $this->equalTo('forwarding'),
-            $this->equalTo('languageCode'),
-            $this->equalTo('alwaysAvailable')
+            $this->equalTo(self::EXAMPLE_PATH),
+            $this->equalTo(true),
+            $this->equalTo(self::EXAMPLE_LANGUAGE_CODE),
+            $this->equalTo(true)
         )->will(
             $this->throwException(new Exception('Handler threw an exception'))
         );
 
         $mockedService->createUrlAlias(
             $location,
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
     }
 
@@ -3053,20 +3063,20 @@ class UrlAliasTest extends BaseServiceMockTest
             'createCustomUrlAlias'
         )->with(
             $this->equalTo($location->id),
-            $this->equalTo('path'),
-            $this->equalTo('forwarding'),
-            $this->equalTo('languageCode'),
-            $this->equalTo('alwaysAvailable')
+            $this->equalTo(self::EXAMPLE_PATH),
+            $this->equalTo(true),
+            $this->equalTo(self::EXAMPLE_LANGUAGE_CODE),
+            $this->equalTo(true)
         )->will(
             $this->throwException(new ForbiddenException('Forbidden!'))
         );
 
         $mockedService->createUrlAlias(
             $location,
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
     }
 
@@ -3105,20 +3115,20 @@ class UrlAliasTest extends BaseServiceMockTest
             'createGlobalUrlAlias'
         )->with(
             $this->equalTo($resource),
-            $this->equalTo('path'),
-            $this->equalTo('forwarding'),
-            $this->equalTo('languageCode'),
-            $this->equalTo('alwaysAvailable')
+            $this->equalTo(self::EXAMPLE_PATH),
+            $this->equalTo(true),
+            $this->equalTo(self::EXAMPLE_LANGUAGE_CODE),
+            $this->equalTo(true)
         )->will(
             $this->returnValue(new SPIUrlAlias())
         );
 
         $urlAlias = $mockedService->createGlobalUrlAlias(
             $resource,
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
 
         self::assertInstanceOf(URLAlias::class, $urlAlias);
@@ -3162,20 +3172,20 @@ class UrlAliasTest extends BaseServiceMockTest
             'createGlobalUrlAlias'
         )->with(
             $this->equalTo($resource),
-            $this->equalTo('path'),
-            $this->equalTo('forwarding'),
-            $this->equalTo('languageCode'),
-            $this->equalTo('alwaysAvailable')
+            $this->equalTo(self::EXAMPLE_PATH),
+            $this->equalTo(true),
+            $this->equalTo(self::EXAMPLE_LANGUAGE_CODE),
+            $this->equalTo(true)
         )->will(
             $this->throwException(new Exception('Handler threw an exception'))
         );
 
         $mockedService->createGlobalUrlAlias(
             $resource,
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
     }
 
@@ -3197,10 +3207,10 @@ class UrlAliasTest extends BaseServiceMockTest
 
         $mockedService->createGlobalUrlAlias(
             'invalid/resource',
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
     }
 
@@ -3229,20 +3239,20 @@ class UrlAliasTest extends BaseServiceMockTest
             'createGlobalUrlAlias'
         )->with(
             $this->equalTo($resource),
-            $this->equalTo('path'),
-            $this->equalTo('forwarding'),
-            $this->equalTo('languageCode'),
-            $this->equalTo('alwaysAvailable')
+            $this->equalTo(self::EXAMPLE_PATH),
+            $this->equalTo(true),
+            $this->equalTo(self::EXAMPLE_LANGUAGE_CODE),
+            $this->equalTo(true)
         )->will(
             $this->throwException(new ForbiddenException('Forbidden!'))
         );
 
         $mockedService->createGlobalUrlAlias(
             $resource,
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
     }
 
@@ -3293,25 +3303,25 @@ class UrlAliasTest extends BaseServiceMockTest
             'createUrlAlias'
         )->with(
             $this->equalTo($location),
-            $this->equalTo('path'),
-            $this->equalTo('languageCode'),
-            $this->equalTo('forwarding'),
-            $this->equalTo('alwaysAvailable')
+            $this->equalTo(self::EXAMPLE_PATH),
+            $this->equalTo(self::EXAMPLE_LANGUAGE_CODE),
+            $this->equalTo(true),
+            $this->equalTo(true)
         );
 
         $mockedService->createGlobalUrlAlias(
             'eznode:42',
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
         $mockedService->createGlobalUrlAlias(
             'module:content/view/full/42',
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
     }
 
@@ -3404,9 +3414,9 @@ class UrlAliasTest extends BaseServiceMockTest
 
         $mockedService->createUrlAlias(
             $location,
-            'path',
-            'languageCode',
-            'forwarding'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true
         );
     }
 
@@ -3430,10 +3440,10 @@ class UrlAliasTest extends BaseServiceMockTest
 
         $mockedService->createGlobalUrlAlias(
             'eznode:42',
-            'path',
-            'languageCode',
-            'forwarding',
-            'alwaysAvailable'
+            self::EXAMPLE_PATH,
+            self::EXAMPLE_LANGUAGE_CODE,
+            true,
+            true
         );
     }
 
