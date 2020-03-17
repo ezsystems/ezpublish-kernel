@@ -15,11 +15,12 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\QueryTypeBundle\QueryType\TestQueryType;
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubPolicyProvider;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CheckExceptionOnInvalidReferenceBehaviorPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Yaml\Yaml;
-use ReflectionObject;
 
 class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 {
@@ -32,7 +33,15 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     protected function setUp(): void
     {
-        $this->extension = new EzPublishCoreExtension();
+        parent::setUp();
+
+        $loader = new YamlFileLoader(
+            $this->container,
+            new FileLocator(__DIR__ . '/Fixtures')
+        );
+
+        $loader->load('parameters.yml');
+
         $this->siteaccessConfig = [
             'siteaccess' => [
                 'default_siteaccess' => 'ezdemo_site',
@@ -55,13 +64,11 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 'empty_group' => ['var_dir' => 'foo'],
             ],
         ];
-
-        parent::setUp();
     }
 
     protected function getContainerExtensions(): array
     {
-        return [$this->extension];
+        return [EzPublishCoreExtension::class => $this->getCoreExtension()];
     }
 
     protected function getMinimalConfiguration(): array
@@ -71,17 +78,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testSiteAccessConfiguration()
     {
-        // Injecting needed config parsers.
-        $refExtension = new ReflectionObject($this->extension);
-        $refMethod = $refExtension->getMethod('getMainConfigParser');
-        $refMethod->setAccessible(true);
-        $refMethod->invoke($this->extension);
-        $refParser = $refExtension->getProperty('mainConfigParser');
-        $refParser->setAccessible(true);
-        /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser $parser */
-        $parser = $refParser->getValue($this->extension);
-        $parser->setConfigParsers([new Common(), new Content()]);
-
         $this->load($this->siteaccessConfig);
         $this->assertContainerBuilderHasParameter(
             'ezpublish.siteaccess.list',
@@ -817,5 +813,16 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 }
             )
         );
+    }
+
+    protected function getCoreExtension(): EzPublishCoreExtension
+    {
+        if (null !== $this->extension) {
+            return $this->extension;
+        }
+
+        $this->extension = new EzPublishCoreExtension([new Common(), new Content()]);
+
+        return $this->extension;
     }
 }
