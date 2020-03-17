@@ -56,7 +56,7 @@ class UserService extends UserServiceDecorator
     public function createUserGroup(
         UserGroupCreateStruct $userGroupCreateStruct,
         UserGroup $parentGroup
-    ) {
+    ): UserGroup {
         $eventData = [
             $userGroupCreateStruct,
             $parentGroup,
@@ -80,7 +80,7 @@ class UserService extends UserServiceDecorator
         return $userGroup;
     }
 
-    public function deleteUserGroup(UserGroup $userGroup)
+    public function deleteUserGroup(UserGroup $userGroup): iterable
     {
         $eventData = [$userGroup];
 
@@ -128,7 +128,7 @@ class UserService extends UserServiceDecorator
     public function updateUserGroup(
         UserGroup $userGroup,
         UserGroupUpdateStruct $userGroupUpdateStruct
-    ) {
+    ): UserGroup {
         $eventData = [
             $userGroup,
             $userGroupUpdateStruct,
@@ -155,7 +155,7 @@ class UserService extends UserServiceDecorator
     public function createUser(
         UserCreateStruct $userCreateStruct,
         array $parentGroups
-    ) {
+    ): User {
         $eventData = [
             $userCreateStruct,
             $parentGroups,
@@ -179,7 +179,7 @@ class UserService extends UserServiceDecorator
         return $user;
     }
 
-    public function deleteUser(User $user)
+    public function deleteUser(User $user): iterable
     {
         $eventData = [$user];
 
@@ -204,7 +204,7 @@ class UserService extends UserServiceDecorator
     public function updateUser(
         User $user,
         UserUpdateStruct $userUpdateStruct
-    ) {
+    ): User {
         $eventData = [
             $user,
             $userUpdateStruct,
@@ -231,7 +231,7 @@ class UserService extends UserServiceDecorator
     public function updateUserToken(
         User $user,
         UserTokenUpdateStruct $userTokenUpdateStruct
-    ) {
+    ): User {
         $eventData = [
             $user,
             $userTokenUpdateStruct,

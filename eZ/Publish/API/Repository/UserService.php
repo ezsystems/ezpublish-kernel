@@ -1,14 +1,15 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\UserService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
@@ -21,8 +22,6 @@ use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
 /**
  * This service provides methods for managing users and user groups.
- *
- * @example Examples/user.php
  */
 interface UserService
 {
@@ -43,12 +42,12 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userGroupCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set to an empty value
      */
-    public function createUserGroup(UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup);
+    public function createUserGroup(UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup): UserGroup;
 
     /**
      * Loads a user group for the given id.
      *
-     * @param mixed $id
+     * @param int $id
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
@@ -56,7 +55,7 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
-    public function loadUserGroup($id, array $prioritizedLanguages = []);
+    public function loadUserGroup(int $id, array $prioritizedLanguages = []): UserGroup;
 
     /**
      * Loads the sub groups of a user group.
@@ -70,7 +69,7 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = []);
+    public function loadSubUserGroups(UserGroup $userGroup, int $offset = 0, int $limit = 25, array $prioritizedLanguages = []): iterable;
 
     /**
      * Removes a user group.
@@ -81,9 +80,9 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      *
-     * @return mixed[] Affected Location Id's (List of Locations of the Content that was deleted)
+     * @return int[] Affected Location Id's (List of Locations of the Content that was deleted)
      */
-    public function deleteUserGroup(UserGroup $userGroup);
+    public function deleteUserGroup(UserGroup $userGroup): iterable;
 
     /**
      * Moves the user group to another parent.
@@ -93,7 +92,7 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
      */
-    public function moveUserGroup(UserGroup $userGroup, UserGroup $newParent);
+    public function moveUserGroup(UserGroup $userGroup, UserGroup $newParent): void;
 
     /**
      * Updates the group profile with fields and meta data.
@@ -102,7 +101,7 @@ interface UserService
      * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct
+     * @param UserGroupUpdateStruct $userGroupUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
@@ -111,7 +110,7 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
      */
-    public function updateUserGroup(UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct);
+    public function updateUserGroup(UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct): UserGroup;
 
     /**
      * Create a new user. The created user is published by this method.
@@ -127,7 +126,7 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
      *                                                                        if a user with provided login already exists
      */
-    public function createUser(UserCreateStruct $userCreateStruct, array $parentGroups);
+    public function createUser(UserCreateStruct $userCreateStruct, array $parentGroups): User;
 
     /**
      * Loads a user.
@@ -139,7 +138,7 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      */
-    public function loadUser($userId, array $prioritizedLanguages = []);
+    public function loadUser(int $userId, array $prioritizedLanguages = []): User;
 
     /**
      * Loads a user for the given login.
@@ -157,7 +156,7 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login, array $prioritizedLanguages = []);
+    public function loadUserByLogin(string $login, array $prioritizedLanguages = []): User;
 
     /**
      * Checks if credentials are valid for provided User.
@@ -196,17 +195,17 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function loadUsersByEmail(string $email, array $prioritizedLanguages = []): array;
+    public function loadUsersByEmail(string $email, array $prioritizedLanguages = []): iterable;
 
     /**
      * Loads a user with user hash key.
      *
      * @param string $hash
-     * @param array $prioritizedLanguages
+     * @param string[] $prioritizedLanguages
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function loadUserByToken($hash, array $prioritizedLanguages = []);
+    public function loadUserByToken(string $hash, array $prioritizedLanguages = []): User;
 
     /**
      * This method deletes a user.
@@ -215,9 +214,9 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete the user
      *
-     * @return mixed[] Affected Location Id's (List of Locations of the Content that was deleted)
+     * @return int[] Affected Location Id's (List of Locations of the Content that was deleted)
      */
-    public function deleteUser(User $user);
+    public function deleteUser(User $user): iterable;
 
     /**
      * Updates a user.
@@ -226,16 +225,16 @@ interface UserService
      * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
+     * @param UserUpdateStruct $userUpdateStruct
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *@throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
      *
-     * @return \eZ\Publish\API\Repository\Values\User\User
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
      */
-    public function updateUser(User $user, UserUpdateStruct $userUpdateStruct);
+    public function updateUser(User $user, UserUpdateStruct $userUpdateStruct): User;
 
     /**
      * Update the user token information specified by the user token struct.
@@ -245,14 +244,14 @@ interface UserService
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct);
+    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct): User;
 
     /**
      * Expires user token with user hash.
      *
      * @param string $hash
      */
-    public function expireUserToken($hash);
+    public function expireUserToken(string $hash): void;
 
     /**
      * Assigns a new user group to the user.
@@ -264,7 +263,7 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
      */
-    public function assignUserToUserGroup(User $user, UserGroup $userGroup);
+    public function assignUserToUserGroup(User $user, UserGroup $userGroup): void;
 
     /**
      * Removes a user group from the user.
@@ -276,7 +275,7 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $userGroup is the last assigned user group
      */
-    public function unAssignUserFromUserGroup(User $user, UserGroup $userGroup);
+    public function unAssignUserFromUserGroup(User $user, UserGroup $userGroup): void;
 
     /**
      * Loads the user groups the user belongs to.
@@ -290,7 +289,7 @@ interface UserService
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25, array $prioritizedLanguages = []);
+    public function loadUserGroupsOfUser(User $user, int $offset = 0, int $limit = 25, array $prioritizedLanguages = []): iterable;
 
     /**
      * Loads the users of a user group.
@@ -304,7 +303,7 @@ interface UserService
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = []);
+    public function loadUsersOfUserGroup(UserGroup $userGroup, int $offset = 0, int $limit = 25, array $prioritizedLanguages = []): iterable;
 
     /**
      * Checks if Content is a user.
@@ -339,7 +338,7 @@ interface UserService
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserCreateStruct
      */
-    public function newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType = null);
+    public function newUserCreateStruct(string $login, string $email, string $password, string $mainLanguageCode, ?ContentType $contentType = null): \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 
     /**
      * Instantiate a user group create class.
@@ -349,21 +348,21 @@ interface UserService
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      */
-    public function newUserGroupCreateStruct($mainLanguageCode, $contentType = null);
+    public function newUserGroupCreateStruct(string $mainLanguageCode, ?ContentType $contentType = null): UserGroupCreateStruct;
 
     /**
      * Instantiate a new user update struct.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
      */
-    public function newUserUpdateStruct();
+    public function newUserUpdateStruct(): UserUpdateStruct;
 
     /**
      * Instantiate a new user group update struct.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
      */
-    public function newUserGroupUpdateStruct();
+    public function newUserGroupUpdateStruct(): UserGroupUpdateStruct;
 
     /**
      * Validates given password.
