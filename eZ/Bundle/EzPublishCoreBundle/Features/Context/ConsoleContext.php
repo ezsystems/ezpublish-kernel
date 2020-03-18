@@ -2,7 +2,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 
 use Behat\Behat\Context\Context;
-use Behat\Symfony2Extension\Context\KernelDictionary;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -10,7 +9,14 @@ use PHPUnit\Framework\Assert as Assertion;
 
 class ConsoleContext implements Context
 {
-    use KernelDictionary;
+    /** @var ConfigResolverInterface */
+    private $configResolver;
+
+    /** @var string[] */
+    private $siteaccessList;
+
+    /** @var string */
+    private $defaultSiteaccess;
 
     private $scriptOutput = null;
 
@@ -19,6 +25,21 @@ class ConsoleContext implements Context
      * @var array
      */
     private $it = [];
+
+    /**
+     * @param ConfigResolverInterface $configResolver
+     * @param string[] $siteaccessList
+     * @param string $defaultSiteaccess
+     */
+    public function __construct(
+        ConfigResolverInterface $configResolver,
+        array $siteaccessList,
+        string $defaultSiteaccess
+    ) {
+        $this->configResolver = $configResolver;
+        $this->siteaccessList = $siteaccessList;
+        $this->defaultSiteaccess = $defaultSiteaccess;
+    }
 
     /**
      * @When I run a console script without specifying a siteaccess
@@ -124,10 +145,10 @@ class ConsoleContext implements Context
         }
 
         $commandLine = $php . ($phpArgs ? ' ' . $phpArgs : '') . ' ' . $console . ' ' . $cmd;
-        $process = new Process($commandLine);
+        $process = Process::fromShellCommandline($commandLine);
         $process->run();
         if (!$process->isSuccessful()) {
-            throw new \RuntimeException(sprintf('An error occurred when executing the "%s" command.', escapeshellarg($cmd)));
+            throw new \RuntimeException(sprintf('An error occurred when executing the "%s" command. %s', escapeshellarg($cmd), $process->getErrorOutput()));
         }
 
         $this->scriptOutput = $process->getOutput();
@@ -158,7 +179,7 @@ class ConsoleContext implements Context
     private function getNonDefaultSiteaccessName()
     {
         $defaultSiteaccessName = $this->getDefaultSiteaccessName();
-        foreach ($this->getKernel()->getContainer()->getParameter('ezpublish.siteaccess.list') as $siteaccessName) {
+        foreach ($this->siteaccessList as $siteaccessName) {
             if ($siteaccessName !== $defaultSiteaccessName) {
                 return $siteaccessName;
             }
@@ -172,11 +193,11 @@ class ConsoleContext implements Context
      */
     private function getConfigResolver()
     {
-        return $this->getKernel()->getContainer()->get('ezpublish.config.resolver');
+        return $this->configResolver;
     }
 
     private function getDefaultSiteaccessName()
     {
-        return $this->getKernel()->getContainer()->getParameter('ezpublish.siteaccess.default');
+        return $this->defaultSiteaccess;
     }
 }

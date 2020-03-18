@@ -136,7 +136,7 @@ class SecurityListenerTest extends TestCase
             ->will($this->returnValue($user));
         $token
             ->expects($this->once())
-            ->method('getRoles')
+            ->method('getRoleNames')
             ->will($this->returnValue(['ROLE_USER']));
         $token
             ->expects($this->once())

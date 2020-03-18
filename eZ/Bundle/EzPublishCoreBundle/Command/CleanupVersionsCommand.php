@@ -113,7 +113,7 @@ EOT
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // We don't load repo services or config resolver before execute() to avoid loading before SiteAccess is set.
         $keep = $input->getOption('keep');
@@ -150,7 +150,7 @@ EOT
         if ($contentIdsCount === 0) {
             $output->writeln('<info>There is no content matching the given Criteria.</info>');
 
-            return;
+            return 0;
         }
 
         $output->writeln(sprintf(
@@ -230,6 +230,8 @@ EOT
             $removedVersionsCounter,
             $contentIdsCount
         ));
+
+        return 0;
     }
 
     /**

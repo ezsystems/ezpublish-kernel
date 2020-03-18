@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.kernel.root_dir: "%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel"
+    ezpublish.kernel.root_dir: "%kernel.project_dir%/vendor/ezsystems/ezpublish-kernel"
 
     # API
     ezplatform.kernel.proxy_cache_dir: '%kernel.cache_dir%/repository/proxy'

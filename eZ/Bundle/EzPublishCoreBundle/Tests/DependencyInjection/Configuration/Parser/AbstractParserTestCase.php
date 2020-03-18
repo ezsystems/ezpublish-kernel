@@ -17,10 +17,24 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider\StaticSiteAccessProvider;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessProviderInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccessGroup;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 abstract class AbstractParserTestCase extends AbstractExtensionTestCase
 {
     protected const EMPTY_SA_GROUP = 'empty_group';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $loader = new YamlFileLoader(
+            $this->container,
+            new FileLocator(__DIR__ . '/../../Fixtures')
+        );
+
+        $loader->load('parameters.yml');
+    }
 
     /**
      * Asserts a parameter from ConfigResolver has expected value for given scope.

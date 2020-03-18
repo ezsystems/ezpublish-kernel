@@ -90,19 +90,19 @@ EOT
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('list-io-handlers')) {
             $this->outputConfiguredHandlers($output);
 
-            return;
+            return 0;
         }
 
         $bulkCount = (int)$input->getOption('bulk-count');
         if ($bulkCount < 1) {
             $output->writeln('The value for --bulk-count must be a positive integer.');
 
-            return;
+            return 0;
         }
 
         $output->writeln($this->getProcessedHelp());
@@ -121,7 +121,7 @@ EOT
         }
 
         if (!$this->validateHandlerOptions($fromHandlers, $toHandlers, $output)) {
-            return;
+            return 0;
         }
 
         $output->writeln([
@@ -156,7 +156,7 @@ EOT
         if ($totalCount === 0) {
             $output->writeln('Nothing to process.');
 
-            return;
+            return 0;
         }
 
         if (!$input->getOption('no-interaction')) {
@@ -169,7 +169,7 @@ EOT
             if (!$helper->ask($input, $output, $question)) {
                 $output->writeln('Aborting.');
 
-                return;
+                return 0;
             }
         }
 
@@ -179,6 +179,8 @@ EOT
             $input->getOption('dry-run'),
             $output
         );
+
+        return 0;
     }
 
     /**

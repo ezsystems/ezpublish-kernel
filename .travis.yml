@@ -17,6 +17,7 @@ env:
   global:
     # For functional and acceptance tests
     - COMPOSE_FILE="doc/docker/base-dev.yml:doc/docker/selenium.yml"
+    - PHP_INI_ENV_memory_limit=512M
     # In order to specify extra flags like ignoring platform reqs, using only stable packages and so on.
     - COMPOSER_FLAGS=""
     - COMPOSER_MEMORY_LIMIT=4G

@@ -31,7 +31,7 @@ class ConsoleCommandListenerTest extends TestCase
     /** @var \eZ\Bundle\EzPublishCoreBundle\EventListener\ConsoleCommandListener */
     private $listener;
 
-    /** @var \Symfony\Component\Console\Input\InputDefinition; */
+    /** @var \Symfony\Component\Console\Input\InputDefinition */
     private $inputDefinition;
 
     /** @var \Symfony\Component\Console\Output\Output */

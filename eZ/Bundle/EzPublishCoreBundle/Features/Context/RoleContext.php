@@ -18,9 +18,6 @@ class RoleContext implements Context
     /** @var \eZ\Publish\API\Repository\roleService */
     protected $roleService;
 
-    /**
-     * @injectService $roleService @ezpublish.api.service.role
-     */
     public function __construct(RoleService $roleService)
     {
         $this->roleService = $roleService;

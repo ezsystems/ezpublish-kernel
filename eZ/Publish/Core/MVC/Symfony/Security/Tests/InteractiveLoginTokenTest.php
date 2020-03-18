@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 use eZ\Publish\Core\MVC\Symfony\Security\InteractiveLoginToken;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Security\Core\Role\Role;
 
 class InteractiveLoginTokenTest extends TestCase
 {
@@ -21,11 +20,11 @@ class InteractiveLoginTokenTest extends TestCase
         $originalTokenType = 'FooBar';
         $credentials = 'my_credentials';
         $providerKey = 'key';
-        $roles = ['ROLE_USER', 'ROLE_TEST', new Role('ROLE_FOO')];
+        $roles = ['ROLE_USER', 'ROLE_TEST', 'ROLE_FOO'];
         $expectedRoles = [];
         foreach ($roles as $role) {
             if (is_string($role)) {
-                $expectedRoles[] = new Role($role);
+                $expectedRoles[] = $role;
             } else {
                 $expectedRoles[] = $role;
             }
@@ -37,7 +36,7 @@ class InteractiveLoginTokenTest extends TestCase
         $this->assertSame($originalTokenType, $token->getOriginalTokenType());
         $this->assertSame($credentials, $token->getCredentials());
         $this->assertSame($providerKey, $token->getProviderKey());
-        $this->assertEquals($expectedRoles, $token->getRoles());
+        $this->assertEquals($expectedRoles, $token->getRoleNames());
     }
 
     public function testSerialize()
@@ -46,7 +45,7 @@ class InteractiveLoginTokenTest extends TestCase
         $originalTokenType = 'FooBar';
         $credentials = 'my_credentials';
         $providerKey = 'key';
-        $roles = ['ROLE_USER', 'ROLE_TEST', new Role('ROLE_FOO')];
+        $roles = ['ROLE_USER', 'ROLE_TEST', 'ROLE_FOO'];
 
         $token = new InteractiveLoginToken($user, $originalTokenType, $credentials, $providerKey, $roles);
         $serialized = serialize($token);

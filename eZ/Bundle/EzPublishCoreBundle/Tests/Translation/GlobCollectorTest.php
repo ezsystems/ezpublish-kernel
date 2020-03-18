@@ -17,7 +17,7 @@ class GlobCollectorTest extends TestCase
     {
         $translationRootDir = str_replace(
             sprintf('%1$sTests%1$sTranslation', DIRECTORY_SEPARATOR),
-            sprintf('%1$sTests%1$sResources%1$sTranslation%1$svendor', DIRECTORY_SEPARATOR),
+            sprintf('%1$sTests%1$sResources%1$sTranslation', DIRECTORY_SEPARATOR),
             __DIR__
         );
         $collector = new GlobCollector($translationRootDir);

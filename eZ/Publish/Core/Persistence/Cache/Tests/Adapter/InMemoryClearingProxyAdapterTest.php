@@ -206,7 +206,7 @@ class InMemoryClearingProxyAdapterTest extends TestCase
         return [
             ['invalidateTags', ['my_tag']],
             ['invalidateTags', ['my_tag', 'another_tag']],
-            ['clear', null],
+            ['clear', ''],
         ];
     }
 

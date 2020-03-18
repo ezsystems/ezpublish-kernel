@@ -78,7 +78,7 @@ class DebugTemplate extends Template
     /**
      * {@inheritdoc}
      */
-    public function getSource()
+    public function getSourceContext()
     {
         return '';
     }

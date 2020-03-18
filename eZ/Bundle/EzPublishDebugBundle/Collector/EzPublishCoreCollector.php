@@ -21,7 +21,7 @@ class EzPublishCoreCollector extends DataCollector
         $this->reset();
     }
 
-    public function collect(Request $request, Response $response, \Exception $exception = null)
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         /** @var DataCollectorInterface $innerCollector */
         foreach ($this->data['collectors'] as $innerCollector) {

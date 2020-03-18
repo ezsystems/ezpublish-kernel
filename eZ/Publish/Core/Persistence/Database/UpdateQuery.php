@@ -55,8 +55,7 @@ interface UpdateQuery extends Query
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
      *
-     * @param string|array(string) $... Either a string with a logical expression name
-     * or an array with logical expressions.
+     * @param string|array(string) $... Either a string with a logical expression name or an array with logical expressions.
      *
      * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
      */

@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ViewControllerListenerTest extends TestCase
@@ -65,11 +66,7 @@ class ViewControllerListenerTest extends TestCase
         );
 
         $this->request = new Request();
-        $this->event = $this->createMock(ControllerEvent::class);
-        $this->event
-            ->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($this->request));
+        $this->event = $this->createEvent();
 
         $this->viewBuilderMock = $this->createMock(ViewBuilder::class);
     }
@@ -93,10 +90,6 @@ class ViewControllerListenerTest extends TestCase
             ->with('Foo::bar')
             ->willReturn(null);
 
-        $this->event
-            ->expects($this->never())
-            ->method('setController');
-
         $this->controllerListener->getController($this->event);
     }
 
@@ -110,10 +103,6 @@ class ViewControllerListenerTest extends TestCase
             ->method('getFromRegistry')
             ->with($initialController)
             ->willReturn(null);
-
-        $this->event
-            ->expects($this->never())
-            ->method('setController');
 
         $this->controllerListener->getController($this->event);
     }
@@ -149,10 +138,6 @@ class ViewControllerListenerTest extends TestCase
             ->method('buildView')
             ->will($this->returnValue($viewObject));
 
-        $this->event
-            ->expects($this->once())
-            ->method('setController');
-
         $this->controllerResolver
             ->expects($this->once())
             ->method('getController')
@@ -166,5 +151,18 @@ class ViewControllerListenerTest extends TestCase
         $expectedView->setControllerReference(new ControllerReference($customController));
 
         $this->assertEquals($expectedView, $this->request->attributes->get('view'));
+    }
+
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject|ControllerEvent
+     */
+    protected function createEvent()
+    {
+        return new ControllerEvent(
+            $this->createMock(HttpKernelInterface::class),
+            static function () {},
+            $this->request,
+            HttpKernelInterface::MASTER_REQUEST
+        );
     }
 }

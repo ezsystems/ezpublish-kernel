@@ -187,7 +187,7 @@ class ServiceContainer implements Container
 
         // Compile container if necessary
         if ($this->innerContainer instanceof ContainerBuilder && !$this->innerContainer->isCompiled()) {
-            $this->innerContainer->compile();
+            $this->innerContainer->compile(true);
         }
     }
 

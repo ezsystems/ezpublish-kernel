@@ -62,7 +62,7 @@ abstract class FileSystemTwigIntegrationTestCase extends IntegrationTestCase
             }
 
             try {
-                $template = $twig->loadTemplate('index.twig');
+                $template = $twig->loadTemplate($twig->getTemplateClass('index.twig'), 'index.twig');
             } catch (Exception $e) {
                 if (false !== $exception) {
                     $this->assertEquals(

@@ -25,3 +25,9 @@ services:
             - '@ezpublish.url_checker'
         tags:
             - { name: console.command }
+
+    eZ\Bundle\EzPublishCoreBundle\Command\UpdateTimestampsToUTCCommand:
+        arguments:
+            - '@ezpublish.api.search_engine.legacy.connection'
+        tags:
+            - { name: console.command }

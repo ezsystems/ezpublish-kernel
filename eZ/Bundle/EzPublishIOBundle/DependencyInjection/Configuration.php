@@ -57,7 +57,7 @@ class Configuration implements ConfigurationInterface
 
     /**
      * @param NodeDefinition $node
-     * @param                $name
+     * @param string $name
      * @param string $info block info line
      * @param ConfigurationFactory[]|ArrayObject $factories
      */

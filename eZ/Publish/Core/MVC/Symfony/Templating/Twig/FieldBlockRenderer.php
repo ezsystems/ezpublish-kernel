@@ -169,7 +169,10 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
 
         // Getting instance of \Twig\Template that will be used to render blocks
         if (is_string($this->baseTemplate)) {
-            $this->baseTemplate = $this->twig->loadTemplate($this->baseTemplate);
+            $this->baseTemplate = $this->twig->loadTemplate(
+                $this->twig->getTemplateClass($this->baseTemplate),
+                $this->baseTemplate
+            );
         }
         $blockName = $this->getRenderFieldBlockName($fieldTypeIdentifier, $type);
         $context = $this->twig->mergeGlobals($params);
@@ -202,7 +205,10 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     private function renderFieldDefinition(FieldDefinition $fieldDefinition, array $params, $type)
     {
         if (is_string($this->baseTemplate)) {
-            $this->baseTemplate = $this->twig->loadTemplate($this->baseTemplate);
+            $this->baseTemplate = $this->twig->loadTemplate(
+                $this->twig->getTemplateClass($this->baseTemplate),
+                $this->baseTemplate
+            );
         }
 
         $params += [
@@ -261,7 +267,10 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         if ($localTemplate !== null) {
             // $localTemplate might be a \Twig\Template instance already (e.g. using _self Twig keyword)
             if (!$localTemplate instanceof Template) {
-                $localTemplate = $this->twig->loadTemplate($localTemplate);
+                $localTemplate = $this->twig->loadTemplate(
+                    $this->twig->getTemplateClass($localTemplate),
+                    $localTemplate
+                );
             }
 
             $block = $this->searchBlock($fieldBlockName, $localTemplate);
@@ -306,7 +315,10 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
 
         foreach ($this->{$resourcesName} as &$template) {
             if (!$template instanceof Template) {
-                $template = $this->twig->loadTemplate($template['template']);
+                $template = $this->twig->loadTemplate(
+                    $this->twig->getTemplateClass($template['template']),
+                    $template['template']
+                );
             }
 
             $tpl = $template;

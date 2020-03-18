@@ -83,7 +83,7 @@ EOM
     /**
      * {@inheritdoc}.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $parameter = $input->getArgument('parameter');
         $namespace = $input->getOption('namespace');
@@ -94,7 +94,7 @@ EOM
         if ($input->getOption('json')) {
             $output->write(json_encode($parameterData));
 
-            return;
+            return 0;
         }
 
         $output->writeln('<comment>SiteAccess name:</comment> ' . $this->siteAccess->name);
@@ -108,5 +108,7 @@ EOM
                 true
             )
         );
+
+        return 0;
     }
 }

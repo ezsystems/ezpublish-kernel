@@ -84,6 +84,11 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         $configuration = $this->getConfiguration($configs, $container);
 
+        $environment = $container->getParameter('kernel.environment');
+        if (in_array($environment, ['behat', 'test'])) {
+            $loader->load('feature_contexts.yml');
+        }
+
         // Note: this is where the transformation occurs
         $config = $this->processConfiguration($configuration, $configs);
 
@@ -533,7 +538,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
 
         $fileSystem = new Filesystem();
-        $translationsPath = $container->getParameterBag()->get('kernel.root_dir') . '/../vendor/ezplatform-i18n';
+        $translationsPath = $container->getParameterBag()->get('kernel.project_dir') . '/vendor/ezplatform-i18n';
 
         if ($fileSystem->exists($translationsPath)) {
             $container->prependExtensionConfig('framework', ['translator' => ['paths' => [$translationsPath]]]);
