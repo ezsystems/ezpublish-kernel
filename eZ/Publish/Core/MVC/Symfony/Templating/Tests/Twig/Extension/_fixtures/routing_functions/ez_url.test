@@ -1,0 +1,41 @@
+--TEST--
+"ez_url" function
+--TEMPLATE--
+{{ ez_url(location) }}
+{{ ez_url(location, {}, true) }}
+{{ ez_url(location, {'foo': 'foo'}) }}
+{{ ez_url(content) }}
+{{ ez_url(content, {}, true) }}
+{{ ez_url(content, {'foo': 'foo'}) }}
+{{ ez_url(content_info) }}
+{{ ez_url(content_info, {}, true) }}
+{{ ez_url(content_info, {'foo': 'foo'}) }}
+{{ ez_url(route_ref) }}
+{{ ez_url(route_ref, {}, true) }}
+{{ ez_url(route_ref, {'baz': 'baz'}) }}
+--DATA--
+return [
+    'location' => $this->getExampleLocation(54),
+    'content' => $this->getExampleContent(2),
+    'content_info' => $this->getExampleContentInfo(2),
+    'route_ref' => $this->getExampleRouteReference(
+        'example_route',
+        [
+            'foo' => 'foo',
+            'bar' => 'bar'
+        ]
+    )
+];
+--EXPECT--
+{"$name":"ez_urlalias","$parameters":{"locationId":54},"$referenceType":0}
+{"$name":"ez_urlalias","$parameters":{"locationId":54},"$referenceType":3}
+{"$name":"ez_urlalias","$parameters":{"foo":"foo","locationId":54},"$referenceType":0}
+{"$name":"ez_urlalias","$parameters":{"contentId":2},"$referenceType":0}
+{"$name":"ez_urlalias","$parameters":{"contentId":2},"$referenceType":3}
+{"$name":"ez_urlalias","$parameters":{"foo":"foo","contentId":2},"$referenceType":0}
+{"$name":"ez_urlalias","$parameters":{"contentId":2},"$referenceType":0}
+{"$name":"ez_urlalias","$parameters":{"contentId":2},"$referenceType":3}
+{"$name":"ez_urlalias","$parameters":{"foo":"foo","contentId":2},"$referenceType":0}
+{"$name":"example_route","$parameters":{"foo":"foo","bar":"bar"},"$referenceType":0}
+{"$name":"example_route","$parameters":{"foo":"foo","bar":"bar"},"$referenceType":3}
+{"$name":"example_route","$parameters":{"baz":"baz","foo":"foo","bar":"bar"},"$referenceType":0}

@@ -10,6 +10,9 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
 use Symfony\Cmf\Component\Routing\ChainRouter as BaseChainRouter;
 
+/**
+ * TODO: Propably needs to be removed.
+ */
 class ChainRouter extends BaseChainRouter
 {
     public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
