@@ -16,6 +16,9 @@ use eZ\Publish\SPI\Repository\Decorator\URLAliasServiceDecorator;
 
 class URLAliasServiceDecoratorTest extends TestCase
 {
+    private const EXAMPLE_OFFSET = 10;
+    private const EXAMPLE_LIMIT = 100;
+
     protected function createDecorator(MockObject $service): URLAliasService
     {
         return new class($service) extends URLAliasServiceDecorator {
@@ -36,8 +39,8 @@ class URLAliasServiceDecoratorTest extends TestCase
             $this->createMock(Location::class),
             'random_value_5ced05ce0f45c8.98320978',
             'random_value_5ced05ce0f45f9.49337276',
-            'random_value_5ced05ce0f4605.59244506',
-            'random_value_5ced05ce0f4613.54899052',
+            true,
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('createUrlAlias')->with(...$parameters);
@@ -54,8 +57,8 @@ class URLAliasServiceDecoratorTest extends TestCase
             'random_value_5ced05ce0f4681.71978747',
             'random_value_5ced05ce0f4690.44246628',
             'random_value_5ced05ce0f46a4.07620211',
-            'random_value_5ced05ce0f46b2.87669331',
-            'random_value_5ced05ce0f46c8.07270908',
+            true,
+            true,
         ];
 
         $serviceMock->expects($this->once())->method('createGlobalUrlAlias')->with(...$parameters);
@@ -70,7 +73,7 @@ class URLAliasServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(Location::class),
-            'random_value_5ced05ce0f4711.57541540',
+            true,
             'random_value_5ced05ce0f4720.32499208',
         ];
 
@@ -86,8 +89,8 @@ class URLAliasServiceDecoratorTest extends TestCase
 
         $parameters = [
             'random_value_5ced05ce0f4757.52395035',
-            'random_value_5ced05ce0f4766.23213494',
-            'random_value_5ced05ce0f4774.51720548',
+            self::EXAMPLE_OFFSET,
+            self::EXAMPLE_LIMIT,
         ];
 
         $serviceMock->expects($this->once())->method('listGlobalAliases')->with(...$parameters);
