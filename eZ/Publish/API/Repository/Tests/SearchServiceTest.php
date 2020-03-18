@@ -578,6 +578,20 @@ class SearchServiceTest extends BaseTest
             ],
             43 => [
                 [
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::GROUP,
+                        null,
+                        [4]
+                    ),
+                    'sortClauses' => [
+                        new SortClause\ContentId(),
+                    ],
+                    'limit' => 50,
+                ],
+                $fixtureDir . 'UserMetadata.php',
+            ],
+            44 => [
+                [
                     'filter' => new Criterion\Ancestor(
                         [
                             '/1/5/44/',

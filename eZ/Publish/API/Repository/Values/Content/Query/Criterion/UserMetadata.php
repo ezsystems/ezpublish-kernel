@@ -51,10 +51,10 @@ class UserMetadata extends Criterion
      * @throws \InvalidArgumentException If target is unknown
      *
      * @param string $target One of UserMetadata::OWNER, UserMetadata::GROUP or UserMetadata::MODIFIED
-     * @param string $operator One of the Operator constants
+     * @param string|null $operator The operator the Criterion uses. If null is given, will default to Operator::IN if $value is an array, Operator::EQ if it is not.
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator
      */
-    public function __construct(string $target, string $operator, $value)
+    public function __construct(string $target, ?string $operator, $value)
     {
         switch ($target) {
             case self::OWNER:
