@@ -125,7 +125,7 @@ class FixImagesVarDirCommand extends Command
             )
             ->setHelp(
                 <<<EOT
-The command <info>%command.name%</info> fixes referefences to images that aren't part of the current var_dir.
+The command <info>%command.name%</info> fixes references to images that are not placed in the current var_dir.
 
 This may for instance occur when the var_dir setting is changed. This script will rename the files, and update the
 database references to the new path
