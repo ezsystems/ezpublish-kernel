@@ -301,7 +301,7 @@ class LegacyStorage extends Gateway
             $connection->quoteColumn('contentobject_attribute_id'),
             $connection->quoteColumn('filepath')
         )->from(
-            $connection->quoteTable('ezimagefile')
+            $connection->quoteTable(self::IMAGE_FILE_TABLE)
         )->where(
             $selectQuery->expr->not(
                 $selectQuery->expr->like(
