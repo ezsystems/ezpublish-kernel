@@ -9,3 +9,4 @@ services:
       - "@ezpublish.fieldType.ezimage.storage_gateway"
     tags:
       - { name: console.command }
+      
