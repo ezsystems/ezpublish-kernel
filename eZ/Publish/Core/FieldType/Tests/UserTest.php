@@ -102,6 +102,14 @@ class UserTest extends FieldTypeTest
                 'type' => 'int',
                 'default' => null,
             ],
+            UserType::REQUIRE_UNIQUE_EMAIL => [
+                'type' => 'bool',
+                'default' => true,
+            ],
+            UserType::USERNAME_PATTERN => [
+                'type' => 'string',
+                'default' => '^[^@]+$',
+            ],
         ];
     }
 
@@ -543,6 +551,8 @@ class UserTest extends FieldTypeTest
                 [
                     UserType::PASSWORD_TTL_SETTING => 30,
                     UserType::PASSWORD_TTL_WARNING_SETTING => 14,
+                    UserType::REQUIRE_UNIQUE_EMAIL => true,
+                    UserType::USERNAME_PATTERN => '^[^!]+$',
                 ],
             ],
         ];
