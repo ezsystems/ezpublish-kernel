@@ -25,6 +25,7 @@ class UserConverter implements Converter
     private const REQUIRE_AT_LEAST_ONE_NUMERIC_CHAR = 4;
     private const REQUIRE_AT_LEAST_ONE_NON_ALPHANUMERIC_CHAR = 8;
     private const REQUIRE_NEW_PASSWORD = 16;
+    private const REQUIRE_UNIQUE_EMAIL = 32;
 
     /**
      * {@inheritdoc}
@@ -60,6 +61,8 @@ class UserConverter implements Converter
             'requireNewPassword' => self::REQUIRE_NEW_PASSWORD,
         ];
 
+        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+
         $storageDef->dataInt1 = 0;
         foreach ($rules as $rule => $flag) {
             if (isset($validatorParameters[$rule]) && $validatorParameters[$rule]) {
@@ -67,15 +70,19 @@ class UserConverter implements Converter
             }
         }
 
+        $storageDef->dataInt1 |= $fieldSettings[UserType::REQUIRE_UNIQUE_EMAIL]
+            ? self::REQUIRE_UNIQUE_EMAIL
+            : 0;
+
         $storageDef->dataInt2 = null;
         if (isset($validatorParameters['minLength'])) {
             $storageDef->dataInt2 = $validatorParameters['minLength'];
         }
 
-        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
-
         $storageDef->dataInt3 = $fieldSettings[UserType::PASSWORD_TTL_SETTING] ?? null;
         $storageDef->dataInt4 = $fieldSettings[UserType::PASSWORD_TTL_WARNING_SETTING] ?? null;
+
+        $storageDef->dataText2 = $fieldSettings[UserType::USERNAME_PATTERN];
     }
 
     /**
@@ -103,6 +110,8 @@ class UserConverter implements Converter
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings([
             UserType::PASSWORD_TTL_SETTING => $storageDef->dataInt3,
             UserType::PASSWORD_TTL_WARNING_SETTING => $storageDef->dataInt4,
+            UserType::REQUIRE_UNIQUE_EMAIL => (bool)($storageDef->dataInt1 & self::REQUIRE_UNIQUE_EMAIL),
+            UserType::USERNAME_PATTERN => $storageDef->dataText2,
         ]);
     }
 
