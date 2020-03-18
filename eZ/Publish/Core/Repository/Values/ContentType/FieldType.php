@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\FieldType class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\FieldType as FieldTypeInterface;
@@ -42,7 +42,7 @@ class FieldType implements FieldTypeInterface
      *
      * @return string
      */
-    public function getFieldTypeIdentifier()
+    public function getFieldTypeIdentifier(): string
     {
         return $this->internalFieldType->getFieldTypeIdentifier();
     }
@@ -125,7 +125,7 @@ class FieldType implements FieldTypeInterface
      *
      * @return bool
      */
-    public function isSearchable()
+    public function isSearchable(): bool
     {
         return $this->internalFieldType->isSearchable();
     }
@@ -135,7 +135,7 @@ class FieldType implements FieldTypeInterface
      *
      * @return bool
      */
-    public function isSingular()
+    public function isSingular(): bool
     {
         return $this->internalFieldType->isSingular();
     }
@@ -145,7 +145,7 @@ class FieldType implements FieldTypeInterface
      *
      * @return bool
      */
-    public function onlyEmptyInstance()
+    public function onlyEmptyInstance(): bool
     {
         return $this->internalFieldType->onlyEmptyInstance();
     }
@@ -174,7 +174,7 @@ class FieldType implements FieldTypeInterface
      *
      * @return bool
      */
-    public function isEmptyValue($value)
+    public function isEmptyValue($value): bool
     {
         return $this->internalFieldType->isEmptyValue($value);
     }
@@ -264,7 +264,7 @@ class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration($validatorConfiguration)
+    public function validateValidatorConfiguration($validatorConfiguration): iterable
     {
         return $this->internalFieldType->validateValidatorConfiguration($validatorConfiguration);
     }
@@ -279,7 +279,7 @@ class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings($fieldSettings)
+    public function validateFieldSettings($fieldSettings): iterable
     {
         return $this->internalFieldType->validateFieldSettings($fieldSettings);
     }
@@ -292,7 +292,7 @@ class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValue(APIFieldDefinition $fieldDef, Value $value)
+    public function validateValue(APIFieldDefinition $fieldDef, Value $value): iterable
     {
         return $this->internalFieldType->validate($fieldDef, $value);
     }

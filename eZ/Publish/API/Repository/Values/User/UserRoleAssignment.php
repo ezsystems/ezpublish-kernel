@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\UserRoleAssignment class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\User;
 
 /**
@@ -20,5 +20,5 @@ abstract class UserRoleAssignment extends RoleAssignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    abstract public function getUser();
+    abstract public function getUser(): User;
 }

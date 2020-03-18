@@ -1,23 +1,26 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\Content\Content class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Thumbnail;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\SPI\FieldType\Value;
 
 /**
  * this class represents a content object in a specific version.
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType convenience getter for $versionInfo->contentInfo->contentType
- * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->content->id
+ * @property-read int $id convenience getter for retrieving the contentId: $versionInfo->content->id
  * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
  * @property-read \eZ\Publish\API\Repository\Values\Content\Field[] $fields Access fields, calls getFields()
  *
@@ -25,19 +28,19 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
  */
 class Content extends APIContent
 {
-    /** @var Thumbnail|null */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Thumbnail|null */
     protected $thumbnail;
 
     /** @var mixed[][] An array of array of field values like[$fieldDefIdentifier][$languageCode] */
     protected $fields;
 
-    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+    /** @var APIVersionInfo */
     protected $versionInfo;
 
     /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     protected $contentType;
 
-    /** @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field} */
+    /** @var Field[] An array of {@link Field} */
     private $internalFields = [];
 
     /**
@@ -69,7 +72,7 @@ class Content extends APIContent
     /**
      * {@inheritdoc}
      */
-    public function getVersionInfo()
+    public function getVersionInfo(): APIVersionInfo
     {
         return $this->versionInfo;
     }
@@ -85,7 +88,7 @@ class Content extends APIContent
     /**
      * {@inheritdoc}
      */
-    public function getFieldValue($fieldDefIdentifier, $languageCode = null)
+    public function getFieldValue(string $fieldDefIdentifier, ?string $languageCode = null): ?Value
     {
         if (null === $languageCode) {
             $languageCode = $this->prioritizedFieldLanguageCode ?: $this->versionInfo->contentInfo->mainLanguageCode;
@@ -101,7 +104,7 @@ class Content extends APIContent
     /**
      * {@inheritdoc}
      */
-    public function getFields()
+    public function getFields(): iterable
     {
         return $this->internalFields;
     }
@@ -109,7 +112,7 @@ class Content extends APIContent
     /**
      * {@inheritdoc}
      */
-    public function getFieldsByLanguage($languageCode = null)
+    public function getFieldsByLanguage(?string $languageCode = null): iterable
     {
         $fields = [];
 
@@ -130,7 +133,7 @@ class Content extends APIContent
     /**
      * {@inheritdoc}
      */
-    public function getField($fieldDefIdentifier, $languageCode = null)
+    public function getField(string $fieldDefIdentifier, ?string $languageCode = null): ?Field
     {
         if (null === $languageCode) {
             $languageCode = $this->prioritizedFieldLanguageCode ?: $this->versionInfo->contentInfo->mainLanguageCode;

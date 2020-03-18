@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\User\Policy class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
@@ -29,7 +29,7 @@ class Policy extends APIPolicy
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    public function getLimitations()
+    public function getLimitations(): iterable
     {
         return $this->limitations;
     }

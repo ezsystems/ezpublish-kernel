@@ -75,17 +75,6 @@ class PermissionCriterionResolverTest extends TestCase
                 [
                     [
                         'limitation' => null,
-                        'policies' => [new Policy(['limitations' => '*']), $policy1],
-                    ],
-                ],
-                false,
-            ],
-            [
-                $criterionMock,
-                0,
-                [
-                    [
-                        'limitation' => null,
                         'policies' => [new Policy(['limitations' => []]), $policy1],
                     ],
                 ],
@@ -205,7 +194,7 @@ class PermissionCriterionResolverTest extends TestCase
                 [
                     [
                         'limitation' => $limitationMock,
-                        'policies' => [new Policy(['limitations' => '*'])],
+                        'policies' => [new Policy(['limitations' => []])],
                     ],
                 ],
                 $criterionMock,
@@ -216,11 +205,11 @@ class PermissionCriterionResolverTest extends TestCase
                 [
                     [
                         'limitation' => $limitationMock,
-                        'policies' => [new Policy(['limitations' => '*'])],
+                        'policies' => [new Policy(['limitations' => []])],
                     ],
                     [
                         'limitation' => $limitationMock,
-                        'policies' => [new Policy(['limitations' => '*'])],
+                        'policies' => [new Policy(['limitations' => []])],
                     ],
                 ],
                 new Criterion\LogicalOr([$criterionMock, $criterionMock]),

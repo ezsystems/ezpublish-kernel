@@ -31,7 +31,7 @@ class PolicyUpdateStruct extends APIPolicyUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    public function getLimitations()
+    public function getLimitations(): iterable
     {
         return $this->limitations;
     }
@@ -42,7 +42,7 @@ class PolicyUpdateStruct extends APIPolicyUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      */
-    public function addLimitation(Limitation $limitation)
+    public function addLimitation(Limitation $limitation): void
     {
         $limitationIdentifier = $limitation->getIdentifier();
         $this->limitations[$limitationIdentifier] = $limitation;

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -33,17 +33,17 @@ class UserMetadata extends Criterion
     /**
      * UserMetadata target: Owner user.
      */
-    const OWNER = 'owner';
+    public const OWNER = 'owner';
 
     /**
      * UserMetadata target: Owner user group.
      */
-    const GROUP = 'group';
+    public const GROUP = 'group';
 
     /**
      * UserMetadata target: Modifier.
      */
-    const MODIFIER = 'modifier';
+    public const MODIFIER = 'modifier';
 
     /**
      * Creates a new UserMetadata criterion on $metadata.
@@ -54,7 +54,7 @@ class UserMetadata extends Criterion
      * @param string $operator One of the Operator constants
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator
      */
-    public function __construct($target, $operator, $value)
+    public function __construct(string $target, string $operator, $value)
     {
         switch ($target) {
             case self::OWNER:
@@ -68,7 +68,7 @@ class UserMetadata extends Criterion
         throw new InvalidArgumentException("Unknown UserMetadata $target");
     }
 
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [
             new Specifications(

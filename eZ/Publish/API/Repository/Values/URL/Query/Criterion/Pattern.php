@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 
 /**
@@ -23,9 +25,9 @@ class Pattern extends Matcher
      *
      * @param string $pattern
      */
-    public function __construct($pattern)
+    public function __construct(string $pattern)
     {
-        if ($pattern === null || $pattern === '') {
+        if ($pattern === '') {
             throw new \InvalidArgumentException('URL pattern cannot be empty.');
         }
 

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
@@ -21,14 +21,14 @@ abstract class LogicalOperator extends Criterion
     /**
      * The set of criteria combined by the logical operator.
      *
-     * @var Criterion[]
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion[]
      */
     public $criteria = [];
 
     /**
      * Creates a Logic operation with the given criteria.
      *
-     * @param Criterion[] $criteria
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion[] $criteria
      *
      * @throws \InvalidArgumentException
      */
@@ -55,10 +55,11 @@ abstract class LogicalOperator extends Criterion
     }
 
     /**
+     * @return array
      * @deprecated in LogicalOperators since 7.2.
      * It will be removed in 8.0 when Logical Operator no longer extends Criterion.
      */
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
 

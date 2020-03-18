@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
 
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
@@ -50,10 +50,10 @@ class MapLocationTarget extends Target
      * @param string $fieldIdentifier
      */
     public function __construct(
-        $latitude,
-        $longitude,
-        $typeIdentifier,
-        $fieldIdentifier
+        float $latitude,
+        float $longitude,
+        string $typeIdentifier,
+        string $fieldIdentifier
     ) {
         $this->latitude = $latitude;
         $this->longitude = $longitude;

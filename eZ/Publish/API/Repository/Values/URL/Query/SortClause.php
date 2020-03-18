@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\URL\Query;
 
 use InvalidArgumentException;
@@ -13,8 +15,8 @@ use InvalidArgumentException;
  */
 abstract class SortClause
 {
-    const SORT_ASC = 'ascending';
-    const SORT_DESC = 'descending';
+    public const SORT_ASC = 'ascending';
+    public const SORT_DESC = 'descending';
 
     /**
      * Sort direction.
@@ -38,7 +40,7 @@ abstract class SortClause
      *
      * @throws InvalidArgumentException if the given sort order isn't one of SortClause::SORT_ASC or SortClause::SORT_DESC
      */
-    public function __construct($sortTarget, $sortDirection)
+    public function __construct(string $sortTarget, string $sortDirection)
     {
         if ($sortDirection !== self::SORT_ASC && $sortDirection !== self::SORT_DESC) {
             throw new InvalidArgumentException('Sort direction must be either SortClause::SORT_ASC or SortClause::SORT_DESC');

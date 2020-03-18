@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -24,12 +24,12 @@ class Visibility extends Criterion
     /**
      * Visibility constant: visible.
      */
-    const VISIBLE = 0;
+    public const VISIBLE = 0;
 
     /**
      * Visibility constant: hidden.
      */
-    const HIDDEN = 1;
+    public  const HIDDEN = 1;
 
     /**
      * Creates a new Visibility criterion.
@@ -38,7 +38,7 @@ class Visibility extends Criterion
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($value)
+    public function __construct(int $value)
     {
         if ($value !== self::VISIBLE && $value !== self::HIDDEN) {
             throw new InvalidArgumentException("Invalid visibility value $value");
@@ -47,7 +47,7 @@ class Visibility extends Criterion
         parent::__construct(null, null, $value);
     }
 
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [
             new Specifications(

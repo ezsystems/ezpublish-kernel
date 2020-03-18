@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the User class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
@@ -24,10 +24,10 @@ class User implements ReferenceUserInterface, EquatableInterface
     /** @var array */
     private $roles;
 
-    public function __construct(APIUser $user = null, array $roles = [])
+    public function __construct(APIUser $user, array $roles = [])
     {
         $this->user = $user;
-        $this->reference = new UserReference($user ? $user->getUserId() : null);
+        $this->reference = new UserReference($user->getUserId());
         $this->roles = $roles;
     }
 

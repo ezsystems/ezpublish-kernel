@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
@@ -30,7 +30,7 @@ class PolicyCreateStruct extends APIPolicyCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    public function getLimitations()
+    public function getLimitations(): iterable
     {
         return $this->limitations;
     }
@@ -40,7 +40,7 @@ class PolicyCreateStruct extends APIPolicyCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      */
-    public function addLimitation(Limitation $limitation)
+    public function addLimitation(Limitation $limitation): void
     {
         $limitationIdentifier = $limitation->getIdentifier();
         $this->limitations[$limitationIdentifier] = $limitation;

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\User\RoleDraft class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\RoleDraft as APIRoleDraft;
@@ -66,7 +66,7 @@ class RoleDraft extends APIRoleDraft
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyDraft[]
      */
-    public function getPolicies()
+    public function getPolicies(): iterable
     {
         return $this->innerRole->getPolicies();
     }

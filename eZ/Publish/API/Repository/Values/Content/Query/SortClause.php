@@ -1,14 +1,15 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\SortClause class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
 use InvalidArgumentException;
 
 /**
@@ -34,7 +35,7 @@ abstract class SortClause
     /**
      * Extra target data, required by some sort clauses, field for instance.
      *
-     * @var SortClause\Target
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target|null
      */
     public $targetData;
 
@@ -43,11 +44,11 @@ abstract class SortClause
      *
      * @param string $sortTarget
      * @param string $sortDirection one of Query::SORT_ASC or Query::SORT_DESC
-     * @param string $targetData Extra target data, used by some clauses (field for instance)
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target|null $targetData Extra target data, used by some clauses (field for instance)
      *
      * @throws InvalidArgumentException if the given sort order isn't one of Query::SORT_ASC or Query::SORT_DESC
      */
-    public function __construct($sortTarget, $sortDirection, $targetData = null)
+    public function __construct(string $sortTarget, string $sortDirection, ?Target $targetData = null)
     {
         if ($sortDirection !== Query::SORT_ASC && $sortDirection !== Query::SORT_DESC) {
             throw new InvalidArgumentException('Sort direction must be one of Query::SORT_ASC or Query::SORT_DESC');

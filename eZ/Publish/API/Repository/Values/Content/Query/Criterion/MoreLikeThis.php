@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\MoreLikeThis class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -17,9 +17,9 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
  */
 class MoreLikeThis extends Criterion
 {
-    const CONTENT = 1;
-    const TEXT = 2;
-    const URL = 3;
+    public const CONTENT = 1;
+    public const TEXT = 2;
+    public const URL = 3;
 
     /**
      * The type of the parameter from which terms are extracted for finding similar objects.
@@ -36,14 +36,14 @@ class MoreLikeThis extends Criterion
      *
      * @throws \InvalidArgumentException if the value type doesn't match the expected type
      */
-    public function __construct($type, $value)
+    public function __construct(int $type, $value)
     {
         $this->type = $type;
 
         parent::__construct(null, null, $value);
     }
 
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [
             new Specifications(Operator::EQ, Specifications::FORMAT_SINGLE),

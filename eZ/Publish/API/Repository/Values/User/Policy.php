@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Policy class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -17,21 +17,21 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $roleId the role id this policy belongs to
  * @property-read string $module Name of module, associated with the Policy
  * @property-read string $function  Name of the module function Or all functions with '*'
- * @property-read array $limitations an array of \eZ\Publish\API\Repository\Values\User\Limitation
+ * @property-read \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations an array of \eZ\Publish\API\Repository\Values\User\Limitation
  */
 abstract class Policy extends ValueObject
 {
     /**
      * ID of the policy.
      *
-     * @var mixed
+     * @var int
      */
     protected $id;
 
     /**
      * the ID of the role this policy belongs to.
      *
-     * @var mixed
+     * @var int
      */
     protected $roleId;
 
@@ -56,5 +56,5 @@ abstract class Policy extends ValueObject
     /**
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    abstract public function getLimitations();
+    abstract public function getLimitations(): iterable;
 }

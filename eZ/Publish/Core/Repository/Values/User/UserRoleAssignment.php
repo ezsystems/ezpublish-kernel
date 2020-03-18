@@ -1,13 +1,16 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\User\UserRoleAssignment class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\Values\User;
 
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation as APIRoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\User\UserRoleAssignment as APIUserRoleAssignment;
 
 /**
@@ -43,7 +46,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null
      */
-    public function getRoleLimitation()
+    public function getRoleLimitation(): ?APIRoleLimitation
     {
         return $this->limitation;
     }
@@ -53,7 +56,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function getRole()
+    public function getRole(): APIRole
     {
         return $this->role;
     }
@@ -63,7 +66,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function getUser()
+    public function getUser(): APIUser
     {
         return $this->user;
     }

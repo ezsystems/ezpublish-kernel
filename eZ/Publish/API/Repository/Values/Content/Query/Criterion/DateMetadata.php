@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\DateMetadata class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -35,12 +35,12 @@ class DateMetadata extends Criterion
     /**
      * DateMetadata target: modification date.
      */
-    const MODIFIED = 'modified';
+    public const MODIFIED = 'modified';
 
     /**
      * DateMetadata target: creation date.
      */
-    const CREATED = 'created';
+    public const CREATED = 'created';
 
     /**
      * Creates a new DateMetadata criterion on $metadata.
@@ -51,7 +51,7 @@ class DateMetadata extends Criterion
      * @param string $operator One of the Operator constants
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator
      */
-    public function __construct($target, $operator, $value)
+    public function __construct(string $target, string $operator, $value)
     {
         if ($target != self::MODIFIED && $target != self::CREATED) {
             throw new InvalidArgumentException("Unknown DateMetadata $target");
@@ -59,7 +59,7 @@ class DateMetadata extends Criterion
         parent::__construct($target, $operator, $value);
     }
 
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [
             new Specifications(Operator::EQ, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),

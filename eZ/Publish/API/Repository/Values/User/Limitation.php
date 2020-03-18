@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Limitation class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -16,29 +16,22 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class Limitation extends ValueObject
 {
     // consts for BC
-    const CONTENTTYPE = 'Class';
-    const LANGUAGE = 'Language';
-    const LOCATION = 'Node';
-    const OWNER = 'Owner';
-    const PARENTOWNER = 'ParentOwner';
-    const PARENTCONTENTTYPE = 'ParentClass';
-    const PARENTDEPTH = 'ParentDepth';
-    const SECTION = 'Section';
-    const NEWSECTION = 'NewSection';
-    const SITEACCESS = 'SiteAccess';
-    const STATE = 'State';
-    const NEWSTATE = 'NewState';
-    const SUBTREE = 'Subtree';
-    const USERGROUP = 'Group';
-    const PARENTUSERGROUP = 'ParentGroup';
-    const STATUS = 'Status';
-
-    /**
-     * Returns the limitation identifier (one of the defined constants) or a custom limitation.
-     *
-     * @return string
-     */
-    abstract public function getIdentifier();
+    public const CONTENTTYPE = 'Class';
+    public const LANGUAGE = 'Language';
+    public const LOCATION = 'Node';
+    public const OWNER = 'Owner';
+    public const PARENTOWNER = 'ParentOwner';
+    public const PARENTCONTENTTYPE = 'ParentClass';
+    public const PARENTDEPTH = 'ParentDepth';
+    public const SECTION = 'Section';
+    public const NEWSECTION = 'NewSection';
+    public const SITEACCESS = 'SiteAccess';
+    public const STATE = 'State';
+    public const NEWSTATE = 'NewState';
+    public const SUBTREE = 'Subtree';
+    public const USERGROUP = 'Group';
+    public const PARENTUSERGROUP = 'ParentGroup';
+    public const STATUS = 'Status';
 
     /**
      * A read-only list of IDs or identifiers for which the limitation should be applied.
@@ -50,4 +43,11 @@ abstract class Limitation extends ValueObject
      * @var mixed[]
      */
     public $limitationValues = [];
+
+    /**
+     * Returns the limitation identifier (one of the defined constants) or a custom limitation.
+     *
+     * @return string
+     */
+    abstract public function getIdentifier(): string;
 }

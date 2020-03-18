@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location\Depth class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
@@ -28,12 +28,12 @@ class Depth extends Location
      * @param string $operator One of the Operator constants
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator
      */
-    public function __construct($operator, $value)
+    public function __construct(string $operator, $value)
     {
         parent::__construct(null, $operator, $value);
     }
 
-    public function getSpecifications()
+    public function getSpecifications(): array
     {
         return [
             new Specifications(
