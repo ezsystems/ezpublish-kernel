@@ -144,7 +144,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $iterationCount = (int)$input->getOption('iteration-count');
+        $iterationCount = (int) $input->getOption('iteration-count');
         $this->dryRun = $input->getOption('dry-run');
         $consoleScript = $_SERVER['argv'][0];
 
