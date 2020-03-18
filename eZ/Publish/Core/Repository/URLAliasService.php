@@ -173,7 +173,7 @@ class URLAliasService implements URLAliasServiceInterface
                 $locationId = end($resourcePath);
             }
 
-            $location = $this->repository->getLocationService()->loadLocation($locationId);
+            $location = $this->repository->getLocationService()->loadLocation((int)$locationId);
 
             if (!$this->permissionResolver->canUser('content', 'urltranslator', $location)) {
                 throw new UnauthorizedException('content', 'urltranslator');
