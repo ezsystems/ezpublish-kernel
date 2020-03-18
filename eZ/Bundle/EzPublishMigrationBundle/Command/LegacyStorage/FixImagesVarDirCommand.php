@@ -108,7 +108,7 @@ class FixImagesVarDirCommand extends Command
         $this
             ->setName('ezplatform:fix_images_var_dir')
             ->setDescription(
-                'This update script will fix references to images that aren\'t part of the current var_dir.'
+                'This update script will fix references to images that are not placed in the current var_dir.'
             )
             ->addOption(
                 'dry-run',
