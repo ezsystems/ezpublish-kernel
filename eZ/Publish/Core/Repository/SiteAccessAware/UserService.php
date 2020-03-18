@@ -1,15 +1,16 @@
 <?php
 
 /**
- * UserService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
@@ -48,46 +49,46 @@ class UserService implements UserServiceInterface
         $this->languageResolver = $languageResolver;
     }
 
-    public function createUserGroup(UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup)
+    public function createUserGroup(UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup): UserGroup
     {
         return $this->service->createUserGroup($userGroupCreateStruct, $parentGroup);
     }
 
-    public function loadUserGroup($id, array $prioritizedLanguages = null)
+    public function loadUserGroup(int $id, array $prioritizedLanguages = null): UserGroup
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadUserGroup($id, $prioritizedLanguages);
     }
 
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
+    public function loadSubUserGroups(UserGroup $userGroup, int $offset = 0, int $limit = 25, array $prioritizedLanguages = null): iterable
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadSubUserGroups($userGroup, $offset, $limit, $prioritizedLanguages);
     }
 
-    public function deleteUserGroup(UserGroup $userGroup)
+    public function deleteUserGroup(UserGroup $userGroup): iterable
     {
         return $this->service->deleteUserGroup($userGroup);
     }
 
-    public function moveUserGroup(UserGroup $userGroup, UserGroup $newParent)
+    public function moveUserGroup(UserGroup $userGroup, UserGroup $newParent): void
     {
-        return $this->service->moveUserGroup($userGroup, $newParent);
+        $this->service->moveUserGroup($userGroup, $newParent);
     }
 
-    public function updateUserGroup(UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct)
+    public function updateUserGroup(UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct): UserGroup
     {
         return $this->service->updateUserGroup($userGroup, $userGroupUpdateStruct);
     }
 
-    public function createUser(UserCreateStruct $userCreateStruct, array $parentGroups)
+    public function createUser(UserCreateStruct $userCreateStruct, array $parentGroups): User
     {
         return $this->service->createUser($userCreateStruct, $parentGroups);
     }
 
-    public function loadUser($userId, array $prioritizedLanguages = null)
+    public function loadUser(int $userId, array $prioritizedLanguages = null): User
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
@@ -99,7 +100,7 @@ class UserService implements UserServiceInterface
         return $this->service->checkUserCredentials($user, $credentials);
     }
 
-    public function loadUserByLogin($login, array $prioritizedLanguages = null)
+    public function loadUserByLogin(string $login, array $prioritizedLanguages = null): User
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
@@ -120,41 +121,41 @@ class UserService implements UserServiceInterface
         return $this->service->loadUsersByEmail($email, $prioritizedLanguages);
     }
 
-    public function deleteUser(User $user)
+    public function deleteUser(User $user): iterable
     {
         return $this->service->deleteUser($user);
     }
 
-    public function updateUser(User $user, UserUpdateStruct $userUpdateStruct)
+    public function updateUser(User $user, UserUpdateStruct $userUpdateStruct): User
     {
         return $this->service->updateUser($user, $userUpdateStruct);
     }
 
-    public function assignUserToUserGroup(User $user, UserGroup $userGroup)
+    public function assignUserToUserGroup(User $user, UserGroup $userGroup): void
     {
-        return $this->service->assignUserToUserGroup($user, $userGroup);
+        $this->service->assignUserToUserGroup($user, $userGroup);
     }
 
-    public function unAssignUserFromUserGroup(User $user, UserGroup $userGroup)
+    public function unAssignUserFromUserGroup(User $user, UserGroup $userGroup): void
     {
-        return $this->service->unAssignUserFromUserGroup($user, $userGroup);
+        $this->service->unAssignUserFromUserGroup($user, $userGroup);
     }
 
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
+    public function loadUserGroupsOfUser(User $user, int $offset = 0, int $limit = 25, array $prioritizedLanguages = null): iterable
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadUserGroupsOfUser($user, $offset, $limit, $prioritizedLanguages);
     }
 
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
+    public function loadUsersOfUserGroup(UserGroup $userGroup, int $offset = 0, int $limit = 25, array $prioritizedLanguages = null): iterable
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadUsersOfUserGroup($userGroup, $offset, $limit, $prioritizedLanguages);
     }
 
-    public function loadUserByToken($hash, array $prioritizedLanguages = null)
+    public function loadUserByToken(string $hash, array $prioritizedLanguages = null): User
     {
         return $this->service->loadUserByToken(
             $hash,
@@ -162,14 +163,14 @@ class UserService implements UserServiceInterface
         );
     }
 
-    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct)
+    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct): User
     {
         return $this->service->updateUserToken($user, $userTokenUpdateStruct);
     }
 
-    public function expireUserToken($hash)
+    public function expireUserToken(string $hash): void
     {
-        return $this->service->expireUserToken($hash);
+        $this->service->expireUserToken($hash);
     }
 
     public function isUser(Content $content): bool
@@ -182,22 +183,22 @@ class UserService implements UserServiceInterface
         return $this->service->isUserGroup($content);
     }
 
-    public function newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType = null)
+    public function newUserCreateStruct(string $login, string $email, string $password, string $mainLanguageCode, ?ContentType $contentType = null): UserCreateStruct
     {
         return $this->service->newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType);
     }
 
-    public function newUserGroupCreateStruct($mainLanguageCode, $contentType = null)
+    public function newUserGroupCreateStruct(string $mainLanguageCode, ?ContentType $contentType = null): UserGroupCreateStruct
     {
         return $this->service->newUserGroupCreateStruct($mainLanguageCode, $contentType);
     }
 
-    public function newUserUpdateStruct()
+    public function newUserUpdateStruct(): UserUpdateStruct
     {
         return $this->service->newUserUpdateStruct();
     }
 
-    public function newUserGroupUpdateStruct()
+    public function newUserGroupUpdateStruct(): UserGroupUpdateStruct
     {
         return $this->service->newUserGroupUpdateStruct();
     }

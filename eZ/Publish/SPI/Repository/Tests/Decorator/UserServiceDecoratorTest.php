@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Tests\Decorator;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\UserService;
@@ -24,6 +25,11 @@ use eZ\Publish\SPI\Repository\Decorator\UserServiceDecorator;
 
 class UserServiceDecoratorTest extends TestCase
 {
+    private const EXAMPLE_USER_GROUP_ID = 1;
+    private const EXAMPLE_USER_ID = 14;
+    private const EXAMPLE_OFFSET = 10;
+    private const EXAMPLE_LIMIT = 100;
+
     protected function createDecorator(MockObject $service): UserService
     {
         return new class($service) extends UserServiceDecorator {
@@ -56,7 +62,7 @@ class UserServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce176350.26344745',
+            self::EXAMPLE_USER_GROUP_ID,
             ['random_value_5ced05ce176389.48271998'],
         ];
 
@@ -72,8 +78,8 @@ class UserServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(UserGroup::class),
-            'random_value_5ced05ce1763e8.82084712',
-            'random_value_5ced05ce1763f9.17530594',
+            self::EXAMPLE_OFFSET,
+            self::EXAMPLE_LIMIT,
             ['random_value_5ced05ce176401.55725588'],
         ];
 
@@ -145,7 +151,7 @@ class UserServiceDecoratorTest extends TestCase
         $decoratedService = $this->createDecorator($serviceMock);
 
         $parameters = [
-            'random_value_5ced05ce177160.22585046',
+            self::EXAMPLE_USER_ID,
             ['random_value_5ced05ce177174.42173129'],
         ];
 
@@ -305,8 +311,8 @@ class UserServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(User::class),
-            'random_value_5ced05ce177f43.25078178',
-            'random_value_5ced05ce177f51.93852014',
+            self::EXAMPLE_OFFSET,
+            self::EXAMPLE_LIMIT,
             ['random_value_5ced05ce177f66.49237325'],
         ];
 
@@ -322,8 +328,8 @@ class UserServiceDecoratorTest extends TestCase
 
         $parameters = [
             $this->createMock(UserGroup::class),
-            'random_value_5ced05ce177fa7.34344515',
-            'random_value_5ced05ce177fb3.61754448',
+            self::EXAMPLE_OFFSET,
+            self::EXAMPLE_LIMIT,
             ['random_value_5ced05ce177fc8.32448790'],
         ];
 
@@ -366,7 +372,7 @@ class UserServiceDecoratorTest extends TestCase
             'random_value_5ced05ce178049.06911955',
             'random_value_5ced05ce178050.58319472',
             'random_value_5ced05ce178063.84822784',
-            'random_value_5ced05ce178075.03166061',
+            $this->createMock(ContentType::class),
         ];
 
         $serviceMock->expects($this->once())->method('newUserCreateStruct')->with(...$parameters);
@@ -381,7 +387,7 @@ class UserServiceDecoratorTest extends TestCase
 
         $parameters = [
             'random_value_5ced05ce178098.19193304',
-            'random_value_5ced05ce1780a5.92966105',
+            $this->createMock(ContentType::class),
         ];
 
         $serviceMock->expects($this->once())->method('newUserGroupCreateStruct')->with(...$parameters);
