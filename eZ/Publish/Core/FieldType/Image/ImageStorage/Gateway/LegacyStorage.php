@@ -237,6 +237,91 @@ class LegacyStorage extends Gateway
     }
 
     /**
+     * Returns the number of recorded references outside of the given $path.
+     *
+     * @param string $uri File IO uri (not legacy)
+     *
+     * @return int
+     */
+    public function countImageReferencesOutsidePath($uri)
+    {
+        $path = $this->redecorator->redecorateFromSource($uri);
+
+        $connection = $this->getConnection()->getConnection();
+
+        $queryBuilder = $connection->createQueryBuilder();
+        $statement = $queryBuilder
+            ->select('count(id)')
+            ->from('ezimagefile')
+            ->where('filepath not like :path')
+            ->setParameter('path', $path . '%')
+            ->execute();
+
+        return (int)$statement->fetchColumn();
+    }
+
+    /**
+     * Updates the filepath of given Image.
+     *
+     * @param $imageId
+     * @param $newFilePath
+     */
+    public function updateImageFilePath($imageId, $newFilePath)
+    {
+        $connection = $this->getConnection()->getConnection();
+
+        $query = $connection->createQueryBuilder();
+        $query
+            ->update('ezimagefile')
+            ->set('filepath', $query->expr()->literal($newFilePath))
+            ->where('id = :id')
+            ->setParameter('id', $imageId);
+
+        $query->execute();
+    }
+
+    /**
+     * Return references outside of the given $path.
+     *
+     * @param string $uri File IO uri (not legacy)
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return array
+     */
+    public function getImagesOutsidePath($uri, $limit = null, $offset = 0)
+    {
+        $path = $this->redecorator->redecorateFromSource($uri);
+
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $connection->quoteColumn('id'),
+            $connection->quoteColumn('contentobject_attribute_id'),
+            $connection->quoteColumn('filepath')
+        )->from(
+            $connection->quoteTable('ezimagefile')
+        )->where(
+            $selectQuery->expr->not(
+                $selectQuery->expr->like(
+                    $connection->quoteColumn('filepath'),
+                    $selectQuery->bindValue($path . '%')
+                )
+            )
+        );
+
+        if ($limit && $offset) {
+            $selectQuery->limit($limit, $offset);
+        }
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Checks if image $path can be removed when deleting $versionNo and $fieldId.
      *
      * @param string $path legacy image path (var/storage/images...)

@@ -430,6 +430,24 @@ abstract class Gateway
     abstract public function copyRelations($originalContentId, $copiedContentId, $versionNo = null);
 
     /**
+     * Updates Content's attribute text value.
+     *
+     * @param int $attributeId
+     * @param int $version
+     * @param string $text
+     */
+    abstract public function updateContentObjectAttributeText($attributeId, $version, $text);
+
+    /**
+     * Returns an array containing all content attributes with the specified id.
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    abstract public function getContentObjectAttributesById($id);
+
+    /**
      * Remove the specified translation from all the Versions of a Content Object.
      *
      * @param int $contentId
