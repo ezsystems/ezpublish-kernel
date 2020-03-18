@@ -49,7 +49,7 @@ class LegacyStorage extends Gateway
 
         $existingKeywordMap = $this->getExistingKeywords($field->value->externalData, $contentTypeId);
 
-        $this->deleteOldKeywordAssignments($field->id);
+        //$this->deleteOldKeywordAssignments($field->id);
 
         $this->assignKeywords(
             $field->id,
@@ -91,8 +91,9 @@ class LegacyStorage extends Gateway
      * Stores the keyword list from $field->value->externalData.
      *
      * @param mixed $fieldId
+     * @param int $versionNo
      */
-    public function deleteFieldData($fieldId)
+    public function deleteFieldData($fieldId, $versionNo)
     {
         $this->deleteOldKeywordAssignments($fieldId);
         $this->deleteOrphanedKeywords();

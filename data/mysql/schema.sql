@@ -1097,6 +1097,7 @@ CREATE TABLE `ezkeyword_attribute_link` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `keyword_id` int(11) NOT NULL DEFAULT '0',
   `objectattribute_id` int(11) NOT NULL DEFAULT '0',
+  `versions` text NULL DEFAULT NULL
   PRIMARY KEY (`id`),
   KEY `ezkeyword_attr_link_kid_oaid` (`keyword_id`,`objectattribute_id`),
   KEY `ezkeyword_attr_link_oaid` (`objectattribute_id`)
