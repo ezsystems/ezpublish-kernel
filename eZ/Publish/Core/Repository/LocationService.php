@@ -1,11 +1,11 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\LocationService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\PermissionCriterionResolver;
@@ -118,7 +118,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
      */
-    public function copySubtree(APILocation $subtree, APILocation $targetParentLocation)
+    public function copySubtree(APILocation $subtree, APILocation $targetParentLocation): APILocation
     {
         $loadedSubtree = $this->loadLocation($subtree->id);
         $loadedTargetLocation = $this->loadLocation($targetParentLocation->id);
@@ -195,7 +195,7 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
+    public function loadLocation(int $locationId, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): APILocation
     {
         $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
         $location = $this->contentDomainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
@@ -209,7 +209,7 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocationList(array $locationIds, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null): iterable
+    public function loadLocationList(array $locationIds, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): iterable
     {
         $spiLocations = $this->persistenceHandler->locationHandler()->loadList(
             $locationIds,
@@ -255,12 +255,8 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
+    public function loadLocationByRemoteId(string $remoteId, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): APILocation
     {
-        if (!is_string($remoteId)) {
-            throw new InvalidArgumentValue('remoteId', $remoteId);
-        }
-
         $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
         $location = $this->contentDomainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
         if (!$this->permissionResolver->canUser('content', 'read', $location->getContentInfo(), [$location])) {
@@ -273,7 +269,7 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocations(ContentInfo $contentInfo, APILocation $rootLocation = null, array $prioritizedLanguages = null)
+    public function loadLocations(ContentInfo $contentInfo, ?APILocation $rootLocation = null, ?array $prioritizedLanguages = null): iterable
     {
         if (!$contentInfo->published) {
             throw new BadStateException('$contentInfo', 'The Content item has no published versions');
@@ -300,7 +296,7 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocationChildren(APILocation $location, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
+    public function loadLocationChildren(APILocation $location, int $offset = 0, int $limit = 25, ?array $prioritizedLanguages = null): LocationList
     {
         if (!$this->contentDomainMapper->isValidLocationSortField($location->sortField)) {
             throw new InvalidArgumentValue('sortField', $location->sortField, 'Location');
@@ -335,7 +331,7 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, array $prioritizedLanguages = null)
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, ?array $prioritizedLanguages = null): iterable
     {
         if (!$versionInfo->isDraft()) {
             throw new BadStateException(
@@ -383,7 +379,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return int
      */
-    public function getLocationChildCount(APILocation $location)
+    public function getLocationChildCount(APILocation $location): int
     {
         $searchResult = $this->searchChildrenLocations($location, 0, 0);
 
@@ -424,7 +420,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      */
-    public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct)
+    public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct): APILocation
     {
         $content = $this->contentDomainMapper->buildContentDomainObjectFromPersistence(
             $this->persistenceHandler->contentHandler()->load($contentInfo->id),
@@ -510,7 +506,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the updated Location
      */
-    public function updateLocation(APILocation $location, LocationUpdateStruct $locationUpdateStruct)
+    public function updateLocation(APILocation $location, LocationUpdateStruct $locationUpdateStruct): APILocation
     {
         if (!$this->contentDomainMapper->isValidLocationPriority($locationUpdateStruct->priority)) {
             throw new InvalidArgumentValue('priority', $locationUpdateStruct->priority, 'LocationUpdateStruct');
@@ -570,7 +566,7 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location1
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location2
      */
-    public function swapLocation(APILocation $location1, APILocation $location2)
+    public function swapLocation(APILocation $location1, APILocation $location2): void
     {
         $loadedLocation1 = $this->loadLocation($location1->id);
         $loadedLocation2 = $this->loadLocation($location2->id);
@@ -608,7 +604,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
-    public function hideLocation(APILocation $location)
+    public function hideLocation(APILocation $location): APILocation
     {
         if (!$this->permissionResolver->canUser('content', 'hide', $location->getContentInfo(), [$location])) {
             throw new UnauthorizedException('content', 'hide', ['locationId' => $location->id]);
@@ -638,7 +634,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
-    public function unhideLocation(APILocation $location)
+    public function unhideLocation(APILocation $location): APILocation
     {
         if (!$this->permissionResolver->canUser('content', 'hide', $location->getContentInfo(), [$location])) {
             throw new UnauthorizedException('content', 'hide', ['locationId' => $location->id]);
@@ -669,7 +665,7 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      */
-    public function moveSubtree(APILocation $location, APILocation $newParentLocation)
+    public function moveSubtree(APILocation $location, APILocation $newParentLocation): void
     {
         $location = $this->loadLocation($location->id);
         $newParentLocation = $this->loadLocation($newParentLocation->id);
@@ -747,7 +743,7 @@ class LocationService implements LocationServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
-    public function deleteLocation(APILocation $location)
+    public function deleteLocation(APILocation $location): void
     {
         $location = $this->loadLocation($location->id);
 
@@ -798,11 +794,11 @@ class LocationService implements LocationServiceInterface
      * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null)
+    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null): LocationCreateStruct
     {
         $properties = [
             'parentLocationId' => $parentLocationId,
@@ -820,7 +816,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
      */
-    public function newLocationUpdateStruct()
+    public function newLocationUpdateStruct(): LocationUpdateStruct
     {
         return new LocationUpdateStruct();
     }

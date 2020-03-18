@@ -162,7 +162,9 @@ class GlobalHelperTest extends TestCase
 
         $rootLocation = $this
             ->getMockBuilder(Location::class)
-            ->setConstructorArgs([['id' => $rootLocationId]]);
+            ->setConstructorArgs([['id' => $rootLocationId]])
+            ->getMock();
+
         $this->locationService
             ->expects($this->once())
             ->method('loadLocation')
