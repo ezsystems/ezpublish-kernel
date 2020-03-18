@@ -10,11 +10,10 @@ namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
 use DOMDocument;
+use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use PDO;
-use function Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Image Field Type external storage DoctrineStorage gateway.
@@ -54,8 +53,6 @@ class DoctrineStorage extends Gateway
 
     /**
      * Return the node path string of $versionInfo.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      *
      * @return string
      */
@@ -121,7 +118,6 @@ class DoctrineStorage extends Gateway
      * Return an XML content stored for the given $fieldIds.
      *
      * @param int $versionNo
-     * @param array $fieldIds
      *
      * @return array
      */
