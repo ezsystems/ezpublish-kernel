@@ -1,10 +1,4 @@
-integration_tests/
-ezp/Io
-ezp/Persistence
-ezp/PublicAPI
 config.php
-ezc
-/nbproject/private/
 doc/apidoc/
 docblox.xml
 composer.phar
