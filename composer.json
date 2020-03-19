@@ -1,5 +1,5 @@
 {
-    "name": "ezsystems/ezpublish-kernel",
+    "name": "ezsystems/ezplatform-kernel",
     "description": "Kernel used by ezsystems/ezplatform and derivatives. Provides the Content Repository, its APIs, and the application's Symfony framework integration.",
     "homepage": "https://ezplatform.com",
     "license": "GPL-2.0-only",
@@ -62,20 +62,16 @@
     },
     "conflict": {
         "doctrine/dbal": "2.7.0",
-        "ezsystems/ezpublish-legacy": "<2019.03",
+        "ezsystems/ezpublish-legacy": "*",
         "phpunit/phpunit": "8.4.0"
     },
     "replace": {
-        "ezsystems/ezpublish": "*",
-        "ezsystems/ezpublish-api": "self.version",
-        "ezsystems/ezpublish-spi": "self.version"
+        "ezsystems/ezpublish-kernel": "*"
     },
     "autoload": {
         "psr-4": {
-            "EzSystems\\PlatformInstallerBundle\\": "eZ/Bundle/PlatformInstallerBundle/src"
-        },
-        "psr-0": {
-            "eZ": ""
+            "EzSystems\\PlatformInstallerBundle\\": "eZ/Bundle/PlatformInstallerBundle/src",
+            "eZ\\": "eZ"
         }
     },
     "autoload-dev": {
@@ -104,8 +100,8 @@
         "_ezplatform_branch_for_behat_tests_comment_": "ezplatform branch to use to run Behat tests",
         "_ezplatform_branch_for_behat_tests": "master",
         "branch-alias": {
-            "dev-master": "8.0.x-dev",
-            "dev-tmp_ci_branch": "8.0.x-dev"
+            "dev-master": "1.0.x-dev",
+            "dev-tmp_ci_branch": "1.0.x-dev"
         },
         "thanks": {
             "name": "ezsystems/ezplatform",
