@@ -1,4 +1,4 @@
-For the full list of changes see [changes-8.0](../changes-8.0.md).
+For the full list of changes see [changes-1.0](../changes-1.0.md).
 
 The following deprecated Symfony Dependency Injection Container parameters ending with `.class` have
 been removed:

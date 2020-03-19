@@ -1,6 +1,7 @@
 # Backwards compatibility changes
 
-Changes affecting version compatibility with former or future versions.
+Changes affecting version compatibility with deprecated ezpublish-kernel version 7.5
+(used by eZ Platform 2.5 LTS).
 
 ## Removed features
 
@@ -238,7 +239,7 @@ Changes affecting version compatibility with former or future versions.
   removed, services relying on them have now their classes defined explicitly.
   To properly decorate a Symfony service, use the `decorates` attribute instead.
   For the full list of the dropped parameters please see the
-  [8.0/dropped-container-parameters.md](8.0/dropped-container-parameters.md) document.
+  [1.0/dropped-container-parameters.md](1.0/dropped-container-parameters.md) document.
   
 * Deprecated `viewLocation` and `embedLocation` actions of `ViewController` have been dropped, along with
   related route `_ezpublishLocation`. As stated in controller, use `viewAction` in place of `viewLocation` and
