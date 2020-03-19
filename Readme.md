@@ -1,8 +1,8 @@
 # eZ Platform Kernel
-[![Build Status](https://img.shields.io/travis/ezsystems/ezpublish-kernel.svg?style=flat-square&branch=master)](https://travis-ci.org/ezsystems/ezpublish-kernel)
-[![Downloads](https://img.shields.io/packagist/dt/ezsystems/ezpublish-kernel.svg?style=flat-square)](https://packagist.org/packages/ezsystems/ezpublish-kernel)
-[![Latest version](https://img.shields.io/github/release/ezsystems/ezpublish-kernel.svg?style=flat-square)](https://github.com/ezsystems/ezpublish-kernel/releases)
-[![License](https://img.shields.io/github/license/ezsystems/ezpublish-kernel.svg?style=flat-square)](LICENSE)
+[![Build Status](https://img.shields.io/travis/ezsystems/ezplatform-kernel.svg?style=flat-square&branch=master)](https://travis-ci.org/ezsystems/ezplatform-kernel)
+[![Downloads](https://img.shields.io/packagist/dt/ezsystems/ezplatform-kernel.svg?style=flat-square)](https://packagist.org/packages/ezsystems/ezplatform-kernel)
+[![Latest version](https://img.shields.io/github/release/ezsystems/ezplatform-kernel.svg?style=flat-square)](https://github.com/ezsystems/ezplatform-kernel/releases)
+[![License](https://img.shields.io/github/license/ezsystems/ezplatform-kernel.svg?style=flat-square)](LICENSE)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0/big.png)](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0)
 
@@ -66,8 +66,8 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
     ```bash
     # Note: Change the line below to the ssh format of your fork to create topic branches to propose as pull requests
-    git clone https://github.com/ezsystems/ezpublish-kernel.git
-    cd ezpublish-kernel
+    git clone https://github.com/ezsystems/ezplatform-kernel.git
+    cd ezplatform-kernel
     composer install
     ```
 2. Run unit tests:
@@ -88,7 +88,7 @@ For Contributing to this Bundle, you should make sure to run both unit and integ
 
     To run integration tests against Solr, see [Solr Search Engine Bundle for eZ Platform](https://github.com/ezsystems/ezplatform-solr-search-engine).
 
-This should produce a result similar to this: [travis](https://travis-ci.org/ezsystems/ezpublish-kernel). If it doesn't, double-check [.travis.yml](.travis.yml) for up-to-date information on how travis is set up.
+This should produce a result similar to this: [travis](https://travis-ci.org/ezsystems/ezplatform-kernel). If it doesn't, double-check [.travis.yml](.travis.yml) for up-to-date information on how travis is set up.
 
 ## Issue Tracker
 Submitting bugs, improvements, and stories is possible in [https://jira.ez.no/browse/EZP](https://jira.ez.no/browse/EZP).
@@ -102,7 +102,7 @@ Good manners:
   "EZP-20104: Fixed ContentController to return error status when content is not found"
   or
   "EZP-20105: Added support for X in Y"
-* If you want to contribute implementation-specification proposals, place them in the [doc/](doc/) folder.
+* If you want to contribute implementation-specification proposals, place them in the [doc/](doc) folder.
 * Keep different changes in different commits in case cherry-pick is preferred instead of a merge later.
   * A pull request should only cover one issue.
   * A single commit should not contain code changes along with coding standards/whitespace/typo fixes.

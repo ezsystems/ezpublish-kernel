@@ -1,6 +1,6 @@
 build: off
 clone_depth: 30
-clone_folder: c:\projects\ezpublish-kernel
+clone_folder: c:\projects\ezplatform-kernel
 
 skip_commits:
     message: /\[skip ci\]/i
@@ -35,11 +35,11 @@ install:
     - echo extension=php_curl.dll >> php.ini
     - echo memory_limit=3G >> php.ini
     - echo default_charset="utf-8" >> php.ini
-    - cd c:\projects\ezpublish-kernel
+    - cd c:\projects\ezplatform-kernel
     - composer install --no-suggest --no-progress --ansi
 
 test_script:
-    - cd c:\projects\ezpublish-kernel
+    - cd c:\projects\ezplatform-kernel
     - copy /Y config.php-DEVELOPMENT config.php
     - SET X=0
     - vendor/bin/phpunit --colors=never -c phpunit.xml || SET X=!errorlevel!

@@ -4,20 +4,20 @@ core:
     suites:
         console:
             paths:
-                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Console
+                - vendor/ezsystems/ezplatform-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Console
             contexts:
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ConsoleContext
         web:
             paths:
-                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Content
-                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Exception
+                - vendor/ezsystems/ezplatform-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Content
+                - vendor/ezsystems/ezplatform-kernel/eZ/Bundle/EzPublishCoreBundle/Features/Exception
             contexts:
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentPreviewContext
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\ExceptionContext
         query_controller:
             paths:
-                - vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Features/QueryController
+                - vendor/ezsystems/ezplatform-kernel/eZ/Bundle/EzPublishCoreBundle/Features/QueryController
             contexts:
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\QueryControllerContext
                 - eZ\Bundle\EzPublishCoreBundle\Features\Context\YamlConfigurationContext
