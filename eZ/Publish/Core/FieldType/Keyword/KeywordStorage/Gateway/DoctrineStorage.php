@@ -86,11 +86,9 @@ class DoctrineStorage extends Gateway
             if (!$versions || !is_array($versions)) {
                 // serialization failed, means that relation has been created before EZP-31471,
                 // therefore it must be deleted completely
-                $this->deleteOldKeywordAssignments($fieldId);
+                $this->deleteOldKeywordAssignments($fieldId, $keywordId);
 
-                // we can skipx continuing foreach loop, as we are sure at that point that all keyword assignments
-                // will be deleted for current $fieldId
-                return;
+                continue;
             }
 
             if ($versions && is_array($versions) && ($key = array_search($versionNo, $versions)) !== false) {
@@ -100,7 +98,7 @@ class DoctrineStorage extends Gateway
                 if (empty($versions)) {
                     // after deleting last version within this relation, we can safely delete whole relation
                     // (i.e. during trash cleanup)
-                    $this->deleteOldKeywordAssignments($fieldId);
+                    $this->deleteOldKeywordAssignments($fieldId, $keywordId);
                 }
 
                 $versions = serialize($versions);
@@ -134,23 +132,30 @@ class DoctrineStorage extends Gateway
     }
 
     /**
-     * Deletes keyword <=> field relation
-     * Method will be used when the current relation is created before EZP-31471.
+     * Deletes keyword <=> field relation for given keyword.
      *
      * @param int $fieldId
+     * @param int $keywordId
      */
-    protected function deleteOldKeywordAssignments($fieldId)
+    protected function deleteOldKeywordAssignments($fieldId, $keywordId)
     {
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
             ->delete($this->connection->quoteIdentifier(self::KEYWORD_ATTRIBUTE_LINK_TABLE))
             ->where(
-                $deleteQuery->expr()->eq(
-                    $this->connection->quoteIdentifier('objectattribute_id'),
-                    ':fieldId'
+                $deleteQuery->expr()->andX(
+                    $deleteQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('objectattribute_id'),
+                        ':fieldId'
+                    ),
+                    $deleteQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('keyword_id'),
+                        ':keywordId'
+                    )
                 )
             )
-            ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT);
+            ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
+            ->setParameter(':keywordId', $keywordId, \PDO::PARAM_INT);
 
         $deleteQuery->execute();
     }
