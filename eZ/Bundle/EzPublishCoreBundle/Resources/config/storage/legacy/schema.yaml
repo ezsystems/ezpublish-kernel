@@ -380,6 +380,7 @@ tables:
         fields:
             keyword_id: { type: integer, nullable: false, options: { default: '0' } }
             objectattribute_id: { type: integer, nullable: false, options: { default: '0' } }
+            versions: { type: text, nullable: true, options: { default: '' } }
     ezmedia:
         id:
             contentobject_attribute_id: { type: integer, nullable: false, options: { default: '0' } }

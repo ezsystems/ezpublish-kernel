@@ -413,6 +413,31 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         $this->assertEquals($value, $dataField->value);
     }
 
+    /**
+     * Test going back to different version which contains different keywords
+     */
+    public function testGoBackToDifferentVersionWithDifferentKeywords()
+    {
+        $contentType = $this->testCreateContentType();
+        $contentService = $this->getRepository()->getContentService();
+
+        $value01 = new KeywordValue(['foo', 'FOO', 'bar', 'baz']);
+        $contentDraft01 = $this->createContent($value01, $contentType);
+        $publishedContent01 = $contentService->publishVersion($contentDraft01->versionInfo);
+
+        // for the first content, create draft, remove one keyword, add new keyword, and publish new version
+        $contentDraft = $contentService->createContentDraft($publishedContent01->contentInfo);
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $value02 = new KeywordValue(['foo', 'FOO', 'bar', 'far']);
+        $updateStruct->setField('data', $value02);
+        $contentDraft02 = $contentService->updateContent($contentDraft->versionInfo, $updateStruct);
+        $publishedContent01 = $contentService->publishVersion($contentDraft02->versionInfo);
+
+        // go back to the first version and check whether keywords are correct
+        $contentDraft03 = $contentService->createContentDraft($publishedContent01->contentInfo, $contentDraft01->versionInfo);
+        $this->assertEquals($contentDraft03->getFieldValue('data'), $value01);
+    }
+
     public function testKeywordsAreCaseSensitive()
     {
         $contentType = $this->testCreateContentType();
