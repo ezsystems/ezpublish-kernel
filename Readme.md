@@ -40,8 +40,6 @@ as separate *(sub-tree split)* packages for re-usability. As is the case with [S
 
 ### Current Organization
 
-In the doc folder, you'll find [Specifications](doc/specifications) for most features.
-
 MVC layer:
 - [eZ/Bundle](eZ/Bundle) - the bundles that are important to expose the functionality of the Backend and MVC layer to Symfony.
 - [eZ/Publish/Core/MVC](eZ/Publish/Core/MVC) - the parts that make up the different components extending Symfony.
