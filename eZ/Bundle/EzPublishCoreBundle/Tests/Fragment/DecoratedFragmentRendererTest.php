@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Fragment;
 
 use eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer;
+use eZ\Publish\Core\MVC\Symfony\Component\Serializer\SerializerTrait;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 class DecoratedFragmentRendererTest extends TestCase
 {
+    use SerializerTrait;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -91,7 +94,12 @@ class DecoratedFragmentRendererTest extends TestCase
     public function testRendererControllerReference()
     {
         $reference = new ControllerReference('FooBundle:bar:baz');
-        $siteAccess = new SiteAccess('test', 'test');
+        $matcher = new SiteAccess\Matcher\URIElement(1);
+        $siteAccess = new SiteAccess(
+            'test',
+            'test',
+            $matcher
+        );
         $request = new Request();
         $request->attributes->set('siteaccess', $siteAccess);
         $options = array('foo' => 'bar');
@@ -105,6 +113,15 @@ class DecoratedFragmentRendererTest extends TestCase
         $renderer = new DecoratedFragmentRenderer($this->innerRenderer);
         $this->assertSame($expectedReturn, $renderer->render($reference, $request, $options));
         $this->assertTrue(isset($reference->attributes['serialized_siteaccess']));
-        $this->assertSame(serialize($siteAccess), $reference->attributes['serialized_siteaccess']);
+        $serializedSiteAccess = json_encode($siteAccess);
+        $this->assertSame($serializedSiteAccess, $reference->attributes['serialized_siteaccess']);
+        $this->assertTrue(isset($reference->attributes['serialized_siteaccess_matcher']));
+        $this->assertSame(
+            $this->getSerializer()->serialize(
+                $siteAccess->matcher,
+                'json'
+            ),
+            $reference->attributes['serialized_siteaccess_matcher']
+        );
     }
 }
