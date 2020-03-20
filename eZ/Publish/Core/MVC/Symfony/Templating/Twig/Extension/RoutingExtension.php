@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGeneratorInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Node\Expression\ArrayExpression;
@@ -99,8 +99,6 @@ class RoutingExtension extends AbstractExtension
      */
     private function generateUrlForObject(object $object, array $parameters, int $referenceType): string
     {
-        $routeName = null;
-
         if ($object instanceof Location) {
             $routeName = UrlAliasRouter::URL_ALIAS_ROUTE_NAME;
             $parameters += [
@@ -115,7 +113,10 @@ class RoutingExtension extends AbstractExtension
             $routeName = $object->getRoute();
             $parameters += $object->getParams();
         } else {
-            throw new InvalidArgumentException('$object', 'Unsupported class: ' . get_class($object));
+            $routeName = '';
+            $parameters += [
+                RouteObjectInterface::ROUTE_OBJECT => $$object,
+            ];
         }
 
         return $this->urlGenerator->generate($routeName, $parameters, $referenceType);

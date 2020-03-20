@@ -296,6 +296,14 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      */
     public function generate($name, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
+        if ($name === '' &&
+            array_key_exists(RouteObjectInterface::ROUTE_OBJECT, $parameters) &&
+            $this->supportsObject($parameters[RouteObjectInterface::ROUTE_OBJECT])
+        ) {
+            $name = $parameters[RouteObjectInterface::ROUTE_OBJECT];
+            unset($parameters[RouteObjectInterface::ROUTE_OBJECT]);
+        }
+
         // Direct access to Location
         if ($name instanceof Location) {
             return $this->generator->generate($name, $parameters, $referenceType);
@@ -376,11 +384,16 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      */
     public function supports($name)
     {
-        return $name instanceof Location || $name === self::URL_ALIAS_ROUTE_NAME;
+        return $name === self::URL_ALIAS_ROUTE_NAME || $this->supportsObject($name);
+    }
+
+    private function supportsObject($object): bool
+    {
+        return $object instanceof Location;
     }
 
     /**
-     * @see Symfony\Cmf\Component\Routing\VersatileGeneratorInterface::getRouteDebugMessage()
+     * @see \Symfony\Cmf\Component\Routing\VersatileGeneratorInterface::getRouteDebugMessage()
      */
     public function getRouteDebugMessage($name, array $parameters = [])
     {
