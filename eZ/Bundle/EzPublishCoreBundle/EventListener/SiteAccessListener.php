@@ -92,7 +92,10 @@ class SiteAccessListener implements EventSubscriberInterface
     private function getViewParameters(string $pathinfo): array
     {
         // No view parameters, get out of here.
-        if (($vpStart = strpos($pathinfo, '/(')) === false) {
+        if (
+            strpos($pathinfo, ')/') === false
+            || ($vpStart = strpos($pathinfo, '/(')) === false
+        ) {
             return [$pathinfo, [], ''];
         }
 
