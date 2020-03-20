@@ -18,6 +18,8 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Persistence\Cache\UserHandler;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition as CoreFieldDefinition;
+use eZ\Publish\SPI\Persistence\User;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 
 /**
@@ -421,6 +423,200 @@ class UserTest extends FieldTypeTest
         $validationErrors = $userType->validate($fieldDefinitionMock, $userValue);
 
         self::assertEquals($expectedValidationErrors, $validationErrors);
+    }
+
+    public function testInvalidLoginFormat(): void
+    {
+        $validateUserValue = new UserValue([
+            'hasStoredLogin' => false,
+            'contentId' => 46,
+            'login' => 'validate@user',
+            'email' => 'example@test.ez',
+            'passwordHash' => '1234567890abcdef',
+            'passwordHashType' => 'md5',
+            'enabled' => true,
+            'maxLogin' => 1000,
+            'plainPassword' => 'testPassword',
+        ]);
+
+        $userHandlerMock = $this->createMock(UserHandler::class);
+
+        $userHandlerMock
+            ->expects($this->once())
+            ->method('loadByLogin')
+            ->with($validateUserValue->login)
+            ->willThrowException(new NotFoundException('', ''));
+
+        $userType = new UserType(
+            $userHandlerMock,
+            $this->createMock(PasswordHashServiceInterface::class),
+            $this->createMock(PasswordValidatorInterface::class)
+        );
+
+        $fieldSettings = [
+            UserType::REQUIRE_UNIQUE_EMAIL => false,
+            UserType::USERNAME_PATTERN => '^[^@]+$',
+        ];
+
+        $fieldDefinition = new CoreFieldDefinition(['fieldSettings' => $fieldSettings]);
+
+        $validationErrors = $userType->validate($fieldDefinition, $validateUserValue);
+
+        self::assertEquals([
+            new ValidationError(
+                'Invalid login format',
+                null,
+                [],
+                'username'
+            ),
+        ], $validationErrors);
+    }
+
+    public function testValidLoginFormat(): void
+    {
+        $validateUserValue = new UserValue([
+            'hasStoredLogin' => false,
+            'contentId' => 46,
+            'login' => 'validate_user',
+            'email' => 'example@test.ez',
+            'passwordHash' => '1234567890abcdef',
+            'passwordHashType' => 'md5',
+            'enabled' => true,
+            'maxLogin' => 1000,
+            'plainPassword' => 'testPassword',
+        ]);
+
+        $userHandlerMock = $this->createMock(UserHandler::class);
+
+        $userHandlerMock
+            ->expects($this->once())
+            ->method('loadByLogin')
+            ->with($validateUserValue->login)
+            ->willThrowException(new NotFoundException('', ''));
+
+        $userType = new UserType(
+            $userHandlerMock,
+            $this->createMock(PasswordHashServiceInterface::class),
+            $this->createMock(PasswordValidatorInterface::class)
+        );
+
+        $fieldSettings = [
+            UserType::REQUIRE_UNIQUE_EMAIL => false,
+            UserType::USERNAME_PATTERN => '^[^@]+$',
+        ];
+
+        $fieldDefinition = new CoreFieldDefinition(['fieldSettings' => $fieldSettings]);
+
+        $validationErrors = $userType->validate($fieldDefinition, $validateUserValue);
+
+        self::assertEquals([], $validationErrors);
+    }
+
+    public function testEmailAlreadyTaken(): void
+    {
+        $existingUser = new User([
+            'id' => 23,
+            'login' => 'existing_user',
+            'email' => 'test@test.ez',
+        ]);
+
+        $validateUserValue = new UserValue([
+            'hasStoredLogin' => false,
+            'contentId' => 46,
+            'login' => 'validate_user',
+            'email' => 'test@test.ez',
+            'passwordHash' => '1234567890abcdef',
+            'passwordHashType' => 'md5',
+            'enabled' => true,
+            'maxLogin' => 1000,
+            'plainPassword' => 'testPassword',
+        ]);
+
+        $userHandlerMock = $this->createMock(UserHandler::class);
+
+        $userHandlerMock
+            ->expects($this->once())
+            ->method('loadByLogin')
+            ->with($validateUserValue->login)
+            ->willThrowException(new NotFoundException('', ''));
+
+        $userHandlerMock
+            ->expects($this->once())
+            ->method('loadByEmail')
+            ->with($validateUserValue->email)
+            ->willReturn($existingUser);
+
+        $userType = new UserType(
+            $userHandlerMock,
+            $this->createMock(PasswordHashServiceInterface::class),
+            $this->createMock(PasswordValidatorInterface::class)
+        );
+
+        $fieldSettings = [
+            UserType::REQUIRE_UNIQUE_EMAIL => true,
+            UserType::USERNAME_PATTERN => '^[^@]+$',
+        ];
+
+        $fieldDefinition = new CoreFieldDefinition(['fieldSettings' => $fieldSettings]);
+
+        $validationErrors = $userType->validate($fieldDefinition, $validateUserValue);
+
+        self::assertEquals([
+            new ValidationError(
+                "Email '%email%' is used by another user. You must enter a unique email.",
+                null,
+                [
+                    '%email%' => $validateUserValue->email,
+                ],
+                'email'
+            ),
+        ], $validationErrors);
+    }
+
+    public function testEmailFreeToUse(): void
+    {
+        $validateUserValue = new UserValue([
+            'hasStoredLogin' => false,
+            'contentId' => 46,
+            'login' => 'validate_user',
+            'email' => 'test@test.ez',
+            'passwordHash' => '1234567890abcdef',
+            'passwordHashType' => 'md5',
+            'enabled' => true,
+            'maxLogin' => 1000,
+            'plainPassword' => 'testPassword',
+        ]);
+
+        $userHandlerMock = $this->createMock(UserHandler::class);
+
+        $userHandlerMock
+            ->expects($this->once())
+            ->method('loadByLogin')
+            ->with($validateUserValue->login)
+            ->willThrowException(new NotFoundException('', ''));
+
+        $userHandlerMock
+            ->expects($this->once())
+            ->method('loadByEmail')
+            ->with($validateUserValue->email)
+            ->willThrowException(new NotFoundException('', ''));
+
+        $userType = new UserType(
+            $userHandlerMock,
+            $this->createMock(PasswordHashServiceInterface::class),
+            $this->createMock(PasswordValidatorInterface::class)
+        );
+
+        $fieldSettings = [
+            UserType::REQUIRE_UNIQUE_EMAIL => true,
+            UserType::USERNAME_PATTERN => '^[^@]+$',
+        ];
+
+        $fieldDefinition = new CoreFieldDefinition(['fieldSettings' => $fieldSettings]);
+
+        $validationErrors = $userType->validate($fieldDefinition, $validateUserValue);
+
+        self::assertEquals([], $validationErrors);
     }
 
     /**
