@@ -112,7 +112,7 @@ class RoutingExtension extends AbstractExtension
         } else {
             $routeName = '';
             $parameters += [
-                RouteObjectInterface::ROUTE_OBJECT => $$object,
+                RouteObjectInterface::ROUTE_OBJECT => $object,
             ];
         }
 
