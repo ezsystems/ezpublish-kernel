@@ -94,9 +94,6 @@ class RoutingExtension extends AbstractExtension
         return $this->urlGenerator->generate($name, $parameters, $referenceType);
     }
 
-    /**
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
     private function generateUrlForObject(object $object, array $parameters, int $referenceType): string
     {
         if ($object instanceof Location) {
