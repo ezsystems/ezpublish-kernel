@@ -299,7 +299,7 @@ abstract class BaseTest extends TestCase
     /**
      * Create a user in editor user group.
      */
-    protected function createUserVersion1(string $login = 'user', ?string $email = null): User
+    protected function createUserVersion1(string $login = 'user', ?string $email = null, ContentType $contentType = null): User
     {
         $repository = $this->getRepository();
 
@@ -314,7 +314,7 @@ abstract class BaseTest extends TestCase
         $userCreate = $userService->newUserCreateStruct(
             $login,
             $email,
-            'secret',
+            'VerySecret@Password.1234',
             'eng-US'
         );
         $userCreate->enabled = true;
@@ -322,6 +322,10 @@ abstract class BaseTest extends TestCase
         // Set some fields required by the user ContentType
         $userCreate->setField('first_name', 'Example');
         $userCreate->setField('last_name', 'User');
+
+        if (!empty($contentType)) {
+            $userCreate->contentType = $contentType;
+        }
 
         // Load parent group for the user
         $group = $userService->loadUserGroup($editorsGroupId);
