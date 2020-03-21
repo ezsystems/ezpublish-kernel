@@ -13,6 +13,9 @@
 {{ ez_url(route_ref) }}
 {{ ez_url(route_ref, {}, true) }}
 {{ ez_url(route_ref, {'baz': 'baz'}) }}
+{{ ez_path(unsupported_object) }}
+{{ ez_path(unsupported_object, {}, true) }}
+{{ ez_path(unsupported_object, {'baz': 'baz'}) }}
 --DATA--
 return [
     'location' => $this->getExampleLocation(54),
@@ -24,7 +27,8 @@ return [
             'foo' => 'foo',
             'bar' => 'bar'
         ]
-    )
+    ),
+    'unsupported_object' => $this->getExampleUnsupportedObject(),
 ];
 --EXPECT--
 {"$name":"ez_urlalias","$parameters":{"locationId":54},"$referenceType":0}
@@ -39,3 +43,6 @@ return [
 {"$name":"example_route","$parameters":{"foo":"foo","bar":"bar"},"$referenceType":0}
 {"$name":"example_route","$parameters":{"foo":"foo","bar":"bar"},"$referenceType":3}
 {"$name":"example_route","$parameters":{"baz":"baz","foo":"foo","bar":"bar"},"$referenceType":0}
+{"$name":"","$parameters":{"_route_object":{"foo":"foo","bar":"bar"}},"$referenceType":1}
+{"$name":"","$parameters":{"_route_object":{"foo":"foo","bar":"bar"}},"$referenceType":2}
+{"$name":"","$parameters":{"baz":"baz","_route_object":{"foo":"foo","bar":"bar"}},"$referenceType":1}

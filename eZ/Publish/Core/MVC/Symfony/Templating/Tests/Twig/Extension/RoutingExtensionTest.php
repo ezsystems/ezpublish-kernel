@@ -18,6 +18,7 @@ use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use stdClass;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -65,6 +66,15 @@ final class RoutingExtensionTest extends IntegrationTestCase
     protected function getExampleRouteReference($name, array $parameters = []): RouteReference
     {
         return new RouteReference($name, $parameters);
+    }
+
+    protected function getExampleUnsupportedObject(): object
+    {
+        $object = new stdClass();
+        $object->foo = 'foo';
+        $object->bar = 'bar';
+
+        return $object;
     }
 
     private function getRouteReferenceGenerator(): RouteReferenceGeneratorInterface
