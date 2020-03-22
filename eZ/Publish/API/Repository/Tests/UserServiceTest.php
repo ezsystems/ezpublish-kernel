@@ -1085,7 +1085,7 @@ class UserServiceTest extends BaseTest
      * @covers \eZ\Publish\API\Repository\UserService::createUser
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testCreateUserWithEmailAlreadyTaken()
+    public function testCreateUserWithEmailAlreadyTaken(): void
     {
         $repository = $this->getRepository();
 
@@ -1108,8 +1108,8 @@ class UserServiceTest extends BaseTest
 
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(
-        // admin is an existing login
             'another_user',
+            // email is already taken
             'unique@email.com',
             'VerySecure@Password.1234',
             'eng-US',
@@ -1126,12 +1126,10 @@ class UserServiceTest extends BaseTest
             // This call will fail with a "ContentFieldValidationException", because the
             // user with "unique@email.com" email already exists in database.
             $userService->createUser($userCreate, [$group]);
-            /* END: Use Case */
         } catch (ContentFieldValidationException $e) {
             // Exception is caught, as there is no other way to check exception properties.
             $this->assertValidationErrorOccurs($e, 'Email \'%email%\' is used by another user. You must enter a unique email.');
 
-            /* END: Use Case */
             return;
         }
 
@@ -1144,7 +1142,7 @@ class UserServiceTest extends BaseTest
      * @covers \eZ\Publish\API\Repository\UserService::createUser
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testCreateInvalidFormatUsername()
+    public function testCreateInvalidFormatUsername(): void
     {
         $repository = $this->getRepository();
 
@@ -1161,7 +1159,7 @@ class UserServiceTest extends BaseTest
 
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(
-        // admin is an existing login
+            // login contains @
             'invalid@user',
             'unique@email.com',
             'VerySecure@Password.1234',
@@ -1179,12 +1177,10 @@ class UserServiceTest extends BaseTest
             // This call will fail with a "ContentFieldValidationException", because the
             // user with "invalid@user" login does not match "^[^@]$" pattern.
             $userService->createUser($userCreate, [$group]);
-            /* END: Use Case */
         } catch (ContentFieldValidationException $e) {
             // Exception is caught, as there is no other way to check exception properties.
             $this->assertValidationErrorOccurs($e, 'Invalid login format');
 
-            /* END: Use Case */
             return;
         }
 
