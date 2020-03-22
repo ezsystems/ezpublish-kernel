@@ -55,8 +55,9 @@ final class QueryTypePass implements CompilerPassInterface
         foreach ($serviceIdsWithDeprecatedTags as $serviceId => $tags) {
             @trigger_error(
                 sprintf(
-                    'Service tag `%s` is deprecated and will be removed in eZ Platform 4.0. Use `%s` instead.',
+                    'Service tag `%s` is deprecated and will be removed in eZ Platform 4.0. Tag %s with `%s` instead.',
                     self::DEPRECATED_QUERY_TYPE_SERVICE_TAG,
+                    $serviceId,
                     self::QUERY_TYPE_SERVICE_TAG
                 ),
                 E_USER_DEPRECATED
