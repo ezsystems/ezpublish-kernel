@@ -82,9 +82,14 @@ abstract class AbstractQueryType extends OptionsResolverBasedQueryType
 
     abstract protected function getQueryFilter(array $parameters): Criterion;
 
+    protected function createQuery(): Query
+    {
+        return new Query();
+    }
+
     protected function doGetQuery(array $parameters): Query
     {
-        $query = new Query();
+        $query = $this->createQuery();
         $query->filter = $this->buildFilters($parameters);
 
         if ($parameters['sort'] !== null) {

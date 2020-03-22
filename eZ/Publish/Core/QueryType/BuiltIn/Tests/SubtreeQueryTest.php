@@ -1,10 +1,15 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\Core\QueryType\BuiltIn\Tests;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location\Depth;
@@ -37,7 +42,7 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
             [
                 'location' => $location,
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new Subtree(self::EXAMPLE_LOCATION_PATH_STRING),
                     new Visibility(Visibility::VISIBLE),
@@ -51,7 +56,7 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
                 'location' => $location,
                 'depth' => 2,
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new LogicalAnd([
                         new Subtree(self::EXAMPLE_LOCATION_PATH_STRING),
@@ -70,7 +75,7 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
                     'visible_only' => false,
                 ],
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new Subtree(self::EXAMPLE_LOCATION_PATH_STRING),
                     new Subtree(self::ROOT_LOCATION_PATH_STRING),
@@ -89,7 +94,7 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
                     ],
                 ],
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new Subtree(self::EXAMPLE_LOCATION_PATH_STRING),
                     new Visibility(Visibility::VISIBLE),
@@ -110,7 +115,7 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
                     'siteaccess_aware' => false,
                 ],
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new Subtree(self::EXAMPLE_LOCATION_PATH_STRING),
                     new Visibility(Visibility::VISIBLE),
@@ -124,7 +129,7 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
                 'limit' => 10,
                 'offset' => 100,
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new Subtree(self::EXAMPLE_LOCATION_PATH_STRING),
                     new Visibility(Visibility::VISIBLE),
@@ -140,7 +145,7 @@ final class SubtreeQueryTest extends AbstractQueryTypeTest
                 'location' => $location,
                 'sort' => new Priority(Query::SORT_ASC),
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new Subtree(self::EXAMPLE_LOCATION_PATH_STRING),
                     new Visibility(Visibility::VISIBLE),
