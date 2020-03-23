@@ -414,7 +414,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * Test going back to different version which contains different keywords
+     * Test going back to different version which contains different keywords than the other version
      */
     public function testGoBackToDifferentVersionWithDifferentKeywords()
     {

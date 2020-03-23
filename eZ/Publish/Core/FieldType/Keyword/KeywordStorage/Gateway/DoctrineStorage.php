@@ -45,6 +45,8 @@ class DoctrineStorage extends Gateway
             $contentTypeId
         );
 
+        $this->deleteOldKeywordAssignments($field->id, $field->versionNo);
+
         $this->assignKeywords(
             $field->id,
             $this->insertKeywords(
@@ -58,106 +60,6 @@ class DoctrineStorage extends Gateway
         );
 
         $this->deleteOrphanedKeywords();
-    }
-
-    /**
-     * Deletes keyword data for the given $fieldId and $versionNo.
-     *
-     * @param int $fieldId
-     * @param int $versionNo
-     */
-    public function deleteFieldData($fieldId, $versionNo)
-    {
-        $this->deleteCurrentVersionRelations($fieldId, $versionNo);
-        $this->deleteOrphanedKeywords();
-    }
-
-    /**
-     * Deletes current version from keyword <=> field relation.
-     *
-     * @param int $fieldId
-     * @param int $versionNo
-     */
-    protected function deleteCurrentVersionRelations($fieldId, $versionNo)
-    {
-        $existingKeywordRelations = $this->getKeywordRelations($fieldId);
-
-        foreach ($existingKeywordRelations as $keywordId => $versions) {
-            if (!$versions || !is_array($versions)) {
-                // serialization failed, means that relation has been created before EZP-31471,
-                // therefore it must be deleted completely
-                $this->deleteOldKeywordAssignments($fieldId, $keywordId);
-
-                continue;
-            }
-
-            if ($versions && is_array($versions) && ($key = array_search($versionNo, $versions)) !== false) {
-                // version exists in relation
-                unset($versions[$key]);
-
-                if (empty($versions)) {
-                    // after deleting last version within this relation, we can safely delete whole relation
-                    // (i.e. during trash cleanup)
-                    $this->deleteOldKeywordAssignments($fieldId, $keywordId);
-                }
-
-                $versions = serialize($versions);
-
-                $query = $this->connection->createQueryBuilder();
-                $query
-                    ->update($this->connection->quoteIdentifier(self::KEYWORD_ATTRIBUTE_LINK_TABLE))
-                    ->set(
-                        'versions',
-                        ':versions'
-                    )
-                    ->where(
-                        $query->expr()->andX(
-                            $query->expr()->eq(
-                                $this->connection->quoteIdentifier('objectattribute_id'),
-                                ':objectAttributeId'
-                            ),
-                            $query->expr()->eq(
-                                $this->connection->quoteIdentifier('keyword_id'),
-                                ':keywordId'
-                            )
-                        )
-                    )
-                    ->setParameter(':objectAttributeId', $fieldId)
-                    ->setParameter(':keywordId', $keywordId)
-                    ->setParameter(':versions', $versions);
-
-                $query->execute();
-            }
-        }
-    }
-
-    /**
-     * Deletes keyword <=> field relation for given keyword.
-     *
-     * @param int $fieldId
-     * @param int $keywordId
-     */
-    protected function deleteOldKeywordAssignments($fieldId, $keywordId)
-    {
-        $deleteQuery = $this->connection->createQueryBuilder();
-        $deleteQuery
-            ->delete($this->connection->quoteIdentifier(self::KEYWORD_ATTRIBUTE_LINK_TABLE))
-            ->where(
-                $deleteQuery->expr()->andX(
-                    $deleteQuery->expr()->eq(
-                        $this->connection->quoteIdentifier('objectattribute_id'),
-                        ':fieldId'
-                    ),
-                    $deleteQuery->expr()->eq(
-                        $this->connection->quoteIdentifier('keyword_id'),
-                        ':keywordId'
-                    )
-                )
-            )
-            ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
-            ->setParameter(':keywordId', $keywordId, \PDO::PARAM_INT);
-
-        $deleteQuery->execute();
     }
 
     /**
@@ -183,6 +85,18 @@ class DoctrineStorage extends Gateway
     }
 
     /**
+     * Deletes keyword data for the given $fieldId.
+     *
+     * @param int $fieldId
+     * @param int $versionNo
+     */
+    public function deleteFieldData($fieldId, $versionNo)
+    {
+        $this->deleteOldKeywordAssignments($fieldId, $versionNo);
+        $this->deleteOrphanedKeywords();
+    }
+
+    /**
      * Returns a list of keywords assigned to $fieldId.
      *
      * @param int $fieldId
@@ -194,9 +108,7 @@ class DoctrineStorage extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->select($this->connection->quoteIdentifier('kwd.keyword'),
-                $this->connection->quoteIdentifier('attr.versions')
-            )
+            ->select($this->connection->quoteIdentifier('keyword'))
             ->from($this->connection->quoteIdentifier(self::KEYWORD_TABLE), 'kwd')
             ->innerJoin(
                 'kwd',
@@ -208,27 +120,24 @@ class DoctrineStorage extends Gateway
                 )
             )
             ->where(
-                $query->expr()->eq(
-                    $this->connection->quoteIdentifier('attr.objectattribute_id'),
-                    ':fieldId'
+                $query->expr()->andX(
+                    $query->expr()->eq(
+                        $this->connection->quoteIdentifier('attr.objectattribute_id'),
+                        ':fieldId'
+                    ),
+                    $query->expr()->eq(
+                        $this->connection->quoteIdentifier('attr.version'),
+                        ':versionNo'
+                    )
                 )
             )
-            ->setParameter(':fieldId', $fieldId);
+            ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
+            ->setParameter(':versionNo', $versionNo, \PDO::PARAM_INT)
+        ;
 
         $statement = $query->execute();
-        $records = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        foreach ($records as $key => $record) {
-            $availableVersions = unserialize($record['versions']);
-            //added not and empty conditions to avoid bc break for keywords which do not have assigned content versions
-            if (!$availableVersions || empty($availableVersions) || in_array($versionNo, $availableVersions)) {
-                $records[$key] = $record['keyword'];
-            } else {
-                unset($records[$key]);
-            }
-        }
-
-        return $records;
+        return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -366,6 +275,33 @@ class DoctrineStorage extends Gateway
     }
 
     /**
+     * @param int $fieldId
+     * @param int $versionNo
+     */
+    protected function deleteOldKeywordAssignments($fieldId, $versionNo)
+    {
+        $deleteQuery = $this->connection->createQueryBuilder();
+        $deleteQuery
+            ->delete($this->connection->quoteIdentifier(self::KEYWORD_ATTRIBUTE_LINK_TABLE))
+            ->where(
+                $deleteQuery->expr()->andX(
+                    $deleteQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('objectattribute_id'),
+                        ':fieldId'
+                    ),
+                    $deleteQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('version'),
+                        ':versionNo'
+                    )
+                )
+            )
+            ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
+            ->setParameter(':versionNo', $versionNo, \PDO::PARAM_INT);
+
+        $deleteQuery->execute();
+    }
+
+    /**
      * Assigns keywords from $keywordMap to the field with $fieldId.
      *
      * $keywordMap has the format:
@@ -377,13 +313,11 @@ class DoctrineStorage extends Gateway
      * </code>
      *
      * @param int $fieldId
-     * @param array $keywordMap
-     * @param int|null $versionNo
+     * @param int[] $keywordMap
+     * @param int $versionNo
      */
-    protected function assignKeywords($fieldId, array $keywordMap, int $versionNo = null)
+    protected function assignKeywords($fieldId, array $keywordMap, $versionNo)
     {
-        $existingKeywordRelations = $this->getKeywordRelations($fieldId);
-
         $insertQuery = $this->connection->createQueryBuilder();
         $insertQuery
             ->insert($this->connection->quoteIdentifier(self::KEYWORD_ATTRIBUTE_LINK_TABLE))
@@ -391,117 +325,18 @@ class DoctrineStorage extends Gateway
                 [
                     $this->connection->quoteIdentifier('keyword_id') => ':keywordId',
                     $this->connection->quoteIdentifier('objectattribute_id') => ':fieldId',
-                    $this->connection->quoteIdentifier('versions') => ':versions',
+                    $this->connection->quoteIdentifier('version') => ':versionNo',
                 ]
-            );
-
-        $updateQuery = $this->connection->createQueryBuilder();
-        $updateQuery
-            ->update($this->connection->quoteIdentifier(self::KEYWORD_ATTRIBUTE_LINK_TABLE))
-            ->set(
-                'versions',
-                ':versions'
             )
-            ->where(
-                $updateQuery->expr()->andX(
-                    $updateQuery->expr()->eq(
-                        $this->connection->quoteIdentifier('objectattribute_id'),
-                        ':objectAttributeId'
-                    ),
-                    $updateQuery->expr()->in(
-                        $this->connection->quoteIdentifier('keyword_id'),
-                        ':keywordId'
-                    )
-                )
-            )
-            ->setParameter(':objectAttributeId', $fieldId);
+        ;
 
-        $keywordsToLink = array_intersect(array_keys($existingKeywordRelations), $keywordMap);
-        $keywordsToUnlinkOrCreate = array_merge(
-            array_diff($keywordMap, array_keys($existingKeywordRelations)),
-            array_diff(array_keys($existingKeywordRelations), $keywordMap)
-        );
-
-        // handling versions that need to be removed or additionally added to link
-        foreach ($keywordsToUnlinkOrCreate as $keywordId) {
-            $versions = in_array($keywordId, array_keys($existingKeywordRelations))
-                ? $existingKeywordRelations[$keywordId]
-                : [];
-            if (($key = array_search($versionNo, $versions)) !== false) {
-                // version found, needs to be removed
-                unset($versions[$key]);
-                $versions = serialize($versions);
-                $updateQuery->setParameter(':versions', $versions, \PDO::PARAM_STR);
-                $updateQuery->setParameter(':keywordId', $keywordId, \PDO::PARAM_INT);
-                $updateQuery->execute();
-            } else {
-                // version not found, new attribute link with single current version has to be created
-                if (in_array($keywordId, $keywordMap)) {
-                    $versions[] = $versionNo;
-                    $versions = serialize($versions);
-                    $insertQuery
-                        ->setParameter(':keywordId', $keywordId, \PDO::PARAM_INT)
-                        ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
-                        ->setParameter(':versions', $versions, \PDO::PARAM_STR);
-                    $insertQuery->execute();
-                }
-            }
+        foreach ($keywordMap as $keyword => $keywordId) {
+            $insertQuery
+                ->setParameter(':keywordId', $keywordId, \PDO::PARAM_INT)
+                ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
+                ->setParameter(':versionNo', $versionNo, \PDO::PARAM_INT);
+            $insertQuery->execute();
         }
-
-        // handling adding current version into existing attribute links
-        foreach ($keywordsToLink as $keywordId) {
-            $versions = in_array($keywordId, array_keys($existingKeywordRelations))
-                ? $existingKeywordRelations[$keywordId]
-                : [];
-            if (!in_array($versionNo, $versions)) {
-                $versions[] = $versionNo;
-                $versions = serialize($versions);
-                $updateQuery
-                    ->setParameter(':versions', $versions, \PDO::PARAM_STR);
-                $updateQuery->setParameter(':keywordId', $keywordId, \PDO::PARAM_INT);
-                $updateQuery->execute();
-            }
-        }
-    }
-
-    /**
-     * Return keyword content relations based on provided $fieldId and $keywordList in format:
-     * <code>
-     *  array(
-     *      '<keywordId>' => <versions>,
-     *      // ...
-     *  );
-     * </code>.
-     *
-     * @param int $fieldId
-     *
-     * @return array
-     */
-    protected function getKeywordRelations($fieldId)
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query
-            ->select(
-                $this->connection->quoteIdentifier('keyword_id'),
-                $this->connection->quoteIdentifier('versions')
-            )
-            ->from($this->connection->quoteIdentifier(self::KEYWORD_ATTRIBUTE_LINK_TABLE))
-            ->where(
-                $query->expr()->eq(
-                    $this->connection->quoteIdentifier('objectattribute_id'),
-                    ':objectAttributeId'
-                )
-            )
-            ->setParameter(':objectAttributeId', $fieldId);
-
-        $statement = $query->execute();
-        $records = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        array_walk($records, function (&$versions) {
-            $versions = unserialize($versions);
-        });
-
-        return $records;
     }
 
     /**
