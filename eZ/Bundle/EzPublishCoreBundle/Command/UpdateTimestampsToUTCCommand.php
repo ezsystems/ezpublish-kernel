@@ -5,6 +5,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved
  * @license For full copyright and license information view LICENSE file distributed with this source code
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use DateTime;
@@ -140,7 +142,7 @@ EOT
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $iterationCount = (int) $input->getOption('iteration-count');
         $this->dryRun = $input->getOption('dry-run');
@@ -151,17 +153,17 @@ EOT
                 sprintf('The selected mode is not supported. Use one of the following modes: %s', implode(', ', array_keys(self::MODES)))
             );
 
-            return;
+            return 0;
         }
 
         $from = $input->getOption('from');
         $to = $input->getOption('to');
 
         if ($from && !$this->validateDateTimeString($from, $output)) {
-            return;
+            return 0;
         }
         if ($to && !$this->validateDateTimeString($to, $output)) {
-            return;
+            return 0;
         }
         if ($from) {
             $this->from = $this->dateStringToTimestamp($from);
@@ -193,7 +195,7 @@ EOT
             if ($count == 0) {
                 $output->writeln('Nothing to process, exiting.');
 
-                return;
+                return 0;
             }
 
             $helper = $this->getHelper('question');
@@ -205,7 +207,7 @@ EOT
             if (!$helper->ask($input, $output, $question)) {
                 $output->writeln('');
 
-                return;
+                return 0;
             }
 
             $progressBar = $this->getProgressBar($count, $output);
@@ -254,6 +256,8 @@ EOT
                 '',
                 sprintf('Done: %d', $this->done),
             ]);
+
+            return 0;
         }
     }
 
@@ -415,7 +419,7 @@ EOT
                     '',
                 ]);
 
-                return;
+                return 0;
             }
 
             $output->writeln([
