@@ -1,4 +1,3 @@
-# Use trusty for better performance (and avoiding mysql/postgres/solr gone issues on precise and container infra)
 dist: xenial
 sudo: required
 
