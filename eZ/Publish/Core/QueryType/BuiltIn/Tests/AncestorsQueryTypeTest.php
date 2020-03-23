@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\QueryType\BuiltIn\Tests;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Ancestor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier;
@@ -40,7 +41,7 @@ final class AncestorsQueryTypeTest extends AbstractQueryTypeTest
             [
                 'location' => $location,
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new LogicalAnd([
                         new Ancestor(self::EXAMPLE_LOCATION_PATH_STRING),
@@ -61,7 +62,7 @@ final class AncestorsQueryTypeTest extends AbstractQueryTypeTest
                     'visible_only' => false,
                 ],
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new LogicalAnd([
                         new Ancestor(self::EXAMPLE_LOCATION_PATH_STRING),
@@ -85,7 +86,7 @@ final class AncestorsQueryTypeTest extends AbstractQueryTypeTest
                     ],
                 ],
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new LogicalAnd([
                         new Ancestor(self::EXAMPLE_LOCATION_PATH_STRING),
@@ -111,7 +112,7 @@ final class AncestorsQueryTypeTest extends AbstractQueryTypeTest
                     'siteaccess_aware' => false,
                 ],
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new LogicalAnd([
                         new Ancestor(self::EXAMPLE_LOCATION_PATH_STRING),
@@ -130,7 +131,7 @@ final class AncestorsQueryTypeTest extends AbstractQueryTypeTest
                 'limit' => 10,
                 'offset' => 100,
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new LogicalAnd([
                         new Ancestor(self::EXAMPLE_LOCATION_PATH_STRING),
@@ -151,7 +152,7 @@ final class AncestorsQueryTypeTest extends AbstractQueryTypeTest
                 'location' => $location,
                 'sort' => new Priority(Query::SORT_ASC),
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     new LogicalAnd([
                         new Ancestor(self::EXAMPLE_LOCATION_PATH_STRING),

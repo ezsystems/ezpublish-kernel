@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\QueryType\BuiltIn\Tests;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
@@ -37,7 +38,7 @@ final class SiblingsQueryTypeTest extends AbstractQueryTypeTest
             [
                 'location' => $location,
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     Sibling::fromLocation($location),
                     new Visibility(Visibility::VISIBLE),
@@ -53,7 +54,7 @@ final class SiblingsQueryTypeTest extends AbstractQueryTypeTest
                     'visible_only' => false,
                 ],
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     Sibling::fromLocation($location),
                     new Subtree(self::ROOT_LOCATION_PATH_STRING),
@@ -72,7 +73,7 @@ final class SiblingsQueryTypeTest extends AbstractQueryTypeTest
                     ],
                 ],
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     Sibling::fromLocation($location),
                     new Visibility(Visibility::VISIBLE),
@@ -93,7 +94,7 @@ final class SiblingsQueryTypeTest extends AbstractQueryTypeTest
                     'siteaccess_aware' => false,
                 ],
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     Sibling::fromLocation($location),
                     new Visibility(Visibility::VISIBLE),
@@ -107,7 +108,7 @@ final class SiblingsQueryTypeTest extends AbstractQueryTypeTest
                 'limit' => 10,
                 'offset' => 100,
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     Sibling::fromLocation($location),
                     new Visibility(Visibility::VISIBLE),
@@ -123,7 +124,7 @@ final class SiblingsQueryTypeTest extends AbstractQueryTypeTest
                 'location' => $location,
                 'sort' => new Priority(Query::SORT_ASC),
             ],
-            new Query([
+            new LocationQuery([
                 'filter' => new LogicalAnd([
                     Sibling::fromLocation($location),
                     new Visibility(Visibility::VISIBLE),
