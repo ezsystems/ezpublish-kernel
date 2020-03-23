@@ -436,7 +436,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         // go back to the first version and check whether keywords are correct
         $contentDraft03 = $contentService->createContentDraft($publishedContent01->contentInfo, $contentDraft01->versionInfo);
         $contentService->deleteContent($publishedContent01->contentInfo);
-        $this->assertEquals($contentDraft03->getFieldValue('data'), $value01);
+        $this->assertEqualsCanonicalizing($contentDraft03->getFieldValue('data'), $value01);
     }
 
     public function testKeywordsAreCaseSensitive()
