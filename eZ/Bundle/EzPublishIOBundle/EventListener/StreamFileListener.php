@@ -77,11 +77,12 @@ class StreamFileListener implements EventSubscriberInterface
      * Tests if $uri is an IO file uri root.
      *
      * @param string $uri
+     * @param string $urlPrefix
      *
      * @return bool
      */
     private function isIoUri($uri, $urlPrefix)
     {
-        return strpos(ltrim($uri, '/'), $this->ioConfigResolver->getUrlPrefix()) === 0;
+        return strpos(ltrim($uri, '/'), $urlPrefix) === 0;
     }
 }
