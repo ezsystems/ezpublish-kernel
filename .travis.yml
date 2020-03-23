@@ -29,6 +29,7 @@ matrix:
     - php: 7.3
       env: TEST_CONFIG="phpunit.xml"
     - name: "Kernel Behat Core tests"
+      php: 7.3
       env:
         - COMPOSE_FILE="doc/docker/base-dev.yml:doc/docker/selenium.yml"
         - BEHAT_OPTS="--profile=core --tags=~@broken"
