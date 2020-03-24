@@ -121,7 +121,9 @@ class ContentViewBuilder implements ViewBuilder
                 throw new InvalidArgumentException('Content', 'Could not load any content from the parameters');
             }
 
-            $content = $view->isEmbed() ? $this->loadEmbeddedContent($contentId, $location) : $this->loadContent($contentId);
+            $languageCode = $parameters['languageCode'] ?? null;
+
+            $content = $view->isEmbed() ? $this->loadEmbeddedContent($contentId, $location, $languageCode) : $this->loadContent($contentId, $languageCode);
         }
 
         $view->setContent($content);
@@ -164,9 +166,12 @@ class ContentViewBuilder implements ViewBuilder
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
-    private function loadContent($contentId)
+    private function loadContent($contentId, ?string $languageCode = null)
     {
-        return $this->repository->getContentService()->loadContent($contentId);
+        return $this->repository->getContentService()->loadContent(
+            $contentId,
+            $languageCode ? [$languageCode] : null
+        );
     }
 
     /**
@@ -180,11 +185,11 @@ class ContentViewBuilder implements ViewBuilder
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
-    private function loadEmbeddedContent($contentId, Location $location = null)
+    private function loadEmbeddedContent($contentId, Location $location = null, ?string $languageCode = null)
     {
         $content = $this->repository->sudo(
-            function (Repository $repository) use ($contentId) {
-                return $repository->getContentService()->loadContent($contentId);
+            function (Repository $repository) use ($contentId, $languageCode) {
+                return $repository->getContentService()->loadContent($contentId, $languageCode ? [$languageCode] : null);
             }
         );
 
