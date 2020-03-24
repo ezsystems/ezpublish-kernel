@@ -652,20 +652,6 @@ class UrlAliasRouterTest extends TestCase
         $this->router->generate('invalidRoute');
     }
 
-    public function testGenerateWithLocation()
-    {
-        $location = new Location();
-        $parameters = ['some' => 'thing'];
-        $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH;
-        $generatedLink = '/foo/bar';
-        $this->urlALiasGenerator
-            ->expects($this->once())
-            ->method('generate')
-            ->with($location, $parameters, $referenceType)
-            ->will($this->returnValue($generatedLink));
-        $this->assertSame($generatedLink, $this->router->generate($location, $parameters, $referenceType));
-    }
-
     public function testGenerateWithRouteObject(): void
     {
         $location = new Location(['id' => 54]);
