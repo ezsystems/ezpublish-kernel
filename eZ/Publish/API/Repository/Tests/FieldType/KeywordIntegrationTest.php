@@ -416,7 +416,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     /**
      * Test going back to different version which contains different keywords than the other version.
      */
-    public function testGoBackToDifferentVersionWithDifferentKeywords()
+    public function testGoBackToDifferentVersionWithDifferentKeywords(): void
     {
         $contentType = $this->testCreateContentType();
         $contentService = $this->getRepository()->getContentService();

@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use RuntimeException;
@@ -98,13 +100,8 @@ class DoctrineStorage extends Gateway
 
     /**
      * Returns a list of keywords assigned to $fieldId.
-     *
-     * @param int $fieldId
-     * @param int $versionNo
-     *
-     * @return mixed[]
      */
-    protected function getAssignedKeywords($fieldId, $versionNo)
+    protected function getAssignedKeywords(int $fieldId, int $versionNo): array
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -120,24 +117,24 @@ class DoctrineStorage extends Gateway
                 )
             )
             ->where(
-                $query->expr()->andX(
-                    $query->expr()->eq(
-                        $this->connection->quoteIdentifier('attr.objectattribute_id'),
-                        ':fieldId'
-                    ),
-                    $query->expr()->eq(
-                        $this->connection->quoteIdentifier('attr.version'),
-                        ':versionNo'
-                    )
+                $query->expr()->eq(
+                    $this->connection->quoteIdentifier('attr.objectattribute_id'),
+                    ':fieldId'
                 )
             )
-            ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
-            ->setParameter(':versionNo', $versionNo, \PDO::PARAM_INT)
+            ->andWhere(
+                $query->expr()->eq(
+                    $this->connection->quoteIdentifier('attr.version'),
+                    ':versionNo'
+                )
+            )
+            ->setParameter('fieldId', $fieldId, ParameterType::INTEGER)
+            ->setParameter('versionNo', $versionNo, ParameterType::INTEGER)
         ;
 
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return $statement->fetchAll(FetchMode::COLUMN);
     }
 
     /**
@@ -274,11 +271,7 @@ class DoctrineStorage extends Gateway
         return $keywordIdMap;
     }
 
-    /**
-     * @param int $fieldId
-     * @param int $versionNo
-     */
-    protected function deleteOldKeywordAssignments($fieldId, $versionNo)
+    protected function deleteOldKeywordAssignments(int $fieldId, int $versionNo): void
     {
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
@@ -295,14 +288,14 @@ class DoctrineStorage extends Gateway
                     )
                 )
             )
-            ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
-            ->setParameter(':versionNo', $versionNo, \PDO::PARAM_INT);
+            ->setParameter('fieldId', $fieldId, ParameterType::INTEGER)
+            ->setParameter('versionNo', $versionNo, ParameterType::INTEGER);
 
         $deleteQuery->execute();
     }
 
     /**
-     * Assigns keywords from $keywordMap to the field with $fieldId.
+     * Assigns keywords from $keywordMap to the field with $fieldId and specific $versionNo.
      *
      * $keywordMap has the format:
      * <code>
@@ -311,12 +304,8 @@ class DoctrineStorage extends Gateway
      *      // ...
      *  );
      * </code>
-     *
-     * @param int $fieldId
-     * @param int[] $keywordMap
-     * @param int $versionNo
      */
-    protected function assignKeywords($fieldId, array $keywordMap, $versionNo)
+    protected function assignKeywords(int $fieldId, array $keywordMap, int $versionNo): void
     {
         $insertQuery = $this->connection->createQueryBuilder();
         $insertQuery
@@ -332,9 +321,9 @@ class DoctrineStorage extends Gateway
 
         foreach ($keywordMap as $keyword => $keywordId) {
             $insertQuery
-                ->setParameter(':keywordId', $keywordId, \PDO::PARAM_INT)
-                ->setParameter(':fieldId', $fieldId, \PDO::PARAM_INT)
-                ->setParameter(':versionNo', $versionNo, \PDO::PARAM_INT);
+                ->setParameter('keywordId', $keywordId, ParameterType::INTEGER)
+                ->setParameter('fieldId', $fieldId, ParameterType::INTEGER)
+                ->setParameter('versionNo', $versionNo, ParameterType::INTEGER);
             $insertQuery->execute();
         }
     }
