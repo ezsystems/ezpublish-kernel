@@ -1,5 +1,5 @@
-_ez_multilingual_content_view:
-    path: /view/ml_content/{contentId}/{viewType}/{layout}/{languageCode}/{locationId}
+_ez_content_translation_view:
+    path: /view/content/{contentId}/{viewType}/{layout}/translation/{languageCode}/{locationId}
     defaults:
         _controller: ez_content:viewAction
         viewType: full
