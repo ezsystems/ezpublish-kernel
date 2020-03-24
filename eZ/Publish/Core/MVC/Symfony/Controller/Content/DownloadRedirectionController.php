@@ -59,11 +59,14 @@ class DownloadRedirectionController extends Controller
             $params['version'] = $request->query->get('version');
         }
 
+        $downloadRouteRef = $this->routeReferenceGenerator->generate(
+            'ez_content_download',
+            $params
+        );
+
         $downloadUrl = $this->router->generate(
-            $this->routeReferenceGenerator->generate(
-                'ez_content_download',
-                $params
-            )
+            $downloadRouteRef->getRoute(),
+            $downloadRouteRef->getParams()
         );
 
         return new RedirectResponse($downloadUrl, 302);

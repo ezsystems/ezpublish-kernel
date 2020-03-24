@@ -23,6 +23,7 @@ use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit\Framework\TestCase;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
@@ -651,18 +652,32 @@ class UrlAliasRouterTest extends TestCase
         $this->router->generate('invalidRoute');
     }
 
-    public function testGenerateWithLocation()
+    public function testGenerateWithRouteObject(): void
     {
-        $location = new Location();
-        $parameters = ['some' => 'thing'];
+        $location = new Location(['id' => 54]);
+        $parameters = [
+            'some' => 'thing',
+        ];
+
         $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH;
         $generatedLink = '/foo/bar';
+
         $this->urlALiasGenerator
             ->expects($this->once())
             ->method('generate')
             ->with($location, $parameters, $referenceType)
             ->will($this->returnValue($generatedLink));
-        $this->assertSame($generatedLink, $this->router->generate($location, $parameters, $referenceType));
+
+        $this->assertSame(
+            $generatedLink,
+            $this->router->generate(
+                '',
+                $parameters + [
+                    RouteObjectInterface::ROUTE_OBJECT => $location,
+                ],
+                $referenceType
+            )
+        );
     }
 
     public function testGenerateNoLocation()
