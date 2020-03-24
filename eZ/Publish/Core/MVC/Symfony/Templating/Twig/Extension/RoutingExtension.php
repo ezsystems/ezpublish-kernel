@@ -74,24 +74,18 @@ class RoutingExtension extends AbstractExtension
         return $this->routeReferenceGenerator->generate($resource, $params);
     }
 
-    public function getPath($name, array $parameters = [], bool $relative = false): string
+    public function getPath(object $name, array $parameters = [], bool $relative = false): string
     {
         $referenceType = $relative ? UrlGeneratorInterface::RELATIVE_PATH : UrlGeneratorInterface::ABSOLUTE_PATH;
-        if (is_object($name)) {
-            return $this->generateUrlForObject($name, $parameters, $referenceType);
-        }
 
-        return $this->urlGenerator->generate($name, $parameters, $referenceType);
+        return $this->generateUrlForObject($name, $parameters, $referenceType);
     }
 
-    public function getUrl($name, array $parameters = [], bool $schemeRelative = false): string
+    public function getUrl(object $name, array $parameters = [], bool $schemeRelative = false): string
     {
         $referenceType = $schemeRelative ? UrlGeneratorInterface::NETWORK_PATH : UrlGeneratorInterface::ABSOLUTE_URL;
-        if (is_object($name)) {
-            return $this->generateUrlForObject($name, $parameters, $referenceType);
-        }
 
-        return $this->urlGenerator->generate($name, $parameters, $referenceType);
+        return $this->generateUrlForObject($name, $parameters, $referenceType);
     }
 
     private function generateUrlForObject(object $object, array $parameters, int $referenceType): string
