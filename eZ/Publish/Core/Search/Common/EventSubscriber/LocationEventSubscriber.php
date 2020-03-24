@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Events\Location\MoveSubtreeEvent;
 use eZ\Publish\API\Repository\Events\Location\SwapLocationEvent;
 use eZ\Publish\API\Repository\Events\Location\UnhideLocationEvent;
 use eZ\Publish\API\Repository\Events\Location\UpdateLocationEvent;
+use eZ\Publish\API\Repository\Events\Section\AssignSectionToSubtreeEvent;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -22,6 +23,7 @@ class LocationEventSubscriber extends AbstractSearchEventSubscriber implements E
     public static function getSubscribedEvents(): array
     {
         return [
+            AssignSectionToSubtreeEvent::class => 'onAssignSectionToSubtree',
             CopySubtreeEvent::class => 'onCopySubtree',
             CreateLocationEvent::class => 'onCreateLocation',
             DeleteLocationEvent::class => 'onDeleteLocation',
@@ -116,5 +118,10 @@ class LocationEventSubscriber extends AbstractSearchEventSubscriber implements E
                 $event->getLocation()->id
             )
         );
+    }
+
+    public function onAssignSectionToSubtree(AssignSectionToSubtreeEvent $event): void
+    {
+        $this->indexSubtree($event->getLocation()->id);
     }
 }
