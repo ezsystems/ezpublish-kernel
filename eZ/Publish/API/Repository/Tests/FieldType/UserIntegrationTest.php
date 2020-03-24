@@ -54,6 +54,14 @@ class UserIntegrationTest extends BaseIntegrationTest
                 'type' => 'int',
                 'default' => null,
             ],
+            'RequireUniqueEmail' => [
+                'type' => 'bool',
+                'default' => true,
+            ],
+            'UsernamePattern' => [
+                'type' => 'string',
+                'default' => '^[^@]+$',
+            ],
         ];
     }
 
@@ -67,6 +75,8 @@ class UserIntegrationTest extends BaseIntegrationTest
         return [
             'PasswordTTL' => null,
             'PasswordTTLWarning' => null,
+            'RequireUniqueEmail' => false,
+            'UsernamePattern' => '.*',
         ];
     }
 
@@ -553,6 +563,8 @@ class UserIntegrationTest extends BaseIntegrationTest
         $userFieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
         $userFieldDefinitionUpdateStruct->fieldSettings = [
             Type::PASSWORD_TTL_WARNING_SETTING => null,
+            Type::REQUIRE_UNIQUE_EMAIL => false,
+            Type::USERNAME_PATTERN => '.*',
         ];
 
         $contentTypeService->updateFieldDefinition($contentTypeDraft, $userFieldDefinition, $userFieldDefinitionUpdateStruct);

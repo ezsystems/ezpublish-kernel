@@ -20,6 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use LogicException;
 
 /**
  * The User field type.
@@ -30,6 +31,8 @@ class Type extends FieldType
 {
     public const PASSWORD_TTL_SETTING = 'PasswordTTL';
     public const PASSWORD_TTL_WARNING_SETTING = 'PasswordTTLWarning';
+    public const REQUIRE_UNIQUE_EMAIL = 'RequireUniqueEmail';
+    public const USERNAME_PATTERN = 'UsernamePattern';
 
     /** @var array */
     protected $settingsSchema = [
@@ -40,6 +43,14 @@ class Type extends FieldType
         self::PASSWORD_TTL_WARNING_SETTING => [
             'type' => 'int',
             'default' => null,
+        ],
+        self::REQUIRE_UNIQUE_EMAIL => [
+            'type' => 'bool',
+            'default' => true,
+        ],
+        self::USERNAME_PATTERN => [
+            'type' => 'string',
+            'default' => '^[^@]+$',
         ],
     ];
 
@@ -300,6 +311,17 @@ class Type extends FieldType
             );
         }
 
+        $pattern = sprintf('/%s/', $fieldDefinition->fieldSettings[self::USERNAME_PATTERN]);
+        $loginFormatValid = preg_match($pattern, $fieldValue->login);
+        if (!$fieldValue->hasStoredLogin && !$loginFormatValid) {
+            $errors[] = new ValidationError(
+                'Invalid login format',
+                null,
+                [],
+                'username'
+            );
+        }
+
         if (!is_string($fieldValue->email) || empty($fieldValue->email)) {
             $errors[] = new ValidationError(
                 'Email required',
@@ -339,7 +361,7 @@ class Type extends FieldType
                 $login = $fieldValue->login;
                 $this->userHandler->loadByLogin($login);
 
-                // If you want to change this ValidationError message, please remember to change it also in Repository Forms in lib/Validator/Constraints/FieldValueValidatorMessages class
+                // If you want to change this ValidationError message, please remember to change it also in Content Forms in lib/Validator/Constraints/FieldValueValidatorMessages class
                 $errors[] = new ValidationError(
                     "The user login '%login%' is used by another user. You must enter a unique login.",
                     null,
@@ -348,6 +370,32 @@ class Type extends FieldType
                     ],
                     'username'
                 );
+            } catch (NotFoundException $e) {
+                // Do nothing
+            }
+        }
+
+        if ($fieldDefinition->fieldSettings[self::REQUIRE_UNIQUE_EMAIL]) {
+            try {
+                $email = $fieldValue->email;
+                try {
+                    $user = $this->userHandler->loadByEmail($email);
+                } catch (LogicException $exception) {
+                    // There are multiple users with the same email
+                }
+
+                // Don't prevent email update
+                if (empty($user) || $user->id != $fieldValue->contentId) {
+                    // If you want to change this ValidationError message, please remember to change it also in Content Forms in lib/Validator/Constraints/FieldValueValidatorMessages class
+                    $errors[] = new ValidationError(
+                        "Email '%email%' is used by another user. You must enter a unique email.",
+                        null,
+                        [
+                            '%email%' => $email,
+                        ],
+                        'email'
+                    );
+                }
             } catch (NotFoundException $e) {
                 // Do nothing
             }

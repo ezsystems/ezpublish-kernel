@@ -23,6 +23,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\FieldType\User\Type;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
@@ -190,7 +191,6 @@ class UserServiceTest extends BaseTest
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      *
      * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      */
     public function testNewUserGroupCreateStruct()
     {
@@ -244,7 +244,6 @@ class UserServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct($mainLanguageCode, $contentType)
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
-     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      */
     public function testNewUserGroupCreateStructWithSecondParameter()
     {
@@ -279,7 +278,6 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateUserGroup()
     {
@@ -427,7 +425,6 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateUserGroupInTransactionWithRollback()
     {
@@ -864,7 +861,6 @@ class UserServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\UserService::newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType)
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserCreateStruct
-     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      */
     public function testNewUserCreateStructWithFifthParameter()
     {
@@ -916,7 +912,6 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::createUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserCreateStruct
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateUser()
     {
@@ -1087,12 +1082,119 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the createUser() method.
      *
+     * @covers \eZ\Publish\API\Repository\UserService::createUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testCreateUserWithEmailAlreadyTaken(): void
+    {
+        $repository = $this->getRepository();
+
+        $userContentType = $this->createUserContentTypeWithAccountSettings('user_email_unique', [
+            Type::REQUIRE_UNIQUE_EMAIL => true,
+        ]);
+
+        $existingUser = $this->createUserVersion1(
+            'existing_user',
+            'unique@email.com',
+            $userContentType,
+        );
+
+        $editorsGroupId = $this->generateId('group', 13);
+        /* BEGIN: Use Case */
+        // $editorsGroupId is the ID of the "Editors" user group in an eZ
+        // Publish demo installation
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'another_user',
+            // email is already taken
+            'unique@email.com',
+            'VerySecure@Password.1234',
+            'eng-US',
+            $userContentType
+        );
+
+        $userCreate->setField('first_name', 'Example');
+        $userCreate->setField('last_name', 'User');
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup($editorsGroupId);
+
+        try {
+            // This call will fail with a "ContentFieldValidationException", because the
+            // user with "unique@email.com" email already exists in database.
+            $userService->createUser($userCreate, [$group]);
+        } catch (ContentFieldValidationException $e) {
+            // Exception is caught, as there is no other way to check exception properties.
+            $this->assertValidationErrorOccurs($e, 'Email \'%email%\' is used by another user. You must enter a unique email.');
+
+            return;
+        }
+
+        $this->fail('Expected ValidationError messages did not occur.');
+    }
+
+    /**
+     * Test for the createUser() method.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::createUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testCreateInvalidFormatUsername(): void
+    {
+        $repository = $this->getRepository();
+
+        $userContentType = $this->createUserContentTypeWithAccountSettings('username_format', [
+            Type::USERNAME_PATTERN => '^[^@]$',
+        ]);
+
+        $editorsGroupId = $this->generateId('group', 13);
+        /* BEGIN: Use Case */
+        // $editorsGroupId is the ID of the "Editors" user group in an eZ
+        // Publish demo installation
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            // login contains @
+            'invalid@user',
+            'unique@email.com',
+            'VerySecure@Password.1234',
+            'eng-US',
+            $userContentType
+        );
+
+        $userCreate->setField('first_name', 'Example');
+        $userCreate->setField('last_name', 'User');
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup($editorsGroupId);
+
+        try {
+            // This call will fail with a "ContentFieldValidationException", because the
+            // user with "invalid@user" login does not match "^[^@]$" pattern.
+            $userService->createUser($userCreate, [$group]);
+        } catch (ContentFieldValidationException $e) {
+            // Exception is caught, as there is no other way to check exception properties.
+            $this->assertValidationErrorOccurs($e, 'Invalid login format');
+
+            return;
+        }
+
+        $this->fail('Expected ValidationError messages did not occur.');
+    }
+
+    /**
+     * Test for the createUser() method.
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @see \eZ\Publish\API\Repository\UserService::createUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserCreateStruct
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateUserInTransactionWithRollback()
     {
@@ -1253,7 +1355,7 @@ class UserServiceTest extends BaseTest
 
     /**
      * @see \eZ\Publish\API\Repository\UserService::checkUserCredentials()
-     * @depends \eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testCheckUserCredentialsValid(): void
     {
@@ -1265,7 +1367,7 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Load the newly created user credentials
-        $credentialsValid = $userService->loadUserByCredentials($user, 'secret');
+        $credentialsValid = $userService->checkUserCredentials($user, 'VerySecret@Password.1234');
         /* END: Use Case */
 
         $this->assertTrue($credentialsValid);
@@ -1273,7 +1375,7 @@ class UserServiceTest extends BaseTest
 
     /**
      * @see \eZ\Publish\API\Repository\UserService::checkUserCredentials()
-     * @depends \eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testCheckUserCredentialsInvalid(): void
     {
@@ -1285,7 +1387,7 @@ class UserServiceTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Load the newly created user credentials
-        $credentialsValid = $userService->loadUserByCredentials($user, '1234');
+        $credentialsValid = $userService->checkUserCredentials($user, 'NotSoSecretPassword');
         /* END: Use Case */
 
         $this->assertFalse($credentialsValid);
@@ -1559,8 +1661,6 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserUpdateStruct
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
     public function testUpdateUser()
     {
@@ -1623,8 +1723,6 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserUpdateStruct
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
     public function testUpdateUserNoPassword()
     {
@@ -3031,7 +3129,7 @@ class UserServiceTest extends BaseTest
 
         $typeCreate->addFieldDefinition($lastNameFieldCreate);
 
-        $accountFieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct('account', 'ezuser');
+        $accountFieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct('user_account', 'ezuser');
         $accountFieldCreateStruct->names = [
             'eng-GB' => 'User account',
         ];
