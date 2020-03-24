@@ -5,7 +5,7 @@
 %}
 
 {% if location is defined %}
-    <a href="{{ path( "ez_urlalias", {"locationId": location.id}) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
+    <a href="{{ ez_path(location}) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
 {% else %}
-    <a href="{{ path( "ez_urlalias", {"contentId": content.id} ) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
+    <a href="{{ ez_path(content) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
 {% endif %}

@@ -130,7 +130,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                     // 3. requested URL is not case-sensitive equal with the one loaded
                     if ($urlAlias->isHistory === true || ($urlAlias->isCustom === true && $urlAlias->forward === true)) {
                         $params += [
-                            'semanticPathinfo' => $this->generate($location),
+                            'semanticPathinfo' => $this->generator->generate($location, []),
                             'needsRedirect' => true,
                             // Specify not to prepend siteaccess while redirecting when applicable since it would be already present (see UrlAliasGenerator::doGenerate())
                             'prependSiteaccessOnRedirect' => false,
@@ -282,8 +282,8 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      *
      * @see UrlAliasRouter::supports()
      *
-     * @param string|\eZ\Publish\API\Repository\Values\Content\Location $name The name of the route or a Location instance
-     * @param mixed $parameters An array of parameters
+     * @param string $name The name of the route or a Location instance
+     * @param array $parameters An array of parameters
      * @param int $referenceType The type of reference to be generated (one of the constants)
      *
      * @throws \LogicException
@@ -294,11 +294,16 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      *
      * @api
      */
-    public function generate($name, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generate(string $name, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
-        // Direct access to Location
-        if ($name instanceof Location) {
-            return $this->generator->generate($name, $parameters, $referenceType);
+        if ($name === '' &&
+            array_key_exists(RouteObjectInterface::ROUTE_OBJECT, $parameters) &&
+            $this->supportsObject($parameters[RouteObjectInterface::ROUTE_OBJECT])
+        ) {
+            $location = $parameters[RouteObjectInterface::ROUTE_OBJECT];
+            unset($parameters[RouteObjectInterface::ROUTE_OBJECT]);
+
+            return $this->generator->generate($location, $parameters, $referenceType);
         }
 
         // Normal route name
@@ -376,11 +381,16 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      */
     public function supports($name)
     {
-        return $name instanceof Location || $name === self::URL_ALIAS_ROUTE_NAME;
+        return $name === self::URL_ALIAS_ROUTE_NAME || $this->supportsObject($name);
+    }
+
+    private function supportsObject($object): bool
+    {
+        return $object instanceof Location;
     }
 
     /**
-     * @see Symfony\Cmf\Component\Routing\VersatileGeneratorInterface::getRouteDebugMessage()
+     * @see \Symfony\Cmf\Component\Routing\VersatileGeneratorInterface::getRouteDebugMessage()
      */
     public function getRouteDebugMessage($name, array $parameters = [])
     {

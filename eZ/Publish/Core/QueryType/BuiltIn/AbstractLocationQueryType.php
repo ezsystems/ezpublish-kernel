@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\QueryType\BuiltIn;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Query;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -67,5 +69,10 @@ abstract class AbstractLocationQueryType extends AbstractQueryType
         }
 
         return $location;
+    }
+
+    protected function createQuery(): Query
+    {
+        return new LocationQuery();
     }
 }

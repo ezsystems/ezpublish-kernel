@@ -122,7 +122,7 @@ services:
 
     ezpublish.templating.extension.routing:
         class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension
-        arguments: ["@ezpublish.route_reference.generator"]
+        arguments: ["@ezpublish.route_reference.generator", "@router"]
         tags:
             - {name: twig.extension}
 

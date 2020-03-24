@@ -203,7 +203,7 @@
 {% apply spaceless %}
     {% if not ez_field_is_empty( content, field ) %}
         {% set route_reference = ez_route( 'ez_content_download', { 'content': content, 'fieldIdentifier': field.fieldDefIdentifier } ) %}
-        <a href="{{ path( route_reference ) }}"
+        <a href="{{ ez_path( route_reference ) }}"
             {{ block( 'field_attributes' ) }}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize|ez_file_size( 1 ) }})
     {% endif %}
 {% endapply %}
@@ -215,7 +215,7 @@
     {% set type = fieldSettings.mediaType %}
     {% set value = field.value %}
     {% set route_reference = ez_route( 'ez_content_download', {'content': content, 'fieldIdentifier': field.fieldDefIdentifier} ) %}
-    {% set download = path( route_reference ) %}
+    {% set download = ez_path( route_reference ) %}
     {% set width = value.width > 0 ? 'width="' ~ value.width ~ '"' : "" %}
     {% set height = value.height > 0 ? 'height="' ~ value.height ~ '"' : "" %}
     <div {{ block( 'field_attributes' ) }}>

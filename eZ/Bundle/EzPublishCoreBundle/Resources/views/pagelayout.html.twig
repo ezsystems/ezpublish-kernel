@@ -8,7 +8,7 @@
     <title>{{ title|default( 'Home' ) }}</title>
     <meta name="generator" content="eZ Platform"/>
     {% if content is defined and content.contentInfo.mainLocationId %}
-        <link rel="canonical" href="{{ path( 'ez_urlalias', {'locationId': content.contentInfo.mainLocationId} ) }}" />
+        <link rel="canonical" href="{{ ez_path(content) }}" />
     {% endif %}
 </head>
 <body>
