@@ -68,9 +68,7 @@ abstract class BaseProvider implements APIUserProviderInterface
      */
     public function supportsClass($class)
     {
-        $supportedClass = 'eZ\\Publish\\Core\\MVC\\Symfony\\Security\\User';
-
-        return $class === $supportedClass || is_subclass_of($class, $supportedClass);
+        return $class === UserInterface::class || is_subclass_of($class, UserInterface::class);
     }
 
     /**
