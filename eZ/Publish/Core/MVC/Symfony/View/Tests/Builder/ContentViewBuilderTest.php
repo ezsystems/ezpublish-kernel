@@ -55,7 +55,16 @@ class ContentViewBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->repository = $this->getMockBuilder(Repository::class)->disableOriginalConstructor()->setMethods(['sudo', 'getPermissionResolver', 'getLocationService', 'getContentService'])->getMock();
+        $this->repository = $this
+            ->getMockBuilder(Repository::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'sudo',
+                'getPermissionResolver',
+                'getLocationService',
+                'getContentService',
+            ])
+            ->getMock();
         $this->viewConfigurator = $this->getMockBuilder(Configurator::class)->getMock();
         $this->parametersInjector = $this->getMockBuilder(ParametersInjector::class)->getMock();
         $this->contentInfoLocationLoader = $this->getMockBuilder(ContentInfoLocationLoader::class)->getMock();

@@ -168,7 +168,10 @@ class ContentViewBuilder implements ViewBuilder
      */
     private function loadContent($contentId, ?string $languageCode = null)
     {
-        return $this->repository->getContentService()->loadContent($contentId, $languageCode ? [$languageCode] : null);
+        return $this->repository->getContentService()->loadContent(
+            $contentId,
+            $languageCode ? [$languageCode] : null
+        );
     }
 
     /**
