@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Builder;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -54,7 +55,16 @@ class ContentViewBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->repository = $this->getMockBuilder(Repository::class)->disableOriginalConstructor()->setMethods(['sudo', 'getPermissionResolver'])->getMock();
+        $this->repository = $this
+            ->getMockBuilder(Repository::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'sudo',
+                'getPermissionResolver',
+                'getLocationService',
+                'getContentService',
+            ])
+            ->getMock();
         $this->viewConfigurator = $this->getMockBuilder(Configurator::class)->getMock();
         $this->parametersInjector = $this->getMockBuilder(ParametersInjector::class)->getMock();
         $this->contentInfoLocationLoader = $this->getMockBuilder(ContentInfoLocationLoader::class)->getMock();
@@ -248,6 +258,49 @@ class ContentViewBuilderTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $this->contentViewBuilder->buildView($parameters);
+    }
+
+    public function testBuildViewWithTranslatedContentWithoutLocation(): void
+    {
+        $contentInfo = new ContentInfo(['id' => 120, 'mainLanguageCode' => 'eng-GB']);
+        $content = new Content([
+            'versionInfo' => new VersionInfo([
+                'contentInfo' => $contentInfo,
+            ]),
+        ]);
+
+        $parameters = [
+            'viewType' => 'full',
+            '_controller' => 'ez_content:viewContent',
+            'contentId' => 120,
+            'languageCode' => 'eng-GB',
+        ];
+
+        $contentServiceMock = $this
+            ->getMockBuilder(ContentService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $contentServiceMock
+            ->method('loadContent')
+            ->with(120, ['eng-GB'])
+            ->willReturn($content);
+
+        // No call for LocationService::loadLocation()
+        $this->repository
+            ->expects($this->never())
+            ->method('sudo');
+
+        $this->repository
+            ->method('getContentService')
+            ->willReturn($contentServiceMock);
+
+        $this->contentViewBuilder->buildView($parameters);
+
+        $expectedView = new ContentView(null, [], 'full');
+        $expectedView->setContent($content);
+
+        $this->assertEquals($expectedView, $this->contentViewBuilder->buildView($parameters));
     }
 
     public function testBuildView(): void
