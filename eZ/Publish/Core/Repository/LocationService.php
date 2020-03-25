@@ -429,10 +429,12 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->locationHandler()->load($locationCreateStruct->parentLocationId)
         );
 
+        $contentType = $content->getContentType();
+
         $locationCreateStruct->sortField = $locationCreateStruct->sortField
-            ?? ($content->getContentType()->defaultSortField ?? Location::SORT_FIELD_NAME);
+            ?? ($contentType->defaultSortField ?? Location::SORT_FIELD_NAME);
         $locationCreateStruct->sortOrder = $locationCreateStruct->sortOrder
-            ?? ($content->getContentType()->defaultSortOrder ?? Location::SORT_ORDER_ASC);
+            ?? ($contentType->defaultSortOrder ?? Location::SORT_ORDER_ASC);
 
         $contentInfo = $content->contentInfo;
 
