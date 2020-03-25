@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
+use eZ\Publish\API\Repository\Values\User\RoleCopyStruct;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -40,6 +41,13 @@ abstract class RoleServiceDecorator implements RoleService
     public function createRoleDraft(Role $role): RoleDraft
     {
         return $this->innerService->createRoleDraft($role);
+    }
+
+    public function copyRole(
+        Role $role,
+        RoleCopyStruct $roleCopyStruct
+    ): Role {
+        return $this->innerService->copyRole($role, $roleCopyStruct);
     }
 
     public function loadRoleDraft(int $id): RoleDraft
@@ -157,6 +165,11 @@ abstract class RoleServiceDecorator implements RoleService
     public function newRoleCreateStruct(string $name): RoleCreateStruct
     {
         return $this->innerService->newRoleCreateStruct($name);
+    }
+
+    public function newRoleCopyStruct(string $name): RoleCopyStruct
+    {
+        return $this->innerService->newRoleCopyStruct($name);
     }
 
     public function newPolicyCreateStruct(
