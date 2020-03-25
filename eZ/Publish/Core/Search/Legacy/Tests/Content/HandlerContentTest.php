@@ -18,6 +18,8 @@ use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
+use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Content Search test case for ContentSearchHandler.
@@ -398,6 +400,8 @@ class HandlerContentTest extends AbstractTestCase
      */
     public function testFindSingleZero()
     {
+        $this->expectException(NotFoundException::class);
+
         $locator = $this->getContentSearchHandler();
         $locator->findSingle(new Criterion\ContentId(0));
     }
@@ -1441,5 +1445,12 @@ class HandlerContentTest extends AbstractTestCase
                 )
             )
         );
+    }
+
+    public function testGetNonExistingFieldDefinition(): void
+    {
+        $this->expectException(NotFoundException::class);
+
+        $this->getContentTypeHandler()->getFieldDefinition(0, Type::STATUS_DEFINED);
     }
 }
