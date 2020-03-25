@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\LanguageResolver;
 
 /**
@@ -143,9 +142,9 @@ class LocationService implements LocationServiceInterface
         $this->service->deleteLocation($location);
     }
 
-    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null)
+    public function newLocationCreateStruct($parentLocationId)
     {
-        return $this->service->newLocationCreateStruct($parentLocationId, $contentType);
+        return $this->service->newLocationCreateStruct($parentLocationId);
     }
 
     public function newLocationUpdateStruct()

@@ -428,6 +428,16 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->locationHandler()->load($locationCreateStruct->parentLocationId)
         );
 
+        $locationCreateStruct->sortField = $locationCreateStruct->sortField ?? $content->getContentType()->defaultSortField;
+        $locationCreateStruct->sortOrder = $locationCreateStruct->sortOrder ?? $content->getContentType()->defaultSortOrder;
+
+        if (empty($locationCreateStruct->sortField) || empty($locationCreateStruct->sortOrder)) {
+            throw new InvalidArgumentException(
+                '$locationCreateStruct',
+                'Sorting parameters are not set.'
+            );
+        }
+
         $contentInfo = $content->contentInfo;
 
         if (!$this->repository->canUser('content', 'manage_locations', $contentInfo, $parentLocation)) {

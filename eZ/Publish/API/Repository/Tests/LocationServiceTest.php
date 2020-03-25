@@ -73,8 +73,8 @@ class LocationServiceTest extends BaseTest
                 'hidden' => false,
                 // remoteId should be initialized with a default value
                 //'remoteId' => null,
-                'sortField' => Location::SORT_FIELD_NAME,
-                'sortOrder' => Location::SORT_ORDER_ASC,
+                'sortField' => null,
+                'sortOrder' => null,
                 'parentLocationId' => $this->generateId('location', 1),
             ],
             $locationCreate
