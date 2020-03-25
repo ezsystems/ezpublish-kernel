@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\PermissionCriterionResolver;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -428,15 +429,10 @@ class LocationService implements LocationServiceInterface
             $this->persistenceHandler->locationHandler()->load($locationCreateStruct->parentLocationId)
         );
 
-        $locationCreateStruct->sortField = $locationCreateStruct->sortField ?? $content->getContentType()->defaultSortField;
-        $locationCreateStruct->sortOrder = $locationCreateStruct->sortOrder ?? $content->getContentType()->defaultSortOrder;
-
-        if (empty($locationCreateStruct->sortField) || empty($locationCreateStruct->sortOrder)) {
-            throw new InvalidArgumentException(
-                '$locationCreateStruct',
-                'Sorting parameters are not set.'
-            );
-        }
+        $locationCreateStruct->sortField = $locationCreateStruct->sortField
+            ?? ($content->getContentType()->defaultSortField ?? Location::SORT_FIELD_NAME);
+        $locationCreateStruct->sortOrder = $locationCreateStruct->sortOrder
+            ?? ($content->getContentType()->defaultSortOrder ?? Location::SORT_ORDER_ASC);
 
         $contentInfo = $content->contentInfo;
 
