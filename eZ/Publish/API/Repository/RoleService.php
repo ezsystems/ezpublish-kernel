@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
+use eZ\Publish\API\Repository\Values\User\RoleCopyStruct;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -56,6 +57,18 @@ interface RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
      */
     public function createRoleDraft(Role $role): RoleDraft;
+
+    /**
+     * Copies an existing Role.
+     *
+     * @since 8.0
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to copy a role
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the same type
+     *         is repeated in the policy create struct or if limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCopyStruct is not valid
+     */
+    public function copyRole(Role $role, RoleCopyStruct $roleCopyStruct): Role;
 
     /**
      * Loads a RoleDraft for the given id.
@@ -307,6 +320,11 @@ interface RoleService
      * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
      */
     public function newRoleCreateStruct(string $name): RoleCreateStruct;
+
+    /**
+     *  Instantiates a role copy struct.
+     */
+    public function newRoleCopyStruct(string $name): RoleCopyStruct;
 
     /**
      * Instantiates a policy create class.
