@@ -601,6 +601,8 @@ class RoleServiceTest extends BaseTest
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCopyStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      *
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[] $policies
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
@@ -641,6 +643,8 @@ class RoleServiceTest extends BaseTest
      * @covers \eZ\Publish\API\Repository\RoleService::copyRole
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCopyStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[] $policies
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
