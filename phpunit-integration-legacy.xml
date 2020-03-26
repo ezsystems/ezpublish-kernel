@@ -8,6 +8,7 @@
          convertWarningsToExceptions="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          colors="true"
+         failOnWarning="true"
          >
     <php>
         <env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\Legacy" />

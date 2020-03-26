@@ -375,11 +375,13 @@ tables:
         indexes:
             ezkeyword_attr_link_oaid: { fields: [objectattribute_id] }
             ezkeyword_attr_link_kid_oaid: { fields: [keyword_id, objectattribute_id] }
+            ezkeyword_attr_link_oaid_ver: { fields: [objectattribute_id, version] }
         id:
             id: { type: integer, nullable: false, options: { autoincrement: true } }
         fields:
             keyword_id: { type: integer, nullable: false, options: { default: '0' } }
             objectattribute_id: { type: integer, nullable: false, options: { default: '0' } }
+            version: { type: integer, nullable: false, options: { default: '0' } }
     ezmedia:
         id:
             contentobject_attribute_id: { type: integer, nullable: false, options: { default: '0' } }
