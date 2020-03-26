@@ -111,8 +111,8 @@ class DoctrineDatabase extends Gateway
             ->select(...$this->columns[$this->table])
             ->from($this->connection->quoteIdentifier($this->table))
             ->where('action = :action')
-            ->andWhere('is_original= :is_original')
-            ->setParameter(':action', "eznode:{$locationId}", ParameterType::STRING)
+            ->andWhere('is_original = :is_original')
+            ->setParameter('action', "eznode:{$locationId}", ParameterType::STRING)
             ->setParameter('is_original', 1, ParameterType::INTEGER);
 
         return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
@@ -887,10 +887,11 @@ class DoctrineDatabase extends Gateway
     /**
      * Loads all data for the path identified by given $id.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     *
      * @param int $id
      *
      * @return array
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function loadPathData($id)
     {
@@ -1156,7 +1157,8 @@ class DoctrineDatabase extends Gateway
             ->where(
                 $expr->eq('t.node_id', ':locationId')
             )
-            ->setParameter('locationId', $locationId, ParameterType::INTEGER);
+            ->setParameter('locationId', $locationId, ParameterType::INTEGER)
+        ;
 
         $statement = $queryBuilder->execute();
         $languageId = $statement->fetchColumn();
@@ -1186,7 +1188,8 @@ class DoctrineDatabase extends Gateway
             // parameter for bitwise operation has to be placed verbatim (w/o binding) for this to work cross-DBMS
             ->set('lang_mask', 'lang_mask & ~ ' . $languageId)
             ->where('action IN (:actions)')
-            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY);
+            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY)
+        ;
         $query->execute();
 
         // cleanup: delete single language rows (including alwaysAvailable)
@@ -1195,7 +1198,8 @@ class DoctrineDatabase extends Gateway
             ->delete($this->table)
             ->where('action IN (:actions)')
             ->andWhere('lang_mask IN (0, 1)')
-            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY);
+            ->setParameter(':actions', $actions, Connection::PARAM_STR_ARRAY)
+        ;
         $query->execute();
     }
 
@@ -1223,7 +1227,7 @@ class DoctrineDatabase extends Gateway
         // remove specific languages from a bit mask
         foreach ($rows as $row) {
             // filter mask to reduce the number of calls to storage engine
-            $rowLanguageMask = (int)$row['lang_mask'];
+            $rowLanguageMask = (int) $row['lang_mask'];
             $languageIdsToBeRemoved = array_filter(
                 $languageIds,
                 function ($languageId) use ($rowLanguageMask) {
@@ -1275,7 +1279,8 @@ class DoctrineDatabase extends Gateway
             // fetch rows matching any of the given Languages
             ->andWhere('lang_mask & :languageMask <> 0')
             ->setParameter(':action', 'eznode:' . $locationId)
-            ->setParameter(':languageMask', $languageMask);
+            ->setParameter(':languageMask', $languageMask)
+        ;
 
         $statement = $query->execute();
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -1307,7 +1312,8 @@ class DoctrineDatabase extends Gateway
                         $this->getIntegerType($dbPlatform)
                     )
                 )
-            );
+            )
+        ;
 
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
@@ -1320,7 +1326,8 @@ class DoctrineDatabase extends Gateway
             )
             ->andWhere(
                 sprintf('NOT EXISTS (%s)', $subquery->getSQL())
-            );
+            )
+        ;
 
         return $deleteQuery->execute();
     }
@@ -1348,7 +1355,8 @@ class DoctrineDatabase extends Gateway
                     'parent',
                     $existingAliasesQuery
                 )
-            );
+            )
+        ;
 
         return $query->execute();
     }
@@ -1373,7 +1381,8 @@ class DoctrineDatabase extends Gateway
                     'link',
                     $existingAliasesQuery
                 )
-            );
+            )
+        ;
 
         return $query->execute();
     }
