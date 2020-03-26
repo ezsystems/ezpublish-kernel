@@ -216,7 +216,7 @@ class RoleService implements RoleServiceInterface
             $roleCopyStruct->addPolicy($policyCreateStruct);
         }
 
-        $limitationValidationErrors = $this->validateRoleCopyStruct($roleCopyStruct);
+        $limitationValidationErrors = $this->validateRoleCreateStruct($roleCopyStruct);
         if (!empty($limitationValidationErrors)) {
             throw new LimitationValidationException($limitationValidationErrors);
         }
@@ -1130,31 +1130,6 @@ class RoleService implements RoleServiceInterface
                 $policyCreateStruct->module,
                 $policyCreateStruct->function,
                 $policyCreateStruct->getLimitations()
-            );
-
-            if (!empty($errors)) {
-                $allErrors[$key] = $errors;
-            }
-        }
-
-        return $allErrors;
-    }
-
-    /**
-     * Validates Policies and Limitations in Role copy struct.
-     *
-     * @uses ::validatePolicy()
-     *
-     * @return \eZ\Publish\Core\FieldType\ValidationError[][][]
-     */
-    protected function validateRoleCopyStruct(APIRoleCopyStruct $roleCopyStruct): array
-    {
-        $allErrors = [];
-        foreach ($roleCopyStruct->getPolicies() as $key => $policyCopyStruct) {
-            $errors = $this->validatePolicy(
-                $policyCopyStruct->module,
-                $policyCopyStruct->function,
-                $policyCopyStruct->getLimitations()
             );
 
             if (!empty($errors)) {
