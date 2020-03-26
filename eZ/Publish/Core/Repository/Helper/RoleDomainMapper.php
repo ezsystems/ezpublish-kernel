@@ -207,7 +207,7 @@ class RoleDomainMapper
         );
     }
 
-    protected function fillRoleStructWithPolicies(APIRoleCreateStruct $struct)
+    protected function fillRoleStructWithPolicies(APIRoleCreateStruct $struct): array
     {
         $policies = [];
         foreach ($struct->getPolicies() as $policyStruct) {
