@@ -31,7 +31,7 @@ class RejectExplicitFrontControllerRequestsListener implements EventSubscriberIn
     /**
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest(GetResponseEvent $event)
     {
         if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
             return;
