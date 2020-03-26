@@ -129,6 +129,43 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createLocation() method with utilizing default ContentType sorting options.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation
+     */
+    public function testCreateLocationWithContentTypeSortingOptions(): void
+    {
+        $repository = $this->getRepository();
+
+        $contentId = $this->generateId('object', 41);
+        $parentLocationId = $this->generateId('location', 5);
+        // $contentId is the ID of an existing content object
+        // $parentLocationId is the ID of an existing location
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo($contentId);
+
+        // ContentType loading
+        $contentType = $contentTypeService->loadContentType($contentInfo->contentTypeId);
+
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
+        $locationCreate->priority = 23;
+        $locationCreate->hidden = true;
+        $locationCreate->remoteId = 'sindelfingen';
+
+        $location = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+
+        $this->assertEquals($contentType->defaultSortField, $location->sortField);
+        $this->assertEquals($contentType->defaultSortOrder, $location->sortOrder);
+    }
+
+    /**
      * Test for the createLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
