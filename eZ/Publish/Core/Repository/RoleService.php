@@ -221,7 +221,11 @@ class RoleService implements RoleServiceInterface
             throw new LimitationValidationException($limitationValidationErrors);
         }
 
-        $spiRoleCopyStruct = $this->roleDomainMapper->buildPersistenceRoleCopyStruct($roleCopyStruct, $role->id);
+        $spiRoleCopyStruct = $this->roleDomainMapper->buildPersistenceRoleCopyStruct(
+            $roleCopyStruct,
+            $role->id,
+            $role->getStatus()
+        );
 
         $this->repository->beginTransaction();
         try {
@@ -1000,9 +1004,6 @@ class RoleService implements RoleServiceInterface
         );
     }
 
-    /**
-     * Instantiates a role copy class.
-     */
     public function newRoleCopyStruct(string $name): APIRoleCopyStruct
     {
         return new RoleCopyStruct(

@@ -177,21 +177,10 @@ class RoleDomainMapper
 
     /**
      * Creates SPI Role create struct from provided API role create struct.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\RoleCreateStruct
      */
-    public function buildPersistenceRoleCreateStruct(APIRoleCreateStruct $roleCreateStruct)
+    public function buildPersistenceRoleCreateStruct(APIRoleCreateStruct $roleCreateStruct): SPIRoleCreateStruct
     {
-        $policiesToCreate = [];
-        foreach ($roleCreateStruct->getPolicies() as $policyCreateStruct) {
-            $policiesToCreate[] = $this->buildPersistencePolicyObject(
-                $policyCreateStruct->module,
-                $policyCreateStruct->function,
-                $policyCreateStruct->getLimitations()
-            );
-        }
+        $policiesToCreate = $this->fillRoleStructWithPolicies($roleCreateStruct);
 
         return new SPIRoleCreateStruct(
             [
@@ -204,24 +193,32 @@ class RoleDomainMapper
     /**
      * Creates SPI Role copy struct from provided API role copy struct.
      */
-    public function buildPersistenceRoleCopyStruct(APIRoleCopyStruct $roleCopyStruct, int $clonedId): SPIRoleCopyStruct
+    public function buildPersistenceRoleCopyStruct(APIRoleCopyStruct $roleCopyStruct, int $clonedId, int $status): SPIRoleCopyStruct
     {
-        $policiesToCopy = [];
-        foreach ($roleCopyStruct->getPolicies() as $policyCopyStruct) {
-            $policiesToCopy[] = $this->buildPersistencePolicyObject(
-                $policyCopyStruct->module,
-                $policyCopyStruct->function,
-                $policyCopyStruct->getLimitations()
-            );
-        }
+        $policiesToCopy = $this->fillRoleStructWithPolicies($roleCopyStruct);
 
         return new SPIRoleCopyStruct(
             [
                 'clonedId' => $clonedId,
                 'newIdentifier' => $roleCopyStruct->newIdentifier,
+                'status' => $status,
                 'policies' => $policiesToCopy,
             ]
         );
+    }
+
+    protected function fillRoleStructWithPolicies(APIRoleCreateStruct $struct)
+    {
+        $policies = [];
+        foreach ($struct->getPolicies() as $policyStruct) {
+            $policies[] = $this->buildPersistencePolicyObject(
+                $policyStruct->module,
+                $policyStruct->function,
+                $policyStruct->getLimitations()
+            );
+        }
+
+        return $policies;
     }
 
     /**

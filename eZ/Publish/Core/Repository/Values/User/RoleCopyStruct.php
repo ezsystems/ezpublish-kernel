@@ -30,16 +30,18 @@ class RoleCopyStruct extends APIRoleCopyStruct
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
      */
-    public function getPolicies(): array
+    public function getPolicies(): iterable
     {
         return $this->policies;
     }
 
     /**
      * Adds a policy to this role.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
      */
-    public function addPolicy(APIPolicyCreateStruct $policyCopy)
+    public function addPolicy(APIPolicyCreateStruct $policyCreateStruct): void
     {
-        $this->policies[] = $policyCopy;
+        $this->policies[] = $policyCreateStruct;
     }
 }
