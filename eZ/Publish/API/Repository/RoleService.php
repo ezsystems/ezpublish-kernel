@@ -61,12 +61,14 @@ interface RoleService
     /**
      * Copies an existing Role.
      *
-     * @since 8.0
+     * @since eZ Platform 3.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to copy a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the same type
      *         is repeated in the policy create struct or if limitation is not allowed on module/function
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCopyStruct is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if CopyRoleEvent does not posses valid Role object
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if newly cloned Role does not exist
      */
     public function copyRole(Role $role, RoleCopyStruct $roleCopyStruct): Role;
 

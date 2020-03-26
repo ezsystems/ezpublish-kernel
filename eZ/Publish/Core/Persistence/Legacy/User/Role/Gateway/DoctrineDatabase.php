@@ -88,8 +88,7 @@ final class DoctrineDatabase extends Gateway
 
     public function copyRole(Role $role): Role
     {
-        // Copying already publish Role
-        $roleOriginalId = Role::STATUS_DEFINED;
+        $roleOriginalId = $role->status;
 
         $query = $this->connection->createQueryBuilder();
         $query

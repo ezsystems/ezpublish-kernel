@@ -8,12 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-
 /**
  * This class is used to copy an existing role.
  */
-abstract class RoleCopyStruct extends ValueObject
+abstract class RoleCopyStruct extends RoleCreateStruct
 {
     /**
      * Readable string identifier of a new role.
@@ -23,14 +21,9 @@ abstract class RoleCopyStruct extends ValueObject
     public $newIdentifier;
 
     /**
-     * Returns policies associated with the role.
+     * Status of a new role.
      *
-     * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
+     * @var int
      */
-    abstract public function getPolicies(): array;
-
-    /**
-     * Adds a policy to this role.
-     */
-    abstract public function addPolicy(PolicyCreateStruct $policyCreateStruct);
+    public $status;
 }
