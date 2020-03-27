@@ -46,18 +46,22 @@ class LocationCreateStruct extends ValueObject
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
+     * If not set, will be taken out of ContentType's default sort field
+     *
      * @var mixed
      */
-    public $sortField = Location::SORT_FIELD_NAME;
+    public $sortField = null;
 
     /**
      * Specifies whether the sort order should be ascending or descending.
      *
      * Valid values are {@link Location::SORT_ORDER_*}
      *
+     * If not set, will be taken out of ContentType's default sort order
+     *
      * @var mixed
      */
-    public $sortOrder = Location::SORT_ORDER_ASC;
+    public $sortOrder = null;
 
     /**
      * The id of the parent location under which the new location should be created.
