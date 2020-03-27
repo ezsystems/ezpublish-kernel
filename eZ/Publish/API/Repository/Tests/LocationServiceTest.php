@@ -73,8 +73,8 @@ class LocationServiceTest extends BaseTest
                 'hidden' => false,
                 // remoteId should be initialized with a default value
                 //'remoteId' => null,
-                'sortField' => Location::SORT_FIELD_NAME,
-                'sortOrder' => Location::SORT_ORDER_ASC,
+                'sortField' => null,
+                'sortOrder' => null,
                 'parentLocationId' => $this->generateId('location', 1),
             ],
             $locationCreate
@@ -126,6 +126,43 @@ class LocationServiceTest extends BaseTest
             'contentInfo' => $contentInfo,
             'parentLocation' => $locationService->loadLocation($this->generateId('location', 5)),
         ];
+    }
+
+    /**
+     * Test for the createLocation() method with utilizing default ContentType sorting options.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation
+     */
+    public function testCreateLocationWithContentTypeSortingOptions(): void
+    {
+        $repository = $this->getRepository();
+
+        $contentId = $this->generateId('object', 41);
+        $parentLocationId = $this->generateId('location', 5);
+        // $contentId is the ID of an existing content object
+        // $parentLocationId is the ID of an existing location
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo($contentId);
+
+        // ContentType loading
+        $contentType = $contentTypeService->loadContentType($contentInfo->contentTypeId);
+
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
+        $locationCreate->priority = 23;
+        $locationCreate->hidden = true;
+        $locationCreate->remoteId = 'sindelfingen';
+
+        $location = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+
+        $this->assertEquals($contentType->defaultSortField, $location->sortField);
+        $this->assertEquals($contentType->defaultSortOrder, $location->sortOrder);
     }
 
     /**

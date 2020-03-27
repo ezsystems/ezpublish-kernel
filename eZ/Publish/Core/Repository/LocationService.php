@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\PermissionCriterionResolver;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -427,6 +428,13 @@ class LocationService implements LocationServiceInterface
         $parentLocation = $this->domainMapper->buildLocation(
             $this->persistenceHandler->locationHandler()->load($locationCreateStruct->parentLocationId)
         );
+
+        $contentType = $content->getContentType();
+
+        $locationCreateStruct->sortField = $locationCreateStruct->sortField
+            ?? ($contentType->defaultSortField ?? Location::SORT_FIELD_NAME);
+        $locationCreateStruct->sortOrder = $locationCreateStruct->sortOrder
+            ?? ($contentType->defaultSortOrder ?? Location::SORT_ORDER_ASC);
 
         $contentInfo = $content->contentInfo;
 
