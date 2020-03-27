@@ -8,13 +8,11 @@
  */
 namespace eZ\Publish\SPI\Search;
 
-
 /**
- * The Search Content translation handler
+ * The Search Content translation handler.
  */
 interface ContentTranslationHandler
 {
-
     /**
      * Deletes a translation content object from the index.
      *
@@ -22,5 +20,4 @@ interface ContentTranslationHandler
      * @param string $languageCode
      */
     public function deleteTranslation($contentId, $languageCode);
-    
 }
