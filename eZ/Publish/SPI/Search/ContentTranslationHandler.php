@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Search;
 
+
 /**
  * The Search Content translation handler.
  */
