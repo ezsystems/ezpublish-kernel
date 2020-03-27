@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 use PDO;
 
@@ -162,8 +163,9 @@ class DoctrineStorage extends Gateway
      *
      * @param int $fieldId
      * @param int $versionNo
+     * @param int[] $excludeUrlIds
      */
-    public function unlinkUrl($fieldId, $versionNo)
+    public function unlinkUrl($fieldId, $versionNo, array $excludeUrlIds = [])
     {
         $deleteQuery = $this->connection->createQueryBuilder();
 
@@ -181,9 +183,19 @@ class DoctrineStorage extends Gateway
                     )
                 )
             )
-            ->setParameter(':contentobject_attribute_id', $fieldId, PDO::PARAM_INT)
-            ->setParameter(':contentobject_attribute_version', $versionNo, PDO::PARAM_INT)
-        ;
+            ->setParameter(':contentobject_attribute_id', $fieldId, ParameterType::INTEGER)
+            ->setParameter(':contentobject_attribute_version', $versionNo, ParameterType::INTEGER);
+
+        if (empty($excludeUrlIds) === false) {
+            $deleteQuery
+                ->andWhere(
+                    $deleteQuery->expr()->notIn(
+                        'url_id',
+                        ':url_ids'
+                    )
+                )
+                ->setParameter('url_ids', $excludeUrlIds, Connection::PARAM_INT_ARRAY);
+        }
 
         $deleteQuery->execute();
 
