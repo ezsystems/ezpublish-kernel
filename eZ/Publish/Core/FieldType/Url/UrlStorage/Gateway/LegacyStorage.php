@@ -174,8 +174,9 @@ class LegacyStorage extends Gateway
      *
      * @param int $fieldId
      * @param int $versionNo
+     * @param int[] $excludeUrlIds
      */
-    public function unlinkUrl($fieldId, $versionNo)
+    public function unlinkUrl($fieldId, $versionNo, array $excludeUrlIds = [])
     {
         $dbHandler = $this->getConnection();
 
@@ -184,8 +185,14 @@ class LegacyStorage extends Gateway
             $dbHandler->quoteTable(self::URL_LINK_TABLE)
         )->where(
             $deleteQuery->expr->lAnd(
-                $deleteQuery->expr->in($dbHandler->quoteColumn('contentobject_attribute_id'), $fieldId),
-                $deleteQuery->expr->in($dbHandler->quoteColumn('contentobject_attribute_version'), $versionNo)
+                $deleteQuery->expr->in(
+                    $dbHandler->quoteColumn('contentobject_attribute_id'),
+                    $fieldId
+                ),
+                $deleteQuery->expr->in(
+                    $dbHandler->quoteColumn('contentobject_attribute_version'),
+                    $versionNo
+                )
             )
         );
 
