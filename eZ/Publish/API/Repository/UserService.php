@@ -146,9 +146,6 @@ interface UserService
      * Since 6.1 login is case-insensitive across all storage engines and database backends, like was the case
      * with mysql before in eZ Publish 3.x/4.x/5.x.
      *
-     * @deprecated since eZ Platform 2.5, will be dropped in the next major version as authentication
-     *             may depend on various user providers. Use UserService::checkUserCredentials() instead.
-     *
      * @param string $login
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
