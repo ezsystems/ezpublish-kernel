@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use Doctrine\DBAL\Connection;
+use ErrorException;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -140,22 +141,34 @@ abstract class BaseTest extends TestCase
 
     /**
      * @param bool $initialInitializeFromScratch Only has an effect if set in first call within a test
-     *
-     * @return \eZ\Publish\API\Repository\Repository
      */
-    protected function getRepository($initialInitializeFromScratch = true)
+    protected function getRepository(bool $initialInitializeFromScratch = true): Repository
     {
         if (null === $this->repository) {
-            $this->repository = $this->getSetupFactory()->getRepository($initialInitializeFromScratch);
+            try {
+                $this->repository = $this->getSetupFactory()->getRepository(
+                    $initialInitializeFromScratch
+                );
+            } catch (ErrorException $e) {
+                self::fail(
+                    sprintf(
+                        '%s: %s in %s:%d',
+                        __FUNCTION__,
+                        $e->getMessage(),
+                        $e->getFile(),
+                        $e->getLine()
+                    )
+                );
+            }
         }
 
         return $this->repository;
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Tests\SetupFactory
+     * @throws \ErrorException
      */
-    protected function getSetupFactory()
+    protected function getSetupFactory(): SetupFactory
     {
         if (null === $this->setupFactory) {
             if (false === ($setupClass = getenv('setupFactory'))) {
@@ -163,12 +176,12 @@ abstract class BaseTest extends TestCase
                 putenv("setupFactory=${setupClass}");
             }
 
-            if (false === ($fixtureDir = getenv('fixtureDir'))) {
+            if (false === getenv('fixtureDir')) {
                 putenv('fixtureDir=Legacy');
             }
 
             if (false === class_exists($setupClass)) {
-                throw new \ErrorException(
+                throw new ErrorException(
                     sprintf(
                         'Environment variable "setupFactory" does not reference an existing class: %s. Did you forget to install a package dependency?',
                         $setupClass
@@ -612,15 +625,13 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * @return \Doctrine\DBAL\Connection
-     *
      * @throws \ErrorException
      */
-    protected function getRawDatabaseConnection()
+    protected function getRawDatabaseConnection(): Connection
     {
         $connection = $this
             ->getSetupFactory()
-            ->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.connection');
+            ->getServiceContainer()->get('ezpublish.persistence.connection');
 
         if (!$connection instanceof Connection) {
             throw new \RuntimeException(
