@@ -103,8 +103,6 @@ class ContentServiceTest extends AbstractServiceTest
 
             ['deleteRelation', [$versionInfo, $contentInfo], null],
 
-            ['removeTranslation', [$contentInfo, 'eng-GB'], null],
-
             ['deleteTranslation', [$contentInfo, 'eng-GB'], null],
 
             ['deleteTranslationFromDraft', [$versionInfo, 'eng-GB'], $content],

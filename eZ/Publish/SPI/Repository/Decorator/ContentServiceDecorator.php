@@ -212,13 +212,6 @@ abstract class ContentServiceDecorator implements ContentService
         $this->innerService->deleteRelation($sourceVersion, $destinationContent);
     }
 
-    public function removeTranslation(
-        ContentInfo $contentInfo,
-        string $languageCode
-    ): void {
-        $this->innerService->removeTranslation($contentInfo, $languageCode);
-    }
-
     public function deleteTranslation(
         ContentInfo $contentInfo,
         string $languageCode

@@ -459,14 +459,6 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     /**
      * {@inheritdoc}
      */
-    public function removeTranslationFromContent($contentId, $languageCode)
-    {
-        $this->deleteTranslationFromContent($contentId, $languageCode);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function deleteTranslationFromContent($contentId, $languageCode)
     {
         $this->logger->logCall(

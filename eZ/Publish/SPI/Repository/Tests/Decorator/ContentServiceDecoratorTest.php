@@ -381,21 +381,6 @@ class ContentServiceDecoratorTest extends TestCase
         $decoratedService->deleteRelation(...$parameters);
     }
 
-    public function testRemoveTranslationDecorator()
-    {
-        $serviceMock = $this->createServiceMock();
-        $decoratedService = $this->createDecorator($serviceMock);
-
-        $parameters = [
-            $this->createMock(ContentInfo::class),
-            self::EXAMPLE_LANGUAGE_CODE,
-        ];
-
-        $serviceMock->expects($this->once())->method('removeTranslation')->with(...$parameters);
-
-        $decoratedService->removeTranslation(...$parameters);
-    }
-
     public function testDeleteTranslationDecorator()
     {
         $serviceMock = $this->createServiceMock();

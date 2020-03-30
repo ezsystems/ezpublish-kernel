@@ -2262,18 +2262,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function removeTranslation(ContentInfo $contentInfo, string $languageCode): void
-    {
-        @trigger_error(
-            __METHOD__ . ' is deprecated, use deleteTranslation instead',
-            E_USER_DEPRECATED
-        );
-        $this->deleteTranslation($contentInfo, $languageCode);
-    }
-
-    /**
      * Delete Content item Translation from all Versions (including archived ones) of a Content Object.
      *
      * NOTE: this operation is risky and permanent, so user interface should provide a warning before performing it.

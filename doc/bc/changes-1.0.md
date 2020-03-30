@@ -68,8 +68,9 @@ Changes affecting version compatibility with deprecated ezpublish-kernel version
 
 * Deprecated Symfony framework templating component integration has been dropped.
 
-* Following methods have been removed:
+* Following API methods have been removed:
 
+    * `\eZ\Publish\API\Repository\ContentService::removeTranslation`
     * `\eZ\Publish\API\Repository\UserService::loadAnonymousUser`
     * `\eZ\Publish\API\Repository\Repository::getCurrentUser`
     * `\eZ\Publish\API\Repository\Repository::getCurrentUserReference`
@@ -104,6 +105,10 @@ Changes affecting version compatibility with deprecated ezpublish-kernel version
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree::createFromQueryBuilder`
     * `\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility::createFromQueryBuilder`
     
+* Following SPI methods have been removed:
+
+    * `\eZ\Publish\SPI\Persistence\Content\Handler::removeTranslationFromContent`
+
 * The "Setup" folder and Section have been removed from the initial (clean installation) data.
 
 * The "Design" Section has been removed from the initial (clean installation) data.

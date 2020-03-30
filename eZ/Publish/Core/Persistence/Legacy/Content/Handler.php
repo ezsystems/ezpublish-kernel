@@ -858,18 +858,6 @@ class Handler implements BaseContentHandler
     /**
      * {@inheritdoc}
      */
-    public function removeTranslationFromContent($contentId, $languageCode)
-    {
-        @trigger_error(
-            __METHOD__ . ' is deprecated, use deleteTranslationFromContent instead',
-            E_USER_DEPRECATED
-        );
-        $this->deleteTranslationFromContent($contentId, $languageCode);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function deleteTranslationFromContent($contentId, $languageCode)
     {
         $this->fieldHandler->deleteTranslationFromContentFields(

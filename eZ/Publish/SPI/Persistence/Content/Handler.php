@@ -349,16 +349,6 @@ interface Handler
     public function publish($contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct);
 
     /**
-     * Remove the specified translation from all the Versions of a Content Object.
-     *
-     * @deprecated since 6.13, use {@see deleteTranslationFromContent} instead
-     *
-     * @param int $contentId
-     * @param string $languageCode language code of the translation
-     */
-    public function removeTranslationFromContent($contentId, $languageCode);
-
-    /**
      * Delete the specified translation from all the Versions of a Content Object.
      *
      * @param int $contentId

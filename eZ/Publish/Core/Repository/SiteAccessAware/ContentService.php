@@ -213,11 +213,6 @@ class ContentService implements ContentServiceInterface
         $this->service->deleteRelation($sourceVersion, $destinationContent);
     }
 
-    public function removeTranslation(ContentInfo $contentInfo, string $languageCode): void
-    {
-        $this->service->removeTranslation($contentInfo, $languageCode);
-    }
-
     public function deleteTranslation(ContentInfo $contentInfo, string $languageCode): void
     {
         $this->service->deleteTranslation($contentInfo, $languageCode);
