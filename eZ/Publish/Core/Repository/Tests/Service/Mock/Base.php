@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\LanguageResolver;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
 use eZ\Publish\Core\Repository\Permission\LimitationService;
@@ -65,6 +66,9 @@ abstract class Base extends TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Permission\LimitationService */
     private $limitationServiceMock;
 
+    /** @var \eZ\Publish\API\Repository\LanguageResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $languageResolverMock;
+
     /**
      * Get Real repository with mocked dependencies.
      *
@@ -87,6 +91,7 @@ abstract class Base extends TestCase
                 $this->getContentDomainMapperMock(),
                 $this->getContentTypeDomainMapperMock(),
                 $this->getLimitationServiceMock(),
+                $this->getLanguageResolverMock(),
                 $serviceSettings,
             );
 
@@ -318,5 +323,14 @@ abstract class Base extends TestCase
         }
 
         return $this->limitationServiceMock;
+    }
+
+    protected function getLanguageResolverMock(): LanguageResolver
+    {
+        if ($this->languageResolverMock === null) {
+            $this->languageResolverMock = $this->createMock(LanguageResolver::class);
+        }
+
+        return $this->languageResolverMock;
     }
 }

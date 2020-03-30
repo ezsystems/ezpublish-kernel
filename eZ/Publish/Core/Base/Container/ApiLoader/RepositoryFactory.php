@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
+use eZ\Publish\API\Repository\LanguageResolver;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
@@ -35,12 +36,17 @@ class RepositoryFactory implements ContainerAwareInterface
      */
     protected $policyMap = [];
 
+    /** @var \eZ\Publish\API\Repository\LanguageResolver */
+    private $languageResolver;
+
     public function __construct(
         $repositoryClass,
-        array $policyMap
+        array $policyMap,
+        LanguageResolver $languageResolver
     ) {
         $this->repositoryClass = $repositoryClass;
         $this->policyMap = $policyMap;
+        $this->languageResolver = $languageResolver;
     }
 
     /**
@@ -74,6 +80,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $contentDomainMapper,
             $contentTypeDomainMapper,
             $limitationService,
+            $this->languageResolver,
             [
                 'role' => [
                     'policyMap' => $this->policyMap,

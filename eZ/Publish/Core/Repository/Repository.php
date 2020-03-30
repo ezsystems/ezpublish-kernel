@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\LanguageResolver;
 use eZ\Publish\API\Repository\PermissionCriterionResolver as PermissionCriterionResolverInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
@@ -246,6 +247,9 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface|null */
     private $proxyDomainMapper;
 
+    /** @var \eZ\Publish\API\Repository\LanguageResolver */
+    private $languageResolver;
+
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
@@ -258,6 +262,7 @@ class Repository implements RepositoryInterface
         Mapper\ContentDomainMapper $contentDomainMapper,
         Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
         LimitationService $limitationService,
+        LanguageResolver $languageResolver,
         array $serviceSettings = [],
         ?LoggerInterface $logger = null
     ) {
@@ -272,6 +277,7 @@ class Repository implements RepositoryInterface
         $this->contentDomainMapper = $contentDomainMapper;
         $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->limitationService = $limitationService;
+        $this->languageResolver = $languageResolver;
 
         $this->serviceSettings = $serviceSettings + [
                 'content' => [],
@@ -506,7 +512,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->urlAliasHandler(),
             $this->getNameSchemaService(),
             $this->getPermissionResolver(),
-            $this->serviceSettings['urlAlias']
+            $this->languageResolver
         );
 
         return $this->urlAliasService;

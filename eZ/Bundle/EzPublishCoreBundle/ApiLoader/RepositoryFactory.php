@@ -6,6 +6,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
+use eZ\Publish\API\Repository\LanguageResolver;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -43,15 +44,20 @@ class RepositoryFactory implements ContainerAwareInterface
     /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
+    /** @var \eZ\Publish\API\Repository\LanguageResolver */
+    private $languageResolver;
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         $repositoryClass,
         array $policyMap,
+        LanguageResolver $languageResolver,
         LoggerInterface $logger = null
     ) {
         $this->configResolver = $configResolver;
         $this->repositoryClass = $repositoryClass;
         $this->policyMap = $policyMap;
+        $this->languageResolver = $languageResolver;
         $this->logger = null !== $logger ? $logger : new NullLogger();
     }
 
@@ -88,6 +94,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $contentDomainMapper,
             $contentTypeDomainMapper,
             $limitationService,
+            $this->languageResolver,
             [
                 'role' => [
                     'policyMap' => $this->policyMap,
