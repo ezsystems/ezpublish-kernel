@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -346,34 +344,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway->updateObjectStateLinks(1, 2);
 
-        $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query
-        ->select($query->expr->count('*'))
-        ->from('ezcobj_state_link')
-        ->where('contentobject_state_id = 1');
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $this->assertEquals(
-            0,
-            $statement->fetchColumn()
-        );
-
-        $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query
-        ->select($query->expr->count('*'))
-        ->from('ezcobj_state_link')
-        ->where('contentobject_state_id = 2');
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $this->assertEquals(
-            // The number of objects in the fixtures
-            185,
-            $statement->fetchColumn()
-        );
+        self::assertSame(0, $gateway->getContentCount(1));
+        self::assertSame(185, $gateway->getContentCount(2));
     }
 
     /**
@@ -385,19 +357,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway->deleteObjectStateLinks(1);
 
-        $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query
-            ->select($query->expr->count('*'))
-            ->from('ezcobj_state_link')
-            ->where('contentobject_state_id = 1');
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $this->assertEquals(
-            0,
-            $statement->fetchColumn()
-        );
+        self::assertSame(0, $gateway->getContentCount(1));
     }
 
     /**
@@ -488,7 +448,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'contentobject_state_id' => 2,
                 ],
             ],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('contentobject_id', 'contentobject_state_id')
                 ->from('ezcobj_state_link')
                 ->where('contentobject_id = 42')

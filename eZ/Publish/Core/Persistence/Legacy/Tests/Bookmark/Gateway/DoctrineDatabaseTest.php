@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Bookmark\Gateway;
 
+use eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Bookmark\Bookmark;
@@ -154,13 +155,11 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Return a ready to test DoctrineStorage gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\DoctrineDatabase
+     * @throws \Doctrine\DBAL\DBALException
      */
-    protected function getGateway(): DoctrineDatabase
+    protected function getGateway(): Gateway
     {
-        return new DoctrineDatabase(
-            $this->getDatabaseHandler()->getConnection()
-        );
+        return new DoctrineDatabase($this->getDatabaseConnection());
     }
 
     private function loadBookmark(int $id): array

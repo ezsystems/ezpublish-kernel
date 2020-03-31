@@ -20,7 +20,8 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPIContentTypeHandler;
  */
 class AbstractTestCase extends LanguageAwareTestCase
 {
-    private static $setup;
+    /** @var bool */
+    private static $databaseInitialized = false;
 
     /**
      * Field registry mock.
@@ -41,13 +42,10 @@ class AbstractTestCase extends LanguageAwareTestCase
      */
     protected function setUp(): void
     {
-        if (!self::$setup) {
+        if (!self::$databaseInitialized) {
             parent::setUp();
             $this->insertDatabaseFixture(__DIR__ . '/../_fixtures/full_dump.php');
-            self::$setup = $this->handler;
-        } else {
-            $this->handler = self::$setup;
-            $this->connection = $this->handler->getConnection();
+            self::$databaseInitialized = true;
         }
     }
 

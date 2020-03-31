@@ -52,7 +52,7 @@ class DoctrineDatabaseTest extends TestCase
                     'disabled' => '0',
                 ],
             ],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('id', 'locale', 'name', 'disabled')
                 ->from('ezcontent_language')
                 ->where('id=8')
@@ -97,7 +97,7 @@ class DoctrineDatabaseTest extends TestCase
                     'disabled' => '0',
                 ],
             ],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('id', 'locale', 'name', 'disabled')
                 ->from('ezcontent_language')
                 ->where('id=2')
@@ -171,7 +171,7 @@ class DoctrineDatabaseTest extends TestCase
                     'count' => '1',
                 ],
             ],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT( * ) AS count')
                 ->from('ezcontent_language')
         );
@@ -182,7 +182,7 @@ class DoctrineDatabaseTest extends TestCase
                     'count' => '0',
                 ],
             ],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT( * ) AS count')
                 ->from('ezcontent_language')
                 ->where('id=2')

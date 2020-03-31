@@ -9,11 +9,11 @@
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\PDOException;
-use Doctrine\DBAL\Schema\Schema;
 use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
 use eZ\Publish\Core\Base\ServiceContainer;
+use eZ\Publish\SPI\Tests\Persistence\Fixture;
+use eZ\Publish\SPI\Tests\Persistence\FixtureImporter;
+use eZ\Publish\SPI\Tests\Persistence\YamlFixture;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
@@ -66,13 +66,23 @@ class Legacy extends SetupFactory
     protected static $schemaInitialized = false;
 
     /**
-     * Initial database data.
+     * Cached in-memory initial database data fixture.
      *
-     * @var array
+     * @var \eZ\Publish\SPI\Tests\Persistence\Fixture
      */
-    protected static $initialData;
+    private static $initialDataFixture;
+
+    /**
+     * Cached in-memory post insert SQL statements.
+     *
+     * @var string[]
+     */
+    private static $postInsertStatements;
 
     protected $repositoryReference = 'ezpublish.api.repository';
+
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
 
     /**
      * Creates a new setup factory.
@@ -178,66 +188,16 @@ class Legacy extends SetupFactory
 
     /**
      * Insert the database data.
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function insertData()
+    public function insertData(): void
     {
-        $data = $this->getInitialData();
-        $handler = $this->getDatabaseHandler();
-        $connection = $handler->getConnection();
-        $dbPlatform = $connection->getDatabasePlatform();
+        $connection = $this->getDatabaseConnection();
         $this->cleanupVarDir($this->getInitialVarDir());
 
-        foreach (array_reverse(array_keys($data)) as $table) {
-            try {
-                // Cleanup before inserting (using TRUNCATE for speed, however not possible to rollback)
-                $connection->executeUpdate($dbPlatform->getTruncateTableSql($handler->quoteIdentifier($table)));
-            } catch (DBALException | PDOException $e) {
-                // Fallback to DELETE if TRUNCATE failed (because of FKs for instance)
-                $connection->createQueryBuilder()->delete($table)->execute();
-            }
-        }
-
-        foreach ($data as $table => $rows) {
-            // Check that at least one row exists
-            if (!isset($rows[0])) {
-                continue;
-            }
-
-            $q = $handler->createInsertQuery();
-            $q->insertInto($handler->quoteIdentifier($table));
-
-            // Contains the bound parameters
-            $values = [];
-
-            // Binding the parameters
-            foreach ($rows[0] as $col => $val) {
-                $q->set(
-                    $handler->quoteIdentifier($col),
-                    $q->bindParam($values[$col])
-                );
-            }
-
-            $stmt = $q->prepare();
-
-            foreach ($rows as $row) {
-                try {
-                    // This CANNOT be replaced by:
-                    // $values = $row
-                    // each $values[$col] is a PHP reference which should be
-                    // kept for parameters binding to work
-                    foreach ($row as $col => $val) {
-                        $values[$col] = $val;
-                    }
-
-                    $stmt->execute();
-                } catch (Exception $e) {
-                    echo "$table ( ", implode(', ', $row), " )\n";
-                    throw $e;
-                }
-            }
-        }
-
-        $this->applyStatements($this->getPostInsertStatements());
+        $fixtureImporter = new FixtureImporter($connection);
+        $fixtureImporter->import($this->getInitialDataFixture());
     }
 
     protected function getInitialVarDir()
@@ -282,33 +242,19 @@ class Legacy extends SetupFactory
     }
 
     /**
-     * Returns statements to be executed after data insert.
+     * Returns the initial database data fixture.
      *
-     * @return string[]
+     * @return \eZ\Publish\SPI\Tests\Persistence\Fixture
      */
-    protected function getPostInsertStatements()
+    protected function getInitialDataFixture(): Fixture
     {
-        if (self::$db === 'pgsql') {
-            $setvalPath = __DIR__ . '/../../../../Core/Persistence/Legacy/Tests/_fixtures/setval.pgsql.sql';
-
-            return array_filter(preg_split('(;\\s*$)m', file_get_contents($setvalPath)));
+        if (!isset(self::$initialDataFixture)) {
+            self::$initialDataFixture = new YamlFixture(
+                __DIR__ . '/../_fixtures/Legacy/data/test_data.yaml'
+            );
         }
 
-        return [];
-    }
-
-    /**
-     * Returns the initial database data.
-     *
-     * @return array
-     */
-    protected function getInitialData()
-    {
-        if (!isset(self::$initialData)) {
-            self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php';
-        }
-
-        return self::$initialData;
+        return self::$initialDataFixture;
     }
 
     /**
@@ -330,37 +276,17 @@ class Legacy extends SetupFactory
     }
 
     /**
-     * Applies the given SQL $statements to the database in use.
-     *
-     * @param array $statements
-     */
-    protected function applyStatements(array $statements)
-    {
-        foreach ($statements as $statement) {
-            $this->getDatabaseHandler()->exec($statement);
-        }
-    }
-
-    // ************* Setup copied and refactored from common.php ************
-
-    /**
-     * Returns the database handler from the service container.
-     *
-     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-     */
-    protected function getDatabaseHandler()
-    {
-        return $this->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.dbhandler');
-    }
-
-    /**
      * Returns the raw database connection from the service container.
      *
      * @return \Doctrine\DBAL\Connection
      */
     private function getDatabaseConnection(): Connection
     {
-        return $this->getServiceContainer()->get('ezpublish.persistence.connection');
+        if (null === $this->connection) {
+            $this->connection = $this->getServiceContainer()->get('ezpublish.persistence.connection');
+        }
+
+        return $this->connection;
     }
 
     /**

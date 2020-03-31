@@ -57,8 +57,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'name' => 'Media',
                 ],
             ],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select(
                     'id',
                     'created',
@@ -116,13 +115,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             [
                 ['3'],
             ],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT(*)')
                 ->from('ezcontentclassgroup')
         );
 
-        $q = $this->getDatabaseHandler()->createSelectQuery();
+        $q = $this->getDatabaseConnection()->createQueryBuilder();
         $q
             ->select(
                 'id',
@@ -250,8 +248,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                 ['1'],
                 ['3'],
             ],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('id')
                 ->from('ezcontentclassgroup')
         );
@@ -485,8 +482,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertQueryResult(
             [[$expectation]],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select($column)
                 ->from('ezcontentclass'),
             'Inserted Type data incorrect in column ' . $column
@@ -527,8 +523,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                 },
                 $expectation
             ),
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select($column)
                 ->from('ezcontentclass_name'),
             'Inserted Type data incorrect in column ' . $column
@@ -618,8 +613,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'serialized_data_text' => 'a:2:{i:0;s:3:"foo";i:1;s:3:"bar";}',
                 ],
             ],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select(
                     'contentclass_id',
                     'serialized_name_list',
@@ -732,8 +726,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertQueryResult(
             [[5]],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT(*)')
                 ->from('ezcontentclass_attribute')
         );
@@ -784,8 +777,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'serialized_data_text' => 'a:2:{i:0;s:3:"foo";i:1;s:3:"bar";}',
                 ],
             ],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select(
                     'category',
                     'contentclass_id',
@@ -839,8 +831,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'group_name' => 'Media',
                 ],
             ],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select(
                     'contentclass_id',
                     'contentclass_version',
@@ -865,8 +856,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertQueryResult(
             [['1']],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select(
                     'COUNT(*)'
                 )->from('ezcontentclass_classgroup')
@@ -896,8 +886,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     $fieldName => $expectedValue,
                 ],
             ],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select(
                     $fieldName
                 )->from('ezcontentclass')
@@ -940,8 +929,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'name' => 'New Folder for you',
                 ],
             ],
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('*')
                 ->from('ezcontentclass_name')
                 ->where('contentclass_id = 1 AND contentclass_version = 0')
@@ -1058,13 +1046,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway->deleteFieldDefinitionsForType(1, 0);
 
-        $countAffectedAttr = $this->getDatabaseHandler()
-            ->createSelectQuery();
+        $countAffectedAttr = $this->getDatabaseConnection()->createQueryBuilder();
         $countAffectedAttr
             ->select('COUNT(*)')
             ->from('ezcontentclass_attribute')
             ->where(
-                $countAffectedAttr->expr->eq(
+                $countAffectedAttr->expr()->eq(
                     'contentclass_id',
                     1
                 )
@@ -1075,8 +1062,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $countAffectedAttr
         );
 
-        $countNotAffectedAttr = $this->getDatabaseHandler()
-            ->createSelectQuery();
+        $countNotAffectedAttr = $this->getDatabaseConnection()->createQueryBuilder();
         $countNotAffectedAttr->select('COUNT(*)')
             ->from('ezcontentclass_attribute');
 
@@ -1099,8 +1085,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway->deleteFieldDefinitionsForType(23, 1);
 
-        $countNotAffectedAttr = $this->getDatabaseHandler()
-            ->createSelectQuery();
+        $countNotAffectedAttr = $this->getDatabaseConnection()->createQueryBuilder();
         $countNotAffectedAttr->select('COUNT(*)')
             ->from('ezcontentclass_attribute');
 
@@ -1123,8 +1108,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway->deleteGroupAssignmentsForType(1, 0);
 
-        $countAffectedAttr = $this->getDatabaseHandler()
-            ->createSelectQuery();
+        $countAffectedAttr = $this->getDatabaseConnection()->createQueryBuilder();
         $countAffectedAttr->select('COUNT(*)')
             ->from('ezcontentclass_classgroup');
 
@@ -1147,8 +1131,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway->deleteType(23, 1);
 
-        $countAffectedAttr = $this->getDatabaseHandler()
-            ->createSelectQuery();
+        $countAffectedAttr = $this->getDatabaseConnection()->createQueryBuilder();
         $countAffectedAttr->select('COUNT(*)')
             ->from('ezcontentclass_classgroup');
 
@@ -1171,8 +1154,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway->deleteType(1, 0);
 
-        $countAffectedAttr = $this->getDatabaseHandler()
-            ->createSelectQuery();
+        $countAffectedAttr = $this->getDatabaseConnection()->createQueryBuilder();
         $countAffectedAttr->select('COUNT(*)')
             ->from('ezcontentclass');
 
@@ -1195,8 +1177,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway->deleteType(23, 1);
 
-        $countAffectedAttr = $this->getDatabaseHandler()
-            ->createSelectQuery();
+        $countAffectedAttr = $this->getDatabaseConnection()->createQueryBuilder();
         $countAffectedAttr->select('COUNT(*)')
             ->from('ezcontentclass');
 
@@ -1220,7 +1201,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertQueryResult(
             [[1]],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT( * )')
                 ->from('ezcontentclass')
                 ->where('id = 1 AND version = 0')
@@ -1228,7 +1209,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertQueryResult(
             [[2]],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT( * )')
                 ->from('ezcontentclass_classgroup')
                 ->where('contentclass_id = 1 AND contentclass_version = 0')
@@ -1236,7 +1217,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertQueryResult(
             [[3]],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT( * )')
                 ->from('ezcontentclass_attribute')
                 ->where('contentclass_id = 1 AND version = 0')
@@ -1244,7 +1225,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertQueryResult(
             [[1]],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT( * )')
                 ->from('ezcontentclass_name')
                 ->where('contentclass_id = 1 AND contentclass_version = 0')

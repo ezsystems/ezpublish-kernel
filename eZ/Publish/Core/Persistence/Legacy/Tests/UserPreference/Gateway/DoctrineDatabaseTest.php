@@ -121,7 +121,7 @@ class DoctrineDatabaseTest extends TestCase
     protected function getGateway(): Gateway
     {
         return new DoctrineDatabase(
-            $this->getDatabaseHandler()->getConnection()
+            $this->getDatabaseConnection()
         );
     }
 

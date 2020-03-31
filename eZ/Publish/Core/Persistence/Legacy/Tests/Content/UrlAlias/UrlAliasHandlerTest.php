@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler;
@@ -85,7 +86,7 @@ class UrlAliasHandlerTest extends TestCase
      */
     public function testLookupThrowsInvalidArgumentException()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $handler = $this->getHandler();
         $handler->lookup(str_repeat('/1', 99));
@@ -5291,39 +5292,18 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals('jedan', $locationData['path_identification_string']);
     }
 
-    /**
-     * @return int
-     */
-    protected function countRows()
+    protected function countRows(): int
     {
         /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
-        $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select(
-            $query->expr->count('*')
-        )->from(
-            $this->getDatabaseHandler()->quoteTable('ezurlalias_ml')
-        );
+        $connection = $this->getDatabaseConnection();
+        $query = $connection->createQueryBuilder();
+        $query
+            ->select($connection->getDatabasePlatform()->getCountExpression('*'))
+            ->from(UrlAliasGateway::TABLE);
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
         return (int)$statement->fetchColumn();
-    }
-
-    protected function dump()
-    {
-        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
-        $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select(
-            '*'
-        )->from(
-            $this->getDatabaseHandler()->quoteTable('ezurlalias_ml')
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        var_dump($statement->fetchAll(\PDO::FETCH_ASSOC));
     }
 
     /**

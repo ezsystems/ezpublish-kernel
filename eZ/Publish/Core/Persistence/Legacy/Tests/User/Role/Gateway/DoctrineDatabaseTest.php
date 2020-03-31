@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User\Role\Gateway;
 
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase;
 use eZ\Publish\SPI\Persistence\User\Role;
@@ -52,7 +53,7 @@ class DoctrineDatabaseTest extends TestCase
             'status' => Role::STATUS_DRAFT,
         ]);
         $gateway->createRole($spiRole);
-        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
 
         $this->assertQueryResult(
             [
@@ -65,7 +66,12 @@ class DoctrineDatabaseTest extends TestCase
             $query
                 ->select('id', 'name', 'version')
                 ->from('ezrole')
-                ->where($query->expr->eq('name', $query->bindValue('new_role')))
+                ->where(
+                    $query->expr()->eq(
+                        'name',
+                        $query->createPositionalParameter('new_role', ParameterType::STRING)
+                    )
+                )
         );
     }
 

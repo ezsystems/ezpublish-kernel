@@ -1,13 +1,12 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
@@ -37,7 +36,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $handler = $this->getLocationGateway();
         $handler->trashLocation(71);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [1, 0],
@@ -48,7 +47,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
             $query
                 ->select('node_id', 'priority')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [1, 2, 69, 70, 71]))
+                ->where($query->expr()->in('node_id', [1, 2, 69, 70, 71]))
         );
     }
 
@@ -61,7 +60,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $handler = $this->getLocationGateway();
         $handler->trashLocation(71);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [71, '/1/2/69/70/71/'],
@@ -104,13 +103,13 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $handler->untrashLocation(71);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [[$value]],
             $query
                 ->select($property)
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('contentobject_id', [69]))
+                ->where($query->expr()->in('contentobject_id', [69]))
         );
     }
 
@@ -125,13 +124,13 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $handler->untrashLocation(71, 1);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [['228', '1', '/1/228/']],
             $query
                 ->select('node_id', 'parent_node_id', 'path_string')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('contentobject_id', [69]))
+                ->where($query->expr()->in('contentobject_id', [69]))
         );
     }
 
@@ -411,7 +410,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $this->trashSubtree();
         $handler->cleanupTrash();
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [],
             $query
@@ -430,13 +429,13 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $this->trashSubtree();
         $handler->removeElementFromTrash(71);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [],
             $query
                 ->select('*')
                 ->from('ezcontentobject_trash')
-                ->where($query->expr->eq('node_id', 71))
+                ->where($query->expr()->eq('node_id', 71))
         );
     }
 
@@ -452,15 +451,34 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         self::assertSame(1, $handler->countLocationsByContentId(67));
 
         // Insert a new node and count again
-        $query = $this->handler->createInsertQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $query
-            ->insertInto('ezcontentobject_tree')
-            ->set('contentobject_id', $query->bindValue(67, null, \PDO::PARAM_INT))
-            ->set('contentobject_version', $query->bindValue(1, null, \PDO::PARAM_INT))
-            ->set('path_string', $query->bindValue('/1/2/96'))
-            ->set('parent_node_id', $query->bindValue(96, null, \PDO::PARAM_INT))
-            ->set('remote_id', $query->bindValue('some_remote_id'));
-        $query->prepare()->execute();
+            ->insert('ezcontentobject_tree')
+            ->values(
+                [
+                    'contentobject_id' => $query->createPositionalParameter(
+                        67,
+                        ParameterType::INTEGER
+                    ),
+                    'contentobject_version' => $query->createPositionalParameter(
+                        1,
+                        ParameterType::INTEGER
+                    ),
+                    'path_string' => $query->createPositionalParameter(
+                        '/1/2/96',
+                        ParameterType::INTEGER
+                    ),
+                    'parent_node_id' => $query->createPositionalParameter(
+                        96,
+                        ParameterType::INTEGER
+                    ),
+                    'remote_id' => $query->createPositionalParameter(
+                        'some_remote_id',
+                        ParameterType::STRING
+                    ),
+                ]
+            );
+        $query->execute();
         self::assertSame(2, $handler->countLocationsByContentId(67));
     }
 }

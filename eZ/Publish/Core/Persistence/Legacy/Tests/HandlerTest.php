@@ -323,19 +323,4 @@ class HandlerTest extends TestCase
 
         return self::$container;
     }
-
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler::createFromDSN
-     */
-    public function testDatabaseInstance()
-    {
-        $container = $this->getContainer();
-        $databaseHandler = $container->get('ezpublish.api.storage_engine.legacy.dbhandler');
-        $className = get_class($this->getDatabaseHandler());
-
-        $this->assertTrue(
-            $databaseHandler instanceof $className,
-            get_class($databaseHandler) . " not of type $className."
-        );
-    }
 }

@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Notification\Gateway;
 
+use Doctrine\DBAL\FetchMode;
 use eZ\Publish\Core\Persistence\Legacy\Notification\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Notification;
-use PDO;
 
 class DoctrineDatabaseTest extends TestCase
 {
@@ -175,7 +175,7 @@ class DoctrineDatabaseTest extends TestCase
     protected function getGateway(): DoctrineDatabase
     {
         return new DoctrineDatabase(
-            $this->getDatabaseHandler()->getConnection()
+            $this->getDatabaseConnection()
         );
     }
 
@@ -183,7 +183,7 @@ class DoctrineDatabaseTest extends TestCase
     {
         $data = $this->connection
             ->executeQuery('SELECT * FROM eznotification WHERE id = :id', ['id' => $id])
-            ->fetch(PDO::FETCH_ASSOC);
+            ->fetch(FetchMode::ASSOCIATIVE);
 
         return is_array($data) ? $data : [];
     }

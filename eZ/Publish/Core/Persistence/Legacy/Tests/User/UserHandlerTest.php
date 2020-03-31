@@ -291,7 +291,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, self::TEST_USER_ID]],
-            $this->handler->createSelectQuery()->select(
+            $this->getDatabaseConnection()->createQueryBuilder()->select(
                 ['hash_key', 'id', 'time', 'user_id']
             )->from('ezuser_accountkey'),
             'Expected user data to be updated.'
@@ -301,7 +301,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [['0800fc577294c34e0b28ad2839435945', 1, 2234567890, self::TEST_USER_ID]],
-            $this->handler->createSelectQuery()->select(
+            $this->getDatabaseConnection()->createQueryBuilder()->select(
                 ['hash_key', 'id', 'time', 'user_id']
             )->from('ezuser_accountkey'),
             'Expected user token data to be updated.'
@@ -316,7 +316,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [['0800fc577294c34e0b28ad2839435945', 1, 1234567890, self::TEST_USER_ID]],
-            $this->handler->createSelectQuery()->select(
+            $this->getDatabaseConnection()->createQueryBuilder()->select(
                 ['hash_key', 'id', 'time', 'user_id']
             )->from('ezuser_accountkey'),
             'Expected user data to be updated.'
@@ -326,7 +326,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [['0800fc577294c34e0b28ad2839435945', 1, 0, self::TEST_USER_ID]],
-            $this->handler->createSelectQuery()->select(
+            $this->getDatabaseConnection()->createQueryBuilder()->select(
                 ['hash_key', 'id', 'time', 'user_id']
             )->from('ezuser_accountkey'),
             'Expected user token to be expired.'
@@ -372,7 +372,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [[1, 'Test', -1]],
-            $this->handler->createSelectQuery()->select('id', 'name', 'version')->from('ezrole'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'name', 'version')->from('ezrole'),
             'Expected a new role draft.'
         );
     }
@@ -395,7 +395,7 @@ class UserHandlerTest extends TestCase
                 [$publishedRoleId, 'Test', APIRole::STATUS_DEFINED],
                 [2, 'Test', $publishedRoleId],
             ],
-            $this->handler->createSelectQuery()->select('id', 'name', 'version')->from('ezrole'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'name', 'version')->from('ezrole'),
             'Expected a role and a role draft.'
         );
     }
@@ -573,14 +573,14 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [[1, 'Changed']],
-            $this->handler->createSelectQuery()->select('id', 'name')->from('ezrole'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'name')->from('ezrole'),
             'Expected a changed role.'
         );
     }
 
     public function testDeleteRole()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
         $handler = $this->getUserHandler();
 
         // 3 is the ID of Editor role
@@ -588,26 +588,26 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [],
-            $this->handler->createSelectQuery()->select('id')->from('ezrole')->where('id = 3'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id')->from('ezrole')->where('id = 3'),
             'Expected an empty set.'
         );
 
         $this->assertQueryResult(
             [],
-            $this->handler->createSelectQuery()->select('role_id')->from('ezpolicy')->where('role_id = 3'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('role_id')->from('ezpolicy')->where('role_id = 3'),
             'Expected an empty set.'
         );
 
         $this->assertQueryResult(
             [],
-            $this->handler->createSelectQuery()->select('role_id')->from('ezuser_role')->where('role_id = 3'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('role_id')->from('ezuser_role')->where('role_id = 3'),
             'Expected an empty set.'
         );
     }
 
     public function testDeleteRoleDraft()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
         $handler = $this->getUserHandler();
 
         // 3 is the ID of Editor role
@@ -616,19 +616,19 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [['3', APIRole::STATUS_DEFINED]],
-            $this->handler->createSelectQuery()->select('id, version')->from('ezrole')->where('id = 3'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id, version')->from('ezrole')->where('id = 3'),
             'Expected a published role.'
         );
 
         $this->assertQueryResult(
             [[implode("\n", array_fill(0, 28, '3, ' . APIRole::STATUS_DEFINED))]],
-            $this->handler->createSelectQuery()->select('role_id, original_id')->from('ezpolicy')->where('role_id = 3'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('role_id, original_id')->from('ezpolicy')->where('role_id = 3'),
             'Expected 28 policies for the published role.'
         );
 
         $this->assertQueryResult(
             [[3], [3]],
-            $this->handler->createSelectQuery()->select('role_id')->from('ezuser_role')->where('role_id = 3'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('role_id')->from('ezuser_role')->where('role_id = 3'),
             'Expected that role assignments still exist.'
         );
     }
@@ -647,7 +647,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [[1, 'foo', 'bar', 1]],
-            $this->handler->createSelectQuery()->select('id', 'module_name', 'function_name', 'role_id')->from('ezpolicy'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'module_name', 'function_name', 'role_id')->from('ezpolicy'),
             'Expected a new policy.'
         );
     }
@@ -676,7 +676,7 @@ class UserHandlerTest extends TestCase
                 [1, 'Subtree', 1],
                 [2, 'Foo', 1],
             ],
-            $this->handler->createSelectQuery()->select('id', 'identifier', 'policy_id')->from('ezpolicy_limitation'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'identifier', 'policy_id')->from('ezpolicy_limitation'),
             'Expected a new policy.'
         );
     }
@@ -691,7 +691,7 @@ class UserHandlerTest extends TestCase
                 [2, '/1/2', 1],
                 [3, 'Bar', 2],
             ],
-            $this->handler->createSelectQuery()->select('id', 'value', 'limitation_id')->from('ezpolicy_limitation_value'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'value', 'limitation_id')->from('ezpolicy_limitation_value'),
             'Expected a new policy.'
         );
     }
@@ -731,7 +731,7 @@ class UserHandlerTest extends TestCase
                 [1, 'foo', 'bar', 1],
                 [2, 'foo', 'blubb', 1],
             ],
-            $this->handler->createSelectQuery()->select('id', 'module_name', 'function_name', 'role_id')->from('ezpolicy'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'module_name', 'function_name', 'role_id')->from('ezpolicy'),
             'Expected a new policy.'
         );
     }
@@ -748,7 +748,7 @@ class UserHandlerTest extends TestCase
             [
                 [2, 'foo', 'blubb', 1],
             ],
-            $this->handler->createSelectQuery()->select('id', 'module_name', 'function_name', 'role_id')->from('ezpolicy')->where('original_id = 0'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'module_name', 'function_name', 'role_id')->from('ezpolicy')->where('original_id = 0'),
             'Expected a new policy.'
         );
     }
@@ -762,7 +762,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [[3, 'Foo', 2]],
-            $this->handler->createSelectQuery()->select('*')->from('ezpolicy_limitation')
+            $this->getDatabaseConnection()->createQueryBuilder()->select('*')->from('ezpolicy_limitation')
         );
     }
 
@@ -775,7 +775,7 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [[4, 3, 'Blubb']],
-            $this->handler->createSelectQuery()->select('*')->from('ezpolicy_limitation_value')
+            $this->getDatabaseConnection()->createQueryBuilder()->select('*')->from('ezpolicy_limitation_value')
         );
     }
 
@@ -797,7 +797,7 @@ class UserHandlerTest extends TestCase
                 [3, 'Foo', 2],
                 [4, 'new', 1],
             ],
-            $this->handler->createSelectQuery()->select('*')->from('ezpolicy_limitation')
+            $this->getDatabaseConnection()->createQueryBuilder()->select('*')->from('ezpolicy_limitation')
         );
 
         $this->assertQueryResult(
@@ -805,7 +805,7 @@ class UserHandlerTest extends TestCase
                 [4, 3, 'Blubb'],
                 [5, 4, 'something'],
             ],
-            $this->handler->createSelectQuery()->select('*')->from('ezpolicy_limitation_value')
+            $this->getDatabaseConnection()->createQueryBuilder()->select('*')->from('ezpolicy_limitation_value')
         );
     }
 
@@ -824,7 +824,7 @@ class UserHandlerTest extends TestCase
             [
                 [1, self::TEST_USER_ID, 1, null, null],
             ],
-            $this->handler->createSelectQuery()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
             'Expected a new user policy association.'
         );
     }
@@ -850,7 +850,7 @@ class UserHandlerTest extends TestCase
             [
                 [1, self::TEST_USER_ID, 1, 'Subtree', '/1'],
             ],
-            $this->handler->createSelectQuery()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
             'Expected a new user policy association.'
         );
     }
@@ -879,7 +879,7 @@ class UserHandlerTest extends TestCase
                 [2, self::TEST_USER_ID, 1, 'Subtree', '/1/2'],
                 [3, self::TEST_USER_ID, 1, 'Foo', 'Bar'],
             ],
-            $this->handler->createSelectQuery()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
             'Expected a new user policy association.'
         );
     }
@@ -906,14 +906,14 @@ class UserHandlerTest extends TestCase
 
         $this->assertQueryResult(
             [],
-            $this->handler->createSelectQuery()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
+            $this->getDatabaseConnection()->createQueryBuilder()->select('id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value')->from('ezuser_role'),
             'Expected no user policy associations.'
         );
     }
 
     public function testLoadPoliciesForUser()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
         $handler = $this->getUserHandler();
 
         $policies = $handler->loadPoliciesByUserId(10); // Anonymous user
@@ -938,7 +938,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadRoleAssignmentsByGroupId()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
         $handler = $this->getUserHandler();
 
         $this->assertEquals(
@@ -982,7 +982,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadRoleAssignmentsByGroupIdInherited()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
         $handler = $this->getUserHandler();
 
         $this->assertEquals(
@@ -1001,7 +1001,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadComplexRoleAssignments()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
         $handler = $this->getUserHandler();
 
         $this->assertEquals(
@@ -1069,7 +1069,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadRoleAssignmentsByRoleId()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
         $handler = $this->getUserHandler();
 
         $this->assertEquals(
@@ -1102,7 +1102,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadRoleDraftByRoleId()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
         $handler = $this->getUserHandler();
 
         // 3 is the ID of Editor role
@@ -1115,7 +1115,7 @@ class UserHandlerTest extends TestCase
 
     public function testRoleDraftOnlyHavePolicyDraft()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
         $handler = $this->getUserHandler();
         $originalRoleId = 3;
         $originalRole = $handler->loadRole($originalRoleId);

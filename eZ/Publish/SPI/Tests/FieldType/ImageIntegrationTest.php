@@ -15,6 +15,7 @@ use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface;
 use eZ\Publish\Core\FieldType\Image\AliasCleanerInterface;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
+use PHPUnit\Framework\MockObject\MockObject;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
@@ -90,7 +91,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             new FieldType\Image\ImageStorage(
                 new FieldType\Image\ImageStorage\Gateway\DoctrineStorage(
                     $urlRedecorator,
-                    $this->getDatabaseHandler()->getConnection()
+                    $this->getDatabaseConnection()
                 ),
                 $this->ioService,
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
@@ -101,7 +102,10 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
     }
 
-    public function getDeprecationWarnerMock()
+    /**
+     * @return \eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    public function getDeprecationWarnerMock(): MockObject
     {
         if (!isset($this->deprecationWarnerMock)) {
             $this->deprecationWarnerMock = $this->createMock(DeprecationWarnerInterface::class);
@@ -110,7 +114,10 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         return $this->deprecationWarnerMock;
     }
 
-    public function getAliasCleanerMock()
+    /**
+     * @return \eZ\Publish\Core\FieldType\Image\AliasCleanerInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    public function getAliasCleanerMock(): MockObject
     {
         if (!isset($this->aliasCleanerMock)) {
             $this->aliasCleanerMock = $this->createMock(AliasCleanerInterface::class);

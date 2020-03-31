@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User\Gateway;
 
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase;
 
@@ -43,7 +44,7 @@ class DoctrineDatabaseTest extends TestCase
         $gateway = $this->getDatabaseGateway();
 
         $gateway->removeRoleAssignmentById(38);
-        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
 
         $this->assertQueryResult(
             [
@@ -72,7 +73,12 @@ class DoctrineDatabaseTest extends TestCase
             $query
                 ->select('contentobject_id', 'id', 'limit_identifier', 'limit_value', 'role_id')
                 ->from('ezuser_role')
-                ->where($query->expr->eq('role_id', $query->bindValue('5')))
+                ->where(
+                    $query->expr()->eq(
+                        'role_id',
+                        $query->createPositionalParameter(5, ParameterType::INTEGER)
+                    )
+                )
         );
     }
 

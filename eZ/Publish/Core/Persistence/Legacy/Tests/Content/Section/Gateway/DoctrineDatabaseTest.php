@@ -42,7 +42,7 @@ class DoctrineDatabaseTest extends TestCase
         $gateway = $this->getDatabaseGateway();
 
         $gateway->insertSection('New Section', 'new_section');
-        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
 
         $this->assertQueryResult(
             [
@@ -56,7 +56,12 @@ class DoctrineDatabaseTest extends TestCase
             $query
                 ->select('id', 'identifier', 'name', 'locale')
                 ->from('ezsection')
-                ->where($query->expr->eq('identifier', $query->bindValue('new_section')))
+                ->where(
+                    $query->expr()->eq(
+                        'identifier',
+                        $query->createPositionalParameter('new_section')
+                    )
+                )
         );
     }
 
@@ -78,7 +83,7 @@ class DoctrineDatabaseTest extends TestCase
                     'locale' => '',
                 ],
             ],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('id', 'identifier', 'name', 'locale')
                 ->from('ezsection')
                 ->where('id=2')
@@ -224,7 +229,7 @@ class DoctrineDatabaseTest extends TestCase
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->deleteSection(2);
+        $gateway->deleteSection(2);
 
         $this->assertQueryResult(
             [
@@ -232,7 +237,7 @@ class DoctrineDatabaseTest extends TestCase
                     'count' => '5',
                 ],
             ],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT( * ) AS count')
                 ->from('ezsection')
         );
@@ -243,7 +248,7 @@ class DoctrineDatabaseTest extends TestCase
                     'count' => '0',
                 ],
             ],
-            $this->getDatabaseHandler()->createSelectQuery()
+            $this->getDatabaseConnection()->createQueryBuilder()
                 ->select('COUNT( * ) AS count')
                 ->from('ezsection')
                 ->where('id=2')

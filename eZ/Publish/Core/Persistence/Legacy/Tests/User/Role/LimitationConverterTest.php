@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\User\Role\LimitationConverter class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -31,7 +29,7 @@ class LimitationConverterTest extends TestCase
      */
     public function testObjectStateToLegacy()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
 
         $converter = $this->getLimitationConverter();
 
@@ -84,7 +82,7 @@ class LimitationConverterTest extends TestCase
      */
     public function testObjectStateToSPI()
     {
-        $this->insertDatabaseFixture(__DIR__ . '/../../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
+        $this->insertSharedDatabaseFixture();
 
         $converter = $this->getLimitationConverter();
 

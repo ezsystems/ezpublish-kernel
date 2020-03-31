@@ -17,6 +17,8 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
+use eZ\Publish\SPI\Tests\Persistence\FixtureImporter;
+use eZ\Publish\SPI\Tests\Persistence\YamlFixture;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -205,21 +207,18 @@ abstract class BaseIntegrationTest extends TestCase
     /**
      * Only set up once for these read only tests on a large fixture.
      *
-     * Skipping the reset-up, since setting up for these tests takes quite some
-     * time, which is not required to spent, since we are only reading from the
-     * database anyways.
+     * @throws \Doctrine\DBAL\DBALException
      */
     protected function setUp(): void
     {
         if (!self::$setUp) {
             self::$container = $this->getContainer();
             parent::setUp();
-            $this->handler = $this->getDatabaseHandler();
-            $this->db = $this->handler->getName();
-            $this->insertDatabaseFixture(__DIR__ . '/../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php');
-            self::$setUp = $this->handler;
-        } else {
-            $this->handler = self::$setUp;
+            $fixtureImporter = new FixtureImporter($this->getDatabaseConnection());
+            $fixtureImporter->import(
+                new YamlFixture(__DIR__ . '/../../../API/Repository/Tests/_fixtures/Legacy/data/test_data.yaml')
+            );
+            self::$setUp = true;
         }
     }
 

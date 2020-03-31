@@ -1,18 +1,20 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway\DoctrineDatabaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase.
@@ -61,8 +63,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testLoadLocationByRemoteId()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $data = $handler->getBasicNodeDataByRemoteId('dbc2f3c8716c12f32c379dbf0b1cb133');
+        $gateway = $this->getLocationGateway();
+        $data = $gateway->getBasicNodeDataByRemoteId('dbc2f3c8716c12f32c379dbf0b1cb133');
 
         self::assertLoadLocationProperties($data);
     }
@@ -70,8 +72,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testLoadLocation()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $data = $handler->getBasicNodeData(77);
+        $gateway = $this->getLocationGateway();
+        $data = $gateway->getBasicNodeData(77);
 
         self::assertLoadLocationProperties($data);
     }
@@ -79,8 +81,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testLoadLocationList()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $locationsData = $handler->getNodeDataList([77]);
+        $gateway = $this->getLocationGateway();
+        $locationsData = $gateway->getNodeDataList([77]);
 
         self::assertCount(1, $locationsData);
 
@@ -94,8 +96,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
 
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->getBasicNodeData(1337);
+        $gateway = $this->getLocationGateway();
+        $gateway->getBasicNodeData(1337);
     }
 
     public function testLoadLocationDataByContent()
@@ -142,8 +144,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testMoveSubtreePathUpdate()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->moveSubtreeNodes(
+        $gateway = $this->getLocationGateway();
+        $gateway->moveSubtreeNodes(
             [
                 'path_string' => '/1/2/69/',
                 'path_identification_string' => 'products',
@@ -158,8 +160,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ]
         );
 
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [65, '/1/2/', '', 1, 1, 0, 0],
@@ -169,9 +170,17 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                 [75, '/1/2/77/', 'solutions', 2, 2, 0, 0],
             ],
             $query
-                ->select('contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth', 'is_hidden', 'is_invisible')
+                ->select(
+                    'contentobject_id',
+                    'path_string',
+                    'path_identification_string',
+                    'parent_node_id',
+                    'depth',
+                    'is_hidden',
+                    'is_invisible'
+                )
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [69, 71, 75, 77, 2]))
+                ->where($query->expr()->in('node_id', [69, 71, 75, 77, 2]))
                 ->orderBy('contentobject_id')
         );
     }
@@ -179,9 +188,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testMoveHiddenDestinationUpdate()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->hideSubtree('/1/2/77/');
-        $handler->moveSubtreeNodes(
+        $gateway = $this->getLocationGateway();
+        $gateway->hideSubtree('/1/2/77/');
+        $gateway->moveSubtreeNodes(
             [
                 'path_string' => '/1/2/69/',
                 'path_identification_string' => 'products',
@@ -196,8 +205,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ]
         );
 
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [65, '/1/2/', '', 1, 1, 0, 0],
@@ -207,9 +215,17 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                 [75, '/1/2/77/', 'solutions', 2, 2, 1, 1],
             ],
             $query
-                ->select('contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth', 'is_hidden', 'is_invisible')
+                ->select(
+                    'contentobject_id',
+                    'path_string',
+                    'path_identification_string',
+                    'parent_node_id',
+                    'depth',
+                    'is_hidden',
+                    'is_invisible'
+                )
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [69, 71, 75, 77, 2]))
+                ->where($query->expr()->in('node_id', [69, 71, 75, 77, 2]))
                 ->orderBy('contentobject_id')
         );
     }
@@ -217,9 +233,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testMoveHiddenSourceUpdate()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->hideSubtree('/1/2/69/');
-        $handler->moveSubtreeNodes(
+        $gateway = $this->getLocationGateway();
+        $gateway->hideSubtree('/1/2/69/');
+        $gateway->moveSubtreeNodes(
             [
                 'path_string' => '/1/2/69/',
                 'path_identification_string' => 'products',
@@ -234,8 +250,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ]
         );
 
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [65, '/1/2/', '', 1, 1, 0, 0],
@@ -245,9 +260,17 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                 [75, '/1/2/77/', 'solutions', 2, 2, 0, 0],
             ],
             $query
-                ->select('contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth', 'is_hidden', 'is_invisible')
+                ->select(
+                    'contentobject_id',
+                    'path_string',
+                    'path_identification_string',
+                    'parent_node_id',
+                    'depth',
+                    'is_hidden',
+                    'is_invisible'
+                )
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [69, 71, 75, 77, 2]))
+                ->where($query->expr()->in('node_id', [69, 71, 75, 77, 2]))
                 ->orderBy('contentobject_id')
         );
     }
@@ -255,10 +278,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testMoveHiddenSourceChildUpdate()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->hideSubtree('/1/2/69/70/');
+        $gateway = $this->getLocationGateway();
+        $gateway->hideSubtree('/1/2/69/70/');
 
-        $handler->moveSubtreeNodes(
+        $gateway->moveSubtreeNodes(
             [
                 'path_string' => '/1/2/69/',
                 'path_identification_string' => 'products',
@@ -273,8 +296,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ]
         );
 
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [65, '/1/2/', '', 1, 1, 0, 0],
@@ -285,9 +307,17 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                 [75, '/1/2/77/', 'solutions', 2, 2, 0, 0],
             ],
             $query
-                ->select('contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth', 'is_hidden', 'is_invisible')
+                ->select(
+                    'contentobject_id',
+                    'path_string',
+                    'path_identification_string',
+                    'parent_node_id',
+                    'depth',
+                    'is_hidden',
+                    'is_invisible'
+                )
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [69, 70, 71, 75, 77, 2]))
+                ->where($query->expr()->in('node_id', [69, 70, 71, 75, 77, 2]))
                 ->orderBy('contentobject_id')
         );
     }
@@ -298,10 +328,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testMoveSubtreeAssignmentUpdate()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->updateNodeAssignment(67, 2, 77, 5);
+        $gateway = $this->getLocationGateway();
+        $gateway->updateNodeAssignment(67, 2, 77, 5);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [67, 1, 0, 53, 1, 5, 77, '9cec85d730eec7578190ee95ce5a36f5', 0, 2, 1, 0, 0],
@@ -325,18 +355,18 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     ]
                 )
                 ->from('eznode_assignment')
-                ->where($query->expr->eq('contentobject_id', 67))
+                ->where($query->expr()->eq('contentobject_id', 67))
         );
     }
 
     public function testUpdateSubtreeModificationTime()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
+        $gateway = $this->getLocationGateway();
         $time = time();
-        $handler->updateSubtreeModificationTime('/1/2/69/');
+        $gateway->updateSubtreeModificationTime('/1/2/69/');
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 ['/1/'],
@@ -346,7 +376,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select('path_string')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->gte('modified_subnode', $time))
+                ->where($query->expr()->gte('modified_subnode', $time))
                 ->orderBy('path_string')
         );
     }
@@ -354,10 +384,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testHideUpdateHidden()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->hideSubtree('/1/2/69/');
+        $gateway = $this->getLocationGateway();
+        $gateway->hideSubtree('/1/2/69/');
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [1, 0, 0],
@@ -368,7 +398,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select('node_id', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [1, 2, 69, 75]))
+                ->where($query->expr()->in('node_id', [1, 2, 69, 75]))
                 ->orderBy('node_id')
         );
     }
@@ -379,11 +409,11 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testHideUnhideUpdateHidden()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->hideSubtree('/1/2/69/');
-        $handler->unhideSubtree('/1/2/69/');
+        $gateway = $this->getLocationGateway();
+        $gateway->hideSubtree('/1/2/69/');
+        $gateway->unhideSubtree('/1/2/69/');
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [1, 0, 0],
@@ -394,7 +424,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select('node_id', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [1, 2, 69, 75]))
+                ->where($query->expr()->in('node_id', [1, 2, 69, 75]))
                 ->orderBy('node_id')
         );
     }
@@ -405,12 +435,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testHideUnhideParentTree()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->hideSubtree('/1/2/69/');
-        $handler->hideSubtree('/1/2/69/70/');
-        $handler->unhideSubtree('/1/2/69/');
+        $gateway = $this->getLocationGateway();
+        $gateway->hideSubtree('/1/2/69/');
+        $gateway->hideSubtree('/1/2/69/70/');
+        $gateway->unhideSubtree('/1/2/69/');
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [1, 0, 0],
@@ -423,7 +453,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select('node_id', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [1, 2, 69, 70, 71, 75]))
+                ->where($query->expr()->in('node_id', [1, 2, 69, 70, 71, 75]))
                 ->orderBy('node_id')
         );
     }
@@ -434,12 +464,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testHideUnhidePartialSubtree()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->hideSubtree('/1/2/69/');
-        $handler->hideSubtree('/1/2/69/70/');
-        $handler->unhideSubtree('/1/2/69/70/');
+        $gateway = $this->getLocationGateway();
+        $gateway->hideSubtree('/1/2/69/');
+        $gateway->hideSubtree('/1/2/69/70/');
+        $gateway->unhideSubtree('/1/2/69/70/');
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [1, 0, 0],
@@ -452,7 +482,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select('node_id', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [1, 2, 69, 70, 71, 75]))
+                ->where($query->expr()->in('node_id', [1, 2, 69, 70, 71, 75]))
                 ->orderBy('node_id')
         );
     }
@@ -460,10 +490,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testSwapLocations()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->swap(70, 78);
+        $gateway = $this->getLocationGateway();
+        $gateway->swap(70, 78);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [70, 76],
@@ -472,7 +502,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select('node_id', 'contentobject_id')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [70, 78]))
+                ->where($query->expr()->in('node_id', [70, 78]))
                 ->orderBy('node_id')
         );
     }
@@ -480,8 +510,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testCreateLocation()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->create(
+        $gateway = $this->getLocationGateway();
+        $gateway->create(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -495,7 +525,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ]
         );
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [70, '/1/2/69/70/'],
@@ -505,19 +535,18 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select('node_id', 'path_string')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('contentobject_id', [68, 75]))
+                ->where($query->expr()->in('contentobject_id', [68, 75]))
                 ->orderBy('node_id')
         );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::getMainNodeId
+     * @covers  \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::getMainNodeId
      * @depends testCreateLocation
      */
     public function testGetMainNodeId()
     {
-        // $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
-        $handler = $this->getLocationGateway();
+        $gateway = $this->getLocationGateway();
 
         $parentLocationData = [
             'node_id' => '77',
@@ -526,7 +555,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         ];
 
         // main location
-        $mainLocation = $handler->create(
+        $mainLocation = $gateway->create(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -539,7 +568,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         // secondary location
-        $handler->create(
+        $gateway->create(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -551,10 +580,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $parentLocationData
         );
 
-        $handlerReflection = new \ReflectionObject($handler);
-        $methodReflection = $handlerReflection->getMethod('getMainNodeId');
+        $gatewayReflection = new \ReflectionObject($gateway);
+        $methodReflection = $gatewayReflection->getMethod('getMainNodeId');
         $methodReflection->setAccessible(true);
-        self::assertEquals($mainLocation->id, $res = $methodReflection->invoke($handler, 68));
+        self::assertEquals($mainLocation->id, $res = $methodReflection->invoke($gateway, 68));
     }
 
     public static function getCreateLocationValues()
@@ -577,7 +606,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @depends testCreateLocation
+     * @depends      testCreateLocation
      * @dataProvider getCreateLocationValues
      */
     public function testCreateLocationValues($field, $value)
@@ -587,8 +616,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         }
 
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->create(
+        $gateway = $this->getLocationGateway();
+        $gateway->create(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -607,13 +636,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ]
         );
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [[$value]],
             $query
                 ->select($field)
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->eq('node_id', 228))
+                ->where($query->expr()->eq('node_id', 228))
         );
     }
 
@@ -636,7 +665,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @depends testCreateLocation
+     * @depends      testCreateLocation
      * @dataProvider getCreateLocationReturnValues
      */
     public function testCreateLocationReturnValues($field, $value)
@@ -646,8 +675,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         }
 
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $location = $handler->create(
+        $gateway = $this->getLocationGateway();
+        $location = $gateway->create(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -686,8 +715,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testUpdateLocation($field, $value)
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->update(
+        $gateway = $this->getLocationGateway();
+        $gateway->update(
             new Location\UpdateStruct(
                 [
                     'priority' => 23,
@@ -699,44 +728,103 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             70
         );
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [[$value]],
             $query
                 ->select($field)
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', [70]))
+                ->where($query->expr()->in('node_id', [70]))
         );
     }
 
     public static function getNodeAssignmentValues()
     {
         return [
-            ['contentobject_version', 1],
-            ['from_node_id', 0],
-            ['id', 215],
-            ['is_main', 0],
-            ['op_code', 3],
-            ['parent_node', 77],
-            ['parent_remote_id', 'some_id'],
-            ['remote_id', '0'],
-            ['sort_field', 2],
-            ['sort_order', 0],
-            ['is_main', 0],
-            ['priority', 1],
-            ['is_hidden', 1],
+            ['contentobject_version', [1]],
+            ['from_node_id', [0]],
+            ['id', [215]],
+            ['is_main', [0]],
+            ['op_code', [3]],
+            ['parent_node', [77]],
+            ['parent_remote_id', ['some_id']],
+            ['remote_id', ['0']],
+            ['sort_field', [2]],
+            ['sort_order', [0]],
+            ['is_main', [0]],
+            ['priority', [1]],
+            ['is_hidden', [1]],
         ];
     }
 
+    private function buildGenericNodeSelectContentWithParentQuery(
+        int $contentId,
+        int $parentLocationId,
+        string $nodeTable,
+        string $parentNodeIdColumnName,
+        array $fields
+    ): QueryBuilder {
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select($fields)
+            ->from($nodeTable)
+            ->where(
+                $expr->eq(
+                    'contentobject_id',
+                    $query->createPositionalParameter($contentId, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    $parentNodeIdColumnName,
+                    $query->createPositionalParameter($parentLocationId, ParameterType::INTEGER)
+                )
+            );
+
+        return $query;
+    }
+
+    private function buildNodeAssignmentSelectContentWithParentQuery(
+        int $contentId,
+        int $parentLocationId,
+        array $fields
+    ): QueryBuilder {
+        return $this->buildGenericNodeSelectContentWithParentQuery(
+            $contentId,
+            $parentLocationId,
+            'eznode_assignment',
+            'parent_node',
+            $fields
+        );
+    }
+
+    private function buildContentTreeSelectContentWithParentQuery(
+        int $contentId,
+        int $parentLocationId,
+        array $fields
+    ): QueryBuilder {
+        return $this->buildGenericNodeSelectContentWithParentQuery(
+            $contentId,
+            $parentLocationId,
+            Gateway::CONTENT_TREE_TABLE,
+            'parent_node_id',
+            $fields
+        );
+    }
+
     /**
-     * @depends testCreateLocation
+     * @depends      testCreateLocation
      * @dataProvider getNodeAssignmentValues
+     *
+     * @param string $field
+     * @param array $expectedResult
      */
-    public function testCreateLocationNodeAssignmentCreation($field, $value)
+    public function testCreateLocationNodeAssignmentCreation(string $field, array $expectedResult)
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->createNodeAssignment(
+        $gateway = $this->getLocationGateway();
+        $gateway->createNodeAssignment(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -749,22 +837,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'hidden' => 1,
                 ]
             ),
-            '77',
+            77,
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
-        $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            [[$value]],
-            $query
-                ->select($field)
-                ->from('eznode_assignment')
-                ->where(
-                    $query->expr->lAnd(
-                        $query->expr->eq('contentobject_id', 68),
-                        $query->expr->eq('parent_node', 77)
-                    )
-                )
+            [$expectedResult],
+            $this->buildNodeAssignmentSelectContentWithParentQuery(68, 77, [$field])
         );
     }
 
@@ -774,8 +853,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testCreateLocationNodeAssignmentCreationMainLocation()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
-        $handler->createNodeAssignment(
+        $gateway = $this->getLocationGateway();
+        $gateway->createNodeAssignment(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -791,18 +870,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
-        $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             [[1]],
-            $query
-                ->select('is_main')
-                ->from('eznode_assignment')
-                ->where(
-                    $query->expr->lAnd(
-                        $query->expr->eq('contentobject_id', 68),
-                        $query->expr->eq('parent_node', 77)
-                    )
-                )
+            $this->buildNodeAssignmentSelectContentWithParentQuery(68, 77, ['is_main'])
         );
     }
 
@@ -831,7 +901,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway->updateLocationsContentVersionNo(4096, 2);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [
                 [2],
@@ -841,7 +911,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             )->from(
                 'ezcontentobject_tree'
             )->where(
-                $query->expr->eq(
+                $query->expr()->eq(
                     'contentobject_id',
                     4096
                 )
@@ -855,20 +925,18 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testDeleteNodeAssignment()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
+        $gateway = $this->getLocationGateway();
 
-        $handler->deleteNodeAssignment(11);
+        $gateway->deleteNodeAssignment(11);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [[0]],
             $query
                 ->select('count(*)')
                 ->from('eznode_assignment')
                 ->where(
-                    $query->expr->lAnd(
-                        $query->expr->eq('contentobject_id', 11)
-                    )
+                    $query->expr()->eq('contentobject_id', 11)
                 )
         );
     }
@@ -879,33 +947,28 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testDeleteNodeAssignmentWithSecondArgument()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
-        $handler = $this->getLocationGateway();
+        $gateway = $this->getLocationGateway();
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $query
             ->select('count(*)')
             ->from('eznode_assignment')
             ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq('contentobject_id', 11)
-                )
+                $query->expr()->eq('contentobject_id', 11)
             );
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
         $nodeAssignmentsCount = (int)$statement->fetchColumn();
 
-        $handler->deleteNodeAssignment(11, 1);
+        $gateway->deleteNodeAssignment(11, 1);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [[$nodeAssignmentsCount - 1]],
             $query
                 ->select('count(*)')
                 ->from('eznode_assignment')
                 ->where(
-                    $query->expr->lAnd(
-                        $query->expr->eq('contentobject_id', 11)
-                    )
+                    $query->expr()->eq('contentobject_id', 11)
                 )
         );
     }
@@ -933,15 +996,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @depends testCreateLocationNodeAssignmentCreation
+     * @depends      testCreateLocationNodeAssignmentCreation
      * @dataProvider getConvertNodeAssignmentsLocationValues
      */
     public function testConvertNodeAssignments($field, $value)
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
 
-        $handler = $this->getLocationGateway();
-        $handler->createNodeAssignment(
+        $gateway = $this->getLocationGateway();
+        $gateway->createNodeAssignment(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -961,23 +1024,29 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
-        $handler->createLocationsFromNodeAssignments(68, 1);
+        $gateway->createLocationsFromNodeAssignments(68, 1);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
+        $expr = $query->expr();
         $query
             ->select($field)
-            ->from('ezcontentobject_tree')
+            ->from(Gateway::CONTENT_TREE_TABLE)
             ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq('contentobject_id', 68),
-                    $query->expr->eq('parent_node_id', 77)
+                $expr->eq(
+                    'contentobject_id',
+                    $query->createPositionalParameter(68, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->eq(
+                    'parent_node_id',
+                    $query->createPositionalParameter(77, ParameterType::INTEGER)
                 )
             );
 
         if ($field === 'modified_subnode') {
-            $statement = $query->prepare();
-            $statement->execute();
-            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+            $statement = $query->execute();
+            $result = $statement->fetch(FetchMode::ASSOCIATIVE);
             $this->assertGreaterThanOrEqual($value, $result);
         } else {
             $this->assertQueryResult(
@@ -994,8 +1063,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
 
-        $handler = $this->getLocationGateway();
-        $handler->createNodeAssignment(
+        $gateway = $this->getLocationGateway();
+        $gateway->createNodeAssignment(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -1011,24 +1080,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'invisible' => false,
                 ]
             ),
-            '77',
+            77,
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
-        $handler->createLocationsFromNodeAssignments(68, 1);
+        $gateway->createLocationsFromNodeAssignments(68, 1);
 
-        $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             [[228]],
-            $query
-                ->select('main_node_id')
-                ->from('ezcontentobject_tree')
-                ->where(
-                    $query->expr->lAnd(
-                        $query->expr->eq('contentobject_id', 68),
-                        $query->expr->eq('parent_node_id', 77)
-                    )
-                )
+            $this->buildContentTreeSelectContentWithParentQuery(68, 77, ['main_node_id'])
         );
     }
 
@@ -1039,8 +1099,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
 
-        $handler = $this->getLocationGateway();
-        $handler->createNodeAssignment(
+        $gateway = $this->getLocationGateway();
+        $gateway->createNodeAssignment(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -1056,24 +1116,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'invisible' => false,
                 ]
             ),
-            '224',
+            224,
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
-        $handler->createLocationsFromNodeAssignments(68, 1);
+        $gateway->createLocationsFromNodeAssignments(68, 1);
 
-        $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             [[0, 1]],
-            $query
-                ->select('is_hidden, is_invisible')
-                ->from('ezcontentobject_tree')
-                ->where(
-                    $query->expr->lAnd(
-                        $query->expr->eq('contentobject_id', 68),
-                        $query->expr->eq('parent_node_id', 224)
-                    )
-                )
+            $this->buildContentTreeSelectContentWithParentQuery(
+                68,
+                224,
+                ['is_hidden, is_invisible']
+            )
         );
     }
 
@@ -1084,8 +1139,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
 
-        $handler = $this->getLocationGateway();
-        $handler->createNodeAssignment(
+        $gateway = $this->getLocationGateway();
+        $gateway->createNodeAssignment(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -1101,24 +1156,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'invisible' => false,
                 ]
             ),
-            '225',
+            225,
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
-        $handler->createLocationsFromNodeAssignments(68, 1);
+        $gateway->createLocationsFromNodeAssignments(68, 1);
 
-        $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             [[0, 1]],
-            $query
-                ->select('is_hidden, is_invisible')
-                ->from('ezcontentobject_tree')
-                ->where(
-                    $query->expr->lAnd(
-                        $query->expr->eq('contentobject_id', 68),
-                        $query->expr->eq('parent_node_id', 225)
-                    )
-                )
+            $this->buildContentTreeSelectContentWithParentQuery(
+                68,
+                225,
+                ['is_hidden, is_invisible']
+            )
         );
     }
 
@@ -1129,8 +1179,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
 
-        $handler = $this->getLocationGateway();
-        $handler->createNodeAssignment(
+        $gateway = $this->getLocationGateway();
+        $gateway->createNodeAssignment(
             new CreateStruct(
                 [
                     'contentId' => 68,
@@ -1146,20 +1196,11 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
-        $handler->createLocationsFromNodeAssignments(68, 1);
+        $gateway->createLocationsFromNodeAssignments(68, 1);
 
-        $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             [[DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP]],
-            $query
-                ->select('op_code')
-                ->from('eznode_assignment')
-                ->where(
-                    $query->expr->lAnd(
-                        $query->expr->eq('contentobject_id', 68),
-                        $query->expr->eq('parent_node', 77)
-                    )
-                )
+            $this->buildNodeAssignmentSelectContentWithParentQuery(68, 77, ['op_code'])
         );
     }
 
@@ -1171,16 +1212,16 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public function testSetSectionForSubtree()
     {
         $this->insertDatabaseFixture(__DIR__ . '/../../_fixtures/contentobjects.php');
-        $handler = $this->getLocationGateway();
-        $handler->setSectionForSubtree('/1/2/69/70/', 23);
+        $gateway = $this->getLocationGateway();
+        $gateway->setSectionForSubtree('/1/2/69/70/', 23);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [[68], [69]],
             $query
                 ->select('id')
                 ->from('ezcontentobject')
-                ->where($query->expr->eq('section_id', 23))
+                ->where($query->expr()->eq('section_id', 23))
         );
     }
 
@@ -1188,30 +1229,68 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      * Test for the changeMainLocation() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::changeMainLocation
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function testChangeMainLocation()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         // Create additional location and assignment for test purpose
-        $query = $this->handler->createInsertQuery();
-        $query->insertInto($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set($this->handler->quoteColumn('contentobject_id'), $query->bindValue(10, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('contentobject_version'), $query->bindValue(2, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('main_node_id'), $query->bindValue(15, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('node_id'), $query->bindValue(228, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('parent_node_id'), $query->bindValue(227, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('path_string'), $query->bindValue('/1/5/13/228/', null, \PDO::PARAM_STR))
-            ->set($this->handler->quoteColumn('remote_id'), $query->bindValue('asdfg123437', null, \PDO::PARAM_STR));
-        $query->prepare()->execute();
-        $query = $this->handler->createInsertQuery();
-        $query->insertInto($this->handler->quoteTable('eznode_assignment'))
-            ->set($this->handler->quoteColumn('contentobject_id'), $query->bindValue(10, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('contentobject_version'), $query->bindValue(2, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('id'), $query->bindValue(0, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('is_main'), $query->bindValue(0, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('parent_node'), $query->bindValue(227, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('parent_remote_id'), $query->bindValue('5238a276bf8231fbcf8a986cdc82a6a5', null, \PDO::PARAM_STR));
-        $query->prepare()->execute();
+        $connection = $this->getDatabaseConnection();
+        $query = $connection->createQueryBuilder();
+        $query
+            ->insert('ezcontentobject_tree')
+            ->values(
+                [
+                    'contentobject_id' => $query->createPositionalParameter(
+                        10,
+                        ParameterType::INTEGER
+                    ),
+                    'contentobject_version' => $query->createPositionalParameter(
+                        2,
+                        ParameterType::INTEGER
+                    ),
+                    'main_node_id' => $query->createPositionalParameter(15, ParameterType::INTEGER),
+                    'node_id' => $query->createPositionalParameter(228, ParameterType::INTEGER),
+                    'parent_node_id' => $query->createPositionalParameter(
+                        227,
+                        ParameterType::INTEGER
+                    ),
+                    'path_string' => $query->createPositionalParameter(
+                        '/1/5/13/228/',
+                        ParameterType::STRING
+                    ),
+                    'remote_id' => $query->createPositionalParameter(
+                        'asdfg123437',
+                        ParameterType::STRING
+                    ),
+                ]
+            );
+        $query->execute();
+
+        $query = $connection->createQueryBuilder();
+        $query
+            ->insert('eznode_assignment')
+            ->values(
+                [
+                    'contentobject_id' => $query->createPositionalParameter(
+                        10,
+                        ParameterType::INTEGER
+                    ),
+                    'contentobject_version' => $query->createPositionalParameter(
+                        2,
+                        ParameterType::INTEGER
+                    ),
+                    'id' => $query->createPositionalParameter(0, ParameterType::INTEGER),
+                    'is_main' => $query->createPositionalParameter(0, ParameterType::INTEGER),
+                    'parent_node' => $query->createPositionalParameter(227, ParameterType::INTEGER),
+                    'parent_remote_id' => $query->createPositionalParameter(
+                        '5238a276bf8231fbcf8a986cdc82a6a5',
+                        ParameterType::STRING
+                    ),
+                ]
+            );
+        $query->execute();
 
         $gateway = $this->getLocationGateway();
 
@@ -1222,48 +1301,66 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             227 // new main location parent id
         );
 
-        $query = $this->handler->createSelectQuery();
+        $query = $connection->createQueryBuilder();
         $this->assertQueryResult(
             [[228], [228]],
-            $query->select(
-                'main_node_id'
-            )->from(
-                'ezcontentobject_tree'
-            )->where(
-                $query->expr->eq('contentobject_id', 10)
-            )
+            $query
+                ->select('main_node_id')
+                ->from('ezcontentobject_tree')
+                ->where(
+                    $query->expr()->eq(
+                        'contentobject_id',
+                        $query->createPositionalParameter(10, ParameterType::INTEGER)
+                    )
+                )
         );
 
-        $query = $this->handler->createSelectQuery();
+        $query = $connection->createQueryBuilder();
         $this->assertQueryResult(
             [[1]],
-            $query->select(
-                'is_main'
-            )->from(
-                'eznode_assignment'
-            )->where(
-                $query->expr->lAnd(
-                    $query->expr->eq('contentobject_id', 10),
-                    $query->expr->eq('contentobject_version', 2),
-                    $query->expr->eq('parent_node', 227)
+            $query
+                ->select('is_main')
+                ->from('eznode_assignment')
+                ->where(
+                    $query->expr()->andX(
+                        $query->expr()->eq(
+                            'contentobject_id',
+                            $query->createPositionalParameter(10, ParameterType::INTEGER)
+                        ),
+                        $query->expr()->eq(
+                            'contentobject_version',
+                            $query->createPositionalParameter(2, ParameterType::INTEGER)
+                        ),
+                        $query->expr()->eq(
+                            'parent_node',
+                            $query->createPositionalParameter(227, ParameterType::INTEGER)
+                        )
+                    )
                 )
-            )
         );
 
-        $query = $this->handler->createSelectQuery();
+        $query = $connection->createQueryBuilder();
         $this->assertQueryResult(
             [[0]],
-            $query->select(
-                'is_main'
-            )->from(
-                'eznode_assignment'
-            )->where(
-                $query->expr->lAnd(
-                    $query->expr->eq('contentobject_id', 10),
-                    $query->expr->eq('contentobject_version', 2),
-                    $query->expr->eq('parent_node', 44)
+            $query
+                ->select('is_main')
+                ->from('eznode_assignment')
+                ->where(
+                    $query->expr()->andX(
+                        $query->expr()->eq(
+                            'contentobject_id',
+                            $query->createPositionalParameter(10, ParameterType::INTEGER)
+                        ),
+                        $query->expr()->eq(
+                            'contentobject_version',
+                            $query->createPositionalParameter(2, ParameterType::INTEGER)
+                        ),
+                        $query->expr()->eq(
+                            'parent_node',
+                            $query->createPositionalParameter(44, ParameterType::INTEGER)
+                        )
+                    )
                 )
-            )
         );
     }
 
@@ -1290,21 +1387,44 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      * Test for the getFallbackMainNodeData() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::getFallbackMainNodeData
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function testGetFallbackMainNodeData()
+    public function testGetFallbackMainNodeData(): void
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         // Create additional location for test purpose
-        $query = $this->handler->createInsertQuery();
-        $query->insertInto($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set($this->handler->quoteColumn('contentobject_id'), $query->bindValue(12, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('contentobject_version'), $query->bindValue(1, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('main_node_id'), $query->bindValue(13, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('node_id'), $query->bindValue(228, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('parent_node_id'), $query->bindValue(227, null, \PDO::PARAM_INT))
-            ->set($this->handler->quoteColumn('path_string'), $query->bindValue('/1/5/13/228/', null, \PDO::PARAM_STR))
-            ->set($this->handler->quoteColumn('remote_id'), $query->bindValue('asdfg123437', null, \PDO::PARAM_STR));
-        $query->prepare()->execute();
+        $connection = $this->getDatabaseConnection();
+        $query = $connection->createQueryBuilder();
+        $query
+            ->insert('ezcontentobject_tree')
+            ->values(
+                [
+                    'contentobject_id' => $query->createPositionalParameter(
+                        12,
+                        ParameterType::INTEGER
+                    ),
+                    'contentobject_version' => $query->createPositionalParameter(
+                        1,
+                        ParameterType::INTEGER
+                    ),
+                    'main_node_id' => $query->createPositionalParameter(13, ParameterType::INTEGER),
+                    'node_id' => $query->createPositionalParameter(228, ParameterType::INTEGER),
+                    'parent_node_id' => $query->createPositionalParameter(
+                        227,
+                        ParameterType::INTEGER
+                    ),
+                    'path_string' => $query->createPositionalParameter(
+                        '/1/5/13/228/',
+                        ParameterType::STRING
+                    ),
+                    'remote_id' => $query->createPositionalParameter(
+                        'asdfg123437',
+                        ParameterType::STRING
+                    ),
+                ]
+            );
+        $query->execute();
 
         $gateway = $this->getLocationGateway();
         $data = $gateway->getFallbackMainNodeData(12, 13);
@@ -1345,17 +1465,21 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     /**
      * Test for the updatePathIdentificationString() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::updatePathIdentificationString
+     * @covers       \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::updatePathIdentificationString
      * @dataProvider providerForTestUpdatePathIdentificationString
      */
-    public function testUpdatePathIdentificationString($locationId, $parentLocationId, $text, $expected)
-    {
+    public function testUpdatePathIdentificationString(
+        $locationId,
+        $parentLocationId,
+        $text,
+        $expected
+    ) {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
 
         $gateway = $this->getLocationGateway();
         $gateway->updatePathIdentificationString($locationId, $parentLocationId, $text);
 
-        $query = $this->handler->createSelectQuery();
+        $query = $this->getDatabaseConnection()->createQueryBuilder();
         $this->assertQueryResult(
             [[$expected]],
             $query->select(
@@ -1363,7 +1487,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             )->from(
                 'ezcontentobject_tree'
             )->where(
-                $query->expr->eq('node_id', $locationId)
+                $query->expr()->eq('node_id', $locationId)
             )
         );
     }

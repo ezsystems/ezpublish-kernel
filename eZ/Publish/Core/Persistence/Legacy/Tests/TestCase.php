@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\TestCase class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -12,17 +10,20 @@ use Doctrine\Common\EventManager as DoctrineEventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\SharedGateway;
 use eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory;
+use eZ\Publish\SPI\Tests\Persistence\FileFixtureFactory;
+use eZ\Publish\SPI\Tests\Persistence\FixtureImporter;
+use eZ\Publish\SPI\Tests\Persistence\YamlFixture;
 use EzSystems\DoctrineSchema\Database\DbPlatform\SqliteDbPlatform;
-use PHPUnit\Framework\TestCase as BaseTestCase;
 use InvalidArgumentException;
-use ReflectionObject;
 use PDOException;
-use Exception;
+use PHPUnit\Framework\TestCase as BaseTestCase;
+use ReflectionObject;
 use ReflectionProperty;
 
 /**
@@ -106,8 +107,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Get native Doctrine database connection.
-     *
-     * @throws \Doctrine\DBAL\DBALException
      */
     final public function getDatabaseConnection(): Connection
     {
@@ -118,7 +117,11 @@ abstract class TestCase extends BaseTestCase
                 $eventManager
             );
 
-            $this->connection = $connectionFactory->createConnection($this->getDsn());
+            try {
+                $this->connection = $connectionFactory->createConnection($this->getDsn());
+            } catch (DBALException $e) {
+                self::fail('Connection failed: ' . $e->getMessage());
+            }
         }
 
         return $this->connection;
@@ -156,8 +159,6 @@ abstract class TestCase extends BaseTestCase
                 dirname(__DIR__, 5) .
                 '/Bundle/EzPublishCoreBundle/Resources/config/storage/legacy/schema.yaml'
             );
-
-            $this->resetSequences();
         } catch (PDOException | DBALException | ConnectionException $e) {
             self::fail(
                 sprintf(
@@ -196,73 +197,34 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Inserts database fixture from $file.
-     *
-     * @param string $file
+     * Insert a database fixture from the given file.
      */
-    protected function insertDatabaseFixture($file)
+    protected function insertDatabaseFixture(string $file): void
     {
-        $data = require $file;
-        $db = $this->getDatabaseHandler();
-
-        foreach ($data as $table => $rows) {
-            // Check that at least one row exists
-            if (!isset($rows[0])) {
-                continue;
-            }
-
-            $q = $db->createInsertQuery();
-            $q->insertInto($db->quoteIdentifier($table));
-
-            // Contains the bound parameters
-            $values = [];
-
-            // Binding the parameters
-            foreach ($rows[0] as $col => $val) {
-                $q->set(
-                    $db->quoteIdentifier($col),
-                    $q->bindParam($values[$col])
-                );
-            }
-
-            $stmt = $q->prepare();
-
-            foreach ($rows as $row) {
-                try {
-                    // This CANNOT be replaced by:
-                    // $values = $row
-                    // each $values[$col] is a PHP reference which should be
-                    // kept for parameters binding to work
-                    foreach ($row as $col => $val) {
-                        $values[$col] = $val;
-                    }
-
-                    $stmt->execute();
-                } catch (Exception $e) {
-                    echo "$table ( ", implode(', ', $row), " )\n";
-                    throw $e;
-                }
-            }
+        try {
+            $fixtureImporter = new FixtureImporter($this->getDatabaseConnection());
+            $fixtureImporter->import((new FileFixtureFactory())->buildFixture($file));
+        } catch (DBALException $e) {
+            self::fail('Database fixture import failed: ' . $e->getMessage());
         }
-
-        $this->resetSequences();
     }
 
     /**
-     * Reset DB sequences.
+     * Insert test_data.yaml fixture, common for many test cases.
+     *
+     * See: eZ/Publish/API/Repository/Tests/_fixtures/Legacy/data/test_data.yaml
      */
-    public function resetSequences()
+    protected function insertSharedDatabaseFixture(): void
     {
-        switch ($this->db) {
-            case 'pgsql':
-                // Update PostgreSQL sequences
-                $handler = $this->getDatabaseHandler();
-
-                $queries = array_filter(preg_split('(;\\s*$)m',
-                    file_get_contents(__DIR__ . '/_fixtures/setval.pgsql.sql')));
-                foreach ($queries as $query) {
-                    $handler->exec($query);
-                }
+        try {
+            $fixtureImporter = new FixtureImporter($this->getDatabaseConnection());
+            $fixtureImporter->import(
+                new YamlFixture(
+                    __DIR__ . '/../../../../API/Repository/Tests/_fixtures/Legacy/data/test_data.yaml'
+                )
+            );
+        } catch (DBALException $e) {
+            self::fail('Database fixture import failed: ' . $e->getMessage());
         }
     }
 
@@ -277,21 +239,16 @@ abstract class TestCase extends BaseTestCase
      * The expectation MUST be passed as a two dimensional array containing
      * rows of columns.
      *
-     * @param array $expectation
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param string $message
+     * @param array $expectation expected raw database rows
      */
-    public static function assertQueryResult(array $expectation, SelectQuery $query, $message = '')
-    {
-        $statement = $query->prepare();
-        $statement->execute();
+    public static function assertQueryResult(
+        array $expectation,
+        QueryBuilder $query,
+        string $message = ''
+    ): void {
+        $result = $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
 
-        $result = [];
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $result[] = $row;
-        }
-
-        return self::assertEquals(
+        self::assertEquals(
             self::getResultTextRepresentation($expectation),
             self::getResultTextRepresentation($result),
             $message

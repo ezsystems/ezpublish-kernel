@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -20,6 +18,8 @@ use eZ\Publish\Core\Search\Common\FieldRegistry;
  */
 abstract class LanguageAwareTestCase extends TestCase
 {
+    protected const ENG_GB = 'eng-GB';
+
     /**
      * Language handler.
      *

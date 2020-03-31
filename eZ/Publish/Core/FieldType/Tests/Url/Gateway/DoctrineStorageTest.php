@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests\Url\Gateway;
 
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\DoctrineStorage;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 
@@ -180,12 +181,13 @@ class DoctrineStorageTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    protected function getStorageGateway()
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    protected function getStorageGateway(): Gateway
     {
         if (!isset($this->storageGateway)) {
-            $this->storageGateway = new DoctrineStorage(
-                $this->getDatabaseHandler()->getConnection()
-            );
+            $this->storageGateway = new DoctrineStorage($this->getDatabaseConnection());
         }
 
         return $this->storageGateway;
