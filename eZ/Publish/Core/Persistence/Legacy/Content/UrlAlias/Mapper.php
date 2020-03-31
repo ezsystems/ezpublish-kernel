@@ -108,7 +108,7 @@ class Mapper
             switch ($actionType) {
                 case 'eznode':
                     $type = UrlAlias::LOCATION;
-                    $destination = $actionValue;
+                    $destination = (int)$actionValue;
                     break;
 
                 case 'module':
