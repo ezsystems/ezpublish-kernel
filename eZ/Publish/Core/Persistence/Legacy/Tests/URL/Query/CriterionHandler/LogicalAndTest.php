@@ -6,11 +6,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\URL\Query\CriterionHandler;
 
+use Doctrine\DBAL\Query\Expression\CompositeExpression;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion\LogicalAnd;
-use eZ\Publish\Core\Persistence\Database\Expression;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalAnd as LogicalAndHandler;
 
 class LogicalAndTest extends CriterionHandlerTest
@@ -28,8 +27,10 @@ class LogicalAndTest extends CriterionHandlerTest
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
-    public function testHandle()
+    public function testHandle(): void
     {
         $foo = $this->createMock(Criterion::class);
         $bar = $this->createMock(Criterion::class);
@@ -37,33 +38,22 @@ class LogicalAndTest extends CriterionHandlerTest
         $fooExpr = 'FOO';
         $barExpr = 'BAR';
 
-        $expected = 'FOO AND BAR';
+        $expected = '(FOO) AND (BAR)';
 
-        $expr = $this->createMock(Expression::class);
-        $expr
-            ->expects($this->once())
-            ->method('lAnd')
-            ->with([$fooExpr, $barExpr])
-            ->willReturn($expected);
-
-        $query = $this->createMock(SelectQuery::class);
-        $query->expr = $expr;
-
-        $converter = $this->createMock(CriteriaConverter::class);
-        $converter
-            ->expects($this->at(0))
-            ->method('convertCriteria')
-            ->with($query, $foo)
-            ->willReturn($fooExpr);
-        $converter
-            ->expects($this->at(1))
-            ->method('convertCriteria')
-            ->with($query, $bar)
-            ->willReturn($barExpr);
+        $queryBuilder = $this->createMock(QueryBuilder::class);
+        $converter = $this->mockConverterForLogicalOperator(
+            CompositeExpression::TYPE_AND,
+            $queryBuilder,
+            'andX',
+            $fooExpr,
+            $barExpr,
+            $foo,
+            $bar
+        );
 
         $handler = new LogicalAndHandler();
-        $actual = $handler->handle(
-            $converter, $query, new LogicalAnd([$foo, $bar])
+        $actual = (string)$handler->handle(
+            $converter, $queryBuilder, new LogicalAnd([$foo, $bar])
         );
 
         $this->assertEquals($expected, $actual);

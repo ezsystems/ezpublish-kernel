@@ -6,10 +6,9 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\URL\Query\CriterionHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion\LogicalNot;
-use eZ\Publish\Core\Persistence\Database\Expression;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalNot as LogicalNotHandler;
 
@@ -28,33 +27,27 @@ class LogicalNotTest extends CriterionHandlerTest
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
-    public function testHandle()
+    public function testHandle(): void
     {
         $foo = $this->createMock(Criterion::class);
         $fooExpr = 'FOO';
-        $expected = 'NOT FOO';
+        $expected = 'NOT (FOO)';
 
-        $expr = $this->createMock(Expression::class);
-        $expr
-            ->expects($this->once())
-            ->method('not')
-            ->with($fooExpr)
-            ->willReturn($expected);
-
-        $query = $this->createMock(SelectQuery::class);
-        $query->expr = $expr;
+        $queryBuilder = $this->createMock(QueryBuilder::class);
 
         $converter = $this->createMock(CriteriaConverter::class);
         $converter
             ->expects($this->at(0))
             ->method('convertCriteria')
-            ->with($query, $foo)
+            ->with($queryBuilder, $foo)
             ->willReturn($fooExpr);
 
         $handler = new LogicalNotHandler();
         $actual = $handler->handle(
-            $converter, $query, new LogicalNot($foo)
+            $converter, $queryBuilder, new LogicalNot($foo)
         );
 
         $this->assertEquals($expected, $actual);

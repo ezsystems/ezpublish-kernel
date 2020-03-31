@@ -303,6 +303,17 @@ Changes affecting version compatibility with deprecated ezpublish-kernel version
   ```php
   abstract public function getFieldDefinitions(): FieldDefinitionCollection;
   ```
+  
+* The signature of the `\eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler::handle` contract
+  accepts now `\Doctrine\DBAL\Query\QueryBuilder` instead of `\eZ\Publish\Core\Persistence\Database\SelectQuery`
+  and has the following form:
+  ```php
+  use \Doctrine\DBAL\Query\QueryBuilder;
+  use \eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
+  use \eZ\Publish\API\Repository\Values\URL\Query\Criterion;
+
+  public function handle(CriteriaConverter $converter, QueryBuilder $query, Criterion $criterion);
+  ```
 
 ## Removed services
 

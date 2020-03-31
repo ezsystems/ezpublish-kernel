@@ -6,8 +6,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\URL\Query;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 interface CriterionHandler
 {
@@ -15,6 +15,7 @@ interface CriterionHandler
      * Check if this criterion handler accepts to handle the given criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\URL\Query\Criterion $criterion
+     *
      * @return bool
      */
     public function accept(Criterion $criterion);
@@ -24,10 +25,11 @@ interface CriterionHandler
      *
      * accept() must be called before calling this method.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\URL\Query\Criterion $criterion
-     * @return \eZ\Publish\Core\Persistence\Database\Expression|string
+     * @return \Doctrine\DBAL\Query\Expression\CompositeExpression|string
      */
-    public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion);
+    public function handle(
+        CriteriaConverter $converter,
+        QueryBuilder $queryBuilder,
+        Criterion $criterion
+    );
 }

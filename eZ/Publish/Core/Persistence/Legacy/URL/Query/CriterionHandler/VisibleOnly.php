@@ -7,8 +7,9 @@
 namespace eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler;
 
 use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 
 class VisibleOnly extends Base
@@ -24,28 +25,27 @@ class VisibleOnly extends Base
     /**
      * {@inheritdoc}
      */
-    public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion)
-    {
-        $this->joinContentObjectLink($query);
-        $this->joinContentObjectAttribute($query);
+    public function handle(
+        CriteriaConverter $converter,
+        QueryBuilder $queryBuilder,
+        Criterion $criterion
+    ) {
+        $this->joinContentObjectLink($queryBuilder);
+        $this->joinContentObjectAttribute($queryBuilder);
 
-        $currentQuery = $query->getQuery();
-        if (strpos($currentQuery, 'INNER JOIN ezcontentobject_tree') === false) {
-            $query->innerJoin('ezcontentobject_tree', $query->expr->lAnd(
-                $query->expr->eq(
-                    'ezcontentobject_tree.contentobject_id',
-                    'ezcontentobject_attribute.contentobject_id'
-                ),
-                $query->expr->eq(
-                    'ezcontentobject_tree.contentobject_version',
-                    'ezcontentobject_attribute.version'
-                )
-            ));
-        }
+        $queryBuilder->innerJoin(
+            'f_def',
+            Gateway::CONTENT_TREE_TABLE,
+            't',
+            $queryBuilder->expr()->andX(
+                't.contentobject_id = f_def.contentobject_id',
+                't.contentobject_version = f_def.version'
+            )
+        );
 
-        return $query->expr->eq(
-            'ezcontentobject_tree.is_invisible',
-            $query->bindValue(0, null, ParameterType::INTEGER)
+        return $queryBuilder->expr()->eq(
+            't.is_invisible',
+            $queryBuilder->createNamedParameter(0, ParameterType::INTEGER, ':location_is_invisible')
         );
     }
 }

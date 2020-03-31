@@ -6,10 +6,11 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler;
 
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class Pattern implements CriterionHandler
 {
@@ -24,12 +25,19 @@ class Pattern implements CriterionHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion)
-    {
-        /** @var Criterion\Pattern $criterion */
-        return $query->expr->like(
+    public function handle(
+        CriteriaConverter $converter,
+        QueryBuilder $queryBuilder,
+        Criterion $criterion
+    ) {
+        /** @var \eZ\Publish\API\Repository\Values\URL\Query\Criterion\Pattern $criterion */
+        return $queryBuilder->expr()->like(
             'url',
-            $query->bindValue('%' . $criterion->pattern . '%')
+            $queryBuilder->createNamedParameter(
+                '%' . $criterion->pattern . '%',
+                ParameterType::STRING,
+                ':pattern'
+            )
         );
     }
 }

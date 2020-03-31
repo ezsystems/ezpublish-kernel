@@ -6,10 +6,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class LogicalOr implements CriterionHandler
 {
@@ -23,14 +23,19 @@ class LogicalOr implements CriterionHandler
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
-    public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion)
-    {
+    public function handle(
+        CriteriaConverter $converter,
+        QueryBuilder $queryBuilder,
+        Criterion $criterion
+    ) {
         $subexpressions = [];
         foreach ($criterion->criteria as $subCriterion) {
-            $subexpressions[] = $converter->convertCriteria($query, $subCriterion);
+            $subexpressions[] = $converter->convertCriteria($queryBuilder, $subCriterion);
         }
 
-        return $query->expr->lOr($subexpressions);
+        return $queryBuilder->expr()->orX(...$subexpressions);
     }
 }

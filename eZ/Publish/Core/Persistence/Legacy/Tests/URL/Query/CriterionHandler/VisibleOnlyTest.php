@@ -4,12 +4,14 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\URL\Query\CriterionHandler;
 
-use eZ\Publish\API\Repository\Values\URL\Query\Criterion\VisibleOnly;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\Expression;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\VisibleOnly as VisibleOnlyHandler;
 
@@ -18,127 +20,51 @@ class VisibleOnlyTest extends CriterionHandlerTest
     /**
      * {@inheritdoc}
      */
-    public function testAccept()
+    public function testAccept(): void
     {
         $handler = new VisibleOnlyHandler();
 
-        $this->assertHandlerAcceptsCriterion($handler, VisibleOnly::class);
+        $this->assertHandlerAcceptsCriterion($handler, Criterion\VisibleOnly::class);
         $this->assertHandlerRejectsCriterion($handler, Criterion::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @covers \eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\VisibleOnly::handle
+     *
+     * Note: more complex case with multiple Criteria trying to join the same table multiple times
+     * has been covered by integration tests.
      */
-    public function testHandle()
+    public function testHandle(): void
     {
-        $expected = 'ezcontentobject_tree.is_invisible = 0';
+        $expected = 't.is_invisible = :location_is_invisible';
+        $expectedQueryParameters = ['location_is_invisible' => 0];
 
-        $basicQuery = $this->createMock(SelectQuery::class);
-        $basicQuery->method('bindValue')->with(0, null, \PDO::PARAM_INT)->willReturn('0');
-
-        $converter = $this->createMock(CriteriaConverter::class);
+        $criterion = new Criterion\VisibleOnly();
         $handler = new VisibleOnlyHandler();
-        $criterion = new VisibleOnly();
+        $converter = $this->createMock(CriteriaConverter::class);
+        $queryBuilder = $this->createDoctrineQueryBuilder();
 
-        // tables not joined yet - handle should join them
-        $query = clone $basicQuery;
-        $query->expr = $this->getMockExpression(true, true, true);
-        $query->method('getQuery')->willReturn('SELECT');
-        $actual = $handler->handle($converter, $query, $criterion);
+        $actual = $handler->handle($converter, $queryBuilder, $criterion);
         $this->assertEquals($expected, $actual);
-
-        // table link already joined, should not join again
-        $query = clone $basicQuery;
-        $query->expr = $this->getMockExpression(false, true, true);
-        $query->method('getQuery')->willReturn('(SELECT) INNER JOIN ezurl_object_link (ON)');
-        $actual = $handler->handle($converter, $query, $criterion);
-        $this->assertEquals($expected, $actual);
-
-        // table link and attribute already joined, should not join again
-        $query = clone $basicQuery;
-        $query->expr = $this->getMockExpression(false, false, true);
-        $query->method('getQuery')->willReturn(
-            '(SELECT) INNER JOIN ezurl_object_link (ON) '
-            . 'INNER JOIN ezcontentobject_attribute (ON)'
-        );
-        $actual = $handler->handle($converter, $query, $criterion);
-        $this->assertEquals($expected, $actual);
-
-        // table link, attribute, and tree already joined, should not join again
-        $query = clone $basicQuery;
-        $query->expr = $this->getMockExpression(false, false, false);
-        $query->method('getQuery')->willReturn(
-            '(SELECT) INNER JOIN ezurl_object_link (ON) ' .
-            'INNER JOIN ezcontentobject_attribute (ON) ' .
-            'INNER JOIN ezcontentobject_tree (ON)'
-        );
-        $actual = $handler->handle($converter, $query, $criterion);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expectedQueryParameters, $queryBuilder->getParameters());
     }
 
     /**
-     * @param bool $includeLinkJoin
-     * @param bool $includeAttributeJoin
-     * @param bool $includeTreeJoin
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * Instantiate 3rd party ExpressionBuilder and QueryBuilder with Connection mock.
+     *
+     * NOTE: This is not the safest approach (all 3rd party classes should be mocked),
+     * but it's the quickest way to avoid complex mocks out of test scope.
      */
-    private function getMockExpression(bool $includeLinkJoin, bool $includeAttributeJoin, bool $includeTreeJoin)
+    private function createDoctrineQueryBuilder(): QueryBuilder
     {
-        $execAt = 0;
-        $expr = $this->createMock(Expression::class);
-        if ($includeLinkJoin) {
-            $expr
-                ->expects($this->at($execAt++))
-                ->method('eq')
-                ->with('ezurl.id', 'ezurl_object_link.url_id')
-                ->willReturn('ezurl.id=ezurl_object_link.url_id');
-        }
-        if ($includeAttributeJoin) {
-            $expr
-                ->expects($this->at($execAt++))
-                ->method('eq')
-                ->with('ezurl_object_link.contentobject_attribute_id', 'ezcontentobject_attribute.id')
-                ->willReturn('ezurl_object_link.contentobject_attribute_id = ezcontentobject_attribute.id');
-            $expr
-                ->expects($this->at($execAt++))
-                ->method('eq')
-                ->with('ezurl_object_link.contentobject_attribute_version', 'ezcontentobject_attribute.version')
-                ->willReturn('ezurl_object_link.contentobject_attribute_version = ezcontentobject_attribute.version');
-            $expr
-                ->expects($this->at($execAt++))
-                ->method('lAnd')
-                ->with(
-                    'ezurl_object_link.contentobject_attribute_id = ezcontentobject_attribute.id',
-                    'ezurl_object_link.contentobject_attribute_version = ezcontentobject_attribute.version'
-                )->willReturn('ezurl_object_link.contentobject_attribute_id = ezcontentobject_attribute.id AND ezurl_object_link.contentobject_attribute_version = ezcontentobject_attribute.version');
-        }
+        $connection = $this->createMock(Connection::class);
 
-        if ($includeTreeJoin) {
-            $expr
-                ->expects($this->at($execAt++))
-                ->method('eq')
-                ->with('ezcontentobject_tree.contentobject_id', 'ezcontentobject_attribute.contentobject_id')
-                ->willReturn('ezcontentobject_tree.contentobject_id = ezcontentobject_attribute.contentobject_id');
-            $expr
-                ->expects($this->at($execAt++))
-                ->method('eq')
-                ->with('ezcontentobject_tree.contentobject_version', 'ezcontentobject_attribute.version')
-                ->willReturn('ezcontentobject_tree.contentobject_version = ezcontentobject_attribute.version');
-            $expr
-                ->expects($this->at($execAt++))
-                ->method('lAnd')
-                ->with(
-                    'ezcontentobject_tree.contentobject_id = ezcontentobject_attribute.contentobject_id',
-                    'ezcontentobject_tree.contentobject_version = ezcontentobject_attribute.version'
-                )->willReturn('ezcontentobject_tree.contentobject_id = ezcontentobject_attribute.contentobject_id AND ezcontentobject_tree.contentobject_version = ezcontentobject_attribute.version');
-        }
+        $expressionBuilder = new ExpressionBuilder($connection);
+        $connection
+            ->expects($this->any())
+            ->method('getExpressionBuilder')
+            ->willReturn($expressionBuilder);
 
-        $expr
-            ->expects($this->at($execAt))
-            ->method('eq')
-            ->with('ezcontentobject_tree.is_invisible', '0')
-            ->willReturn('ezcontentobject_tree.is_invisible = 0');
-
-        return $expr;
+        return new QueryBuilder($connection);
     }
 }

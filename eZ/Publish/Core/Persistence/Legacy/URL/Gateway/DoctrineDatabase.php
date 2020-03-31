@@ -6,14 +6,18 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\URL\Gateway;
 
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\API\Repository\Values\URL\Query\SortClause;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\URL\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\URL\URL;
-use PDO;
+use RuntimeException;
 
 /**
  * URL gateway implementation using the Doctrine.
@@ -31,12 +35,13 @@ class DoctrineDatabase extends Gateway
     const COLUMN_MODIFIED = 'modified';
     const COLUMN_CREATED = 'created';
 
-    /**
-     * Database handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     */
-    protected $handler;
+    const SORT_DIRECTION_MAP = [
+        SortClause::SORT_ASC => 'ASC',
+        SortClause::SORT_DESC => 'DESC',
+    ];
+
+    /** @var \Doctrine\DBAL\Connection */
+    protected $connection;
 
     /**
      * Criteria converter.
@@ -45,15 +50,9 @@ class DoctrineDatabase extends Gateway
      */
     protected $criteriaConverter;
 
-    /**
-     * Creates a new Doctrine database Section Gateway.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter $criteriaConverter
-     */
-    public function __construct(DatabaseHandler $dbHandler, CriteriaConverter $criteriaConverter)
+    public function __construct(Connection $connection, CriteriaConverter $criteriaConverter)
     {
-        $this->handler = $dbHandler;
+        $this->connection = $connection;
         $this->criteriaConverter = $criteriaConverter;
     }
 
@@ -64,7 +63,7 @@ class DoctrineDatabase extends Gateway
     {
         $count = $doCount ? $this->doCount($criterion) : null;
         if (!$doCount && $limit === 0) {
-            throw new \RuntimeException('Invalid query. Cannot disable count and request 0 items at the same time');
+            throw new RuntimeException('Invalid query. Cannot disable count and request 0 items at the same time');
         }
 
         if ($limit === 0 || ($count !== null && $count <= $offset)) {
@@ -75,77 +74,60 @@ class DoctrineDatabase extends Gateway
         }
 
         $query = $this->createSelectDistinctQuery();
-        $query->where($this->criteriaConverter->convertCriteria($query, $criterion));
-        $query->limit($limit > 0 ? $limit : PHP_INT_MAX, $offset);
+        $query
+            ->where($this->criteriaConverter->convertCriteria($query, $criterion))
+            ->setMaxResults($limit > 0 ? $limit : PHP_INT_MAX)
+            ->setFirstResult($offset);
 
         foreach ($sortClauses as $sortClause) {
-            $column = $this->handler->quoteColumn($sortClause->target, self::URL_TABLE);
-
-            $direction = SelectQuery::ASC;
-            if ($sortClause->direction === SortClause::SORT_DESC) {
-                $direction = SelectQuery::DESC;
-            }
-
-            $query->orderBy($column, $direction);
+            $column = sprintf('url.%s', $sortClause->target);
+            $query->addOrderBy($column, $this->getQuerySortingDirection($sortClause->direction));
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
         return [
             'count' => $count,
-            'rows' => $statement->fetchAll(PDO::FETCH_ASSOC),
+            'rows' => $statement->fetchAll(FetchMode::ASSOCIATIVE),
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findUsages($id)
+    public function findUsages($id): array
     {
-        $query = $this->handler->createSelectQuery();
-        $query->selectDistinct(
-            $this->handler->quoteColumn('id', 'ezcontentobject')
-        )->from(
-            $this->handler->quoteTable('ezcontentobject')
-        )->innerJoin(
-            $this->handler->quoteTable('ezcontentobject_attribute'),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('id', 'ezcontentobject'),
-                    $this->handler->quoteColumn(
-                        'contentobject_id',
-                        'ezcontentobject_attribute'
-                    )
-                ),
-                $query->expr->eq(
-                    $this->handler->quoteColumn('current_version', 'ezcontentobject'),
-                    $this->handler->quoteColumn('version', 'ezcontentobject_attribute')
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select('DISTINCT c.id')
+            ->from(ContentGateway::CONTENT_ITEM_TABLE, 'c')
+            ->innerJoin(
+                'c',
+                ContentGateway::CONTENT_FIELD_TABLE,
+                'f_def',
+                $expr->andX(
+                    'c.id = f_def.contentobject_id',
+                    'c.current_version = f_def.version'
                 )
             )
-        )->innerJoin(
-            $this->handler->quoteTable(self::URL_LINK_TABLE),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('id', 'ezcontentobject_attribute'),
-                    $this->handler->quoteColumn('contentobject_attribute_id', self::URL_LINK_TABLE)
-                ),
-                $query->expr->eq(
-                    $this->handler->quoteColumn('version', 'ezcontentobject_attribute'),
-                    $this->handler->quoteColumn('contentobject_attribute_version', self::URL_LINK_TABLE)
+            ->innerJoin(
+                'f_def',
+                self::URL_LINK_TABLE,
+                'u_lnk',
+                $expr->andX(
+                    'f_def.id = u_lnk.contentobject_attribute_id',
+                    'f_def.version = u_lnk.contentobject_attribute_version'
                 )
             )
-        )->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn('url_id', self::URL_LINK_TABLE),
-                $query->bindValue($id, null, PDO::PARAM_INT)
-            )
-        );
+            ->where(
+                $expr->eq(
+                    'u_lnk.url_id',
+                    $query->createPositionalParameter($id, ParameterType::INTEGER)
+                )
+            );
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return array_column($statement->fetchAll(PDO::FETCH_ASSOC), 'id');
+        return $query->execute()->fetchAll(FetchMode::COLUMN);
     }
 
     /**
@@ -153,122 +135,133 @@ class DoctrineDatabase extends Gateway
      */
     public function updateUrl(URL $url)
     {
-        $query = $this->handler->createUpdateQuery();
-        $query->update(
-            $this->handler->quoteTable(self::URL_TABLE)
-        )->set(
-            $this->handler->quoteColumn(self::COLUMN_URL),
-            $query->bindValue($url->url)
-        )->set(
-            $this->handler->quoteColumn(self::COLUMN_ORIGINAL_URL_MD5),
-            $query->bindValue($url->originalUrlMd5)
-        )->set(
-            $this->handler->quoteColumn(self::COLUMN_MODIFIED),
-            $query->bindValue($url->modified, null, PDO::PARAM_INT)
-        )->set(
-            $this->handler->quoteColumn(self::COLUMN_IS_VALID),
-            $query->bindValue((int)$url->isValid, null, PDO::PARAM_INT)
-        )->set(
-            $this->handler->quoteColumn(self::COLUMN_LAST_CHECKED),
-            $query->bindValue($url->lastChecked, null, PDO::PARAM_INT)
-        )->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn(self::COLUMN_ID),
-                $query->bindValue($url->id, null, PDO::PARAM_INT)
-            )
-        );
-
-        $query->prepare()->execute();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadUrlData($id)
-    {
-        $query = $this->createSelectQuery();
-        $query->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn(self::COLUMN_ID),
-                $query->bindValue($id, null, PDO::PARAM_INT)
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadUrlDataByUrl($url)
-    {
-        $query = $this->createSelectQuery();
-        $query->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn(self::COLUMN_URL),
-                $query->bindValue($url, null, PDO::PARAM_STR)
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doCount(Criterion $criterion)
-    {
-        $columnName = $this->handler->quoteColumn(self::COLUMN_ID, self::URL_TABLE);
-
-        $query = $this->handler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query
-            ->select("COUNT(DISTINCT $columnName)")
-            ->from($this->handler->quoteTable(self::URL_TABLE))
+            ->update(self::URL_TABLE)
+            ->set(
+                self::COLUMN_URL,
+                $query->createPositionalParameter($url->url, ParameterType::STRING)
+            )->set(
+                self::COLUMN_ORIGINAL_URL_MD5,
+                $query->createPositionalParameter($url->originalUrlMd5, ParameterType::STRING)
+            )
+            ->set(
+                self::COLUMN_MODIFIED,
+                $query->createPositionalParameter($url->modified, ParameterType::INTEGER)
+            )
+            ->set(
+                self::COLUMN_IS_VALID,
+                $query->createPositionalParameter((int)$url->isValid, ParameterType::INTEGER)
+            )
+            ->set(
+                self::COLUMN_LAST_CHECKED,
+                $query->createPositionalParameter($url->lastChecked, ParameterType::INTEGER)
+            )
+            ->where(
+                $query->expr()->eq(
+                    self::COLUMN_ID,
+                    $query->createPositionalParameter($url->id, ParameterType::INTEGER)
+                )
+            );
+
+        $query->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadUrlData($id): array
+    {
+        $query = $this->createSelectQuery();
+        $query->where(
+            $query->expr()->eq(
+                self::COLUMN_ID,
+                $query->createPositionalParameter($id, ParameterType::INTEGER)
+            )
+        );
+
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadUrlDataByUrl($url): array
+    {
+        $query = $this->createSelectQuery();
+        $query->where(
+            $query->expr()->eq(
+                self::COLUMN_URL,
+                $query->createPositionalParameter($url, ParameterType::STRING)
+            )
+        );
+
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     */
+    protected function doCount(Criterion $criterion): int
+    {
+        $columnName = self::COLUMN_ID;
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select("COUNT(DISTINCT url.{$columnName})")
+            ->from(self::URL_TABLE, 'url')
             ->where($this->criteriaConverter->convertCriteria($query, $criterion));
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return (int)$statement->fetchColumn();
+        return (int)$query->execute()->fetchColumn();
     }
 
     /**
      * Creates a Url find query.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    protected function createSelectQuery(): SelectQuery
+    protected function createSelectQuery(): QueryBuilder
     {
-        return $this->handler
-            ->createSelectQuery()
-            ->select(...$this->getSelectColumns())
-            ->from($this->handler->quoteTable(self::URL_TABLE));
+        return $this->connection
+            ->createQueryBuilder()
+            ->select($this->getSelectColumns())
+            ->from(self::URL_TABLE, 'url');
     }
 
-    private function createSelectDistinctQuery(): SelectQuery
+    private function createSelectDistinctQuery(): QueryBuilder
     {
-        return $this->handler
-            ->createSelectQuery()
-            ->selectDistinct(...$this->getSelectColumns())
-            ->from($this->handler->quoteTable(self::URL_TABLE));
+        return $this->connection
+            ->createQueryBuilder()
+            ->select(sprintf('DISTINCT %s', implode(', ', $this->getSelectColumns())))
+            ->from(self::URL_TABLE, 'url');
     }
 
     private function getSelectColumns(): array
     {
         return [
-            $this->handler->quoteColumn(self::COLUMN_ID, self::URL_TABLE),
-            $this->handler->quoteColumn(self::COLUMN_URL, self::URL_TABLE),
-            $this->handler->quoteColumn(self::COLUMN_ORIGINAL_URL_MD5, self::URL_TABLE),
-            $this->handler->quoteColumn(self::COLUMN_IS_VALID, self::URL_TABLE),
-            $this->handler->quoteColumn(self::COLUMN_LAST_CHECKED, self::URL_TABLE),
-            $this->handler->quoteColumn(self::COLUMN_CREATED, self::URL_TABLE),
-            $this->handler->quoteColumn(self::COLUMN_MODIFIED, self::URL_TABLE),
+            sprintf('url.%s', self::COLUMN_ID),
+            sprintf('url.%s', self::COLUMN_URL),
+            sprintf('url.%s', self::COLUMN_ORIGINAL_URL_MD5),
+            sprintf('url.%s', self::COLUMN_IS_VALID),
+            sprintf('url.%s', self::COLUMN_LAST_CHECKED),
+            sprintf('url.%s', self::COLUMN_CREATED),
+            sprintf('url.%s', self::COLUMN_MODIFIED),
         ];
+    }
+
+    /**
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
+    private function getQuerySortingDirection(string $direction): string
+    {
+        if (!isset(self::SORT_DIRECTION_MAP[$direction])) {
+            throw new InvalidArgumentException(
+                '$sortClause->direction',
+                sprintf(
+                    'Unsupported "%s" sorting directions, use one of the SortClause::SORT_* constants instead',
+                    $direction
+                )
+            );
+        }
+
+        return self::SORT_DIRECTION_MAP[$direction];
     }
 }

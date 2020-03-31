@@ -6,10 +6,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class MatchNone implements CriterionHandler
 {
@@ -24,8 +24,11 @@ class MatchNone implements CriterionHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion)
-    {
-        return $query->expr->not($query->bindValue('1'));
+    public function handle(
+        CriteriaConverter $converter,
+        QueryBuilder $queryBuilder,
+        Criterion $criterion
+    ) {
+        return '1 = 0';
     }
 }

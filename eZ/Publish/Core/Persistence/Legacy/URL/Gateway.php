@@ -28,6 +28,9 @@ abstract class Gateway
      * @param SortClause[] $sortClauses
      * @param bool $doCount
      * @return array
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException if Criterion is not applicable to its target
      */
     abstract public function find(Criterion $criterion, $offset, $limit, array $sortClauses = [], $doCount = true);
 

@@ -2,7 +2,7 @@ services:
     ezpublish.persistence.legacy.url.gateway.inner:
         class: eZ\Publish\Core\Persistence\Legacy\URL\Gateway\DoctrineDatabase
         arguments:
-            - '@ezpublish.api.storage_engine.legacy.dbhandler'
+            - '@ezpublish.persistence.connection'
             - '@ezpublish.spi.persistence.legacy.url.criterion_converter'
 
     ezpublish.persistence.legacy.url.gateway.exception_conversion:

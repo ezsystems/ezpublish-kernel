@@ -6,9 +6,9 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\URL\Query\CriterionHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion\MatchAll;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\URL\Query\CriterionHandler\MatchAll as MatchAllHandler;
 
@@ -31,19 +31,13 @@ class MatchAllTest extends CriterionHandlerTest
     public function testHandle()
     {
         $criterion = new MatchAll();
-        $expected = ':value';
+        $expected = '1 = 1';
 
-        $query = $this->createMock(SelectQuery::class);
-        $query
-            ->expects($this->once())
-            ->method('bindValue')
-            ->with('1')
-            ->willReturn(':value');
-
+        $queryBuilder = $this->createMock(QueryBuilder::class);
         $converter = $this->createMock(CriteriaConverter::class);
 
         $handler = new MatchAllHandler();
-        $actual = $handler->handle($converter, $query, $criterion);
+        $actual = $handler->handle($converter, $queryBuilder, $criterion);
 
         $this->assertEquals($expected, $actual);
     }

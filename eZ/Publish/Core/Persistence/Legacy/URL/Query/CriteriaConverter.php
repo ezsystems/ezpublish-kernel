@@ -6,9 +6,9 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\URL\Query;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\URL\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class CriteriaConverter
 {
@@ -44,15 +44,13 @@ class CriteriaConverter
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException if Criterion is not applicable to its target
      *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\URL\Query\Criterion $criterion
-     * @return \eZ\Publish\Core\Persistence\Database\Expression|string
+     * @return \Doctrine\DBAL\Query\Expression\CompositeExpression|string
      */
-    public function convertCriteria(SelectQuery $query, Criterion $criterion)
+    public function convertCriteria(QueryBuilder $queryBuilder, Criterion $criterion)
     {
         foreach ($this->handlers as $handler) {
             if ($handler->accept($criterion)) {
-                return $handler->handle($this, $query, $criterion);
+                return $handler->handle($this, $queryBuilder, $criterion);
             }
         }
 

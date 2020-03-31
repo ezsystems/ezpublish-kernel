@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\URL\UsageSearchResult;
 /**
  * Test case for operations in the UserService using in memory storage.
  *
- * @see eZ\Publish\API\Repository\URLService
+ * @see \eZ\Publish\API\Repository\URLService
  * @group integration
  * @group url
  */
