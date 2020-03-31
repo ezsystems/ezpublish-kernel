@@ -86,6 +86,35 @@ final class DoctrineDatabase extends Gateway
         return $role;
     }
 
+    public function copyRole(Role $role): Role
+    {
+        $status = $role->status;
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::ROLE_TABLE)
+            ->values(
+                [
+                    'is_new' => $query->createPositionalParameter(0, ParameterType::INTEGER),
+                    'name' => $query->createPositionalParameter(
+                        $role->identifier,
+                        ParameterType::STRING
+                    ),
+                    'value' => $query->createPositionalParameter(0, ParameterType::INTEGER),
+                    // BC: "version" stores originalId when creating a draft from an existing role
+                    'version' => $query->createPositionalParameter(
+                        $status,
+                        ParameterType::STRING
+                    ),
+                ]
+            );
+        $query->execute();
+
+        $role->id = (int)$this->connection->lastInsertId(self::ROLE_SEQ);
+
+        return $role;
+    }
+
     private function getLoadRoleQueryBuilder(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();

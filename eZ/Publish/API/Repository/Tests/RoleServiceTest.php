@@ -11,9 +11,12 @@ namespace eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleCopyStruct;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
 
@@ -52,6 +55,20 @@ class RoleServiceTest extends BaseTest
         $roleCreate = $roleService->newRoleCreateStruct('roleName');
 
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct', $roleCreate);
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\RoleService::newRoleCopyStruct
+     */
+    public function testNewRoleCopyStruct(): void
+    {
+        $repository = $this->getRepository();
+
+        $roleService = $repository->getRoleService();
+        $roleCopy = $roleService->newRoleCopyStruct('copiedRole');
+
+        $this->assertSame('copiedRole', $roleCopy->newIdentifier);
+        $this->assertSame([], $roleCopy->getPolicies());
     }
 
     /**
@@ -499,6 +516,179 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->fail('Role draft object still exists after rollback.');
+    }
+
+    public function providerForCopyRoleTests(): array
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        $roleCreateStruct = $roleService->newRoleCreateStruct('newRole');
+        $roleCopyStruct = $roleService->newRoleCopyStruct('copiedRole');
+
+        $policyCreateStruct1 = $roleService->newPolicyCreateStruct('content', 'read');
+        $policyCreateStruct2 = $roleService->newPolicyCreateStruct('content', 'edit');
+
+        $roleLimitations = [
+            new SectionLimitation(['limitationValues' => [2]]),
+            new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
+        ];
+
+        $policyCreateStruct1WithLimitations = $roleService->newPolicyCreateStruct('content', 'read');
+        foreach ($roleLimitations as $roleLimitation) {
+            $policyCreateStruct1WithLimitations->addLimitation($roleLimitation);
+        }
+
+        return [
+            'without-policies' => [
+                $roleCreateStruct,
+                $roleCopyStruct,
+                [],
+            ],
+            'with-policies' => [
+                $roleCreateStruct,
+                $roleCopyStruct,
+                [$policyCreateStruct1, $policyCreateStruct2],
+            ],
+            'with-limitations' => [
+                $roleCreateStruct,
+                $roleCopyStruct,
+                [$policyCreateStruct1WithLimitations, $policyCreateStruct2],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider providerForCopyRoleTests
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::copyRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCopyStruct
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     */
+    public function testCopyRole(RoleCreateStruct $roleCreateStruct, RoleCopyStruct $roleCopyStruct): void
+    {
+        $repository = $this->getRepository();
+
+        $roleService = $repository->getRoleService();
+
+        $roleDraft = $roleService->createRole($roleCreateStruct);
+
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
+
+        $copiedRole = $roleService->copyRole($role, $roleCopyStruct);
+
+        // Now verify that our change was saved
+        $role = $roleService->loadRoleByIdentifier('copiedRole');
+
+        $this->assertEquals($role->id, $copiedRole->id);
+        $this->assertEquals('copiedRole', $role->identifier);
+        $this->assertEmpty($role->getPolicies());
+    }
+
+    /**
+     * Test for the copyRole() method with added policies.
+     *
+     * @dataProvider providerForCopyRoleTests
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::copyRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCopyStruct
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[] $policies
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     */
+    public function testCopyRoleWithPolicies(
+        RoleCreateStruct $roleCreateStruct,
+        RoleCopyStruct $roleCopyStruct,
+        array $policies
+    ): void {
+        $repository = $this->getRepository();
+
+        $roleService = $repository->getRoleService();
+
+        foreach ($policies as $policy) {
+            $roleCreateStruct->addPolicy($policy);
+        }
+
+        $roleDraft = $roleService->createRole($roleCreateStruct);
+
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
+
+        $copiedRole = $roleService->copyRole($role, $roleCopyStruct);
+
+        // Now verify that our change was saved
+        $role = $roleService->loadRoleByIdentifier('copiedRole');
+
+        $this->assertEquals($role->getPolicies(), $copiedRole->getPolicies());
+    }
+
+    /**
+     * Test for the copyRole() method with added policies and limitations.
+     *
+     * @dataProvider providerForCopyRoleTests
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::copyRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCopyStruct
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[] $policies
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     */
+    public function testCopyRoleWithPoliciesAndLimitations(
+        RoleCreateStruct $roleCreateStruct,
+        RoleCopyStruct $roleCopyStruct,
+        array $policies
+    ): void {
+        $repository = $this->getRepository();
+
+        $roleService = $repository->getRoleService();
+
+        foreach ($policies as $policy) {
+            $roleCreateStruct->addPolicy($policy);
+        }
+
+        $roleDraft = $roleService->createRole($roleCreateStruct);
+
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
+
+        $copiedRole = $roleService->copyRole($role, $roleCopyStruct);
+
+        // Now verify that our change was saved
+        $role = $roleService->loadRoleByIdentifier('copiedRole');
+
+        $limitations = [];
+        foreach ($role->getPolicies() as $policy) {
+            $limitations[$policy->function] = $policy->getLimitations();
+        }
+
+        $limitationsCopied = [];
+        foreach ($copiedRole->getPolicies() as $policy) {
+            $limitationsCopied[$policy->function] = $policy->getLimitations();
+        }
+
+        $this->assertEquals($role->getPolicies(), $copiedRole->getPolicies());
+        foreach ($limitations as $policy => $limitation) {
+            $this->assertEquals($limitation, $limitationsCopied[$policy]);
+        }
     }
 
     /**

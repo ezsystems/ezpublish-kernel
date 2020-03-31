@@ -48,6 +48,11 @@ abstract class Role extends ValueObject
      */
     protected $status;
 
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
     /**
      * Returns the list of policies of this role.
      *

@@ -13,6 +13,7 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface;
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
+use eZ\Publish\SPI\Persistence\User\RoleCopyStruct;
 use eZ\Publish\SPI\Persistence\User\RoleCreateStruct;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
@@ -273,6 +274,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['role' => $roleId]);
 
         return $this->persistenceHandler->userHandler()->createRoleDraft($roleId);
+    }
+
+    public function copyRole(RoleCopyStruct $copyStruct): Role
+    {
+        $this->logger->logCall(__METHOD__, ['struct' => $copyStruct]);
+
+        return $this->persistenceHandler->userHandler()->copyRole($copyStruct);
     }
 
     /**

@@ -140,6 +140,11 @@ interface Handler
     public function createRoleDraft($roleId);
 
     /**
+     * Copies an existing role.
+     */
+    public function copyRole(RoleCopyStruct $copyStruct): Role;
+
+    /**
      * Loads a specified role (draft) by $roleId.
      *
      * @param mixed $roleId

@@ -13,6 +13,7 @@ use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Handler as BaseUserHandler;
 use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\RoleCopyStruct;
 use eZ\Publish\SPI\Persistence\User\RoleCreateStruct;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
@@ -289,6 +290,21 @@ class Handler implements BaseUserHandler
 
         foreach ($role->policies as $policy) {
             $this->addPolicyByRoleDraft($role->id, $policy);
+        }
+
+        return $role;
+    }
+
+    public function copyRole(RoleCopyStruct $copyStruct): Role
+    {
+        $role = $this->mapper->createRoleFromCopyStruct(
+            $copyStruct
+        );
+
+        $this->roleGateway->copyRole($role);
+
+        foreach ($role->policies as $policy) {
+            $this->addPolicy($role->id, $policy);
         }
 
         return $role;

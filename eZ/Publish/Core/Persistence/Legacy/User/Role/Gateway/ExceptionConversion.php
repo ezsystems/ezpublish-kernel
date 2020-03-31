@@ -47,6 +47,15 @@ final class ExceptionConversion extends Gateway
         }
     }
 
+    public function copyRole(Role $role): Role
+    {
+        try {
+            return $this->innerGateway->copyRole($role);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
+        }
+    }
+
     public function loadRole(int $roleId, int $status = Role::STATUS_DEFINED): array
     {
         try {

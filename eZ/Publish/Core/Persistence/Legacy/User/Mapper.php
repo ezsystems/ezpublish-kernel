@@ -242,4 +242,18 @@ class Mapper
 
         return $role;
     }
+
+    /**
+     * Maps properties from $struct to $role.
+     */
+    public function createRoleFromCopyStruct(User\RoleCopyStruct $copyStruct): Role
+    {
+        $role = new Role();
+
+        $role->identifier = $copyStruct->newIdentifier;
+        $role->policies = $copyStruct->policies;
+        $role->status = Role::STATUS_DEFINED;
+
+        return $role;
+    }
 }
