@@ -1,21 +1,18 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase Content search Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway;
 
+use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex;
 use eZ\Publish\Core\Search\Legacy\Content\FullTextData;
-use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPITypeHandler;
-use eZ\Publish\SPI\Search\Field;
 
 /**
  * WordIndexer gateway implementation using the Doctrine database.
@@ -29,13 +26,8 @@ class DoctrineDatabase extends Gateway
      */
     const DB_INT_MAX = 2147483647;
 
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
+    /** @var \Doctrine\DBAL\Connection */
+    protected $connection;
 
     /**
      * SPI Content Type Handler.
@@ -74,25 +66,15 @@ class DoctrineDatabase extends Gateway
      */
     protected $fullTextSearchConfiguration;
 
-    /**
-     * Construct from handler handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $typeHandler
-     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
-     * @param \eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex $searchIndex
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
-     * @param array $fullTextSearchConfiguration
-     */
     public function __construct(
-        DatabaseHandler $dbHandler,
+        Connection $connection,
         SPITypeHandler $typeHandler,
         TransformationProcessor $transformationProcessor,
         SearchIndex $searchIndex,
         MaskGenerator $languageMaskGenerator,
         array $fullTextSearchConfiguration
     ) {
-        $this->dbHandler = $dbHandler;
+        $this->connection = $connection;
         $this->typeHandler = $typeHandler;
         $this->transformationProcessor = $transformationProcessor;
         $this->searchIndex = $searchIndex;
@@ -167,7 +149,7 @@ class DoctrineDatabase extends Gateway
         }
 
         $wordIDArray = $this->buildWordIDArray(array_keys($indexArrayOnlyWords));
-        $this->dbHandler->beginTransaction();
+        $this->connection->beginTransaction();
         for ($arrayCount = 0; $arrayCount < $wordCount; $arrayCount += 1000) {
             $placement = $this->indexWords(
                 $fullTextData,
@@ -176,7 +158,7 @@ class DoctrineDatabase extends Gateway
                 $placement
             );
         }
-        $this->dbHandler->commit();
+        $this->connection->commit();
     }
 
     /**
@@ -209,7 +191,7 @@ class DoctrineDatabase extends Gateway
     public function remove($contentId, $versionId = null)
     {
         $doDelete = false;
-        $this->dbHandler->beginTransaction();
+        $this->connection->beginTransaction();
         // fetch all the words and decrease the object count on all the words
         $wordIDList = $this->searchIndex->getContentObjectWords($contentId);
         if (count($wordIDList) > 0) {
@@ -220,7 +202,7 @@ class DoctrineDatabase extends Gateway
             $this->searchIndex->deleteWordsWithoutObjects();
             $this->searchIndex->deleteObjectWordsLink($contentId);
         }
-        $this->dbHandler->commit();
+        $this->connection->commit();
 
         return true;
     }
@@ -313,7 +295,7 @@ class DoctrineDatabase extends Gateway
         $wordArray = [];
 
         // store the words in the index and remember the ID
-        $this->dbHandler->beginTransaction();
+        $this->connection->beginTransaction();
         for ($arrayCount = 0; $arrayCount < $wordCount; $arrayCount += 500) {
             // Fetch already indexed words from database
             $wordArrayChuck = array_slice($indexArrayOnlyWords, $arrayCount, 500);
@@ -345,7 +327,7 @@ class DoctrineDatabase extends Gateway
                 }
             }
         }
-        $this->dbHandler->commit();
+        $this->connection->commit();
 
         return $wordArray;
     }

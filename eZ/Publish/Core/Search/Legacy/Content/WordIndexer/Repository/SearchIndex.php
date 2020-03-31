@@ -1,266 +1,266 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository;
 
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use PDO;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * A service encapsulating database operations on ezsearch* tables.
  */
 class SearchIndex
 {
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
+    public const SEARCH_WORD_TABLE = 'ezsearch_word';
+    public const SEARCH_OBJECT_WORD_LINK_TABLE = 'ezsearch_object_word_link';
 
-    /**
-     * SearchIndex constructor.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     */
-    public function __construct(
-        DatabaseHandler $dbHandler
-    ) {
-        $this->dbHandler = $dbHandler;
+    protected $connection;
+
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
     }
 
     /**
      * Fetch already indexed words from database (legacy db table: ezsearch_word).
      *
-     * @param array $words
-     *
-     * @return array
+     * @param string[] $words
      */
-    public function getWords(array $words)
+    public function getWords(array $words): array
     {
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
 
-        // use array_map as some DBMS-es do not cast integers to strings by default
-        $query->select('*')
-            ->from('ezsearch_word')
-            ->where($query->expr->in('word', array_map('strval', $words)));
+        $query
+            ->select('*')
+            ->from(self::SEARCH_WORD_TABLE)
+            ->where($query->expr()->in('word', ':words'))
+            // use array_map as some DBMS-es do not cast integers to strings by default
+            ->setParameter('words', array_map('strval', $words), Connection::PARAM_STR_ARRAY);
 
-        $stmt = $query->prepare();
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
      * Increase the object count of the given words by one.
      *
-     * @param array $wordId
+     * @param int[] $wordId
      */
-    public function incrementWordObjectCount(array $wordId)
+    public function incrementWordObjectCount(array $wordId): void
     {
-        $this->updateWordObjectCount($wordId, ['object_count' => 'object_count + 1']);
+        $this
+            ->getWordUpdateQuery($wordId)
+            ->set('object_count', 'object_count + 1')
+            ->execute();
     }
 
     /**
      * Decrease the object count of the given words by one.
      *
-     * @param array $wordId
+     * @param int[] $wordId
      */
-    public function decrementWordObjectCount(array $wordId)
+    public function decrementWordObjectCount(array $wordId): void
     {
-        $this->updateWordObjectCount($wordId, ['object_count' => 'object_count - 1']);
+        $this
+            ->getWordUpdateQuery($wordId)
+            ->set('object_count', 'object_count - 1')
+            ->execute();
     }
 
     /**
      * Insert new words (legacy db table: ezsearch_word).
      *
-     * @param array $words
+     * @param string[] $words
      */
-    public function addWords(array $words)
+    public function addWords(array $words): void
     {
-        $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto('ezsearch_word');
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::SEARCH_WORD_TABLE)
+            ->values(
+                [
+                    'word' => ':word',
+                    'object_count' => ':one',
+                ]
+            )
+            ->setParameter(':one', 1, ParameterType::INTEGER);
 
-        $word = null;
-
-        $query->set(
-            'word',
-            ':word'
-        )->set(
-            'object_count',
-            '1'
-        );
-        $stmt = $query->prepare();
         foreach ($words as $word) {
-            $stmt->execute(['word' => $word]);
+            $query->setParameter('word', $word);
+            $query->execute();
         }
     }
 
     /**
      * Remove entire search index.
      */
-    public function purge()
+    public function purge(): void
     {
-        $this->dbHandler->beginTransaction();
-        $query = $this->dbHandler->createDeleteQuery();
-        $tables = [
-            'ezsearch_object_word_link',
-            'ezsearch_word',
+        $this->connection->beginTransaction();
+        $searchIndexTables = [
+            self::SEARCH_OBJECT_WORD_LINK_TABLE,
+            self::SEARCH_WORD_TABLE,
         ];
-        foreach ($tables as $tbl) {
-            $query->deleteFrom($tbl);
-            $stmt = $query->prepare();
-            $stmt->execute();
+        foreach ($searchIndexTables as $tableName) {
+            $this->connection
+                ->createQueryBuilder()
+                ->delete($tableName)
+                ->execute();
         }
-        $this->dbHandler->commit();
+        $this->connection->commit();
     }
 
     /**
      * Link word with specific content object (legacy db table: ezsearch_object_word_link).
-     *
-     * @param $wordId
-     * @param $contentId
-     * @param $frequency
-     * @param $placement
-     * @param $nextWordId
-     * @param $prevWordId
-     * @param $contentTypeId
-     * @param $fieldTypeId
-     * @param $published
-     * @param $sectionId
-     * @param $identifier
-     * @param $integerValue
-     * @param $languageMask
      */
-    public function addObjectWordLink($wordId,
-                                      $contentId,
-                                      $frequency,
-                                      $placement,
-                                      $nextWordId,
-                                      $prevWordId,
-                                      $contentTypeId,
-                                      $fieldTypeId,
-                                      $published,
-                                      $sectionId,
-                                      $identifier,
-                                      $integerValue,
-                                      $languageMask
-    ) {
-        $assoc = [
-            'word_id' => $wordId,
-            'contentobject_id' => $contentId,
-            'frequency' => $frequency,
-            'placement' => $placement,
-            'next_word_id' => $nextWordId,
-            'prev_word_id' => $prevWordId,
-            'contentclass_id' => $contentTypeId,
-            'contentclass_attribute_id' => $fieldTypeId,
-            'published' => $published,
-            'section_id' => $sectionId,
-            'identifier' => $identifier,
-            'integer_value' => $integerValue,
-            'language_mask' => $languageMask,
-        ];
-        $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto('ezsearch_object_word_link');
-        foreach ($assoc as $column => $value) {
-            $query->set($this->dbHandler->quoteColumn($column), $query->bindValue($value));
-        }
-        $stmt = $query->prepare();
-        $stmt->execute();
+    public function addObjectWordLink(
+        int $wordId,
+        int $contentId,
+        float $frequency,
+        int $placement,
+        int $nextWordId,
+        int $prevWordId,
+        int $contentTypeId,
+        int $fieldTypeId,
+        int $published,
+        int $sectionId,
+        string $identifier,
+        int $integerValue,
+        int $languageMask
+    ): void {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->insert(self::SEARCH_OBJECT_WORD_LINK_TABLE)
+            ->values(
+                [
+                    'word_id' => $query->createPositionalParameter($wordId, ParameterType::INTEGER),
+                    'contentobject_id' => $query->createPositionalParameter(
+                        $contentId,
+                        ParameterType::INTEGER
+                    ),
+                    'frequency' => $query->createPositionalParameter($frequency),
+                    'placement' => $query->createPositionalParameter(
+                        $placement,
+                        ParameterType::INTEGER
+                    ),
+                    'next_word_id' => $query->createPositionalParameter(
+                        $nextWordId,
+                        ParameterType::INTEGER
+                    ),
+                    'prev_word_id' => $query->createPositionalParameter(
+                        $prevWordId,
+                        ParameterType::INTEGER
+                    ),
+                    'contentclass_id' => $query->createPositionalParameter(
+                        $contentTypeId,
+                        ParameterType::INTEGER
+                    ),
+                    'contentclass_attribute_id' => $query->createPositionalParameter(
+                        $fieldTypeId,
+                        ParameterType::INTEGER
+                    ),
+                    'published' => $query->createPositionalParameter(
+                        $published,
+                        ParameterType::INTEGER
+                    ),
+                    'section_id' => $query->createPositionalParameter(
+                        $sectionId,
+                        ParameterType::INTEGER
+                    ),
+                    'identifier' => $query->createPositionalParameter(
+                        $identifier,
+                        ParameterType::STRING
+                    ),
+                    'integer_value' => $query->createPositionalParameter(
+                        $integerValue,
+                        ParameterType::INTEGER
+                    ),
+                    'language_mask' => $query->createPositionalParameter(
+                        $languageMask,
+                        ParameterType::INTEGER
+                    ),
+                ]
+            );
+
+        $query->execute();
     }
 
     /**
      * Get all words related to the content object (legacy db table: ezsearch_object_word_link).
-     *
-     * @param $contentId
-     *
-     * @return array
      */
-    public function getContentObjectWords($contentId)
+    public function getContentObjectWords(int $contentId): array
     {
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('word_id')
+            ->from(self::SEARCH_OBJECT_WORD_LINK_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'contentobject_id',
+                    $query->createPositionalParameter($contentId, ParameterType::INTEGER)
+                )
+            );
 
-        $this->setContentObjectWordsSelectQuery($query);
-
-        $stmt = $query->prepare();
-        $stmt->execute(['contentId' => $contentId]);
-
-        $wordIDList = [];
-
-        while (false !== ($row = $stmt->fetch(PDO::FETCH_NUM))) {
-            $wordIDList[] = $row[0];
-        }
-
-        return $wordIDList;
+        return $query->execute()->fetchAll(FetchMode::COLUMN);
     }
 
     /**
      * Delete words not related to any content object.
      */
-    public function deleteWordsWithoutObjects()
+    public function deleteWordsWithoutObjects(): int
     {
-        $query = $this->dbHandler->createDeleteQuery();
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::SEARCH_WORD_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'object_count',
+                    $query->createPositionalParameter(0, ParameterType::INTEGER)
+                )
+            );
 
-        $query->deleteFrom($this->dbHandler->quoteTable('ezsearch_word'))
-            ->where($query->expr->eq($this->dbHandler->quoteColumn('object_count'), ':c'));
-
-        $stmt = $query->prepare();
-        $stmt->execute(['c' => 0]);
+        return $query->execute();
     }
 
     /**
      * Delete relation between a word and a content object.
-     *
-     * @param $contentId
      */
-    public function deleteObjectWordsLink($contentId)
+    public function deleteObjectWordsLink(int $contentId): int
     {
-        $query = $this->dbHandler->createDeleteQuery();
-        $query->deleteFrom($this->dbHandler->quoteTable('ezsearch_object_word_link'))
-            ->where($query->expr->eq($this->dbHandler->quoteColumn('contentobject_id'), ':contentId'));
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete(self::SEARCH_OBJECT_WORD_LINK_TABLE)
+            ->where(
+                $query->expr()->eq(
+                    'contentobject_id',
+                    $query->createPositionalParameter($contentId, ParameterType::INTEGER)
+                )
+            );
 
-        $stmt = $query->prepare();
-        $stmt->execute(['contentId' => $contentId]);
+        return $query->execute();
     }
 
     /**
-     * Set query selecting word ids for content object (method was extracted to be reusable).
+     * Build ezsearch_word update query, without any columns set.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
+     * @param array $wordIds list of word IDs
      */
-    private function setContentObjectWordsSelectQuery(SelectQuery $query)
+    private function getWordUpdateQuery(array $wordIds): QueryBuilder
     {
-        $query->select('word_id')
-            ->from($this->dbHandler->quoteTable('ezsearch_object_word_link'))
-            ->where($query->expr->eq($this->dbHandler->quoteColumn('contentobject_id'), ':contentId'));
-    }
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update(self::SEARCH_WORD_TABLE)
+            ->where(
+                $query->expr()->in(
+                    'id',
+                    $query->createPositionalParameter($wordIds, Connection::PARAM_INT_ARRAY)
+                )
+            );
 
-    /**
-     * Update object count for words (legacy db table: ezsearch_word).
-     *
-     * @param array $wordId list of word IDs
-     * @param array $columns map of columns and values to be updated ([column => value])
-     */
-    private function updateWordObjectCount(array $wordId, array $columns)
-    {
-        $query = $this->dbHandler->createUpdateQuery();
-        $query->update($this->dbHandler->quoteTable('ezsearch_word'));
-
-        foreach ($columns as $column => $value) {
-            $query->set($this->dbHandler->quoteColumn($column), $value);
-        }
-
-        $query->where($query->expr->in($this->dbHandler->quoteColumn('id'), $wordId));
-
-        $stmt = $query->prepare();
-        $stmt->execute();
+        return $query;
     }
 }

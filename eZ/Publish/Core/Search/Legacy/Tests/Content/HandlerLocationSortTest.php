@@ -90,10 +90,10 @@ class HandlerLocationSortTest extends AbstractTestCase
                 $this->getLanguageHandler()
             ),
             new Content\WordIndexer\Gateway\DoctrineDatabase(
-                $this->getDatabaseHandler(),
+                $this->getDatabaseConnection(),
                 $this->getContentTypeHandler(),
                 $this->getDefinitionBasedTransformationProcessor(),
-                new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler()),
+                new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseConnection()),
                 $this->getLanguageMaskGenerator(),
                 $this->getFullTextSearchConfiguration()
             ),

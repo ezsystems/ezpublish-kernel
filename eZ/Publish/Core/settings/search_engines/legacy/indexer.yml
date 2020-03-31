@@ -1,15 +1,13 @@
 services:
-    ezpublish.search.legacy.gateway.wordIndexer:
-        class: eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway\DoctrineDatabase
+    eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway\DoctrineDatabase:
         arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
-            - "@ezpublish.spi.persistence.content_type_handler"
-            - "@ezpublish.api.storage_engine.transformation_processor"
-            - "@ezpublish.search.legacy.repository.searchIndex"
-            - "@ezpublish.persistence.legacy.language.mask_generator"
-            - "%ezpublish.search.legacy.criterion_handler.full_text.configuration%"
+            $connection: '@ezpublish.persistence.connection'
+            $typeHandler: '@ezpublish.spi.persistence.content_type_handler'
+            $transformationProcessor: '@ezpublish.api.storage_engine.transformation_processor'
+            $searchIndex: '@eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex'
+            $languageMaskGenerator: '@ezpublish.persistence.legacy.language.mask_generator'
+            $fullTextSearchConfiguration: '%ezpublish.search.legacy.criterion_handler.full_text.configuration%'
 
-    ezpublish.search.legacy.repository.searchIndex:
-        class: eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex
+    eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Repository\SearchIndex:
         arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            $connection: '@ezpublish.persistence.connection'

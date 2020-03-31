@@ -69,13 +69,13 @@ services:
     ezpublish.spi.search.legacy:
         class: eZ\Publish\Core\Search\Legacy\Content\Handler
         arguments:
-            - "@ezpublish.search.legacy.gateway.content"
-            - "@ezpublish.search.legacy.gateway.location"
-            - "@ezpublish.search.legacy.gateway.wordIndexer"
-            - "@ezpublish.persistence.legacy.content.mapper"
-            - "@ezpublish.persistence.legacy.location.mapper"
-            - "@ezpublish.spi.persistence.language_handler"
-            - "@ezpublish.search.legacy.fulltext_mapper"
+            $gateway: '@ezpublish.search.legacy.gateway.content'
+            $locationGateway: '@ezpublish.search.legacy.gateway.location'
+            $indexerGateway: '@eZ\Publish\Core\Search\Legacy\Content\WordIndexer\Gateway\DoctrineDatabase'
+            $contentMapper: '@ezpublish.persistence.legacy.content.mapper'
+            $locationMapper: '@ezpublish.persistence.legacy.location.mapper'
+            $languageHandler: '@ezpublish.spi.persistence.language_handler'
+            $mapper: '@ezpublish.search.legacy.fulltext_mapper'
         tags:
             - {name: ezpublish.searchEngine, alias: legacy}
         lazy: true
