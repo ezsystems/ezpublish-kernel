@@ -260,6 +260,8 @@ Changes affecting version compatibility with deprecated ezpublish-kernel version
   Security package of Symfony framework to provide authenticated user, as it may happen there are
   different ways of providing users configured in the application (ref.: https://symfony.com/doc/current/security/user_provider.html).
 
+* Legacy (SQL) Search Engine will no longer treat deprecated `%` as a search wildcard. Use `*` instead.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.

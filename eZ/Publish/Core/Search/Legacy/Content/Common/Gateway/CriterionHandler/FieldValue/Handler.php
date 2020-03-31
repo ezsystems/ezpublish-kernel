@@ -105,17 +105,7 @@ abstract class Handler
                 break;
 
             case Criterion\Operator::LIKE:
-                if (strpos($criterion->value, '%') !== false) {
-                    // @deprecated In 6.13.x/7.3.x and higher, to be removed in 8.0
-                    @trigger_error(
-                        "Usage of '%' in Operator::LIKE criteria with Legacy Search Engine was never intended, " .
-                        "and is deprecated for removal in 8.0. Please use '*' like in FullText, works across engines",
-                        E_USER_DEPRECATED
-                    );
-                    $value = $this->lowerCase($criterion->value);
-                } else {
-                    $value = str_replace('*', '%', $this->prepareLikeString($criterion->value));
-                }
+                $value = str_replace('*', '%', $this->prepareLikeString($criterion->value));
 
                 $filter = $query->expr->like(
                     $column,

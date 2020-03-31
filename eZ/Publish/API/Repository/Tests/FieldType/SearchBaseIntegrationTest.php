@@ -1113,16 +1113,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         $criteria = new Field('data', Operator::LIKE, $valueTwo);
 
         $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
-
-        // BC support for "%" for Legacy Storage engine only
-        // @deprecated In 6.13.x/7.3.x and higher, to be removed in 8.0
-        if (!$this->supportsLikeWildcard($valueTwo) || get_class($this->getSetupFactory()) !== Legacy::class) {
-            return;
-        }
-
-        $criteria = new Field('data', Operator::LIKE, substr_replace($valueTwo, '%', 1, 1));
-
-        $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
     }
 
     /**
