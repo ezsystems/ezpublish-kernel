@@ -49,7 +49,7 @@ class RouterTest extends RouterBaseTest
         putenv('EZPUBLISH_SITEACCESS=' . self::UNDEFINED_SA_NAME);
 
         $this->expectException(InvalidSiteAccessException::class);
-        $this->expectExceptionMessageRegExp(
+        $this->expectExceptionMessageMatches(
             '/^Invalid SiteAccess \'' . self::UNDEFINED_SA_NAME . '\', matched by .+\\. Valid SiteAccesses are/'
         );
 
@@ -62,7 +62,7 @@ class RouterTest extends RouterBaseTest
         putenv('EZPUBLISH_SITEACCESS=' . self::UNDEFINED_SA_NAME);
 
         $this->expectException(InvalidSiteAccessException::class);
-        $this->expectExceptionMessageRegExp(
+        $this->expectExceptionMessageMatches(
             '/^Invalid SiteAccess \'' . self::UNDEFINED_SA_NAME . '\', matched by .+\\.$/'
         );
 
