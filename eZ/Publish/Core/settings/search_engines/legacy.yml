@@ -83,10 +83,10 @@ services:
     ezpublish.spi.search.legacy.indexer:
         class: eZ\Publish\Core\Search\Legacy\Content\Indexer
         arguments:
-            - "@logger"
-            - "@ezpublish.api.storage_engine"
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
-            - "@ezpublish.spi.search.legacy"
+            $logger: '@logger'
+            $persistenceHandler: '@ezpublish.api.storage_engine'
+            $connection: '@ezpublish.persistence.connection'
+            $searchHandler: "@ezpublish.spi.search.legacy"
         tags:
             - {name: ezpublish.searchEngineIndexer, alias: legacy}
         lazy: true

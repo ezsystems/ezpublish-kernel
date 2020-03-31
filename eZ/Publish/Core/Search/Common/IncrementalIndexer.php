@@ -1,16 +1,14 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Common;
 
+use Doctrine\DBAL\FetchMode;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
-use PDO;
 
 /**
  * Base class for the Search Engine Indexer Service aimed to recreate Search Engine Index.
@@ -46,7 +44,7 @@ abstract class IncrementalIndexer extends Indexer
         do {
             $contentIds = [];
             for ($k = 0; $k <= $iterationCount; ++$k) {
-                if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                if (!$row = $stmt->fetch(FetchMode::ASSOCIATIVE)) {
                     break;
                 }
 

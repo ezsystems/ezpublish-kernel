@@ -1,18 +1,17 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
+use Doctrine\DBAL\Connection;
 use Exception;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use eZ\Publish\Core\Search\Legacy\Content\Handler as LegacySearchHandler;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use Psr\Log\LoggerInterface;
 
@@ -21,10 +20,10 @@ class Indexer extends IncrementalIndexer
     public function __construct(
         LoggerInterface $logger,
         PersistenceHandler $persistenceHandler,
-        DatabaseHandler $databaseHandler,
+        Connection $connection,
         LegacySearchHandler $searchHandler
     ) {
-        parent::__construct($logger, $persistenceHandler, $databaseHandler, $searchHandler);
+        parent::__construct($logger, $persistenceHandler, $connection, $searchHandler);
     }
 
     public function getName()
@@ -38,7 +37,7 @@ class Indexer extends IncrementalIndexer
         foreach ($contentIds as $contentId) {
             try {
                 $info = $contentHandler->loadContentInfo($contentId);
-                if ($info->isPublished) {
+                if ($info->status === ContentInfo::STATUS_PUBLISHED) {
                     $this->searchHandler->indexContent(
                         $contentHandler->load($info->id, $info->currentVersionNo)
                     );
