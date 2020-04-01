@@ -54,7 +54,6 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
                 'ez-user-' . $user->id,
                 'ez-user-' . $this->escapeForCacheKey($user->login) . '-by-login',
                 'ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email',
-                'ez-users-' . $this->escapeForCacheKey($user->email) . '-by-email',
                 //'ez-user-' . $hash . '-by-account-key',
             ];
         };
