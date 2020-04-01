@@ -284,6 +284,7 @@ EOT
         }
 
         $progress = new ProgressBar($output);
+        $progress->setFormat('very_verbose');
         $progress->start($iterations);
 
         if ($processCount > 1) {
