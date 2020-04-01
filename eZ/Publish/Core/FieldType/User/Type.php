@@ -259,6 +259,7 @@ class Type extends FieldType
                 $value->plainPassword,
                 $value->passwordHashType
             );
+            $value->passwordUpdatedAt = new DateTimeImmutable();
         }
 
         return new FieldValue(

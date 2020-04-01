@@ -1789,6 +1789,13 @@ class UserServiceTest extends BaseTest
                 'enabled' => $user->enabled,
             ]
         );
+
+        // Make sure passwordUpdatedAt field has been updated together with password
+        $this->assertNotNull($user->passwordUpdatedAt);
+        $this->assertEquals(
+            (new DateTime())->format('Y-m-d H:i'),
+            $user->passwordUpdatedAt->format('Y-m-d H:i')
+        );
     }
 
     /**
