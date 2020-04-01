@@ -48,6 +48,7 @@ class RejectExplicitFrontControllerRequestsListenerTest extends TestCase
 
     /**
      * @dataProvider validRequestDataProvider
+     * @doesNotPerformAssertions
      */
     public function testOnKernelRequest(Request $request)
     {
