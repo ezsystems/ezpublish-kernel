@@ -236,8 +236,7 @@ VALUES (1,'standard','','Standard','ezcontentnavigationpart'),
        (3,'media','','Media','ezmedianavigationpart');
 
 INSERT INTO "ezsite_data" ("name", "value")
-VALUES ('ezplatform-release','3.0.0'),
-       ('ezpublish-version','8.0.0');
+VALUES ('ezplatform-release','3.0.0');
 
 INSERT INTO "ezurlalias" ("destination_url", "forward_to_id", "id", "is_imported", "is_internal", "is_wildcard", "source_md5", "source_url")
 VALUES ('content/view/full/2',0,12,1,1,0,'d41d8cd98f00b204e9800998ecf8427e',''),
