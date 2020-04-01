@@ -5263,7 +5263,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($writerUser);
 
         $this->expectException(CoreUnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/The User does not have the \'publish\' \'content\' permission/');
+        $this->expectExceptionMessageMatches('/The User does not have the \'publish\' \'content\' permission/');
 
         $this->createContentVersion1();
     }
@@ -5748,7 +5748,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $content = $this->createMultipleLanguageContentVersion2();
         $draft = $this->contentService->createContentDraft($content->contentInfo);
         $this->expectException(APIInvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/The version \(ContentId=\d+, VersionNo=\d+\) is not translated into ger-DE/');
+        $this->expectExceptionMessageMatches('/The version \(ContentId=\d+, VersionNo=\d+\) is not translated into ger-DE/');
         $this->contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
     }
 

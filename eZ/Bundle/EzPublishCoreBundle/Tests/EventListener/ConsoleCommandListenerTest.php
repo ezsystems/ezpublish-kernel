@@ -62,7 +62,7 @@ class ConsoleCommandListenerTest extends TestCase
     public function testInvalidSiteAccessDev()
     {
         $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);
-        $this->expectExceptionMessageRegExp('/^Invalid SiteAccess \'foo\', matched by .+\\. Valid SiteAccesses are/');
+        $this->expectExceptionMessageMatches('/^Invalid SiteAccess \'foo\', matched by .+\\. Valid SiteAccesses are/');
 
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
@@ -75,7 +75,7 @@ class ConsoleCommandListenerTest extends TestCase
     public function testInvalidSiteAccessProd()
     {
         $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);
-        $this->expectExceptionMessageRegExp('/^Invalid SiteAccess \'foo\', matched by .+\\.$/');
+        $this->expectExceptionMessageMatches('/^Invalid SiteAccess \'foo\', matched by .+\\.$/');
 
         $this->dispatcher->expects($this->never())
             ->method('dispatch');

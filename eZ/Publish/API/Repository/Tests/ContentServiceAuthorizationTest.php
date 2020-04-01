@@ -84,7 +84,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $contentCreate->alwaysAvailable = true;
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'create\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'create\' \'content\'/');
 
         $this->contentService->createContent($contentCreate);
     }
@@ -100,7 +100,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'create\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'create\' \'content\'/');
 
         $this->createContentDraftVersion1();
     }
@@ -117,7 +117,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         // $contentId contains a content object ID not accessible for anonymous
         $this->contentService->loadContentInfo($contentId);
@@ -172,7 +172,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContentInfoByRemoteId($anonymousRemoteId);
     }
@@ -190,7 +190,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadVersionInfo($contentInfo);
     }
@@ -208,7 +208,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadVersionInfo($contentInfo, 2);
     }
@@ -225,7 +225,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadVersionInfoById($anonymousUserId);
     }
@@ -242,7 +242,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadVersionInfoById($anonymousUserId, 2);
     }
@@ -261,7 +261,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $this->expectException(UnauthorizedException::class);
         // content versionread policy is needed because it is a draft
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->loadVersionInfoById(
             $contentDraft->id,
@@ -282,7 +282,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByContentInfo($contentInfo);
     }
@@ -300,7 +300,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByContentInfo($contentInfo, ['eng-US']);
     }
@@ -318,7 +318,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByContentInfo($contentInfo, ['eng-US'], 2);
     }
@@ -338,7 +338,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByVersionInfo($versionInfo);
     }
@@ -358,7 +358,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByVersionInfo($versionInfo, ['eng-US']);
     }
@@ -375,7 +375,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContent($anonymousUserId);
     }
@@ -392,7 +392,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContent($anonymousUserId, ['eng-US']);
     }
@@ -409,7 +409,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContent($anonymousUserId, ['eng-US'], 2);
     }
@@ -434,7 +434,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // Try to load the draft with anonymous user to make sure access won't be allowed by throwing an exception
         $this->expectException(UnauthorizedException::class);
         // content versionread policy is needed because it is a draft
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->loadContent($draft->id);
     }
@@ -480,7 +480,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $this->expectException(UnauthorizedException::class);
         // content versionread policy is needed because it is a draft
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->loadContent($objectUpdated->id, null, 1);
     }
@@ -498,7 +498,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByRemoteId($anonymousRemoteId);
     }
@@ -516,7 +516,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByRemoteId($anonymousRemoteId, ['eng-US']);
     }
@@ -534,7 +534,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->setRestrictedEditorUser();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadContentByRemoteId($anonymousRemoteId, ['eng-US'], 2);
     }
@@ -562,7 +562,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $metadataUpdate->modificationDate = $this->createDateTime();
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'edit\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'edit\' \'content\'/');
 
         $this->contentService->updateContentMetadata(
             $contentInfo,
@@ -585,7 +585,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'remove\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'remove\' \'content\'/');
 
         $this->contentService->deleteContent($contentInfo);
     }
@@ -605,7 +605,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'edit\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'edit\' \'content\'/');
 
         $this->contentService->createContentDraft($contentInfo);
     }
@@ -626,7 +626,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'edit\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'edit\' \'content\'/');
 
         $this->contentService->createContentDraft($contentInfo, $versionInfo);
     }
@@ -655,7 +655,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->loadContentDrafts();
     }
@@ -671,7 +671,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->loadContentDrafts($this->administratorUser);
     }
@@ -699,7 +699,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $this->expectException(UnauthorizedException::class);
         /* TODO - the `content/edit` policy should be probably needed */
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->updateContent($versionInfo, $contentUpdate);
     }
@@ -717,7 +717,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'publish\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'publish\' \'content\'/');
 
         $this->contentService->publishVersion($draft->getVersionInfo());
     }
@@ -735,7 +735,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'versionremove\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionremove\' \'content\'/');
 
         $this->contentService->deleteVersion($draft->getVersionInfo());
     }
@@ -755,7 +755,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->loadVersions($contentInfo);
     }
@@ -788,7 +788,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->copyContent(
             $contentInfo,
@@ -820,7 +820,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->copyContent(
             $contentVersion2->contentInfo,
@@ -850,7 +850,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($mediaEditor);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'read\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'read\' \'content\'/');
 
         $this->contentService->loadRelations($versionInfo);
     }
@@ -868,7 +868,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->loadRelations($draft->versionInfo);
     }
@@ -890,7 +890,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($mediaEditor);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'reverserelatedlist\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'reverserelatedlist\' \'content\'/');
 
         $this->contentService->loadReverseRelations($contentInfo);
     }
@@ -914,7 +914,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->addRelation(
             $versionInfo,
@@ -947,7 +947,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessageRegExp('/\'versionread\' \'content\'/');
+        $this->expectExceptionMessageMatches('/\'versionread\' \'content\'/');
 
         $this->contentService->deleteRelation($versionInfo, $media);
     }
