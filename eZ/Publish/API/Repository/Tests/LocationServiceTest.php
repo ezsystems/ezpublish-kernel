@@ -1045,7 +1045,7 @@ class LocationServiceTest extends BaseTest
     public function testLoadParentLocationsForDraftContentThrowsBadStateException(Content $contentDraft)
     {
         $this->expectException(BadStateException::class);
-        $this->expectExceptionMessageRegExp('/is already published/');
+        $this->expectExceptionMessageMatches('/is already published/');
 
         $repository = $this->getRepository(false);
         $locationService = $repository->getLocationService();
