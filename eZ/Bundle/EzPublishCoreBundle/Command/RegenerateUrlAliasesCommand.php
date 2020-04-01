@@ -78,6 +78,11 @@ EOT;
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'Only Locations with provided ID\'s will have URL aliases regenerated',
                 []
+            )->addOption(
+                'force',
+                'f',
+                InputOption::VALUE_NONE,
+                'Prevents confirmation dialog when used with --no-interaction. Please use it carefully.'
             )->setHelp(
                 <<<EOT
 {$beforeRunningHints}
@@ -123,17 +128,21 @@ EOT
             return 0;
         }
 
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion(
-            sprintf(
-                "<info>Found %d Locations.</info>\n%s\n<info>Do you want to proceed? [y/N] </info>",
-                $locationsCount,
-                self::BEFORE_RUNNING_HINTS
-            ),
-            false
-        );
-        if (!$helper->ask($input, $output, $question)) {
-            return 0;
+        if (!$input->getOption('no-interaction')) {
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion(
+                sprintf(
+                    "<info>Found %d Locations.</info>\n%s\n<info>Do you want to proceed? [y/N] </info>",
+                    $locationsCount,
+                    self::BEFORE_RUNNING_HINTS
+                ),
+                false
+            );
+            if (!$helper->ask($input, $output, $question)) {
+                return 0;
+            }
+        } elseif (!$input->getOption('force')) {
+            return 1;
         }
 
         $this->regenerateSystemUrlAliases($output, $locationsCount, $locationIds, $iterationCount);
