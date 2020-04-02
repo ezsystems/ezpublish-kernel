@@ -17,7 +17,9 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\F
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PoliciesConfigBuilder;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PolicyProviderInterface;
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\QueryType\QueryType;
+use eZ\Publish\SPI\MVC\EventSubscriber\ConfigScopeChangeSubscriber;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -143,6 +145,16 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         $container->registerForAutoconfiguration(QueryType::class)
             ->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG);
+
+        $container->registerForAutoconfiguration(ConfigScopeChangeSubscriber::class)
+                  ->addTag(
+                      'kernel.event_listener',
+                      ['method' => 'onConfigScopeChange', 'event' => MVCEvents::CONFIG_SCOPE_CHANGE]
+                  )
+                  ->addTag(
+                      'kernel.event_listener',
+                      ['method' => 'onConfigScopeChange', 'event' => MVCEvents::CONFIG_SCOPE_RESTORE]
+                  );
     }
 
     /**

@@ -6,18 +6,29 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler;
 
+use eZ\Publish\API\Repository\URLService;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MailToHandler extends AbstractURLHandler
+class MailToHandler extends AbstractConfigResolverBasedURLHandler
 {
     const MAILTO_PATTERN = '/^mailto:(.+)@([^?]+)(\\?.*)?$/';
+
+    public function __construct(
+        URLService $urlService,
+        ConfigResolverInterface $configResolver
+    ) {
+        parent::__construct($urlService, $configResolver, 'url_handler.mailto.options');
+    }
 
     /**
      * {@inheritdoc}
      */
     public function validate(array $urls)
     {
-        if (!$this->options['enabled']) {
+        $options = $this->getOptions();
+
+        if (!$options['enabled']) {
             return;
         }
 
@@ -30,12 +41,7 @@ class MailToHandler extends AbstractURLHandler
         }
     }
 
-    /**
-     * Returns options resolver.
-     *
-     * @return OptionsResolver
-     */
-    protected function getOptionsResolver()
+    protected function getOptionsResolver(): OptionsResolver
     {
         $resolver = new OptionsResolver();
         $resolver->setDefaults([

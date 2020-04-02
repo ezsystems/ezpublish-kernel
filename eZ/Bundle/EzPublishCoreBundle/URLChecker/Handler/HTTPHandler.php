@@ -9,7 +9,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class HTTPHandler extends AbstractURLHandler
+class HTTPHandler extends AbstractConfigResolverBasedURLHandler
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,9 @@ class HTTPHandler extends AbstractURLHandler
      */
     public function validate(array $urls)
     {
-        if (!$this->options['enabled']) {
+        $options = $this->getOptions();
+
+        if (!$options['enabled']) {
             return;
         }
 
@@ -28,7 +30,15 @@ class HTTPHandler extends AbstractURLHandler
         // Batch size can't be larger then number of urls
         $batchSize = min(count($urls), $this->options['batch_size']);
         for ($i = 0; $i < $batchSize; ++$i) {
-            curl_multi_add_handle($master, $this->createCurlHandlerForUrl($urls[$i], $handlers));
+            curl_multi_add_handle(
+                $master,
+                $this->createCurlHandlerForUrl(
+                    $urls[$i],
+                    $handlers,
+                    $options['connection_timeout'],
+                    $options['timeout']
+                )
+            );
         }
 
         do {
@@ -44,7 +54,15 @@ class HTTPHandler extends AbstractURLHandler
                 $this->doValidate($handlers[(int)$handler], $handler);
 
                 if ($i < count($urls)) {
-                    curl_multi_add_handle($master, $this->createCurlHandlerForUrl($urls[$i], $handlers));
+                    curl_multi_add_handle(
+                        $master,
+                        $this->createCurlHandlerForUrl(
+                            $urls[$i],
+                            $handlers,
+                            $options['connection_timeout'],
+                            $options['timeout']
+                        )
+                    );
                     ++$i;
                 }
 
@@ -59,7 +77,7 @@ class HTTPHandler extends AbstractURLHandler
     /**
      * {@inheritdoc}
      */
-    protected function getOptionsResolver()
+    protected function getOptionsResolver(): OptionsResolver
     {
         $resolver = new OptionsResolver();
         $resolver->setDefaults([
@@ -79,14 +97,24 @@ class HTTPHandler extends AbstractURLHandler
         return $resolver;
     }
 
+    public function getOptions(): array
+    {
+        $options = $this->configResolver->getParameter('url_handler.http.options');
+
+        return $this->getOptionsResolver()->resolve($options);
+    }
+
     /**
      * Initialize and return a cURL session for given URL.
      *
      * @param URL $url
      * @param array $handlers
+     * @param int $connectionTimeout
+     * @param int $timeout
+     *
      * @return resource
      */
-    private function createCurlHandlerForUrl(URL $url, array &$handlers)
+    private function createCurlHandlerForUrl(URL $url, array &$handlers, int $connectionTimeout, int $timeout)
     {
         $handler = curl_init();
 
@@ -94,8 +122,8 @@ class HTTPHandler extends AbstractURLHandler
             CURLOPT_URL => $url->url,
             CURLOPT_RETURNTRANSFER => false,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_CONNECTTIMEOUT => $this->options['connection_timeout'],
-            CURLOPT_TIMEOUT => $this->options['timeout'],
+            CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
+            CURLOPT_TIMEOUT => $timeout,
             CURLOPT_FAILONERROR => true,
             CURLOPT_NOBODY => true,
         ]);

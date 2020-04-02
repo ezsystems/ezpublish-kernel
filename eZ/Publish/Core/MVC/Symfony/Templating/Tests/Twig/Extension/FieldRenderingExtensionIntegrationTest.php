@@ -16,12 +16,14 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension;
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistryInterface;
+use eZ\Publish\Core\MVC\Symfony\Templating\Twig\ResourceProviderInterface;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection;
 use Psr\Log\LoggerInterface;
+use Twig\Environment;
 
 class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
 {
@@ -30,40 +32,13 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
     public function getExtensions()
     {
         $configResolver = $this->getConfigResolverMock();
+        $twig = $this->createMock(Environment::class);
+        $resourceProvider = $this->getResourceProviderMock();
 
-        $fieldBlockRenderer = new FieldBlockRenderer();
-        $fieldBlockRenderer->setBaseTemplate($this->getTemplatePath('base.html.twig'));
-        $fieldBlockRenderer->setFieldViewResources(
-            [
-                [
-                    'template' => $this->getTemplatePath('fields_override1.html.twig'),
-                    'priority' => 10,
-                ],
-                [
-                    'template' => $this->getTemplatePath('fields_default.html.twig'),
-                    'priority' => 0,
-                ],
-                [
-                    'template' => $this->getTemplatePath('fields_override2.html.twig'),
-                    'priority' => 20,
-                ],
-            ]
-        );
-        $fieldBlockRenderer->setFieldDefinitionViewResources(
-            [
-                [
-                    'template' => $this->getTemplatePath('settings_override1.html.twig'),
-                    'priority' => 10,
-                ],
-                [
-                    'template' => $this->getTemplatePath('settings_default.html.twig'),
-                    'priority' => 0,
-                ],
-                [
-                    'template' => $this->getTemplatePath('settings_override2.html.twig'),
-                    'priority' => 20,
-                ],
-            ]
+        $fieldBlockRenderer = new FieldBlockRenderer(
+            $twig,
+            $resourceProvider,
+            $this->getTemplatePath('base.html.twig')
         );
 
         return [
@@ -180,6 +155,52 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
                     ]
                 )
             );
+
+        return $mock;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\Templating\Twig\ResourceProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private function getResourceProviderMock(): ResourceProviderInterface
+    {
+        $mock = $this->createMock(ResourceProviderInterface::class);
+
+        $mock
+            ->method('getFieldViewResources')
+            ->willReturn([
+                [
+                    'template' => $this->getTemplatePath('fields_override2.html.twig'),
+                    'priority' => 20,
+                ],
+                [
+                    'template' => $this->getTemplatePath('fields_override1.html.twig'),
+                    'priority' => 10,
+                ],
+                [
+                    'template' => $this->getTemplatePath('fields_default.html.twig'),
+                    'priority' => 0,
+                ],
+            ])
+        ;
+
+        $mock
+            ->method('getFieldDefinitionViewResources')
+            ->willReturn([
+                [
+                    'template' => $this->getTemplatePath('settings_override2.html.twig'),
+                    'priority' => 20,
+                ],
+                [
+                    'template' => $this->getTemplatePath('settings_override1.html.twig'),
+                    'priority' => 10,
+                ],
+                [
+                    'template' => $this->getTemplatePath('settings_default.html.twig'),
+                    'priority' => 0,
+                ],
+            ])
+        ;
 
         return $mock;
     }

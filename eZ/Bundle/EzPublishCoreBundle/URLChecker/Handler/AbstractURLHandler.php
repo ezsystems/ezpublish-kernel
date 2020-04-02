@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\URLService;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractURLHandler implements URLHandlerInterface
 {
@@ -21,34 +22,15 @@ abstract class AbstractURLHandler implements URLHandlerInterface
     /** @var \eZ\Publish\API\Repository\URLService */
     protected $urlService;
 
-    /** @var array */
-    protected $options;
-
     public function __construct(URLService $urlService)
     {
         $this->logger = new NullLogger();
         $this->urlService = $urlService;
-        $this->options = $this->getOptionsResolver()->resolve();
     }
 
-    /**
-     * Returns options resolver.
-     *
-     * @return \Symfony\Component\OptionsResolver\OptionsResolver
-     */
-    abstract protected function getOptionsResolver();
+    abstract protected function getOptionsResolver(): OptionsResolver;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setOptions(array $options = null)
-    {
-        if ($options === null) {
-            $options = [];
-        }
-
-        $this->options = $this->getOptionsResolver()->resolve($options);
-    }
+    abstract public function getOptions(): array;
 
     /**
      * Sets URL status.

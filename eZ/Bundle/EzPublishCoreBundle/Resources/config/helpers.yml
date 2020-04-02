@@ -31,16 +31,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    ezpublish.dynamic_settings_listener:
-        class: eZ\Bundle\EzPublishCoreBundle\EventListener\DynamicSettingsListener
-        arguments:
-            - "%ezpublish.config_resolver.resettable_services%"
-            - "%ezpublish.config_resolver.updateable_services%"
-        calls:
-            - [setContainer, ["@service_container"]]
-        tags:
-            - { name: kernel.event_subscriber }
-
     ezpublish.content_preview.location_provider:
         class: eZ\Publish\Core\Helper\PreviewLocationProvider
         arguments:

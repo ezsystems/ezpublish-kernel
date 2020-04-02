@@ -262,6 +262,8 @@ Changes affecting version compatibility with deprecated ezpublish-kernel version
 
 * Legacy (SQL) Search Engine will no longer treat deprecated `%` as a search wildcard. Use `*` instead.
 
+* Dynamic Settings feature has been dropped. It was conceptually not compatible with Symfony's Container. Consider injecting `\eZ\Publish\Core\MVC\ConfigResolverInterface` instead and using `getParameter` method to fetch SiteAccess dependent settings.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.

@@ -5,9 +5,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\View\CachableView;
 use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
-use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -17,31 +17,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class CacheViewResponseListener implements EventSubscriberInterface
 {
-    /**
-     * True if view cache is enabled, false if it is not.
-     *
-     * @var bool
-     */
-    private $enableViewCache;
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
+    private $configResolver;
 
-    /**
-     * True if TTL cache is enabled, false if it is not.
-     * @var bool
-     */
-    private $enableTtlCache;
-
-    /**
-     * Default ttl for ttl cache.
-     *
-     * @var int
-     */
-    private $defaultTtl;
-
-    public function __construct($enableViewCache, $enableTtlCache, $defaultTtl)
+    public function __construct(ConfigResolverInterface $configResolver)
     {
-        $this->enableViewCache = $enableViewCache;
-        $this->enableTtlCache = $enableTtlCache;
-        $this->defaultTtl = $defaultTtl;
+        $this->configResolver = $configResolver;
     }
 
     public static function getSubscribedEvents()
@@ -55,7 +36,8 @@ class CacheViewResponseListener implements EventSubscriberInterface
             return;
         }
 
-        if (!$this->enableViewCache || !$view->isCacheEnabled()) {
+        $isViewCacheEnabled = $this->configResolver->getParameter('content.view_cache');
+        if (!$isViewCacheEnabled || !$view->isCacheEnabled()) {
             return;
         }
 
@@ -66,8 +48,10 @@ class CacheViewResponseListener implements EventSubscriberInterface
         }
 
         $response->setPublic();
-        if ($this->enableTtlCache && !$response->headers->hasCacheControlDirective('s-maxage')) {
-            $response->setSharedMaxAge($this->defaultTtl);
+
+        $isTtlCacheEnabled = $this->configResolver->getParameter('content.ttl_cache');
+        if ($isTtlCacheEnabled && !$response->headers->hasCacheControlDirective('s-maxage')) {
+            $response->setSharedMaxAge((int) $this->configResolver->getParameter('content.default_ttl'));
         }
     }
 }

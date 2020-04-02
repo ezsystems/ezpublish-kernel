@@ -7,8 +7,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BinaryContentDownloadPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConsoleCacheWarmupPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
@@ -32,7 +30,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TranslationCollec
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ViewProvidersPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
 use eZ\Publish\Core\Base\Container\Compiler\GenericFieldTypeConverterPass;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Persistence\FieldTypeRegistryPass as PersistenceFieldTypeRegistryPass;
@@ -69,8 +66,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new FragmentPass());
         $container->addCompilerPass(new StorageConnectionPass());
         $container->addCompilerPass(new ImaginePass());
-        $container->addCompilerPass(new ComplexSettingsPass(new ComplexSettingParser()));
-        $container->addCompilerPass(new ConfigResolverParameterPass(new DynamicSettingParser()));
         $container->addCompilerPass(new URLHandlerPass());
         $container->addCompilerPass(new BinaryContentDownloadPass());
         $container->addCompilerPass(new ViewProvidersPass());

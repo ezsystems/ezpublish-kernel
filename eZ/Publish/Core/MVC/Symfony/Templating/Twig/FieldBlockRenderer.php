@@ -1,15 +1,16 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig;
 
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\MVC\Symfony\Templating\Exception\MissingFieldBlockException;
 use eZ\Publish\Core\MVC\Symfony\Templating\FieldBlockRendererInterface;
 use Twig\Environment;
@@ -25,44 +26,21 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     const FIELD_DEFINITION_VIEW_SUFFIX = '_settings';
     const FIELD_DEFINITION_EDIT_SUFFIX = '_field_definition_edit';
 
+    const FIELD_RESOURCES_MAP = [
+        self::VIEW => 'fieldViewResources',
+        self::EDIT => 'fieldEditResources',
+    ];
+
+    const FIELD_DEFINITION_RESOURCES_MAP = [
+        self::VIEW => 'fieldDefinitionViewResources',
+        self::EDIT => 'fieldDefinitionEditResources',
+    ];
+
     /** @var \Twig\Environment */
     private $twig;
 
-    /**
-     * Array of Twig template resources for field view.
-     * Either the path to each template and its priority in a hash or its
-     * \Twig\Template (compiled) counterpart.
-     *
-     * @var \Twig\Template[]|array
-     */
-    private $fieldViewResources = [];
-
-    /**
-     * Array of Twig template resources for field edit.
-     * Either the path to each template and its priority in a hash or its
-     * \Twig\Template (compiled) counterpart.
-     *
-     * @var \Twig\Template[]|array
-     */
-    private $fieldEditResources = [];
-
-    /**
-     * Array of Twig template resources for field definition view.
-     * Either the path to each template and its priority in a hash or its
-     * \Twig\Template (compiled) counterpart.
-     *
-     * @var \Twig\Template[]|array
-     */
-    private $fieldDefinitionViewResources = [];
-
-    /**
-     * Array of Twig template resources for field definition edit.
-     * Either the path to each template and its priority in a hash or its
-     * \Twig\Template (compiled) counterpart.
-     *
-     * @var \Twig\Template[]|array
-     */
-    private $fieldDefinitionEditResources = [];
+    /** @var \eZ\Publish\Core\MVC\Symfony\Templating\Twig\ResourceProviderInterface */
+    private $resourceProvider;
 
     /**
      * A \Twig\Template instance used to render template blocks, or path to the template to use.
@@ -76,7 +54,25 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @var array
      */
-    private $blocks = [];
+    private $blocks;
+
+    /**
+     * @param \Twig\Environment $twig
+     * @param \eZ\Publish\Core\MVC\Symfony\Templating\Twig\ResourceProviderInterface $resourceProvider
+     * @param string|\Twig\Template $baseTemplate
+     * @param array $blocks
+     */
+    public function __construct(
+        Environment $twig,
+        ResourceProviderInterface $resourceProvider,
+        $baseTemplate,
+        array $blocks = []
+    ) {
+        $this->twig = $twig;
+        $this->resourceProvider = $resourceProvider;
+        $this->baseTemplate = $baseTemplate;
+        $this->blocks = $blocks;
+    }
 
     /**
      * @param \Twig\Environment $twig
@@ -86,61 +82,12 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         $this->twig = $twig;
     }
 
-    /**
-     * @param string|\Twig\Template $baseTemplate
-     */
-    public function setBaseTemplate($baseTemplate)
-    {
-        $this->baseTemplate = $baseTemplate;
-    }
-
-    /**
-     * @param array $fieldViewResources
-     */
-    public function setFieldViewResources(array $fieldViewResources = null)
-    {
-        $this->fieldViewResources = (array)$fieldViewResources;
-        usort($this->fieldViewResources, [$this, 'sortResourcesCallback']);
-    }
-
-    /**
-     * @param array $fieldEditResources
-     */
-    public function setFieldEditResources(array $fieldEditResources = null)
-    {
-        $this->fieldEditResources = (array)$fieldEditResources;
-        usort($this->fieldEditResources, [$this, 'sortResourcesCallback']);
-    }
-
-    /**
-     * @param array $fieldDefinitionViewResources
-     */
-    public function setFieldDefinitionViewResources(array $fieldDefinitionViewResources = null)
-    {
-        $this->fieldDefinitionViewResources = (array)$fieldDefinitionViewResources;
-        usort($this->fieldDefinitionViewResources, [$this, 'sortResourcesCallback']);
-    }
-
-    /**
-     * @param array $fieldDefinitionEditResources
-     */
-    public function setFieldDefinitionEditResources(array $fieldDefinitionEditResources = null)
-    {
-        $this->fieldDefinitionEditResources = (array)$fieldDefinitionEditResources;
-        usort($this->fieldDefinitionEditResources, [$this, 'sortResourcesCallback']);
-    }
-
-    public function sortResourcesCallback(array $a, array $b)
-    {
-        return $b['priority'] - $a['priority'];
-    }
-
-    public function renderContentFieldView(Field $field, $fieldTypeIdentifier, array $params = [])
+    public function renderContentFieldView(Field $field, $fieldTypeIdentifier, array $params = []): string
     {
         return $this->renderContentField($field, $fieldTypeIdentifier, $params, self::VIEW);
     }
 
-    public function renderContentFieldEdit(Field $field, $fieldTypeIdentifier, array $params = [])
+    public function renderContentFieldEdit(Field $field, $fieldTypeIdentifier, array $params = []): string
     {
         return $this->renderContentField($field, $fieldTypeIdentifier, $params, self::EDIT);
     }
@@ -155,7 +102,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return string
      */
-    private function renderContentField(Field $field, $fieldTypeIdentifier, array $params, $type)
+    private function renderContentField(Field $field, $fieldTypeIdentifier, array $params, $type): string
     {
         $localTemplate = null;
         if (isset($params['template'])) {
@@ -185,12 +132,12 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         return $this->baseTemplate->renderBlock($blockName, $context, $blocks);
     }
 
-    public function renderFieldDefinitionView(FieldDefinition $fieldDefinition, array $params = [])
+    public function renderFieldDefinitionView(FieldDefinition $fieldDefinition, array $params = []): string
     {
         return $this->renderFieldDefinition($fieldDefinition, $params, self::VIEW);
     }
 
-    public function renderFieldDefinitionEdit(FieldDefinition $fieldDefinition, array $params = [])
+    public function renderFieldDefinitionEdit(FieldDefinition $fieldDefinition, array $params = []): string
     {
         return $this->renderFieldDefinition($fieldDefinition, $params, self::EDIT);
     }
@@ -202,7 +149,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return string
      */
-    private function renderFieldDefinition(FieldDefinition $fieldDefinition, array $params, $type)
+    private function renderFieldDefinition(FieldDefinition $fieldDefinition, array $params, $type): string
     {
         if (is_string($this->baseTemplate)) {
             $this->baseTemplate = $this->twig->loadTemplate(
@@ -235,7 +182,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return array|null
      */
-    private function searchBlock(string $blockName, Template $tpl)
+    private function searchBlock(string $blockName, Template $tpl): ?array
     {
         // Current template might have parents, so we need to loop against
         // them to find a matching block
@@ -261,7 +208,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return array
      */
-    private function getBlocksByField($fieldTypeIdentifier, $type, $localTemplate = null)
+    private function getBlocksByField($fieldTypeIdentifier, $type, $localTemplate = null): array
     {
         $fieldBlockName = $this->getRenderFieldBlockName($fieldTypeIdentifier, $type);
         if ($localTemplate !== null) {
@@ -279,7 +226,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
             }
         }
 
-        return $this->getBlockByName($fieldBlockName, $type === self::EDIT ? 'fieldEditResources' : 'fieldViewResources');
+        return $this->getBlockByName($fieldBlockName, self::FIELD_RESOURCES_MAP[$type]);
     }
 
     /**
@@ -290,11 +237,11 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return array
      */
-    private function getBlocksByFieldDefinition(FieldDefinition $definition, $type)
+    private function getBlocksByFieldDefinition(FieldDefinition $definition, $type): array
     {
         return $this->getBlockByName(
             $this->getRenderFieldDefinitionBlockName($definition->fieldTypeIdentifier, $type),
-            $type === self::EDIT ? 'fieldDefinitionEditResources' : 'fieldDefinitionViewResources'
+            self::FIELD_DEFINITION_RESOURCES_MAP[$type]
         );
     }
 
@@ -307,13 +254,13 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return array
      */
-    private function getBlockByName($name, $resourcesName)
+    private function getBlockByName($name, $resourcesName): array
     {
         if (isset($this->blocks[$name])) {
             return [$name => $this->blocks[$name]];
         }
 
-        foreach ($this->{$resourcesName} as &$template) {
+        foreach ($this->getResources($resourcesName) as &$template) {
             if (!$template instanceof Template) {
                 $template = $this->twig->loadTemplate(
                     $this->twig->getTemplateClass($template['template']),
@@ -342,7 +289,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return string
      */
-    private function getRenderFieldBlockName($fieldTypeIdentifier, $type)
+    private function getRenderFieldBlockName($fieldTypeIdentifier, $type): string
     {
         $suffix = $type === self::EDIT ? self::FIELD_EDIT_SUFFIX : self::FIELD_VIEW_SUFFIX;
 
@@ -358,10 +305,43 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return string
      */
-    private function getRenderFieldDefinitionBlockName($fieldTypeIdentifier, $type)
+    private function getRenderFieldDefinitionBlockName($fieldTypeIdentifier, $type): string
     {
         $suffix = $type === self::EDIT ? self::FIELD_DEFINITION_EDIT_SUFFIX : self::FIELD_DEFINITION_VIEW_SUFFIX;
 
         return $fieldTypeIdentifier . $suffix;
+    }
+
+    /**
+     * @return array|\Twig\Template[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function getResources(string $resourceType): array
+    {
+        switch ($resourceType) {
+            case 'fieldViewResources':
+                return $this->sortResources($this->resourceProvider->getFieldViewResources());
+            case 'fieldEditResources':
+                return $this->sortResources($this->resourceProvider->getFieldEditResources());
+            case 'fieldDefinitionViewResources':
+                return $this->sortResources($this->resourceProvider->getFieldDefinitionViewResources());
+            case 'fieldDefinitionEditResources':
+                return $this->sortResources($this->resourceProvider->getFieldDefinitionEditResources());
+            default:
+                throw new InvalidArgumentException(
+                    '$resourceType',
+                    sprintf('Invalid resource type: %s', $resourceType)
+                );
+        }
+    }
+
+    private function sortResources(array $resources): array
+    {
+        usort($resources, static function (array $a, array $b): int {
+            return $b['priority'] - $a['priority'];
+        });
+
+        return $resources;
     }
 }

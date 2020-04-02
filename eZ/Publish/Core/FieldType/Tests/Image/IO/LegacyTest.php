@@ -14,6 +14,7 @@ use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PHPUnit\Framework\TestCase;
 
 class LegacyTest extends TestCase
@@ -39,14 +40,7 @@ class LegacyTest extends TestCase
     {
         $this->publishedIoServiceMock = $this->createMock(IOServiceInterface::class);
         $this->draftIoServiceMock = $this->createMock(IOServiceInterface::class);
-        $optionsProvider = new OptionsProvider(
-            [
-                'var_dir' => 'var/test',
-                'storage_dir' => 'storage',
-                'draft_images_dir' => 'images-versioned',
-                'published_images_dir' => 'images',
-            ]
-        );
+        $optionsProvider = new OptionsProvider($this->createConfigResolverMock());
         $this->service = new LegacyIOService(
             $this->publishedIoServiceMock,
             $this->draftIoServiceMock,
@@ -452,5 +446,34 @@ class LegacyTest extends TestCase
             $struct,
             $this->service->newBinaryCreateStructFromUploadedFile([])
         );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function createConfigResolverMock(): ConfigResolverInterface
+    {
+        $mock = $this->createMock(ConfigResolverInterface::class);
+        $mock
+            ->method('getParameter')
+            ->willReturnMap([
+                ['var_dir', null, null, 'var/test'],
+                ['storage_dir', null, null, 'storage'],
+                ['image.versioned_images_dir', null, null, 'images-versioned'],
+                ['image.published_images_dir', null, null, 'images'],
+            ])
+        ;
+
+        $mock
+            ->method('hasParameter')
+            ->willReturnMap([
+                ['var_dir', null, null, true],
+                ['storage_dir', null, null, true],
+                ['image.versioned_images_dir', null, null, true],
+                ['image.published_images_dir', null, null, true],
+            ])
+        ;
+
+        return $mock;
     }
 }

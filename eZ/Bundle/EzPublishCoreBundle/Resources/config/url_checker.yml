@@ -21,23 +21,25 @@ services:
     ezpublish.url_checker.handler.http:
         class: 'eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler\HTTPHandler'
         parent: ezpublish.url_checker.handler.base
-        calls:
-            - ['setOptions', ['$url_handler.http.options;ezsettings$']]
+        arguments:
+            $configResolver: '@ezpublish.config.resolver'
+            $parameterName: url_handler.http.options
         tags:
             - { name: ezpublish.url_handler, scheme: http }
 
     ezpublish.url_checker.handler.https:
         class: 'eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler\HTTPHandler'
         parent: ezpublish.url_checker.handler.base
-        calls:
-            - ['setOptions', ['$url_handler.https.options;ezsettings$']]
+        arguments:
+            $configResolver: '@ezpublish.config.resolver'
+            $parameterName: url_handler.https.options
         tags:
             - { name: ezpublish.url_handler, scheme: https }
 
     ezpublish.url_checker.handler.mailto:
         class: 'eZ\Bundle\EzPublishCoreBundle\URLChecker\Handler\MailToHandler'
         parent: ezpublish.url_checker.handler.base
-        calls:
-            - ['setOptions', ['$url_handler.mailto.options;ezsettings$']]
+        arguments:
+            $configResolver: '@ezpublish.config.resolver'
         tags:
             - { name: ezpublish.url_handler, scheme: mailto }

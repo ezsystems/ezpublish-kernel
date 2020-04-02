@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageAssetConverter;
 use eZ\Publish\SPI\Persistence\Content;
 
@@ -34,14 +35,13 @@ class ImageAssetIntegrationTest extends BaseIntegrationTest
         $locationService = $this->createMock(LocationService::class);
         $contentTypeService = $this->createMock(ContentTypeService::class);
         $contentHandler = $this->createMock(Content\Handler::class);
-
-        $config = [];
+        $configResolver = $this->createMock(ConfigResolverInterface::class);
 
         $mapper = new FieldType\ImageAsset\AssetMapper(
             $contentService,
             $locationService,
             $contentTypeService,
-            $config
+            $configResolver
         );
 
         $fieldType = new FieldType\ImageAsset\Type(

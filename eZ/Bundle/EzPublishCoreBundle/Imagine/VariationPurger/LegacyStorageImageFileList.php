@@ -6,6 +6,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger;
 
 use eZ\Publish\Core\IO\IOConfigProvider;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
  * Iterator for entries in legacy's ezimagefile table.
@@ -38,19 +39,17 @@ class LegacyStorageImageFileList implements ImageFileList
     /** @var \eZ\Publish\Core\IO\IOConfigProvider */
     private $ioConfigResolver;
 
-    /** @var string */
-    private $imagesDir;
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
+    private $configResolver;
 
-    /**
-     * @param \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader $rowReader
-     * @param \eZ\Publish\Core\IO\IOConfigProvider $ioConfigResolver
-     * @param string $imagesDir Folder where images are stored, within the storage dir. Example: 'images'
-     */
-    public function __construct(ImageFileRowReader $rowReader, IOConfigProvider $ioConfigResolver, $imagesDir)
-    {
+    public function __construct(
+        ImageFileRowReader $rowReader,
+        IOConfigProvider $ioConfigResolver,
+        ConfigResolverInterface $configResolver
+    ) {
         $this->ioConfigResolver = $ioConfigResolver;
-        $this->imagesDir = $imagesDir;
         $this->rowReader = $rowReader;
+        $this->configResolver = $configResolver;
     }
 
     public function current()
@@ -92,7 +91,7 @@ class LegacyStorageImageFileList implements ImageFileList
     {
         // Folder, relative to the root, where files are stored. Example: var/ezdemo_site/storage
         $storageDir = $this->ioConfigResolver->getLegacyUrlPrefix();
-        $prefix = $storageDir . '/' . $this->imagesDir;
+        $prefix = $storageDir . '/' . $this->configResolver->getParameter('image.published_images_dir');
         ++$this->cursor;
         $imageId = $this->rowReader->getRow();
 

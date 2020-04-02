@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\FieldType\ImageAsset\AssetMapper;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Repository\ContentTypeService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
@@ -36,6 +37,9 @@ class AssetMapperTest extends TestCase
     /** @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject */
     private $contentTypeService;
 
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $configResolver;
+
     /** @var array */
     private $mappings = [
         'content_type_identifier' => 'image',
@@ -49,9 +53,10 @@ class AssetMapperTest extends TestCase
         $this->contentService = $this->createMock(ContentService::class);
         $this->locationService = $this->createMock(LocationService::class);
         $this->contentTypeService = $this->createMock(ContentTypeService::class);
+        $this->configResolver = $this->mockConfigResolver();
     }
 
-    public function testCreateAsset()
+    public function testCreateAsset(): void
     {
         $name = 'Example asset';
         $value = new Image\Value();
@@ -108,7 +113,7 @@ class AssetMapperTest extends TestCase
         $mapper->createAsset($name, $value, $languageCode);
     }
 
-    public function testGetAssetField()
+    public function testGetAssetField(): void
     {
         $expectedValue = new Field();
         $content = $this->createContentWithId(self::EXAMPLE_CONTENT_ID);
@@ -129,7 +134,7 @@ class AssetMapperTest extends TestCase
         $this->assertEquals($expectedValue, $mapper->getAssetField($content));
     }
 
-    public function testGetAssetFieldThrowsInvalidArgumentException()
+    public function testGetAssetFieldThrowsInvalidArgumentException(): void
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
 
@@ -145,7 +150,7 @@ class AssetMapperTest extends TestCase
         $mapper->getAssetField($content);
     }
 
-    public function testGetAssetFieldDefinition()
+    public function testGetAssetFieldDefinition(): void
     {
         $fieldDefinition = new FieldDefinition();
 
@@ -165,7 +170,7 @@ class AssetMapperTest extends TestCase
         $this->assertEquals($fieldDefinition, $this->createMapper()->getAssetFieldDefinition());
     }
 
-    public function testGetAssetValue()
+    public function testGetAssetValue(): void
     {
         $expectedValue = new Image\Value();
         $content = $this->createContentWithId(self::EXAMPLE_CONTENT_ID);
@@ -186,7 +191,7 @@ class AssetMapperTest extends TestCase
         $this->assertEquals($expectedValue, $mapper->getAssetValue($content));
     }
 
-    public function testGetAssetValueThrowsInvalidArgumentException()
+    public function testGetAssetValueThrowsInvalidArgumentException(): void
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
 
@@ -205,7 +210,7 @@ class AssetMapperTest extends TestCase
     /**
      * @dataProvider dataProviderForIsAsset
      */
-    public function testIsAsset(int $contentContentTypeId, int $assetContentTypeId, bool $expected)
+    public function testIsAsset(int $contentContentTypeId, int $assetContentTypeId, bool $expected): void
     {
         $assetContentType = new ContentType([
             'id' => $assetContentTypeId,
@@ -232,7 +237,7 @@ class AssetMapperTest extends TestCase
         ];
     }
 
-    public function testGetContentFieldIdentifier()
+    public function testGetContentFieldIdentifier(): void
     {
         $mapper = $this->createMapper();
 
@@ -242,7 +247,7 @@ class AssetMapperTest extends TestCase
         );
     }
 
-    public function testGetParentLocationId()
+    public function testGetParentLocationId(): void
     {
         $mapper = $this->createMapper();
 
@@ -252,13 +257,23 @@ class AssetMapperTest extends TestCase
         );
     }
 
+    public function testGetContentTypeIdentifier(): void
+    {
+        $mapper = $this->createMapper();
+
+        $this->assertEquals(
+            $this->mappings['content_type_identifier'],
+            $mapper->getContentTypeIdentifier()
+        );
+    }
+
     private function createMapper(): AssetMapper
     {
         return new AssetMapper(
             $this->contentService,
             $this->locationService,
             $this->contentTypeService,
-            $this->mappings
+            $this->configResolver
         );
     }
 
@@ -270,7 +285,7 @@ class AssetMapperTest extends TestCase
                 $this->contentService,
                 $this->locationService,
                 $this->contentTypeService,
-                $this->mappings,
+                $this->configResolver,
             ])
             ->disableOriginalClone()
             ->disableArgumentCloning()
@@ -305,5 +320,20 @@ class AssetMapperTest extends TestCase
             ->willReturn($contentInfo);
 
         return $content;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private function mockConfigResolver(): ConfigResolverInterface
+    {
+        $mock = $this->createMock(ConfigResolverInterface::class);
+        $mock
+            ->method('getParameter')
+            ->with('fieldtypes.ezimageasset.mappings', null, null)
+            ->willReturn($this->mappings)
+        ;
+
+        return $mock;
     }
 }

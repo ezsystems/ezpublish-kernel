@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 class AssetMapper
 {
@@ -28,28 +29,22 @@ class AssetMapper
     /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
-    /** @var array */
-    private $mappings = [];
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
+    private $configResolver;
 
     /** @var int */
     private $contentTypeId = null;
 
-    /**
-     * @param \eZ\Publish\API\Repository\ContentService $contentService
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
-     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
-     * @param array $mappings
-     */
     public function __construct(
         ContentService $contentService,
         LocationService $locationService,
         ContentTypeService $contentTypeService,
-        array $mappings)
+        ConfigResolverInterface $configResolver)
     {
         $this->contentService = $contentService;
         $this->locationService = $locationService;
         $this->contentTypeService = $contentTypeService;
-        $this->mappings = $mappings;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -63,16 +58,18 @@ class AssetMapper
      */
     public function createAsset(string $name, ImageValue $image, string $languageCode): Content
     {
+        $mappings = $this->getMappings();
+
         $contentType = $this->contentTypeService->loadContentTypeByIdentifier(
-            $this->mappings['content_type_identifier']
+            $mappings['content_type_identifier']
         );
 
         $contentCreateStruct = $this->contentService->newContentCreateStruct($contentType, $languageCode);
-        $contentCreateStruct->setField($this->mappings['name_field_identifier'], $name);
-        $contentCreateStruct->setField($this->mappings['content_field_identifier'], $image);
+        $contentCreateStruct->setField($mappings['name_field_identifier'], $name);
+        $contentCreateStruct->setField($mappings['content_field_identifier'], $image);
 
         $contentDraft = $this->contentService->createContent($contentCreateStruct, [
-            $this->locationService->newLocationCreateStruct($this->mappings['parent_location_id']),
+            $this->locationService->newLocationCreateStruct($mappings['parent_location_id']),
         ]);
 
         return $this->contentService->publishVersion($contentDraft->versionInfo);
@@ -94,7 +91,7 @@ class AssetMapper
             throw new InvalidArgumentException('contentId', "Content {$content->id} is not an image asset.");
         }
 
-        return $content->getField($this->mappings['content_field_identifier']);
+        return $content->getField($this->getContentFieldIdentifier());
     }
 
     /**
@@ -104,12 +101,14 @@ class AssetMapper
      */
     public function getAssetFieldDefinition(): FieldDefinition
     {
+        $mappings = $this->getMappings();
+
         $contentType = $this->contentTypeService->loadContentTypeByIdentifier(
-            $this->mappings['content_type_identifier']
+            $mappings['content_type_identifier']
         );
 
         return $contentType->getFieldDefinition(
-            $this->mappings['content_field_identifier']
+            $mappings['content_field_identifier']
         );
     }
 
@@ -129,7 +128,7 @@ class AssetMapper
             throw new InvalidArgumentException('contentId', "Content {$content->id} is not an image asset.");
         }
 
-        return $content->getFieldValue($this->mappings['content_field_identifier']);
+        return $content->getFieldValue($this->getContentFieldIdentifier());
     }
 
     /**
@@ -145,7 +144,7 @@ class AssetMapper
     {
         if ($this->contentTypeId === null) {
             $contentType = $this->contentTypeService->loadContentTypeByIdentifier(
-                $this->mappings['content_type_identifier']
+                $this->getContentTypeIdentifier()
             );
 
             $this->contentTypeId = $contentType->id;
@@ -155,13 +154,21 @@ class AssetMapper
     }
 
     /**
+     * Return identifier of the Content Type used as Assets.
+     */
+    public function getContentTypeIdentifier(): string
+    {
+        return $this->getMappings()['content_type_identifier'];
+    }
+
+    /**
      * Return identifier of the field used to store Image Asset value.
      *
      * @return string
      */
     public function getContentFieldIdentifier(): string
     {
-        return $this->mappings['content_field_identifier'];
+        return $this->getMappings()['content_field_identifier'];
     }
 
     /**
@@ -171,6 +178,11 @@ class AssetMapper
      */
     public function getParentLocationId(): int
     {
-        return $this->mappings['parent_location_id'];
+        return $this->getMappings()['parent_location_id'];
+    }
+
+    protected function getMappings(): array
+    {
+        return $this->configResolver->getParameter('fieldtypes.ezimageasset.mappings');
     }
 }

@@ -8,61 +8,45 @@
  */
 namespace eZ\Publish\Core\FieldType\Image\IO;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+
+/**
+ * @internal
+ */
 class OptionsProvider
 {
-    protected $varDir;
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
+    protected $configResolver;
 
-    protected $storageDir;
-
-    protected $draftImagesDir;
-
-    protected $publishedImagesDir;
-
-    public function __construct(array $values = [])
+    public function __construct(ConfigResolverInterface $configResolver)
     {
-        $this->varDir = isset($values['var_dir']) ? $values['var_dir'] : null;
-        $this->storageDir = isset($values['storage_dir']) ? $values['storage_dir'] : null;
-        $this->draftImagesDir = isset($values['draft_images_dir']) ? $values['draft_images_dir'] : null;
-        $this->publishedImagesDir = isset($values['published_images_dir']) ? $values['published_images_dir'] : null;
+        $this->configResolver = $configResolver;
     }
 
-    public function setVarDir($varDir)
+    protected function getSetting(string $name): ?string
     {
-        $this->varDir = $varDir;
+        return $this->configResolver->hasParameter($name)
+            ? $this->configResolver->getParameter($name)
+            : null;
     }
 
     public function getVarDir()
     {
-        return $this->varDir;
-    }
-
-    public function setStorageDir($storageDir)
-    {
-        $this->storageDir = $storageDir;
+        return $this->getSetting('var_dir');
     }
 
     public function getStorageDir()
     {
-        return $this->storageDir;
-    }
-
-    public function setDraftImagesDir($draftImagesDir)
-    {
-        $this->draftImagesDir = $draftImagesDir;
+        return $this->getSetting('storage_dir');
     }
 
     public function getDraftImagesDir()
     {
-        return $this->draftImagesDir;
-    }
-
-    public function setPublishedImagesDir($publishedImagesDir)
-    {
-        $this->publishedImagesDir = $publishedImagesDir;
+        return $this->getSetting('image.versioned_images_dir');
     }
 
     public function getPublishedImagesDir()
     {
-        return $this->publishedImagesDir;
+        return $this->getSetting('image.published_images_dir');
     }
 }

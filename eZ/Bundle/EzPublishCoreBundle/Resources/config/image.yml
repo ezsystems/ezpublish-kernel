@@ -259,7 +259,7 @@ services:
         arguments:
             - "@ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader"
             - '@eZ\Publish\Core\IO\IOConfigProvider'
-            - $image.published_images_dir$
+            - '@ezpublish.config.resolver'
 
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader:
         class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileRowReader

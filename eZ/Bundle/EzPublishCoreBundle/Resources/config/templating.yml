@@ -126,16 +126,16 @@ services:
         tags:
             - {name: twig.extension}
 
+    eZ\Publish\Core\MVC\Symfony\Templating\Twig\ResourceProvider:
+        arguments:
+            $configResolver: '@ezpublish.config.resolver'
+
     ezpublish.templating.field_block_renderer.twig:
         class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer
-        calls:
-            - [setTwig, ["@twig"]]
-            - [setBaseTemplate, ["%ezpublish.content_view.viewbase_layout%"]]
-            - [setFieldViewResources, ["$field_templates$"]]
-            - [setFieldEditResources, ["$field_edit_templates$"]]
-            - [setFieldDefinitionViewResources, ["$fielddefinition_settings_templates$"]]
-            - [setFieldDefinitionEditResources, ["$fielddefinition_edit_templates$"]]
-        lazy: true
+        arguments:
+            $twig: '@twig'
+            $resourceProvider: '@eZ\Publish\Core\MVC\Symfony\Templating\Twig\ResourceProvider'
+            $baseTemplate: '%ezpublish.content_view.viewbase_layout%'
 
     ezpublish.templating.field_block_renderer:
         alias: ezpublish.templating.field_block_renderer.twig
@@ -237,9 +237,7 @@ services:
     ezpublish.view.cache_response_listener:
         class: eZ\Bundle\EzPublishCoreBundle\EventListener\CacheViewResponseListener
         arguments:
-            - $content.view_cache$
-            - $content.ttl_cache$
-            - $content.default_ttl$
+            $configResolver: '@ezpublish.config.resolver'
         tags:
             - { name: kernel.event_subscriber }
 

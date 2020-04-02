@@ -77,16 +77,16 @@ services:
 
     # Builds the binarydata and metadata handler based on the siteaccess config
     ezpublish.core.io.metadata_handler:
-        class: eZ\Publish\Core\IO\IOMetadataHandler
-        factory: ["@ezpublish.core.io.metadata_handler.registry", getConfiguredHandler]
+        class: eZ\Publish\Core\IO\IOBinarydataHandler\SiteAccessDependentMetadataHandler
         arguments:
-            - "$io.metadata_handler$"
+            $configResolver: '@ezpublish.config.resolver'
+            $dataHandlerRegistry: '@ezpublish.core.io.metadata_handler.registry'
 
     ezpublish.core.io.binarydata_handler:
-        class: eZ\Publish\Core\IO\IOBinarydataHandler
-        factory: ["@ezpublish.core.io.binarydata_handler.registry", getConfiguredHandler]
+        class: eZ\Publish\Core\IO\IOBinarydataHandler\SiteAccessDependentBinaryDataHandler
         arguments:
-            - "$io.binarydata_handler$"
+            $configResolver: '@ezpublish.config.resolver'
+            $dataHandlerRegistry: '@ezpublish.core.io.binarydata_handler.registry'
 
     ezpublish.core.io.metadata_handler.registry:
         class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerRegistry
@@ -96,15 +96,10 @@ services:
 
     # Inject the siteaccess config into a few io services
     ezpublish.core.io.flysystem.default_adapter:
-        class: League\Flysystem\Adapter\Local
-        factory: ["@ezpublish.core.io.flysystem.local_adapter_factory", build]
+        class: eZ\Publish\Core\IO\Adapter\LocalAdapter
         arguments:
             - '@eZ\Publish\Core\IO\IOConfigProvider'
-            - "$io.permissions.files$"
-            - "$io.permissions.directories$"
-
-    ezpublish.core.io.flysystem.local_adapter_factory:
-        class: eZ\Bundle\EzPublishIOBundle\DependencyInjection\Factory\LocalAdapterFactory
+            - '@ezpublish.config.resolver'
 
     ezpublish.core.io.prefix_url_decorator:
         class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
