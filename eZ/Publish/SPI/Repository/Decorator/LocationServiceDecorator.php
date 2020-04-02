@@ -34,7 +34,7 @@ abstract class LocationServiceDecorator implements LocationService
     }
 
     public function loadLocation(
-        int $locationId,
+        ?int $locationId = null,
         ?array $prioritizedLanguages = null,
         ?bool $useAlwaysAvailable = null
     ): Location {

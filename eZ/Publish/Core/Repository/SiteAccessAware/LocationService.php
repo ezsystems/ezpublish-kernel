@@ -49,7 +49,7 @@ class LocationService implements LocationServiceInterface
         return $this->service->copySubtree($subtree, $targetParentLocation);
     }
 
-    public function loadLocation(int $locationId, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): Location
+    public function loadLocation(?int $locationId = null, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): Location
     {
         return $this->service->loadLocation(
             $locationId,

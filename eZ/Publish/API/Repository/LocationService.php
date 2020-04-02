@@ -42,13 +42,13 @@ interface LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
-     * @param mixed $locationId
+     * @param int|null $locationId
      * @param string[]|null $prioritizedLanguages Filter on and use as prioritized language code on translated properties of returned object.
      * @param bool|null $useAlwaysAvailable Respect always available flag on content when filtering on $prioritizedLanguages.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocation(int $locationId, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): Location;
+    public function loadLocation(?int $locationId = null, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): Location;
 
     /**
      * Loads several location objects from its $locationIds.

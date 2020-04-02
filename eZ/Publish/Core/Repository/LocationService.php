@@ -196,7 +196,7 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocation(int $locationId, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): APILocation
+    public function loadLocation(?int $locationId = null, ?array $prioritizedLanguages = null, ?bool $useAlwaysAvailable = null): APILocation
     {
         $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
         $location = $this->contentDomainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
