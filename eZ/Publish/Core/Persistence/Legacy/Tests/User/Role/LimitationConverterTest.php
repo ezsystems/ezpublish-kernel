@@ -19,9 +19,9 @@ class LimitationConverterTest extends TestCase
 {
     protected function getLimitationConverter()
     {
-        $dbHandler = $this->getDatabaseHandler();
+        $connection = $this->getDatabaseConnection();
 
-        return new LimitationConverter([new ObjectStateLimitationHandler($dbHandler)]);
+        return new LimitationConverter([new ObjectStateLimitationHandler($connection)]);
     }
 
     /**

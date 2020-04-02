@@ -32,13 +32,13 @@ class UserHandlerTest extends TestCase
      */
     protected function getUserHandler(User\Gateway $userGateway = null): Handler
     {
-        $dbHandler = $this->getDatabaseHandler();
+        $connection = $this->getDatabaseConnection();
 
         return new User\Handler(
-            $userGateway ?? new User\Gateway\DoctrineDatabase($this->getDatabaseConnection()),
-            new User\Role\Gateway\DoctrineDatabase($this->getDatabaseConnection()),
+            $userGateway ?? new User\Gateway\DoctrineDatabase($connection),
+            new User\Role\Gateway\DoctrineDatabase($connection),
             new User\Mapper(),
-            new LimitationConverter([new ObjectStateLimitationHandler($dbHandler)])
+            new LimitationConverter([new ObjectStateLimitationHandler($connection)])
         );
     }
 

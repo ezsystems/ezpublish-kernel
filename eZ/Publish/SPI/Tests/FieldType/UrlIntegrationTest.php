@@ -61,7 +61,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
             new Legacy\Content\FieldValue\Converter\UrlConverter(),
             new FieldType\Url\UrlStorage(
                 new FieldType\Url\UrlStorage\Gateway\DoctrineStorage(
-                    $this->getDatabaseHandler()->getConnection()
+                    $this->getDatabaseConnection()
                 )
             )
         );

@@ -34,7 +34,7 @@ services:
         abstract: true
         class: eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler
         arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            $connection: '@ezpublish.api.storage_engine.legacy.connection'
 
     ezpublish.persistence.legacy.role.limitation.handler.object_state:
         parent: ezpublish.persistence.legacy.role.limitation.handler

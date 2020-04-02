@@ -13,7 +13,6 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
-use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\Persistence\Legacy\SharedGateway;
 use eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory;
 use eZ\Publish\SPI\Tests\Persistence\FileFixtureFactory;
@@ -46,14 +45,6 @@ abstract class TestCase extends BaseTestCase
     protected $db;
 
     /**
-     * Database handler -- to not be constructed twice for one test.
-     *
-     * @internal
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
-    protected $handler;
-
-    /**
      * Doctrine Database connection -- to not be constructed twice for one test.
      *
      * @internal
@@ -83,26 +74,6 @@ abstract class TestCase extends BaseTestCase
         }
 
         return $this->dsn;
-    }
-
-    /**
-     * Get a eZ Doctrine database connection handler.
-     *
-     * Get a ConnectionHandler, which can be used to interact with the configured
-     * database. The database connection string is read from an optional
-     * environment variable "DATABASE" and defaults to an in-memory SQLite
-     * database.
-     *
-     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-     */
-    final public function getDatabaseHandler()
-    {
-        if (!$this->handler) {
-            $this->handler = ConnectionHandler::createFromConnection($this->getDatabaseConnection());
-            $this->db = $this->handler->getName();
-        }
-
-        return $this->handler;
     }
 
     /**
@@ -159,7 +130,7 @@ abstract class TestCase extends BaseTestCase
                 dirname(__DIR__, 5) .
                 '/Bundle/EzPublishCoreBundle/Resources/config/storage/legacy/schema.yaml'
             );
-        } catch (PDOException | DBALException | ConnectionException $e) {
+        } catch (PDOException | ConnectionException $e) {
             self::fail(
                 sprintf(
                     'PDO session could not be created: %s: %s',
@@ -172,7 +143,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function tearDown(): void
     {
-        unset($this->handler);
         unset($this->connection);
     }
 
@@ -232,7 +202,7 @@ abstract class TestCase extends BaseTestCase
      * Assert query result as correct.
      *
      * Builds text representations of the asserted and fetched query result,
-     * based on a eZ\Publish\Core\Persistence\Database\SelectQuery object. Compares them using classic diff for
+     * based on a QueryBuilder object. Compares them using classic diff for
      * maximum readability of the differences between expectations and real
      * results.
      *

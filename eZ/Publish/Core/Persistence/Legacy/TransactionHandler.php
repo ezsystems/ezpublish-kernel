@@ -1,17 +1,15 @@
 <?php
 
 /**
- * File containing the Legacy Storage TransactionHandler.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Persistence\Legacy;
 
+use Doctrine\DBAL\Connection;
 use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler as CachingContentTypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as CachingLanguageHandler;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use Exception;
 use RuntimeException;
 
@@ -22,11 +20,8 @@ use RuntimeException;
  */
 class TransactionHandler implements TransactionHandlerInterface
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
+    /** @var \Doctrine\DBAL\Connection */
+    protected $connection;
 
     /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
@@ -34,17 +29,12 @@ class TransactionHandler implements TransactionHandlerInterface
     /** @var \eZ\Publish\SPI\Persistence\Content\Language\Handler */
     protected $languageHandler;
 
-    /**
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler $contentTypeHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
-     */
     public function __construct(
-        DatabaseHandler $dbHandler,
+        Connection $connection,
         CachingContentTypeHandler $contentTypeHandler = null,
         CachingLanguageHandler $languageHandler = null
     ) {
-        $this->dbHandler = $dbHandler;
+        $this->connection = $connection;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->languageHandler = $languageHandler;
     }
@@ -54,7 +44,7 @@ class TransactionHandler implements TransactionHandlerInterface
      */
     public function beginTransaction()
     {
-        $this->dbHandler->beginTransaction();
+        $this->connection->beginTransaction();
     }
 
     /**
@@ -67,7 +57,7 @@ class TransactionHandler implements TransactionHandlerInterface
     public function commit()
     {
         try {
-            $this->dbHandler->commit();
+            $this->connection->commit();
         } catch (Exception $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
@@ -83,7 +73,7 @@ class TransactionHandler implements TransactionHandlerInterface
     public function rollback()
     {
         try {
-            $this->dbHandler->rollback();
+            $this->connection->rollback();
 
             // Clear all caches after rollback
             if ($this->contentTypeHandler instanceof CachingContentTypeHandler) {

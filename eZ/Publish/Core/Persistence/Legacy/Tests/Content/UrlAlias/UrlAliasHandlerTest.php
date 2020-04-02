@@ -5294,7 +5294,6 @@ class UrlAliasHandlerTest extends TestCase
 
     protected function countRows(): int
     {
-        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
         $connection = $this->getDatabaseConnection();
         $query = $connection->createQueryBuilder();
         $query
@@ -5305,12 +5304,6 @@ class UrlAliasHandlerTest extends TestCase
 
         return (int)$statement->fetchColumn();
     }
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
 
     /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway */
     protected $locationGateway;

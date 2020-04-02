@@ -6,31 +6,29 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReader;
 
+use Doctrine\DBAL\Connection;
 use eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReaderInterface;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
 abstract class LegacyStorageFileRowReader implements FileRowReaderInterface
 {
-    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler */
-    private $dbHandler;
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
 
-    /** @var \PDOStatement */
+    /** @var \Doctrine\DBAL\Driver\Statement */
     private $statement;
 
-    /**
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler Database handler
-     */
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
+        $this->connection = $connection;
     }
 
     final public function init()
     {
-        $selectQuery = $this->dbHandler->createSelectQuery();
-        $selectQuery->select('filename, mime_type')->from($this->dbHandler->quoteTable($this->getStorageTable()));
-        $this->statement = $selectQuery->prepare();
-        $this->statement->execute();
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select('filename', 'mime_type')
+            ->from($this->getStorageTable());
+        $this->statement = $selectQuery->execute();
     }
 
     /**

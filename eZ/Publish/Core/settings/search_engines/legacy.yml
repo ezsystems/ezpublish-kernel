@@ -9,15 +9,6 @@ imports:
     - {resource: search_engines/common.yml}
 
 services:
-    # Legacy Search Engine semantic configuration will override connection service to the one
-    # resolved for the current siteaccess
-    ezpublish.api.search_engine.legacy.dbhandler:
-        class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-        factory: ['eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler', createFromConnection]
-        arguments:
-            - "@ezpublish.api.search_engine.legacy.connection"
-        lazy: true
-
     # Aliasing storage connection in order to support sqlite://:memory:
     # Otherwise it should be possible to use a separate database and/or database connection
     ezpublish.api.search_engine.legacy.connection:

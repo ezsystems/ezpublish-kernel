@@ -264,7 +264,7 @@ services:
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader:
         class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileRowReader
         arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            $connection: '@ezpublish.persistence.connection'
 
     ezpublish.image_alias.variation_path_generator:
         # < platform 2015.05

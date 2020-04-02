@@ -1,43 +1,37 @@
 <?php
 
 /**
- * File containing the Relation converter.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
+use DOMDocument;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as ContentTypeGateway;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use DOMDocument;
-use PDO;
 
 class RelationListConverter implements Converter
 {
-    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler */
-    private $db;
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
 
-    /**
-     * Create instance of RelationList converter.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
-     */
-    public function __construct(DatabaseHandler $db)
+    public function __construct(Connection $connection)
     {
-        $this->db = $db;
+        $this->connection = $connection;
     }
 
     /**
      * Converts data from $value to $storageFieldValue.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
@@ -80,9 +74,6 @@ class RelationListConverter implements Converter
 
     /**
      * Converts data from $value to $fieldValue.
-     *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
@@ -110,9 +101,6 @@ class RelationListConverter implements Converter
 
     /**
      * Converts field definition data in $fieldDef into $storageFieldDef.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
@@ -192,9 +180,6 @@ class RelationListConverter implements Converter
      *     <contentobject-placement/>
      *   </related-objects>
      * </code>
-     *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
@@ -285,63 +270,58 @@ class RelationListConverter implements Converter
             return [];
         }
 
-        $q = $this->db->createSelectQuery();
-        $q
+        $query = $this->connection->createQueryBuilder();
+        $query
             ->select(
-                $this->db->aliasedColumn($q, 'id', 'ezcontentobject'),
-                $this->db->aliasedColumn($q, 'remote_id', 'ezcontentobject'),
-                $this->db->aliasedColumn($q, 'current_version', 'ezcontentobject'),
-                $this->db->aliasedColumn($q, 'contentclass_id', 'ezcontentobject'),
-                $this->db->aliasedColumn($q, 'node_id', 'ezcontentobject_tree'),
-                $this->db->aliasedColumn($q, 'parent_node_id', 'ezcontentobject_tree'),
-                $this->db->aliasedColumn($q, 'identifier', 'ezcontentclass')
-            )
-            ->from($this->db->quoteTable('ezcontentobject'))
+                'c.id',
+                'c.remote_id',
+                'c.current_version',
+                'c.contentclass_id',
+                't.node_id',
+                't.parent_node_id',
+                'ct.identifier',
+                )
+            ->from(ContentGateway::CONTENT_ITEM_TABLE, 'c')
             ->leftJoin(
-                $this->db->quoteTable('ezcontentobject_tree'),
-                $q->expr->lAnd(
-                    $q->expr->eq(
-                        $this->db->quoteColumn('contentobject_id', 'ezcontentobject_tree'),
-                        $this->db->quoteColumn('id', 'ezcontentobject')
-                    ),
-                    $q->expr->eq(
-                        $this->db->quoteColumn('node_id', 'ezcontentobject_tree'),
-                        $this->db->quoteColumn('main_node_id', 'ezcontentobject_tree')
-                    )
+                'c',
+                LocationGateway::CONTENT_TREE_TABLE,
+                't',
+                $query->expr()->andX(
+                    't.contentobject_id = c.id',
+                    't.node_id = t.main_node_id'
                 )
             )
             ->leftJoin(
-                $this->db->quoteTable('ezcontentclass'),
-                $q->expr->lAnd(
-                    $q->expr->eq(
-                        $this->db->quoteColumn('id', 'ezcontentclass'),
-                        $this->db->quoteColumn('contentclass_id', 'ezcontentobject')
-                    ),
-                    $q->expr->eq(
-                        $this->db->quoteColumn('version', 'ezcontentclass'),
-                        $q->bindValue(ContentType::STATUS_DEFINED, null, PDO::PARAM_INT)
-                    )
+                'c',
+                ContentTypeGateway::CONTENT_TYPE_TABLE,
+                'ct',
+                $query->expr()->andX(
+                    'ct.id = c.contentclass_id',
+                    // in Legacy Storage ezcontentclass.version contains status (draft, defined)
+                    'ct.version = :content_type_status'
                 )
             )
             ->where(
-                $q->expr->in(
-                    $this->db->quoteColumn('id', 'ezcontentobject'),
-                    $destinationContentIds
+                $query->expr()->in(
+                    'c.id',
+                    ':content_ids'
                 )
-            );
-        $stmt = $q->prepare();
-        $stmt->execute();
+            )
+            ->setParameter(
+                'content_type_status',
+                ContentType::STATUS_DEFINED,
+                ParameterType::INTEGER
+            )
+            ->setParameter('content_ids', $destinationContentIds, Connection::PARAM_INT_ARRAY);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_GROUP);
+        $stmt = $query->execute();
+
+        return $this->groupResultSetById($stmt->fetchAll(FetchMode::ASSOCIATIVE));
     }
 
-    /**
-     * @return array
-     */
-    private static function dbAttributeMap()
+    private static function dbAttributeMap(): array
     {
         return [
-            // 'identifier' => 'identifier',// not used
             'priority' => 'priority',
             // 'in-trash' => 'in_trash',// false by default and implies
             'contentobject-id' => 'ezcontentobject_id',
@@ -350,8 +330,70 @@ class RelationListConverter implements Converter
             'parent-node-id' => 'ezcontentobject_tree_parent_node_id',
             'contentclass-id' => 'ezcontentobject_contentclass_id',
             'contentclass-identifier' => 'ezcontentclass_identifier',
-            // 'is-modified' => 'is_modified',// deprecated and not used
             'contentobject-remote-id' => 'ezcontentobject_remote_id',
         ];
+    }
+
+    /**
+     * Group database result set by the id column.
+     *
+     * It's a replacement for PDO::FETCH_GROUP which is not supported by Doctrine\DBAL
+     *
+     * For the data set returned by <code>SELECT id, column1, column2 FROM table</code> it returns:
+     * <code>
+     * [
+     *     'id1' => [
+     *          [
+     *              'column1' => 'value1',
+     *              'column2' => 'value2',
+     *          ],
+     *          [
+     *              'column1' => 'value2',
+     *              'column2' => 'value3',
+     *          ],
+     *      ],
+     *     'id2' => [
+     *          [
+     *              'column1' => 'value4',
+     *              'column2' => 'value5',
+     *          ],
+     *          [
+     *              'column1' => 'value6',
+     *              'column2' => 'value7',
+     *          ],
+     *      ],
+     * ]
+     * </code>
+     *
+     * @param array $data database result set
+     *
+     * @return array
+     */
+    public function groupResultSetById(array $data): array
+    {
+        $groupedData = [];
+        $ids = array_column($data, 'id');
+        foreach ($ids as $id) {
+            // use array_values to get rid of keys
+            $groupedData[$id] = array_values(
+                array_map(
+                    // remove id column from the matched set per FETCH_GROUP specification
+                    static function (array $row): array {
+                        unset($row['id']);
+
+                        return $row;
+                    },
+                    // filter out rows matching current id
+                    array_filter(
+                        $data,
+                        static function (array $row) use ($id): bool {
+                            return $row['id'] === $id;
+                        }
+                    )
+                )
+            );
+        }
+
+        return $groupedData;
     }
 }

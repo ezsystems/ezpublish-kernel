@@ -1,13 +1,13 @@
 <?php
 
 /**
- * File containing the abstract Limitation handler.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler;
 use eZ\Publish\SPI\Persistence\User\Policy;
@@ -23,10 +23,8 @@ class ObjectStateHandler extends LimitationHandler
 
     /**
      * Translate API STATE limitation to Legacy StateGroup_<identifier> limitations.
-     *
-     * @param Policy $policy
      */
-    public function toLegacy(Policy $policy)
+    public function toLegacy(Policy $policy): void
     {
         if ($policy->limitations !== '*' && isset($policy->limitations[Limitation::STATE])) {
             if ($policy->limitations[Limitation::STATE] === '*') {
@@ -41,10 +39,8 @@ class ObjectStateHandler extends LimitationHandler
 
     /**
      * Translate Legacy StateGroup_<identifier> limitations to API STATE limitation.
-     *
-     * @param Policy $policy
      */
-    public function toSPI(Policy $policy)
+    public function toSPI(Policy $policy): void
     {
         if ($policy->limitations === '*' || empty($policy->limitations)) {
             return;
@@ -100,36 +96,35 @@ class ObjectStateHandler extends LimitationHandler
     /**
      * Query for groups identifiers and id's.
      */
-    protected function getGroupMap(array $limitIds = null)
+    protected function getGroupMap(array $limitIds = null): array
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn('identifier', 'ezcobj_state_group'),
-            $this->dbHandler->quoteColumn('id', 'ezcobj_state')
-        )->from(
-            $this->dbHandler->quoteTable('ezcobj_state')
-        )->innerJoin(
-            $this->dbHandler->quoteTable('ezcobj_state_group'),
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('group_id', 'ezcobj_state'),
-                $this->dbHandler->quoteColumn('id', 'ezcobj_state_group')
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('sg.identifier', 's.id')
+            ->from('ezcobj_state', 's')
+            ->innerJoin(
+                's',
+                'ezcobj_state_group',
+                'sg',
+                's.group_id = sg.id'
+            );
 
         if ($limitIds !== null) {
             $query->where(
-                $query->expr->in(
-                    $this->dbHandler->quoteColumn('id', 'ezcobj_state'),
-                    array_map('intval', $limitIds)
+                $query->expr()->in(
+                    's.id',
+                    $query->createPositionalParameter(
+                        array_map('intval', $limitIds),
+                        Connection::PARAM_INT_ARRAY
+                    )
                 )
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
         $map = [];
-        $groupValues = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $groupValues = $statement->fetchAll(FetchMode::ASSOCIATIVE);
         foreach ($groupValues as $groupValue) {
             $map[self::STATE_GROUP . $groupValue['identifier']][] = (int)$groupValue['id'];
         }

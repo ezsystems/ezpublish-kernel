@@ -51,8 +51,6 @@ class TrashHandlerTest extends TestCase
 
     protected function getTrashHandler()
     {
-        $dbHandler = $this->getDatabaseHandler();
-
         return new Handler(
             $this->locationHandler = $this->createMock(CoreContent\Location\Handler::class),
             $this->locationGateway = $this->createMock(CoreContent\Location\Gateway::class),

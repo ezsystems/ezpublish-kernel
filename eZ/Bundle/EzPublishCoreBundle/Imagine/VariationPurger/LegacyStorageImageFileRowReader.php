@@ -1,31 +1,31 @@
 <?php
 
 /**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger;
 
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use Doctrine\DBAL\Connection;
 
 class LegacyStorageImageFileRowReader implements ImageFileRowReader
 {
-    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler */
-    private $dbHandler;
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
 
-    /** @var \PDOStatement */
+    /** @var \Doctrine\DBAL\Driver\Statement */
     private $statement;
 
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
+        $this->connection = $connection;
     }
 
     public function init()
     {
-        $selectQuery = $this->dbHandler->createSelectQuery();
-        $selectQuery->select('filepath')->from($this->dbHandler->quoteTable('ezimagefile'));
-        $this->statement = $selectQuery->prepare();
-        $this->statement->execute();
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery->select('filepath')->from('ezimagefile');
+        $this->statement = $selectQuery->execute();
     }
 
     public function getRow()

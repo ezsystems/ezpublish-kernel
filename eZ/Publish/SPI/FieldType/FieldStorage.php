@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the eZ\Publish\SPI\FieldType\FieldStorage class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -16,16 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
  *
  * Methods in this interface are called by storage engine.
  *
- * $context array passed to most methods provides some context for the field handler about the
- * currently used storage engine.
- * The array should at least define 2 keys :
- *   - identifier (connection identifier)
- *   - connection (the connection handler)
- * For example, using Legacy storage engine, $context will be:
- *   - identifier = 'LegacyStorage'
- *   - connection = {@link \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler} object handler (for DB connection),
- *                  to be used accordingly to
- *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
+ * $context array passed to most methods is deprecated and will be dropped in the next major version.
  */
 interface FieldStorage
 {
@@ -42,23 +31,14 @@ interface FieldStorage
      * database back end on create, before the external data source may be
      * called from storing).
      *
-     * The context array provides some context for the field handler about the
-     * currently used storage engine.
-     * The array should at least define 2 keys :
-     *   - identifier (connection identifier)
-     *   - connection (the connection handler)
-     * For example, using Legacy storage engine, $context will be:
-     *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler} object handler (for DB connection),
-     *                  to be used accordingly to
-     *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
+     * The context array is deprecated and will be dropped in the next major version.
      *
      * This method might return true if $field needs to be updated after storage done here (to store a PK for instance).
      * In any other case, this method must not return anything (null).
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
+     * @param array $context Deprecated. Rely on injected Connection instead.
      *
      * @return mixed null|true
      */
@@ -72,7 +52,7 @@ interface FieldStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
+     * @param array $context Deprecated. Rely on injected Connection instead.
      */
     public function getFieldData(VersionInfo $versionInfo, Field $field, array $context);
 
@@ -82,7 +62,7 @@ interface FieldStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param array $fieldIds Array of field IDs
-     * @param array $context
+     * @param array $context Deprecated. Rely on injected Connection instead.
      *
      * @return bool
      */
@@ -101,7 +81,7 @@ interface FieldStorage
      * @deprecated Use eZ\Publish\SPI\FieldType\Indexable
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
+     * @param array $context Deprecated. Rely on injected Connection instead.
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */

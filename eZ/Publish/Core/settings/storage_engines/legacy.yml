@@ -42,24 +42,11 @@ services:
         lazy: true
         public: true # @todo should be private
 
-    # Compiler pass will alias 'ezpublish.api.storage_engine.legacy.connection' service to the StorageConnectionFactory
-    ezpublish.api.storage_engine.legacy.dbhandler:
-        class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-        factory: ['eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler', 'createFromConnection']
-        arguments:
-            - "@ezpublish.api.storage_engine.legacy.connection"
-        lazy: true
-        public: true # @todo should be private
-
-    ezpublish.api.storage_engine.legacy.connection:
-        class: Doctrine\DBAL\Connection
-        factory: ['eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler', 'createConnectionFromDSN']
-        arguments:
-            - "%legacy_dsn%"
+    ezpublish.api.storage_engine.legacy.connection: '@ezpublish.persistence.connection'
 
     ezpublish.spi.persistence.legacy.transactionhandler:
         class: eZ\Publish\Core\Persistence\Legacy\TransactionHandler
         arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
-            - "@ezpublish.spi.persistence.legacy.content_type.handler.caching"
-            - "@ezpublish.spi.persistence.legacy.language.handler.caching"
+            $connection: '@ezpublish.api.storage_engine.legacy.connection'
+            $contentTypeHandler: '@ezpublish.spi.persistence.legacy.content_type.handler.caching'
+            $languageHandler: '@ezpublish.spi.persistence.legacy.language.handler.caching'

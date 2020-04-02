@@ -1,7 +1,6 @@
 services:
    ezpublish.persistence.legacy.url.criterion_handler.base:
         abstract: true
-        arguments: ['@ezpublish.api.storage_engine.legacy.dbhandler']
 
    ezpublish.persistence.legacy.url.criterion_handler.logical_and:
        parent: ezpublish.persistence.legacy.url.criterion_handler.base

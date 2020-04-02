@@ -61,15 +61,17 @@ services:
         arguments:
             - "@ezpublish.core.io.migration.file_lister.file_row_reader.media_file_row_reader"
 
+    eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReader\LegacyStorageFileRowReader:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
+
     ezpublish.core.io.migration.file_lister.file_row_reader.binary_file_row_reader:
         class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReader\LegacyStorageBinaryFileRowReader
-        arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+        parent: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReader\LegacyStorageFileRowReader
 
     ezpublish.core.io.migration.file_lister.file_row_reader.media_file_row_reader:
         class: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReader\LegacyStorageMediaFileRowReader
-        arguments:
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+        parent: eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReader\LegacyStorageFileRowReader
 
     ezpublish.core.io.migration.file_migrator:
         class: eZ\Bundle\EzPublishIOBundle\Migration\FileMigrator\FileMigrator

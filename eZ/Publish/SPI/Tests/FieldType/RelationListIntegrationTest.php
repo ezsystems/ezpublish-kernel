@@ -59,7 +59,9 @@ class RelationListIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezobjectrelationlist',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\RelationListConverter($this->getDatabaseHandler()),
+            new Legacy\Content\FieldValue\Converter\RelationListConverter(
+                $this->getDatabaseConnection()
+            ),
             new FieldType\NullStorage()
         );
     }

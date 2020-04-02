@@ -44,9 +44,6 @@
     <testsuite name="eZ\Publish\Core\Search\Legacy">
       <directory>eZ/Publish/Core/Search/Legacy/Tests</directory>
     </testsuite>
-    <testsuite name="eZ\Publish\Core\Persistence\Doctrine">
-      <directory>eZ/Publish/Core/Persistence/Doctrine/Tests</directory>
-    </testsuite>
     <testsuite name="eZ\Publish\Core\Search">
       <directory>eZ/Publish/Core/Search/Tests</directory>
     </testsuite>

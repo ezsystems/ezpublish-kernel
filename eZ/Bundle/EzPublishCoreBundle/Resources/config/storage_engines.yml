@@ -20,12 +20,5 @@ services:
         lazy: true
 
     # Legacy storage engine
-
-    # Alias for backend connection used by eZ Publish storage engine
-    # Useful if you need to reuse it in order to access resources not related to eZ Publish, but stored in your backend (e.g. foreign DB tables)
-    ezpublish.connection:
-        alias: ezpublish.api.storage_engine.legacy.dbhandler
-        deprecated: 'The "%alias_id%" alias is deprecated. Use "ezpublish.persistence.connection" instead'
-
     ezpublish.api.storage_engine.legacy:
         alias: ezpublish.spi.persistence.legacy

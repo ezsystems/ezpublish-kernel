@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
-use eZ\Publish\Core\Persistence\Legacy\TransactionHandler;
+use Doctrine\DBAL\Connection;
+use Exception;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use Exception;
+use eZ\Publish\Core\Persistence\Legacy\TransactionHandler;
 
 /**
  * Test case for TransactionHandler.
@@ -26,8 +26,8 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected $transactionHandler;
 
-    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit\Framework\MockObject\MockObject */
-    protected $dbHandlerMock;
+    /** @var \Doctrine\DBAL\Connection|\PHPUnit\Framework\MockObject\MockObject */
+    protected $connectionMock;
 
     /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject */
     protected $contentTypeHandlerMock;
@@ -41,7 +41,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     public function testBeginTransaction()
     {
         $handler = $this->getTransactionHandler();
-        $this->getDatabaseHandlerMock()
+        $this->getConnectionMock()
             ->expects($this->once())
             ->method('beginTransaction');
         $this->getContentTypeHandlerMock()
@@ -60,7 +60,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     public function testCommit()
     {
         $handler = $this->getTransactionHandler();
-        $this->getDatabaseHandlerMock()
+        $this->getConnectionMock()
             ->expects($this->once())
             ->method('commit');
         $this->getContentTypeHandlerMock()
@@ -82,7 +82,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('test');
 
         $handler = $this->getTransactionHandler();
-        $this->getDatabaseHandlerMock()
+        $this->getConnectionMock()
             ->expects($this->once())
             ->method('commit')
             ->will($this->throwException(new Exception('test')));
@@ -102,7 +102,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     public function testRollback()
     {
         $handler = $this->getTransactionHandler();
-        $this->getDatabaseHandlerMock()
+        $this->getConnectionMock()
             ->expects($this->once())
             ->method('rollback');
         $this->getContentTypeHandlerMock()
@@ -124,7 +124,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('test');
 
         $handler = $this->getTransactionHandler();
-        $this->getDatabaseHandlerMock()
+        $this->getConnectionMock()
             ->expects($this->once())
             ->method('rollback')
             ->will($this->throwException(new Exception('test')));
@@ -147,7 +147,7 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     {
         if (!isset($this->transactionHandler)) {
             $this->transactionHandler = new TransactionHandler(
-                $this->getDatabaseHandlerMock(),
+                $this->getConnectionMock(),
                 $this->getContentTypeHandlerMock(),
                 $this->getLanguageHandlerMock()
             );
@@ -157,17 +157,15 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Returns a mock object for the Content Gateway.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Doctrine\DBAL\Connection|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getDatabaseHandlerMock()
+    protected function getConnectionMock(): Connection
     {
-        if (!isset($this->dbHandlerMock)) {
-            $this->dbHandlerMock = $this->getMockForAbstractClass(DatabaseHandler::class);
+        if (!isset($this->connectionMock)) {
+            $this->connectionMock = $this->createMock(Connection::class);
         }
 
-        return $this->dbHandlerMock;
+        return $this->connectionMock;
     }
 
     /**

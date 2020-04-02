@@ -106,7 +106,8 @@ services:
 
     ezpublish.fieldType.ezobjectrelationlist.converter:
         class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter
-        arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
         tags:
             - {name: ezplatform.field_type.legacy_storage.converter, alias: ezobjectrelationlist}
 

@@ -30,18 +30,6 @@ abstract class BaseCoreFieldTypeIntegrationTest extends APIBaseTest
     }
 
     /**
-     * Return the database handler from the service container.
-     *
-     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler|object
-     */
-    protected function getDatabaseHandler()
-    {
-        return $this->getSetupFactory()->getServiceContainer()->get(
-            'ezpublish.api.storage_engine.legacy.dbhandler'
-        );
-    }
-
-    /**
      * Return the database connection from the service container.
      *
      * @return \Doctrine\DBAL\Connection|object
