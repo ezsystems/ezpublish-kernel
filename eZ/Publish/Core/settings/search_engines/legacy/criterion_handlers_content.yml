@@ -6,25 +6,25 @@ services:
         class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter
 
     ezpublish.search.legacy.gateway.criterion_handler.content.ancestor:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
         class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\Ancestor
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.location_id:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
         class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\LocationId
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.location_remote_id:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
         class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\LocationRemoteId
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.parent_location_id:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
         class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\ParentLocationId
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
@@ -33,19 +33,19 @@ services:
     # Only needed for Content Search on SQL engines where applying Permissions Subtree criterion on all possible
     # locations leads to peformance issues: https://jira.ez.no/browse/EZP-23037
     ezpublish.search.legacy.gateway.criterion_handler.content.permission_subtree:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
         class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\PermissionSubtree
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.subtree:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
         class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\Subtree
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.visibility:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
         class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\Visibility
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}

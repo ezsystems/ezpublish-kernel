@@ -1,17 +1,17 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase date metadata criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
@@ -31,41 +31,28 @@ class DateMetadata extends CriterionHandler
         return $criterion instanceof Criterion\DateMetadata;
     }
 
-    /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
-        $column = $this->dbHandler->quoteColumn(
-            $criterion->target === Criterion\DateMetadata::MODIFIED ? 'modified' : 'published',
-            'ezcontentobject'
-        );
+        $column = $criterion->target === Criterion\DateMetadata::MODIFIED ? 'modified' : 'published';
+        $column = "c.{$column}";
 
+        $value = (array)$criterion->value;
         switch ($criterion->operator) {
             case Criterion\Operator::IN:
-                return $query->expr->in(
+                return $queryBuilder->expr()->in(
                     $column,
-                    $criterion->value
+                    $queryBuilder->createNamedParameter($value, Connection::PARAM_INT_ARRAY)
                 );
 
             case Criterion\Operator::BETWEEN:
-                return $query->expr->between(
+                return $this->dbPlatform->getBetweenExpression(
                     $column,
-                    $query->bindValue($criterion->value[0]),
-                    $query->bindValue($criterion->value[1])
+                    $queryBuilder->createNamedParameter($value[0], ParameterType::INTEGER),
+                    $queryBuilder->createNamedParameter($value[1], ParameterType::INTEGER)
                 );
 
             case Criterion\Operator::EQ:
@@ -75,9 +62,9 @@ class DateMetadata extends CriterionHandler
             case Criterion\Operator::LTE:
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
 
-                return $query->expr->$operatorFunction(
+                return $queryBuilder->expr()->$operatorFunction(
                     $column,
-                    $query->bindValue(reset($criterion->value))
+                    $queryBuilder->createNamedParameter(reset($value), ParameterType::INTEGER)
                 );
 
             default:

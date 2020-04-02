@@ -49,39 +49,41 @@ class HandlerLocationSortTest extends AbstractTestCase
      */
     protected function getContentSearchHandler()
     {
+        $connection = $this->getDatabaseConnection();
+
         return new Content\Handler(
             $this->createMock(ContentGateway::class),
             new Content\Location\Gateway\DoctrineDatabase(
-                $this->getDatabaseHandler(),
+                $connection,
                 new CriteriaConverter(
                     [
-                        new LocationCriterionHandler\LocationId($this->getDatabaseHandler()),
-                        new LocationCriterionHandler\ParentLocationId($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\LogicalAnd($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\MatchAll($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\SectionId($this->getDatabaseHandler()),
+                        new LocationCriterionHandler\LocationId($connection),
+                        new LocationCriterionHandler\ParentLocationId($connection),
+                        new CommonCriterionHandler\LogicalAnd($connection),
+                        new CommonCriterionHandler\MatchAll($connection),
+                        new CommonCriterionHandler\SectionId($connection),
                         new CommonCriterionHandler\ContentTypeIdentifier(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getContentTypeHandler()
                         ),
                     ]
                 ),
                 new SortClauseConverter(
                     [
-                        new LocationSortClauseHandler\Location\Id($this->getDatabaseHandler()),
-                        new LocationSortClauseHandler\Location\Depth($this->getDatabaseHandler()),
-                        new LocationSortClauseHandler\Location\Path($this->getDatabaseHandler()),
-                        new LocationSortClauseHandler\Location\Priority($this->getDatabaseHandler()),
-                        new LocationSortClauseHandler\Location\Visibility($this->getDatabaseHandler()),
-                        new LocationSortClauseHandler\Location\IsMainLocation($this->getDatabaseHandler()),
-                        new CommonSortClauseHandler\ContentId($this->getDatabaseHandler()),
-                        new CommonSortClauseHandler\ContentName($this->getDatabaseHandler()),
-                        new CommonSortClauseHandler\DateModified($this->getDatabaseHandler()),
-                        new CommonSortClauseHandler\DatePublished($this->getDatabaseHandler()),
-                        new CommonSortClauseHandler\SectionIdentifier($this->getDatabaseHandler()),
-                        new CommonSortClauseHandler\SectionName($this->getDatabaseHandler()),
+                        new LocationSortClauseHandler\Location\Id($connection),
+                        new LocationSortClauseHandler\Location\Depth($connection),
+                        new LocationSortClauseHandler\Location\Path($connection),
+                        new LocationSortClauseHandler\Location\Priority($connection),
+                        new LocationSortClauseHandler\Location\Visibility($connection),
+                        new LocationSortClauseHandler\Location\IsMainLocation($connection),
+                        new CommonSortClauseHandler\ContentId($connection),
+                        new CommonSortClauseHandler\ContentName($connection),
+                        new CommonSortClauseHandler\DateModified($connection),
+                        new CommonSortClauseHandler\DatePublished($connection),
+                        new CommonSortClauseHandler\SectionIdentifier($connection),
+                        new CommonSortClauseHandler\SectionName($connection),
                         new CommonSortClauseHandler\Field(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getLanguageHandler(),
                             $this->getContentTypeHandler()
                         ),

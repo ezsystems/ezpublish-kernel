@@ -1,16 +1,14 @@
 <?php
 
 /**
- * File containing a DoctrineDatabase sort clause handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content locator gateway implementation using the DoctrineDatabase.
@@ -29,22 +27,21 @@ abstract class AbstractRandom extends SortClauseHandler
         return $sortClause instanceof SortClause\Random;
     }
 
-    /**
-     * @param int $number
-     *
-     * @return string
-     */
-    public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
-    {
+    public function applySelect(
+        QueryBuilder $query,
+        SortClause $sortClause,
+        int $number
+    ): array {
         $query
-            ->select(
-                $query->alias(
+            ->addSelect(
+                sprintf(
+                    '%s AS %s',
                     $this->getRandomFunctionName($sortClause->targetData->seed),
                     $column = $this->getSortColumnName($number)
                 )
             );
 
-        return $column;
+        return [$column];
     }
 
     abstract public function getRandomFunctionName(?int $seed): string;

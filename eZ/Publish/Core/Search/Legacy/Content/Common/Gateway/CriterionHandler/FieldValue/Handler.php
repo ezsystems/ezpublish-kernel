@@ -1,17 +1,15 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase base field value Handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue;
 
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use RuntimeException;
 
@@ -20,13 +18,8 @@ use RuntimeException;
  */
 abstract class Handler
 {
-    /**
-     * DB handler to fetch additional field information.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
+    /** @var \Doctrine\DBAL\Connection */
+    protected $connection;
 
     /**
      * Map of criterion operators to the respective function names
@@ -49,46 +42,52 @@ abstract class Handler
      */
     protected $transformationProcessor;
 
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform|null */
+    protected $dbPlatform;
+
     /**
-     * Creates a new criterion handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $dbHandler, TransformationProcessor $transformationProcessor)
+    public function __construct(Connection $connection, TransformationProcessor $transformationProcessor)
     {
-        $this->dbHandler = $dbHandler;
+        $this->connection = $connection;
+        $this->dbPlatform = $connection->getDatabasePlatform();
         $this->transformationProcessor = $transformationProcessor;
     }
 
     /**
      * Generates query expression for operator and value of a Field Criterion.
      *
-     * @throws \RuntimeException If operator is not handled.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
+     * @param \Doctrine\DBAL\Query\QueryBuilder $outerQuery to be used only for parameter binding
+     * @param \Doctrine\DBAL\Query\QueryBuilder $subQuery to modify Field Value query constraints
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param string $column
      *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
+     * @return \Doctrine\DBAL\Query\Expression\CompositeExpression|string
+     *
+     * @throws \RuntimeException If operator is not handled.
      */
-    public function handle(SelectQuery $query, Criterion $criterion, $column)
-    {
-        $column = $this->dbHandler->quoteColumn($column);
-
+    public function handle(
+        QueryBuilder $outerQuery,
+        QueryBuilder $subQuery,
+        Criterion $criterion,
+        string $column
+    ) {
         switch ($criterion->operator) {
             case Criterion\Operator::IN:
-                $filter = $query->expr->in(
+                $filter = $subQuery->expr()->in(
                     $column,
-                    array_map([$this, 'lowerCase'], $criterion->value)
+                    $outerQuery->createNamedParameter(
+                        array_map([$this, 'lowerCase'], $criterion->value),
+                        Connection::PARAM_STR_ARRAY
+                    )
                 );
                 break;
 
             case Criterion\Operator::BETWEEN:
-                $filter = $query->expr->between(
+                $filter = $this->dbPlatform->getBetweenExpression(
                     $column,
-                    $query->bindValue($this->lowerCase($criterion->value[0])),
-                    $query->bindValue($this->lowerCase($criterion->value[1]))
+                    $outerQuery->createNamedParameter($this->lowerCase($criterion->value[0])),
+                    $outerQuery->createNamedParameter($this->lowerCase($criterion->value[1]))
                 );
                 break;
 
@@ -98,32 +97,34 @@ abstract class Handler
             case Criterion\Operator::LT:
             case Criterion\Operator::LTE:
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
-                $filter = $query->expr->$operatorFunction(
+                $filter = $subQuery->expr()->{$operatorFunction}(
                     $column,
-                    $query->bindValue($this->lowerCase($criterion->value))
+                    $outerQuery->createNamedParameter($this->lowerCase($criterion->value))
                 );
                 break;
 
             case Criterion\Operator::LIKE:
                 $value = str_replace('*', '%', $this->prepareLikeString($criterion->value));
 
-                $filter = $query->expr->like(
+                $filter = $subQuery->expr()->like(
                     $column,
-                    $query->bindValue($value)
+                    $outerQuery->createNamedParameter($value)
                 );
                 break;
 
             case Criterion\Operator::CONTAINS:
-                $filter = $query->expr->like(
+                $filter = $subQuery->expr()->like(
                     $column,
-                    $query->bindValue(
+                    $outerQuery->createNamedParameter(
                         '%' . $this->prepareLikeString($criterion->value) . '%'
                     )
                 );
                 break;
 
             default:
-                throw new RuntimeException("Unknown operator '{$criterion->operator}' for Field Criterion handler.");
+                throw new RuntimeException(
+                    "Unknown operator '{$criterion->operator}' for Field Criterion handler."
+                );
         }
 
         return $filter;
@@ -133,24 +134,16 @@ abstract class Handler
      * Returns the given $string prepared for use in SQL LIKE clause.
      *
      * LIKE clause wildcards '%' and '_' contained in the given $string will be escaped.
-     *
-     * @param $string
-     *
-     * @return string
      */
-    protected function prepareLikeString($string)
+    protected function prepareLikeString(string $string): string
     {
         return addcslashes($this->lowerCase($string), '%_');
     }
 
     /**
      * Downcases a given string using string transformation processor.
-     *
-     * @param string $string
-     *
-     * @return string
      */
-    protected function lowerCase($string)
+    protected function lowerCase(string $string): string
     {
         return $this->transformationProcessor->transformByGroup($string, 'lowercase');
     }

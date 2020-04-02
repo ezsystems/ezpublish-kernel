@@ -47,49 +47,50 @@ class HandlerLocationTest extends AbstractTestCase
             ),
             glob(__DIR__ . '/../../../../Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr')
         );
+        $connection = $this->getDatabaseConnection();
         $commaSeparatedCollectionValueHandler = new CommonCriterionHandler\FieldValue\Handler\Collection(
-            $this->getDatabaseHandler(),
+            $connection,
             $transformationProcessor,
             ','
         );
         $hyphenSeparatedCollectionValueHandler = new CommonCriterionHandler\FieldValue\Handler\Collection(
-            $this->getDatabaseHandler(),
+            $connection,
             $transformationProcessor,
             '-'
         );
         $simpleValueHandler = new CommonCriterionHandler\FieldValue\Handler\Simple(
-            $this->getDatabaseHandler(),
+            $connection,
             $transformationProcessor
         );
         $compositeValueHandler = new CommonCriterionHandler\FieldValue\Handler\Composite(
-            $this->getDatabaseHandler(),
+            $connection,
             $transformationProcessor
         );
 
         return new Content\Handler(
             $this->createMock(ContentGateway::class),
             new Content\Location\Gateway\DoctrineDatabase(
-                $this->getDatabaseHandler(),
+                $connection,
                 new CriteriaConverter(
                     [
-                        new LocationCriterionHandler\LocationId($this->getDatabaseHandler()),
-                        new LocationCriterionHandler\ParentLocationId($this->getDatabaseHandler()),
-                        new LocationCriterionHandler\LocationRemoteId($this->getDatabaseHandler()),
-                        new LocationCriterionHandler\Subtree($this->getDatabaseHandler()),
-                        new LocationCriterionHandler\Visibility($this->getDatabaseHandler()),
-                        new LocationCriterionHandler\Location\Depth($this->getDatabaseHandler()),
-                        new LocationCriterionHandler\Location\Priority($this->getDatabaseHandler()),
-                        new LocationCriterionHandler\Location\IsMainLocation($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\ContentId($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\ContentTypeGroupId($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\ContentTypeId($this->getDatabaseHandler()),
+                        new LocationCriterionHandler\LocationId($connection),
+                        new LocationCriterionHandler\ParentLocationId($connection),
+                        new LocationCriterionHandler\LocationRemoteId($connection),
+                        new LocationCriterionHandler\Subtree($connection),
+                        new LocationCriterionHandler\Visibility($connection),
+                        new LocationCriterionHandler\Location\Depth($connection),
+                        new LocationCriterionHandler\Location\Priority($connection),
+                        new LocationCriterionHandler\Location\IsMainLocation($connection),
+                        new CommonCriterionHandler\ContentId($connection),
+                        new CommonCriterionHandler\ContentTypeGroupId($connection),
+                        new CommonCriterionHandler\ContentTypeId($connection),
                         new CommonCriterionHandler\ContentTypeIdentifier(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getContentTypeHandler()
                         ),
-                        new CommonCriterionHandler\DateMetadata($this->getDatabaseHandler()),
+                        new CommonCriterionHandler\DateMetadata($connection),
                         new CommonCriterionHandler\Field(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getContentTypeHandler(),
                             $this->getLanguageHandler(),
                             $this->getConverterRegistry(),
@@ -113,39 +114,39 @@ class HandlerLocationTest extends AbstractTestCase
                             $transformationProcessor
                         ),
                         new CommonCriterionHandler\FullText(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $transformationProcessor,
                             $this->getLanguageMaskGenerator(),
                             $fullTextSearchConfiguration
                         ),
                         new CommonCriterionHandler\LanguageCode(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getLanguageMaskGenerator()
                         ),
-                        new CommonCriterionHandler\LogicalAnd($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\LogicalNot($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\LogicalOr($this->getDatabaseHandler()),
+                        new CommonCriterionHandler\LogicalAnd($connection),
+                        new CommonCriterionHandler\LogicalNot($connection),
+                        new CommonCriterionHandler\LogicalOr($connection),
                         new CommonCriterionHandler\MapLocationDistance(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getContentTypeHandler(),
                             $this->getLanguageHandler()
                         ),
-                        new CommonCriterionHandler\MatchAll($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\ObjectStateId($this->getDatabaseHandler()),
+                        new CommonCriterionHandler\MatchAll($connection),
+                        new CommonCriterionHandler\ObjectStateId($connection),
                         new CommonCriterionHandler\FieldRelation(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getContentTypeHandler(),
                             $this->getLanguageHandler()
                         ),
-                        new CommonCriterionHandler\RemoteId($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\SectionId($this->getDatabaseHandler()),
-                        new CommonCriterionHandler\UserMetadata($this->getDatabaseHandler()),
+                        new CommonCriterionHandler\RemoteId($connection),
+                        new CommonCriterionHandler\SectionId($connection),
+                        new CommonCriterionHandler\UserMetadata($connection),
                     ]
                 ),
                 new SortClauseConverter(
                     [
-                        new LocationSortClauseHandler\Location\Id($this->getDatabaseHandler()),
-                        new CommonSortClauseHandler\ContentId($this->getDatabaseHandler()),
+                        new LocationSortClauseHandler\Location\Id($connection),
+                        new CommonSortClauseHandler\ContentId($connection),
                     ]
                 ),
                 $this->getLanguageHandler()

@@ -26,10 +26,10 @@ services:
     ezpublish.search.legacy.gateway.content.inner:
         class: eZ\Publish\Core\Search\Legacy\Content\Gateway\DoctrineDatabase
         arguments:
-            - "@ezpublish.api.search_engine.legacy.dbhandler"
-            - "@ezpublish.search.legacy.gateway.criteria_converter.content"
-            - "@ezpublish.search.legacy.gateway.sort_clause_converter.content"
-            - "@ezpublish.spi.persistence.language_handler"
+            $connection: '@ezpublish.persistence.connection'
+            $criteriaConverter: '@ezpublish.search.legacy.gateway.criteria_converter.content'
+            $sortClauseConverter: '@ezpublish.search.legacy.gateway.sort_clause_converter.content'
+            $languageHandler: '@ezpublish.spi.persistence.language_handler'
 
     ezpublish.search.legacy.gateway.content.exception_conversion:
         class: eZ\Publish\Core\Search\Legacy\Content\Gateway\ExceptionConversion
@@ -43,10 +43,10 @@ services:
     ezpublish.search.legacy.gateway.location.inner:
         class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\DoctrineDatabase
         arguments:
-            - "@ezpublish.api.search_engine.legacy.dbhandler"
-            - "@ezpublish.search.legacy.gateway.criteria_converter.location"
-            - "@ezpublish.search.legacy.gateway.sort_clause_converter.location"
-            - "@ezpublish.spi.persistence.language_handler"
+            $connection: "@ezpublish.persistence.connection"
+            $criteriaConverter: "@ezpublish.search.legacy.gateway.criteria_converter.location"
+            $sortClauseConverter: "@ezpublish.search.legacy.gateway.sort_clause_converter.location"
+            $languageHandler: "@ezpublish.spi.persistence.language_handler"
 
     ezpublish.search.legacy.gateway.location.exception_conversion:
         class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\ExceptionConversion

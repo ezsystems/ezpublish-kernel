@@ -1,17 +1,16 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase visibility criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Visibility criterion handler.
@@ -30,65 +29,46 @@ class Visibility extends CriterionHandler
         return $criterion instanceof Criterion\Visibility;
     }
 
-    /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @todo: Needs optimisation since this subselect can potentially be problematic
-     * due to large number of contentobject_id values returned. One way to fix this
-     * is to use inner joins on ezcontentobject_tree table, but this is not currently
-     * supported in legacy search gateway
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
-        $subSelect = $query->subSelect();
+        $subSelect = $this->connection->createQueryBuilder();
 
         if ($criterion->value[0] === Criterion\Visibility::VISIBLE) {
-            $expression = $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_hidden', 'ezcontentobject_tree'),
+            $expression = $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->eq(
+                    'subquery_location.is_hidden',
                     0
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_invisible', 'ezcontentobject_tree'),
+                $queryBuilder->expr()->eq(
+                    'subquery_location.is_invisible',
                     0
                 )
             );
         } else {
-            $expression = $query->expr->lOr(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_hidden', 'ezcontentobject_tree'),
+            $expression = $queryBuilder->expr()->orX(
+                $queryBuilder->expr()->eq(
+                    'subquery_location.is_hidden',
                     1
                 ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_invisible', 'ezcontentobject_tree'),
+                $queryBuilder->expr()->eq(
+                    'subquery_location.is_invisible',
                     1
                 )
             );
         }
 
         $subSelect
-            ->select(
-                $this->dbHandler->quoteColumn('contentobject_id')
-            )->from(
-                $this->dbHandler->quoteTable('ezcontentobject_tree')
-            )->where($expression);
+            ->select('contentobject_id')
+            ->from(LocationGateway::CONTENT_TREE_TABLE, 'subquery_location')
+            ->where($expression);
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-            $subSelect
+        return $queryBuilder->expr()->in(
+            'c.id',
+            $subSelect->getSQL()
         );
     }
 }

@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class IsUserBased extends CriterionHandler
 {
@@ -22,27 +22,27 @@ class IsUserBased extends CriterionHandler
 
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
-        $isUserBased = (bool) reset($criterion->value);
+        $isUserBased = (bool)reset($criterion->value);
 
-        $subSelect = $query->subSelect();
+        $subSelect = $this->connection->createQueryBuilder();
         $subSelect
             ->select(
-                $this->dbHandler->quoteColumn('contentobject_id')
+                'contentobject_id'
             )->from(
-                $this->dbHandler->quoteTable('ezuser')
+                'ezuser'
             );
 
-        $queryExpression = $query->expr->in(
-            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-            $subSelect
+        $queryExpression = $queryBuilder->expr()->in(
+            'c.id',
+            $subSelect->getSQL()
         );
 
         return $isUserBased
             ? $queryExpression
-            : $query->expr->not($queryExpression);
+            : "NOT({$queryExpression})";
     }
 }

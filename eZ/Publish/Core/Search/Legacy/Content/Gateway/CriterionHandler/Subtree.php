@@ -1,17 +1,16 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase subtree criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Subtree criterion handler.
@@ -30,41 +29,29 @@ class Subtree extends CriterionHandler
         return $criterion instanceof Criterion\Subtree;
     }
 
-    /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
         $statements = [];
         foreach ($criterion->value as $pattern) {
-            $statements[] = $query->expr->like(
-                $this->dbHandler->quoteColumn('path_string'),
-                $query->bindValue($pattern . '%')
+            $statements[] = $queryBuilder->expr()->like(
+                'path_string',
+                $queryBuilder->createNamedParameter($pattern . '%', ParameterType::STRING)
             );
         }
 
-        $subSelect = $query->subSelect();
+        $subSelect = $this->connection->createQueryBuilder();
         $subSelect
-            ->select($this->dbHandler->quoteColumn('contentobject_id'))
-            ->from($this->dbHandler->quoteTable('ezcontentobject_tree'))
-            ->where($query->expr->lOr($statements));
+            ->select('contentobject_id')
+            ->from('ezcontentobject_tree')
+            ->where($queryBuilder->expr()->orX(...$statements));
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-            $subSelect
+        return $queryBuilder->expr()->in(
+            'c.id',
+            $subSelect->getSQL()
         );
     }
 }

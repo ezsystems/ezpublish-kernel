@@ -8,21 +8,23 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class UserEmail extends CriterionHandler
 {
     /** @var \eZ\Publish\Core\Persistence\TransformationProcessor */
     private $transformationProcessor;
 
-    public function __construct(DatabaseHandler $dbHandler, TransformationProcessor $transformationProcessor)
-    {
-        parent::__construct($dbHandler);
+    public function __construct(
+        Connection $connection,
+        TransformationProcessor $transformationProcessor
+    ) {
+        parent::__construct($connection);
 
         $this->transformationProcessor = $transformationProcessor;
     }
@@ -34,14 +36,14 @@ class UserEmail extends CriterionHandler
 
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
         if (Criterion\Operator::LIKE === $criterion->operator) {
-            $expression = $query->expr->like(
-                $this->dbHandler->quoteColumn('email', 't1'),
-                $query->bindValue(
+            $expression = $queryBuilder->expr()->like(
+                't1.email',
+                $queryBuilder->createNamedParameter(
                     str_replace(
                         '*',
                         '%',
@@ -56,28 +58,22 @@ class UserEmail extends CriterionHandler
                 )
             );
         } else {
-            $expression = $query->expr->in(
-                $this->dbHandler->quoteColumn('email', 't1'),
-                $criterion->value
+            $value = (array)$criterion->value;
+            $expression = $queryBuilder->expr()->in(
+                't1.email',
+                $queryBuilder->createNamedParameter($value, Connection::PARAM_STR_ARRAY)
             );
         }
 
-        $subSelect = $query->subSelect();
+        $subSelect = $this->connection->createQueryBuilder();
         $subSelect
-            ->select(
-                $this->dbHandler->quoteColumn('contentobject_id', 't1')
-            )->from(
-                $query->alias(
-                    $this->dbHandler->quoteTable('ezuser'),
-                    't1'
-                )
-            )->where(
-                $expression
-            );
+            ->select('t1.contentobject_id')
+            ->from('ezuser', 't1')
+            ->where($expression);
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-            $subSelect
+        return $queryBuilder->expr()->in(
+            'c.id',
+            $subSelect->getSQL()
         );
     }
 }

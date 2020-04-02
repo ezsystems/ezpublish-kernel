@@ -1,38 +1,33 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase sort clause handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway;
 
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Handler for a single sort clause.
  */
 abstract class SortClauseHandler
 {
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
+    /** @var \Doctrine\DBAL\Connection */
+    protected $connection;
+
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform|null */
+    protected $dbPlatform;
 
     /**
-     * Creates a new sort clause handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
+        $this->connection = $connection;
+        $this->dbPlatform = $connection->getDatabasePlatform();
     }
 
     /**
@@ -50,28 +45,25 @@ abstract class SortClauseHandler
      * Returns the name of the (aliased) column, which information should be
      * used for sorting.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
+     * @param \Doctrine\DBAL\Query\QueryBuilder $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      *
-     * @return string
+     * @return array column names to be used when sorting
      */
-    abstract public function applySelect(SelectQuery $query, SortClause $sortClause, $number);
+    abstract public function applySelect(QueryBuilder $query, SortClause $sortClause, int $number): array;
 
     /**
      * Applies joins to the query.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
-     * @param int $number
      * @param array $languageSettings
      */
     public function applyJoin(
-        SelectQuery $query,
+        QueryBuilder $query,
         SortClause $sortClause,
-        $number,
+        int $number,
         array $languageSettings
-    ) {
+    ): void {
     }
 
     /**
@@ -83,7 +75,7 @@ abstract class SortClauseHandler
      */
     protected function getSortColumnName($number)
     {
-        return $this->dbHandler->quoteIdentifier('sort_column_' . $number);
+        return $this->connection->quoteIdentifier('sort_column_' . $number);
     }
 
     /**

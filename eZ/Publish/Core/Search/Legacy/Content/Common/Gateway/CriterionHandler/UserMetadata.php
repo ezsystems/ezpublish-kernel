@@ -1,17 +1,18 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase user metadata criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
@@ -31,70 +32,57 @@ class UserMetadata extends CriterionHandler
         return $criterion instanceof Criterion\UserMetadata;
     }
 
-    /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
+        $value = (array)$criterion->value;
         switch ($criterion->target) {
             case Criterion\UserMetadata::MODIFIER:
-                return $query->expr->in(
-                    $this->dbHandler->quoteColumn('creator_id', 'ezcontentobject_version'),
-                    $criterion->value
+                return $queryBuilder->expr()->in(
+                    'v.creator_id',
+                    $queryBuilder->createNamedParameter($value, Connection::PARAM_INT_ARRAY)
                 );
 
             case Criterion\UserMetadata::GROUP:
-                $subSelect = $query->subSelect();
+                $subSelect = $this->connection->createQueryBuilder();
                 $subSelect
                     ->select(
-                        $this->dbHandler->quoteColumn('contentobject_id', 't1')
+                        't1.contentobject_id'
                     )->from(
-                        $query->alias(
-                            $this->dbHandler->quoteTable('ezcontentobject_tree'),
-                            't1'
-                        )
+                        LocationGateway::CONTENT_TREE_TABLE, 't1'
                     )->innerJoin(
-                        $query->alias(
-                            $this->dbHandler->quoteTable('ezcontentobject_tree'),
-                            't2'
-                        ),
-                        $query->expr->like(
+                        't1',
+                        LocationGateway::CONTENT_TREE_TABLE,
+                        't2',
+                        $queryBuilder->expr()->like(
                             't1.path_string',
-                            $query->expr->concat(
+                            $this->dbPlatform->getConcatExpression(
                                 't2.path_string',
-                                $query->bindValue('%')
+                                $queryBuilder->createNamedParameter('%', ParameterType::STRING)
                             )
                         )
                     )->where(
-                        $query->expr->in(
-                            $this->dbHandler->quoteColumn('contentobject_id', 't2'),
-                            $criterion->value
+                        $queryBuilder->expr()->in(
+                            't2.contentobject_id',
+                            $queryBuilder->createNamedParameter($value, Connection::PARAM_INT_ARRAY)
                         )
                     );
 
-                return $query->expr->in(
-                    $this->dbHandler->quoteColumn('owner_id', 'ezcontentobject'),
-                    $subSelect
+                return $queryBuilder->expr()->in(
+                    'c.owner_id',
+                    $subSelect->getSQL()
                 );
 
             case Criterion\UserMetadata::OWNER:
-                return $query->expr->in(
-                    $this->dbHandler->quoteColumn('owner_id', 'ezcontentobject'),
-                    $criterion->value
+                return $queryBuilder->expr()->in(
+                    'c.owner_id',
+                    $queryBuilder->createNamedParameter($value, Connection::PARAM_INT_ARRAY)
                 );
+            default:
+                break;
         }
 
         throw new RuntimeException("Invalid target Criterion: '" . $criterion->target . "'");

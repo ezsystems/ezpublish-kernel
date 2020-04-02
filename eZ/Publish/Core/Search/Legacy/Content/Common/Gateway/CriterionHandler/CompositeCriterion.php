@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class CompositeCriterion extends CriterionHandler
 {
@@ -20,8 +20,12 @@ class CompositeCriterion extends CriterionHandler
         return $criterion instanceof Criterion\CompositeCriterion;
     }
 
-    public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion, array $languageSettings)
-    {
-        return $converter->convertCriteria($query, $criterion->criteria, $languageSettings);
+    public function handle(
+        CriteriaConverter $converter,
+        QueryBuilder $queryBuilder,
+        Criterion $criterion,
+        array $languageSettings
+    ) {
+        return $converter->convertCriteria($queryBuilder, $criterion->criteria, $languageSettings);
     }
 }

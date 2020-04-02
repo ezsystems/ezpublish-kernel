@@ -1,17 +1,16 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase permission subtree criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Repository\Values\Content\Query\Criterion\PermissionSubtree as PermissionSubtreeCriterion;
 
 /**
@@ -31,21 +30,9 @@ class PermissionSubtree extends CriterionHandler
         return $criterion instanceof PermissionSubtreeCriterion;
     }
 
-    /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
@@ -53,34 +40,26 @@ class PermissionSubtree extends CriterionHandler
 
         $statements = [];
         foreach ($criterion->value as $pattern) {
-            $statements[] = $query->expr->like(
-                $this->dbHandler->quoteColumn('path_string', $table),
-                $query->bindValue($pattern . '%')
+            $statements[] = $queryBuilder->expr()->like(
+                "{$table}.path_string",
+                $queryBuilder->createNamedParameter($pattern . '%')
             );
         }
 
-        // Check if ezcontentobject_tree was already joined, if it was there is no need to join
-        // with it again - first join will be reused by all other PermissionSubtree criteria
-        /** @var $query \eZ\Publish\Core\Persistence\Doctrine\SelectDoctrineQuery */
-        if (!$query->permissionSubtreeJoinAdded) {
-            $query
+        $locationTableAlias = $this->connection->quoteIdentifier($table);
+        if (!$this->hasJoinedTableAs($queryBuilder, $locationTableAlias)) {
+            $queryBuilder
                 ->leftJoin(
-                    $query->alias(
-                        $this->dbHandler->quoteTable('ezcontentobject_tree'),
-                        $this->dbHandler->quoteIdentifier($table)
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn('contentobject_id', $table),
-                        $this->dbHandler->quoteColumn('id', 'ezcontentobject')
+                    'c',
+                    LocationGateway::CONTENT_TREE_TABLE,
+                    $locationTableAlias,
+                    $queryBuilder->expr()->eq(
+                        "{$locationTableAlias}.contentobject_id",
+                        'c.id'
                     )
                 );
-
-            // Set joined state to true
-            $query->permissionSubtreeJoinAdded = true;
         }
 
-        return $query->expr->lOr(
-            $statements
-        );
+        return $queryBuilder->expr()->orX(...$statements);
     }
 }

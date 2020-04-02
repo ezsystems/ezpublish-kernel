@@ -1,18 +1,16 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase content type criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use Psr\Log\LoggerInterface;
@@ -35,19 +33,12 @@ class ContentTypeIdentifier extends CriterionHandler
      */
     protected $logger;
 
-    /**
-     * Construct from handler handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \Psr\Log\LoggerInterface|null $logger
-     */
     public function __construct(
-        DatabaseHandler $dbHandler,
+        Connection $connection,
         ContentTypeHandler $contentTypeHandler,
         LoggerInterface $logger = null
     ) {
-        parent::__construct($dbHandler);
+        parent::__construct($connection);
 
         $this->contentTypeHandler = $contentTypeHandler;
         $this->logger = $logger ?? new NullLogger();
@@ -65,21 +56,9 @@ class ContentTypeIdentifier extends CriterionHandler
         return $criterion instanceof Criterion\ContentTypeIdentifier;
     }
 
-    /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
@@ -105,12 +84,12 @@ class ContentTypeIdentifier extends CriterionHandler
         }
 
         if (count($idList) === 0) {
-            return $query->expr->not($query->bindValue('1'));
+            return '1 = 0';
         }
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn('contentclass_id', 'ezcontentobject'),
-            $idList
+        return $queryBuilder->expr()->in(
+            'c.contentclass_id',
+            $queryBuilder->createNamedParameter($idList, Connection::PARAM_INT_ARRAY)
         );
     }
 }

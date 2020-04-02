@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\Core\FieldType\User\UserStorage\Gateway\DoctrineStorage as UserGateway;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class IsUserEnabled extends CriterionHandler
 {
@@ -22,38 +23,30 @@ class IsUserEnabled extends CriterionHandler
 
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
-        $subSelect = $query->subSelect();
+        $subSelect = $this->connection->createQueryBuilder();
         $subSelect
-            ->select(
-                $this->dbHandler->quoteColumn('contentobject_id', 't1')
-            )->from(
-                $query->alias(
-                    $this->dbHandler->quoteTable('ezuser'),
-                    't1'
-                )
-            )->leftJoin(
-                $query->alias(
-                    $this->dbHandler->quoteTable('ezuser_setting'),
-                    't2'
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 't1'),
-                    $this->dbHandler->quoteColumn('user_id', 't2')
-                )
-            )->where(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('is_enabled', 't2'),
-                    (int) reset($criterion->value)
+            ->select('t1.contentobject_id')
+            ->from(UserGateway::USER_TABLE, 't1')
+            ->leftJoin(
+                't1',
+                'ezuser_setting',
+                't2',
+                't1.contentobject_id = t2.user_id'
+            )
+            ->where(
+                $queryBuilder->expr()->eq(
+                    't2.is_enabled',
+                    $queryBuilder->createNamedParameter((int)reset($criterion->value))
                 )
             );
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-            $subSelect
+        return $queryBuilder->expr()->in(
+            'c.id',
+            $subSelect->getSQL()
         );
     }
 }

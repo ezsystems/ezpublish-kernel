@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the Search Location Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -26,6 +24,9 @@ abstract class Gateway
      * @param bool $doCount
      *
      * @return mixed[][]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException if a given Criterion Handler or Sort Clause is not implemented
      */
     abstract public function find(
         Criterion $criterion,
@@ -34,5 +35,5 @@ abstract class Gateway
         array $sortClauses = null,
         array $languageFilter = [],
         $doCount = true
-    );
+    ): array;
 }

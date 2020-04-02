@@ -1,26 +1,26 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase Location Gateway class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
-use PDO;
+use RuntimeException;
 
 /**
  * Location gateway implementation using the Doctrine database.
  */
-class DoctrineDatabase extends Gateway
+final class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
@@ -28,12 +28,8 @@ class DoctrineDatabase extends Gateway
      */
     const MAX_LIMIT = 1073741824;
 
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
-    protected $handler;
+    /** @var \Doctrine\DBAL\Connection */
+    private $connection;
 
     /** @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter */
     private $criteriaConverter;
@@ -46,40 +42,29 @@ class DoctrineDatabase extends Gateway
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
-    protected $languageHandler;
+    private $languageHandler;
+
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $dbPlatform;
 
     /**
      * Construct from database handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $criteriaConverter
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter $sortClauseConverter
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(
-        DatabaseHandler $handler,
+        Connection $connection,
         CriteriaConverter $criteriaConverter,
         SortClauseConverter $sortClauseConverter,
         LanguageHandler $languageHandler
     ) {
-        $this->handler = $handler;
+        $this->connection = $connection;
+        $this->dbPlatform = $connection->getDatabasePlatform();
         $this->criteriaConverter = $criteriaConverter;
         $this->sortClauseConverter = $sortClauseConverter;
         $this->languageHandler = $languageHandler;
     }
 
-    /**
-     * Returns total count and data for all Locations satisfying the parameters.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int $limit
-     * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
-     * @param array $languageFilter
-     * @param bool $doCount
-     *
-     * @return mixed[][]
-     */
     public function find(
         Criterion $criterion,
         $offset,
@@ -87,22 +72,22 @@ class DoctrineDatabase extends Gateway
         array $sortClauses = null,
         array $languageFilter = [],
         $doCount = true
-    ) {
+    ): array {
         $count = $doCount ? $this->getTotalCount($criterion, $languageFilter) : null;
 
         if (!$doCount && $limit === 0) {
-            throw new \RuntimeException('Invalid query. Cannot disable count and request 0 items at the same time.');
+            throw new RuntimeException('Invalid query. Cannot disable count and request 0 items at the same time.');
         }
 
         if ($limit === 0 || ($count !== null && $count <= $offset)) {
             return ['count' => $count, 'rows' => []];
         }
 
-        $selectQuery = $this->handler->createSelectQuery();
+        $selectQuery = $this->connection->createQueryBuilder();
         $selectQuery->select(
-            'ezcontentobject_tree.*',
-            $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
-            $this->handler->quoteColumn('initial_language_id', 'ezcontentobject')
+            't.*',
+            'c.language_mask',
+            'c.initial_language_id'
         );
 
         if ($sortClauses !== null) {
@@ -110,16 +95,18 @@ class DoctrineDatabase extends Gateway
         }
 
         $selectQuery
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
+            ->from('ezcontentobject_tree', 't')
             ->innerJoin(
+                't',
                 'ezcontentobject',
-                'ezcontentobject_tree.contentobject_id',
-                'ezcontentobject.id'
+                'c',
+                't.contentobject_id = c.id'
             )
             ->innerJoin(
+                'c',
                 'ezcontentobject_version',
-                'ezcontentobject.id',
-                'ezcontentobject_version.contentobject_id'
+                'v',
+                'c.id = v.contentobject_id',
             );
 
         if ($sortClauses !== null) {
@@ -128,35 +115,34 @@ class DoctrineDatabase extends Gateway
 
         $selectQuery->where(
             $this->criteriaConverter->convertCriteria($selectQuery, $criterion, $languageFilter),
-            $selectQuery->expr->eq(
-                'ezcontentobject.status',
+            $selectQuery->expr()->eq(
+                'c.status',
                 //ContentInfo::STATUS_PUBLISHED
-                $selectQuery->bindValue(1, null, PDO::PARAM_INT)
+                $selectQuery->createNamedParameter(1, ParameterType::INTEGER)
             ),
-            $selectQuery->expr->eq(
-                'ezcontentobject_version.status',
+            $selectQuery->expr()->eq(
+                'v.status',
                 //VersionInfo::STATUS_PUBLISHED
-                $selectQuery->bindValue(1, null, PDO::PARAM_INT)
+                $selectQuery->createNamedParameter(1, ParameterType::INTEGER)
             ),
-            $selectQuery->expr->neq(
-                $this->handler->quoteColumn('depth', 'ezcontentobject_tree'),
-                $selectQuery->bindValue(0, null, PDO::PARAM_INT)
+            $selectQuery->expr()->neq(
+                't.depth',
+                $selectQuery->createNamedParameter(0, ParameterType::INTEGER)
             )
         );
 
         // If not main-languages query
         if (!empty($languageFilter['languages'])) {
-            $selectQuery->where(
-                $selectQuery->expr->gt(
-                    $selectQuery->expr->bitAnd(
-                        $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
-                        $selectQuery->bindValue(
+            $selectQuery->andWhere(
+                $selectQuery->expr()->gt(
+                    $this->dbPlatform->getBitAndComparisonExpression(
+                        'c.language_mask',
+                        $selectQuery->createNamedParameter(
                             $this->getLanguageMask($languageFilter),
-                            null,
-                            PDO::PARAM_INT
+                            ParameterType::INTEGER
                         )
                     ),
-                    $selectQuery->bindValue(0, null, PDO::PARAM_INT)
+                    $selectQuery->createNamedParameter(0, ParameterType::INTEGER)
                 )
             );
         }
@@ -165,14 +151,14 @@ class DoctrineDatabase extends Gateway
             $this->sortClauseConverter->applyOrderBy($selectQuery);
         }
 
-        $selectQuery->limit($limit, $offset);
+        $selectQuery->setMaxResults($limit);
+        $selectQuery->setFirstResult($offset);
 
-        $statement = $selectQuery->prepare();
-        $statement->execute();
+        $statement = $selectQuery->execute();
 
         return [
             'count' => $count,
-            'rows' => $statement->fetchAll(PDO::FETCH_ASSOC),
+            'rows' => $statement->fetchAll(FetchMode::ASSOCIATIVE),
         ];
     }
 
@@ -182,62 +168,63 @@ class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param array $languageFilter
      *
-     * @return array
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    protected function getTotalCount(Criterion $criterion, array $languageFilter)
+    private function getTotalCount(Criterion $criterion, array $languageFilter): int
     {
-        $query = $this->handler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query
-            ->select($query->alias($query->expr->count('*'), 'count'))
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
+            ->select($this->dbPlatform->getCountExpression('*'))
+            ->from('ezcontentobject_tree', 't')
             ->innerJoin(
-                'ezcontentobject',
-                'ezcontentobject_tree.contentobject_id',
-                'ezcontentobject.id'
+                't',
+                ContentGateway::CONTENT_ITEM_TABLE,
+                'c',
+                't.contentobject_id = c.id'
             )
             ->innerJoin(
-                'ezcontentobject_version',
-                'ezcontentobject.id',
-                'ezcontentobject_version.contentobject_id'
+                'c',
+                ContentGateway::CONTENT_VERSION_TABLE,
+                'v',
+                'c.id = v.contentobject_id'
             );
 
         $query->where(
             $this->criteriaConverter->convertCriteria($query, $criterion, $languageFilter),
-            $query->expr->eq(
-                'ezcontentobject.status',
+            $query->expr()->eq(
+                'c.status',
                 //ContentInfo::STATUS_PUBLISHED
-                $query->bindValue(1, null, PDO::PARAM_INT)
+                $query->createNamedParameter(1, ParameterType::INTEGER)
             ),
-            $query->expr->eq(
-                'ezcontentobject_version.status',
+            $query->expr()->eq(
+                'v.status',
                 //VersionInfo::STATUS_PUBLISHED
-                $query->bindValue(1, null, PDO::PARAM_INT)
+                $query->createNamedParameter(1, ParameterType::INTEGER)
             ),
-            $query->expr->neq(
-                $this->handler->quoteColumn('depth', 'ezcontentobject_tree'),
-                $query->bindValue(0, null, PDO::PARAM_INT)
+            $query->expr()->neq(
+                't.depth',
+                $query->createNamedParameter(0, ParameterType::INTEGER)
             )
         );
 
         // If not main-languages query
         if (!empty($languageFilter['languages'])) {
-            $query->where(
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
-                        $query->bindValue(
+            $query->andWhere(
+                $query->expr()->gt(
+                    $this->dbPlatform->getBitAndComparisonExpression(
+                        'c.language_mask',
+                        $query->createNamedParameter(
                             $this->getLanguageMask($languageFilter),
-                            null,
-                            PDO::PARAM_INT
+                            ParameterType::INTEGER
                         )
                     ),
-                    $query->bindValue(0, null, PDO::PARAM_INT)
+                    $query->createNamedParameter(0, ParameterType::INTEGER)
                 )
             );
         }
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
         return (int)$statement->fetchColumn();
     }
@@ -247,9 +234,9 @@ class DoctrineDatabase extends Gateway
      *
      * @param array $languageFilter
      *
-     * @return int
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    protected function getLanguageMask(array $languageFilter)
+    private function getLanguageMask(array $languageFilter): int
     {
         if (!isset($languageFilter['languages'])) {
             $languageFilter['languages'] = [];

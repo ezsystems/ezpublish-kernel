@@ -1,15 +1,13 @@
 <?php
 
 /**
- * File containing the ValueConverter class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
@@ -46,25 +44,35 @@ class Converter
     /**
      * Converts the criteria into query fragments.
      *
+     * @param \Doctrine\DBAL\Query\QueryBuilder $outerQuery to be used only for parameter binding
+     * @param \Doctrine\DBAL\Query\QueryBuilder $subQuery to modify Field Value query constraints
+     *
+     * @return \Doctrine\DBAL\Query\Expression\CompositeExpression|string
+     *
      * @throws \RuntimeException if Criterion is not applicable to its target
-     *
-     * @param string $fieldTypeIdentifier
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param string $column
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function convertCriteria($fieldTypeIdentifier, SelectQuery $query, Criterion $criterion, $column)
-    {
+    public function convertCriteria(
+        string $fieldTypeIdentifier,
+        QueryBuilder $outerQuery,
+        QueryBuilder $subQuery,
+        Criterion $criterion,
+        string $column
+    ) {
         if ($this->registry->has($fieldTypeIdentifier)) {
-            return $this->registry->get($fieldTypeIdentifier)->handle($query, $criterion, $column);
+            return $this->registry->get($fieldTypeIdentifier)->handle(
+                $outerQuery,
+                $subQuery,
+                $criterion,
+                $column
+            );
         }
 
         if ($this->defaultHandler === null) {
-            throw new RuntimeException("No conversion for a Field Type '$fieldTypeIdentifier' found.");
+            throw new RuntimeException(
+                "No conversion for a Field Type '$fieldTypeIdentifier' found."
+            );
         }
 
-        return $this->defaultHandler->handle($query, $criterion, $column);
+        return $this->defaultHandler->handle($outerQuery, $subQuery, $criterion, $column);
     }
 }

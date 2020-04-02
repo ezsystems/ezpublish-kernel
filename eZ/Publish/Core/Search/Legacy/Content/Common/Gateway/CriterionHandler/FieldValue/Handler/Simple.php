@@ -1,16 +1,14 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase Simple field value handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content locator gateway implementation using the DoctrineDatabase.
@@ -20,28 +18,25 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
  */
 class Simple extends Handler
 {
-    /**
-     * Generates query expression for operator and value of a Field Criterion.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param string $column
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     */
-    public function handle(SelectQuery $query, Criterion $criterion, $column)
-    {
+    public function handle(
+        QueryBuilder $outerQuery,
+        QueryBuilder $subQuery,
+        Criterion $criterion,
+        string $column
+    ) {
         // For "Simple" FieldTypes, handle the following as equal:
         // - Contains
         // - LIKE when against int column
-        if ($criterion->operator === Criterion\Operator::CONTAINS ||
-            ($criterion->operator === Criterion\Operator::LIKE && $column === 'sort_key_int')) {
-            $filter = $query->expr->eq(
-                $this->dbHandler->quoteColumn($column),
-                $query->bindValue($this->lowerCase($criterion->value))
+        if (
+            $criterion->operator === Criterion\Operator::CONTAINS ||
+            ($criterion->operator === Criterion\Operator::LIKE && $column === 'sort_key_int')
+        ) {
+            $filter = $subQuery->expr()->eq(
+                $column,
+                $outerQuery->createNamedParameter($this->lowerCase($criterion->value))
             );
         } else {
-            $filter = parent::handle($query, $criterion, $column);
+            $filter = parent::handle($outerQuery, $subQuery, $criterion, $column);
         }
 
         return $filter;

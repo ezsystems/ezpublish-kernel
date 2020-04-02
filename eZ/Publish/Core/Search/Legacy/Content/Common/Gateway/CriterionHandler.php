@@ -1,16 +1,14 @@
 <?php
 
 /**
- * File containing the Legacy location criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 abstract class CriterionHandler
@@ -30,22 +28,19 @@ abstract class CriterionHandler
         Operator::LIKE => 'like',
     ];
 
-    /**
-     * Database handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     * @deprecated Start to use DBAL $connection instead.
-     */
-    protected $dbHandler;
+    /** @var \Doctrine\DBAL\Connection */
+    protected $connection;
+
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform|null */
+    protected $dbPlatform;
 
     /**
-     * Creates a new criterion handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(DatabaseHandler $dbHandler)
+    public function __construct(Connection $connection)
     {
-        $this->dbHandler = $dbHandler;
+        $this->connection = $connection;
+        $this->dbPlatform = $connection->getDatabasePlatform();
     }
 
     /**
@@ -62,25 +57,32 @@ abstract class CriterionHandler
      *
      * accept() must be called before calling this method.
      *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param array $languageSettings
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @return \Doctrine\DBAL\Query\Expression\CompositeExpression|string
      */
     abstract public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     );
 
-    /**
-     * Returns a unique table name.
-     *
-     * @return string
-     */
-    protected function getUniqueTableName()
+    protected function hasJoinedTableAs(QueryBuilder $queryBuilder, string $tableAlias): bool
     {
-        return uniqid('CriterionHandler', true);
+        // find table name in a structure: ['fromAlias' => [['joinTable' => '<table_name>'], ...]]
+        $joinedParts = $queryBuilder->getQueryPart('join');
+        foreach ($joinedParts as $joinedTables) {
+            foreach ($joinedTables as $join) {
+                if ($join['joinAlias'] === $tableAlias) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

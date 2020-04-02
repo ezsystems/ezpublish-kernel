@@ -1,17 +1,16 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase parent location id criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Parent location id criterion handler.
@@ -30,40 +29,32 @@ class ParentLocationId extends CriterionHandler
         return $criterion instanceof Criterion\ParentLocationId;
     }
 
-    /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
-        $subSelect = $query->subSelect();
+        $subSelect = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
         $subSelect
             ->select(
-                $this->dbHandler->quoteColumn('contentobject_id')
+                'contentobject_id'
             )->from(
-                $this->dbHandler->quoteTable('ezcontentobject_tree')
+                'ezcontentobject_tree'
             )->where(
-                $query->expr->in(
-                    $this->dbHandler->quoteColumn('parent_node_id'),
-                    $criterion->value
+                $expr->in(
+                    'parent_node_id',
+                    $queryBuilder->createNamedParameter(
+                        $criterion->value,
+                        Connection::PARAM_INT_ARRAY
+                    )
                 )
             );
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-            $subSelect
+        return $expr->in(
+            'c.id',
+            $subSelect->getSQL()
         );
     }
 }

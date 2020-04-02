@@ -1,21 +1,21 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase full text criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Full text criterion handler.
@@ -85,22 +85,18 @@ class FullText extends CriterionHandler
     private $languageMaskGenerator;
 
     /**
-     * Construct from full text search configuration.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $processor
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      * @param array $configuration
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException On invalid $configuration values
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function __construct(
-        DatabaseHandler $dbHandler,
+        Connection $connection,
         TransformationProcessor $processor,
         MaskGenerator $languageMaskGenerator,
         array $configuration = []
     ) {
-        parent::__construct($dbHandler);
+        parent::__construct($connection);
 
         $this->configuration = $configuration + $this->configuration;
         $this->processor = $processor;
@@ -147,106 +143,81 @@ class FullText extends CriterionHandler
      * Depending on the configuration of the full text search criterion
      * converter wildcards are either transformed into the respective LIKE
      * queries, or everything is just compared using equal.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param string $token
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    protected function getWordExpression(SelectQuery $query, $token)
+    protected function getWordExpression(QueryBuilder $query, string $token): string
     {
-        if ($this->configuration['enableWildcards'] &&
-             $token[0] === '*') {
-            return $query->expr->like(
-                $this->dbHandler->quoteColumn('word'),
-                $query->bindValue('%' . substr($token, 1))
+        if ($this->configuration['enableWildcards'] && $token[0] === '*') {
+            return $query->expr()->like(
+                'word',
+                $query->createNamedParameter('%' . substr($token, 1))
             );
         }
 
-        if ($this->configuration['enableWildcards'] &&
-             $token[strlen($token) - 1] === '*') {
-            return $query->expr->like(
-                $this->dbHandler->quoteColumn('word'),
-                $query->bindValue(substr($token, 0, -1) . '%')
+        if ($this->configuration['enableWildcards'] && $token[strlen($token) - 1] === '*') {
+            return $query->expr()->like(
+                'word',
+                $query->createNamedParameter(substr($token, 0, -1) . '%')
             );
         }
 
-        return $query->expr->eq(
-            $this->dbHandler->quoteColumn('word'),
-            $query->bindValue($token)
-        );
+        return $query->expr()->eq('word', $query->createNamedParameter($token));
     }
 
     /**
-     * Get subquery to select relevant word IDs.
+     * Get sub query to select relevant word IDs.
      *
-     * @uses ::getStopWordThresholdValue() To get threshold for words we would like to ignore in query.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param string $string
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     * @uses getStopWordThresholdValue To get threshold for words we would like to ignore in query.
      */
-    protected function getWordIdSubquery(SelectQuery $query, $string)
+    protected function getWordIdSubquery(QueryBuilder $query, string $string): string
     {
-        $subQuery = $query->subSelect();
+        $subQuery = $this->connection->createQueryBuilder();
         $tokens = $this->tokenizeString(
             $this->processor->transform($string, $this->configuration['commands'])
         );
         $wordExpressions = [];
         foreach ($tokens as $token) {
-            $wordExpressions[] = $this->getWordExpression($subQuery, $token);
+            $wordExpressions[] = $this->getWordExpression($query, $token);
         }
 
-        $whereCondition = $subQuery->expr->lOr($wordExpressions);
+        $whereCondition = $subQuery->expr()->orX(...$wordExpressions);
 
         // If stop word threshold is below 100%, make it part of $whereCondition
         if ($this->configuration['stopWordThresholdFactor'] < 1) {
-            $whereCondition = $subQuery->expr->lAnd(
+            $whereCondition = $subQuery->expr()->andX(
                 $whereCondition,
-                $subQuery->expr->lt(
-                    $this->dbHandler->quoteColumn('object_count'),
-                    $subQuery->bindValue($this->getStopWordThresholdValue())
+                $subQuery->expr()->lt(
+                    'object_count',
+                    $query->createNamedParameter($this->getStopWordThresholdValue(), ParameterType::STRING)
                 )
             );
         }
 
         $subQuery
-            ->select($this->dbHandler->quoteColumn('id'))
-            ->from($this->dbHandler->quoteTable('ezsearch_word'))
+            ->select('id')
+            ->from('ezsearch_word')
             ->where($whereCondition);
 
-        return $subQuery;
+        return $subQuery->getSQL();
     }
 
-    /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $languageSettings
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
-     */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
-        $subSelect = $query->subSelect();
+        $subSelect = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
         $subSelect
             ->select(
-                $this->dbHandler->quoteColumn('contentobject_id')
+                'contentobject_id'
             )->from(
-                $this->dbHandler->quoteTable('ezsearch_object_word_link')
+                'ezsearch_object_word_link'
             )->where(
-                $query->expr->in(
-                    $this->dbHandler->quoteColumn('word_id'),
-                    $this->getWordIdSubquery($subSelect, $criterion->value)
+                $expr->in(
+                    'word_id',
+                    // pass main Query Builder to set query parameters
+                    $this->getWordIdSubquery($queryBuilder, $criterion->value)
                 )
             );
 
@@ -256,20 +227,20 @@ class FullText extends CriterionHandler
                 $languageSettings['useAlwaysAvailable'] ?? true
             );
 
-            $subSelect->where(
-                $query->expr->gt(
-                    $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn('language_mask', 'ezsearch_object_word_link'),
-                        $query->bindValue($languageMask, null, \PDO::PARAM_INT)
+            $subSelect->andWhere(
+                $expr->gt(
+                    $this->dbPlatform->getBitAndComparisonExpression(
+                        'ezsearch_object_word_link.language_mask',
+                        $queryBuilder->createNamedParameter($languageMask, ParameterType::INTEGER)
                     ),
-                    $query->bindValue(0, null, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)
                 )
             );
         }
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-            $subSelect
+        return $expr->in(
+            'c.id',
+            $subSelect->getSQL()
         );
     }
 
@@ -287,25 +258,21 @@ class FullText extends CriterionHandler
      *
      * @return int
      */
-    protected function getStopWordThresholdValue()
+    protected function getStopWordThresholdValue(): int
     {
         if ($this->stopWordThresholdValue !== null) {
             return $this->stopWordThresholdValue;
         }
 
         // Cached value does not exists, do a simple count query on ezcontentobject table
-        $query = $this->dbHandler->createSelectQuery();
+        $query = $this->connection->createQueryBuilder();
         $query
-            ->select(
-                $query->alias($query->expr->count('*'), 'count')
-            )
-            ->from($this->dbHandler->quoteTable('ezcontentobject'));
+            ->select($this->dbPlatform->getCountExpression('id'))
+            ->from(ContentGateway::CONTENT_ITEM_TABLE);
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $count = (int)$query->execute()->fetchColumn();
 
         // Calculate the int stopWordThresholdValue based on count (first column) * factor
-        return $this->stopWordThresholdValue =
-            (int)($statement->fetchColumn() * $this->configuration['stopWordThresholdFactor']);
+        return $this->stopWordThresholdValue = (int)($count * $this->configuration['stopWordThresholdFactor']);
     }
 }

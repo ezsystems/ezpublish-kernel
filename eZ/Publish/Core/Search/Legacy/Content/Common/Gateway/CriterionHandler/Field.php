@@ -1,21 +1,20 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase field criterion handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter as FieldValueConverter;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
@@ -46,14 +45,14 @@ class Field extends FieldBase
     protected $transformationProcessor;
 
     public function __construct(
-        DatabaseHandler $dbHandler,
+        Connection $connection,
         ContentTypeHandler $contentTypeHandler,
         LanguageHandler $languageHandler,
         Registry $fieldConverterRegistry,
         FieldValueConverter $fieldValueConverter,
         TransformationProcessor $transformationProcessor
     ) {
-        parent::__construct($dbHandler, $contentTypeHandler, $languageHandler);
+        parent::__construct($connection, $contentTypeHandler, $languageHandler);
 
         $this->fieldConverterRegistry = $fieldConverterRegistry;
         $this->fieldValueConverter = $fieldValueConverter;
@@ -78,12 +77,12 @@ class Field extends FieldBase
      * The returned information is returned as an array of the attribute
      * identifier and the sort column, which should be used.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
-     * @throws \RuntimeException if no converter is found
-     *
      * @param string $fieldIdentifier
      *
      * @return array
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
+     * @throws \RuntimeException if no converter is found
      *
      * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
@@ -92,7 +91,7 @@ class Field extends FieldBase
         $fieldMapArray = [];
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
 
-        foreach ($fieldMap as $contentTypeIdentifier => $fieldIdentifierMap) {
+        foreach ($fieldMap as $fieldIdentifierMap) {
             // First check if field exists in the current ContentType, there is nothing to do if it doesn't
             if (!isset($fieldIdentifierMap[$fieldIdentifier])) {
                 continue;
@@ -101,7 +100,9 @@ class Field extends FieldBase
             $fieldTypeIdentifier = $fieldIdentifierMap[$fieldIdentifier]['field_type_identifier'];
             $fieldMapArray[$fieldTypeIdentifier]['ids'][] = $fieldIdentifierMap[$fieldIdentifier]['field_definition_id'];
             if (!isset($fieldMapArray[$fieldTypeIdentifier]['column'])) {
-                $fieldMapArray[$fieldTypeIdentifier]['column'] = $this->fieldConverterRegistry->getConverter($fieldTypeIdentifier)->getIndexColumn();
+                $fieldMapArray[$fieldTypeIdentifier]['column'] = $this->fieldConverterRegistry->getConverter(
+                    $fieldTypeIdentifier
+                )->getIndexColumn();
             }
         }
 
@@ -116,36 +117,27 @@ class Field extends FieldBase
     }
 
     /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If no searchable fields are found for the given criterion target.
-     *
-     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param array $languageSettings
      *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
+     * @return string
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If no searchable fields are found for the given criterion target.
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
     ) {
         $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
-        $subSelect = $query->subSelect();
-        $subSelect->select(
-            $this->dbHandler->quoteColumn('contentobject_id')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject_attribute')
-        );
+        $subSelect = $this->connection->createQueryBuilder();
+        $subSelect
+            ->select('contentobject_id')
+            ->from(ContentGateway::CONTENT_FIELD_TABLE, 'f_def');
 
         $whereExpressions = [];
 
@@ -156,22 +148,26 @@ class Field extends FieldBase
 
             $filter = $this->fieldValueConverter->convertCriteria(
                 $fieldTypeIdentifier,
+                $queryBuilder,
                 $subSelect,
                 $criterion,
                 $fieldsInfo['column']
             );
 
-            $whereExpressions[] = $subSelect->expr->lAnd(
-                $subSelect->expr->in(
-                    $this->dbHandler->quoteColumn('contentclassattribute_id'),
-                    $fieldsInfo['ids']
+            $whereExpressions[] = $subSelect->expr()->andX(
+                $subSelect->expr()->in(
+                    'contentclassattribute_id',
+                    $queryBuilder->createNamedParameter(
+                        $fieldsInfo['ids'],
+                        Connection::PARAM_INT_ARRAY
+                    )
                 ),
                 $filter
             );
         }
 
         return $this->getInExpressionWithFieldConditions(
-            $query,
+            $queryBuilder,
             $subSelect,
             $languageSettings,
             $whereExpressions,

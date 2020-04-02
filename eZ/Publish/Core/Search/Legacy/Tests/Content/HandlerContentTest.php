@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -45,81 +46,82 @@ class HandlerContentTest extends AbstractTestCase
             ),
             glob(__DIR__ . '/../../../../Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr')
         );
+        $connection = $this->getDatabaseConnection();
         $commaSeparatedCollectionValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
-            $this->getDatabaseHandler(),
+            $connection,
             $transformationProcessor,
             ','
         );
         $hyphenSeparatedCollectionValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
-            $this->getDatabaseHandler(),
+            $connection,
             $transformationProcessor,
             '-'
         );
         $simpleValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Simple(
-            $this->getDatabaseHandler(),
+            $connection,
             $transformationProcessor
         );
         $compositeValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite(
-            $this->getDatabaseHandler(),
+            $connection,
             $transformationProcessor
         );
 
         return new Content\Handler(
             new Content\Gateway\DoctrineDatabase(
-                $this->getDatabaseHandler(),
+                $connection,
                 new Content\Common\Gateway\CriteriaConverter(
                     [
                         new Content\Common\Gateway\CriterionHandler\ContentId(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\LogicalNot(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\LogicalAnd(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\LogicalOr(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Gateway\CriterionHandler\Subtree(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\ContentTypeId(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getContentTypeHandler()
                         ),
                         new Content\Common\Gateway\CriterionHandler\ContentTypeGroupId(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\DateMetadata(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Gateway\CriterionHandler\LocationId(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Gateway\CriterionHandler\ParentLocationId(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\RemoteId(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Gateway\CriterionHandler\LocationRemoteId(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\SectionId(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\FullText(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $transformationProcessor,
                             $this->getLanguageMaskGenerator(),
                             $fullTextSearchConfiguration
                         ),
                         new Content\Common\Gateway\CriterionHandler\Field(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getContentTypeHandler(),
                             $this->getLanguageHandler(),
                             $this->getConverterRegistry(),
@@ -143,23 +145,23 @@ class HandlerContentTest extends AbstractTestCase
                             $transformationProcessor
                         ),
                         new Content\Common\Gateway\CriterionHandler\ObjectStateId(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\LanguageCode(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getLanguageMaskGenerator()
                         ),
                         new Content\Gateway\CriterionHandler\Visibility(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\MatchAll(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\UserMetadata(
-                            $this->getDatabaseHandler()
+                            $connection
                         ),
                         new Content\Common\Gateway\CriterionHandler\FieldRelation(
-                            $this->getDatabaseHandler(),
+                            $connection,
                             $this->getContentTypeHandler(),
                             $this->getLanguageHandler()
                         ),
@@ -167,7 +169,7 @@ class HandlerContentTest extends AbstractTestCase
                 ),
                 new Content\Common\Gateway\SortClauseConverter(
                     [
-                        new Content\Common\Gateway\SortClauseHandler\ContentId($this->getDatabaseHandler()),
+                        new Content\Common\Gateway\SortClauseHandler\ContentId($connection),
                     ]
                 ),
                 $this->getLanguageHandler()
@@ -353,7 +355,7 @@ class HandlerContentTest extends AbstractTestCase
 
     public function testFindSingleWithNonSearchableField()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $locator = $this->getContentSearchHandler();
         $locator->findSingle(
@@ -367,7 +369,7 @@ class HandlerContentTest extends AbstractTestCase
 
     public function testFindContentWithNonSearchableField()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $locator = $this->getContentSearchHandler();
         $locator->findContent(
@@ -386,7 +388,7 @@ class HandlerContentTest extends AbstractTestCase
 
     public function testFindSingleTooMany()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $locator = $this->getContentSearchHandler();
         $locator->findSingle(new Criterion\ContentId([4, 10, 12, 23]));
@@ -1042,7 +1044,7 @@ class HandlerContentTest extends AbstractTestCase
 
     public function testFullTextFilterInvalidStopwordThreshold()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->getContentSearchHandler(
             [

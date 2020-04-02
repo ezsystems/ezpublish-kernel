@@ -43,31 +43,31 @@ class HandlerContentSortTest extends AbstractTestCase
      */
     protected function getContentSearchHandler(array $fullTextSearchConfiguration = [])
     {
-        $db = $this->getDatabaseHandler();
+        $connection = $this->getDatabaseConnection();
 
         return new Content\Handler(
             new Content\Gateway\DoctrineDatabase(
-                $this->getDatabaseHandler(),
+                $connection,
                 new Content\Common\Gateway\CriteriaConverter(
                     [
-                        new Content\Common\Gateway\CriterionHandler\MatchAll($db),
-                        new Content\Common\Gateway\CriterionHandler\LogicalAnd($db),
-                        new Content\Common\Gateway\CriterionHandler\SectionId($db),
+                        new Content\Common\Gateway\CriterionHandler\MatchAll($connection),
+                        new Content\Common\Gateway\CriterionHandler\LogicalAnd($connection),
+                        new Content\Common\Gateway\CriterionHandler\SectionId($connection),
                         new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
-                            $db,
+                            $connection,
                             $this->getContentTypeHandler()
                         ),
                     ]
                 ),
                 new Content\Common\Gateway\SortClauseConverter(
                     [
-                        new Content\Common\Gateway\SortClauseHandler\DateModified($db),
-                        new Content\Common\Gateway\SortClauseHandler\DatePublished($db),
-                        new Content\Common\Gateway\SortClauseHandler\SectionIdentifier($db),
-                        new Content\Common\Gateway\SortClauseHandler\SectionName($db),
-                        new Content\Common\Gateway\SortClauseHandler\ContentName($db),
+                        new Content\Common\Gateway\SortClauseHandler\DateModified($connection),
+                        new Content\Common\Gateway\SortClauseHandler\DatePublished($connection),
+                        new Content\Common\Gateway\SortClauseHandler\SectionIdentifier($connection),
+                        new Content\Common\Gateway\SortClauseHandler\SectionName($connection),
+                        new Content\Common\Gateway\SortClauseHandler\ContentName($connection),
                         new Content\Common\Gateway\SortClauseHandler\Field(
-                            $db,
+                            $connection,
                             $this->getLanguageHandler(),
                             $this->getContentTypeHandler()
                         ),

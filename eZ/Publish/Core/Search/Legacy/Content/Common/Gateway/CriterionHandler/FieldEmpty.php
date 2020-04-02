@@ -8,16 +8,16 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\FieldTypeService;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
-use eZ\Publish\Core\Persistence\Database\Expression;
 
 /**
  * Field criterion handler.
@@ -37,13 +37,13 @@ class FieldEmpty extends FieldBase
     protected $fieldTypeService;
 
     public function __construct(
-        DatabaseHandler $dbHandler,
+        Connection $connection,
         ContentTypeHandler $contentTypeHandler,
         LanguageHandler $languageHandler,
         Registry $fieldConverterRegistry,
         FieldTypeService $fieldTypeService
     ) {
-        parent::__construct($dbHandler, $contentTypeHandler, $languageHandler);
+        parent::__construct($connection, $contentTypeHandler, $languageHandler);
 
         $this->fieldConverterRegistry = $fieldConverterRegistry;
         $this->fieldTypeService = $fieldTypeService;
@@ -72,7 +72,7 @@ class FieldEmpty extends FieldBase
         $fieldMapArray = [];
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
 
-        foreach ($fieldMap as $contentTypeIdentifier => $fieldIdentifierMap) {
+        foreach ($fieldMap as $fieldIdentifierMap) {
             if (!isset($fieldIdentifierMap[$fieldIdentifier])) {
                 continue;
             }
@@ -97,56 +97,42 @@ class FieldEmpty extends FieldBase
         return $fieldMapArray;
     }
 
-    /**
-     * Generate query expression for a Criterion this handler accepts.
-     *
-     * accept() must be called before calling this method.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If no searchable fields are found for the given criterion target.
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
     public function handle(
         CriteriaConverter $converter,
-        SelectQuery $query,
+        QueryBuilder $queryBuilder,
         Criterion $criterion,
         array $languageSettings
-    ): string {
+    ) {
         $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
-        $subSelect = $query->subSelect();
-        $subSelect->select(
-            $this->dbHandler->quoteColumn('contentobject_id')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject_attribute')
-        );
+        $subSelect = $this->connection->createQueryBuilder();
+        $subSelect
+            ->select('contentobject_id')
+            ->from(ContentGateway::CONTENT_FIELD_TABLE, 'f_def');
 
         $whereExpressions = [];
 
-        foreach ($fieldsInformation as $fieldTypeIdentifier => $fieldsInfo) {
+        foreach ($fieldsInformation as $fieldsInfo) {
             if ($fieldsInfo['column'] === false) {
                 continue;
             }
 
-            $filterPlaceholder = $subSelect->bindValue(
-                $fieldsInfo['empty_value'],
-                ':fieldTypeIdentifier'
-            );
+            $filterPlaceholder = $queryBuilder->createNamedParameter($fieldsInfo['empty_value']);
             $filter = $criterion->value[0]
-                ? $subSelect->expr->eq($fieldsInfo['column'], $filterPlaceholder)
-                : $subSelect->expr->neq($fieldsInfo['column'], $filterPlaceholder);
+                ? $subSelect->expr()->eq($fieldsInfo['column'], $filterPlaceholder)
+                : $subSelect->expr()->neq($fieldsInfo['column'], $filterPlaceholder);
 
-            $whereExpressions[] = $subSelect->expr->lAnd(
-                $subSelect->expr->in(
-                    $this->dbHandler->quoteColumn('contentclassattribute_id'),
-                    $fieldsInfo['ids']
+            $whereExpressions[] = $subSelect->expr()->andX(
+                $subSelect->expr()->in(
+                    'contentclassattribute_id',
+                    $queryBuilder->createNamedParameter($fieldsInfo['ids'], Connection::PARAM_INT_ARRAY)
                 ),
                 $filter
             );
         }
 
         return $this->getInExpressionWithFieldConditions(
-            $query,
+            $queryBuilder,
             $subSelect,
             $languageSettings,
             $whereExpressions,

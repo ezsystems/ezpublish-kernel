@@ -1,15 +1,13 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase sort clause converter class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
@@ -54,22 +52,22 @@ class SortClauseConverter
     /**
      * Apply select parts of sort clauses to query.
      *
-     * @throws \RuntimeException If no handler is available for sort clause
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
+     * @param \Doctrine\DBAL\Query\QueryBuilder $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     *
+     * @throws \RuntimeException If no handler is available for sort clause
      */
-    public function applySelect(SelectQuery $query, array $sortClauses)
+    public function applySelect(QueryBuilder $query, array $sortClauses): void
     {
         foreach ($sortClauses as $nr => $sortClause) {
             foreach ($this->handlers as $handler) {
                 if ($handler->accept($sortClause)) {
-                    foreach ((array)$handler->applySelect($query, $sortClause, $nr) as $column) {
+                    foreach ($handler->applySelect($query, $sortClause, $nr) as $column) {
                         if (strrpos($column, '_null', -6) === false) {
                             $direction = $sortClause->direction;
                         } else {
                             // Always sort null last
-                            $direction = SelectQuery::ASC;
+                            $direction = 'ASC';
                         }
 
                         $this->sortColumns[$column] = $direction;
@@ -87,11 +85,10 @@ class SortClauseConverter
      *
      * @throws \RuntimeException If no handler is available for sort clause
      *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      * @param array $languageSettings
      */
-    public function applyJoin(SelectQuery $query, array $sortClauses, array $languageSettings)
+    public function applyJoin(QueryBuilder $query, array $sortClauses, array $languageSettings): void
     {
         foreach ($sortClauses as $nr => $sortClause) {
             foreach ($this->handlers as $handler) {
@@ -107,15 +104,13 @@ class SortClauseConverter
 
     /**
      * Apply order by parts of sort clauses to query.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      */
-    public function applyOrderBy(SelectQuery $query)
+    public function applyOrderBy(QueryBuilder $query): void
     {
         foreach ($this->sortColumns as $column => $direction) {
-            $query->orderBy(
+            $query->addOrderBy(
                 $column,
-                $direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC
+                $direction === Query::SORT_ASC ? 'ASC' : 'DESC'
             );
         }
         // @todo Review needed

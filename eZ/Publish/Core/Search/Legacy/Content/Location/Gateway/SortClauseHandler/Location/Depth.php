@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content locator gateway implementation using the DoctrineDatabase.
@@ -29,31 +29,15 @@ class Depth extends SortClauseHandler
         return $sortClause instanceof SortClause\Location\Depth;
     }
 
-    /**
-     * Apply selects to the query.
-     *
-     * Returns the name of the (aliased) column, which information should be
-     * used for sorting.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
-     * @param int $number
-     *
-     * @return string
-     */
-    public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
-    {
+    public function applySelect(
+        QueryBuilder $query, SortClause $sortClause,
+        int $number
+    ): array {
         $query
-            ->select(
-                $query->alias(
-                    $this->dbHandler->quoteColumn(
-                        'depth',
-                        'ezcontentobject_tree'
-                    ),
-                    $column = $this->getSortColumnName($number)
-                )
+            ->addSelect(
+                sprintf('t.depth AS %s', $column = $this->getSortColumnName($number))
             );
 
-        return $column;
+        return [$column];
     }
 }

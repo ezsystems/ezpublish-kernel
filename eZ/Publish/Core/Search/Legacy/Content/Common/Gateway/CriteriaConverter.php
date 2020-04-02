@@ -1,15 +1,13 @@
 <?php
 
 /**
- * File containing the DoctrineDatabase criteria converter class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
@@ -47,16 +45,14 @@ class CriteriaConverter
     /**
      * Generic converter of criteria into query fragments.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param array $languageSettings
      *
-     * @return \eZ\Publish\Core\Persistence\Database\Expression
+     * @return \Doctrine\DBAL\Query\Expression\CompositeExpression|string
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
     public function convertCriteria(
-        SelectQuery $query,
+        QueryBuilder $query,
         Criterion $criterion,
         array $languageSettings
     ) {

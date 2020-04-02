@@ -319,6 +319,67 @@ Changes affecting version compatibility with deprecated ezpublish-kernel version
   public function handle(CriteriaConverter $converter, QueryBuilder $query, Criterion $criterion);
   ```
 
+* The signature of the `\eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler::handle`
+  contract accepts now `\Doctrine\DBAL\Query\QueryBuilder` instead of `\eZ\Publish\Core\Persistence\Database\SelectQuery`
+  and has the following form:
+  ```php
+  use \Doctrine\DBAL\Query\QueryBuilder;
+  use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+  use \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
+
+  abstract public function handle(
+      CriteriaConverter $converter,
+      QueryBuilder $queryBuilder,
+      Criterion $criterion,
+      array $languageSettings
+  );
+  ```
+* The signature of the `\eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler::handle`
+  contract accepts now two new arguments of `\Doctrine\DBAL\Query\QueryBuilder` type instead of
+  `\eZ\Publish\Core\Persistence\Database\SelectQuery`. The first one is an outer query, to be used
+  only for parameter binding. The second one is a sub-query that can be modified according to a strategy
+  needed by a particular Field Type. This change is necessary due to the nature of Doctrine Query Builder.
+  While sub-queries are used for convenience, in the end, the only query having parameters bound
+  and being executed is the outer query. The sub-query is used just to generate nested SQL for the outer query.
+  The signature has the following form:
+  ```php
+    use \Doctrine\DBAL\Query\QueryBuilder;
+    use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+    use \Doctrine\DBAL\Query\Expression\CompositeExpression;
+
+    public function handle(
+        QueryBuilder $outerQuery,
+        QueryBuilder $subQuery,
+        Criterion $criterion,
+        string $column
+    ): CompositeExpression|string;
+  ```
+
+* The signature of the `\eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler::applySelect`
+  contract accepts now `\Doctrine\DBAL\Query\QueryBuilder` instead of `\eZ\Publish\Core\Persistence\Database\SelectQuery`
+  and has the following form:
+  ```php
+  use \Doctrine\DBAL\Query\QueryBuilder;
+  use \eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+
+  abstract public function applySelect(QueryBuilder $query, SortClause $sortClause, int $number): array;
+  ```
+
+* The signature of the `\eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler::applyJoin`
+  contract accepts now `\Doctrine\DBAL\Query\QueryBuilder` instead of `\eZ\Publish\Core\Persistence\Database\SelectQuery`
+  and has the following form:
+  ```php
+  use \Doctrine\DBAL\Query\QueryBuilder;
+  use \eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+
+  public function applyJoin(
+          QueryBuilder $query,
+          SortClause $sortClause,
+          int $number,
+          array $languageSettings
+  ): void;
+  ```
+
 ## Removed services
 
 * `ezpublish.field_type_collection.factory` has been removed in favor of `eZ\Publish\Core\FieldType\FieldTypeRegistry`
