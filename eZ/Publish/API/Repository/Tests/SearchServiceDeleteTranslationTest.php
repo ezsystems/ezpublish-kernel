@@ -15,13 +15,13 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 /**
- * Test case for field filtering operations in the SearchService.
+ * Test case for delete content translation with the SearchService
  *
  * @see \eZ\Publish\API\Repository\SearchService
  * @group integration
  * @group search
  */
-class SearchDeleteTranslationTest extends BaseTest
+class SearchServiceDeleteTranslationTest extends BaseTest
 {
     /**
      * @throws \ErrorException
@@ -48,7 +48,7 @@ class SearchDeleteTranslationTest extends BaseTest
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    protected function createTestContentByLanguages(array $languages): Content
+    protected function createTestContentWithLanguages(array $languages): Content
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
@@ -115,7 +115,7 @@ class SearchDeleteTranslationTest extends BaseTest
     public function testDeleteContentTranslation()
     {
         $repository = $this->getRepository();
-        $testContent = $this->createTestContentByLanguages(
+        $testContent = $this->createTestContentWithLanguages(
             [
                 'eng-GB' => 'Contact',
                 'ger-DE' => 'Kontakt',
