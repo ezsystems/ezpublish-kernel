@@ -81,13 +81,11 @@ class FixImagesVarDirCommand extends Command
 
     public function __construct(
         ChainConfigResolver $configResolver,
-        DatabaseHandler $db,
         SiteAccess $siteaccess,
         ContentGateway $contentGateway,
         ImageGateway $imageGateway
     ) {
         parent::__construct();
-        $this->db = $db;
         $this->configResolver = $configResolver;
         $this->siteaccess = $siteaccess;
         $this->contentGateway = $contentGateway;
@@ -99,7 +97,7 @@ class FixImagesVarDirCommand extends Command
         $this
             ->setName('ezplatform:fix_images_var_dir')
             ->setDescription(
-                'This update script will fix references to images that are not placed in the current var_dir.'
+                'This update script will fix database references to images that are not placed in the current var_dir.'
             )
             ->addOption(
                 'dry-run',
@@ -116,13 +114,12 @@ class FixImagesVarDirCommand extends Command
             )
             ->setHelp(
                 <<<EOT
-The command <info>%command.name%</info> fixes references to images that are not placed in the current var_dir.
+The command <info>%command.name%</info> fixes database references to images that are not placed in the current var_dir.
 
-This may for instance occur when the var_dir setting is changed. This script will rename the files, and update the
-database references to the new path
+This may for instance occur when the var_dir setting is changed. This script will update the database references to the new path
 
 Since this script can potentially run for a very long time, to avoid memory exhaustion run it in
-production environment using <info>--env=prod</info> switch.
+production environment using <info>--env=prod</info> switch and with <info>--no-debug</info> for non-prod environments.
 
 EOT
             );

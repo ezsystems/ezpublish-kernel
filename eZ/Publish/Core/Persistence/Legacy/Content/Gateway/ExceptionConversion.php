@@ -834,7 +834,7 @@ class ExceptionConversion extends Gateway
     public function updateContentObjectAttributeText($attributeId, $version, $text)
     {
         try {
-            return $this->innerGateway->updateContentObjectAttributeText($attributeId, $version, $text);
+            $this->innerGateway->updateContentObjectAttributeText($attributeId, $version, $text);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

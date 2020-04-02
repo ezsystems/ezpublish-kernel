@@ -54,6 +54,8 @@ class DoctrineStorage extends Gateway
     /**
      * Return the node path string of $versionInfo.
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     *
      * @return string
      */
     public function getNodePathString(VersionInfo $versionInfo)
@@ -118,6 +120,7 @@ class DoctrineStorage extends Gateway
      * Return an XML content stored for the given $fieldIds.
      *
      * @param int $versionNo
+     * @param array $fieldIds
      *
      * @return array
      */
@@ -307,7 +310,7 @@ class DoctrineStorage extends Gateway
             ->setParameter(':filePath', $path . '%')
             ;
 
-        if ($limit && $offset) {
+        if ($limit !== null) {
             $selectQuery->setMaxResults($limit);
             $selectQuery->setFirstResult($offset);
         }
