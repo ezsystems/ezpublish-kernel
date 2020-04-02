@@ -254,7 +254,7 @@ class DoctrineStorage extends Gateway
     /**
      * Updates the filepath of given Image.
      *
-     * @param $imageId
+     * @param int $imageId
      * @param $newFilePath
      */
     public function updateImageFilePath($imageId, $newFilePath)
