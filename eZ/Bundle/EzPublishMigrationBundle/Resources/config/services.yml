@@ -2,11 +2,11 @@ services:
   ezpublish.migration.fix_images_var_dir:
     class: eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage\FixImagesVarDirCommand
     arguments:
-      - "@ezpublish.config.resolver"
-      - "@ezpublish.api.storage_engine.legacy.dbhandler"
-      - "@ezpublish.siteaccess"
-      - "@ezpublish.persistence.legacy.content.gateway"
-      - "@ezpublish.fieldType.ezimage.storage_gateway"
+      - '@ezpublish.config.resolver'
+      - '@ezpublish.api.storage_engine.legacy.dbhandler'
+      - '@ezpublish.siteaccess'
+      - '@ezpublish.persistence.legacy.content.gateway'
+      - '@ezpublish.fieldType.ezimage.storage_gateway'
     tags:
       - { name: console.command }
       
