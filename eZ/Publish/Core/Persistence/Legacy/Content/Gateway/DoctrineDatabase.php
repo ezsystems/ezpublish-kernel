@@ -2070,7 +2070,7 @@ class DoctrineDatabase extends Gateway
         $query = $this->connection->createQueryBuilder();
         $query
             ->update('ezcontentobject_attribute', 'oa')
-            ->set('oa.data_text', ':text')
+            ->set('data_text', ':text')
             ->where('oa.id = :id')
             ->andWhere('oa.version = :version')
             ->setParameters([
