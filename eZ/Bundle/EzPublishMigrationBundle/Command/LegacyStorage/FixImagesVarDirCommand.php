@@ -79,13 +79,6 @@ class FixImagesVarDirCommand extends Command
      */
     private $imageAttributes = [];
 
-    /**
-     * @param \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver; $configResolver
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
-     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteaccess
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
-     * @param \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway $imageGateway
-     */
     public function __construct(
         ChainConfigResolver $configResolver,
         DatabaseHandler $db,
