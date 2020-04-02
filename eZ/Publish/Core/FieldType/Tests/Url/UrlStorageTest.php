@@ -36,6 +36,15 @@ class UrlStorageTest extends TestCase
             ->method('linkUrl')
             ->with(12, 42, 24);
 
+        $gateway
+            ->expects($this->once())
+            ->method('unlinkUrl')
+            ->with(
+                42,
+                24,
+                [12]
+            );
+
         $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
 
@@ -67,6 +76,15 @@ class UrlStorageTest extends TestCase
             ->method('linkUrl')
             ->with(12, 42, 24);
 
+        $gateway
+            ->expects($this->once())
+            ->method('unlinkUrl')
+            ->with(
+                42,
+                24,
+                [12]
+            );
+
         $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
 
@@ -92,6 +110,10 @@ class UrlStorageTest extends TestCase
         $gateway
             ->expects($this->never())
             ->method('linkUrl');
+
+        $gateway
+            ->expects($this->never())
+            ->method('unlinkUrl');
 
         $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
