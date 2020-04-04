@@ -97,7 +97,7 @@ class UrlStorageTest extends TestCase
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
 
         $this->assertFalse($result);
-        $this->assertNull($field->value->data['urlId']);
+        $this->assertNull($field->value->data);
     }
 
     public function testGetFieldData()
