@@ -253,7 +253,15 @@ class ContentHandlerTest extends TestCase
             ->with(23, 1)
             ->will(
                 $this->returnValue(
-                    new VersionInfo(['contentInfo' => new ContentInfo(['currentVersionNo' => 1])])
+                    new VersionInfo([
+                        'contentInfo' => new ContentInfo([
+                            'currentVersionNo' => 1,
+                            'mainLanguageCode' => 'eng-GB'
+                        ]),
+                        'names' => [
+                            'eng-GB' => ''
+                        ]
+                    ])
                 )
             );
 
@@ -325,7 +333,15 @@ class ContentHandlerTest extends TestCase
             ->with(23, 2)
             ->will(
                 $this->returnValue(
-                    new VersionInfo(['contentInfo' => new ContentInfo(['currentVersionNo' => 1])])
+                    new VersionInfo([
+                        'contentInfo' => new ContentInfo([
+                            'currentVersionNo' => 1,
+                            'mainLanguageCode' => 'eng-GB'
+                        ]),
+                        'names' => [
+                            'eng-GB' => ''
+                        ]
+                    ])
                 )
             );
 
