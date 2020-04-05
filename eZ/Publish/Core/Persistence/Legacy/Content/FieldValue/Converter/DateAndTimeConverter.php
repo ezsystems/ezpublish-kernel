@@ -77,13 +77,16 @@ class DateAndTimeConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->fieldSettings['useSeconds'] ? 1 : 0;
-        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultType'];
+        $fieldSettings = null;
+        if ($fieldSettings === null) {
+            return;
+        }
 
-        if ($fieldDef->fieldTypeConstraints->fieldSettings['defaultType'] === DateAndTimeType::DEFAULT_CURRENT_DATE_ADJUSTED) {
-            $storageDef->dataText5 = $this->generateDateIntervalXML(
-                $fieldDef->fieldTypeConstraints->fieldSettings['dateInterval']
-            );
+        $storageDef->dataInt2 = $fieldSettings['useSeconds'] ? 1 : 0;
+        $storageDef->dataInt1 = $fieldSettings['defaultType'];
+
+        if ($fieldSettings['defaultType'] === DateAndTimeType::DEFAULT_CURRENT_DATE_ADJUSTED) {
+            $storageDef->dataText5 = $this->generateDateIntervalXML($fieldSettings['dateInterval']);
         }
     }
 

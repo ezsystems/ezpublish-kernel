@@ -65,7 +65,11 @@ class AuthorConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        $storageDef->dataInt1 = (int)$fieldDef->fieldTypeConstraints->fieldSettings['defaultAuthor'];
+        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+
+        if ($fieldSettings !== null) {
+            $storageDef->dataInt1 = (int)$fieldSettings['defaultAuthor'];
+        }
     }
 
     /**
