@@ -31,17 +31,17 @@ class SearchField implements Indexable
         return [
             new Search\Field(
                 'file_name',
-                $field->value->externalData['fileName'],
+                $field->value->externalData['fileName'] ?? null,
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
                 'file_size',
-                $field->value->externalData['fileSize'],
+                $field->value->externalData['fileSize'] ?? null,
                 new Search\FieldType\IntegerField()
             ),
             new Search\Field(
                 'mime_type',
-                $field->value->externalData['mimeType'],
+                $field->value->externalData['mimeType'] ?? null,
                 new Search\FieldType\StringField()
             ),
         ];
