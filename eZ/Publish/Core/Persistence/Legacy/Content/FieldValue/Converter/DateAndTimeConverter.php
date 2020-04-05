@@ -77,7 +77,7 @@ class DateAndTimeConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        $fieldSettings = null;
+        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
         if ($fieldSettings === null) {
             return;
         }
