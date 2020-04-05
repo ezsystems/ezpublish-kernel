@@ -31,7 +31,7 @@ class SearchField implements Indexable
         return [
             new Search\Field(
                 'value',
-                $field->value->data['timestamp'],
+                $field->value->data['timestamp'] ?? null,
                 new Search\FieldType\DateField()
             ),
         ];
