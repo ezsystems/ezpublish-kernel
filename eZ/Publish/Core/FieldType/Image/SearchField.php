@@ -31,22 +31,22 @@ class SearchField implements Indexable
         return [
             new Search\Field(
                 'filename',
-                $field->value->data['fileName'],
+                $field->value->data['fileName'] ?? null,
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
                 'alternative_text',
-                $field->value->data['alternativeText'],
+                $field->value->data['alternativeText'] ?? null,
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
                 'file_size',
-                $field->value->data['fileSize'],
+                $field->value->data['fileSize'] ?? null,
                 new Search\FieldType\IntegerField()
             ),
             new Search\Field(
                 'mime_type',
-                $field->value->data['mime'],
+                $field->value->data['mime'] ?? null,
                 new Search\FieldType\StringField()
             ),
         ];
