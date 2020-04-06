@@ -395,6 +395,11 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
                 $tags[] = 'urlAlias-location-path-' . $pathId;
             }
+
+            $tags = array_merge(
+                $tags,
+                $this->getLocationCustomAliasExtendedTags($urlAlias)
+            );
         }
 
         return array_unique($tags);
@@ -440,5 +445,38 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
                 'urlAlias-location-path-' . $locationId,
             ]
         );
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias $urlAlias
+     * @return array
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function getLocationCustomAliasExtendedTags(UrlAlias $urlAlias): array
+    {
+        if (true !== $urlAlias->isCustom) {
+            return [];
+        }
+
+        $nestedPathsData = $urlAlias->pathData;
+
+        if (count($nestedPathsData) <= 1) {
+            return [];
+        }
+
+        array_pop($nestedPathsData);
+        $tags = [];
+
+        foreach ($nestedPathsData as $pathData) {
+            foreach ($pathData['translations'] as $path) {
+                $aliasFormPath = $this->persistenceHandler->urlAliasHandler()->lookup($path);
+                $tags[] = 'urlAlias-location-path-' . $aliasFormPath->destination;
+            }
+        }
+
+        return $tags;
     }
 }
