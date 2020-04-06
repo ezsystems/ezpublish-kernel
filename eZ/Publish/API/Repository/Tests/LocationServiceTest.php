@@ -2121,41 +2121,27 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
         $urlAliasService = $repository->getURLAliasService();
 
-        $homeLocationCreateStruct = $locationService->newLocationCreateStruct(2);
-
-        $originalFolder = $contentService->publishVersion(
-            $contentService->createContent(
-                $this->createFolderStruct('Original folder'),
-                [$homeLocationCreateStruct]
-            )->versionInfo
-        );
-
-        $newFolder = $contentService->publishVersion(
-            $contentService->createContent(
-                $this->createFolderStruct('New folder'),
-                [$homeLocationCreateStruct]
-            )->versionInfo
-        );
-
+        $originalFolder = $this->createFolder(['eng-GB' => 'Original folder'], 2);
+        $newFolder = $this->createFolder(['eng-GB' => 'New folder'], 2);
         $originalFolderLocationId = $originalFolder->contentInfo->mainLocationId;
 
-        $article = $contentService->publishVersion(
+        $forum = $contentService->publishVersion(
             $contentService->createContent(
-                $this->createSampleArticleStruct(),
+                $this->createForumStruct('Some forum'),
                 [
                     $locationService->newLocationCreateStruct($originalFolderLocationId),
                 ]
             )->versionInfo
         );
 
-        $articleMainLocation = $locationService->loadLocation(
-            $article->contentInfo->mainLocationId
+        $forumMainLocation = $locationService->loadLocation(
+            $forum->contentInfo->mainLocationId
         );
 
-        $customRelativeAliasPath = '/Original-folder/some-article-alias';
+        $customRelativeAliasPath = '/Original-folder/some-forum-alias';
 
         $urlAliasService->createUrlAlias(
-            $articleMainLocation,
+            $forumMainLocation,
             $customRelativeAliasPath,
             'eng-GB',
             true,
@@ -2163,15 +2149,15 @@ class LocationServiceTest extends BaseTest
         );
 
         $locationService->moveSubtree(
-            $articleMainLocation,
+            $forumMainLocation,
             $locationService->loadLocation(
                 $newFolder->contentInfo->mainLocationId
             )
         );
 
-        $this->assertIsAliasExists(
+        $this->assertAliasExists(
             $customRelativeAliasPath,
-            $articleMainLocation,
+            $forumMainLocation,
             $urlAliasService
         );
 
@@ -2183,9 +2169,9 @@ class LocationServiceTest extends BaseTest
             )
         );
 
-        $this->assertIsAliasExists(
+        $this->assertAliasExists(
             $customRelativeAliasPath,
-            $articleMainLocation,
+            $forumMainLocation,
             $urlAliasService
         );
 
@@ -3043,49 +3029,19 @@ class LocationServiceTest extends BaseTest
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    private function createFolderStruct(string $name): ContentCreateStruct
+    private function createForumStruct(string $name): ContentCreateStruct
     {
         $repository = $this->getRepository(false);
 
-        $contentTypeFolder = $repository->getContentTypeService()
-            ->loadContentTypeByIdentifier('folder');
+        $contentTypeForum = $repository->getContentTypeService()
+            ->loadContentTypeByIdentifier('forum');
 
-        $folderCreateStruct = $repository->getContentService()
-            ->newContentCreateStruct($contentTypeFolder, 'eng-GB');
-        $folderCreateStruct->setField('name', $name);
+        $forum = $repository->getContentService()
+            ->newContentCreateStruct($contentTypeForum, 'eng-GB');
 
-        return $folderCreateStruct;
-    }
+        $forum->setField('name', $name);
 
-    /**
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
-     *
-     * @throws NotFoundException
-     */
-    private function createSampleArticleStruct(): ContentCreateStruct
-    {
-        $repository = $this->getRepository();
-
-        $introDocument = new \DOMDocument();
-        $introDocument->loadXML(
-            <<<EOT
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
-<para>some paragraph</para>
-</section>
-EOT
-        );
-
-        $contentTypeArticle = $repository->getContentTypeService()
-            ->loadContentTypeByIdentifier('article');
-
-        $articleCreateStruct = $repository->getContentService()
-            ->newContentCreateStruct($contentTypeArticle, 'eng-GB');
-
-        $articleCreateStruct->setField('title', 'Some article');
-        $articleCreateStruct->setField('intro', new RichTextValue($introDocument));
-
-        return $articleCreateStruct;
+        return $forum;
     }
 
     /**
@@ -3093,7 +3049,7 @@ EOT
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
      */
-    private function assertIsAliasExists(
+    private function assertAliasExists(
         string $expectedAliasPath,
         Location $location,
         URLAliasServiceInterface $urlAliasService

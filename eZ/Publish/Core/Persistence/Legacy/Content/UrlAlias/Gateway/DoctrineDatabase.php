@@ -1457,22 +1457,22 @@ class DoctrineDatabase extends Gateway
         $expressionBuilder = $queryBuilder->expr();
 
         $selectQueryBuilder
-            ->select('al1.id AS inner_id')
-            ->from($this->table, 'al1')
+            ->select('u_parent.id AS inner_id')
+            ->from($this->table, 'u_parent')
             ->leftJoin(
-                'al1',
+                'u_parent',
                 $this->table,
-                'al2',
-                $expressionBuilder->eq('inner_id', 'al2.parent')
+                'u',
+                $expressionBuilder->eq('u_parent.id', 'u.parent')
             )
             ->where(
                 $expressionBuilder->eq(
-                    'al1.action_type',
+                    'u_parent.action_type',
                     ':actionType'
                 )
             )
-            ->groupBy('inner_id')
-            ->having($platform->getCountExpression('al2.id').' = 0');
+            ->groupBy('u_parent.id')
+            ->having($platform->getCountExpression('u.id'), 0);
 
         $wrapperQueryBuilder
             ->select('inner_id')
