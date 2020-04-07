@@ -1472,7 +1472,9 @@ class DoctrineDatabase extends Gateway
                 )
             )
             ->groupBy('u_parent.id')
-            ->having($platform->getCountExpression('u.id'), 0);
+            ->having(
+                $expressionBuilder->eq($platform->getCountExpression('u.id'),0)
+            );
 
         $wrapperQueryBuilder
             ->select('inner_id')
