@@ -15,7 +15,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 abstract class AbstractConfigResolverBasedURLHandler extends AbstractURLHandler
 {
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
-    private $configResolver;
+    protected $configResolver;
 
     /** @var string */
     private $parameterName;

@@ -28,7 +28,7 @@ class HTTPHandler extends AbstractConfigResolverBasedURLHandler
         $handlers = [];
 
         // Batch size can't be larger then number of urls
-        $batchSize = min(count($urls), $this->options['batch_size']);
+        $batchSize = min(count($urls), $options['batch_size']);
         for ($i = 0; $i < $batchSize; ++$i) {
             curl_multi_add_handle(
                 $master,
@@ -116,6 +116,7 @@ class HTTPHandler extends AbstractConfigResolverBasedURLHandler
      */
     private function createCurlHandlerForUrl(URL $url, array &$handlers, int $connectionTimeout, int $timeout)
     {
+        $options = $this->getOptions();
         $handler = curl_init();
 
         curl_setopt_array($handler, [
@@ -128,7 +129,7 @@ class HTTPHandler extends AbstractConfigResolverBasedURLHandler
             CURLOPT_NOBODY => true,
         ]);
 
-        if ($this->options['ignore_certificate']) {
+        if ($options['ignore_certificate']) {
             curl_setopt_array($handler, [
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_SSL_VERIFYHOST => false,
