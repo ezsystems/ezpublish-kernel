@@ -287,14 +287,24 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     /**
      * {@inheritdoc}
      */
-    public function locationDeleted($locationId)
+    public function locationDeleted($locationId): array
     {
         $this->logger->logCall(__METHOD__, ['location' => $locationId]);
-        $return = $this->persistenceHandler->urlAliasHandler()->locationDeleted($locationId);
+        $childrenAliases = $this->persistenceHandler->urlAliasHandler()
+            ->locationDeleted($locationId);
 
-        $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId]);
+        $tags = [
+            'urlAlias-location-' . $locationId,
+            'urlAlias-location-path-' . $locationId,
+        ];
 
-        return $return;
+        foreach ($childrenAliases as $childAlias) {
+            $tags[] = "urlAlias-{$childAlias['parent']}-{$childAlias['text_md5']}";
+        }
+
+        $this->cache->invalidateTags($tags);
+
+        return $childrenAliases;
     }
 
     /**
@@ -395,11 +405,6 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
                 $tags[] = 'urlAlias-location-path-' . $pathId;
             }
-
-            $tags = array_merge(
-                $tags,
-                $this->getLocationCustomAliasExtendedTags($urlAlias)
-            );
         }
 
         return array_unique($tags);
@@ -445,38 +450,5 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
                 'urlAlias-location-path-' . $locationId,
             ]
         );
-    }
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias $urlAlias
-     * @return array
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    private function getLocationCustomAliasExtendedTags(UrlAlias $urlAlias): array
-    {
-        if (true !== $urlAlias->isCustom) {
-            return [];
-        }
-
-        $nestedPathsData = $urlAlias->pathData;
-
-        if (count($nestedPathsData) <= 1) {
-            return [];
-        }
-
-        array_pop($nestedPathsData);
-        $tags = [];
-
-        foreach ($nestedPathsData as $pathData) {
-            foreach ($pathData['translations'] as $path) {
-                $aliasFormPath = $this->persistenceHandler->urlAliasHandler()->lookup($path);
-                $tags[] = 'urlAlias-location-path-' . $aliasFormPath->destination;
-            }
-        }
-
-        return $tags;
     }
 }

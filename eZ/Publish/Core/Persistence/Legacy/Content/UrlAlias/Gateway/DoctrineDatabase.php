@@ -1473,13 +1473,13 @@ class DoctrineDatabase extends Gateway
             )
             ->groupBy('u_parent.id')
             ->having(
-                $expressionBuilder->eq($platform->getCountExpression('u.id'),0)
+                $expressionBuilder->eq($platform->getCountExpression('u.id'), 0)
             );
 
         $wrapperQueryBuilder
             ->select('inner_id')
             ->from(
-                sprintf('(%s) wrapper', $selectQueryBuilder)
+                sprintf('(%s)', $selectQueryBuilder), 'wrapper'
             )
             ->where('id = inner_id');
 
@@ -1496,14 +1496,13 @@ class DoctrineDatabase extends Gateway
     /**
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function countAllChildAliases(int $parentId): int
+    public function getAllChildrenAliases(int $parentId): array
     {
-        $platform = $this->connection->getDatabasePlatform();
         $queryBuilder = $this->connection->createQueryBuilder();
         $expressionBuilder = $queryBuilder->expr();
 
         $queryBuilder
-            ->select($platform->getCountExpression('id'))
+            ->select('*')
             ->from($this->table)
             ->where(
                 $expressionBuilder->eq(
@@ -1517,7 +1516,7 @@ class DoctrineDatabase extends Gateway
                 )
             );
 
-        return $queryBuilder->execute()->fetchColumn();
+        return $queryBuilder->execute()->fetchAll();
     }
 
     /**

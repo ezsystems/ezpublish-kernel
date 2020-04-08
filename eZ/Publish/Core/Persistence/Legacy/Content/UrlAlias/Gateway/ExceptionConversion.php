@@ -273,10 +273,10 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function countAllChildAliases(int $parentId): int
+    public function getAllChildrenAliases(int $parentId): array
     {
         try {
-            return $this->innerGateway->countAllChildAliases($parentId);
+            return $this->innerGateway->getAllChildrenAliases($parentId);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }

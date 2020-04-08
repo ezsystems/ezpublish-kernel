@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -2110,7 +2111,7 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * @covers \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     * @covers \eZ\Publish\API\Repository\LocationService::deleteLocation
      */
     public function testDeleteUnusedLocationWhichPreviousHadContentWithRelativeAlias(): void
     {
@@ -3022,10 +3023,6 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * @param string $name
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     private function createForumStruct(string $name): ContentCreateStruct
@@ -3043,11 +3040,6 @@ class LocationServiceTest extends BaseTest
         return $forum;
     }
 
-    /**
-     * @param string $expectedAliasPath
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
-     */
     private function assertAliasExists(
         string $expectedAliasPath,
         Location $location,
@@ -3056,12 +3048,13 @@ class LocationServiceTest extends BaseTest
         $articleAliasesBeforeDelete = $urlAliasService
             ->listLocationAliases($location);
 
-        foreach ($articleAliasesBeforeDelete as $alias) {
-            if ($alias->path === $expectedAliasPath) {
-                $this->assertTrue(true);
-
-                return;
-            }
-        }
+        $this->assertNotEmpty(
+            array_filter(
+                $articleAliasesBeforeDelete,
+                static function (URLAlias $alias) use ($expectedAliasPath) {
+                    return $alias->path === $expectedAliasPath;
+                }
+            )
+        );
     }
 }

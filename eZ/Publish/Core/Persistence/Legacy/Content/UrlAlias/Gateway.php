@@ -274,9 +274,9 @@ abstract class Gateway
     abstract public function deleteUrlNopAliasesWithoutChildren(): int;
 
     /**
-     * Count how many aliases are connected with provided parentId.
+     * Return aliases which are connected with provided parentId.
      */
-    abstract public function countAllChildAliases(int $parentId): int;
+    abstract public function getAllChildrenAliases(int $parentId): array;
 
     /**
      * Attempt repairing data corruption for broken archived URL aliases for Location,
