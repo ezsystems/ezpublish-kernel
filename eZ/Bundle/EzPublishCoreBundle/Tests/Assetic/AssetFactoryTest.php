@@ -36,10 +36,13 @@ class AssetFactoryTest extends BaseTest
 
     protected function getAssetFactory()
     {
+        $parameterBag = $this->createMock(ParameterBagInterface::class);
+        $parameterBag->method('resolveValue')->willReturnArgument(0);
+
         $assetFactory = new AssetFactory(
             $this->createMock(KernelInterface::class),
             $this->createMock(ContainerInterface::class),
-            $this->createMock(ParameterBagInterface::class),
+            $parameterBag,
             '/root/dir/'
         );
         $assetFactory->setConfigResolver($this->configResolver);
