@@ -1502,7 +1502,7 @@ class DoctrineDatabase extends Gateway
         $expressionBuilder = $queryBuilder->expr();
 
         $queryBuilder
-            ->select('*')
+            ->select('parent', 'text_md5')
             ->from($this->table)
             ->where(
                 $expressionBuilder->eq(
