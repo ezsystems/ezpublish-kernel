@@ -50,13 +50,9 @@
                     </p>
                 </td>
                 <td>
-                    {% for key, argument  in call.arguments %}
-                        {{ key }}:
-                        {% if argument is iterable %}
-                           {{  argument|join(', ') }}
-                        {% else %}
-                            {{  argument }}
-                        {% endif %}
+
+                    {% for key, argument in call.arguments %}
+                        {{ key }}:{{ dump(argument) }}
                         <br>
                     {% endfor %}
                 </td>

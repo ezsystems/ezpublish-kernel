@@ -35,6 +35,7 @@
         "symfony/console": "^5.0",
         "symfony/expression-language": "^5.0",
         "symfony/validator": "^5.0",
+        "symfony/var-dumper": "^5.0",
         "ezsystems/doctrine-dbal-schema": "^1.0@dev",
         "ezsystems/routing": "^2.2",
         "guzzlehttp/guzzle": "^6.5",
