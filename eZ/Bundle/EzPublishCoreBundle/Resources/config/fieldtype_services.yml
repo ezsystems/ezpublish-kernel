@@ -62,17 +62,27 @@ services:
         alias: ezpublish.image_alias.imagine.alias_generator.image_asset
 
     ezpublish.fieldType.ezimage.io_service.published:
-        class: eZ\Publish\Core\IO\ConfigScopeChangeAwareIOService
-        arguments:
-            $configResolver: '@ezpublish.config.resolver'
-            $innerIOService: '@ezpublish.core.io.service'
-            $prefixParameterName: 'image.published_images_dir'
+        parent: ezpublish.core.io.service
 
     ezpublish.fieldType.ezimage.io_service.draft:
+        parent: ezpublish.core.io.service
+
+    ezpublish.fieldType.ezimage.io_service.published.config_scope_change_aware:
         class: eZ\Publish\Core\IO\ConfigScopeChangeAwareIOService
+        decorates: ezpublish.fieldType.ezimage.io_service.published
+        lazy: true
         arguments:
             $configResolver: '@ezpublish.config.resolver'
-            $innerIOService: '@ezpublish.core.io.service'
+            $innerIOService: '@ezpublish.fieldType.ezimage.io_service.published.config_scope_change_aware.inner'
+            $prefixParameterName: 'image.published_images_dir'
+
+    ezpublish.fieldType.ezimage.io_service.draft.config_scope_change_aware:
+        class: eZ\Publish\Core\IO\ConfigScopeChangeAwareIOService
+        decorates: ezpublish.fieldType.ezimage.io_service.draft
+        lazy: true
+        arguments:
+            $configResolver: '@ezpublish.config.resolver'
+            $innerIOService: '@ezpublish.fieldType.ezimage.io_service.draft.config_scope_change_aware.inner'
             $prefixParameterName: 'image.versioned_images_dir'
 
     ezpublish.fieldType.ezimage.pathGenerator:
@@ -88,10 +98,15 @@ services:
 
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.io_service:
+        parent: ezpublish.core.io.service
+
+    ezpublish.fieldType.ezbinaryfile.io_service.config_scope_change_aware:
         class: eZ\Publish\Core\IO\ConfigScopeChangeAwareIOService
+        decorates: ezpublish.fieldType.ezbinaryfile.io_service
+        lazy: true
         arguments:
             $configResolver: '@ezpublish.config.resolver'
-            $innerIOService: '@ezpublish.core.io.service'
+            $innerIOService: '@ezpublish.fieldType.ezbinaryfile.io_service.config_scope_change_aware.inner'
             $prefixParameterName: 'binary_dir'
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:

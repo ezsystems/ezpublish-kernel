@@ -33,6 +33,9 @@ class ConfigScopeChangeAwareIOService implements IOServiceInterface, ConfigScope
         $this->configResolver = $configResolver;
         $this->innerIOService = $innerIOService;
         $this->prefixParameterName = $prefixParameterName;
+
+        // set initial prefix on inner IOService
+        $this->setPrefix($this->configResolver->getParameter($this->prefixParameterName));
     }
 
     public function setPrefix($prefix): void
