@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 /**
- * Test case for delete content translation with the SearchService
+ * Test case for delete content translation with the SearchService.
  *
  * @see \eZ\Publish\API\Repository\SearchService
  * @group integration
