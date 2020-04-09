@@ -307,7 +307,7 @@ services:
         autoconfigure: true
         arguments:
             $locationService: '@ezpublish.api.service.location'
-            $permissionResolver: "@=service('ezpublish.api.repository').getPermissionResolver()"
+            $permissionResolver: '@eZ\Publish\API\Repository\PermissionResolver'
             $userService: '@ezpublish.api.service.user'
             $contentTypeService: '@ezpublish.api.service.content_type'
             $searchService: '@ezpublish.api.service.search'
@@ -322,7 +322,7 @@ services:
             $ioService: '@ezpublish.fieldType.ezimage.io_service.published'
             $imagine: '@liip_imagine'
             $filterManager: '@liip_imagine.filter.manager'
-            $permissionResolver: "@=service('ezpublish.api.repository').getPermissionResolver()"
+            $permissionResolver: '@eZ\Publish\API\Repository\PermissionResolver'
             $userService: '@ezpublish.api.service.user'
             $mimeTypes: '@mime_types'
         tags:
