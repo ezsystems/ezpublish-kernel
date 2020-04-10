@@ -24,7 +24,7 @@ use RuntimeException;
 class PermissionCriterionResolver implements APIPermissionCriterionResolver
 {
     /** @var \eZ\Publish\API\Repository\PermissionResolver */
-    private $permissionResolver;
+    private $innerPermissionResolver;
 
     /** @var \eZ\Publish\Core\Repository\Permission\LimitationService */
     private $limitationService;
@@ -32,14 +32,14 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
     /**
      * Constructor.
      *
-     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
+     * @param \eZ\Publish\API\Repository\PermissionResolver $innerPermissionResolver
      * @param \eZ\Publish\Core\Repository\Permission\LimitationService $limitationService
      */
     public function __construct(
-        PermissionResolverInterface $permissionResolver,
+        PermissionResolverInterface $innerPermissionResolver,
         LimitationService $limitationService
     ) {
-        $this->permissionResolver = $permissionResolver;
+        $this->innerPermissionResolver = $innerPermissionResolver;
         $this->limitationService = $limitationService;
     }
 
@@ -57,7 +57,7 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
      */
     public function getPermissionsCriterion(string $module = 'content', string $function = 'read', ?array $targets = null)
     {
-        $permissionSets = $this->permissionResolver->hasAccess($module, $function);
+        $permissionSets = $this->innerPermissionResolver->hasAccess($module, $function);
         if (is_bool($permissionSets)) {
             return $permissionSets;
         }
@@ -72,7 +72,7 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
          * If RoleAssignment has limitation then policy OR conditions are wrapped in a AND condition with the
          * role limitation, otherwise it will be merged into RoleAssignment's OR condition.
          */
-        $currentUserRef = $this->permissionResolver->getCurrentUserReference();
+        $currentUserRef = $this->innerPermissionResolver->getCurrentUserReference();
         $roleAssignmentOrCriteria = [];
         foreach ($permissionSets as $permissionSet) {
             // $permissionSet is a RoleAssignment, but in the form of role limitation & role policies hash

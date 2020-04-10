@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository\Permission;
 
 use eZ\Publish\API\Repository\PermissionResolver as APIPermissionResolver;
 use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriterionResolver;
+use eZ\Publish\API\Repository\PermissionService;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\User\LookupLimitationResult;
 use eZ\Publish\API\Repository\Values\User\UserReference;
@@ -27,10 +28,10 @@ use Exception;
  * The logic here uses a cache TTL of a few seconds, as this is in-memory cache we are not
  * able to know if any other concurrent user might be changing permissions.
  */
-class CachedPermissionService implements APIPermissionResolver, APIPermissionCriterionResolver
+class CachedPermissionService implements PermissionService
 {
     /** @var \eZ\Publish\API\Repository\PermissionResolver */
-    private $permissionResolver;
+    private $innerPermissionResolver;
 
     /** @var \eZ\Publish\API\Repository\PermissionCriterionResolver */
     private $permissionCriterionResolver;
@@ -64,39 +65,39 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
     /**
      * CachedPermissionService constructor.
      *
-     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
+     * @param \eZ\Publish\API\Repository\PermissionResolver $innerPermissionResolver
      * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
      * @param int $cacheTTL By default set to 5 seconds, should be low to avoid to many permission exceptions on long running requests / processes (even if tolerant search service should handle that)
      */
     public function __construct(
-        APIPermissionResolver $permissionResolver,
+        APIPermissionResolver $innerPermissionResolver,
         APIPermissionCriterionResolver $permissionCriterionResolver,
         int $cacheTTL = 5
     ) {
-        $this->permissionResolver = $permissionResolver;
+        $this->innerPermissionResolver = $innerPermissionResolver;
         $this->permissionCriterionResolver = $permissionCriterionResolver;
         $this->cacheTTL = $cacheTTL;
     }
 
     public function getCurrentUserReference(): UserReference
     {
-        return $this->permissionResolver->getCurrentUserReference();
+        return $this->innerPermissionResolver->getCurrentUserReference();
     }
 
     public function setCurrentUserReference(UserReference $userReference): void
     {
         $this->permissionCriterion = null;
-        $this->permissionResolver->setCurrentUserReference($userReference);
+        $this->innerPermissionResolver->setCurrentUserReference($userReference);
     }
 
     public function hasAccess(string $module, string $function, ?UserReference $userReference = null)
     {
-        return $this->permissionResolver->hasAccess($module, $function, $userReference);
+        return $this->innerPermissionResolver->hasAccess($module, $function, $userReference);
     }
 
     public function canUser(string $module, string $function, ValueObject $object, array $targets = []): bool
     {
-        return $this->permissionResolver->canUser($module, $function, $object, $targets);
+        return $this->innerPermissionResolver->canUser($module, $function, $object, $targets);
     }
 
     /**
@@ -109,7 +110,7 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
         array $targets = [],
         array $limitations = []
     ): LookupLimitationResult {
-        return $this->permissionResolver->lookupLimitations($module, $function, $object, $targets, $limitations);
+        return $this->innerPermissionResolver->lookupLimitations($module, $function, $object, $targets, $limitations);
     }
 
     public function getPermissionsCriterion(string $module = 'content', string $function = 'read', ?array $targets = null)
@@ -140,7 +141,7 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
     {
         ++$this->sudoNestingLevel;
         try {
-            $returnValue = $this->permissionResolver->sudo($callback, $outerRepository);
+            $returnValue = $this->innerPermissionResolver->sudo($callback, $outerRepository);
         } catch (Exception $e) {
             --$this->sudoNestingLevel;
             throw $e;

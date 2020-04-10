@@ -8,6 +8,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\LanguageResolver;
 use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\PermissionService;
 use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
 use eZ\Publish\Core\Repository\Mapper\RoleDomainMapper;
 use eZ\Publish\Core\Repository\Permission\LimitationService;
@@ -42,6 +43,9 @@ abstract class Base extends TestCase
 
     /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionResolverMock;
+
+    /** @var \eZ\Publish\API\Repository\PermissionService|\PHPUnit\Framework\MockObject\MockObject */
+    private $permissionServiceMock;
 
     /** @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $persistenceMock;
@@ -97,6 +101,7 @@ abstract class Base extends TestCase
                 $this->getRoleDomainMapperMock(),
                 $this->getLimitationServiceMock(),
                 $this->getLanguageResolverMock(),
+                $this->getPermissionServiceMock(),
                 $serviceSettings,
             );
 
@@ -172,6 +177,18 @@ abstract class Base extends TestCase
         }
 
         return $this->permissionResolverMock;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\PermissionService|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getPermissionServiceMock(): PermissionService
+    {
+        if (!isset($this->permissionServiceMock)) {
+            $this->permissionServiceMock = $this->createMock(PermissionService::class);
+        }
+
+        return $this->permissionServiceMock;
     }
 
     /**

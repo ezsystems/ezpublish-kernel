@@ -10,7 +10,6 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
-use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
@@ -447,6 +446,12 @@ class UrlAliasGeneratorTest extends TestCase
 
     protected function getPermissionResolverMock()
     {
+        $configResolverMock = $this->createMock(ConfigResolverInterface::class);
+        $configResolverMock
+            ->method('getParameter')
+            ->with('anonymous_user_id')
+            ->willReturn(10);
+
         return $this
             ->getMockBuilder(PermissionResolver::class)
             ->setMethods(null)
@@ -455,7 +460,8 @@ class UrlAliasGeneratorTest extends TestCase
                     $this->createMock(RoleDomainMapper::class),
                     $this->createMock(LimitationService::class),
                     $this->createMock(SPIUserHandler::class),
-                    $this->createMock(UserReference::class),
+                    $configResolverMock,
+                    [],
                 ]
             )
             ->getMock();

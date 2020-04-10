@@ -19,7 +19,6 @@ services:
     eZ\Publish\API\Repository\URLAliasService: '@ezpublish.api.service.url_alias'
     eZ\Publish\API\Repository\TrashService: '@ezpublish.api.service.trash'
 
-    eZ\Publish\API\Repository\PermissionResolver:
-        class: eZ\Publish\Core\Repository\Permission\PermissionResolver
-        lazy: true
-        factory: ['@eZ\Publish\API\Repository\Repository', 'getPermissionResolver']
+    eZ\Publish\API\Repository\PermissionService: '@eZ\Publish\Core\Repository\Permission\CachedPermissionService'
+    eZ\Publish\API\Repository\PermissionResolver: '@eZ\Publish\API\Repository\PermissionService'
+    eZ\Publish\API\Repository\PermissionCriterionResolver: '@eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver'

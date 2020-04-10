@@ -17,6 +17,8 @@ use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Mapper\RoleDomainMapper;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Limitation\Target;
 use eZ\Publish\SPI\Limitation\TargetAwareType;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
@@ -58,29 +60,34 @@ class PermissionResolver implements PermissionResolverInterface
      */
     private $policyMap;
 
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
+    private $configResolver;
+
     /**
-     * @param \eZ\Publish\Core\Repository\Mapper\RoleDomainMapper $roleDomainMapper
-     * @param \eZ\Publish\Core\Repository\Permission\LimitationService $limitationService
-     * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
-     * @param \eZ\Publish\API\Repository\Values\User\UserReference $userReference
      * @param array $policyMap Map of system configured policies, for validation usage.
      */
     public function __construct(
         RoleDomainMapper $roleDomainMapper,
         LimitationService $limitationService,
         UserHandler $userHandler,
-        APIUserReference $userReference,
-        array $policyMap = []
+        ConfigResolverInterface $configResolver,
+        array $policyMap
     ) {
         $this->roleDomainMapper = $roleDomainMapper;
         $this->limitationService = $limitationService;
         $this->userHandler = $userHandler;
-        $this->currentUserRef = $userReference;
+        $this->configResolver = $configResolver;
         $this->policyMap = $policyMap;
     }
 
     public function getCurrentUserReference(): APIUserReference
     {
+        if (empty($this->currentUserRef)) {
+            $this->currentUserRef = new UserReference(
+                $this->configResolver->getParameter('anonymous_user_id')
+            );
+        }
+
         return $this->currentUserRef;
     }
 

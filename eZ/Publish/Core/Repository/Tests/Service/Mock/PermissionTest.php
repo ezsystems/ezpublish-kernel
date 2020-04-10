@@ -9,6 +9,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Repository\Repository as CoreRepository;
@@ -104,13 +105,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
-        $userReferenceMock = $this->getUserReferenceMock();
         $mockedService = $this->getPermissionResolverMock(null);
-
-        $userReferenceMock
-            ->expects($this->once())
-            ->method('getUserId')
-            ->will($this->returnValue(10));
 
         $userHandlerMock
             ->expects($this->once())
@@ -181,13 +176,7 @@ class PermissionTest extends BaseServiceMockTest
     {
         /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
-        $userReferenceMock = $this->getUserReferenceMock();
         $service = $this->getPermissionResolverMock(null);
-
-        $userReferenceMock
-            ->expects($this->once())
-            ->method('getUserId')
-            ->will($this->returnValue(10));
 
         $userHandlerMock
             ->expects($this->once())
@@ -1007,12 +996,8 @@ class PermissionTest extends BaseServiceMockTest
     public function testGetCurrentUserReferenceReturnsAnonymousUser()
     {
         $permissionResolverMock = $this->getPermissionResolverMock(null);
-        $userReferenceMock = $this->getUserReferenceMock();
 
-        self::assertSame(
-            $userReferenceMock,
-            $permissionResolverMock->getCurrentUserReference()
-        );
+        self::assertEquals(new UserReference(10), $permissionResolverMock->getCurrentUserReference());
     }
 
     protected $permissionResolverMock;
@@ -1023,6 +1008,12 @@ class PermissionTest extends BaseServiceMockTest
     protected function getPermissionResolverMock($methods = [])
     {
         if ($this->permissionResolverMock === null) {
+            $configResolverMock = $this->createMock(ConfigResolverInterface::class);
+            $configResolverMock
+                ->method('getParameter')
+                ->with('anonymous_user_id')
+                ->willReturn(10);
+
             $this->permissionResolverMock = $this
                 ->getMockBuilder(PermissionResolver::class)
                 ->setMethods($methods)
@@ -1031,7 +1022,7 @@ class PermissionTest extends BaseServiceMockTest
                         $this->getRoleDomainMapperMock(),
                         $this->getLimitationServiceMock(),
                         $this->getPersistenceMock()->userHandler(),
-                        $this->getUserReferenceMock(),
+                        $configResolverMock,
                         [
                             'dummy-module' => [
                                 'dummy-function' => [

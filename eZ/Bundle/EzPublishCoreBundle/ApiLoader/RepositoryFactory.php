@@ -7,6 +7,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\API\Repository\LanguageResolver;
+use eZ\Publish\API\Repository\PermissionService;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -79,7 +80,8 @@ class RepositoryFactory implements ContainerAwareInterface
         Mapper\ContentDomainMapper $contentDomainMapper,
         Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
         Mapper\RoleDomainMapper $roleDomainMapper,
-        LimitationService $limitationService
+        LimitationService $limitationService,
+        PermissionService $permissionService
     ): Repository {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 
@@ -97,6 +99,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $roleDomainMapper,
             $limitationService,
             $this->languageResolver,
+            $permissionService,
             [
                 'role' => [
                     'policyMap' => $this->policyMap,

@@ -8,12 +8,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\User\User as ApiUser;
-use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RememberMeRepositoryAuthenticationProvider;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
-use eZ\Publish\Core\Repository\Permission\LimitationService;
-use eZ\Publish\Core\Repository\Mapper\RoleDomainMapper;
-use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
@@ -118,33 +114,5 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
             [$rememberMeToken->getProviderKey(), $rememberMeToken->getSecret(), $rememberMeToken->getUsername()],
             [$authenticatedToken->getProviderKey(), $authenticatedToken->getSecret(), $authenticatedToken->getUsername()]
         );
-    }
-
-    /**
-     * @return \eZ\Publish\Core\Repository\Permission\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private function getPermissionResolverMock()
-    {
-        return $this
-            ->getMockBuilder(PermissionResolver::class)
-            ->setMethods(null)
-            ->setConstructorArgs(
-                [
-                    $this
-                        ->getMockBuilder(RoleDomainMapper::class)
-                        ->disableOriginalConstructor()
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder(LimitationService::class)
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder(UserHandler::class)
-                        ->getMock(),
-                    $this
-                        ->getMockBuilder(UserReference::class)
-                        ->getMock(),
-                ]
-            )
-            ->getMock();
     }
 }

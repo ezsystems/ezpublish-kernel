@@ -29,7 +29,8 @@ services:
             - '@eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper'
             - '@eZ\Publish\Core\Repository\Mapper\RoleDomainMapper'
             - '@eZ\Publish\Core\Repository\Permission\LimitationService'
-        lazy: true
+            - '@eZ\Publish\API\Repository\PermissionService'
+            - '%languages%'
 
     ezpublish.api.service.inner_content:
         class: eZ\Publish\Core\Repository\ContentService
@@ -183,3 +184,21 @@ services:
     eZ\Publish\Core\Repository\Permission\LimitationService:
         arguments:
             $limitationTypes: !tagged_iterator { tag: ezpublish.limitationType, index_by: alias }
+
+    eZ\Publish\Core\Repository\Permission\PermissionResolver:
+        arguments:
+            $roleDomainMapper: '@eZ\Publish\Core\Repository\Mapper\RoleDomainMapper'
+            $limitationService: '@eZ\Publish\Core\Repository\Permission\LimitationService'
+            $userHandler: '@ezpublish.spi.persistence.legacy.user.handler'
+            $configResolver: '@ezpublish.config.resolver'
+            $policyMap: '%ezpublish.api.role.policy_map%'
+
+    eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver:
+        arguments:
+            $innerPermissionResolver: '@eZ\Publish\Core\Repository\Permission\PermissionResolver'
+            $limitationService: '@eZ\Publish\Core\Repository\Permission\LimitationService'
+
+    eZ\Publish\Core\Repository\Permission\CachedPermissionService:
+        arguments:
+            $innerPermissionResolver: '@eZ\Publish\Core\Repository\Permission\PermissionResolver'
+            $permissionCriterionResolver: '@eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver'
