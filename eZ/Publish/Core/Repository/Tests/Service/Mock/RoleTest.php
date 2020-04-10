@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\Mapper\RoleDomainMapper;
 use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\RoleService;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
@@ -1095,7 +1095,7 @@ class RoleTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      * @param array $settings
-     * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper|null $roleDomainMapper
+     * @param \eZ\Publish\Core\Repository\Mapper\RoleDomainMapper|null $roleDomainMapper
      *
      * @return \eZ\Publish\Core\Repository\RoleService|\PHPUnit\Framework\MockObject\MockObject
      */

@@ -213,7 +213,7 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\Core\Repository\Permission\LimitationService */
     protected $limitationService;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
+    /** @var \eZ\Publish\Core\Repository\Mapper\RoleDomainMapper */
     protected $roleDomainMapper;
 
     /** @var \eZ\Publish\Core\Repository\Mapper\ContentDomainMapper */
@@ -261,6 +261,7 @@ class Repository implements RepositoryInterface
         ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
         Mapper\ContentDomainMapper $contentDomainMapper,
         Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
+        Mapper\RoleDomainMapper $roleDomainMapper,
         LimitationService $limitationService,
         LanguageResolver $languageResolver,
         array $serviceSettings = [],
@@ -276,6 +277,7 @@ class Repository implements RepositoryInterface
         $this->proxyDomainMapperFactory = $proxyDomainMapperFactory;
         $this->contentDomainMapper = $contentDomainMapper;
         $this->contentTypeDomainMapper = $contentTypeDomainMapper;
+        $this->roleDomainMapper = $roleDomainMapper;
         $this->limitationService = $limitationService;
         $this->languageResolver = $languageResolver;
 
@@ -636,19 +638,8 @@ class Repository implements RepositoryInterface
         return $this->roleService;
     }
 
-    /**
-     * Get RoleDomainMapper.
-     *
-     * @return \eZ\Publish\Core\Repository\Helper\RoleDomainMapper
-     */
-    protected function getRoleDomainMapper()
+    protected function getRoleDomainMapper(): Mapper\RoleDomainMapper
     {
-        if ($this->roleDomainMapper !== null) {
-            return $this->roleDomainMapper;
-        }
-
-        $this->roleDomainMapper = new Helper\RoleDomainMapper($this->limitationService);
-
         return $this->roleDomainMapper;
     }
 

@@ -53,7 +53,7 @@ class RoleService implements RoleServiceInterface
     /** @var \eZ\Publish\Core\Repository\Permission\LimitationService */
     protected $limitationService;
 
-    /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
+    /** @var \eZ\Publish\Core\Repository\Mapper\RoleDomainMapper */
     protected $roleDomainMapper;
 
     /** @var array */
@@ -68,14 +68,14 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\Core\Repository\Permission\LimitationService $limitationService
-     * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
+     * @param \eZ\Publish\Core\Repository\Mapper\RoleDomainMapper $roleDomainMapper
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $userHandler,
         Permission\LimitationService $limitationService,
-        Helper\RoleDomainMapper $roleDomainMapper,
+        Mapper\RoleDomainMapper $roleDomainMapper,
         array $settings = []
     ) {
         $this->repository = $repository;

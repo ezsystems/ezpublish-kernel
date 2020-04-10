@@ -9,6 +9,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\API\Repository\LanguageResolver;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
+use eZ\Publish\Core\Repository\Mapper\RoleDomainMapper;
 use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
@@ -69,6 +70,9 @@ abstract class Base extends TestCase
     /** @var \eZ\Publish\API\Repository\LanguageResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $languageResolverMock;
 
+    /** @var \eZ\Publish\Core\Repository\Mapper\RoleDomainMapper|\PHPUnit\Framework\MockObject\MockObject */
+    protected $roleDomainMapperMock;
+
     /**
      * Get Real repository with mocked dependencies.
      *
@@ -90,6 +94,7 @@ abstract class Base extends TestCase
                 $this->createMock(ProxyDomainMapperFactoryInterface::class),
                 $this->getContentDomainMapperMock(),
                 $this->getContentTypeDomainMapperMock(),
+                $this->getRoleDomainMapperMock(),
                 $this->getLimitationServiceMock(),
                 $this->getLanguageResolverMock(),
                 $serviceSettings,
@@ -332,5 +337,25 @@ abstract class Base extends TestCase
         }
 
         return $this->languageResolverMock;
+    }
+
+    /**
+     * @param string[] $methods
+     *
+     * @return \eZ\Publish\Core\Repository\Mapper\RoleDomainMapper|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getRoleDomainMapperMock(array $methods = []): RoleDomainMapper
+    {
+        if ($this->roleDomainMapperMock === null) {
+            $mockBuilder = $this->getMockBuilder(RoleDomainMapper::class);
+            if (!empty($methods)) {
+                $mockBuilder->onlyMethods($methods);
+            }
+            $this->roleDomainMapperMock = $mockBuilder
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->roleDomainMapperMock;
     }
 }

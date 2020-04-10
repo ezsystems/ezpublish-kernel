@@ -66,6 +66,7 @@ class RepositoryFactory implements ContainerAwareInterface
         ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
         Mapper\ContentDomainMapper $contentDomainMapper,
         Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
+        Mapper\RoleDomainMapper $roleDomainMapper,
         LimitationService $limitationService
     ): Repository {
         return new $this->repositoryClass(
@@ -79,6 +80,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $proxyDomainMapperFactory,
             $contentDomainMapper,
             $contentTypeDomainMapper,
+            $roleDomainMapper,
             $limitationService,
             $this->languageResolver,
             [

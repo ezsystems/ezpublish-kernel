@@ -27,6 +27,7 @@ services:
             - '@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactory'
             - '@eZ\Publish\Core\Repository\Mapper\ContentDomainMapper'
             - '@eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper'
+            - '@eZ\Publish\Core\Repository\Mapper\RoleDomainMapper'
             - '@eZ\Publish\Core\Repository\Permission\LimitationService'
         lazy: true
 
@@ -173,6 +174,10 @@ services:
             $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
             $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
             $thumbnailStrategy: '@eZ\Publish\Core\Repository\Strategy\ContentThumbnail\ThumbnailChainStrategy'
+
+    eZ\Publish\Core\Repository\Mapper\RoleDomainMapper:
+        arguments:
+            $limitationService: '@eZ\Publish\Core\Repository\Permission\LimitationService'
 
     # Permission-related
     eZ\Publish\Core\Repository\Permission\LimitationService:

@@ -78,6 +78,7 @@ class RepositoryFactory implements ContainerAwareInterface
         ProxyDomainMapperFactoryInterface $proxyDomainMapperFactory,
         Mapper\ContentDomainMapper $contentDomainMapper,
         Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
+        Mapper\RoleDomainMapper $roleDomainMapper,
         LimitationService $limitationService
     ): Repository {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
@@ -93,6 +94,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $proxyDomainMapperFactory,
             $contentDomainMapper,
             $contentTypeDomainMapper,
+            $roleDomainMapper,
             $limitationService,
             $this->languageResolver,
             [
