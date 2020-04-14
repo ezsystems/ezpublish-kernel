@@ -59,7 +59,6 @@
             <file>eZ/Publish/API/Repository/Tests/SearchServiceLocationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchEngineIndexingTest.php</file>
-            <file>eZ/Publish/API/Repository/Tests/SearchServiceDeleteTranslationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/FieldTypeServiceTest.php</file>
         </testsuite>
         <testsuite name="eZ\Publish\API\Repository\Tests\Regression">
