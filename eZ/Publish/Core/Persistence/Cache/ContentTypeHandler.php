@@ -241,7 +241,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
         return $this->getCacheValue(
             $this->escapeForCacheKey($identifier),
             'ez-content-type-',
-            function ($identifier) {
+            function ($escapedIdentifier) use ($identifier) {
                 return $this->persistenceHandler->contentTypeHandler()->loadByIdentifier($identifier);
             },
             $this->getTypeTags,
