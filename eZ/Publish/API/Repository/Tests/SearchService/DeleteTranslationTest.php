@@ -1,13 +1,14 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\API\Repository\Tests;
+declare(strict_types=1);
 
+namespace eZ\Publish\API\Repository\Tests\SearchService;
+
+use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -21,12 +22,12 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
  * @group integration
  * @group search
  */
-class SearchServiceDeleteTranslationTest extends BaseTest
+class DeleteTranslationTest extends BaseTest
 {
     /**
      * @throws \ErrorException
      */
-    public function setUp()
+    public function setUp(): void
     {
         $setupFactory = $this->getSetupFactory();
 
@@ -39,12 +40,8 @@ class SearchServiceDeleteTranslationTest extends BaseTest
 
     /**
      * @param array $languages
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
@@ -85,7 +82,6 @@ class SearchServiceDeleteTranslationTest extends BaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     protected function findContent(string $text, string $languageCode): SearchResult
@@ -105,14 +101,11 @@ class SearchServiceDeleteTranslationTest extends BaseTest
     }
 
     /**
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testDeleteContentTranslation()
+    public function testDeleteContentTranslation(): void
     {
         $repository = $this->getRepository();
         $testContent = $this->createTestContentWithLanguages(

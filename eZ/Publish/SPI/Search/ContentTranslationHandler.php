@@ -1,11 +1,11 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\SPI\Search;
 
 /**
@@ -15,9 +15,6 @@ interface ContentTranslationHandler
 {
     /**
      * Deletes a translation content object from the index.
-     *
-     * @param int $contentId
-     * @param string $languageCode
      */
-    public function deleteTranslation($contentId, $languageCode);
+    public function deleteTranslation(int $contentId, string $languageCode): void;
 }
