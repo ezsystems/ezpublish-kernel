@@ -505,7 +505,7 @@ class Mapper
         $struct->ownerId = $content->versionInfo->contentInfo->ownerId;
         $struct->locations = [];
         $struct->alwaysAvailable = $content->versionInfo->contentInfo->alwaysAvailable;
-        $struct->remoteId = md5(uniqid(get_class($this), true));
+        $struct->remoteId = md5(uniqid(static::class, true));
         $struct->initialLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->initialLanguageCode)->id;
         $struct->mainLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->contentInfo->mainLanguageCode)->id;
         $struct->modified = time();

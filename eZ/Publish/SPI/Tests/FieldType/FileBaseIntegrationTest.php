@@ -65,7 +65,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      */
     public static function setUpBeforeClass(): void
     {
-        $calledClass = get_called_class();
+        $calledClass = static::class;
 
         $tmpFile = tempnam(
             sys_get_temp_dir(),

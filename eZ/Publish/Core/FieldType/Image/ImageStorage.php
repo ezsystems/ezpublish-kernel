@@ -37,7 +37,7 @@ class ImageStorage extends GatewayBasedStorage
     /** @var \eZ\Publish\Core\FieldType\Image\AliasCleanerInterface */
     protected $aliasCleaner;
 
-    /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway $gateway */
+    /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway */
     protected $gateway;
 
     public function __construct(

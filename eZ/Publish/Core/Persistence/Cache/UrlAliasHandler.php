@@ -287,14 +287,24 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     /**
      * {@inheritdoc}
      */
-    public function locationDeleted($locationId)
+    public function locationDeleted($locationId): array
     {
         $this->logger->logCall(__METHOD__, ['location' => $locationId]);
-        $return = $this->persistenceHandler->urlAliasHandler()->locationDeleted($locationId);
+        $childrenAliases = $this->persistenceHandler->urlAliasHandler()
+            ->locationDeleted($locationId);
 
-        $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId]);
+        $tags = [
+            'urlAlias-location-' . $locationId,
+            'urlAlias-location-path-' . $locationId,
+        ];
 
-        return $return;
+        foreach ($childrenAliases as $childAlias) {
+            $tags[] = "urlAlias-{$childAlias['parent']}-{$childAlias['text_md5']}";
+        }
+
+        $this->cache->invalidateTags($tags);
+
+        return $childrenAliases;
     }
 
     /**

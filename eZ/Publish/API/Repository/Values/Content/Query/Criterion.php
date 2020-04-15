@@ -104,7 +104,7 @@ abstract class Criterion implements CriterionInterface
 
         // Operator wasn't found in the criterion specifications
         if ($operatorFound === false) {
-            throw new InvalidArgumentException("Operator $operator isn't supported by Criterion " . get_class($this));
+            throw new InvalidArgumentException("Operator $operator isn't supported by Criterion " . static::class);
         }
 
         $this->operator = $operator;

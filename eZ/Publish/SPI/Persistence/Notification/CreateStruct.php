@@ -12,18 +12,18 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 class CreateStruct extends ValueObject
 {
-    /** @var int $ownerId */
+    /** @var int */
     public $ownerId;
 
-    /** @var string $type */
+    /** @var string */
     public $type;
 
-    /** @var bool $isPending */
+    /** @var bool */
     public $isPending;
 
-    /** @var array $data */
+    /** @var array */
     public $data = [];
 
-    /** @var int $created */
+    /** @var int */
     public $created;
 }

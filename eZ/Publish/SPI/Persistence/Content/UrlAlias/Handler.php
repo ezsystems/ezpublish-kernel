@@ -164,8 +164,9 @@ interface Handler
      * Notifies the underlying engine that a location was deleted or moved to trash.
      *
      * @param mixed $locationId
+     * @return array
      */
-    public function locationDeleted($locationId);
+    public function locationDeleted($locationId): array;
 
     /**
      * Notifies the underlying engine that Locations Content Translation was removed.
