@@ -11,7 +11,9 @@ namespace eZ\Publish\API\Repository\Tests;
 use Exception;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -19,6 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -2145,6 +2148,74 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\LocationService::deleteLocation
+     */
+    public function testDeleteUnusedLocationWhichPreviousHadContentWithRelativeAlias(): void
+    {
+        $repository = $this->getRepository(false);
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $originalFolder = $this->createFolder(['eng-GB' => 'Original folder'], 2);
+        $newFolder = $this->createFolder(['eng-GB' => 'New folder'], 2);
+        $originalFolderLocationId = $originalFolder->contentInfo->mainLocationId;
+
+        $forum = $contentService->publishVersion(
+            $contentService->createContent(
+                $this->createForumStruct('Some forum'),
+                [
+                    $locationService->newLocationCreateStruct($originalFolderLocationId),
+                ]
+            )->versionInfo
+        );
+
+        $forumMainLocation = $locationService->loadLocation(
+            $forum->contentInfo->mainLocationId
+        );
+
+        $customRelativeAliasPath = '/Original-folder/some-forum-alias';
+
+        $urlAliasService->createUrlAlias(
+            $forumMainLocation,
+            $customRelativeAliasPath,
+            'eng-GB',
+            true,
+            true
+        );
+
+        $locationService->moveSubtree(
+            $forumMainLocation,
+            $locationService->loadLocation(
+                $newFolder->contentInfo->mainLocationId
+            )
+        );
+
+        $this->assertAliasExists(
+            $customRelativeAliasPath,
+            $forumMainLocation,
+            $urlAliasService
+        );
+
+        $urlAliasService->lookup($customRelativeAliasPath);
+
+        $locationService->deleteLocation(
+            $locationService->loadLocation(
+                $originalFolder->contentInfo->mainLocationId
+            )
+        );
+
+        $this->assertAliasExists(
+            $customRelativeAliasPath,
+            $forumMainLocation,
+            $urlAliasService
+        );
+
+        $urlAliasService->lookup($customRelativeAliasPath);
+    }
+
+    /**
      * Test for the copySubtree() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
@@ -2986,5 +3057,41 @@ class LocationServiceTest extends BaseTest
         );
 
         return $contentService->publishVersion($contentDraft->versionInfo);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function createForumStruct(string $name): ContentCreateStruct
+    {
+        $repository = $this->getRepository(false);
+
+        $contentTypeForum = $repository->getContentTypeService()
+            ->loadContentTypeByIdentifier('forum');
+
+        $forum = $repository->getContentService()
+            ->newContentCreateStruct($contentTypeForum, 'eng-GB');
+
+        $forum->setField('name', $name);
+
+        return $forum;
+    }
+
+    private function assertAliasExists(
+        string $expectedAliasPath,
+        Location $location,
+        URLAliasServiceInterface $urlAliasService
+    ): void {
+        $articleAliasesBeforeDelete = $urlAliasService
+            ->listLocationAliases($location);
+
+        $this->assertNotEmpty(
+            array_filter(
+                $articleAliasesBeforeDelete,
+                static function (URLAlias $alias) use ($expectedAliasPath) {
+                    return $alias->path === $expectedAliasPath;
+                }
+            )
+        );
     }
 }

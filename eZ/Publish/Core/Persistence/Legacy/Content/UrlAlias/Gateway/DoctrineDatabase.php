@@ -1444,6 +1444,82 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function deleteUrlNopAliasesWithoutChildren(): int
+    {
+        $platform = $this->connection->getDatabasePlatform();
+        $queryBuilder = $this->connection->createQueryBuilder();
+
+        // The wrapper select is needed for SQL "Derived Table Merge" issue for deleting
+        $wrapperQueryBuilder = clone $queryBuilder;
+        $selectQueryBuilder = clone $queryBuilder;
+        $expressionBuilder = $queryBuilder->expr();
+
+        $selectQueryBuilder
+            ->select('u_parent.id AS inner_id')
+            ->from($this->table, 'u_parent')
+            ->leftJoin(
+                'u_parent',
+                $this->table,
+                'u',
+                $expressionBuilder->eq('u_parent.id', 'u.parent')
+            )
+            ->where(
+                $expressionBuilder->eq(
+                    'u_parent.action_type',
+                    ':actionType'
+                )
+            )
+            ->groupBy('u_parent.id')
+            ->having(
+                $expressionBuilder->eq($platform->getCountExpression('u.id'), 0)
+            );
+
+        $wrapperQueryBuilder
+            ->select('inner_id')
+            ->from(
+                sprintf('(%s)', $selectQueryBuilder), 'wrapper'
+            )
+            ->where('id = inner_id');
+
+        $queryBuilder
+            ->delete($this->table)
+            ->where(
+                sprintf('EXISTS (%s)', $wrapperQueryBuilder)
+            )
+            ->setParameter('actionType', 'nop');
+
+        return $queryBuilder->execute();
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function getAllChildrenAliases(int $parentId): array
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expressionBuilder = $queryBuilder->expr();
+
+        $queryBuilder
+            ->select('parent', 'text_md5')
+            ->from($this->table)
+            ->where(
+                $expressionBuilder->eq(
+                    'parent',
+                    $queryBuilder->createPositionalParameter($parentId, ParameterType::INTEGER)
+                )
+            )->andWhere(
+                $expressionBuilder->eq(
+                    'is_alias',
+                    $queryBuilder->createPositionalParameter(1, ParameterType::INTEGER)
+                )
+            );
+
+        return $queryBuilder->execute()->fetchAll();
+    }
+
+    /**
      * Filter from the given result set original (current) only URL aliases and index them by language_mask.
      *
      * Note: each language_mask can have one URL Alias.

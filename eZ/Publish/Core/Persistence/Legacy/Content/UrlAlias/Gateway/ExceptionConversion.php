@@ -263,4 +263,22 @@ class ExceptionConversion extends Gateway
             throw DatabaseException::wrap($e);
         }
     }
+
+    public function deleteUrlNopAliasesWithoutChildren(): int
+    {
+        try {
+            return $this->innerGateway->deleteUrlNopAliasesWithoutChildren();
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
+        }
+    }
+
+    public function getAllChildrenAliases(int $parentId): array
+    {
+        try {
+            return $this->innerGateway->getAllChildrenAliases($parentId);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
+        }
+    }
 }

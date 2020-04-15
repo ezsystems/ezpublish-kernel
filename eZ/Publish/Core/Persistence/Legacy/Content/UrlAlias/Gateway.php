@@ -269,6 +269,16 @@ abstract class Gateway
     abstract public function deleteUrlAliasesWithBrokenLink();
 
     /**
+     * Delete "nop" type actions URL aliases that don't have children.
+     */
+    abstract public function deleteUrlNopAliasesWithoutChildren(): int;
+
+    /**
+     * Return aliases which are connected with provided parentId.
+     */
+    abstract public function getAllChildrenAliases(int $parentId): array;
+
+    /**
      * Attempt repairing data corruption for broken archived URL aliases for Location,
      * assuming there exists restored original (current) entry.
      *
