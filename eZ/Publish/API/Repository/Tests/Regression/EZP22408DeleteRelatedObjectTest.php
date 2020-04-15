@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @copyright: Copyright (C) 2014 Heliopsis. All rights reserved.
- * @license: proprietary
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\API\Repository\Tests\Regression;
 

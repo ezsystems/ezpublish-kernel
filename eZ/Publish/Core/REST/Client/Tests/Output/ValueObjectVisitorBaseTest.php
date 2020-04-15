@@ -1,12 +1,9 @@
 <?php
 
 /**
- * File containing ValueObjectVisitorBaseTest class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client\Tests\Output;
 
 use eZ\Publish\Core\REST\Common\Tests\AssertXmlTagTrait;

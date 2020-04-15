@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the configuration of the REST SDK client.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
