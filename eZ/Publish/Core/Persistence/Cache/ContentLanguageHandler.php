@@ -119,7 +119,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function loadListByLanguageCodes(array $languageCodes): iterable
     {
         return $this->getMultipleCacheValues(
-            array_map(array($this, 'escapeForCacheKey'), $languageCodes),
+            array_map([$this, 'escapeForCacheKey'], $languageCodes),
             'ez-language-code-',
             function (array $escapedLanguageCodes) use ($languageCodes) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($escapedLanguageCodes);
