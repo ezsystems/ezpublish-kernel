@@ -1,6 +1,6 @@
 <?php
 
-namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\RelationList;
+namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\Relation;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;

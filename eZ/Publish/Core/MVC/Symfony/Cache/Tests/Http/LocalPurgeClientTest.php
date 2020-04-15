@@ -18,7 +18,7 @@ function time()
     return 1417624982;
 }
 
-namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests;
+namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\ContentPurger;

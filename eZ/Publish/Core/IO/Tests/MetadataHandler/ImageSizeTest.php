@@ -6,7 +6,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\FieldType\Tests\MetadataHandler;
+namespace eZ\Publish\Core\IO\Tests\MetadataHandler;
 
 use eZ\Publish\Core\IO\MetadataHandler\ImageSize as ImageSizeMetadataHandler;
 use PHPUnit\Framework\TestCase;
