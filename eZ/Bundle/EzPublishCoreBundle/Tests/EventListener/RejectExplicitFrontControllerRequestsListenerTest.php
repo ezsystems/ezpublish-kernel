@@ -8,7 +8,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\RejectExplicitFrontControllerRequestsListener;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -22,7 +22,7 @@ class RejectExplicitFrontControllerRequestsListenerTest extends TestCase
     private $eventListener;
 
     /**
-     * @var \Symfony\Component\HttpKernel\HttpKernelInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\HttpKernel\HttpKernelInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpKernel;
 
@@ -52,7 +52,7 @@ class RejectExplicitFrontControllerRequestsListenerTest extends TestCase
      */
     public function testOnKernelRequest(Request $request)
     {
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->httpKernel,
             $request,
             HttpKernelInterface::MASTER_REQUEST
@@ -68,7 +68,7 @@ class RejectExplicitFrontControllerRequestsListenerTest extends TestCase
     {
         $this->expectException(NotFoundHttpException::class);
 
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             $this->httpKernel,
             $request,
             HttpKernelInterface::MASTER_REQUEST
