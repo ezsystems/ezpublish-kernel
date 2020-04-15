@@ -61,7 +61,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->getRoleKeys = static function (Role $role) {
             return [
                 'ez-role-' . $role->id,
-                'ez-role-' . $role->identifier . '-by-identifier',
+                'ez-role-' . $this->escapeForCacheKey($role->identifier) . '-by-identifier',
             ];
         };
         $this->getRoleAssignmentTags = static function (RoleAssignment $roleAssignment) {
@@ -121,7 +121,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         return $this->getCacheValue(
             $this->escapeForCacheKey($login),
             'ez-user-',
-            function ($escapedLogin) use ($login) {
+            function () use ($login) {
                 return $this->persistenceHandler->userHandler()->loadByLogin($login);
             },
             $this->getUserTags,
@@ -288,9 +288,9 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         }
 
         return $this->getCacheValue(
-            $identifier,
+            $this->escapeForCacheKey($identifier),
             'ez-role-',
-            function ($identifier) {
+            function () use ($identifier) {
                 return $this->persistenceHandler->userHandler()->loadRoleByIdentifier($identifier);
             },
             $this->getRoleTags,

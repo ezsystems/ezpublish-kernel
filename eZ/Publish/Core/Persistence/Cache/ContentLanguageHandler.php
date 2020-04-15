@@ -32,7 +32,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         $this->getKeys = static function (Language $language) {
             return [
                 'ez-language-' . $language->id,
-                'ez-language-code-' . $language->languageCode,
+                'ez-language-code-' . $this->escapeForCacheKey($language->languageCode),
             ];
         };
     }
@@ -59,7 +59,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         $this->cache->deleteItems([
             'ez-language-list',
             'ez-language-' . $struct->id,
-            'ez-language-code-' . $struct->languageCode,
+            'ez-language-code-' . $this->escapeForCacheKey($struct->languageCode),
         ]);
 
         return $return;
@@ -103,10 +103,10 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function loadByLanguageCode($languageCode)
     {
         return $this->getCacheValue(
-            $languageCode,
+            $this->escapeForCacheKey($languageCode),
             'ez-language-code-',
-            function ($languageCode) {
-                return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+            function ($escapedLanguageCode) use ($languageCode) {
+                return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($escapedLanguageCode);
             },
             $this->getTags,
             $this->getKeys
@@ -119,10 +119,10 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function loadListByLanguageCodes(array $languageCodes): iterable
     {
         return $this->getMultipleCacheValues(
-            $languageCodes,
+            array_map(array($this, 'escapeForCacheKey'), $languageCodes),
             'ez-language-code-',
-            function (array $languageCodes) {
-                return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($languageCodes);
+            function (array $escapedLanguageCodes) use ($languageCodes) {
+                return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($escapedLanguageCodes);
             },
             $this->getTags,
             $this->getKeys

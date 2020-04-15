@@ -73,7 +73,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function loadByIdentifier($identifier)
     {
-        $cacheItem = $this->cache->getItem('ez-section-' . $identifier . '-by-identifier');
+        $cacheItem = $this->cache->getItem('ez-section-' . $this->escapeForCacheKey($identifier) . '-by-identifier');
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
