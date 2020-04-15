@@ -2536,11 +2536,12 @@ class UrlAliasHandlerTest extends TestCase
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_location_delete.php');
 
         $countBeforeDeleting = $this->countRows();
+        $countAfterFirstDeleting = $countBeforeDeleting - 5;
 
         $handler->locationDeleted(5);
 
         self::assertEquals(
-            $countBeforeDeleting - 5,
+            $countAfterFirstDeleting,
             $this->countRows()
         );
 
@@ -2563,6 +2564,20 @@ class UrlAliasHandlerTest extends TestCase
                 // Do nothing
             }
         }
+
+        // Deleting location historically related with some relative alias
+        $handler->locationDeleted(9);
+
+        self::assertEquals(
+            $countAfterFirstDeleting - 1,
+            $this->countRows()
+        );
+        self::assertCount(
+            1,
+            $handler->listURLAliasesForLocation(10)
+        );
+
+        $handler->lookup('to-delete-folder/article-to-move-relative-alias');
     }
 
     /**

@@ -1545,8 +1545,8 @@ class URLAliasServiceTest extends BaseTest
 
         $updatedRows = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
         self::assertCount(
-            // API should also remove already broken pre-existing URL aliases to Locations 50 and 2x 59
-            count($originalRows) - 3,
+            // API should also remove already broken pre-existing URL aliases
+            count($originalRows) - 4,
             $updatedRows,
             'Number of rows after cleanup is not the same as the original number of rows'
         );

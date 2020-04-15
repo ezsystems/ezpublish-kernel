@@ -1,0 +1,5 @@
+services:
+    ezpublish.http_kernel.reject_explicit_front_controller_requests_listener:
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\RejectExplicitFrontControllerRequestsListener
+        tags:
+              - { name: kernel.event_subscriber }
