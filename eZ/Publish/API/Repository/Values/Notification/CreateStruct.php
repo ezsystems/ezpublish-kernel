@@ -12,15 +12,15 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 class CreateStruct extends ValueObject
 {
-    /** @var int $ownerId */
+    /** @var int */
     public $ownerId;
 
-    /** @var string $type */
+    /** @var string */
     public $type;
 
-    /** @var bool $isPending */
+    /** @var bool */
     public $isPending = true;
 
-    /** @var array $data */
+    /** @var array */
     public $data = [];
 }

@@ -19,7 +19,7 @@ final class LegacyStorageFileIterator implements FileIteratorInterface
     /** @var mixed Last fetched item. */
     private $item;
 
-    /** @var int Iteration cursor on $statement. */
+    /** @var int Iteration cursor on. */
     private $cursor;
 
     /** @var \eZ\Bundle\EzPublishIOBundle\Migration\FileLister\FileRowReaderInterface Used to get file rows. */

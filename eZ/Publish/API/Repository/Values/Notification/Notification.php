@@ -22,21 +22,21 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 class Notification extends ValueObject
 {
-    /** @var int $id */
+    /** @var int */
     protected $id;
 
-    /** @var int $ownerId */
+    /** @var int */
     protected $ownerId;
 
-    /** @var bool $isPending */
+    /** @var bool */
     protected $isPending;
 
-    /** @var string $type */
+    /** @var string */
     protected $type;
 
-    /** @var \DateTimeInterface $created */
+    /** @var \DateTimeInterface */
     protected $created;
 
-    /** @var array $data */
+    /** @var array */
     protected $data = [];
 }

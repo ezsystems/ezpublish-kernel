@@ -12,21 +12,21 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 class Notification extends ValueObject
 {
-    /** @var int $id */
+    /** @var int */
     public $id;
 
-    /** @var int $ownerId */
+    /** @var int */
     public $ownerId;
 
-    /** @var bool $isPending */
+    /** @var bool */
     public $isPending;
 
-    /** @var string $type */
+    /** @var string */
     public $type;
 
-    /** @var int $created */
+    /** @var int */
     public $created;
 
-    /** @var array $data */
+    /** @var array */
     public $data = [];
 }

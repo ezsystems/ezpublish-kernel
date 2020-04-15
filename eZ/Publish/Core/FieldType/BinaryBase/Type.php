@@ -100,14 +100,14 @@ abstract class Type extends FieldType
                 throw new InvalidArgumentValue(
                     '$value->inputUri',
                     $value->inputUri,
-                    get_class($this)
+                    static::class
                 );
             }
         } elseif (!isset($value->id)) {
             throw new InvalidArgumentValue(
                 '$value->id',
                 $value->id,
-                get_class($this)
+                static::class
             );
         }
 
@@ -116,7 +116,7 @@ abstract class Type extends FieldType
             throw new InvalidArgumentValue(
                 '$value->fileName',
                 $value->fileName,
-                get_class($this)
+                static::class
             );
         }
 
@@ -125,7 +125,7 @@ abstract class Type extends FieldType
             throw new InvalidArgumentValue(
                 '$value->fileSize',
                 $value->fileSize,
-                get_class($this)
+                static::class
             );
         }
     }

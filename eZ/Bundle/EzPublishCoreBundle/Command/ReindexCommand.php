@@ -236,7 +236,7 @@ EOT
             $contentIds = explode(',', $contentIds);
             $output->writeln(sprintf(
                 'Indexing list of content ID\'s (%s)' . ($commit ? ', with commit' : ''),
-                \count($contentIds)
+                count($contentIds)
             ));
 
             $this->searchIndexer->updateSearchIndex($contentIds, $commit);
@@ -500,7 +500,7 @@ EOT
             // Linux (and potentially Windows with linux sub systems)
             $cpuinfo = file_get_contents('/proc/cpuinfo');
             preg_match_all('/^processor/m', $cpuinfo, $matches);
-            $cores = \count($matches[0]);
+            $cores = count($matches[0]);
         } elseif (DIRECTORY_SEPARATOR === '\\') {
             // Windows
             if (($process = @popen('wmic cpu get NumberOfCores', 'rb')) !== false) {

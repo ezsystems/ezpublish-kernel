@@ -83,7 +83,7 @@ abstract class GatewayBasedStorage implements FieldStorage
         @trigger_error(
             sprintf(
                 '%s: Retrieving gateway based on $context is deprecated and will be removed in 7.0. Inject gateway directly into FieldStorage',
-                get_class($this)
+                static::class
             ),
             E_USER_DEPRECATED
         );

@@ -94,7 +94,7 @@ class Mapper
         $struct->parentId = $data['parent_node_id'];
         $struct->pathIdentificationString = $data['path_identification_string'];
         $struct->priority = $data['priority'];
-        $struct->remoteId = md5(uniqid(get_class($this), true));
+        $struct->remoteId = md5(uniqid(static::class, true));
         $struct->sortField = $data['sort_field'];
         $struct->sortOrder = $data['sort_order'];
 
