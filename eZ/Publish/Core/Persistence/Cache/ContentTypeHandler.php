@@ -43,7 +43,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     protected function init(): void
     {
         $this->getGroupTags = static function (Type\Group $group) { return ['type-group-' . $group->id]; };
-        $this->getGroupKeys = static function (Type\Group $group) {
+        $this->getGroupKeys = function (Type\Group $group) {
             return [
                 'ez-content-type-group-' . $group->id,
                 'ez-content-type-group-' . $this->escapeForCacheKey($group->identifier) . '-by-identifier',
@@ -56,7 +56,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
                 'type-' . $type->id,
             ];
         };
-        $this->getTypeKeys = static function (Type $type, int $status = Type::STATUS_DEFINED) {
+        $this->getTypeKeys = function (Type $type, int $status = Type::STATUS_DEFINED) {
             return [
                 'ez-content-type-' . $type->id . '-' . $status,
                 'ez-content-type-' . $this->escapeForCacheKey($type->identifier) . '-by-identifier',

@@ -29,7 +29,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     protected function init(): void
     {
         $this->getTags = static function (Language $language) { return ['language-' . $language->id]; };
-        $this->getKeys = static function (Language $language) {
+        $this->getKeys = function (Language $language) {
             return [
                 'ez-language-' . $language->id,
                 'ez-language-code-' . $this->escapeForCacheKey($language->languageCode),

@@ -58,7 +58,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->getRoleTags = static function (Role $role) {
             return ['role-' . $role->id];
         };
-        $this->getRoleKeys = static function (Role $role) {
+        $this->getRoleKeys = function (Role $role) {
             return [
                 'ez-role-' . $role->id,
                 'ez-role-' . $this->escapeForCacheKey($role->identifier) . '-by-identifier',
