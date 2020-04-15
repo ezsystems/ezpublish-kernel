@@ -42,7 +42,7 @@ class RatingTest extends TestCase
         $storageFieldValue = new StorageFieldValue();
 
         $this->converter->toStorageValue($value, $storageFieldValue);
-        self::assertSame(null, $storageFieldValue->dataInt);
+        self::assertNull($storageFieldValue->dataInt);
     }
 
     /**
@@ -73,7 +73,7 @@ class RatingTest extends TestCase
         $fieldValue = new FieldValue();
 
         $this->converter->toFieldValue($storageFieldValue, $fieldValue);
-        self::assertSame(false, $fieldValue->data);
+        self::assertFalse($fieldValue->data);
     }
 
     /**
@@ -88,7 +88,7 @@ class RatingTest extends TestCase
         $fieldValue = new FieldValue();
 
         $this->converter->toFieldValue($storageFieldValue, $fieldValue);
-        self::assertSame(true, $fieldValue->data);
+        self::assertTrue($fieldValue->data);
     }
 
     /**

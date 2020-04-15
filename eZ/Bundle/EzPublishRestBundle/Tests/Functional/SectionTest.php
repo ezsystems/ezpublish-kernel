@@ -82,6 +82,7 @@ XML;
 
     /**
      * Covers GET /content/sections/{sectionId}.
+     *
      * @depends testCreateSection
      */
     public function testLoadSection($sectionHref)

@@ -65,6 +65,7 @@ class Field extends BaseParser
      * Get operator for the given literal name.
      *
      * For the full list of supported operators:
+     *
      * @see \eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Field::OPERATORS
      *
      * @param string $operatorName operator literal operator name

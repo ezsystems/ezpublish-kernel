@@ -231,6 +231,7 @@ class ContentTypeContext implements Context
      * Verifies that a content type with $identifier exists.
      *
      * @param string $identifier
+     *
      * @return bool
      */
     protected function checkContentTypeExistenceByIdentifier($identifier, $groupIdentifier = null)

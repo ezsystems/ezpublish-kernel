@@ -327,7 +327,7 @@ EOT;
                                             $basename = substr($basename, 0, $wsPos);
                                         }
 
-                                        return !is_executable(dirname($v) . DIRECTORY_SEPARATOR . $basename);
+                                        return !is_executable(dirname($v) . \DIRECTORY_SEPARATOR . $basename);
                                     }
                                 )
                                 ->thenInvalid('Please provide full path to ImageMagick / GraphicsMagick  "convert" binary. Please also check that it is executable.')

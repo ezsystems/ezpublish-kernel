@@ -23,7 +23,7 @@ abstract class XmlBase
      * When recording errors holds previous setting for libxml user error handling,
      * null otherwise.
      *
-     * @var null|bool
+     * @var bool|null
      */
     protected $useInternalErrors;
 

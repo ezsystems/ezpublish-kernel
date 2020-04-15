@@ -81,10 +81,10 @@ class TrashItemTest extends TestCase
     {
         $trashItem = new TrashItem();
         $value = isset($trashItem->notDefined);
-        self::assertEquals(false, $value);
+        self::assertFalse($value);
 
         $value = isset($trashItem->id);
-        self::assertEquals(true, $value);
+        self::assertTrue($value);
     }
 
     /**

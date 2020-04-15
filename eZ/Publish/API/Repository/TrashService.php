@@ -41,7 +41,7 @@ interface TrashService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return null|\eZ\Publish\API\Repository\Values\Content\TrashItem null if location was deleted, otherwise TrashItem
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem|null null if location was deleted, otherwise TrashItem
      */
     public function trash(Location $location);
 

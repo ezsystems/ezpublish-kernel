@@ -17,6 +17,7 @@ class ConsoleContext extends EzContext implements Context, SnippetAcceptingConte
 
     /**
      * Elements referenced by 'it' in sentences.
+     *
      * @var array
      */
     private $it = [];
@@ -154,6 +155,7 @@ class ConsoleContext extends EzContext implements Context, SnippetAcceptingConte
 
     /**
      * Returns the name of an existing siteaccess that isn't the default one.
+     *
      * @return string|null The siteaccess name, or null if there isn't one
      */
     private function getNonDefaultSiteaccessName()

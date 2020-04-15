@@ -33,6 +33,7 @@ class QueryController
      * Runs a content search.
      *
      * @param ContentView $view
+     *
      * @return ContentView
      */
     public function contentQueryAction(ContentView $view)
@@ -46,6 +47,7 @@ class QueryController
      * Runs a location search.
      *
      * @param ContentView $view
+     *
      * @return ContentView
      */
     public function locationQueryAction(ContentView $view)
@@ -59,6 +61,7 @@ class QueryController
      * Runs a contentInfo search.
      *
      * @param ContentView $view
+     *
      * @return ContentView
      */
     public function contentInfoQueryAction(ContentView $view)

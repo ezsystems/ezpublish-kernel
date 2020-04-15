@@ -2624,6 +2624,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test that multi-language logic respects prioritized language list.
      *
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $languageCodes
      */
     public function testLoadContentTypeWithPrioritizedLanguagesList(array $languageCodes)

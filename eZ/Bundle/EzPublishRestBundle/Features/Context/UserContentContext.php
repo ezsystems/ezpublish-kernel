@@ -45,6 +45,7 @@ class UserContentContext extends RawMinkContext implements Context, SnippetAccep
 
     /**
      * The new value the user account's email is set to.
+     *
      * @var string
      */
     private $newEmailValue;

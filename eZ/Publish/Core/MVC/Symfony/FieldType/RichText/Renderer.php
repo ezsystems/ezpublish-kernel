@@ -51,7 +51,7 @@ class Renderer implements RendererInterface
     /** @var \Symfony\Component\Templating\EngineInterface */
     protected $templateEngine;
 
-    /** @var null|\Psr\Log\LoggerInterface */
+    /** @var \Psr\Log\LoggerInterface|null */
     protected $logger;
 
     /** @var array */
@@ -68,7 +68,7 @@ class Renderer implements RendererInterface
      * @param string $tagConfigurationNamespace
      * @param string $styleConfigurationNamespace
      * @param string $embedConfigurationNamespace
-     * @param null|\Psr\Log\LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface|null $logger
      * @param array $customTagsConfiguration
      * @param array $customStylesConfiguration
      */
@@ -301,7 +301,7 @@ class Renderer implements RendererInterface
      * @param string $identifier
      * @param bool $isInline
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getStyleTemplateName($identifier, $isInline)
     {
@@ -338,7 +338,7 @@ class Renderer implements RendererInterface
      * @param string $identifier
      * @param bool $isInline
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getTagTemplateName($identifier, $isInline)
     {
@@ -386,7 +386,7 @@ class Renderer implements RendererInterface
      * @param $isInline
      * @param $isDenied
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getEmbedTemplateName($resourceType, $isInline, $isDenied)
     {
@@ -443,6 +443,7 @@ class Renderer implements RendererInterface
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      *
      * @deprecated since 6.7
+     *
      * @param int $contentId
      */
     protected function checkContent($contentId)

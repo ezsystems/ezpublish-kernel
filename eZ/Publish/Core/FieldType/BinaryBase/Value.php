@@ -23,7 +23,7 @@ abstract class Value extends BaseValue
      *
      * Since 5.3 this is not used for input, use self::$inputUri instead
      *
-     * @var null|string
+     * @var string|null
      */
     protected $id;
 

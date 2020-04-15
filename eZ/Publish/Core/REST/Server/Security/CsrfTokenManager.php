@@ -34,6 +34,7 @@ class CsrfTokenManager extends BaseCsrfTokenManager
      * Tests if a CSRF token is stored.
      *
      * @param string $tokenId
+     *
      * @return bool
      */
     public function hasToken($tokenId)
@@ -45,6 +46,7 @@ class CsrfTokenManager extends BaseCsrfTokenManager
      * Resolves token namespace.
      *
      * @param RequestStack $requestStack
+     *
      * @return string
      */
     private function resolveNamespace(RequestStack $requestStack = null)

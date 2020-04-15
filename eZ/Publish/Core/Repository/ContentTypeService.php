@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
@@ -1623,6 +1622,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param string $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException

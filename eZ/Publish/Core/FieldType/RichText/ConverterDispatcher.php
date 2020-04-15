@@ -39,7 +39,7 @@ class ConverterDispatcher
      * Adds converter mapping.
      *
      * @param string $namespace
-     * @param null|\eZ\Publish\Core\FieldType\RichText\Converter $converter
+     * @param \eZ\Publish\Core\FieldType\RichText\Converter|null $converter
      */
     public function addConverter($namespace, Converter $converter = null)
     {

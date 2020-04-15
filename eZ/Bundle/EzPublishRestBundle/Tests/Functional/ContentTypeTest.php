@@ -296,6 +296,7 @@ XML;
 
     /**
      * Covers POST /content/type/<contentTypeId>.
+     *
      * @depends testCopyContentType
      *
      * @return string the created content type draft href
@@ -371,6 +372,7 @@ XML;
 
     /**
      * Covers POST /content/types/<contentTypeId>/draft/fielddefinitions.
+     *
      * @depends testCreateContentTypeDraft
      *
      * @return string The content type draft field definition href
@@ -479,6 +481,7 @@ XML;
 
     /**
      * Covers DELETE /content/types/<contentTypeId>/draft/fieldDefinitions/<fieldDefinitionId>.
+     *
      * @depends testAddContentTypeDraftFieldDefinition
      *
      * @param string $fieldDefinitionHref
@@ -494,6 +497,7 @@ XML;
 
     /**
      * Covers DELETE /content/types/<contentTypeId>/draft.
+     *
      * @depends testCreateContentTypeDraft
      */
     public function testDeleteContentTypeDraft($contentTypeDraftHref)

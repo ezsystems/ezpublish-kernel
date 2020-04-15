@@ -30,6 +30,7 @@ class PathStringRouteBasedLimitationParserTest extends BaseTest
 
     /**
      * Must return the tested parser object.
+     *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\Limitation\RouteBasedLimitationParser
      */
     protected function internalGetParser()

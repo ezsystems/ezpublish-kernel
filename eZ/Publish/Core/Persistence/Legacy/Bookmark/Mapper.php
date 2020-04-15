@@ -20,6 +20,7 @@ class Mapper
      * Creates a Bookmark from $createStruct.
      *
      * @param \eZ\Publish\SPI\Persistence\Bookmark\CreateStruct $createStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Bookmark\Bookmark
      */
     public function createBookmarkFromCreateStruct(CreateStruct $createStruct): Bookmark
@@ -36,6 +37,7 @@ class Mapper
      * Extracts Bookmark objects from $rows.
      *
      * @param array $rows
+     *
      * @return \eZ\Publish\SPI\Persistence\Bookmark\Bookmark[]
      */
     public function extractBookmarksFromRows(array $rows): array
@@ -52,6 +54,7 @@ class Mapper
      * Extract Bookmark object from $row.
      *
      * @param array $row
+     *
      * @return \eZ\Publish\SPI\Persistence\Bookmark\Bookmark
      */
     private function extractBookmarkFromRow(array $row): Bookmark

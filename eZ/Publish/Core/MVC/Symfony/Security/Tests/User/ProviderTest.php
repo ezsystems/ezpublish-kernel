@@ -87,7 +87,7 @@ class ProviderTest extends TestCase
         $this->assertInstanceOf(UserInterface::class, $user);
         $this->assertSame($apiUser, $user->getAPIUser());
         $this->assertSame(['ROLE_USER'], $user->getRoles());
-        $this->assertSame(true, $user->isCredentialsNonExpired());
+        $this->assertTrue($user->isCredentialsNonExpired());
     }
 
     /**
@@ -202,6 +202,6 @@ class ProviderTest extends TestCase
         $this->assertInstanceOf(MVCUser::class, $user);
         $this->assertSame($apiUser, $user->getAPIUser());
         $this->assertSame(['ROLE_USER'], $user->getRoles());
-        $this->assertSame(true, $user->isCredentialsNonExpired());
+        $this->assertTrue($user->isCredentialsNonExpired());
     }
 }

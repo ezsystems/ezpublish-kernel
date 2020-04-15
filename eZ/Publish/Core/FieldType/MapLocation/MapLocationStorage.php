@@ -22,9 +22,11 @@ class MapLocationStorage extends GatewayBasedStorage
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return mixed
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
@@ -72,6 +74,7 @@ class MapLocationStorage extends GatewayBasedStorage
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return \eZ\Publish\SPI\Search\Field[]|null
      */
     public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)

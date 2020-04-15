@@ -329,6 +329,7 @@ class ContentService implements ContentServiceInterface
      * If no version number is given, the method returns the current version
      *
      * @internal
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
      *
      * @param mixed $id
@@ -908,7 +909,7 @@ class ContentService implements ContentServiceInterface
         $propertyCount = 0;
         foreach ($contentMetadataUpdateStruct as $propertyName => $propertyValue) {
             if (isset($contentMetadataUpdateStruct->$propertyName)) {
-                $propertyCount += 1;
+                ++$propertyCount;
             }
         }
         if ($propertyCount === 0) {
@@ -1267,7 +1268,6 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException If field definition does not exist in the ContentType,
      *                                                                          or value is set for non-translatable field in language
      *                                                                          other than main.
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a property on the struct is invalid.
@@ -1309,7 +1309,6 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException If field definition does not exist in the ContentType,
      *                                                                          or value is set for non-translatable field in language
      *                                                                          other than main.
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a property on the struct is invalid.
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException

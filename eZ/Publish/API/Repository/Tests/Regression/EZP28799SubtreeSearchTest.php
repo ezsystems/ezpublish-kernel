@@ -10,7 +10,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
- * @link https://jira.ez.no/browse/EZP-28799
+ * @see https://jira.ez.no/browse/EZP-28799
  */
 class EZP28799SubtreeSearchTest extends BaseTest
 {

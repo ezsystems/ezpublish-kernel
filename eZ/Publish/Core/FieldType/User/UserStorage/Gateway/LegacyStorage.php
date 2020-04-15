@@ -53,6 +53,7 @@ class LegacyStorage extends Gateway
      * Maps legacy database column names to property names.
      *
      * @var array
+     *
      * @return array
      */
     protected function getPropertyMap()

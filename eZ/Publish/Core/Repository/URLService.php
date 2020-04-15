@@ -245,6 +245,7 @@ class URLService implements URLServiceInterface
      * @param string $url
      *
      * @return bool
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     protected function isUnique($id, $url)

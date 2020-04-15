@@ -21,7 +21,7 @@ interface LanguageResolver
      * Languages forced by PHP API consumer when retrieving Repository objects will still take priority,
      * setting both context language and prioritized languages list as a fallback.
      *
-     * @param null|string $contextLanguage
+     * @param string|null $contextLanguage
      */
     public function setContextLanguage(?string $contextLanguage): void;
 

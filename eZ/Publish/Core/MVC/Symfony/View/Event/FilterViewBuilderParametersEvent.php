@@ -18,6 +18,7 @@ class FilterViewBuilderParametersEvent extends Event
 
     /**
      * Parameters the ViewBuilder will use.
+     *
      * @var ParameterBag
      */
     private $parameters;
@@ -38,6 +39,7 @@ class FilterViewBuilderParametersEvent extends Event
 
     /**
      * Returns the ParameterBag that holds the ViewBuilder's parameters.
+     *
      * @return \Symfony\Component\HttpFoundation\ParameterBag
      */
     public function getParameters()

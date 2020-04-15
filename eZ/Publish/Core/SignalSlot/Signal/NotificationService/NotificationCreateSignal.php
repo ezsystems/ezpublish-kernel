@@ -12,12 +12,12 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 class NotificationCreateSignal extends Signal
 {
-    /** @var int $ownerId */
+    /** @var int */
     public $ownerId;
 
-    /** @var string $type */
+    /** @var string */
     public $type;
 
-    /** @var array $data */
+    /** @var array */
     public $data;
 }

@@ -46,7 +46,7 @@ class QueryTypePass implements CompilerPassInterface
                 $bundleReflectionClass = new ReflectionClass($bundleClass);
                 $bundleDir = dirname($bundleReflectionClass->getFileName());
 
-                $bundleQueryTypesDir = $bundleDir . DIRECTORY_SEPARATOR . 'QueryType';
+                $bundleQueryTypesDir = $bundleDir . \DIRECTORY_SEPARATOR . 'QueryType';
 
                 if (!is_dir($bundleQueryTypesDir)) {
                     continue;
@@ -54,7 +54,7 @@ class QueryTypePass implements CompilerPassInterface
 
                 $queryTypeServices = [];
                 $bundleQueryTypeNamespace = substr($bundleClass, 0, strrpos($bundleClass, '\\') + 1) . 'QueryType';
-                foreach (glob($bundleQueryTypesDir . DIRECTORY_SEPARATOR . '*QueryType.php') as $queryTypeFilePath) {
+                foreach (glob($bundleQueryTypesDir . \DIRECTORY_SEPARATOR . '*QueryType.php') as $queryTypeFilePath) {
                     $queryTypeFileName = basename($queryTypeFilePath, '.php');
                     $queryTypeClassName = $bundleQueryTypeNamespace . '\\' . $queryTypeFileName;
                     if (!class_exists($queryTypeClassName)) {

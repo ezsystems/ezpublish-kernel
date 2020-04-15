@@ -25,7 +25,7 @@ interface FilterInterface extends BaseFilterInterface
      * Defaults to $defaultValue if $optionName doesn't exist.
      *
      * @param string $optionName
-     * @param null|mixed $defaultValue
+     * @param mixed|null $defaultValue
      *
      * @return mixed
      */

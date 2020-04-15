@@ -65,6 +65,7 @@ class FilterViewParametersEvent extends Event
 
     /**
      * Returns the ParameterBag used to manipulate the view parameters.
+     *
      * @return ParameterBag
      */
     public function getParameterBag()

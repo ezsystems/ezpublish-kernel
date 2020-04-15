@@ -10,6 +10,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
  * Issue https://jira.ez.no/browse/EZP-26367.
+ *
  * @group regression
  * @group ezp26367
  * @group cache

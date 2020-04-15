@@ -70,10 +70,10 @@ class PolicyTest extends TestCase
     {
         $policy = new Policy();
         $value = isset($policy->notDefined);
-        self::assertEquals(false, $value);
+        self::assertFalse($value);
 
         $value = isset($policy->id);
-        self::assertEquals(true, $value);
+        self::assertTrue($value);
     }
 
     /**

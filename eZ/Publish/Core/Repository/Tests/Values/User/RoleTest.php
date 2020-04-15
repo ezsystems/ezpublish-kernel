@@ -68,10 +68,10 @@ class RoleTest extends TestCase
     {
         $role = new Role();
         $value = isset($role->notDefined);
-        self::assertEquals(false, $value);
+        self::assertFalse($value);
 
         $value = isset($role->id);
-        self::assertEquals(true, $value);
+        self::assertTrue($value);
     }
 
     /**

@@ -44,6 +44,7 @@ class ContentViewBuilder implements ViewBuilder
 
     /**
      * Default templates, indexed per viewType (full, line, ...).
+     *
      * @var array
      */
     private $defaultTemplates;
@@ -76,6 +77,7 @@ class ContentViewBuilder implements ViewBuilder
      *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|\eZ\Publish\Core\MVC\Symfony\View\View
      *         If both contentId and locationId parameters are missing
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      *         If both contentId and locationId parameters are missing
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
@@ -188,6 +190,7 @@ class ContentViewBuilder implements ViewBuilder
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     private function loadEmbeddedContent($contentId, Location $location = null)
@@ -218,6 +221,7 @@ class ContentViewBuilder implements ViewBuilder
 
     /**
      * Loads a visible Location.
+     *
      * @param $locationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location

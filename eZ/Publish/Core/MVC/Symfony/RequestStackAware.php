@@ -36,7 +36,7 @@ trait RequestStackAware
     }
 
     /**
-     * @return null|\Symfony\Component\HttpFoundation\Request
+     * @return \Symfony\Component\HttpFoundation\Request|null
      */
     protected function getCurrentRequest()
     {

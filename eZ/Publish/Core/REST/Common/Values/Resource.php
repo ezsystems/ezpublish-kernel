@@ -38,6 +38,7 @@ class Resource extends RestValue
 
     /**
      * Resource constructor.
+     *
      * @param $name
      * @param $mediaType
      * @param $href

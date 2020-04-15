@@ -339,6 +339,7 @@ class RichTextStorageTest extends TestCase
 
     /**
      * @param \eZ\Publish\SPI\FieldType\StorageGateway $gateway
+     *
      * @return \eZ\Publish\Core\FieldType\RichText\RichTextStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedStorage(StorageGateway $gateway)

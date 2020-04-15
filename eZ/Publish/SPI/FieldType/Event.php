@@ -16,6 +16,7 @@ namespace eZ\Publish\SPI\FieldType;
  * event context.
  *
  * @todo Add VersionInfo parameter
+ *
  * @deprecated (Not implemented)
  */
 abstract class Event

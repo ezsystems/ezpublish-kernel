@@ -132,6 +132,7 @@ abstract class DoctrineStorage extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     *
      * @return bool
      */
     public function storeFileReference(VersionInfo $versionInfo, Field $field)

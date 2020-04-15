@@ -46,6 +46,7 @@ class DoctrineDatabase extends Gateway
      * eZ Doctrine database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     *
      * @deprecated Start to use DBAL $connection instead.
      */
     protected $dbHandler;
@@ -2266,6 +2267,7 @@ HEREDOC;
      *
      * @param int $contentId
      * @param string $languageCode language code of the translation
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     public function deleteTranslationFromContent($contentId, $languageCode)
@@ -2324,6 +2326,7 @@ HEREDOC;
      * @param int $contentId
      * @param int $versionNo
      * @param string $languageCode
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     public function deleteTranslationFromVersion($contentId, $versionNo, $languageCode)
@@ -2379,6 +2382,7 @@ HEREDOC;
      *
      * @param int $contentId
      * @param int $languageId
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
     private function deleteTranslationFromContentObject($contentId, $languageId)
@@ -2418,6 +2422,7 @@ HEREDOC;
      * @param int $contentId
      * @param int $languageId
      * @param int $versionNo optional, if specified, apply to this Version only.
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
     private function deleteTranslationFromContentVersions($contentId, $languageId, $versionNo = null)

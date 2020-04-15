@@ -513,6 +513,7 @@ class ObjectStateServiceTest extends BaseTest
      * Returns a map of the given object state groups.
      *
      * @param array $groups
+     *
      * @return array
      */
     protected function getGroupIdentifierMap(array $groups)
@@ -1053,6 +1054,7 @@ class ObjectStateServiceTest extends BaseTest
      * Test that multi-language logic for loadObjectStateGroups respects prioritized language list.
      *
      * @dataProvider getPrioritizedLanguagesList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode
      */
@@ -1093,6 +1095,7 @@ class ObjectStateServiceTest extends BaseTest
      * Test that multi-language logic for loadObjectStateGroup respects prioritized language list.
      *
      * @dataProvider getPrioritizedLanguagesList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode
      */
@@ -1128,6 +1131,7 @@ class ObjectStateServiceTest extends BaseTest
      * Test that multi-language logic for loadObjectState respects prioritized language list.
      *
      * @dataProvider getPrioritizedLanguagesList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode
      */
@@ -1163,6 +1167,7 @@ class ObjectStateServiceTest extends BaseTest
      * Test that multi-language logic for loadObjectStates respects prioritized language list.
      *
      * @dataProvider getPrioritizedLanguagesList
+     *
      * @param string[] $languageCodes
      * @param string|null $expectedLanguageCode
      */
@@ -1741,6 +1746,7 @@ class ObjectStateServiceTest extends BaseTest
      * @param string $identifier
      * @param array $names multi-language names
      * @param array $descriptions multi-language descriptions
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
     private function createObjectState(

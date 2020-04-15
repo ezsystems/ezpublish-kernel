@@ -47,6 +47,7 @@ class TrashTest extends RESTFunctionalTestCase
 
     /**
      * Covers DELETE /content/trash/{trashItemId}.
+     *
      * @depends testCreateTrashItem
      */
     public function testDeleteTrashItem($trashItemId)
@@ -63,6 +64,7 @@ class TrashTest extends RESTFunctionalTestCase
 
     /**
      * Covers MOVE /content/trash/{trashItemId}.
+     *
      * @depends testCreateTrashItem
      */
     public function testRestoreTrashItem($trashItemId)

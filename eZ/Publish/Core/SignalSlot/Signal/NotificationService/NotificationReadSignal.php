@@ -12,6 +12,6 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 class NotificationReadSignal extends Signal
 {
-    /** @var int $notificationId */
+    /** @var int */
     public $notificationId;
 }

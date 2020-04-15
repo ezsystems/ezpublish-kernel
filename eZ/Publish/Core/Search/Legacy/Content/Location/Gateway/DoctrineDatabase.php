@@ -74,7 +74,7 @@ class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param int $offset
      * @param int $limit
-     * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[]|null $sortClauses
      * @param array $languageFilter
      * @param bool $doCount
      *

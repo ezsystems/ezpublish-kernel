@@ -87,6 +87,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
      * causing it to sometimes crash when cache needs to be cleared.
      *
      * @deprecated In 7.0 will either be made private for use by dumpAssets, or removed.
+     *
      * @param $event Event A instance
      */
     public static function dumpAssetsHelpText(Event $event)

@@ -84,6 +84,7 @@ class HTTPHandler extends AbstractURLHandler
      *
      * @param URL $url
      * @param array $handlers
+     *
      * @return resource
      */
     private function createCurlHandlerForUrl(URL $url, array &$handlers)

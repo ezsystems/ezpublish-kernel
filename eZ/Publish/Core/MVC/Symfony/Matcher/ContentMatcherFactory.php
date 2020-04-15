@@ -24,6 +24,7 @@ class ContentMatcherFactory extends ContentBasedMatcherFactory
      * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
      *
      * @return bool
+     *
      * @internal param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
      */
     protected function doMatch(MatcherInterface $matcher, View $view)

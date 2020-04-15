@@ -253,7 +253,7 @@ class CheckboxTest extends FieldTypeTest
         $ft = $this->createFieldTypeUnderTest();
         $fieldValue = $ft->toPersistenceValue(new CheckboxValue(true));
 
-        self::assertSame(true, $fieldValue->data);
+        self::assertTrue($fieldValue->data);
         self::assertSame(1, $fieldValue->sortKey);
     }
 
@@ -273,7 +273,7 @@ class CheckboxTest extends FieldTypeTest
     public function testBuildFieldValueWithoutParam()
     {
         $value = new CheckboxValue();
-        self::assertSame(false, $value->bool);
+        self::assertFalse($value->bool);
     }
 
     /**

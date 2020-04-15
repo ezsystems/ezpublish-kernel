@@ -46,6 +46,7 @@ class CriteriaConverter
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\URL\Query\Criterion $criterion
+     *
      * @return \eZ\Publish\Core\Persistence\Database\Expression|string
      */
     public function convertCriteria(SelectQuery $query, Criterion $criterion)

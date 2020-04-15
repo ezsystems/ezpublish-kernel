@@ -673,8 +673,8 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $languageCode
-     * @param null|bool $showAllTranslations
-     * @param null|string[] $prioritizedLanguageList
+     * @param bool|null $showAllTranslations
+     * @param string[]|null $prioritizedLanguageList
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */

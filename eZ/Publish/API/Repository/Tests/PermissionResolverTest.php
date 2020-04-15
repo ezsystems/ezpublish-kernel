@@ -814,6 +814,7 @@ class PermissionResolverTest extends BaseTest
 
     /**
      * Data provider for testCanUserWithLimitations.
+     *
      * @see testCanUserWithLimitations
      *
      * @return array

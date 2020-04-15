@@ -10,6 +10,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
  * Issue https://jira.ez.no/browse/EZP-26327.
+ *
  * @group ezp26327
  */
 class EZP26327UrlAliasHistorizationTest extends BaseTest

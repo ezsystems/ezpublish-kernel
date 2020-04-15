@@ -98,6 +98,7 @@ class ContentFieldValidationException extends BadRequestException
      * Convert a Translation object to a string, detecting singular/plural as needed.
      *
      * @param Translation $translation The Translation object
+     *
      * @return string
      */
     private function translationToString(Translation $translation)

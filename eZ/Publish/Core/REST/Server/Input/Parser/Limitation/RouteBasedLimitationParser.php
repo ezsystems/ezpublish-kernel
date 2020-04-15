@@ -22,6 +22,7 @@ class RouteBasedLimitationParser extends BaseParser
     /**
      * Name of the route parameter.
      * Example: "sectionId".
+     *
      * @var string
      */
     private $limitationRouteParameterName;
@@ -29,6 +30,7 @@ class RouteBasedLimitationParser extends BaseParser
     /**
      * Value object class built by the Parser.
      * Example: "eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation".
+     *
      * @var string
      */
     private $limitationClass;

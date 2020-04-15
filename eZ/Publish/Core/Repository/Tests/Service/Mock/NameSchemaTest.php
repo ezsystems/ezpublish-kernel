@@ -160,6 +160,7 @@ class NameSchemaTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolve
      * @dataProvider \eZ\Publish\Core\Repository\Tests\Service\Mock\NameSchemaTest::resolveDataProvider
+     *
      * @param string[] $schemaIdentifiers
      * @param string $nameSchema
      * @param string[] $languageFieldValues field value translations

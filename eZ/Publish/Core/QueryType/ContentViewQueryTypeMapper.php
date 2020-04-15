@@ -14,6 +14,7 @@ interface ContentViewQueryTypeMapper
 {
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $contentView
+     *
      * @return \eZ\Publish\Core\QueryType\QueryType
      */
     public function map(ContentView $contentView);

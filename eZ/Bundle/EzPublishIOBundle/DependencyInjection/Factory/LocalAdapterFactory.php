@@ -18,6 +18,7 @@ class LocalAdapterFactory
      * @param string $rootDir
      * @param int $filesPermissions Permissions used when creating files. Example: 0640.
      * @param int $directoriesPermissions Permissions when creating directories. Example: 0750.
+     *
      * @return Local
      */
     public function build($rootDir, $filesPermissions, $directoriesPermissions)

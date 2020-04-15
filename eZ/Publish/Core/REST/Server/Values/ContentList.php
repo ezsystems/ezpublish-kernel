@@ -24,6 +24,7 @@ class ContentList extends RestValue
 
     /**
      * Total items list count.
+     *
      * @var int|null
      */
     public $totalCount;

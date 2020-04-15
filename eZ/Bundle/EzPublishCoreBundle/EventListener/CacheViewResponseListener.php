@@ -26,6 +26,7 @@ class CacheViewResponseListener implements EventSubscriberInterface
 
     /**
      * True if TTL cache is enabled, false if it is not.
+     *
      * @var bool
      */
     private $enableTtlCache;

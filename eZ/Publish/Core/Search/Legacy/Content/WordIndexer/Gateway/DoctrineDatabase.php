@@ -33,6 +33,7 @@ class DoctrineDatabase extends Gateway
      * Database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     *
      * @deprecated Start to use DBAL $connection instead.
      */
     protected $dbHandler;
@@ -104,6 +105,7 @@ class DoctrineDatabase extends Gateway
      * Index search engine full text data corresponding to content object field values.
      *
      * Ported from the legacy code
+     *
      * @see https://github.com/ezsystems/ezpublish-legacy/blob/master/kernel/search/plugins/ezsearchengine/ezsearchengine.php#L45
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\FullTextData $fullTextData
@@ -199,6 +201,7 @@ class DoctrineDatabase extends Gateway
      * Remove whole content or a specific version from index.
      *
      * Ported from the legacy code
+     *
      * @see https://github.com/ezsystems/ezpublish-legacy/blob/master/kernel/search/plugins/ezsearchengine/ezsearchengine.php#L386
      *
      * @param mixed $contentId

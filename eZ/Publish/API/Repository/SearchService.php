@@ -129,6 +129,7 @@ interface SearchService
      * where content will be loaded by separate code, like an ESI based sub requests that takes content ID as input.
      *
      * @since 5.4.5
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query

@@ -43,6 +43,7 @@ class Content extends APIContent
      * provided (all languages) or on main fallback.
      *
      * @internal
+     *
      * @var string|null
      */
     protected $prioritizedFieldLanguageCode;

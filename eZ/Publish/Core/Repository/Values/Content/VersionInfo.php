@@ -42,6 +42,7 @@ class VersionInfo extends APIVersionInfo
      * provided (all languages) or on main fallback.
      *
      * @internal
+     *
      * @var string|null
      */
     protected $prioritizedNameLanguageCode;

@@ -86,12 +86,14 @@ class User extends RestController
 
     /**
      * @var \Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface
+     *
      * @deprecated This property is deprecated since 6.5, and will be removed in 7.0.
      */
     private $csrfTokenStorage;
 
     /**
      * @var \eZ\Publish\Core\REST\Server\Controller\SessionController
+     *
      * @deprecated This property is added for backward compatibility. It is deprecated, and will be removed in 7.0.
      */
     private $sessionController;

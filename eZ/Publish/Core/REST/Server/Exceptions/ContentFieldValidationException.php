@@ -17,6 +17,7 @@ class ContentFieldValidationException extends BadRequestException
 {
     /**
      * Contains an array of field ValidationError objects indexed with FieldDefinition id and language code.
+     *
      * @see eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException
      *
      * @var \eZ\Publish\Core\FieldType\ValidationError[]

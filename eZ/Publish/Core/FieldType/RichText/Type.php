@@ -36,22 +36,22 @@ class Type extends FieldType
     /** @var \eZ\Publish\Core\FieldType\RichText\Normalizer */
     protected $inputNormalizer;
 
-    /** @var null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher */
+    /** @var \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher|null */
     protected $inputValidatorDispatcher;
 
-    /** @var null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator */
+    /** @var \eZ\Publish\Core\FieldType\RichText\InternalLinkValidator|null */
     protected $internalLinkValidator;
 
-    /** @var null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator */
+    /** @var \eZ\Publish\Core\FieldType\RichText\CustomTagsValidator|null */
     private $customTagsValidator;
 
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
-     * @param null|\eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
-     * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $inputValidatorDispatcher
-     * @param null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator $internalLinkValidator
-     * @param null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator $customTagsValidator
+     * @param \eZ\Publish\Core\FieldType\RichText\Normalizer|null $inputNormalizer
+     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher|null $inputValidatorDispatcher
+     * @param \eZ\Publish\Core\FieldType\RichText\InternalLinkValidator|null $internalLinkValidator
+     * @param \eZ\Publish\Core\FieldType\RichText\CustomTagsValidator|null $customTagsValidator
      */
     public function __construct(
         Validator $internalFormatValidator,

@@ -21,6 +21,7 @@ class IsFieldEmpty extends Criterion
     /**
      * @param string $fieldDefinitionIdentifier
      * @param bool $value
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function __construct(string $fieldDefinitionIdentifier, bool $value = true)

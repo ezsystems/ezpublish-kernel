@@ -13,7 +13,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
  * This includes adding BlockViewProvider implementations.
  *
  * @see \eZ\Publish\Core\MVC\Symfony\View\Manager
- *
  * @deprecated since 6.0
  */
 class BlockViewPass extends ViewManagerPass

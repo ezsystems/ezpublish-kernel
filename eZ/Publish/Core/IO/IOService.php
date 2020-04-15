@@ -326,6 +326,7 @@ class IOService implements IOServiceInterface
      * Check if path is absolute, in terms of http or disk (incl if it contains driver letter on Win).
      *
      * @param string $path
+     *
      * @return bool
      */
     protected function isAbsolutePath($path)

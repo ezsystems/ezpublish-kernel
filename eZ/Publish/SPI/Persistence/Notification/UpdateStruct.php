@@ -12,6 +12,6 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 class UpdateStruct extends ValueObject
 {
-    /** @var bool $isPending */
+    /** @var bool */
     public $isPending;
 }

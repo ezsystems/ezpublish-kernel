@@ -44,6 +44,7 @@ abstract class BaseRelationProcessor extends FieldTypeProcessor
 
     /**
      * @param  int $contentId
+     *
      * @return string
      */
     public function mapToContentHref($contentId)
@@ -53,6 +54,7 @@ abstract class BaseRelationProcessor extends FieldTypeProcessor
 
     /**
      * @param  int $locationId
+     *
      * @return string
      */
     public function mapToLocationHref($locationId)

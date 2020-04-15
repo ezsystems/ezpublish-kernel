@@ -126,6 +126,7 @@ interface RoleService
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      * @param PolicyDraft $policyDraft the policy to remove from the RoleDraft
+     *
      * @return RoleDraft if the authenticated user is not allowed to remove a policy
      */
     public function removePolicyByRoleDraft(RoleDraft $roleDraft, PolicyDraft $policyDraft);

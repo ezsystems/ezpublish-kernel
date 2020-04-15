@@ -37,6 +37,6 @@ class TranslationCollectorPassTest extends AbstractCompilerPassTestCase
      */
     private function normalizePath($path)
     {
-        return str_replace('/', DIRECTORY_SEPARATOR, $path);
+        return str_replace('/', \DIRECTORY_SEPARATOR, $path);
     }
 }

@@ -17,6 +17,7 @@ class ProxyResolver extends ImagineProxyResolver
      * doesn't behave correctly when working with domain and port or with host which contains trailing slash.
      *
      * @param string $url
+     *
      * @return string
      */
     protected function rewriteUrl($url)

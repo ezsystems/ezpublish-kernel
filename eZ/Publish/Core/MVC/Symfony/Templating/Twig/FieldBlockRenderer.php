@@ -251,7 +251,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @param string $fieldTypeIdentifier
      * @param int $type Either self::VIEW or self::EDIT
-     * @param null|string|Twig_Template $localTemplate a file where to look for the block first
+     * @param string|Twig_Template|null $localTemplate a file where to look for the block first
      *
      * @return array
      */

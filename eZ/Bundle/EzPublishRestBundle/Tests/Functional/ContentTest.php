@@ -194,6 +194,7 @@ XML;
 
     /**
      * Covers COPY /content/objects/<contentId>.
+     *
      * @depends testPublishContent
      *
      * @return string the copied content href
@@ -225,6 +226,7 @@ XML;
 
     /**
      * Covers DELETE /content/objects/<versionNumber>.
+     *
      * @depends testCopyContent
      */
     public function testDeleteContent($restContentHref)
@@ -633,7 +635,6 @@ XML;
      * Publish another Version with new Translation.
      *
      * @param string $restContentVersionHref
-     *
      * @param string $languageCode
      * @param string $languageName
      *

@@ -40,6 +40,7 @@ abstract class TestCase extends BaseTestCase
      * Database handler -- to not be constructed twice for one test.
      *
      * @internal
+     *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $handler;
@@ -48,6 +49,7 @@ abstract class TestCase extends BaseTestCase
      * Doctrine Database connection -- to not be constructed twice for one test.
      *
      * @internal
+     *
      * @var \Doctrine\DBAL\Connection
      */
     protected $connection;

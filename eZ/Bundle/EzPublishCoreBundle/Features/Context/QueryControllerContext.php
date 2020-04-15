@@ -26,12 +26,14 @@ class QueryControllerContext extends RawMinkContext implements Context
 
     /**
      * Content item matched by the view configuration.
+     *
      * @var Content
      */
     private $matchedContent;
 
     /**
      * QueryControllerContext constructor.
+     *
      * @injectService $repository @ezpublish.api.repository
      */
     public function __construct(Repository $repository)

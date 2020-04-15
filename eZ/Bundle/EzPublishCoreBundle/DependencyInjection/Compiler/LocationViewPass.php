@@ -14,7 +14,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
  *
  * @see \eZ\Publish\Core\MVC\Symfony\View\Manager
  * @see \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider
- *
  * @deprecated since 6.0
  */
 class LocationViewPass extends ViewManagerPass

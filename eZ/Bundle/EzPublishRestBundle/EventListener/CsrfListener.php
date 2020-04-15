@@ -25,7 +25,7 @@ class CsrfListener implements EventSubscriberInterface
      */
     const CSRF_TOKEN_HEADER = 'X-CSRF-Token';
 
-    /** @var null|CsrfTokenManagerInterface */
+    /** @var CsrfTokenManagerInterface|null */
     private $csrfTokenManager;
 
     /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
@@ -44,7 +44,7 @@ class CsrfListener implements EventSubscriberInterface
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param bool $csrfEnabled
      * @param string $csrfTokenIntention
-     * @param null|CsrfTokenManagerInterface $csrfTokenManager
+     * @param CsrfTokenManagerInterface|null $csrfTokenManager
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,

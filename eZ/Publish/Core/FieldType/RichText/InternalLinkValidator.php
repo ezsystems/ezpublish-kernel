@@ -29,6 +29,7 @@ class InternalLinkValidator
 
     /**
      * InternalLinkValidator constructor.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      */
@@ -42,6 +43,7 @@ class InternalLinkValidator
      * Extracts and validate internal links.
      *
      * @param \DOMDocument $xml
+     *
      * @return array
      */
     public function validateDocument(DOMDocument $xml)
@@ -112,6 +114,7 @@ class InternalLinkValidator
      *
      * @param string $scheme
      * @param string $url
+     *
      * @return string
      */
     private function getInvalidLinkError($scheme, $url)
@@ -131,6 +134,7 @@ class InternalLinkValidator
      * Generates XPath expression for given link tag.
      *
      * @param string $tagName
+     *
      * @return string
      */
     private function getXPathForLinkTag($tagName)

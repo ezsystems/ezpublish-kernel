@@ -62,7 +62,7 @@ abstract class FieldBase extends SortClauseVisitor
      * If given $languageCode is not null the condition targets the field document in the
      * given translation, otherwise document for translation in main language code is returned.
      *
-     * @param null|string $languageCode
+     * @param string|null $languageCode
      *
      * @return mixed
      */

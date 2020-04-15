@@ -63,6 +63,7 @@ abstract class Indexer
      * Get PDOStatement to fetch metadata about content objects to be indexed.
      *
      * @param array $fields Select fields
+     *
      * @return \PDOStatement
      */
     protected function getContentDbFieldsStmt(array $fields)
@@ -81,6 +82,7 @@ abstract class Indexer
      * Fetch location Ids for the given content object.
      *
      * @param int $contentObjectId
+     *
      * @return array Location nodes Ids
      */
     protected function getContentLocationIds($contentObjectId)

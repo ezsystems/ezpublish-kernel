@@ -82,6 +82,7 @@ abstract class Query extends CriterionParser
 
     /**
      * Builds and returns the Query (Location or Content object).
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Query
      */
     abstract protected function buildQuery();

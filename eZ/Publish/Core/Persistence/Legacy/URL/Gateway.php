@@ -27,6 +27,7 @@ abstract class Gateway
      * @param int $limit
      * @param SortClause[] $sortClauses
      * @param bool $doCount
+     *
      * @return array
      */
     abstract public function find(Criterion $criterion, $offset, $limit, array $sortClauses = [], $doCount = true);
@@ -35,6 +36,7 @@ abstract class Gateway
      * Returns IDs of Content Objects using URL identified by $id.
      *
      * @param int $id
+     *
      * @return array
      */
     abstract public function findUsages($id);
@@ -43,6 +45,7 @@ abstract class Gateway
      * Loads URL with url id.
      *
      * @param int $id
+     *
      * @return array
      */
     abstract public function loadUrlData($id);
@@ -51,6 +54,7 @@ abstract class Gateway
      * Loads URL with url address.
      *
      * @param int $url
+     *
      * @return array
      */
     abstract public function loadUrlDataByUrl($url);

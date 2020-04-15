@@ -20,6 +20,7 @@ interface URLHandlerRegistryInterface
      * Is scheme supported ?
      *
      * @param string $scheme
+     *
      * @return bool
      */
     public function supported($scheme);
@@ -28,6 +29,7 @@ interface URLHandlerRegistryInterface
      * Returns handler for scheme.
      *
      * @param string $scheme
+     *
      * @return \eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerInterface
      *
      * @throw \InvalidArgumentException When scheme isn't supported

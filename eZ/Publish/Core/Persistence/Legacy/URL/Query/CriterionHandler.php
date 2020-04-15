@@ -15,6 +15,7 @@ interface CriterionHandler
      * Check if this criterion handler accepts to handle the given criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\URL\Query\Criterion $criterion
+     *
      * @return bool
      */
     public function accept(Criterion $criterion);
@@ -27,6 +28,7 @@ interface CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\URL\Query\Criterion $criterion
+     *
      * @return \eZ\Publish\Core\Persistence\Database\Expression|string
      */
     public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion);

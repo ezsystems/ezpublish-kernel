@@ -346,6 +346,7 @@ JSON
      * @param string $name
      * @param string $operator
      * @param string|string[] $value
+     *
      * @return DOMElement
      */
     private function buildFieldXml(string $name, string $operator, $value): DOMElement

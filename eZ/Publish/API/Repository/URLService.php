@@ -28,6 +28,7 @@ interface URLService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
      * @param \eZ\Publish\API\Repository\Values\URL\URLQuery $query
+     *
      * @return \eZ\Publish\API\Repository\Values\URL\SearchResult
      */
     public function findUrls(URLQuery $query);
@@ -40,6 +41,7 @@ interface URLService
      * @param \eZ\Publish\API\Repository\Values\URL\URL $url
      * @param int $offset
      * @param int $limit
+     *
      * @return \eZ\Publish\API\Repository\Values\URL\UsageSearchResult
      */
     public function findUsages(URL $url, $offset = 0, $limit = -1);
@@ -51,6 +53,7 @@ interface URLService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
      * @param int $id ID of URL
+     *
      * @return \eZ\Publish\API\Repository\Values\URL\URL
      */
     public function loadById($id);
@@ -62,6 +65,7 @@ interface URLService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
      * @param string $url url
+     *
      * @return \eZ\Publish\API\Repository\Values\URL\URL
      */
     public function loadByUrl($url);
@@ -75,6 +79,7 @@ interface URLService
      *
      * @param \eZ\Publish\API\Repository\Values\URL\URL $url
      * @param \eZ\Publish\API\Repository\Values\URL\URLUpdateStruct $struct
+     *
      * @return \eZ\Publish\API\Repository\Values\URL\URL
      */
     public function updateUrl(URL $url, URLUpdateStruct $struct);
