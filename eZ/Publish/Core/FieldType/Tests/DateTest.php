@@ -268,7 +268,7 @@ class DateTest extends FieldTypeTest
                 [
                     // Timezone is not abbreviated because PHP converts it to non-abbreviated local name,
                     // but this is sufficient to test conversion
-                    'rfc850' => 'Thursday, 04-Jul-13 23:59:59 Europe/Zagreb',
+                    'rfc850' => 'Thursday, 04-Jul-13 02:00:00 Europe/Zagreb',
                 ],
                 new DateValue(
                     $dateTime

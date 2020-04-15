@@ -292,7 +292,7 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
             [
                 DateValue::fromTimestamp($timestamp),
                 [
-                    'timestamp' => $dateTime->setTime(0, 0, 0)->getTimestamp(),
+                    'timestamp' => $dateTime->getTimestamp(),
                     'rfc850' => $dateTime->format(DateTime::RFC850),
                 ],
             ],

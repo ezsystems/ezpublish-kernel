@@ -39,10 +39,6 @@ class Value extends BaseValue
      */
     public function __construct(DateTime $dateTime = null)
     {
-        if ($dateTime !== null) {
-            $dateTime = clone $dateTime;
-            $dateTime->setTime(0, 0, 0);
-        }
         $this->date = $dateTime;
     }
 
