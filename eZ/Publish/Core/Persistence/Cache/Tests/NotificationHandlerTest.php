@@ -6,9 +6,8 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Tests\Core\Persistence\Cache;
+namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
-use eZ\Publish\Core\Persistence\Cache\Tests\AbstractCacheHandlerTest;
 use eZ\Publish\SPI\Persistence\Notification\CreateStruct;
 use eZ\Publish\SPI\Persistence\Notification\Handler as SPINotificationHandler;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
