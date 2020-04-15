@@ -133,9 +133,7 @@ class LocationService implements LocationServiceInterface
             throw new UnauthorizedException('content', 'create', ['locationId' => $loadedTargetLocation->id]);
         }
 
-        /** Check read access to whole source subtree
-         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
-         */
+        // Check read access to whole source subtree
         $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'read');
         if ($contentReadCriterion === false) {
             throw new UnauthorizedException('content', 'read');
@@ -683,9 +681,7 @@ class LocationService implements LocationServiceInterface
             throw new UnauthorizedException('content', 'create', ['locationId' => $newParentLocation->id]);
         }
 
-        /** Check read access to whole source subtree
-         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
-         */
+        // Check read access to whole source subtree
         $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'read');
         if ($contentReadCriterion === false) {
             throw new UnauthorizedException('content', 'read');
@@ -762,9 +758,7 @@ class LocationService implements LocationServiceInterface
             throw new UnauthorizedException('content', 'remove', ['locationId' => $location->id]);
         }
 
-        /** Check remove access to descendants
-         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
-         */
+        // Check remove access to descendants
         $contentReadCriterion = $this->permissionCriterionResolver->getPermissionsCriterion('content', 'remove');
         if ($contentReadCriterion === false) {
             throw new UnauthorizedException('content', 'remove');

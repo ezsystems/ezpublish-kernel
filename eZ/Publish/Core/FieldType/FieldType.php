@@ -445,7 +445,7 @@ abstract class FieldType extends SPIFieldType
      */
     protected static function checkValueType($value)
     {
-        $fieldTypeFQN = get_called_class();
+        $fieldTypeFQN = static::class;
         $valueFQN = substr_replace($fieldTypeFQN, 'Value', strrpos($fieldTypeFQN, '\\') + 1);
 
         if (!$value instanceof $valueFQN) {

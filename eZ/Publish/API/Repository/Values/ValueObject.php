@@ -75,9 +75,9 @@ abstract class ValueObject
     public function __set($property, $value)
     {
         if (property_exists($this, $property)) {
-            throw new PropertyReadOnlyException($property, get_class($this));
+            throw new PropertyReadOnlyException($property, static::class);
         }
-        throw new PropertyNotFoundException($property, get_class($this));
+        throw new PropertyNotFoundException($property, static::class);
     }
 
     /**
@@ -98,7 +98,7 @@ abstract class ValueObject
         if (property_exists($this, $property)) {
             return $this->$property;
         }
-        throw new PropertyNotFoundException($property, get_class($this));
+        throw new PropertyNotFoundException($property, static::class);
     }
 
     /**

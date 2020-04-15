@@ -166,7 +166,7 @@ class Value extends BaseValue
             return $this->inputUri ?: $this->id;
         }
 
-        throw new PropertyNotFoundException($propertyName, get_class($this));
+        throw new PropertyNotFoundException($propertyName, static::class);
     }
 
     public function __set($propertyName, $propertyValue)
@@ -177,6 +177,6 @@ class Value extends BaseValue
             return;
         }
 
-        throw new PropertyNotFoundException($propertyName, get_class($this));
+        throw new PropertyNotFoundException($propertyName, static::class);
     }
 }
