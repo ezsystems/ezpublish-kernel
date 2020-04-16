@@ -19,6 +19,7 @@ class PlaceholderProviderRegistryTest extends TestCase
 
     /**
      * @covers       \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry::__construct
+     *
      * @uses         \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry::getProvider
      * @depends      testGetProviderKnown
      */
@@ -37,6 +38,7 @@ class PlaceholderProviderRegistryTest extends TestCase
 
     /**
      * @covers       \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry::addProvider
+     *
      * @uses         \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry::getProvider
      * @depends      testGetProviderKnown
      */

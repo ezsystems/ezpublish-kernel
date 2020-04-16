@@ -18,6 +18,7 @@ class ContentViewTest extends AbstractViewTest
 {
     /**
      * Params that are always returned by this view.
+     *
      * @var array
      */
     private $valueParams = ['content' => null];

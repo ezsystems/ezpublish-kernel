@@ -80,6 +80,7 @@ class FieldTypeContext implements Context
      * Getter method for fieldtype internal identifier.
      *
      * @param string $identifier Identifier of the field
+     *
      * @return string internal Identifier of the field
      */
     public function getFieldTypeInternalIdentifier($identifier)
@@ -91,6 +92,7 @@ class FieldTypeContext implements Context
      * Getter method for the validator mappings.
      *
      * @param string $field Field name
+     *
      * @return string field Validator name
      */
     public function getFieldValidator($field)
@@ -255,6 +257,7 @@ class FieldTypeContext implements Context
      * Getter method for the name of the stored contenttype.
      *
      * @param string $language Language of the name
+     *
      * @return string Name of the contenttype
      */
     public function getThisContentTypeName($language = self::DEFAULT_LANGUAGE)
@@ -266,6 +269,7 @@ class FieldTypeContext implements Context
      * Getter method for the name of the stored content.
      *
      * @param string $language Language of the name
+     *
      * @return string Name of the contenttype
      */
     public function getThisContentName($language = self::DEFAULT_LANGUAGE)
@@ -277,6 +281,7 @@ class FieldTypeContext implements Context
      * Getter method for the name of the stored fieldtype.
      *
      * @param string $language Language of the name
+     *
      * @return string Name of the fieldtype
      */
     public function getThisFieldTypeName($language = self::DEFAULT_LANGUAGE)

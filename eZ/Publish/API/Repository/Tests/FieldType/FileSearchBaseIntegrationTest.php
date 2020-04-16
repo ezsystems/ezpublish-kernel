@@ -119,7 +119,7 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
     {
         return new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                self::$installDir . DIRECTORY_SEPARATOR . self::$storageDir,
+                self::$installDir . \DIRECTORY_SEPARATOR . self::$storageDir,
                 FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS | FilesystemIterator::CURRENT_AS_FILEINFO
             ),
             RecursiveIteratorIterator::CHILD_FIRST
@@ -163,7 +163,7 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
                     continue;
                 }
                 $partPath = implode(
-                    DIRECTORY_SEPARATOR,
+                    \DIRECTORY_SEPARATOR,
                     array_slice($pathPartsArray, 0, $index + 1)
                 );
                 self::$ignoredPathList[realpath($partPath)] = true;

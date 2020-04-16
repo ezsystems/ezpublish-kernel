@@ -107,6 +107,7 @@ class CopySubtreeCommand extends Command
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return int|null
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException

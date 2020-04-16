@@ -33,6 +33,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
      */
     public function testObjectStateLimitationAllow()

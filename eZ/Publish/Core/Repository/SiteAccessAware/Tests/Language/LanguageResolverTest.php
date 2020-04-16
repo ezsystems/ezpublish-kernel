@@ -21,8 +21,8 @@ class LanguageResolverTest extends TestCase
      * @param array $expectedPrioritizedLanguagesList
      * @param array $configLanguages
      * @param bool $defaultShowAllTranslations
-     * @param null|array $forcedLanguages
-     * @param null|string $contextLanguage
+     * @param array|null $forcedLanguages
+     * @param string|null $contextLanguage
      */
     public function testGetPrioritizedLanguages(
         array $expectedPrioritizedLanguagesList,

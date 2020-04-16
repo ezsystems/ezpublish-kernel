@@ -40,6 +40,7 @@ class QueryController
      * Runs a content search.
      *
      * @param ContentView $view
+     *
      * @return ContentView
      */
     public function contentQueryAction(ContentView $view)
@@ -53,6 +54,7 @@ class QueryController
      * Runs a location search.
      *
      * @param ContentView $view
+     *
      * @return ContentView
      */
     public function locationQueryAction(ContentView $view)
@@ -66,6 +68,7 @@ class QueryController
      * Runs a contentInfo search.
      *
      * @param ContentView $view
+     *
      * @return ContentView
      */
     public function contentInfoQueryAction(ContentView $view)
@@ -92,6 +95,7 @@ class QueryController
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
      * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
     public function pagingQueryAction(ContentView $view, Request $request)
@@ -126,6 +130,7 @@ class QueryController
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     *
      * @return \Pagerfanta\Adapter\AdapterInterface
      */
     private function getAdapter(Query $query): AdapterInterface

@@ -1483,7 +1483,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * @param bool $includesTwo
      * @param bool $filter
      * @param bool $content
-     * @param null|string $modifyField
+     * @param string|null $modifyField
      */
     protected function assertFindResult(
         array $context,

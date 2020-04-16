@@ -1849,6 +1849,7 @@ final class DoctrineDatabase extends Gateway
      *
      * @param int $contentId
      * @param int $languageId
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
     private function deleteTranslationFromContentObject($contentId, $languageId)

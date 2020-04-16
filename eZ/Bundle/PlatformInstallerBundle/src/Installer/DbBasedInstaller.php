@@ -82,7 +82,6 @@ class DbBasedInstaller
      * @return string absolute existing file path
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
      * @throws \Doctrine\DBAL\DBALException
      *
      * @since 6.13

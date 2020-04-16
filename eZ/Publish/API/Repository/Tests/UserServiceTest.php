@@ -2147,6 +2147,7 @@ class UserServiceTest extends BaseTest
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode language code of expected translation
      */
@@ -2179,6 +2180,7 @@ class UserServiceTest extends BaseTest
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode language code of expected translation
      */
@@ -2218,6 +2220,7 @@ class UserServiceTest extends BaseTest
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadSubUserGroups
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode language code of expected translation
      */
@@ -2258,6 +2261,7 @@ class UserServiceTest extends BaseTest
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUser
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode language code of expected translation
      */
@@ -2294,6 +2298,7 @@ class UserServiceTest extends BaseTest
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUserGroup
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode language code of expected translation
      */
@@ -2337,6 +2342,7 @@ class UserServiceTest extends BaseTest
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUserByLogin
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode language code of expected translation
      */
@@ -2373,6 +2379,7 @@ class UserServiceTest extends BaseTest
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUsersByEmail
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode language code of expected translation
      */
@@ -2411,6 +2418,7 @@ class UserServiceTest extends BaseTest
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode language code of expected translation
      */
@@ -2442,6 +2450,7 @@ class UserServiceTest extends BaseTest
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[] $prioritizedLanguages
      * @param string|null $expectedLanguageCode language code of expected translation
      */
@@ -2505,6 +2514,7 @@ class UserServiceTest extends BaseTest
 
     /**
      * @param int $parentGroupId
+     *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      */
     private function createMultiLanguageUserGroup($parentGroupId = 4)

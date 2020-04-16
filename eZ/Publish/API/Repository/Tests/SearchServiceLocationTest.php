@@ -33,6 +33,7 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocation() method.
      *
      * @dataProvider getFacetedSearches
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findLoctions()
      */
     public function testFindFacetedLocation(LocationQuery $query, $fixture)
@@ -1264,7 +1265,7 @@ class SearchServiceLocationTest extends BaseTest
      *
      * @param LocationQuery $query
      * @param string $fixture
-     * @param null|callable $closure
+     * @param callable|null $closure
      */
     protected function assertQueryFixture(LocationQuery $query, $fixture, $closure = null, $ignoreScore = true)
     {

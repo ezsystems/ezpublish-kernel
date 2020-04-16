@@ -27,7 +27,7 @@ class UserGroupTest extends TestCase
     public function testNewClass()
     {
         $group = new UserGroup();
-        self::assertEquals(null, $group->parentId);
+        self::assertNull($group->parentId);
 
         $this->assertPropertiesCorrect(
             [
@@ -123,10 +123,10 @@ class UserGroupTest extends TestCase
     {
         $userGroup = new UserGroup();
         $value = isset($userGroup->notDefined);
-        self::assertEquals(false, $value);
+        self::assertFalse($value);
 
         $value = isset($userGroup->parentId);
-        self::assertEquals(true, $value);
+        self::assertTrue($value);
     }
 
     /**

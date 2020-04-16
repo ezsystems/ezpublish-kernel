@@ -35,6 +35,7 @@ class ObjectStateGroup extends APIObjectStateGroup
      * Magic getter for BC reasons.
      *
      * @param string $property
+     *
      * @return mixed
      */
     public function __get($property)

@@ -382,7 +382,7 @@ class UserTest extends FieldTypeTest
      *
      * @param \eZ\Publish\Core\FieldType\User\Value $userValue
      * @param array $expectedValidationErrors
-     * @param null|callable $loadByLoginBehaviorCallback
+     * @param callable|null $loadByLoginBehaviorCallback
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */

@@ -36,6 +36,7 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
      * Generates the SiteAccess value as CRC32.
      *
      * @param string $sa
+     *
      * @return string
      */
     private function generateSiteAccessValue($sa)

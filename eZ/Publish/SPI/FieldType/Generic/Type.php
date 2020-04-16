@@ -323,6 +323,7 @@ abstract class Type extends FieldType
      * </code>
      *
      * @param mixed $value A value returned by {@see createValueFromInput()}.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the parameter is not an instance of the supported value subtype.
      */
     protected function checkValueType($value): void

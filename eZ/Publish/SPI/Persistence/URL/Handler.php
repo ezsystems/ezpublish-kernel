@@ -18,6 +18,7 @@ interface Handler
      *
      * @param int $id
      * @param \eZ\Publish\SPI\Persistence\URL\URLUpdateStruct $urlUpdateStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\URL\URL
      */
     public function updateUrl($id, URLUpdateStruct $urlUpdateStruct);
@@ -26,6 +27,7 @@ interface Handler
      * Selects URLs data using $query.
      *
      * @param \eZ\Publish\API\Repository\Values\URL\URLQuery $query
+     *
      * @return array
      */
     public function find(URLQuery $query);
@@ -34,6 +36,7 @@ interface Handler
      * Returns IDs of Content Objects using URL identified by $id.
      *
      * @param int $id
+     *
      * @return array
      */
     public function findUsages($id);
@@ -42,6 +45,7 @@ interface Handler
      * Loads the data for the URL identified by $id.
      *
      * @param int $id
+     *
      * @return \eZ\Publish\SPI\Persistence\URL\URL
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
@@ -52,6 +56,7 @@ interface Handler
      * Loads the data for the URL identified by $url.
      *
      * @param string $url
+     *
      * @return \eZ\Publish\SPI\Persistence\URL\URL
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException

@@ -22,7 +22,7 @@ class ConsoleCacheWarmupPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         // This pass is CLI only as CLI class cache warmup conflicts with web access, see EZP-29034
-        if (PHP_SAPI !== 'cli' ||
+        if (\PHP_SAPI !== 'cli' ||
             !$container->hasDefinition('kernel.class_cache.cache_warmer')) {
             return;
         }

@@ -184,7 +184,7 @@ class AddField extends Action
      * Creates new Field value object, setting given parameters and default value
      * for a field definition the action is constructed for.
      *
-     * @param null|int $id
+     * @param int|null $id
      * @param int $versionNo
      * @param string $languageCode
      *

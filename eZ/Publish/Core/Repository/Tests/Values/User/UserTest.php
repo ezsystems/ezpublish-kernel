@@ -129,10 +129,10 @@ class UserTest extends TestCase
     {
         $user = new User();
         $value = isset($user->notDefined);
-        self::assertEquals(false, $value);
+        self::assertFalse($value);
 
         $value = isset($user->login);
-        self::assertEquals(true, $value);
+        self::assertTrue($value);
     }
 
     /**

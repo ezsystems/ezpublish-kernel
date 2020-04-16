@@ -209,7 +209,6 @@ class Mapper
      * Creates a FieldDefinition from the data in $row.
      *
      * @param array $row
-     *
      * @param array $multilingualData
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
@@ -253,7 +252,6 @@ class Mapper
      * Extracts a StorageFieldDefinition from $row.
      *
      * @param array $row
-     *
      * @param array $multilingualDataRow
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition

@@ -219,7 +219,7 @@ class Handler implements UrlAliasHandlerInterface
                         if ($e instanceof UniqueConstraintViolationException) {
                             // Concurrency! someone else inserted the same row that we where going to.
                             // let's do another loop pass
-                            $uniqueCounter += 1;
+                            ++$uniqueCounter;
                             continue 2;
                         }
                     }
@@ -279,7 +279,7 @@ class Handler implements UrlAliasHandlerInterface
             }
 
             // If existing row is not reusable, increment $uniqueCounter and try again
-            $uniqueCounter += 1;
+            ++$uniqueCounter;
         }
 
         /* @var $newText */
@@ -679,6 +679,7 @@ class Handler implements UrlAliasHandlerInterface
      * @param int $location1ParentId
      * @param int $location2Id
      * @param int $location2ParentId
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function locationSwapped($location1Id, $location1ParentId, $location2Id, $location2ParentId)

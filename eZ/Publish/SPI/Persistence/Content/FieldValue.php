@@ -20,7 +20,7 @@ class FieldValue extends ValueObject
      * Note: For the legacy storage engine we will need adaptors to map them to
      * the existing database fields, like data_int, data_float, data_text.
      *
-     * @var int|float|bool|string|null|array
+     * @var int|float|bool|string|array|null
      */
     public $data;
 

@@ -72,10 +72,10 @@ class SectionTest extends TestCase
     {
         $section = new Section();
         $value = isset($section->notDefined);
-        self::assertEquals(false, $value);
+        self::assertFalse($value);
 
         $value = isset($section->id);
-        self::assertEquals(true, $value);
+        self::assertTrue($value);
     }
 
     /**

@@ -40,6 +40,7 @@ class RolePolicyLimitationTest extends BaseLimitationTest
      * Test if role with wider policy is not overlapped by limitation (uncovered in EZP-26476).
      *
      * @dataProvider providerForTestRolePoliciesWithOverlappingLimitations
+     *
      * @param int $expectedSubtreeLocationsCount
      * @param string $widePolicyModule
      * @param string $widePolicyFunction
@@ -101,6 +102,7 @@ class RolePolicyLimitationTest extends BaseLimitationTest
      * Perform search by the Subtree Criterion for the given subtree path and return results count.
      *
      * @param $subtreePathString
+     *
      * @return int|null
      */
     protected function getSubtreeLocationsCount($subtreePathString)
@@ -117,6 +119,7 @@ class RolePolicyLimitationTest extends BaseLimitationTest
      * Create test User in the given User Group.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $group
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     protected function createUserInGroup(UserGroup $group)
@@ -166,6 +169,7 @@ class RolePolicyLimitationTest extends BaseLimitationTest
      * @param string $groupName
      * @param string $mainLanguageCode
      * @param int $parentGroupId
+     *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      */
     protected function createGroup($groupName, $mainLanguageCode, $parentGroupId)

@@ -80,6 +80,7 @@ class VisibleOnlyTest extends CriterionHandlerTest
      * @param bool $includeLinkJoin
      * @param bool $includeAttributeJoin
      * @param bool $includeTreeJoin
+     *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getMockExpression(bool $includeLinkJoin, bool $includeAttributeJoin, bool $includeTreeJoin)

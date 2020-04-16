@@ -497,7 +497,6 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      *
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the role draft cannot be loaded
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to publish this RoleDraft
