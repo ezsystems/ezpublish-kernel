@@ -30,7 +30,7 @@ final class SiteAccessDependentMetadataHandler implements IOMetadataHandler
         $this->dataHandlerRegistry = $dataHandlerRegistry;
     }
 
-    protected function getHandler(): IOMetadataHandler
+    private function getHandler(): IOMetadataHandler
     {
         return $this->dataHandlerRegistry->getConfiguredHandler(
             $this->configResolver->getParameter('io.metadata_handler')

@@ -176,7 +176,6 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $targets does not contain
      *         objects of type LocationCreateStruct
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value

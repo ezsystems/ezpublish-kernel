@@ -50,7 +50,7 @@ class RelationListConverter implements Converter
             }
             $row = $data[$id][0];
             $row['ezcontentobject_id'] = $id;
-            $row['priority'] = ($priority += 1);
+            $row['priority'] = (++$priority);
 
             $relationItem = $doc->createElement('relation-item');
             foreach (self::dbAttributeMap() as $domAttrKey => $propertyKey) {

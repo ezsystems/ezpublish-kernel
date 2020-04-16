@@ -23,6 +23,7 @@ class QueryControllerContext extends RawMinkContext implements Context
 
     /**
      * Content item matched by the view configuration.
+     *
      * @var Content
      */
     private $matchedContent;

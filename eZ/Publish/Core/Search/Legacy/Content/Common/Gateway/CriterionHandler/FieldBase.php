@@ -144,6 +144,7 @@ abstract class FieldBase extends CriterionHandler
      * @param array $fieldsInformation
      *
      * @return string
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */

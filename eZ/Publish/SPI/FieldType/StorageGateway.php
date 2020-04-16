@@ -18,6 +18,7 @@ abstract class StorageGateway
      *
      * @param string $table
      * @param string $column
+     *
      * @return string
      */
     protected function getSequenceName($table, $column)

@@ -11,6 +11,7 @@ class Registry
 {
     /**
      * Array of ViewProvider, indexed by handled type.
+     *
      * @var \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[][]
      */
     private $viewProviders;
@@ -19,6 +20,7 @@ class Registry
      * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
      *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
     public function getViewProviders(View $view)

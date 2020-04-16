@@ -12,7 +12,6 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
  * The field type interface which field types available to storage engines have to implement.
  *
  * @see \eZ\Publish\SPI\FieldType\FieldType
- *
  * @deprecated since 7.5.6. In 8.0 (for eZ Platform 3.0) it will be merged into the
  *             `\eZ\Publish\SPI\Persistence\FieldType` interface
  */

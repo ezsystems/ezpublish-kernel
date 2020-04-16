@@ -1918,6 +1918,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the publishVersion() method, and that it creates limited archives.
      *
      * @todo Adapt this when per content type archive limited is added on repository Content Type model.
+     *
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
@@ -3020,6 +3021,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test that retrieval of translated name field respects prioritized language list.
      *
      * @dataProvider getPrioritizedLanguageList
+     *
      * @param string[]|null $languageCodes
      */
     public function testLoadContentWithPrioritizedLanguagesList($languageCodes)

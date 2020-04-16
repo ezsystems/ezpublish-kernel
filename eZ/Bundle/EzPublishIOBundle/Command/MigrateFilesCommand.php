@@ -204,6 +204,7 @@ EOT
      * @param mixed $fromHandlers
      * @param mixed $toHandlers
      * @param OutputInterface $output
+     *
      * @return bool
      */
     protected function validateHandlerOptions(

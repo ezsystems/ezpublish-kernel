@@ -74,6 +74,7 @@ class CatalogueMapperFileWriter extends FileWriter
 
     /**
      * @param $filePath
+     *
      * @return mixed
      */
     private function getEnglishFilePath($filePath)
@@ -85,6 +86,7 @@ class CatalogueMapperFileWriter extends FileWriter
      * @param $foreignFilePath
      * @param $domain
      * @param $format
+     *
      * @return MessageCatalogue
      */
     private function loadEnglishCatalogue($foreignFilePath, $domain, $format)
@@ -104,6 +106,7 @@ class CatalogueMapperFileWriter extends FileWriter
 
     /**
      * @param $message
+     *
      * @return Message\XliffMessage
      */
     private function makeXliffMessage(Message $message)

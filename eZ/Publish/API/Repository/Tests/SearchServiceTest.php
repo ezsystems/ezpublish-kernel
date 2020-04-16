@@ -914,6 +914,7 @@ class SearchServiceTest extends BaseTest
      * Test for the findContentInfo() method.
      *
      * @dataProvider getFilterContentSearches
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
      */
     public function testFindContentInfoFiltered($queryData, $fixture, $closure = null)
@@ -973,6 +974,7 @@ class SearchServiceTest extends BaseTest
      * Test for the findContentInfo() method.
      *
      * @dataProvider getContentQuerySearches
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
     public function testQueryContentInfo($queryData, $fixture, $closure = null)
@@ -1181,6 +1183,7 @@ class SearchServiceTest extends BaseTest
      * Test for FieldRelation using findContentInfo() method.
      *
      * @dataProvider getRelationFieldFilterSearches
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testRelationContentCreation
      */
@@ -1195,6 +1198,7 @@ class SearchServiceTest extends BaseTest
      * Test for FieldRelation using findLocations() method.
      *
      * @dataProvider getRelationFieldFilterSearches
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testRelationContentCreation
      */
@@ -1441,6 +1445,7 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
     public function testFieldIsEmpty()
@@ -2759,6 +2764,7 @@ class SearchServiceTest extends BaseTest
      * Test for the findContentInfo() method.
      *
      * @dataProvider getSortedContentSearches
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
      */
     public function testFindAndSortContentInfo($queryData, $fixture, $closure = null)
@@ -2809,6 +2815,7 @@ class SearchServiceTest extends BaseTest
      * Test for the findContentInfo() method.
      *
      * @dataProvider getFacetedSearches
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
      */
     public function testFindFacetedContentInfo(Query $query, $fixture)
@@ -4615,6 +4622,7 @@ class SearchServiceTest extends BaseTest
 
     /**
      * Test for the findLocations() method.
+     *
      * @covers \eZ\Publish\API\Repository\SearchService::findLocations()
      * @depends testFulltextComplex
      *
@@ -4633,7 +4641,7 @@ class SearchServiceTest extends BaseTest
      *
      * @param Query $query
      * @param string $fixture
-     * @param null|callable $closure
+     * @param callable|null $closure
      * @param bool $info
      * @param bool $id
      */
@@ -4783,7 +4791,7 @@ class SearchServiceTest extends BaseTest
     /**
      * For findContentInfo tests, to reuse fixtures for findContent tests.
      *
-     * @param null|callable $closure
+     * @param callable|null $closure
      *
      * @return callable
      */

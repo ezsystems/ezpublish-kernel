@@ -73,10 +73,10 @@ class LanguageTest extends TestCase
     {
         $language = new Language();
         $value = isset($language->notDefined);
-        self::assertEquals(false, $value);
+        self::assertFalse($value);
 
         $value = isset($language->id);
-        self::assertEquals(true, $value);
+        self::assertTrue($value);
     }
 
     /**

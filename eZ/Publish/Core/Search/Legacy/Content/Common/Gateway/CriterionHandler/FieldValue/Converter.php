@@ -33,7 +33,7 @@ class Converter
      * Construct from an array of Criterion field value handlers.
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry $registry
-     * @param null|\eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler $defaultHandler
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler|null $defaultHandler
      */
     public function __construct(HandlerRegistry $registry, Handler $defaultHandler = null)
     {

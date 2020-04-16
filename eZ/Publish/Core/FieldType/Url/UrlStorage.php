@@ -39,9 +39,11 @@ class UrlStorage extends GatewayBasedStorage
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return bool|mixed
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)

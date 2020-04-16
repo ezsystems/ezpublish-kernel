@@ -56,6 +56,7 @@ abstract class LogicalOperator extends Criterion
 
     /**
      * @return array
+     *
      * @deprecated in LogicalOperators since 7.2.
      * It will be removed in 8.0 when Logical Operator no longer extends Criterion.
      */

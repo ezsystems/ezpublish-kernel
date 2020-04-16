@@ -61,6 +61,7 @@ abstract class UserStorageGatewayTest extends BaseCoreFieldTypeIntegrationTest
 
     /**
      * @dataProvider providerForGetFieldData
+     *
      * @param int|null $fieldId
      * @param int $userId
      * @param array $expectedUserData

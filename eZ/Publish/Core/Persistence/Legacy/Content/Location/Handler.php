@@ -222,6 +222,7 @@ class Handler implements BaseLocationHandler
      * @param int|null $newOwnerId
      *
      * @return Location the newly created Location.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function copySubtree($sourceId, $destinationParentId, $newOwnerId = null)

@@ -107,7 +107,7 @@ class GlobalHelper
      *
      * If current route is not an URLAlias, then the current Pathinfo is returned.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getSystemUriString()
     {
@@ -146,7 +146,7 @@ class GlobalHelper
      *
      * @param string $language
      *
-     * @return null|string
+     * @return string|null
      */
     public function getTranslationSiteAccess($language)
     {

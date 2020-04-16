@@ -104,7 +104,7 @@ class Handler implements BaseTrashHandler
      *
      * @todo Handle field types actions
      *
-     * @return null|\eZ\Publish\SPI\Persistence\Content\Location\Trashed null if location was deleted, otherwise Trashed object
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed|null null if location was deleted, otherwise Trashed object
      */
     public function trashSubtree($locationId)
     {

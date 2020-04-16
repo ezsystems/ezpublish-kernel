@@ -54,8 +54,10 @@ class PreviewLocationProvider
      *
      * @deprecated Since 7.5.4, rather use loadMainLocationByContent.
      * @see loadMainLocationByContent
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
      * @param mixed $contentId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location|null

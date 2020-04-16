@@ -50,6 +50,7 @@ class ObjectState extends APIObjectState
      * Magic getter for BC reasons.
      *
      * @param string $property
+     *
      * @return mixed
      */
     public function __get($property)
@@ -70,6 +71,7 @@ class ObjectState extends APIObjectState
      * Magic isset for BC reasons.
      *
      * @param string $property
+     *
      * @return bool
      */
     public function __isset($property)

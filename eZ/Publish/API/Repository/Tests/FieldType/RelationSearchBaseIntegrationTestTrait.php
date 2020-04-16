@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group integration
  * @group field-type
  * @group relation
+ *
  * @since 6.1
  */
 trait RelationSearchBaseIntegrationTestTrait

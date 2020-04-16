@@ -21,6 +21,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct[] $additionalFieldDefinitionsCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException

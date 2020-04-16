@@ -22,6 +22,7 @@ class ConsoleContext implements Context
 
     /**
      * Elements referenced by 'it' in sentences.
+     *
      * @var array
      */
     private $it = [];
@@ -174,6 +175,7 @@ class ConsoleContext implements Context
 
     /**
      * Returns the name of an existing siteaccess that isn't the default one.
+     *
      * @return string|null The siteaccess name, or null if there isn't one
      */
     private function getNonDefaultSiteaccessName()

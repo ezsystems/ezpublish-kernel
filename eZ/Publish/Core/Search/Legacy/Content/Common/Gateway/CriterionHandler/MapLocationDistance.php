@@ -47,6 +47,7 @@ class MapLocationDistance extends FieldBase
      * @param string $fieldIdentifier
      *
      * @return array
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      */
     protected function getFieldDefinitionIds($fieldIdentifier)
@@ -245,6 +246,7 @@ class MapLocationDistance extends FieldBase
      * @param float $distance
      *
      * @return array
+     *
      * @todo it should also be possible to calculate inner bounding box, which could be applied for the
      * operators GT, GTE and lower distance of the BETWEEN operator.
      */

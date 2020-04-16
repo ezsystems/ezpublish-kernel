@@ -275,6 +275,7 @@ class DoctrineStorage extends Gateway
      * Extract, stored in DocBook XML, file paths.
      *
      * @param string $xml
+     *
      * @return array|null
      */
     public function extractFilesFromXml($xml)

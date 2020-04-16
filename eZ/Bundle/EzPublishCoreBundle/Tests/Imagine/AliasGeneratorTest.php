@@ -102,6 +102,7 @@ class AliasGeneratorTest extends TestCase
 
     /**
      * @dataProvider supportsValueProvider
+     *
      * @param \eZ\Publish\SPI\FieldType\Value $value
      * @param bool $isSupported
      */

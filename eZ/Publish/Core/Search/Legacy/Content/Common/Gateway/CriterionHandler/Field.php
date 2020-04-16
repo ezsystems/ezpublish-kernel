@@ -83,7 +83,6 @@ class Field extends FieldBase
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      * @throws \RuntimeException if no converter is found
-     *
      * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
     protected function getFieldsInformation($fieldIdentifier)

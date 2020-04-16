@@ -61,6 +61,7 @@ class ExceptionListenerTest extends TestCase
 
     /**
      * @param Exception $exception
+     *
      * @return ExceptionEvent
      */
     private function generateExceptionEvent(Exception $exception)

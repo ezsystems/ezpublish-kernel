@@ -367,6 +367,7 @@ EOT
 
     /**
      * @param int $timestamp
+     *
      * @return int
      */
     protected function convertToUtcTimestamp($timestamp)
@@ -384,6 +385,7 @@ EOT
     /**
      * @param string $dateTimeString
      * @param OutputInterface $output
+     *
      * @return bool
      */
     protected function validateDateTimeString($dateTimeString, OutputInterface $output)
@@ -402,6 +404,7 @@ EOT
     /**
      * @param string $timezone
      * @param OutputInterface $output
+     *
      * @return string
      */
     protected function validateTimezone($timezone, OutputInterface $output)
@@ -493,7 +496,9 @@ EOT
 
     /**
      * @param $dateString string
+     *
      * @throws \Exception
+     *
      * @return int
      */
     private function dateStringToTimestamp($dateString)
