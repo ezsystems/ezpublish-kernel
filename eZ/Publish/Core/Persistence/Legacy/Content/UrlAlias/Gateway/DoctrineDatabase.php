@@ -102,6 +102,23 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Loads all list of aliases by given $locationId.
+     */
+    public function loadAllLocationEntries(int $locationId): array
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select(...$this->columns[$this->table])
+            ->from($this->connection->quoteIdentifier($this->table))
+            ->where('action = :action')
+            ->andWhere('is_original = :is_original')
+            ->setParameter('action', "eznode:{$locationId}", ParameterType::STRING)
+            ->setParameter('is_original', 1, ParameterType::INTEGER);
+
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    /**
      * Loads list of aliases by given $locationId.
      *
      * @param mixed $locationId
