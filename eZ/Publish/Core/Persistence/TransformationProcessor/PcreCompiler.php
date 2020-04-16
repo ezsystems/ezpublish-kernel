@@ -277,7 +277,7 @@ class PcreCompiler
     /**
      * Converts a hexadecimal string to a decimal number.
      *
-     * In compare to standard hexdec function it will ignore any non-hexadecimal characters
+     * In comparison to standard hexdec function it will ignore any non-hexadecimal characters
      */
     private function hexdec(?string $value): int
     {
