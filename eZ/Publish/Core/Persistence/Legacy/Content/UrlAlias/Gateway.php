@@ -33,6 +33,11 @@ abstract class Gateway
     abstract public function setTable(string $name): void;
 
     /**
+     * Loads all list of aliases by given $locationId.
+     */
+    abstract public function loadAllLocationEntries(int $locationId): array;
+
+    /**
      * Load list of aliases by given $locationId.
      */
     abstract public function loadLocationEntries(
