@@ -1340,6 +1340,10 @@ class DoctrineDatabase extends Gateway
                     $query->orderBy('priority', $sortDirection);
                     break;
 
+                case $condition instanceof SortClause\Trash\DateTrashed:
+                    $query->orderBy('trashed', $sortDirection);
+                    break;
+
                 default:
                     // Only handle location related sort clauses. The others
                     // require data aggregation which is not sensible here.

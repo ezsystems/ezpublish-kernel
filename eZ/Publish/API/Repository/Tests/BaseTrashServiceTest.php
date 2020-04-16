@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use Doctrine\DBAL\ParameterType;
+
 /**
  * Base class for trash specific tests.
  */
@@ -40,5 +42,21 @@ abstract class BaseTrashServiceTest extends BaseTest
         /* END: Inline */
 
         return $trashItem;
+    }
+
+    /**
+     * @throws \ErrorException
+     */
+    protected function updateTrashedDate(int $locationId, int $newTimestamp): void
+    {
+        $connection = $this->getRawDatabaseConnection();
+        $query = $connection->createQueryBuilder();
+        $query
+            ->update('ezcontentobject_trash')
+            ->set('trashed', ':trashed_timestamp')
+            ->where('node_id = :location_id')
+            ->setParameter('trashed_timestamp', $newTimestamp, ParameterType::INTEGER)
+            ->setParameter('location_id', $locationId, ParameterType::INTEGER);
+        $query->execute();
     }
 }

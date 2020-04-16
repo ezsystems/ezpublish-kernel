@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Trash\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
@@ -682,6 +683,52 @@ class TrashServiceTest extends BaseTrashServiceTest
         // 4 trashed locations from the sub tree
         $this->assertEquals(4, $searchResult->count);
         $this->assertEquals(4, $searchResult->totalCount);
+    }
+
+    /**
+     * @covers  \eZ\Publish\API\Repository\TrashService::findTrashItems
+     *
+     * @throws \ErrorException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testFindTrashItemsSortedByDateTrashed(): void
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
+
+        $folder1 = $this->createFolder(['eng-GB' => 'Folder1'], 2);
+        $folder2 = $this->createFolder(['eng-GB' => 'Folder2'], 2);
+
+        $firstTrashedItem = $trashService->trash(
+            $locationService->loadLocation($folder1->contentInfo->mainLocationId)
+        );
+        $this->updateTrashedDate($firstTrashedItem->id, \time() - 100);
+        $latestTrashItem = $trashService->trash(
+            $locationService->loadLocation($folder2->contentInfo->mainLocationId)
+        );
+
+        $query = new Query();
+        $query->filter = new Criterion\ContentId([
+            $folder1->contentInfo->id,
+            $folder2->contentInfo->id,
+        ]);
+
+        // Load all trashed locations, sorted by trashed date ASC
+        $query->sortClauses = [new SortClause\Trash\DateTrashed(Query::SORT_ASC)];
+        $searchResult = $trashService->findTrashItems($query);
+        self::assertEquals(2, $searchResult->totalCount);
+        self::assertEquals($firstTrashedItem->remoteId, $searchResult->items[0]->remoteId);
+        self::assertEquals($latestTrashItem->remoteId, $searchResult->items[1]->remoteId);
+
+        // Load all trashed locations, sorted by trashed date DESC
+        $query->sortClauses = [new SortClause\Trash\DateTrashed(Query::SORT_DESC)];
+        $searchResult = $trashService->findTrashItems($query);
+        self::assertEquals(2, $searchResult->totalCount);
+        self::assertEquals($latestTrashItem->remoteId, $searchResult->items[0]->remoteId);
+        self::assertEquals($firstTrashedItem->remoteId, $searchResult->items[1]->remoteId);
     }
 
     /**
