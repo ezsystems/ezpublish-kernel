@@ -395,7 +395,6 @@ class PermissionResolver implements PermissionResolverInterface
      *         }
      *     );
      *
-     *
      * @param \Closure $callback
      * @param \eZ\Publish\API\Repository\Repository $outerRepository
      *

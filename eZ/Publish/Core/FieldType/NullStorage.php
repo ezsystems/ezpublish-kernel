@@ -71,7 +71,7 @@ class NullStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
      * @param array $context
      *
-     * @return null|bool Same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
+     * @return bool|null Same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
      */
     public function copyLegacyField(VersionInfo $versionInfo, Field $field, Field $originalField, array $context)
     {

@@ -73,7 +73,7 @@ abstract class AbstractLanguageResolver implements APILanguageResolver
     /**
      * Get context language currently set by custom logic.
      *
-     * @return null|string
+     * @return string|null
      */
     final public function getContextLanguage(): ?string
     {

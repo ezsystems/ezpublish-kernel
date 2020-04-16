@@ -240,7 +240,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
                 'ConfigResolver was used by "%s" before SiteAccess was initialized, loading parameter(s) '
                 . '%s. As this can cause very hard to debug issues, '
                 . 'try to use ConfigResolver lazily, '
-                . (PHP_SAPI === 'cli' ? 'make the affected commands lazy, ' : '')
+                . (\PHP_SAPI === 'cli' ? 'make the affected commands lazy, ' : '')
                 . 'make the service lazy or see if you can inject another lazy service.',
                 $blame,
                 '"$' . implode('$", "$', array_unique($params)) . '$"'
@@ -313,8 +313,8 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
                 }
 
                 // Detect if we found the command loading the service, if we track that as lasts service
-                if (PHP_SAPI === 'cli' && isset($t['file']) && \stripos($t['file'], 'CommandService.php') !== false) {
-                    $path = explode(DIRECTORY_SEPARATOR, $t['file']);
+                if (\PHP_SAPI === 'cli' && isset($t['file']) && \stripos($t['file'], 'CommandService.php') !== false) {
+                    $path = explode(\DIRECTORY_SEPARATOR, $t['file']);
                     $commandName = \substr($path[count($path) - 1], 3, -11);
                     break;
                 }

@@ -17,7 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @see \eZ\Publish\Core\MVC\Symfony\View\Manager
  * @see \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider
- *
  * @deprecated since 6.0
  *
  * Converts the old tag (ezpublish.xxx_view_provider) to the new one (ezpublish.view_provider with type attribute)

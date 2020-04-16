@@ -27,7 +27,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
  * @property-read string $pathString the path to this location e.g. /1/2/4/23 where 23 is current id.
  * @property-read array $path Same as $pathString but as array, e.g. [ 1, 2, 4, 23 ]
  * @property-read int $depth Depth location has in the location tree
- *
  * @property-read int $sortField Specifies which property the child locations should be sorted on. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $sortOrder Specifies whether the sort order should be ascending or descending. Valid values are {@link Location::SORT_ORDER_*}
  */

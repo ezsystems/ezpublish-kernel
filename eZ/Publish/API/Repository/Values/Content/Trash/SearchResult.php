@@ -34,6 +34,7 @@ class SearchResult extends ValueObject implements \IteratorAggregate
      * The total number of Trash items.
      *
      * @deprecated Property is here purely for BC with 5.x/6.x.
+     *
      * @var int
      */
     public $count = 0;

@@ -14,6 +14,7 @@ interface Handler
      * Create a new bookmark.
      *
      * @param \eZ\Publish\SPI\Persistence\Bookmark\CreateStruct $createStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Bookmark\Bookmark
      */
     public function create(CreateStruct $createStruct): Bookmark;
@@ -52,6 +53,7 @@ interface Handler
      * Count bookmarks owned by user.
      *
      * @param int $userId
+     *
      * @return int
      */
     public function countUserBookmarks(int $userId): int;

@@ -64,6 +64,7 @@ class ValidationErrorFileVisitor implements LoggerAwareInterface, FileVisitorInt
 
     /**
      * DefaultPhpFileExtractor constructor.
+     *
      * @param DocParser $docParser
      * @param FileSourceFactory $fileSourceFactory
      */
@@ -197,7 +198,8 @@ class ValidationErrorFileVisitor implements LoggerAwareInterface, FileVisitorInt
 
     /**
      * @param Node $node
-     * @return null|string
+     *
+     * @return string|null
      */
     private function getDocCommentForNode(Node $node)
     {

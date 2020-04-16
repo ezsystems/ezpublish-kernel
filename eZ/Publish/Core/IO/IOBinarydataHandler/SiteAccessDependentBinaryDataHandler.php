@@ -30,7 +30,7 @@ final class SiteAccessDependentBinaryDataHandler implements IOBinaryDataHandler
         $this->dataHandlerRegistry = $dataHandlerRegistry;
     }
 
-    protected function getHandler(): IOBinarydataHandler
+    private function getHandler(): IOBinarydataHandler
     {
         return $this->dataHandlerRegistry->getConfiguredHandler(
             $this->configResolver->getParameter('io.binarydata_handler')

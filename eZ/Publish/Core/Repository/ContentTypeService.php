@@ -1618,6 +1618,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param string $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException

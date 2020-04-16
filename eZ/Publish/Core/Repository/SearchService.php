@@ -108,8 +108,8 @@ class SearchService implements SearchServiceInterface
      * Finds contentInfo objects for the given query.
      *
      * @see SearchServiceInterface::findContentInfo()
-     *
      * @since 5.4.5
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query

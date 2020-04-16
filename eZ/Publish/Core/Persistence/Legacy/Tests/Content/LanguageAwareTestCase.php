@@ -97,6 +97,7 @@ abstract class LanguageAwareTestCase extends TestCase
 
     /**
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler $contentTypeHandler
+     *
      * @return \eZ\Publish\Core\Search\Legacy\Content\Mapper\FullTextMapper
      */
     protected function getFullTextMapper(Persistence\Legacy\Content\Type\Handler $contentTypeHandler)

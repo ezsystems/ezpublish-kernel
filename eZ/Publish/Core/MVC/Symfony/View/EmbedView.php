@@ -11,6 +11,7 @@ interface EmbedView
 {
     /**
      * The default viewType for embed views.
+     *
      * @var string
      */
     const DEFAULT_VIEW_TYPE = 'embed';

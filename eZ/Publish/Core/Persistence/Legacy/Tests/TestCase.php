@@ -48,6 +48,7 @@ abstract class TestCase extends BaseTestCase
      * Doctrine Database connection -- to not be constructed twice for one test.
      *
      * @internal
+     *
      * @var \Doctrine\DBAL\Connection
      */
     protected $connection;

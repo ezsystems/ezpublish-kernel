@@ -115,6 +115,7 @@ class FullTextMapper
      *
      * @param Content\Field $field
      * @param Type\FieldDefinition $fieldDefinition
+     *
      * @return string
      */
     private function getFullTextFieldValue(Content\Field $field, Type\FieldDefinition $fieldDefinition)

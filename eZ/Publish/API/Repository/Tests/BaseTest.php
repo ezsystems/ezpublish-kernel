@@ -394,6 +394,7 @@ abstract class BaseTest extends TestCase
      * @param string $userGroupName Name of the new user group to create
      * @param string $roleIdentifier Role identifier to assign to the new group
      * @param RoleLimitation|null $roleLimitation
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     protected function createCustomUserWithLogin(

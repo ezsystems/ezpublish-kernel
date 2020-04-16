@@ -125,6 +125,7 @@ class LanguageService implements LanguageServiceInterface
      * @param string $newName
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
      *         is not string
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
@@ -168,6 +169,7 @@ class LanguageService implements LanguageServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      */
     public function enableLanguage(Language $language): Language
@@ -205,6 +207,7 @@ class LanguageService implements LanguageServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      */
     public function disableLanguage(Language $language): Language
@@ -242,6 +245,7 @@ class LanguageService implements LanguageServiceInterface
      * @param string $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
      *         is not string
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
@@ -280,6 +284,7 @@ class LanguageService implements LanguageServiceInterface
      * @param mixed $languageId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
      */
     public function loadLanguageById(int $languageId): Language

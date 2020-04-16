@@ -460,6 +460,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      * @param mixed $fieldData
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param string $remoteId
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     protected function createAndPublishContent($fieldData, ContentType $contentType, $remoteId)
@@ -529,7 +530,9 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      * Test that setting an empty value truncates field data.
      *
      * @dataProvider providerForTestTruncateField
+     *
      * @param mixed $emptyValue data representing an empty value
+     *
      * @todo Move this method to BaseIntegrationTest when fixed for all field types.
      */
     public function testTruncateField($emptyValue)

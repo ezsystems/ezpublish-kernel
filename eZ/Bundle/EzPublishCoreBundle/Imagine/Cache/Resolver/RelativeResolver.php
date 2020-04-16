@@ -26,6 +26,7 @@ class RelativeResolver extends ImagineProxyResolver
      * Returns relative image path.
      *
      * @param $url string
+     *
      * @return string
      */
     protected function rewriteUrl($url)

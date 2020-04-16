@@ -50,8 +50,8 @@ class FieldNameGenerator
      * Consists of a name, and optionally field name and a content type name.
      *
      * @param string $name
-     * @param null|string $field
-     * @param null|string $type
+     * @param string|null $field
+     * @param string|null $type
      *
      * @return string
      */

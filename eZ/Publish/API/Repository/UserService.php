@@ -225,10 +225,10 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
+     *
      *@throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
      */
     public function updateUser(User $user, UserUpdateStruct $userUpdateStruct): User;
@@ -341,7 +341,7 @@ interface UserService
      * Instantiate a user group create class.
      *
      * @param string $mainLanguageCode The main language for the underlying content object
-     * @param null|\eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      */

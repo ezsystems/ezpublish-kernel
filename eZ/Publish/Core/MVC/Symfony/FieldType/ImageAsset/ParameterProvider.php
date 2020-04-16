@@ -65,7 +65,9 @@ class ParameterProvider implements ParameterProviderInterface
 
     /**
      * @param int $id
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     private function loadContentInfo(int $id): ContentInfo
@@ -79,6 +81,7 @@ class ParameterProvider implements ParameterProviderInterface
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
      * @return bool
      */
     private function userHasPermissions(ContentInfo $contentInfo): bool

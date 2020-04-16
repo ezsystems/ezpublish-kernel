@@ -18,6 +18,7 @@ class Mapper
      * Creates a URL from the given update $struct.
      *
      * @param \eZ\Publish\SPI\Persistence\URL\URLUpdateStruct $struct
+     *
      * @return \eZ\Publish\SPI\Persistence\URL\URL
      */
     public function createURLFromUpdateStruct(URLUpdateStruct $struct)
@@ -36,6 +37,7 @@ class Mapper
      * Extracts URL objects from $rows.
      *
      * @param array $rows
+     *
      * @return \eZ\Publish\SPI\Persistence\URL\URL[]
      */
     public function extractURLsFromRows(array $rows)

@@ -479,7 +479,6 @@ class SectionLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      *
-     *
      * @param \eZ\Publish\Core\Limitation\SectionLimitationType $limitationType
      */
     public function testValueSchema(SectionLimitationType $limitationType)

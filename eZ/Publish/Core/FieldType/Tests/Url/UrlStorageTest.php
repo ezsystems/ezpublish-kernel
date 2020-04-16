@@ -192,6 +192,7 @@ class UrlStorageTest extends TestCase
 
     /**
      * @param \eZ\Publish\SPI\FieldType\StorageGateway $gateway
+     *
      * @return \eZ\Publish\Core\FieldType\Url\UrlStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedStorage(StorageGateway $gateway)

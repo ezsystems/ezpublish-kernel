@@ -58,6 +58,7 @@ class URLChecker implements URLCheckerInterface
      * Fetch URLs to check.
      *
      * @param \eZ\Publish\API\Repository\Values\URL\URLQuery $query
+     *
      * @return array
      */
     protected function fetchUrls(URLQuery $query)
@@ -71,6 +72,7 @@ class URLChecker implements URLCheckerInterface
      * Group URLs by schema.
      *
      * @param \eZ\Publish\API\Repository\Values\URL\SearchResult $urls
+     *
      * @return array
      */
     private function groupByScheme(SearchResult $urls)

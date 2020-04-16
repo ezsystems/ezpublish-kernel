@@ -47,6 +47,7 @@ class FieldRelation extends FieldBase
      * @param string $fieldDefinitionIdentifier
      *
      * @return array
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      */
     protected function getFieldDefinitionsIds($fieldDefinitionIdentifier)

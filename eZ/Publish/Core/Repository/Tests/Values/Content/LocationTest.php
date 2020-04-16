@@ -84,10 +84,10 @@ class LocationTest extends TestCase
     {
         $location = new Location();
         $value = isset($location->notDefined);
-        self::assertEquals(false, $value);
+        self::assertFalse($value);
 
         $value = isset($location->id);
-        self::assertEquals(true, $value);
+        self::assertTrue($value);
     }
 
     /**
