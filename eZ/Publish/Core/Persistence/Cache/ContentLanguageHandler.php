@@ -105,8 +105,8 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         return $this->getCacheValue(
             $this->escapeForCacheKey($languageCode),
             'ez-language-code-',
-            function ($escapedLanguageCode) use ($languageCode) {
-                return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($escapedLanguageCode);
+            function () use ($languageCode) {
+                return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
             },
             $this->getTags,
             $this->getKeys
@@ -121,8 +121,8 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         return $this->getMultipleCacheValues(
             array_map([$this, 'escapeForCacheKey'], $languageCodes),
             'ez-language-code-',
-            function (array $escapedLanguageCodes) use ($languageCodes) {
-                return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($escapedLanguageCodes);
+            function () use ($languageCodes) {
+                return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($languageCodes);
             },
             $this->getTags,
             $this->getKeys
