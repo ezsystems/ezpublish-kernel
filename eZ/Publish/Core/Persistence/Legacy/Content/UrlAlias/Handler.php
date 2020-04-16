@@ -679,14 +679,15 @@ class Handler implements UrlAliasHandlerInterface
      * @param int $location1ParentId
      * @param int $location2Id
      * @param int $location2ParentId
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function locationSwapped($location1Id, $location1ParentId, $location2Id, $location2ParentId)
     {
         $location1 = new SwappedLocationProperties($location1Id, $location1ParentId);
         $location2 = new SwappedLocationProperties($location2Id, $location2ParentId);
 
-        $location1->entries = $this->gateway->loadLocationEntries($location1Id);
-        $location2->entries = $this->gateway->loadLocationEntries($location2Id);
+        $location1->entries = $this->gateway->loadAllLocationEntries($location1Id);
+        $location2->entries = $this->gateway->loadAllLocationEntries($location2Id);
 
         $location1->mainLanguageId = $this->gateway->getLocationContentMainLanguageId($location1Id);
         $location2->mainLanguageId = $this->gateway->getLocationContentMainLanguageId($location2Id);
@@ -729,6 +730,9 @@ class Handler implements UrlAliasHandlerInterface
                 );
             }
         }
+
+        $this->internalPublishCustomUrlAliasForLocation($location1, $contentInfo1['language_mask']);
+        $this->internalPublishCustomUrlAliasForLocation($location2, $contentInfo2['language_mask']);
     }
 
     /**
@@ -1134,5 +1138,35 @@ class Handler implements UrlAliasHandlerInterface
         $aliasEntry['action_type'] = 'nop';
 
         $this->gateway->insertRow($aliasEntry);
+    }
+
+    /**
+     * Internal publish custom aliases method, accepting language mask to set correct language mask on url aliases
+     * new alias ID (used when swapping Locations).
+     */
+    private function internalPublishCustomUrlAliasForLocation(SwappedLocationProperties $location, int $languageMask)
+    {
+        foreach ($location->entries as $entry) {
+            if ((int)$entry['is_alias'] === 0) {
+                continue;
+            }
+
+            $mask = (int)$entry['lang_mask'] & $languageMask;
+
+            if ($mask <= 1) {
+                continue;
+            }
+
+            $this->gateway->updateRow(
+                (int)$entry['parent'],
+                $entry['text_md5'],
+                [
+                    'id' => (int)$entry['id'],
+                    'is_original' => 1,
+                    'is_alias' => 1,
+                    'lang_mask' => $mask,
+                ]
+            );
+        }
     }
 }
