@@ -119,6 +119,7 @@ class DeleteTranslationTest extends BaseTest
         $this->assertEquals(1, $searchResult->totalCount);
 
         $contentService->deleteTranslation($testContent->contentInfo, 'ger-DE');
+        $this->refreshSearch($repository);
         $searchResult = $this->findContent('Kontakt', 'ger-DE');
         $this->assertEquals(0, $searchResult->totalCount);
     }
