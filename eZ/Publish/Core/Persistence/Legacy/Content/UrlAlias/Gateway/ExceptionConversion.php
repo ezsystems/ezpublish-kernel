@@ -44,6 +44,15 @@ final class ExceptionConversion extends Gateway
         }
     }
 
+    public function loadAllLocationEntries(int $locationId): array
+    {
+        try {
+            return $this->innerGateway->loadAllLocationEntries($locationId);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
+        }
+    }
+
     public function loadLocationEntries(
         int $locationId,
         bool $custom = false,
