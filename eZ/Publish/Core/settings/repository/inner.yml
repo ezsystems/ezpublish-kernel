@@ -189,7 +189,7 @@ services:
         arguments:
             $roleDomainMapper: '@eZ\Publish\Core\Repository\Mapper\RoleDomainMapper'
             $limitationService: '@eZ\Publish\Core\Repository\Permission\LimitationService'
-            $userHandler: '@ezpublish.spi.persistence.legacy.user.handler'
+            $userHandler: '@ezpublish.spi.persistence.user_handler'
             $configResolver: '@ezpublish.config.resolver'
             $policyMap: '%ezpublish.api.role.policy_map%'
 
