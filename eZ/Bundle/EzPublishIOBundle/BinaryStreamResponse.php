@@ -1,12 +1,8 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Legacy package.
- *
- * Many parts are copied from the Symfony2 kernel, and are copyrighted to their respective owners.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
- * @license For full copyright and license information view LICENSE file distributd with this source code.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Bundle\EzPublishIOBundle;
 
