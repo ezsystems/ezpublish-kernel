@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the UrlStorageTest.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -36,6 +34,15 @@ class UrlStorageTest extends TestCase
             ->method('linkUrl')
             ->with(12, 42, 24);
 
+        $gateway
+            ->expects($this->once())
+            ->method('unlinkUrl')
+            ->with(
+                42,
+                24,
+                [12]
+            );
+
         $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
 
@@ -67,6 +74,15 @@ class UrlStorageTest extends TestCase
             ->method('linkUrl')
             ->with(12, 42, 24);
 
+        $gateway
+            ->expects($this->once())
+            ->method('unlinkUrl')
+            ->with(
+                42,
+                24,
+                [12]
+            );
+
         $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
 
@@ -92,6 +108,10 @@ class UrlStorageTest extends TestCase
         $gateway
             ->expects($this->never())
             ->method('linkUrl');
+
+        $gateway
+            ->expects($this->never())
+            ->method('unlinkUrl');
 
         $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());

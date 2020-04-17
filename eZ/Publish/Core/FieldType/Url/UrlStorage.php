@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the UrlStorage class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -63,6 +61,12 @@ class UrlStorage extends GatewayBasedStorage
         }
 
         $this->gateway->linkUrl($urlId, $field->id, $versionInfo->versionNo);
+
+        $this->gateway->unlinkUrl(
+            $field->id,
+            $versionInfo->versionNo,
+            [$urlId]
+        );
 
         $field->value->data['urlId'] = $urlId;
 
