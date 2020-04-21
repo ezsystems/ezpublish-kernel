@@ -52,7 +52,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadGroupByIdentifier($identifier)
     {
-        $cacheItem = $this->cache->getItem('ez-state-group-' . $identifier . '-by-identifier');
+        $cacheItem = $this->cache->getItem('ez-state-group-' . $this->escapeForCacheKey($identifier) . '-by-identifier');
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
@@ -179,7 +179,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadByIdentifier($identifier, $groupId)
     {
-        $cacheItem = $this->cache->getItem('ez-state-identifier-' . $identifier . '-by-group-' . $groupId);
+        $cacheItem = $this->cache->getItem('ez-state-identifier-' . $this->escapeForCacheKey($identifier) . '-by-group-' . $groupId);
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }

@@ -41,10 +41,10 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     protected function init(): void
     {
         $this->getGroupTags = static function (Type\Group $group) { return ['type-group-' . $group->id]; };
-        $this->getGroupKeys = static function (Type\Group $group) {
+        $this->getGroupKeys = function (Type\Group $group) {
             return [
                 'ez-content-type-group-' . $group->id,
-                'ez-content-type-group-' . $group->identifier . '-by-identifier',
+                'ez-content-type-group-' . $this->escapeForCacheKey($group->identifier) . '-by-identifier',
             ];
         };
 
@@ -54,11 +54,11 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
                 'type-' . $type->id,
             ];
         };
-        $this->getTypeKeys = static function (Type $type, int $status = Type::STATUS_DEFINED) {
+        $this->getTypeKeys = function (Type $type, int $status = Type::STATUS_DEFINED) {
             return [
                 'ez-content-type-' . $type->id . '-' . $status,
-                'ez-content-type-' . $type->identifier . '-by-identifier',
-                'ez-content-type-' . $type->remoteId . '-by-remote',
+                'ez-content-type-' . $this->escapeForCacheKey($type->identifier) . '-by-identifier',
+                'ez-content-type-' . $this->escapeForCacheKey($type->remoteId) . '-by-remote',
             ];
         };
     }
@@ -85,7 +85,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
         $this->cache->deleteItems([
             'ez-content-type-group-list',
             'ez-content-type-group-' . $struct->id,
-            'ez-content-type-group-' . $struct->identifier . '-by-identifier',
+            'ez-content-type-group-' . $this->escapeForCacheKey($struct->identifier) . '-by-identifier',
         ]);
 
         return $group;
@@ -142,9 +142,9 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     public function loadGroupByIdentifier($identifier)
     {
         return $this->getCacheValue(
-            $identifier,
+            $this->escapeForCacheKey($identifier),
             'ez-content-type-group-',
-            function (string $identifier) {
+            function () use ($identifier) {
                 return $this->persistenceHandler->contentTypeHandler()->loadGroupByIdentifier($identifier);
             },
             $this->getGroupTags,
@@ -237,9 +237,9 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     public function loadByIdentifier($identifier)
     {
         return $this->getCacheValue(
-            $identifier,
+            $this->escapeForCacheKey($identifier),
             'ez-content-type-',
-            function ($identifier) {
+            function () use ($identifier) {
                 return $this->persistenceHandler->contentTypeHandler()->loadByIdentifier($identifier);
             },
             $this->getTypeTags,
@@ -254,9 +254,9 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     public function loadByRemoteId($remoteId)
     {
         return $this->getCacheValue(
-            $remoteId,
+            $this->escapeForCacheKey($remoteId),
             'ez-content-type-',
-            function ($remoteId) {
+            function () use ($remoteId) {
                 return $this->persistenceHandler->contentTypeHandler()->loadByRemoteId($remoteId);
             },
             $this->getTypeTags,
