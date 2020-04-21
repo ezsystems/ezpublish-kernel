@@ -51,9 +51,16 @@ class StringMapper extends FieldValueMapper
      */
     protected function convert($value)
     {
-        // Remove non-printable characters (except LF and CR)
+        // Replace tab, vertical tab, form-feed chars to single space.
+        $value = preg_replace(
+            '([\x09\x0B\x0C]+)',
+            ' ',
+            (string)$value
+        );
+
+        // Remove non-printable characters (except LF and CR).
         return preg_replace(
-            '([\x00-\x09\x0B\x0C\x0E-\x1F]+)',
+            '([\x00-\x08\x0E-\x1F]+)',
             '',
             (string)$value
         );
