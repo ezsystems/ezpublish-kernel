@@ -528,7 +528,7 @@ CREATE TABLE `ezcontentclass_attribute` (
   `data_int2` int(11) DEFAULT NULL,
   `data_int3` int(11) DEFAULT NULL,
   `data_int4` int(11) DEFAULT NULL,
-  `data_text1` varchar(50) DEFAULT NULL,
+  `data_text1` varchar(255) DEFAULT NULL,
   `data_text2` varchar(50) DEFAULT NULL,
   `data_text3` varchar(50) DEFAULT NULL,
   `data_text4` varchar(255) DEFAULT NULL,
@@ -2231,6 +2231,7 @@ CREATE TABLE `ezuser` (
   `login` varchar(150) NOT NULL DEFAULT '',
   `password_hash` varchar(255) DEFAULT NULL,
   `password_hash_type` int(11) NOT NULL DEFAULT '1',
+  `password_updated_at` int(11) NULL,
   PRIMARY KEY (`contentobject_id`),
   UNIQUE KEY `ezuser_login` (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
