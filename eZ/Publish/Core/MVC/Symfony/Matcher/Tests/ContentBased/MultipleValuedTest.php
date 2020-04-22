@@ -6,9 +6,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased;
 
-use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
 
 class MultipleValuedTest extends BaseTest
