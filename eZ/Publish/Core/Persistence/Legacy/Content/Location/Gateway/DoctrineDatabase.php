@@ -36,6 +36,7 @@ final class DoctrineDatabase extends Gateway
         'location_depth' => 'depth',
         'location_priority' => 'priority',
         'location_path' => 'path_string',
+        'trashed' => 'trashed',
     ];
 
     /** @var \Doctrine\DBAL\Connection */
