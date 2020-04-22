@@ -102,6 +102,35 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
+     * Create test Content with non-printable characters in name.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createFolderWithNonPrintableUtf8Characters()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStruct->remoteId = 'non-printable-char-folder-123';
+        $createStruct->alwaysAvailable = false;
+        $createStruct->setField(
+            'name',
+            utf8_decode("Non\x09Printable\x0EFolder")
+        );
+
+        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct(2);
+        $draft = $contentService->createContent($createStruct, [$locationCreateStruct]);
+        $content = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
+
+        return $content;
+    }
+
+    /**
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
@@ -155,6 +184,35 @@ class SearchServiceLocationTest extends BaseTest
         $result = $searchService->findLocations($query);
 
         $this->assertEquals(0, $result->totalCount);
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     */
+    public function testNonPrintableUtf8Characters()
+    {
+        $folder = $this->createFolderWithNonPrintableUtf8Characters();
+        $query = new LocationQuery(
+            [
+                'query' => new Criterion\Field(
+                    'name',
+                    Criterion\Operator::EQ,
+                    utf8_decode("Non\x09Printable\x0EFolder")
+                ),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $folder->contentInfo->mainLocationId,
+            $result->searchHits[0]->valueObject->id
+        );
     }
 
     /**

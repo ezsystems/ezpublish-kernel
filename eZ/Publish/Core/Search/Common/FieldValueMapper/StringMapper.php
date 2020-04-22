@@ -17,6 +17,10 @@ use eZ\Publish\SPI\Search\Field;
  */
 class StringMapper extends FieldValueMapper
 {
+    public const REPLACE_WITH_SPACE_PATTERN = '([\x09\x0B\x0C]+)';
+    public const REMOVE_PATTERN = '([\x00-\x08\x0E-\x1F]+)';
+
+
     /**
      * Check if field can be mapped.
      *
@@ -53,14 +57,14 @@ class StringMapper extends FieldValueMapper
     {
         // Replace tab, vertical tab, form-feed chars to single space.
         $value = preg_replace(
-            '([\x09\x0B\x0C]+)',
+            self::REPLACE_WITH_SPACE_PATTERN,
             ' ',
             (string)$value
         );
 
-        // Remove non-printable characters (except LF and CR).
+        // Remove non-printable characters.
         return preg_replace(
-            '([\x00-\x08\x0E-\x1F]+)',
+            self::REMOVE_PATTERN,
             '',
             (string)$value
         );
