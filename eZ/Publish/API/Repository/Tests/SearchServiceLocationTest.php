@@ -182,9 +182,7 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
-     * Test for the findLocations() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @covers \eZ\Publish\API\Repository\SearchService::findLocations
      */
     public function testNonPrintableUtf8Characters()
     {
