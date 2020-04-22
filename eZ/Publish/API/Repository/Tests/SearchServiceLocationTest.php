@@ -184,7 +184,7 @@ class SearchServiceLocationTest extends BaseTest
     /**
      * @covers \eZ\Publish\API\Repository\SearchService::findLocations
      */
-    public function testNonPrintableUtf8Characters()
+    public function testNonPrintableUtf8Characters(): void
     {
         $folder = $this->createFolderWithNonPrintableUtf8Characters();
         $query = new LocationQuery(
