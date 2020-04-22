@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Pagination\Pagerfanta\Tests\AdapterFactory;
+namespace eZ\Publish\Core\Pagination\Tests\AdapterFactory;
 
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;

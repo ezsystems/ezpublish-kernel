@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Test\Provider;
+namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\Provider;
 
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;

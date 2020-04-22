@@ -6,9 +6,8 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Tests\Core\Persistence\Cache;
+namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
-use eZ\Publish\Core\Persistence\Cache\Tests\AbstractCacheHandlerTest;
 use eZ\Publish\SPI\Persistence\Bookmark\Bookmark;
 use eZ\Publish\SPI\Persistence\Bookmark\CreateStruct;
 use eZ\Publish\SPI\Persistence\Bookmark\Handler as SPIBookmarkHandler;

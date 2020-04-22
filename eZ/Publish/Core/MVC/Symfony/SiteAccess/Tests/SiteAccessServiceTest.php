@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
+namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use ArrayIterator;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
