@@ -6,8 +6,10 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Bundle\EzPublishCoreBundle\SiteAccess;
+namespace eZ\Bundle\EzPublishCoreBundle\Tests\SiteAccess;
 
+use eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher;
+use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistry;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use PHPUnit\Framework\TestCase;
 

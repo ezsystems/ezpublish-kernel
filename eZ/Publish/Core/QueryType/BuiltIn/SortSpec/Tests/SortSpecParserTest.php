@@ -6,11 +6,14 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\QueryType\BuiltIn\SortSpec;
+namespace eZ\Publish\Core\QueryType\BuiltIn\SortSpec\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\QueryType\BuiltIn\SortSpec\Tests\SortSpecLexerStub;
+use eZ\Publish\Core\QueryType\BuiltIn\SortSpec\SortClauseParserInterface;
+use eZ\Publish\Core\QueryType\BuiltIn\SortSpec\SortSpecLexerInterface;
+use eZ\Publish\Core\QueryType\BuiltIn\SortSpec\SortSpecParser;
+use eZ\Publish\Core\QueryType\BuiltIn\SortSpec\Token;
 use eZ\Publish\Core\Search\Tests\TestCase;
 
 final class SortSpecParserTest extends TestCase

@@ -6,8 +6,10 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\QueryType\BuiltIn\SortSpec;
+namespace eZ\Publish\Core\QueryType\BuiltIn\SortSpec\Tests;
 
+use eZ\Publish\Core\QueryType\BuiltIn\SortSpec\SortSpecLexer;
+use eZ\Publish\Core\QueryType\BuiltIn\SortSpec\Token;
 use PHPUnit\Framework\TestCase;
 
 final class SortSpecLexerTest extends TestCase
