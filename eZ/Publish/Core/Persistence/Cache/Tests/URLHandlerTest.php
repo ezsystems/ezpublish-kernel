@@ -4,10 +4,9 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Tests\Core\Persistence\Cache;
+namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\API\Repository\Values\URL\URLQuery;
-use eZ\Publish\Core\Persistence\Cache\Tests\AbstractCacheHandlerTest;
 use eZ\Publish\SPI\Persistence\URL\Handler as SpiURLHandler;
 use eZ\Publish\SPI\Persistence\URL\URL;
 use eZ\Publish\SPI\Persistence\URL\URLUpdateStruct;

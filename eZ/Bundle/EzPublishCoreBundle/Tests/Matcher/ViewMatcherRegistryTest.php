@@ -4,8 +4,9 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Bundle\EzPublishCoreBundle\Matcher;
+namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
+use eZ\Bundle\EzPublishCoreBundle\Matcher\ViewMatcherRegistry;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface;
 use PHPUnit\Framework\TestCase;
