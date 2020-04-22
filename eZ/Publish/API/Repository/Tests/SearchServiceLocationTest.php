@@ -101,12 +101,7 @@ class SearchServiceLocationTest extends BaseTest
         return $content;
     }
 
-    /**
-     * Create test Content with non-printable characters in name.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    protected function createFolderWithNonPrintableUtf8Characters()
+    protected function createFolderWithNonPrintableUtf8Characters(): Content
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
