@@ -20,6 +20,7 @@ parameters:
         epo-EO: eo
         esl-ES: es_ES
         esl-MX: es_MX
+        fas-IR: fa_IR
         fin-FI: fi_FI
         fre-BE: fr_BE
         fre-CA: fr_CA
@@ -65,6 +66,7 @@ parameters:
         en: ['eng-GB', 'eng-US']
         en_us: ['eng-US']
         es: ['esl-ES']
+        fa: ['fas-IR']
         fi: ['fin-FI']
         fr: ['fre-FR']
         gb: ['eng-GB']
