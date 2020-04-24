@@ -1,3 +1,9 @@
+-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+-- @deprecated since eZ Platform 2.5.0 and no longer used.
+-- Relying on data/mysql/schema.sql to install eZ Platform schema is deprecated since eZ Platform v2.5.0.
+-- The file was removed in eZ Platform v3.0.0.
+-- Rely on \EzSystems\PlatformInstallerBundle\Installer\CoreInstaller instead
+-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 -- MySQL dump 10.13  Distrib 5.5.32, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: behattestdb
