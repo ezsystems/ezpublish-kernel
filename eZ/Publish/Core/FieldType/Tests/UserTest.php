@@ -9,6 +9,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use DateTimeImmutable;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\FieldType\User\Type;
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -416,7 +417,14 @@ class UserTest extends FieldTypeTest
             $this->createMock(PasswordValidatorInterface::class)
         );
 
+        $fieldSettings = [
+            Type::USERNAME_PATTERN => '.*',
+            Type::REQUIRE_UNIQUE_EMAIL => false,
+        ];
+
         $fieldDefinitionMock = $this->createMock(FieldDefinition::class);
+        $fieldDefinitionMock->method('__get')->with('fieldSettings')->willReturn($fieldSettings);
+        $fieldDefinitionMock->method('getFieldSettings')->willReturn($fieldSettings);
 
         $validationErrors = $userType->validate($fieldDefinitionMock, $userValue);
 
