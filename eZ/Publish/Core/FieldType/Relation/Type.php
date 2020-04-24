@@ -239,12 +239,14 @@ class Type extends FieldType
      */
     public function fromHash($hash)
     {
-        $destinationContentId = $hash['destinationContentId'];
-        if ($destinationContentId !== null) {
-            $destinationContentId = (int)$destinationContentId;
+        if ($hash !== null) {
+            $destinationContentId = $hash['destinationContentId'];
+            if ($destinationContentId !== null) {
+                return new Value((int)$destinationContentId);
+            }
         }
 
-        return new Value($destinationContentId);
+        return $this->getEmptyValue();
     }
 
     /**
