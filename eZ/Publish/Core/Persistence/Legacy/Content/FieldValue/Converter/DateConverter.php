@@ -72,7 +72,7 @@ class DateConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultType'];
+        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultType'] ?? null;
     }
 
     /**

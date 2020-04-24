@@ -29,20 +29,20 @@ class SearchField implements Indexable
         return [
             new Search\Field(
                 'value_address',
-                $field->value->externalData['address'],
+                $field->value->externalData['address'] ?? null,
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
                 'value_location',
                 [
-                    'latitude' => $field->value->externalData['latitude'],
-                    'longitude' => $field->value->externalData['longitude'],
+                    'latitude' => $field->value->externalData['latitude'] ?? null,
+                    'longitude' => $field->value->externalData['longitude'] ?? null,
                 ],
                 new Search\FieldType\GeoLocationField()
             ),
             new Search\Field(
                 'fulltext',
-                $field->value->externalData['address'],
+                $field->value->externalData['address'] ?? null,
                 new Search\FieldType\FullTextField()
             ),
         ];

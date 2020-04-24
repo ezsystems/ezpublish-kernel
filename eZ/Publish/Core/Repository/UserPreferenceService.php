@@ -62,14 +62,15 @@ class UserPreferenceService implements UserPreferenceServiceInterface
     {
         $spiSetStructs = [];
         foreach ($userPreferenceSetStructs as $key => $userPreferenceSetStruct) {
-            $spiSetStruct = new UserPreferenceSetStruct();
-            $spiSetStruct->userId = $this->getCurrentUserId();
-
             if (empty($userPreferenceSetStruct->name)) {
                 throw new InvalidArgumentException('name', $userPreferenceSetStruct->name . ' at index ' . $key);
             }
 
-            $spiSetStruct->name = $userPreferenceSetStruct->name;
+            $value = $userPreferenceSetStruct->value;
+
+            if (is_object($value) && !method_exists($value, '__toString')) {
+                throw new InvalidArgumentException('value', 'Cannot convert value to string at index ' . $key);
+            }
 
             try {
                 $value = (string)$userPreferenceSetStruct->value;
@@ -77,7 +78,11 @@ class UserPreferenceService implements UserPreferenceServiceInterface
                 throw new InvalidArgumentException('value', 'Cannot convert value to string at index ' . $key);
             }
 
+            $spiSetStruct = new UserPreferenceSetStruct();
+            $spiSetStruct->userId = $this->getCurrentUserId();
+            $spiSetStruct->name = $userPreferenceSetStruct->name;
             $spiSetStruct->value = $value;
+
             $spiSetStructs[] = $spiSetStruct;
         }
 

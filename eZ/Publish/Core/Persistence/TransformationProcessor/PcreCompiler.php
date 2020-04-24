@@ -196,7 +196,7 @@ class PcreCompiler
      */
     protected function getTransposeClosure($operator, $value)
     {
-        $value = hexdec($value) * ($operator === '-' ? -1 : 1);
+        $value = $this->hexdec($value) * ($operator === '-' ? -1 : 1);
         $converter = $this->converter;
 
         return function ($matches) use ($value, $converter) {
@@ -270,5 +270,19 @@ class PcreCompiler
             default:
                 throw new RuntimeException("Invalid character definition: $char");
         }
+    }
+
+    /**
+     * Converts a hexadecimal string to a decimal number.
+     *
+     * In comparison to standard hexdec function it will ignore any non-hexadecimal characters
+     */
+    private function hexdec(?string $value): int
+    {
+        if ($value === null) {
+            return 0;
+        }
+
+        return hexdec(preg_replace('/[^[:xdigit:]]/', '', (string)$value));
     }
 }
