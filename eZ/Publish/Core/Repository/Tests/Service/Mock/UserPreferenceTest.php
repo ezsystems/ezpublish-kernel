@@ -33,12 +33,10 @@ class UserPreferenceTest extends BaseServiceMockTest
         $this->userSPIPreferenceHandler = $this->getPersistenceMockHandler('UserPreference\\Handler');
         $permissionResolverMock = $this->createMock(PermissionResolver::class);
         $permissionResolverMock
-            ->expects($this->atLeastOnce())
             ->method('getCurrentUserReference')
             ->willReturn(new UserReference(self::CURRENT_USER_ID));
         $repository = $this->getRepositoryMock();
         $repository
-            ->expects($this->atLeastOnce())
             ->method('getPermissionResolver')
             ->willReturn($permissionResolverMock);
     }

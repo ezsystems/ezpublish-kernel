@@ -53,6 +53,12 @@ matrix:
     - name: 'Code Style Check'
       php: 7.3
       env: CHECK_CS=1
+# 7.4
+    - php: 7.4
+      env: TEST_CONFIG="phpunit.xml"
+    - php: 7.4
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
+
 
 # test only master, stable branches and pull requests
 branches:
