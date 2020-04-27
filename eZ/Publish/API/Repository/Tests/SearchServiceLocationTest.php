@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -54,7 +55,7 @@ class SearchServiceLocationTest extends BaseTest
     /**
      * Create test Content with ezcountry field having multiple countries selected.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return Content
      */
     protected function createMultipleCountriesContent()
     {
