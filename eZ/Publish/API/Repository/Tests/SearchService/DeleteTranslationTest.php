@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Tests\SearchService;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -24,18 +23,9 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
  */
 class DeleteTranslationTest extends BaseTest
 {
-    /**
-     * @throws \ErrorException
-     */
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $setupFactory = $this->getSetupFactory();
-
-        if ($setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestIncomplete('Not implemented for Elasticsearch Search Engine');
-        }
-
-        parent::setUp();
+        $this->markTestSkipped('Not possible to run on ezpublish-kernel:master');
     }
 
     /**
@@ -60,14 +50,6 @@ class DeleteTranslationTest extends BaseTest
 
         foreach ($languages as $langCode => $title) {
             $contentCreateStructArticle->setField('title', $title, $langCode);
-            $contentCreateStructArticle->setField(
-                'intro',
-                '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0-variant ezpublish-1.0">
-  <para>' . $title . '</para>
-</section>',
-                $langCode
-            );
         }
 
         $locationCreateStructArticle = $locationService->newLocationCreateStruct(2);
