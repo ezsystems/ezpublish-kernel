@@ -245,10 +245,6 @@ class UserServiceTest extends BaseTest
      */
     public function testNewUserGroupCreateStructWithSecondParameter()
     {
-        if ($this->isVersion4()) {
-            $this->markTestSkipped('This test is only relevant for eZ Publish versions > 4');
-        }
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -857,10 +853,6 @@ class UserServiceTest extends BaseTest
      */
     public function testNewUserCreateStructWithFifthParameter()
     {
-        if ($this->isVersion4()) {
-            $this->markTestSkipped('This test is only relevant for eZ Publish versions > 4');
-        }
-
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */

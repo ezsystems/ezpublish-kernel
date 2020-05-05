@@ -135,6 +135,8 @@ abstract class BaseTest extends TestCase
     /**
      * Tests if the currently tested api is based on a V4 implementation.
      *
+     * @deprecated Not in use, will be removed.
+     *
      * @return bool
      */
     protected function isVersion4()
