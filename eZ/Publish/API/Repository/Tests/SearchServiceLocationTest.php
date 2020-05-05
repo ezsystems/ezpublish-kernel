@@ -9,7 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
-use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
+use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
@@ -212,13 +212,18 @@ class SearchServiceLocationTest extends BaseTest
 
     /**
      * @covers \eZ\Publish\API\Repository\SearchService::findLocations
+     * @depends \eZ\Publish\API\Repository\Tests\SearchServiceLocationTest::testNonPrintableUtf8Characters
      */
     public function testEscapedNonPrintableUtf8Characters(): void
     {
         $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof Legacy) {
-            $this->markTestSkipped(
-                'Field Value mappers are not used with Legacy Search Engine'
+
+        if (
+            !$setupFactory instanceof LegacyElasticsearch AND
+            !$setupFactory instanceof LegacySolrSetupFactory
+        ) {
+            $this->markTestIncomplete(
+                'Field Value mappers are used only with Solr and Elastic search engines'
             );
         }
 
