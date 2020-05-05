@@ -219,7 +219,7 @@ class SearchServiceLocationTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
 
         if (
-            !$setupFactory instanceof LegacyElasticsearch AND
+            !$setupFactory instanceof LegacyElasticsearch &&
             !$setupFactory instanceof LegacySolrSetupFactory
         ) {
             $this->markTestIncomplete(
