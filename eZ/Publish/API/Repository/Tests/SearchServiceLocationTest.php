@@ -8,15 +8,16 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 
 /**
  * Test case for Location operations in the SearchService.
@@ -55,7 +56,7 @@ class SearchServiceLocationTest extends BaseTest
     /**
      * Create test Content with ezcountry field having multiple countries selected.
      *
-     * @return Content
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     protected function createMultipleCountriesContent()
     {
@@ -210,6 +211,35 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\SearchService::findLocations
+     */
+    public function testEscapedNonPrintableUtf8Characters(): void
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ($setupFactory instanceof Legacy) {
+            $this->markTestSkipped(
+                'Field Value mappers are not used with Legacy Search Engine'
+            );
+        }
+
+        $query = new LocationQuery(
+            [
+                'query' => new Criterion\Field(
+                    'name',
+                    Criterion\Operator::EQ,
+                    'Non PrintableFolder'
+                ),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(1, $result->totalCount);
+    }
+
+    /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testInvalidFieldIdentifierRange()
@@ -276,8 +306,6 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result
-     *
      * @return array
      */
     protected function mapResultLocationIds(SearchResult $result)
@@ -1188,7 +1216,6 @@ class SearchServiceLocationTest extends BaseTest
     /**
      * Assert that query result matches the given fixture.
      *
-     * @param LocationQuery $query
      * @param string $fixture
      * @param null|callable $closure
      */
@@ -1261,8 +1288,6 @@ class SearchServiceLocationTest extends BaseTest
     /**
      * Show a simplified view of the search result for manual introspection.
      *
-     * @param SearchResult $result
-     *
      * @return string
      */
     protected function printResult(SearchResult $result)
@@ -1280,8 +1305,6 @@ class SearchServiceLocationTest extends BaseTest
      *
      * This leads to saner comparisons of results, since we do not get the full
      * content objects every time.
-     *
-     * @param SearchResult $result
      */
     protected function simplifySearchResult(SearchResult $result)
     {

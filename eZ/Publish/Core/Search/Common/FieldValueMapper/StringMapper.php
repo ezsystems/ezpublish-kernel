@@ -9,8 +9,8 @@
 namespace eZ\Publish\Core\Search\Common\FieldValueMapper;
 
 use eZ\Publish\Core\Search\Common\FieldValueMapper;
-use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Search\Field;
+use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Common string field value mapper implementation.
@@ -20,11 +20,8 @@ class StringMapper extends FieldValueMapper
     public const REPLACE_WITH_SPACE_PATTERN = '([\x09\x0B\x0C]+)';
     public const REMOVE_PATTERN = '([\x00-\x08\x0E-\x1F]+)';
 
-
     /**
      * Check if field can be mapped.
-     *
-     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return bool
      */
@@ -36,8 +33,6 @@ class StringMapper extends FieldValueMapper
 
     /**
      * Map field value to a proper search engine representation.
-     *
-     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return mixed
      */
