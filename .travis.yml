@@ -94,7 +94,7 @@ script:
 notifications:
   slack:
     rooms:
-      - secure: veaQhu7RrvtFP+7KdsHF0fC2+Lt8Etlezg/DIRnwCufgrEwrOtXhE7KnBF2lIdAMXLgVPWf4/bZeN+Ojtju2ntf7GkCMBzrSqqaPqLVYUGmniITKGv68KqlRgGFQ7JiVDIBXxVLuRKbp7yTetRTw/tJLYZ9+b127/3ouYWV4USg=
+      - secure: "ppsQAlgeuJl6fgQvo2bg4ehVBeoE/7FYzVK/c0kqqUFozLYnQAoyhTx+uYPTXoKqpOfr0ftnByq27Mtmzbh27KhQSXq8AP/V3WOEqwfFnvHNZJ0aXVK/myE8jqc5rMNhIXcCP0jGxO0CjJtOKkn0+pLQhJ7iILGDi+WvS+5bn3KQfV2WaFmzfG/y0ZxBW/YY7GI3Nv7eo44qHaUWky0JtJbFQaV3Bh1H0Vv25aGUWr5k2WQefERpks1dW0AEhafdOqmzGdNyXkAcECVfSCL6kAjOS4TsvtQCC1yl410DS0lHz0h9oX3uv7yPq+biF2/5hm3YMrmw1srZrVyUqAyejGrBXp6kLkgCKo1kPZAzDF0BYz0T6lF1IZAeCg9eZAhBwCckVeYOJrYJj7iqqmWkjJrmH/nn9y8x40tZfwOfequGAE+341xbNErznAjlzbLTuBgp3H70PxbOjQn80IeaagymxdyP9QyU7HwL6lNKC3ZiCXQPVR5HY/6cR0vzIYC4t74onWEy8XqNny08KgvSLVL0HMD9YwOElVxJsTX1mmG67kElMaeTq2SrgAxFPnhA3mc4Y93DWTBdAIEiq16KQT4pqjUpsHUo/Hn+oLAS2MX64e+zFB2rELHvbYaLZzfe05rp83Y59RZt9XaAcJ0brsPm+ONqVRQfvI0kTNpIC80="
     on_success: change
     on_failure: always
     on_pull_requests: false
