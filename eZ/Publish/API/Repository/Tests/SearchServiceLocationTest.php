@@ -6,13 +6,16 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
 /**
  * Test case for Location operations in the SearchService.
@@ -168,6 +171,35 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function createFolderWithNonPrintableUtf8Characters(): Content
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStruct->remoteId = 'non-printable-char-folder-123';
+        $createStruct->alwaysAvailable = false;
+        $createStruct->setField(
+            'name',
+            utf8_decode("Non\x09Printable\x0EFolder")
+        );
+
+        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct(2);
+        $draft = $contentService->createContent($createStruct, [$locationCreateStruct]);
+        $content = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
+
+        return $content;
+    }
+
+    /**
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
@@ -285,9 +317,76 @@ class SearchServiceLocationTest extends BaseTest
         $this->assertEquals(0, $result->totalCount);
     }
 
+    /**
+     * @covers \eZ\Publish\API\Repository\SearchService::findLocations
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testNonPrintableUtf8Characters(): void
+    {
+        $folder = $this->createFolderWithNonPrintableUtf8Characters();
+        $query = new LocationQuery(
+            [
+                'query' => new Criterion\Field(
+                    'name',
+                    Criterion\Operator::EQ,
+                    utf8_decode("Non\x09Printable\x0EFolder")
+                ),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $folder->contentInfo->mainLocationId,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\SearchService::findLocations
+     *
+     * @throws \ErrorException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testEscapedNonPrintableUtf8Characters(): void
+    {
+        $setupFactory = $this->getSetupFactory();
+
+        if (!$setupFactory instanceof LegacySolrSetupFactory) {
+            $this->markTestIncomplete(
+                'Field Value mappers are used only with Solr and Elastic search engines'
+            );
+        }
+
+        $query = new LocationQuery(
+            [
+                'query' => new Criterion\Field(
+                    'name',
+                    Criterion\Operator::EQ,
+                    'Non PrintableFolder'
+                ),
+            ]
+        );
+
+        $repository = $this->getRepository();
+        $this->createFolderWithNonPrintableUtf8Characters();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations($query);
+
+        $this->assertEquals(1, $result->totalCount);
+    }
+
     public function testInvalidFieldIdentifierRange()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -308,7 +407,7 @@ class SearchServiceLocationTest extends BaseTest
 
     public function testInvalidFieldIdentifierIn()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -329,7 +428,7 @@ class SearchServiceLocationTest extends BaseTest
 
     public function testFindLocationsWithNonSearchableField()
     {
-        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -349,8 +448,6 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result
-     *
      * @return array
      */
     protected function mapResultLocationIds(SearchResult $result)
@@ -1261,7 +1358,6 @@ class SearchServiceLocationTest extends BaseTest
     /**
      * Assert that query result matches the given fixture.
      *
-     * @param LocationQuery $query
      * @param string $fixture
      * @param callable|null $closure
      */
@@ -1334,8 +1430,6 @@ class SearchServiceLocationTest extends BaseTest
     /**
      * Show a simplified view of the search result for manual introspection.
      *
-     * @param SearchResult $result
-     *
      * @return string
      */
     protected function printResult(SearchResult $result)
@@ -1353,8 +1447,6 @@ class SearchServiceLocationTest extends BaseTest
      *
      * This leads to saner comparisons of results, since we do not get the full
      * content objects every time.
-     *
-     * @param SearchResult $result
      */
     protected function simplifySearchResult(SearchResult $result)
     {
