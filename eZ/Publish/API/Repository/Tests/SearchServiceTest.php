@@ -3799,9 +3799,6 @@ class SearchServiceTest extends BaseTest
         $query = new LocationQuery(
             [
                 'filter' => new Criterion\ContentId($content->id),
-                'sortClauses' => [
-                    new SortClause\Location\Id(LocationQuery::SORT_ASC),
-                ],
             ]
         );
 
@@ -3809,14 +3806,14 @@ class SearchServiceTest extends BaseTest
         $result = $searchService->findLocations($query);
 
         $this->assertEquals(2, $result->totalCount);
-        $this->assertEquals(
-            $location1->id,
-            $result->searchHits[0]->valueObject->id
+        $locationIds = array_map(
+            static function (SearchHit $searchHit): int {
+                return $searchHit->valueObject->id;
+            },
+            $result->searchHits
         );
-        $this->assertEquals(
-            $location2->id,
-            $result->searchHits[1]->valueObject->id
-        );
+        $this->assertContains($location1->id, $locationIds);
+        $this->assertContains($location2->id, $locationIds);
     }
 
     protected function createContentForTestUserMetadataGroupHorizontal()
