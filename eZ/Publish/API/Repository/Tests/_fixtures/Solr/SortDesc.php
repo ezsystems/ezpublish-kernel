@@ -32,6 +32,17 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
       array(
+        'id' => 4,
+        'title' => 'Users',
+      ),
+       'score' => 1.0,
+       'index' => null,
+       'highlight' => null,
+    )),
+    3 =>
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+       'valueObject' =>
+      array(
         'id' => 10,
         'title' => 'Anonymous User',
       ),
@@ -39,7 +50,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => null,
        'highlight' => null,
     )),
-    3 =>
+    4 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
       array(
@@ -50,24 +61,12 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => null,
        'highlight' => null,
     )),
-    4 =>
+    5 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 14,
         'title' => 'Administrator User',
-      ),
-       'score' => 1.0,
-       'index' => null,
-       'highlight' => null,
-    )),
-    // In ElasticSearch/Slor id is identifier (like API), hence "4" is after "14"
-    5 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' =>
-      array(
-        'id' => 4,
-        'title' => 'Users',
       ),
        'score' => 1.0,
        'index' => null,

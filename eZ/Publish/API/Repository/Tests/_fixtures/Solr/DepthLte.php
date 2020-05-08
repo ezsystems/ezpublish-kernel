@@ -7,6 +7,17 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
             0 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
                 array(
                     'valueObject' => array(
+                        'id' => 4,
+                        'title' => 'Users',
+                    ),
+                    'score' => 1.9200476,
+                    'index' => null,
+                    'highlight' => null,
+                )
+            ),
+            1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
+                array(
+                    'valueObject' => array(
                         'id' => 11,
                         'title' => 'Members',
                     ),
@@ -15,7 +26,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                     'highlight' => null,
                 )
             ),
-            1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
+            2 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
                 array(
                     'valueObject' => array(
                         'id' => 12,
@@ -26,22 +37,11 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                     'highlight' => null,
                 )
             ),
-            2 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
+            3 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
                 array(
                     'valueObject' => array(
                         'id' => 13,
                         'title' => 'Editors',
-                    ),
-                    'score' => 1.9200476,
-                    'index' => null,
-                    'highlight' => null,
-                )
-            ),
-            3 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
-                array(
-                    'valueObject' => array(
-                        'id' => 4,
-                        'title' => 'Users',
                     ),
                     'score' => 1.9200476,
                     'index' => null,

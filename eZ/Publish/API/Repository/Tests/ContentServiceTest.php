@@ -2205,7 +2205,7 @@ XML
         $locationService = $repository->getLocationService();
 
         // create a Content Type which is not always available by default
-        $contentType = $this->createContentType(
+        $contentType = $this->createSimpleContentType(
             'test_t',
             self::ENG_GB,
             [

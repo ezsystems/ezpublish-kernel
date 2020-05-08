@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use function count;
 
 /**
  * Test case for operations in the SearchService.
@@ -4317,13 +4318,24 @@ class SearchServiceTest extends BaseTest
      * Assert that query result matches the given fixture.
      *
      * @param Query $query
-     * @param string $fixture
+     * @param string $fixtureFilePath
      * @param null|callable $closure
+     * @param bool $ignoreScore
      * @param bool $info
      * @param bool $id
+     *
+     * @throws \ErrorException
+     * @throws \ReflectionException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    protected function assertQueryFixture(Query $query, $fixture, $closure = null, $ignoreScore = true, $info = false, $id = true)
-    {
+    protected function assertQueryFixture(
+        Query $query,
+        $fixtureFilePath,
+        $closure = null,
+        $ignoreScore = true,
+        $info = false,
+        $id = true
+    ) {
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
@@ -4335,8 +4347,8 @@ class SearchServiceTest extends BaseTest
                 }
 
                 if ($setupFactory instanceof LegacyElasticsearch) {
-                    $position = strrpos($fixture, '/');
-                    $fixture = substr_replace($fixture, '/Location', $position, 0);
+                    $position = strrpos($fixtureFilePath, '/');
+                    $fixtureFilePath = substr_replace($fixtureFilePath, '/Location', $position, 0);
                 }
 
                 $result = $searchService->findLocations($query);
@@ -4356,19 +4368,19 @@ class SearchServiceTest extends BaseTest
             );
         }
 
-        if (!is_file($fixture)) {
+        if (!is_file($fixtureFilePath)) {
             if (isset($_ENV['ez_tests_record'])) {
                 file_put_contents(
-                    $record = $fixture . '.recording',
+                    $record = $fixtureFilePath . '.recording',
                     "<?php\n\nreturn " . var_export($result, true) . ";\n\n"
                 );
                 $this->markTestIncomplete("No fixture available. Result recorded at $record. Result: \n" . $this->printResult($result));
             } else {
-                $this->markTestIncomplete("No fixture available. Set \$_ENV['ez_tests_record'] to generate:\n " . $fixture);
+                $this->markTestIncomplete("No fixture available. Set \$_ENV['ez_tests_record'] to generate:\n " . $fixtureFilePath);
             }
         }
 
-        $fixture = include $fixture;
+        $fixture = require $fixtureFilePath;
 
         if ($closure !== null) {
             $closure($fixture);
@@ -4408,7 +4420,7 @@ class SearchServiceTest extends BaseTest
         $this->assertEquals(
             $fixture,
             $result,
-            'Search results do not match.',
+            'Search results do not match the fixture: ' . $fixtureFilePath,
             .99 // Be quite generous regarding delay -- most important for scores
         );
     }
@@ -4496,5 +4508,100 @@ class SearchServiceTest extends BaseTest
                 $closure($data);
             }
         };
+    }
+
+    /**
+     * @dataProvider providerForTestSortingByNumericFieldsWithValuesOfDifferentLength
+     *
+     * @param int[] $expectedOrderedIds
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testSortingByNumericFieldsWithValuesOfDifferentLength(
+        LocationQuery $query,
+        array $expectedOrderedIds
+    ) {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $result = $searchService->findLocations($query);
+
+        self::assertEquals(count($expectedOrderedIds), $result->totalCount);
+        $actualIds = array_map(
+            static function (SearchHit $searchHit) {
+                /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
+                $location = $searchHit->valueObject;
+
+                return $location->id;
+            },
+            $result->searchHits
+        );
+        self::assertEquals($expectedOrderedIds, $actualIds);
+    }
+
+    public function providerForTestSortingByNumericFieldsWithValuesOfDifferentLength()
+    {
+        yield 'Location ID ASC' => [
+            new LocationQuery(
+                [
+                    'filter' => new Criterion\LocationId([43, 5]),
+                    'sortClauses' => [
+                        new SortClause\Location\Id(LocationQuery::SORT_ASC),
+                    ],
+                ]
+            ),
+            [5, 43],
+        ];
+
+        yield 'Location ID DESC' => [
+            new LocationQuery(
+                [
+                    'filter' => new Criterion\LocationId([5, 43]),
+                    'sortClauses' => [
+                        new SortClause\Location\Id(LocationQuery::SORT_DESC),
+                    ],
+                ]
+            ),
+            [43, 5],
+        ];
+
+        yield 'Content ID ASC' => [
+            new LocationQuery(
+                [
+                    'filter' => new Criterion\ContentId([14, 4]),
+                    'sortClauses' => [
+                        new SortClause\ContentId(LocationQuery::SORT_ASC),
+                    ],
+                ]
+            ),
+            // those are still Location IDs as it's LocationQuery
+            [5, 15],
+        ];
+
+        yield 'Content ID DESC' => [
+            new LocationQuery(
+                [
+                    'filter' => new Criterion\ContentId([4, 14]),
+                    'sortClauses' => [
+                        new SortClause\ContentId(LocationQuery::SORT_DESC),
+                    ],
+                ]
+            ),
+            // those are still Location IDs as it's LocationQuery
+            [15, 5],
+        ];
+
+        yield 'Content ID DESC' => [
+            new LocationQuery(
+                [
+                    'filter' => new Criterion\ContentId([4, 14]),
+                    'sortClauses' => [
+                        new SortClause\ContentId(LocationQuery::SORT_DESC),
+                    ],
+                ]
+            ),
+            // those are still Location IDs as it's LocationQuery
+            [15, 5],
+        ];
     }
 }

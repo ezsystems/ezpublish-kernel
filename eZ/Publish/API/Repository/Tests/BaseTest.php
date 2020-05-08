@@ -708,7 +708,7 @@ abstract class BaseTest extends TestCase
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    protected function createContentType(
+    protected function createSimpleContentType(
         $identifier,
         $mainTranslation,
         array $fieldsToDefine,

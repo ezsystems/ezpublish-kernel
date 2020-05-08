@@ -76,6 +76,17 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
       array(
+        'id' => 4,
+        'title' => 'Users',
+      ),
+       'score' => 1,
+       'index' => null,
+       'highlight' => null,
+    )),
+    7 =>
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+       'valueObject' =>
+      array(
         'id' => 11,
         'title' => 'Members',
       ),
@@ -83,7 +94,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => null,
        'highlight' => null,
     )),
-    7 =>
+    8 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
       array(
@@ -94,23 +105,12 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => null,
        'highlight' => null,
     )),
-    8 =>
+    9 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
       array(
         'id' => 13,
         'title' => 'Editors',
-      ),
-       'score' => 1,
-       'index' => null,
-       'highlight' => null,
-    )),
-    9 =>
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' =>
-      array(
-        'id' => 4,
-        'title' => 'Users',
       ),
        'score' => 1,
        'index' => null,

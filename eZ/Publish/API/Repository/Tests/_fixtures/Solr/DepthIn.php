@@ -7,8 +7,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
             0 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
                 array(
                     'valueObject' => array(
-                        'id' => 10,
-                        'title' => 'Anonymous User',
+                        'id' => 4,
+                        'title' => 'Users',
                     ),
                     'score' => 1.8414208999999999,
                     'index' => null,
@@ -18,8 +18,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
             1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
                 array(
                     'valueObject' => array(
-                        'id' => 14,
-                        'title' => 'Administrator User',
+                        'id' => 10,
+                        'title' => 'Anonymous User',
                     ),
                     'score' => 1.8414208999999999,
                     'index' => null,
@@ -29,8 +29,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
             2 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
                 array(
                     'valueObject' => array(
-                        'id' => 4,
-                        'title' => 'Users',
+                        'id' => 14,
+                        'title' => 'Administrator User',
                     ),
                     'score' => 1.384091,
                     'index' => null,
