@@ -240,8 +240,10 @@ class UserIntegrationTest extends BaseIntegrationTest
         return [];
     }
 
-    public function testCreateContentFails($failingValue = null, $expectedException = null)
-    {
+    public function testCreateContentFails(
+        $failingValue = null,
+        ?string $expectedException = null
+    ): void {
         $this->markTestSkipped('Values are ignored on creation.');
     }
 

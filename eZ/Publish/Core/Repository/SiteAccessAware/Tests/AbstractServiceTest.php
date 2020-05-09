@@ -30,13 +30,13 @@ abstract class AbstractServiceTest extends TestCase
      */
     const LANG_ARG = 0;
 
-    /** @var \object|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \object|\PHPUnit\Framework\MockObject\MockObject */
     protected $innerApiServiceMock;
 
     /** @var object */
     protected $service;
 
-    /** @var \eZ\Publish\API\Repository\LanguageResolver|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\LanguageResolver|\PHPUnit\Framework\MockObject\MockObject */
     protected $languageResolverMock;
 
     abstract public function getAPIServiceClassName();

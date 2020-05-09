@@ -52,7 +52,6 @@ use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdate
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Mock test case for Content service.
@@ -151,7 +150,7 @@ class ContentTest extends BaseServiceMockTest
     {
         $permissionResolver = $this->getPermissionResolverMock();
         $contentServiceMock = $this->getPartlyMockedContentService(['loadContentInfo']);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getContentDomainMapperMock();
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
