@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Events\Content\HideContentEvent;
 use eZ\Publish\API\Repository\Events\Content\PublishVersionEvent;
 use eZ\Publish\API\Repository\Events\Content\RevealContentEvent;
 use eZ\Publish\API\Repository\Events\Content\UpdateContentMetadataEvent;
+use eZ\Publish\SPI\Search\ContentTranslationHandler;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ContentEventSubscriber extends AbstractSearchEventSubscriber implements EventSubscriberInterface
@@ -65,6 +66,13 @@ class ContentEventSubscriber extends AbstractSearchEventSubscriber implements Ev
 
         if (!$contentInfo->isPublished) {
             return;
+        }
+
+        if ($this->searchHandler instanceof ContentTranslationHandler) {
+            $this->searchHandler->deleteTranslation(
+                $contentInfo->id,
+                $event->getLanguageCode()
+            );
         }
 
         $this->searchHandler->indexContent(
