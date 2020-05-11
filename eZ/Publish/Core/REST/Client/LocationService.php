@@ -109,7 +109,7 @@ class LocationService implements APILocationService, Sessionable
         $values = $this->requestParser->parse('object', $contentInfo->id);
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate('objectLocations', array('object' => $values['object'])),
+            $this->requestParser->generate('objectLocations', ['object' => $values['object']]),
             $inputMessage
         );
 
@@ -117,7 +117,7 @@ class LocationService implements APILocationService, Sessionable
     }
 
     /**
-     * {@inheritdoc)
+     * {@inheritdoc).
      */
     public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
@@ -125,7 +125,7 @@ class LocationService implements APILocationService, Sessionable
             'GET',
             $locationId,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('Location'))
+                ['Accept' => $this->outputVisitor->getMediaType('Location')]
             )
         );
 
@@ -133,7 +133,7 @@ class LocationService implements APILocationService, Sessionable
     }
 
     /**
-     * {@inheritdoc)
+     * {@inheritdoc).
      */
     public function loadLocationList(array $locationIds, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null): iterable
     {
@@ -149,15 +149,15 @@ class LocationService implements APILocationService, Sessionable
     }
 
     /**
-     * {@inheritdoc)
+     * {@inheritdoc).
      */
     public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('locationByRemote', array('location' => $remoteId)),
+            $this->requestParser->generate('locationByRemote', ['location' => $remoteId]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('LocationList'))
+                ['Accept' => $this->outputVisitor->getMediaType('LocationList')]
             )
         );
 
@@ -219,9 +219,9 @@ class LocationService implements APILocationService, Sessionable
         $values = $this->requestParser->parse('object', $contentInfo->id);
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('objectLocations', array('object' => $values['object'])),
+            $this->requestParser->generate('objectLocations', ['object' => $values['object']]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('LocationList'))
+                ['Accept' => $this->outputVisitor->getMediaType('LocationList')]
             )
         );
 
@@ -243,9 +243,9 @@ class LocationService implements APILocationService, Sessionable
         $values = $this->requestParser->parse('location', $location->id);
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('locationChildren', array('location' => $values['location'])),
+            $this->requestParser->generate('locationChildren', ['location' => $values['location']]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('LocationList'))
+                ['Accept' => $this->outputVisitor->getMediaType('LocationList')]
             )
         );
 
@@ -384,6 +384,14 @@ class LocationService implements APILocationService, Sessionable
      * @throws \Exception
      */
     public function loadAllLocations(int $offset = 0, int $limit = 25): array
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function loadFirstAvailableLocation(ContentInfo $contentInfo, array $prioritizedLanguages = null): Location
     {
         throw new \Exception('@todo: Implement.');
     }

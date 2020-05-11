@@ -244,4 +244,12 @@ interface LocationService
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
     public function loadAllLocations(int $offset = 0, int $limit = 25): array;
+
+    /**
+     * Load first available Location for chosen Content for the current User.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed read any of the Content's Locations
+     */
+    public function loadFirstAvailableLocation(ContentInfo $contentInfo, array $prioritizedLanguages = null): Location;
 }

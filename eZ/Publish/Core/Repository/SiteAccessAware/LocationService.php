@@ -174,4 +174,9 @@ class LocationService implements LocationServiceInterface
     {
         return $this->service->loadAllLocations($offset, $limit);
     }
+
+    public function loadFirstAvailableLocation(ContentInfo $contentInfo, array $prioritizedLanguages = null): Location
+    {
+        return $this->service->loadFirstAvailableLocation($contentInfo, $prioritizedLanguages);
+    }
 }

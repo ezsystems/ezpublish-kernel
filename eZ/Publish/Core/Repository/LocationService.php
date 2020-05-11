@@ -895,4 +895,21 @@ class LocationService implements LocationServiceInterface
 
         return $locations;
     }
+
+    public function loadFirstAvailableLocation(ContentInfo $contentInfo, array $prioritizedLanguages = null): Location
+    {
+        try {
+            $location = $this->loadLocation($contentInfo->mainLocationId, $prioritizedLanguages);
+        } catch (Exception $e) {
+            // try different locations if main location is not accessible for the user
+            $locations = $this->loadLocations($contentInfo, null, $prioritizedLanguages);
+            if (empty($locations)) {
+                throw $e;
+            }
+
+            return reset($locations);
+        }
+
+        return $location;
+    }
 }

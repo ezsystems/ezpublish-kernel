@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -2989,6 +2990,46 @@ class LocationServiceTest extends BaseTest
             'top_node/parent/move_me',
             $query->execute()->fetchColumn()
         );
+    }
+
+    /**
+     * Test for the loadFirstAvailableLocation() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::loadFirstAvailableLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     */
+    public function testLoadFirstAvailableLocation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $permissionResolver = $repository->getPermissionResolver();
+
+        $contentId = $this->generateId('object', 4);
+        $contentInfo = $contentService->loadContentInfo($contentId);
+
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+
+        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct($mediaLocationId);
+        $locationService->createLocation($contentInfo, $locationCreateStruct);
+        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct($demoDesignLocationId);
+        $finalLocationToBeFound = $locationService->createLocation($contentInfo, $locationCreateStruct);
+
+        // user has access only to location created under 'demoDesign' parent
+        $user = $this->createUserWithPolicies(
+            'user',
+            [
+                ['module' => 'content', 'function' => 'read'],
+            ],
+            new SubtreeLimitation(['limitationValues' => ['/1/58/56']])
+        );
+        $permissionResolver->setCurrentUserReference($user);
+
+        $location = $locationService->loadFirstAvailableLocation($contentInfo);
+
+        self::assertInstanceOf(Location::class, $location);
+        self::assertEquals($finalLocationToBeFound->id, $location->id);
     }
 
     /**

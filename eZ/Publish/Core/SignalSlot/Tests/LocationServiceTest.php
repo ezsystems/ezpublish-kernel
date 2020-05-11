@@ -222,6 +222,12 @@ class LocationServiceTest extends ServiceTest
                 $locationUpdateStruct,
                 0,
             ],
+            [
+                'loadFirstAvailableLocation',
+                [$locationContentInfo, []],
+                [$location],
+                0,
+            ],
         ];
     }
 }
