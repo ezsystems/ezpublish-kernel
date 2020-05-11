@@ -59,6 +59,8 @@ class LocationServiceTest extends AbstractServiceTest
 
             ['getAllLocationsCount', [], 100],
             ['loadAllLocations', [10, 100], [$location]],
+
+            ['loadFirstAvailableLocation', [$contentInfo], $location],
         ];
     }
 

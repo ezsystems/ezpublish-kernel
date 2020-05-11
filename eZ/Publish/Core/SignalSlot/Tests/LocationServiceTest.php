@@ -225,7 +225,7 @@ class LocationServiceTest extends ServiceTest
             [
                 'loadFirstAvailableLocation',
                 [$locationContentInfo, []],
-                [$location],
+                $location,
                 0,
             ],
         ];
