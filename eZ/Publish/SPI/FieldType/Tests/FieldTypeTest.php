@@ -7,7 +7,6 @@
 namespace eZ\Publish\SPI\FieldType\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Exception;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\FieldType\ValidationError;
@@ -603,34 +602,19 @@ abstract class FieldTypeTest extends TestCase
 
     /**
      * @param mixed $inputValue
-     * @param \Exception $expectedException
      *
      * @dataProvider provideInvalidInputForAcceptValue
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testAcceptValueFailsOnInvalidValues($inputValue, $expectedException)
-    {
+    public function testAcceptValueFailsOnInvalidValues(
+        $inputValue,
+        string $expectedException
+    ): void {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        try {
-            $fieldType->acceptValue($inputValue);
-            $this->fail(
-                sprintf(
-                    'Expected exception of type "%s" not thrown for incorrect input to acceptValue().',
-                    $expectedException
-                )
-            );
-        } catch (Exception $e) {
-            if ($e instanceof \PHPUnit_Framework_Exception
-                 || $e instanceof \PHPUnit_Framework_Error
-                 || $e instanceof \PHPUnit_Framework_AssertionFailedError) {
-                throw $e;
-            }
-
-            $this->assertInstanceOf(
-                $expectedException,
-                $e
-            );
-        }
+        $this->expectException($expectedException);
+        $fieldType->acceptValue($inputValue);
     }
 
     /**

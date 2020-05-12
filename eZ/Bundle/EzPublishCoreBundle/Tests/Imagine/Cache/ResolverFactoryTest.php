@@ -15,10 +15,10 @@ use PHPUnit\Framework\TestCase;
 
 class ResolverFactoryTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface */
     private $resolver;
 
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\ResolverFactory */

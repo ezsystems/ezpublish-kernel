@@ -24,13 +24,13 @@ class AliasGeneratorTest extends TestCase
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\ImageAsset\AliasGenerator */
     private $aliasGenerator;
 
-    /** @var \eZ\Publish\SPI\Variation\VariationHandler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\SPI\Variation\VariationHandler|\PHPUnit\Framework\MockObject\MockObject */
     private $innerAliasGenerator;
 
-    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
     private $contentService;
 
-    /** @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $assetMapper;
 
     protected function setUp(): void

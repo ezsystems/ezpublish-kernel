@@ -65,10 +65,6 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCreateContentThrowsUnauthorizedException()
     {
-        if ($this->isVersion4()) {
-            $this->markTestSkipped('This test requires eZ Publish 5');
-        }
-
         $this->permissionResolver->setCurrentUserReference($this->anonymousUser);
 
         $contentTypeService = $this->getRepository()->getContentTypeService();
