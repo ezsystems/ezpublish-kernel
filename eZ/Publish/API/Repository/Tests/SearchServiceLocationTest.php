@@ -211,6 +211,7 @@ class SearchServiceLocationTest extends BaseTest
         $query = new LocationQuery(
             [
                 'query' => new Criterion\IsFieldEmpty('subtitle'),
+                'sortClauses' => [new SortClause\Location\Id()],
             ]
         );
 
