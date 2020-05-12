@@ -109,10 +109,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContent()
     {
-        if ($this->isVersion4()) {
-            $this->markTestSkipped('This test requires eZ Publish 5');
-        }
-
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
@@ -145,10 +141,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentAndPublishWithPrivilegedAnonymousUser()
     {
-        if ($this->isVersion4()) {
-            $this->markTestSkipped('This test requires eZ Publish 5');
-        }
-
         $anonymousUserId = $this->generateId('user', 10);
 
         $repository = $this->getRepository();
@@ -335,10 +327,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentThrowsInvalidArgumentException()
     {
-        if ($this->isVersion4()) {
-            $this->markTestSkipped('This test requires eZ Publish 5');
-        }
-
         $contentTypeService = $this->getRepository()->getContentTypeService();
 
         $contentType = $contentTypeService->loadContentTypeByIdentifier(self::FORUM_IDENTIFIER);
@@ -4208,10 +4196,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentInTransactionWithRollback()
     {
-        if ($this->isVersion4()) {
-            $this->markTestSkipped('This test requires eZ Publish 5');
-        }
-
         $repository = $this->getRepository();
 
         $contentTypeService = $this->getRepository()->getContentTypeService();
@@ -4260,10 +4244,6 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentInTransactionWithCommit()
     {
-        if ($this->isVersion4()) {
-            $this->markTestSkipped('This test requires eZ Publish 5');
-        }
-
         $repository = $this->getRepository();
 
         $contentTypeService = $repository->getContentTypeService();

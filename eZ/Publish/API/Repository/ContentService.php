@@ -189,17 +189,16 @@ interface ContentService
      * (this is useful for content staging where the transfer process does not
      * have to authenticate with the user which created the content object in the source server).
      * The user has to publish the draft if it should be visible.
-     * In 4.x at least one location has to be provided in the location creation array.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
-     *                                                                        or there is no location provided (4.x) or multiple locations
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remote ID which exists in the system or multiple Locations
      *                                                                        are under the same parent or if the a field value is not accepted by the field type
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or is set to an empty value
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
      * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
+     *                                                                                                While optional, it's highly recommended to use Locations for content as a lot of features in the system is usually tied to the tree structure (including default Role policies).
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
