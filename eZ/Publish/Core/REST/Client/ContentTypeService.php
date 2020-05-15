@@ -24,7 +24,8 @@ use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Common\Message; use eZ\Publish\Core\REST\Client\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Client\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Common\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Client\Exceptions\BadStateException;
@@ -113,7 +114,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'GET',
             $contentTypeGroupId,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('Section'))
+                ['Accept' => $this->outputVisitor->getMediaType('Section')]
             )
         );
 
@@ -127,9 +128,9 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('typegroupByIdentifier', array('typegroup' => $contentTypeGroupIdentifier)),
+            $this->requestParser->generate('typegroupByIdentifier', ['typegroup' => $contentTypeGroupIdentifier]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupList'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupList')]
             )
         );
 
@@ -138,7 +139,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
                 'GET',
                 $response->headers['Location'],
                 new Message(
-                    array('Accept' => $this->outputVisitor->getMediaType('ContentTypeGroup'))
+                    ['Accept' => $this->outputVisitor->getMediaType('ContentTypeGroup')]
                 )
             );
         }
@@ -155,7 +156,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'GET',
             $this->requestParser->generate('typegroups'),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupList'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupList')]
             )
         );
 
@@ -212,7 +213,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeGroup'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeGroup')]
             )
         );
 
@@ -300,7 +301,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
                 $this->requestParser->parse('type', $contentType->id)
             ),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupRefList'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupRefList')]
             )
         );
 
@@ -309,7 +310,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
 
         return new RestContentType(
             $this,
-            array(
+            [
                 'id' => $contentType->id,
                 'remoteId' => $contentType->remoteId,
                 'identifier' => $contentType->identifier,
@@ -334,7 +335,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
                 // dynamic
                 //"fieldDefinitions" => $contentType->fieldDefinitions,
                 //"contentTypeGroups" => $contentType->contentTypeGroups,
-            )
+            ]
         );
     }
 
@@ -347,9 +348,9 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      */
     protected function isErrorResponse(Message $response)
     {
-        return (
+        return
             strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0
-        );
+        ;
     }
 
     /**
@@ -368,7 +369,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'GET',
             $contentTypeId,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentType'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentType')]
             )
         );
 
@@ -467,7 +468,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'GET',
             $contentTypeId,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentType'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentType')]
             )
         );
 
@@ -490,7 +491,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'GET',
             $fieldDefinitionId,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('FieldDefinition'))
+                ['Accept' => $this->outputVisitor->getMediaType('FieldDefinition')]
             )
         );
 
@@ -513,7 +514,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'GET',
             $fieldDefinitionListReference,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('FieldDefinitionList'))
+                ['Accept' => $this->outputVisitor->getMediaType('FieldDefinitionList')]
             )
         );
 
@@ -536,7 +537,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'GET',
             $contentTypeGroupListReference,
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupRefList'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupRefList')]
             )
         );
 
@@ -550,9 +551,9 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('typeByIdentifier', array('type' => $identifier)),
+            $this->requestParser->generate('typeByIdentifier', ['type' => $identifier]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeList'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeList')]
             )
         );
         $contentTypes = $this->inputDispatcher->parse($response);
@@ -567,9 +568,9 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate('typeByRemoteId', array('type' => $remoteId)),
+            $this->requestParser->generate('typeByRemoteId', ['type' => $remoteId]),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeList'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeList')]
             )
         );
         $contentTypes = $this->inputDispatcher->parse($response);
@@ -588,7 +589,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     /**
      * {@inheritdoc}
      */
-    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
+    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [], int $status = ContentType::STATUS_DEFINED)
     {
         $response = $this->client->request(
             'GET',
@@ -597,10 +598,10 @@ class ContentTypeService implements APIContentTypeService, Sessionable
                 $this->requestParser->parse('typegroup', $contentTypeGroup->id)
             ),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeList'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeList')]
             )
         );
-        $completedContentTypes = array();
+        $completedContentTypes = [];
         $contentTypes = $this->inputDispatcher->parse($response);
         foreach ($contentTypes as $contentType) {
             $completedContentTypes[] = $this->completeContentType($contentType);
@@ -682,7 +683,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'POST',
             $this->requestParser->generate('typeGroupAssign', $urlValues),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupRefList'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupRefList')]
             )
         );
 
@@ -719,7 +720,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'DELETE',
             $this->requestParser->generate('groupOfType', $urlValues),
             new Message(
-                array('Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupRefList'))
+                ['Accept' => $this->outputVisitor->getMediaType('ContentTypeGroupRefList')]
             )
         );
 
@@ -748,9 +749,9 @@ class ContentTypeService implements APIContentTypeService, Sessionable
         }
 
         return new ContentTypeGroupCreateStruct(
-            array(
+            [
                 'identifier' => $identifier,
-            )
+            ]
         );
     }
 
@@ -768,9 +769,9 @@ class ContentTypeService implements APIContentTypeService, Sessionable
         }
 
         return new ContentTypeCreateStruct(
-            array(
+            [
                 'identifier' => $identifier,
-            )
+            ]
         );
     }
 
@@ -813,10 +814,10 @@ class ContentTypeService implements APIContentTypeService, Sessionable
         }
 
         return new FieldDefinitionCreateStruct(
-            array(
+            [
                 'identifier' => $identifier,
                 'fieldTypeIdentifier' => $fieldTypeIdentifier,
-            )
+            ]
         );
     }
 
@@ -864,6 +865,4 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     {
         throw new \RuntimeException('Not implemented yet');
     }
-
-
 }
