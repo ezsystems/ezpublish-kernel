@@ -173,7 +173,7 @@ class ContentTypeServiceTest extends ServiceTest
             ],
             [
                 'loadContentTypes',
-                [$contentTypeGroup, ['eng-GB']],
+                [$contentTypeGroup, ['eng-GB'], ContentType::STATUS_DEFINED],
                 [$contentType],
                 0,
             ],
