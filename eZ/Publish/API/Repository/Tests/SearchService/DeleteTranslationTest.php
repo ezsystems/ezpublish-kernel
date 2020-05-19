@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Tests\SearchService;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 
 /**
  * Test case for delete content translation with the SearchService.
@@ -122,5 +124,39 @@ class DeleteTranslationTest extends BaseTest
         $this->refreshSearch($repository);
         $searchResult = $this->findContent('Kontakt', 'ger-DE');
         $this->assertEquals(0, $searchResult->totalCount);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testPreventTranslationDeletionIfNoAccess(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $testContent = $this->createTestContentWithLanguages(
+            [
+                'eng-GB' => 'Contact',
+                'ger-DE' => 'Kontakt',
+                'eng-US' => 'Contact',
+            ]
+        );
+
+        $limitations = [
+            new LanguageLimitation(['limitationValues' => ['eng-US']]),
+        ];
+        $user = $this->createUserWithPolicies(
+            'test',
+            [
+                ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
+                ['module' => 'content', 'function' => 'versionread'],
+            ]
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        $this->expectException(UnauthorizedException::class);
+
+        $contentService->deleteTranslation($testContent->contentInfo, 'ger-DE');
     }
 }
