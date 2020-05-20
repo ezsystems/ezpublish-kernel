@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\EventListener\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Component\Serializer\SerializerTrait;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
@@ -18,9 +19,12 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class SiteAccessMatchListenerTest extends TestCase
 {
+    use SerializerTrait;
+
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $saRouter;
 
@@ -48,9 +52,22 @@ class SiteAccessMatchListenerTest extends TestCase
 
     public function testOnKernelRequestSerializedSA()
     {
-        $siteAccess = new SiteAccess('test');
+        $matcher = new SiteAccess\Matcher\URIElement(1);
+        $siteAccess = new SiteAccess(
+            'test',
+            'matching_type',
+            $matcher
+        );
         $request = new Request();
-        $request->attributes->set('serialized_siteaccess', serialize($siteAccess));
+        $request->attributes->set('serialized_siteaccess', json_encode($siteAccess));
+        $request->attributes->set(
+            'serialized_siteaccess_matcher',
+            $this->getSerializer()->serialize(
+                $siteAccess->matcher,
+                'json',
+                [AbstractNormalizer::IGNORED_ATTRIBUTES => ['request']]
+            )
+        );
         $event = new RequestEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
