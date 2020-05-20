@@ -28,6 +28,7 @@ class ContentDownloadUrlGenerator extends PathGenerator
             [
                 'contentId' => $versionInfo->contentInfo->id,
                 'fieldId' => $field->id,
+                'version' => $versionInfo->versionNo,
             ]
         );
     }
