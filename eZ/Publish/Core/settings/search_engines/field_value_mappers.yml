@@ -78,3 +78,11 @@ services:
         class: "%ezpublish.search.common.field_value_mapper.string.class%"
         tags:
             - {name: ezpublish.search.common.field_value_mapper}
+
+    eZ\Publish\Core\Search\Common\FieldValueMapper\RemoteIdentifierMapper:
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    eZ\Publish\Core\Search\Common\FieldValueMapper\MultipleRemoteIdentifierMapper:
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
