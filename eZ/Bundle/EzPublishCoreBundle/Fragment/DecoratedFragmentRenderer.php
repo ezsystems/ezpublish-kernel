@@ -76,6 +76,15 @@ class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccess
                 $siteAccess->matcher,
                 'json'
             );
+            if ($siteAccess->matcher instanceof SiteAccess\Matcher\CompoundInterface) {
+                $subMatchers = $siteAccess->matcher->getSubMatchers() ?? null;
+                foreach ($subMatchers as $subMatcher) {
+                    $uri->attributes['serialized_siteaccess_sub_matchers'][get_class($subMatcher)] = $this->getSerializer()->serialize(
+                        $subMatcher,
+                        'json'
+                    );
+                }
+            }
         }
 
         return $this->innerRenderer->render($uri, $request, $options);

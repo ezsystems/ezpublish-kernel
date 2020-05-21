@@ -59,6 +59,15 @@ class InlineFragmentRenderer extends BaseRenderer implements SiteAccessAware
                     $siteAccess->matcher,
                     'json'
                 );
+                if ($siteAccess->matcher instanceof SiteAccess\Matcher\CompoundInterface) {
+                    $subMatchers = $siteAccess->matcher->getSubMatchers() ?? null;
+                    foreach ($subMatchers as $subMatcher) {
+                        $uri->attributes['serialized_siteaccess_sub_matchers'][get_class($subMatcher)] = $this->getSerializer()->serialize(
+                            $subMatcher,
+                            'json'
+                        );
+                    }
+                }
             }
             if ($request->attributes->has('semanticPathinfo')) {
                 $uri->attributes['semanticPathinfo'] = $request->attributes->get('semanticPathinfo');
