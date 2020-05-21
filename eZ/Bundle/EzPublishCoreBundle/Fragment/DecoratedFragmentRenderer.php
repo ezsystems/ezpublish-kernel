@@ -8,7 +8,6 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Fragment;
 
-use eZ\Publish\Core\MVC\Symfony\Component\Serializer\SerializerTrait;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +17,7 @@ use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
 class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccessAware
 {
-    use SerializerTrait;
+    use SiteAccessSerializationTrait;
 
     /**
      * @var \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface
@@ -71,20 +70,7 @@ class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccess
             // Serialize the siteaccess to get it back after.
             // @see eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
             $siteAccess = $request->attributes->get('siteaccess');
-            $uri->attributes['serialized_siteaccess'] = json_encode($siteAccess);
-            $uri->attributes['serialized_siteaccess_matcher'] = $this->getSerializer()->serialize(
-                $siteAccess->matcher,
-                'json'
-            );
-            if ($siteAccess->matcher instanceof SiteAccess\Matcher\CompoundInterface) {
-                $subMatchers = $siteAccess->matcher->getSubMatchers() ?? null;
-                foreach ($subMatchers as $subMatcher) {
-                    $uri->attributes['serialized_siteaccess_sub_matchers'][get_class($subMatcher)] = $this->getSerializer()->serialize(
-                        $subMatcher,
-                        'json'
-                    );
-                }
-            }
+            $this->serializeSiteAccess($siteAccess, $uri);
         }
 
         return $this->innerRenderer->render($uri, $request, $options);

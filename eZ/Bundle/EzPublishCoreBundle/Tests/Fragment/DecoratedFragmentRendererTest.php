@@ -9,16 +9,12 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Fragment;
 
 use eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer;
-use eZ\Publish\Core\MVC\Symfony\Component\Serializer\SerializerTrait;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
-class DecoratedFragmentRendererTest extends TestCase
+class DecoratedFragmentRendererTest extends FragmentRendererBaseTest
 {
-    use SerializerTrait;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -125,52 +121,16 @@ class DecoratedFragmentRendererTest extends TestCase
         );
     }
 
-    public function testRendererControllerReferenceWithCompoundMatcher()
+    public function getRequest(SiteAccess $siteAccess)
     {
-        $reference = new ControllerReference('FooBundle:bar:baz');
-        $compoundMatcher = new SiteAccess\Matcher\Compound\LogicalAnd([]);
-        $subMatchers = [
-            'Map\URI' => new SiteAccess\Matcher\Map\URI([]),
-            'Map\Host' => new SiteAccess\Matcher\Map\Host([]),
-        ];
-        $compoundMatcher->setSubMatchers($subMatchers);
-        $siteAccess = new SiteAccess(
-            'test',
-            'test',
-            $compoundMatcher
-        );
         $request = new Request();
         $request->attributes->set('siteaccess', $siteAccess);
-        $options = ['foo' => 'bar'];
-        $expectedReturn = '/_fragment?foo=bar';
-        $this->innerRenderer
-            ->expects($this->once())
-            ->method('render')
-            ->with($reference, $request, $options)
-            ->will($this->returnValue($expectedReturn));
 
-        $renderer = new DecoratedFragmentRenderer($this->innerRenderer);
-        $this->assertSame($expectedReturn, $renderer->render($reference, $request, $options));
-        $this->assertTrue(isset($reference->attributes['serialized_siteaccess']));
-        $serializedSiteAccess = json_encode($siteAccess);
-        $this->assertSame($serializedSiteAccess, $reference->attributes['serialized_siteaccess']);
-        $this->assertTrue(isset($reference->attributes['serialized_siteaccess_matcher']));
-        $this->assertSame(
-            $this->getSerializer()->serialize(
-                $siteAccess->matcher,
-                'json'
-            ),
-            $reference->attributes['serialized_siteaccess_matcher']
-        );
-        $this->assertTrue(isset($reference->attributes['serialized_siteaccess_sub_matchers']));
-        foreach ($siteAccess->matcher->getSubMatchers() as $subMatcher) {
-            $this->assertSame(
-                $this->getSerializer()->serialize(
-                    $subMatcher,
-                    'json'
-                ),
-                $reference->attributes['serialized_siteaccess_sub_matchers'][get_class($subMatcher)]
-            );
-        }
+        return $request;
+    }
+
+    public function getRenderer()
+    {
+        return new DecoratedFragmentRenderer($this->innerRenderer);
     }
 }
