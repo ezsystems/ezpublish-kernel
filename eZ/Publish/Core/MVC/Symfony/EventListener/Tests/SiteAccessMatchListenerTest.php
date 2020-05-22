@@ -124,6 +124,66 @@ class SiteAccessMatchListenerTest extends TestCase
         $this->assertFalse($request->attributes->has('serialized_siteaccess'));
     }
 
+    public function testOnKernelRequestSerializedSAWithCompoundMatcher()
+    {
+        $compoundMatcher = new SiteAccess\Matcher\Compound\LogicalAnd([]);
+        $subMatchers = [
+            SiteAccess\Matcher\Map\URI::class => new SiteAccess\Matcher\Map\URI([]),
+            SiteAccess\Matcher\Map\Host::class => new SiteAccess\Matcher\Map\Host([]),
+        ];
+        $compoundMatcher->setSubMatchers($subMatchers);
+        $siteAccess = new SiteAccess(
+            'test',
+            'matching_type',
+            $compoundMatcher
+        );
+        $request = new Request();
+        $request->attributes->set('serialized_siteaccess', json_encode($siteAccess));
+        $request->attributes->set(
+            'serialized_siteaccess_matcher',
+            $this->getSerializer()->serialize(
+                $siteAccess->matcher,
+                'json'
+            )
+        );
+        $serializedSubMatchers = [];
+        foreach ($subMatchers as $subMatcher) {
+            $serializedSubMatchers[get_class($subMatcher)] = $this->getSerializer()->serialize(
+                $subMatcher,
+                'json'
+            );
+        }
+        $request->attributes->set(
+            'serialized_siteaccess_sub_matchers',
+            $serializedSubMatchers
+        );
+        $event = new GetResponseEvent(
+            $this->createMock(HttpKernelInterface::class),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST
+        );
+
+        $this->userHashMatcher
+            ->expects($this->once())
+            ->method('matches')
+            ->with($request)
+            ->will($this->returnValue(false));
+
+        $this->saRouter
+            ->expects($this->never())
+            ->method('match');
+
+        $postSAMatchEvent = new PostSiteAccessMatchEvent($siteAccess, $request, $event->getRequestType());
+        $this->eventDispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(MVCEvents::SITEACCESS, $this->equalTo($postSAMatchEvent));
+
+        $this->listener->onKernelRequest($event);
+        $this->assertEquals($siteAccess, $request->attributes->get('siteaccess'));
+        $this->assertFalse($request->attributes->has('serialized_siteaccess'));
+    }
+
     public function testOnKernelRequestSiteAccessPresent()
     {
         $siteAccess = new SiteAccess();

@@ -7,18 +7,14 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Fragment;
 
 use eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer;
-use eZ\Publish\Core\MVC\Symfony\Component\Serializer\SerializerTrait;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface;
 use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
-class DecoratedFragmentRendererTest extends TestCase
+class DecoratedFragmentRendererTest extends FragmentRendererBaseTest
 {
-    use SerializerTrait;
-
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $innerRenderer;
 
@@ -121,5 +117,18 @@ class DecoratedFragmentRendererTest extends TestCase
             ),
             $reference->attributes['serialized_siteaccess_matcher']
         );
+    }
+
+    public function getRequest(SiteAccess $siteAccess): Request
+    {
+        $request = new Request();
+        $request->attributes->set('siteaccess', $siteAccess);
+
+        return $request;
+    }
+
+    public function getRenderer(): FragmentRendererInterface
+    {
+        return new DecoratedFragmentRenderer($this->innerRenderer);
     }
 }
