@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Test case for delete content translation with the SearchService.
@@ -131,6 +132,34 @@ class DeleteTranslationTest extends BaseTest
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
+    public function testDeleteContentTranslationWithContentRemovePolicy(): void
+    {
+        $repository = $this->getRepository();
+        $testContent = $this->createTestContentWithLanguages(
+            [
+                'eng-GB' => 'Contact',
+                'ger-DE' => 'Kontakt',
+                'eng-US' => 'Contact',
+            ]
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($this->provideUserWithContentRemovePolicies());
+
+        $contentService = $repository->getContentService();
+        $searchResult = $this->findContent('Contact', 'eng-US');
+        $this->assertEquals(1, $searchResult->totalCount);
+
+        $contentService->deleteTranslation($testContent->contentInfo, 'eng-US');
+        $this->refreshSearch($repository);
+        $searchResult = $this->findContent('Contact', 'eng-US');
+        $this->assertEquals(0, $searchResult->totalCount);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
     public function testPreventTranslationDeletionIfNoAccess(): void
     {
         $repository = $this->getRepository();
@@ -143,20 +172,26 @@ class DeleteTranslationTest extends BaseTest
             ]
         );
 
-        $limitations = [
-            new LanguageLimitation(['limitationValues' => ['eng-US']]),
-        ];
-        $user = $this->createUserWithPolicies(
-            'test',
-            [
-                ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
-                ['module' => 'content', 'function' => 'versionread'],
-            ]
-        );
-        $repository->getPermissionResolver()->setCurrentUserReference($user);
+        $repository->getPermissionResolver()->setCurrentUserReference($this->provideUserWithContentRemovePolicies());
 
         $this->expectException(UnauthorizedException::class);
 
         $contentService->deleteTranslation($testContent->contentInfo, 'ger-DE');
+    }
+
+    public function provideUserWithContentRemovePolicies(): User
+    {
+        $limitations = [
+            new LanguageLimitation(['limitationValues' => ['eng-US']]),
+        ];
+
+        return $this->createUserWithPolicies(
+                'test',
+                [
+                    ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
+                    ['module' => 'content', 'function' => 'versionread'],
+                    ['module' => 'content', 'function' => 'read'],
+                ]
+            );
     }
 }
