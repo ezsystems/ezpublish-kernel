@@ -25,6 +25,13 @@ class URIText extends Regex implements VersatileMatcher, URILexer
     private $suffix;
 
     /**
+     * The property needed to allow correct deserialization with Symfony serializer.
+     *
+     * @var array
+     */
+    private $siteAccessesConfiguration;
+
+    /**
      * Constructor.
      *
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
@@ -38,6 +45,7 @@ class URIText extends Regex implements VersatileMatcher, URILexer
             '^(/' . preg_quote($this->prefix, '@') . '(\w+)' . preg_quote($this->suffix, '@') . ')',
             2
         );
+        $this->siteAccessesConfiguration = $siteAccessesConfiguration;
     }
 
     public function getName()

@@ -7,15 +7,12 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Fragment;
 
 use eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer;
-use eZ\Publish\Core\MVC\Symfony\Component\Serializer\SerializerTrait;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 class InlineFragmentRendererTest extends DecoratedFragmentRendererTest
 {
-    use SerializerTrait;
-
     public function testRendererControllerReference()
     {
         $reference = new ControllerReference('FooBundle:bar:baz');
@@ -54,5 +51,32 @@ class InlineFragmentRendererTest extends DecoratedFragmentRendererTest
         $this->assertSame('/foo/bar', $reference->attributes['semanticPathinfo']);
         $this->assertTrue(isset($reference->attributes['viewParametersString']));
         $this->assertSame('/(foo)/bar', $reference->attributes['viewParametersString']);
+    }
+
+    public function testRendererControllerReferenceWithCompoundMatcher()
+    {
+        $reference = parent::testRendererControllerReferenceWithCompoundMatcher();
+
+        $this->assertArrayHasKey('semanticPathinfo', $reference->attributes);
+        $this->assertSame('/foo/bar', $reference->attributes['semanticPathinfo']);
+        $this->assertArrayHasKey('viewParametersString', $reference->attributes);
+        $this->assertSame('/(foo)/bar', $reference->attributes['viewParametersString']);
+
+        return $reference;
+    }
+
+    public function getRequest(SiteAccess $siteAccess)
+    {
+        $request = new Request();
+        $request->attributes->set('siteaccess', $siteAccess);
+        $request->attributes->set('semanticPathinfo', '/foo/bar');
+        $request->attributes->set('viewParametersString', '/(foo)/bar');
+
+        return $request;
+    }
+
+    public function getRenderer()
+    {
+        return new InlineFragmentRenderer($this->innerRenderer);
     }
 }
