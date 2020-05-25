@@ -16,6 +16,13 @@ class HostText extends Regex implements VersatileMatcher
     private $suffix;
 
     /**
+     * The property needed to allow correct deserialization with Symfony serializer.
+     *
+     * @var array
+     */
+    private $siteAccessesConfiguration;
+
+    /**
      * Constructor.
      *
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
@@ -28,6 +35,7 @@ class HostText extends Regex implements VersatileMatcher
             '^' . preg_quote($this->prefix, '@') . "(\w+)" . preg_quote($this->suffix, '@') . '$',
             1
         );
+        $this->siteAccessesConfiguration = $siteAccessesConfiguration;
     }
 
     public function getName()
