@@ -123,7 +123,7 @@ class ContentTypeServiceTest extends AbstractServiceTest
 
             ['loadContentTypeByRemoteId', ['w4ini3tn4f', self::LANG_ARG], true, 1],
 
-            ['loadContentTypes', [$contentTypeGroup, self::LANG_ARG], true, 1],
+            ['loadContentTypes', [$contentTypeGroup, self::LANG_ARG], [$contentType], 1],
         ];
     }
 }
