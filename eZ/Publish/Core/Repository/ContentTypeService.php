@@ -934,8 +934,11 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadContentTypes(APIContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [], int $status = SPIContentType::STATUS_DEFINED)
-    {
+    public function loadContentTypes(
+        APIContentTypeGroup $contentTypeGroup,
+        array $prioritizedLanguages = [],
+        int $status = SPIContentType::STATUS_DEFINED
+    ): array {
         $spiContentTypes = $this->contentTypeHandler->loadContentTypes(
             $contentTypeGroup->id,
             $status

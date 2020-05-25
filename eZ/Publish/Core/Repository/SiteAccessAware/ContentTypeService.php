@@ -119,7 +119,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         return $this->service->loadContentTypeList($contentTypeIds, $prioritizedLanguages);
     }
 
-    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = null, int $status = ContentType::STATUS_DEFINED)
+    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = null, int $status = ContentType::STATUS_DEFINED): array
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 

@@ -181,9 +181,13 @@ interface ContentTypeService
      * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      * @param int $status One of the available statuses {@link ContentType}
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType}
      */
-    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [], int $status = ContentType::STATUS_DEFINED);
+    public function loadContentTypes(
+        ContentTypeGroup $contentTypeGroup,
+        array $prioritizedLanguages = [],
+        int $status = ContentType::STATUS_DEFINED
+    ): array;
 
     /**
      * Creates a draft from an existing content type.
