@@ -6,7 +6,6 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Fragment;
 
-use eZ\Publish\Core\MVC\Symfony\Component\Serializer\SerializerTrait;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +16,7 @@ use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
 class InlineFragmentRenderer extends BaseRenderer implements SiteAccessAware
 {
-    use SerializerTrait;
+    use SiteAccessSerializationTrait;
 
     /** @var \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface */
     private $innerRenderer;
@@ -48,11 +47,7 @@ class InlineFragmentRenderer extends BaseRenderer implements SiteAccessAware
             if ($request->attributes->has('siteaccess')) {
                 /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess */
                 $siteAccess = $request->attributes->get('siteaccess');
-                $uri->attributes['serialized_siteaccess'] = json_encode($siteAccess);
-                $uri->attributes['serialized_siteaccess_matcher'] = $this->getSerializer()->serialize(
-                    $siteAccess->matcher,
-                    'json'
-                );
+                $this->serializeSiteAccess($siteAccess, $uri);
             }
             if ($request->attributes->has('semanticPathinfo')) {
                 $uri->attributes['semanticPathinfo'] = $request->attributes->get('semanticPathinfo');

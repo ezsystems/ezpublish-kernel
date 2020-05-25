@@ -89,6 +89,13 @@ class SiteAccessMatchListener implements EventSubscriberInterface
                         )
                     );
                 }
+                if ($request->attributes->get('serialized_siteaccess_sub_matchers')) {
+                    $subMatchers = [];
+                    foreach ($request->attributes->get('serialized_siteaccess_sub_matchers') as $matcherClass => $serializedData) {
+                        $subMatchers[$matcherClass] = $serializer->deserialize($serializedData, $matcherClass, 'json');
+                    }
+                    $siteAccess->matcher->setSubMatchers($subMatchers);
+                }
             }
 
             $request->attributes->set(
