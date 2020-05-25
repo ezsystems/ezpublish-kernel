@@ -16,6 +16,13 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 class Host extends Regex implements Matcher
 {
     /**
+     * The property needed to allow correct deserialization with Symfony serializer.
+     *
+     * @var array
+     */
+    private $siteAccessesConfiguration;
+
+    /**
      * Constructor.
      *
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
@@ -26,6 +33,7 @@ class Host extends Regex implements Matcher
             isset($siteAccessesConfiguration['regex']) ? $siteAccessesConfiguration['regex'] : '',
             isset($siteAccessesConfiguration['itemNumber']) ? (int)$siteAccessesConfiguration['itemNumber'] : 1
         );
+        $this->siteAccessesConfiguration = $siteAccessesConfiguration;
     }
 
     public function getName()

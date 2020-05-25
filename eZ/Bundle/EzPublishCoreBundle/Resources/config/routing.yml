@@ -16,7 +16,10 @@ services:
 
     ezpublish.siteaccess_match_listener:
         class: eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
-        arguments: ["@ezpublish.siteaccess_router", "@event_dispatcher"]
+        arguments:
+            $siteAccessRouter: '@ezpublish.siteaccess_router'
+            $eventDispatcher: '@event_dispatcher'
+            $siteAccessMatcherRegistry: '@eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistryInterface'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -53,6 +56,8 @@ services:
         parent: ezpublish.url_generator.base
 
     eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistry: ~
+    eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistryInterface:
+        alias: 'eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessMatcherRegistry'
 
     ezpublish.siteaccess.matcher_builder:
         class: eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder
