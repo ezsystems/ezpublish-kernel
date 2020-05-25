@@ -10,6 +10,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\SiteAccess;
 
 /**
  * @internal
+ *
+ * @todo Move to eZ\Publish\Core\MVC\Symfony\Matcher
  */
 interface SiteAccessMatcherRegistryInterface
 {
