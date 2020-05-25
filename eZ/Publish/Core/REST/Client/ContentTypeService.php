@@ -589,8 +589,11 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     /**
      * {@inheritdoc}
      */
-    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [], int $status = ContentType::STATUS_DEFINED)
-    {
+    public function loadContentTypes(
+        ContentTypeGroup $contentTypeGroup,
+        array $prioritizedLanguages = [],
+        int $status = ContentType::STATUS_DEFINED
+    ): array {
         $response = $this->client->request(
             'GET',
             $this->requestParser->generate(
