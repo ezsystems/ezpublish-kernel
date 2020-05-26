@@ -143,7 +143,8 @@ class DeleteTranslationTest extends BaseTest
             ]
         );
 
-        $repository->getPermissionResolver()->setCurrentUserReference($this->provideUserWithContentRemovePolicies());
+        $user = $this->provideUserWithContentRemovePolicies();
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
 
         $contentService = $repository->getContentService();
         $searchResult = $this->findContent('Contact', 'eng-US');
@@ -172,7 +173,8 @@ class DeleteTranslationTest extends BaseTest
             ]
         );
 
-        $repository->getPermissionResolver()->setCurrentUserReference($this->provideUserWithContentRemovePolicies());
+        $user = $this->provideUserWithContentRemovePolicies();
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
 
         $this->expectException(UnauthorizedException::class);
 
