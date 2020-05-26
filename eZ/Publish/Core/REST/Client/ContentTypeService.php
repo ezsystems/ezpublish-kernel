@@ -208,10 +208,10 @@ class ContentTypeService implements APIContentTypeService, Sessionable
             'DELETE',
             $contentTypeGroup->id,
             new Message(
-            // @todo: What media-type should we set here? Actually, it should be
-            // all expected exceptions + none? Or is "Section" correct,
-            // since this is what is to be expected by the resource
-            // identified by the URL?
+                // @todo: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
                 array('Accept' => $this->outputVisitor->getMediaType('ContentTypeGroup'))
             )
         );
