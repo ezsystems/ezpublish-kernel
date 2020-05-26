@@ -937,7 +937,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentTypes(
         APIContentTypeGroup $contentTypeGroup,
         array $prioritizedLanguages = [],
-        int $status = SPIContentType::STATUS_DEFINED
+        int $status = APIContentType::STATUS_DEFINED
     ): array {
         $spiContentTypes = $this->contentTypeHandler->loadContentTypes(
             $contentTypeGroup->id,
