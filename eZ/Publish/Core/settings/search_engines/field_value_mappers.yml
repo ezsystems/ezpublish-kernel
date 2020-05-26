@@ -63,3 +63,11 @@ services:
         class: eZ\Publish\Core\Search\Common\FieldValueMapper\StringMapper
         tags:
             - {name: ezpublish.search.common.field_value_mapper}
+
+    eZ\Publish\Core\Search\Common\FieldValueMapper\RemoteIdentifierMapper:
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    eZ\Publish\Core\Search\Common\FieldValueMapper\MultipleRemoteIdentifierMapper:
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
