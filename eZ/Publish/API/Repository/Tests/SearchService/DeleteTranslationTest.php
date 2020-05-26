@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
  * @group integration
  * @group search
  */
-class DeleteTranslationTest extends BaseTest
+final class DeleteTranslationTest extends BaseTest
 {
     /**
      * @param array $languages
@@ -85,19 +85,26 @@ class DeleteTranslationTest extends BaseTest
     public function testDeleteContentTranslation(): void
     {
         $repository = $this->getRepository();
-        $testContent = $this->createTestContentWithLanguages(
-            [
-                'eng-GB' => 'Contact',
-                'ger-DE' => 'Kontakt',
-            ]
-        );
         $contentService = $repository->getContentService();
+
+        $testContent = $this->createFolder(['eng-GB' => 'Contact', 'ger-DE' => 'Kontakt'], 2);
+        $this->createFolder(['eng-GB' => 'OtherEngContent', 'ger-DE' => 'OtherGerContent'], 2);
+        $this->refreshSearch($repository);
+
         $searchResult = $this->findContent('Kontakt', 'ger-DE');
         $this->assertEquals(1, $searchResult->totalCount);
 
         $contentService->deleteTranslation($testContent->contentInfo, 'ger-DE');
         $this->refreshSearch($repository);
         $searchResult = $this->findContent('Kontakt', 'ger-DE');
-        $this->assertEquals(0, $searchResult->totalCount);
+        $this->assertEquals(
+            0,
+            $searchResult->totalCount,
+            'Found reference to the deleted Content translation'
+        );
+
+        // check if unrelated items were not affected
+        $searchResult = $this->findContent('OtherGerContent', 'ger-DE');
+        $this->assertEquals(1, $searchResult->totalCount, 'Unrelated translation was deleted');
     }
 }
