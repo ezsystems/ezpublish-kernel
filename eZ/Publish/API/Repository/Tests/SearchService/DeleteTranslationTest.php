@@ -11,7 +11,6 @@ namespace eZ\Publish\API\Repository\Tests\SearchService;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
-use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
@@ -25,7 +24,7 @@ use eZ\Publish\API\Repository\Values\User\User;
  * @group integration
  * @group search
  */
-class DeleteTranslationTest extends BaseTest
+final class DeleteTranslationTest extends BaseTest
 {
     /**
      * @throws \ErrorException
@@ -39,49 +38,6 @@ class DeleteTranslationTest extends BaseTest
         }
 
         parent::setUp();
-    }
-
-    /**
-     * @param array $languages
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    protected function createTestContentWithLanguages(array $languages): Content
-    {
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        $contentTypeArticle = $contentTypeService->loadContentTypeByIdentifier('article');
-        $contentCreateStructArticle = $contentService->newContentCreateStruct(
-            $contentTypeArticle,
-            'eng-GB'
-        );
-
-        foreach ($languages as $langCode => $title) {
-            $contentCreateStructArticle->setField('title', $title, $langCode);
-            $contentCreateStructArticle->setField(
-                'intro',
-                '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0-variant ezpublish-1.0">
-  <para>' . $title . '</para>
-</section>',
-                $langCode
-            );
-        }
-
-        $locationCreateStructArticle = $locationService->newLocationCreateStruct(2);
-        $draftArticle = $contentService->createContent(
-            $contentCreateStructArticle,
-            [$locationCreateStructArticle]
-        );
-        $content = $contentService->publishVersion($draftArticle->getVersionInfo());
-        $this->refreshSearch($repository);
-
-        return $content;
     }
 
     /**
@@ -111,20 +67,27 @@ class DeleteTranslationTest extends BaseTest
     public function testDeleteContentTranslation(): void
     {
         $repository = $this->getRepository();
-        $testContent = $this->createTestContentWithLanguages(
-            [
-                'eng-GB' => 'Contact',
-                'ger-DE' => 'Kontakt',
-            ]
-        );
         $contentService = $repository->getContentService();
+
+        $testContent = $this->createFolder(['eng-GB' => 'Contact', 'ger-DE' => 'Kontakt'], 2);
+        $this->createFolder(['eng-GB' => 'OtherEngContent', 'ger-DE' => 'OtherGerContent'], 2);
+        $this->refreshSearch($repository);
+
         $searchResult = $this->findContent('Kontakt', 'ger-DE');
         $this->assertEquals(1, $searchResult->totalCount);
 
         $contentService->deleteTranslation($testContent->contentInfo, 'ger-DE');
         $this->refreshSearch($repository);
         $searchResult = $this->findContent('Kontakt', 'ger-DE');
-        $this->assertEquals(0, $searchResult->totalCount);
+        $this->assertEquals(
+            0,
+            $searchResult->totalCount,
+            'Found reference to the deleted Content translation'
+        );
+
+        // check if unrelated items were not affected
+        $searchResult = $this->findContent('OtherGerContent', 'ger-DE');
+        $this->assertEquals(1, $searchResult->totalCount, 'Unrelated translation was deleted');
     }
 
     /**
@@ -135,24 +98,21 @@ class DeleteTranslationTest extends BaseTest
     public function testDeleteContentTranslationWithContentRemovePolicy(): void
     {
         $repository = $this->getRepository();
-        $testContent = $this->createTestContentWithLanguages(
-            [
-                'eng-GB' => 'Contact',
-                'ger-DE' => 'Kontakt',
-                'eng-US' => 'Contact',
-            ]
-        );
+        $contentService = $repository->getContentService();
+
+        $testContent = $this->createFolder(['eng-GB' => 'Contact', 'ger-DE' => 'Kontakt'], 2);
+        $this->refreshSearch($repository);
 
         $user = $this->provideUserWithContentRemovePolicies();
         $repository->getPermissionResolver()->setCurrentUserReference($user);
 
-        $contentService = $repository->getContentService();
-        $searchResult = $this->findContent('Contact', 'eng-US');
-        $this->assertEquals(1, $searchResult->totalCount);
+        $searchResult = $this->findContent('Kontakt', 'ger-DE');
 
-        $contentService->deleteTranslation($testContent->contentInfo, 'eng-US');
+        $this->assertEquals(1, $searchResult->totalCount);
+        $contentService->deleteTranslation($testContent->contentInfo, 'ger-DE');
+
         $this->refreshSearch($repository);
-        $searchResult = $this->findContent('Contact', 'eng-US');
+        $searchResult = $this->findContent('Kontakt', 'ger-DE');
         $this->assertEquals(0, $searchResult->totalCount);
     }
 
@@ -165,35 +125,36 @@ class DeleteTranslationTest extends BaseTest
     {
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
-        $testContent = $this->createTestContentWithLanguages(
+
+        $testContent = $this->createFolder(
             [
                 'eng-GB' => 'Contact',
                 'ger-DE' => 'Kontakt',
                 'eng-US' => 'Contact',
-            ]
-        );
+            ],
+            2);
 
         $user = $this->provideUserWithContentRemovePolicies();
         $repository->getPermissionResolver()->setCurrentUserReference($user);
 
         $this->expectException(UnauthorizedException::class);
 
-        $contentService->deleteTranslation($testContent->contentInfo, 'ger-DE');
+        $contentService->deleteTranslation($testContent->contentInfo, 'eng-US');
     }
 
     public function provideUserWithContentRemovePolicies(): User
     {
         $limitations = [
-            new LanguageLimitation(['limitationValues' => ['eng-US']]),
+            new LanguageLimitation(['limitationValues' => ['ger-DE']]),
         ];
 
         return $this->createUserWithPolicies(
-                'test',
-                [
-                    ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
-                    ['module' => 'content', 'function' => 'versionread'],
-                    ['module' => 'content', 'function' => 'read'],
-                ]
-            );
+            'test',
+            [
+                ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
+                ['module' => 'content', 'function' => 'versionread'],
+                ['module' => 'content', 'function' => 'read'],
+            ]
+        );
     }
 }
