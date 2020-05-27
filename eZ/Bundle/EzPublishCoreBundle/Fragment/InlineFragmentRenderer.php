@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
 class InlineFragmentRenderer extends BaseRenderer implements SiteAccessAware
 {
+    use SiteAccessSerializationTrait;
+
     /** @var \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface */
     private $innerRenderer;
 
@@ -43,7 +45,9 @@ class InlineFragmentRenderer extends BaseRenderer implements SiteAccessAware
     {
         if ($uri instanceof ControllerReference) {
             if ($request->attributes->has('siteaccess')) {
-                $uri->attributes['serialized_siteaccess'] = serialize($request->attributes->get('siteaccess'));
+                /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess */
+                $siteAccess = $request->attributes->get('siteaccess');
+                $this->serializeSiteAccess($siteAccess, $uri);
             }
             if ($request->attributes->has('semanticPathinfo')) {
                 $uri->attributes['semanticPathinfo'] = $request->attributes->get('semanticPathinfo');
