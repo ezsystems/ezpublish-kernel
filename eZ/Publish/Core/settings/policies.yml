@@ -11,7 +11,7 @@ parameters:
             hide: { Class: true, Section: true, Owner: true, Group: true, Node: true, Subtree: true, Language: true }
             reverserelatedlist: ~
             translate: { Class: true, Section: true, Owner: true, Node: true, Subtree: true, Language: true }
-            remove: { Class: true, Section: true, Owner: true, Node: true, Subtree: true, State: true }
+            remove: { Class: true, Section: true, Owner: true, Node: true, Subtree: true, Language: true, State: true }
             versionread: { Class: true, Section: true, Owner: true, Status: true, Node: true, Subtree: true, State: true }
             versionremove: { Class: true, Section: true, Owner: true, Status: true, Node: true, Subtree: true, State: true }
             translations: ~

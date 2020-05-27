@@ -2285,12 +2285,14 @@ class ContentService implements ContentServiceInterface
         $translationWasFound = false;
         $this->repository->beginTransaction();
         try {
+            $target = (new Target\Builder\VersionBuilder())->translateToAnyLanguageOf([$languageCode])->build();
+
             foreach ($this->loadVersions($contentInfo) as $versionInfo) {
-                if (!$this->repository->canUser('content', 'remove', $versionInfo)) {
+                if (!$this->repository->canUser('content', 'remove', $versionInfo, [$target])) {
                     throw new UnauthorizedException(
                         'content',
                         'remove',
-                        ['contentId' => $contentInfo->id, 'versionNo' => $versionInfo->versionNo]
+                        ['contentId' => $contentInfo->id, 'versionNo' => $versionInfo->versionNo, 'languageCode' => $languageCode]
                     );
                 }
 
