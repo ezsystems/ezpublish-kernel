@@ -8,11 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Tests\SearchService;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Tests\BaseTest;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Test case for delete content translation with the SearchService.
@@ -106,5 +109,73 @@ final class DeleteTranslationTest extends BaseTest
         // check if unrelated items were not affected
         $searchResult = $this->findContent('OtherGerContent', 'ger-DE');
         $this->assertEquals(1, $searchResult->totalCount, 'Unrelated translation was deleted');
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testDeleteContentTranslationWithContentRemovePolicy(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $testContent = $this->createFolder(['eng-GB' => 'Contact', 'ger-DE' => 'Kontakt'], 2);
+        $this->refreshSearch($repository);
+
+        $user = $this->provideUserWithContentRemovePolicies();
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        $searchResult = $this->findContent('Kontakt', 'ger-DE');
+
+        $this->assertEquals(1, $searchResult->totalCount);
+        $contentService->deleteTranslation($testContent->contentInfo, 'ger-DE');
+
+        $this->refreshSearch($repository);
+        $searchResult = $this->findContent('Kontakt', 'ger-DE');
+        $this->assertEquals(0, $searchResult->totalCount);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testPreventTranslationDeletionIfNoAccess(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $testContent = $this->createFolder(
+            [
+                'eng-GB' => 'Contact',
+                'ger-DE' => 'Kontakt',
+                'eng-US' => 'Contact',
+            ],
+            2);
+
+        $user = $this->provideUserWithContentRemovePolicies();
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        $this->expectException(UnauthorizedException::class);
+
+        $contentService->deleteTranslation($testContent->contentInfo, 'eng-US');
+    }
+
+    public function provideUserWithContentRemovePolicies(): User
+    {
+        $limitations = [
+            new LanguageLimitation(['limitationValues' => ['ger-DE']]),
+        ];
+
+        return $this->createUserWithPolicies(
+            'test',
+            [
+                ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
+                ['module' => 'content', 'function' => 'versionread'],
+                ['module' => 'content', 'function' => 'read'],
+            ]
+        );
     }
 }
