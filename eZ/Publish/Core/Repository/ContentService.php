@@ -2291,7 +2291,6 @@ class ContentService implements ContentServiceInterface
             $target = (new Target\Builder\VersionBuilder())->translateToAnyLanguageOf([$languageCode])->build();
 
             foreach ($this->loadVersions($contentInfo) as $versionInfo) {
-
                 if (!$this->permissionResolver->canUser('content', 'remove', $versionInfo, [$target])) {
                     throw new UnauthorizedException(
                         'content',
