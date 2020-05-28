@@ -55,8 +55,10 @@
         "psr/event-dispatcher": "^1.0"
     },
     "require-dev": {
+        "behat/behat": "^3.6.1",
         "brianium/paratest": "^4.0",
         "jenner/simple_fork": "^1.2",
+        "friends-of-behat/mink-extension": "^2.4",
         "friendsofphp/php-cs-fixer": "^2.16.2",
         "ezsystems/ezplatform-code-style": "^0.1",
         "phpunit/phpunit": "^8.2",
