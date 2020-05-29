@@ -28,6 +28,7 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
         // string $method, array $arguments, array? $tags, array|string? $key, mixed? $return
         return [
             ['create', ['/home/about', '/web3/some/page/link', true], ['urlWildcard-notFound'], null, $wildcard],
+            ['update', [1, '/home/about-updated', '/web3/some/page/link-updated', true], ['urlWildcard-notFound', 'urlWildcard-1'], null, $wildcard],
             ['remove', [1], ['urlWildcard-1']],
             ['loadAll', [], null, null, [$wildcard]],
             ['exactSourceUrlExists', ['/home/about'], null, null, true],

@@ -68,6 +68,30 @@ class Handler implements BaseUrlWildcardHandler
         return $urlWildcard;
     }
 
+    public function update(
+        int $id,
+        string $sourceUrl,
+        string $destinationUrl,
+        bool $forward
+    ): UrlWildcard {
+        $this->gateway->updateUrlWildcard(
+            $id,
+            $sourceUrl,
+            $destinationUrl,
+            $forward
+        );
+
+        $spiUrlWildcard = $this->mapper->createUrlWildcard(
+            $sourceUrl,
+            $destinationUrl,
+            $forward
+        );
+
+        $spiUrlWildcard->id = $id;
+
+        return $spiUrlWildcard;
+    }
+
     /**
      * removes an url wildcard.
      *

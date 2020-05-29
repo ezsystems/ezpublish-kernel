@@ -27,6 +27,13 @@ interface Handler
      */
     public function create($sourceUrl, $destinationUrl, $forward = false);
 
+    public function update(
+        int $id,
+        string $sourceUrl,
+        string $destinationUrl,
+        bool $forward
+    ): UrlWildcard;
+
     /**
      * removes an url wildcard.
      *

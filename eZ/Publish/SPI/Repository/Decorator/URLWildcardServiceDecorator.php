@@ -11,6 +11,7 @@ namespace eZ\Publish\SPI\Repository\Decorator;
 use eZ\Publish\API\Repository\URLWildcardService;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardUpdateStruct;
 
 abstract class URLWildcardServiceDecorator implements URLWildcardService
 {
@@ -28,6 +29,13 @@ abstract class URLWildcardServiceDecorator implements URLWildcardService
         bool $forward = false
     ): UrlWildcard {
         return $this->innerService->create($sourceUrl, $destinationUrl, $forward);
+    }
+
+    public function update(
+        URLWildcard $urlWildcard,
+        URLWildcardUpdateStruct $updateStruct
+    ): void {
+        $this->innerService->update($urlWildcard, $updateStruct);
     }
 
     public function remove(URLWildcard $urlWildcard): void

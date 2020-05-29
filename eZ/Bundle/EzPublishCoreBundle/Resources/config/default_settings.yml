@@ -124,6 +124,9 @@ parameters:
     ezsettings.default.content.field_groups.list: ['content', 'metadata']
     ezsettings.default.content.field_groups.default: 'content'
 
+    # URL Wilcards
+    ezsettings.default.url_wildcards.enabled: '%ezpublish.url_wildcards.enabled%'
+
     # FieldType settings
 
     # Cache settings

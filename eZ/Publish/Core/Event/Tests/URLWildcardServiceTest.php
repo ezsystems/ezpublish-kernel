@@ -9,16 +9,22 @@ namespace eZ\Publish\Core\Event\Tests;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeCreateEvent;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeRemoveEvent;
 use eZ\Publish\API\Repository\Events\URLWildcard\BeforeTranslateEvent;
+use eZ\Publish\API\Repository\Events\URLWildcard\BeforeUpdateEvent;
 use eZ\Publish\API\Repository\Events\URLWildcard\CreateEvent;
 use eZ\Publish\API\Repository\Events\URLWildcard\RemoveEvent;
 use eZ\Publish\API\Repository\Events\URLWildcard\TranslateEvent;
+use eZ\Publish\API\Repository\Events\URLWildcard\UpdateEvent;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardUpdateStruct;
 use eZ\Publish\Core\Event\URLWildcardService;
 
 class URLWildcardServiceTest extends AbstractServiceTest
 {
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
     public function testRemoveEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
@@ -44,6 +50,9 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
 
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
     public function testRemoveStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
@@ -73,6 +82,78 @@ class URLWildcardServiceTest extends AbstractServiceTest
         $this->assertSame($notCalledListeners, [
             [BeforeRemoveEvent::class, 0],
             [RemoveEvent::class, 0],
+        ]);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdateEvents(): void
+    {
+        $traceableEventDispatcher = $this->getEventDispatcher(
+            BeforeUpdateEvent::class,
+            UpdateEvent::class
+        );
+
+        $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
+
+        $service = new URLWildcardService($innerServiceMock, $traceableEventDispatcher);
+        $service->update(
+            $this->createMock(URLWildcard::class),
+            new URLWildcardUpdateStruct()
+        );
+
+        $calledListeners = $this->getListenersStack(
+            $traceableEventDispatcher->getCalledListeners()
+        );
+
+        $this->assertSame($calledListeners, [
+            [BeforeUpdateEvent::class, 0],
+            [UpdateEvent::class, 0],
+        ]);
+
+        $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
+    }
+
+    public function testUpdateStopPropagationInBeforeEvents(): void
+    {
+        $traceableEventDispatcher = $this->getEventDispatcher(
+            BeforeUpdateEvent::class,
+            UpdateEvent::class
+        );
+
+        $innerServiceMock = $this->createMock(URLWildcardServiceInterface::class);
+
+        $traceableEventDispatcher->addListener(
+            BeforeUpdateEvent::class,
+            static function (BeforeUpdateEvent $event) {
+                $event->stopPropagation();
+            }, 10
+        );
+
+        $service = new URLWildcardService($innerServiceMock, $traceableEventDispatcher);
+        $service->update(
+            $this->createMock(URLWildcard::class),
+            new URLWildcardUpdateStruct()
+        );
+
+        $calledListeners = $this->getListenersStack(
+            $traceableEventDispatcher->getCalledListeners()
+        );
+        $notCalledListeners = $this->getListenersStack(
+            $traceableEventDispatcher->getNotCalledListeners()
+        );
+
+        $this->assertSame($calledListeners, [
+            [BeforeUpdateEvent::class, 10],
+        ]);
+
+        $this->assertSame($notCalledListeners, [
+            [BeforeUpdateEvent::class, 0],
+            [UpdateEvent::class, 0],
         ]);
     }
 

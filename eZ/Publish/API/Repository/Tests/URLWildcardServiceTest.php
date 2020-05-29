@@ -8,6 +8,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardUpdateStruct;
 
 /**
  * Test case for operations in the URLWildcardService.
@@ -239,6 +240,50 @@ class URLWildcardServiceTest extends BaseTest
         // This call will fail with a NotFoundException
         $urlWildcardService->load(42);
         /* END: Use Case */
+    }
+
+    /**
+     * @see \eZ\Publish\API\Repository\URLWildcardService::update
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdate(): void
+    {
+        $repository = $this->getRepository();
+
+        $urlWildcardService = $repository->getURLWildcardService();
+
+        $urlWildcard = $urlWildcardService->create(
+            '/articles/*',
+            '/content/{1}',
+            true
+        );
+
+        $updateStruct = new URLWildcardUpdateStruct();
+        $updateStruct->sourceUrl = '/articles/new/*';
+        $updateStruct->destinationUrl = '/content/new/*';
+        $updateStruct->forward = false;
+
+        $urlWildcardService->update($urlWildcard, $updateStruct);
+
+        $urlWildcardUpdated = $urlWildcardService->load($urlWildcard->id);
+
+        $this->assertEquals(
+            [
+                $urlWildcard->id,
+                $updateStruct->sourceUrl,
+                $updateStruct->destinationUrl,
+                $updateStruct->forward,
+            ],
+            [
+                $urlWildcardUpdated->id,
+                $urlWildcardUpdated->sourceUrl,
+                $urlWildcardUpdated->destinationUrl,
+                $urlWildcardUpdated->forward,
+            ]
+        );
     }
 
     /**

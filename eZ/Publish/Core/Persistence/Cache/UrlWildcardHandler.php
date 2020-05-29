@@ -40,6 +40,44 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function update(
+        int $id,
+        string $sourceUrl,
+        string $destinationUrl,
+        bool $forward
+    ): UrlWildcard {
+        $this->logger->logCall(
+            __METHOD__,
+            [
+                'id' => $id,
+                'sourceUrl' => $sourceUrl,
+                'destinationUrl' => $destinationUrl,
+                'forward' => $forward,
+            ]
+        );
+
+        $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->update(
+            $id,
+            $sourceUrl,
+            $destinationUrl,
+            $forward
+        );
+
+        $this->cache->invalidateTags(
+            [
+                'urlWildcard-notFound',
+                'urlWildcard-' . $urlWildcard->id,
+            ]
+        );
+
+        return $urlWildcard;
+    }
+
+    /**
      * @see \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler::remove
      */
     public function remove($id)

@@ -95,6 +95,39 @@ class UrlWildcardHandlerTest extends TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler::update
+     * @depends testLoad
+     */
+    public function testUpdate(): void
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/Gateway/_fixtures/urlwildcards.php');
+        $handler = $this->getHandler();
+
+        $urlWildcard = $handler->load(1);
+
+        $urlWildcardUpdated = $handler->update(
+            $urlWildcard->id, 'amber-updated', 'pattern-updated', true
+        );
+
+        self::assertEquals(
+            new UrlWildcard(
+                [
+                    'id' => 1,
+                    'sourceUrl' => '/amber-updated',
+                    'destinationUrl' => '/pattern-updated',
+                    'forward' => true,
+                ]
+            ),
+            $urlWildcardUpdated
+        );
+
+        self::assertEquals(
+            $urlWildcardUpdated,
+            $handler->load(1)
+        );
+    }
+
+    /**
      * Test for the remove() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler::remove

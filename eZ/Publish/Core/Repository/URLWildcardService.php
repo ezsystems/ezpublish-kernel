@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\URLWildcardUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
@@ -75,7 +76,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function create(string $sourceUrl, string $destinationUrl, bool $forward = false): UrlWildcard
     {
-        if ($this->permissionResolver->hasAccess('content', 'urltranslator') === false) {
+        if (false === $this->permissionResolver->hasAccess('content', 'urltranslator')) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
@@ -89,15 +90,7 @@ class URLWildcardService implements URLWildcardServiceInterface
             );
         }
 
-        preg_match_all('(\\*)', $sourceUrl, $patterns);
-        preg_match_all('(\{(\d+)\})', $destinationUrl, $placeholders);
-
-        $patterns = array_map('intval', $patterns[0]);
-        $placeholders = array_map('intval', $placeholders[1]);
-
-        if (!empty($placeholders) && max($placeholders) > count($patterns)) {
-            throw new ContentValidationException('Placeholders do not match the wildcards.');
-        }
+        $this->validateUrls($sourceUrl, $destinationUrl);
 
         $this->repository->beginTransaction();
         try {
@@ -115,16 +108,46 @@ class URLWildcardService implements URLWildcardServiceInterface
         return $this->buildUrlWildcardDomainObject($spiUrlWildcard);
     }
 
+    public function update(
+        URLWildcard $urlWildcard,
+        URLWildcardUpdateStruct $updateStruct
+    ): void {
+        if (false === $this->permissionResolver->canUser('content', 'urltranslator', $urlWildcard)) {
+            throw new UnauthorizedException('content', 'urltranslator');
+        }
+
+        $destinationUrl = $updateStruct->destinationUrl;
+        $sourceUrl = $updateStruct->sourceUrl;
+
+        $this->validateUrls($sourceUrl, $destinationUrl);
+
+        $this->repository->beginTransaction();
+
+        try {
+            $this->urlWildcardHandler->update(
+                $urlWildcard->id,
+                $sourceUrl,
+                $destinationUrl,
+                $updateStruct->forward
+            );
+
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+    }
+
     /**
-     * Removes an url wildcard.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function remove(URLWildcard $urlWildcard): void
     {
-        if (!$this->permissionResolver->canUser('content', 'urltranslator', $urlWildcard)) {
+        if (false === $this->permissionResolver->canUser('content', 'urltranslator', $urlWildcard)) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 
@@ -143,11 +166,13 @@ class URLWildcardService implements URLWildcardServiceInterface
     /**
      * Loads a url wild card.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
-     *
      * @param int $id
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function load(int $id): UrlWildcard
     {
@@ -163,6 +188,9 @@ class URLWildcardService implements URLWildcardServiceInterface
      * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function loadAll(int $offset = 0, int $limit = -1): iterable
     {
@@ -242,5 +270,28 @@ class URLWildcardService implements URLWildcardServiceInterface
     private function cleanPath(string $path): string
     {
         return trim($path, '/ ');
+    }
+
+    /**
+     * @param string $sourceUrl
+     * @param string $destinationUrl
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\ContentValidationException
+     */
+    private function validateUrls(string $sourceUrl, string $destinationUrl): void
+    {
+        preg_match_all('(\\*)', $sourceUrl, $patterns);
+        preg_match_all('({(\d+)})', $destinationUrl, $placeholders);
+
+        if (empty($patterns) || empty($placeholders)) {
+            throw new ContentValidationException('Invalid URL wildcards provided.');
+        }
+
+        $patterns = array_map('intval', $patterns[0]);
+        $placeholders = array_map('intval', $placeholders[1]);
+
+        if (!empty($placeholders) && max($placeholders) > count($patterns)) {
+            throw new ContentValidationException('Placeholders do not match the wildcards.');
+        }
     }
 }

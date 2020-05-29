@@ -46,11 +46,11 @@ final class DoctrineDatabase extends Gateway
             ->values(
                 [
                     'destination_url' => $query->createPositionalParameter(
-                        trim($urlWildcard->destinationUrl, '/ '),
+                        $this->trimUrl($urlWildcard->destinationUrl),
                         ParameterType::STRING
                     ),
                     'source_url' => $query->createPositionalParameter(
-                        trim($urlWildcard->sourceUrl, '/ '),
+                        $this->trimUrl($urlWildcard->sourceUrl),
                         ParameterType::STRING
                     ),
                     'type' => $query->createPositionalParameter(
@@ -63,6 +63,49 @@ final class DoctrineDatabase extends Gateway
         $query->execute();
 
         return (int)$this->connection->lastInsertId(self::URL_WILDCARD_SEQ);
+    }
+
+    public function updateUrlWildcard(
+        int $id,
+        string $sourceUrl,
+        string $destinationUrl,
+        bool $forward
+    ): void {
+        $query = $this->connection->createQueryBuilder();
+
+        $query
+            ->update(self::URL_WILDCARD_TABLE)
+            ->set(
+                'destination_url',
+                $query->createPositionalParameter(
+                    $this->trimUrl($destinationUrl),
+                    ParameterType::STRING
+                ),
+            )->set(
+                'source_url',
+                $query->createPositionalParameter(
+                    $this->trimUrl($sourceUrl),
+                    ParameterType::STRING
+                ),
+            )->set(
+                'type',
+                $query->createPositionalParameter(
+                    $forward ? 1 : 2,
+                    ParameterType::INTEGER
+                )
+            );
+
+        $query->where(
+            $query->expr()->eq(
+                'id',
+                $query->createPositionalParameter(
+                    $id,
+                    ParameterType::INTEGER
+                )
+            )
+        );
+
+        $query->execute();
     }
 
     public function deleteUrlWildcard(int $id): void
@@ -131,5 +174,10 @@ final class DoctrineDatabase extends Gateway
         $result = $query->execute()->fetch(FetchMode::ASSOCIATIVE);
 
         return false !== $result ? $result : [];
+    }
+
+    private function trimUrl(string $url): string
+    {
+        return trim($url, '/');
     }
 }
