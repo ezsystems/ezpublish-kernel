@@ -67,7 +67,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
         $this->addRouteExpectation(
             $location->location,
             [],
-            '/home/news/feed'
+            '/news/lorem-ipsum'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationChildren',
@@ -450,7 +450,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
         $this->assertXMLTag(
             [
                 'tag' => 'url',
-                'content' => '/home/news/feed',
+                'content' => '/news/lorem-ipsum',
             ],
             $result,
             'Invalid or non-existing <Location> url value element.',

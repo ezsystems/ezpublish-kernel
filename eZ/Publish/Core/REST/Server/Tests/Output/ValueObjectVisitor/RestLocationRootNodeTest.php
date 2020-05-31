@@ -61,7 +61,7 @@ class RestLocationRootNodeTest extends RestLocationTest
         $this->addRouteExpectation(
             $location->location,
             [],
-            '/home/news/feed'
+            '/news/lorem-ipsum'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationChildren',
