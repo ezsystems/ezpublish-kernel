@@ -667,6 +667,7 @@ services:
         class: "%ezpublish_rest.output.value_object_visitor.RestLocation.class%"
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\RestLocation }
+        arguments: ["@router", "@ezpublish.route_reference.generator"]
 
     ezpublish_rest.output.value_object_visitor.Location:
         parent: ezpublish_rest.output.value_object_visitor.base

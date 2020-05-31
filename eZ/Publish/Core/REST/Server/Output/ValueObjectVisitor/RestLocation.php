@@ -6,16 +6,30 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * RestLocation value object visitor.
  */
 class RestLocation extends ValueObjectVisitor
 {
+    /** @var \Symfony\Component\Routing\RouterInterface */
+    protected $router;
+
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator */
+    protected $routeReferenceGenerator;
+
+    public function __construct(RouterInterface $router, RouteReferenceGenerator $routeReferenceGenerator)
+    {
+        $this->router = $router;
+        $this->routeReferenceGenerator = $routeReferenceGenerator;
+    }
+
     /**
      * Visit struct returned by controllers.
      *
@@ -91,6 +105,11 @@ class RestLocation extends ValueObjectVisitor
             $generator->endAttribute('href');
         }
         $generator->endObjectElement('ParentLocation');
+
+        $routeReference = $this->routeReferenceGenerator->generate($data->location);
+
+        $generator->startValueElement('url', $this->router->generate($routeReference));
+        $generator->endValueElement('url');
 
         $generator->startValueElement('pathString', $location->pathString);
         $generator->endValueElement('pathString');
