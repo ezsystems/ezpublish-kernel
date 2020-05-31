@@ -65,6 +65,11 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
             '/content/locations/1/2/21'
         );
         $this->addRouteExpectation(
+            $location->location,
+            [],
+            '/home/news/feed'
+        );
+        $this->addRouteExpectation(
             'ezpublish_rest_loadLocationChildren',
             ['locationPath' => '1/2/21/42'],
             '/content/locations/1/2/21/42/children'
@@ -429,6 +434,26 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
             ],
             $result,
             'Invalid <Content> attributes.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains pathString value element.
+     *
+     * @param string $result
+     *
+     * @depends testVisit
+     */
+    public function testResultContainsUrlValueElement($result)
+    {
+        $this->assertXMLTag(
+            [
+                'tag' => 'url',
+                'content' => '/home/news/feed',
+            ],
+            $result,
+            'Invalid or non-existing <Location> url value element.',
             false
         );
     }
