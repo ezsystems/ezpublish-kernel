@@ -28,7 +28,19 @@ class RestLocation extends ValueObjectVisitor
         $generator->startObjectElement('Location');
         $visitor->setHeader('Content-Type', $generator->getMediaType('Location'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('LocationUpdate'));
+        $this->visitLocationAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('Location');
+    }
 
+    /**
+     * Build visit struct attributes.
+     *
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\Core\REST\Server\Values\RestLocation $data
+     */
+    protected function visitLocationAttributes(Visitor $visitor, Generator $generator, $data)
+    {
         $location = $data->location;
         $contentInfo = $location->getContentInfo();
 
@@ -141,7 +153,5 @@ class RestLocation extends ValueObjectVisitor
         $generator->endAttribute('href');
         $visitor->visitValueObject(new RestContentValue($contentInfo));
         $generator->endObjectElement('ContentInfo');
-
-        $generator->endObjectElement('Location');
     }
 }
