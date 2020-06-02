@@ -52,6 +52,12 @@ class LocationEventSubscriber extends AbstractSearchEventSubscriber implements E
                 $contentInfo->currentVersionNo
             )
         );
+
+        $this->searchHandler->indexLocation(
+            $this->persistenceHandler->locationHandler()->load(
+                $event->getLocation()->id
+            )
+        );
     }
 
     public function onDeleteLocation(DeleteLocationEvent $event)
