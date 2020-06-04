@@ -77,6 +77,17 @@ abstract class Gateway
     abstract public function loadLocationDataByContent($contentId, $rootLocationId = null);
 
     /**
+     * Loads data for all Locations for $contentId in trash, optionally only in the
+     * subtree starting at $rootLocationId.
+     *
+     * @param int $contentId
+     * @param int $rootLocationId
+     *
+     * @return array
+     */
+    abstract public function loadLocationDataByTrashContent($contentId, $rootLocationId = null);
+
+    /**
      * Loads data for all parent Locations for unpublished Content by given $contentId.
      *
      * @param mixed $contentId

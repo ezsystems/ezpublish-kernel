@@ -17,6 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStat
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -157,6 +158,22 @@ class Handler implements BaseLocationHandler
         $rows = $this->locationGateway->loadLocationDataByContent($contentId, $rootLocationId);
 
         return $this->locationMapper->createLocationsFromRows($rows);
+    }
+
+    /**
+     * Loads all locations for $contentId in trash, optionally limited to a sub tree
+     * identified by $rootLocationId.
+     *
+     * @param int $contentId
+     * @param int $rootLocationId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function loadLocationsByTrashContent($contentId, $rootLocationId = null)
+    {
+        $rows = $this->locationGateway->loadLocationDataByTrashContent($contentId, $rootLocationId);
+
+        return $this->locationMapper->createLocationsFromRows($rows, '', new Trashed());
     }
 
     /**
