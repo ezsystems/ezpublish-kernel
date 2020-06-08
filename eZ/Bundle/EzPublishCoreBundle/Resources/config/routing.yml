@@ -23,6 +23,10 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    eZ\Publish\Core\MVC\Symfony\Component\Serializer\CompoundMatcherNormalizer:
+        tags:
+            - { name: serializer.normalizer }
+
     ezpublish.url_generator.base:
         class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
         abstract: true

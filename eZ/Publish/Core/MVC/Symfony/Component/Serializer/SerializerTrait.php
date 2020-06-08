@@ -18,7 +18,10 @@ trait SerializerTrait
     public function getSerializer(): SerializerInterface
     {
         return new Serializer(
-            [(new PropertyNormalizer())],
+            [
+                new CompoundMatcherNormalizer(),
+                new PropertyNormalizer(),
+            ],
             [new JsonEncoder()]
         );
     }
