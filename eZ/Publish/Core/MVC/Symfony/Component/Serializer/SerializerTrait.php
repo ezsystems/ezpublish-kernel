@@ -18,7 +18,10 @@ trait SerializerTrait
     public function getSerializer()
     {
         return new Serializer(
-            [(new PropertyNormalizer())->setIgnoredAttributes(['request', 'container', 'matcherBuilder'])],
+            [
+                new CompoundMatcherNormalizer(),
+                (new PropertyNormalizer())->setIgnoredAttributes(['request', 'container', 'matcherBuilder']),
+            ],
             [new JsonEncoder()]
         );
     }
