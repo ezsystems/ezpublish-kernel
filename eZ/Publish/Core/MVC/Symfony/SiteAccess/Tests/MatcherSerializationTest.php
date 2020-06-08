@@ -15,19 +15,20 @@ class MatcherSerializationTest extends TestCase
     use SerializerTrait;
 
     /**
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher|null $expected
+     *
      * @dataProvider matcherProvider
      */
-    public function testDeserialize(Matcher $matcher)
+    public function testDeserialize(Matcher $matcher, $expected = null)
     {
         $serializedMatcher = $this->serializeMatcher($matcher);
         $unserializedMatcher = $this->deserializeMatcher($serializedMatcher, get_class($matcher));
+        $expected = $expected ?? $matcher;
 
-        $this->assertEquals($matcher, $unserializedMatcher);
+        $this->assertEquals($expected, $unserializedMatcher);
     }
 
     /**
-     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher $matcher
-     *
      * @return string
      */
     private function serializeMatcher(Matcher $matcher)
@@ -55,6 +56,36 @@ class MatcherSerializationTest extends TestCase
 
     public function matcherProvider()
     {
+        $subMatchers = [
+            'Map\URI' => [
+                'map' => ['key' => 'value'],
+            ],
+            'Map\Host' => [
+                'map' => ['key' => 'value'],
+            ],
+        ];
+        $logicalAnd = new Matcher\Compound\LogicalAnd(
+            [
+                [
+                    'match' => 'site_access_name',
+                ],
+            ]
+        );
+        $logicalAnd->setSubMatchers($subMatchers);
+        $expectedLogicalAnd = new Matcher\Compound\LogicalAnd([]);
+        $expectedLogicalAnd->setSubMatchers($subMatchers);
+
+        $logicalOr = new Matcher\Compound\LogicalOr(
+            [
+                [
+                    'match' => 'site_access_name',
+                ],
+            ]
+        );
+        $logicalOr->setSubMatchers($subMatchers);
+        $expectedLogicalOr = new Matcher\Compound\LogicalOr([]);
+        $expectedLogicalOr->setSubMatchers($subMatchers);
+
         return [
             'URIText' => [
                 new Matcher\URIText([
@@ -106,38 +137,12 @@ class MatcherSerializationTest extends TestCase
                 ]),
             ],
             'CompoundAnd' => [
-                new Matcher\Compound\LogicalAnd(
-                    [
-                        [
-                            'matchers' => [
-                                'Map\URI' => [
-                                    'map' => ['key' => 'value'],
-                                ],
-                                'Map\Host' => [
-                                    'map' => ['key' => 'value'],
-                                ],
-                            ],
-                            'match' => 'site_access_name',
-                        ],
-                    ]
-                ),
+                $logicalAnd,
+                $expectedLogicalAnd,
             ],
             'CompoundOr' => [
-                new Matcher\Compound\LogicalOr(
-                    [
-                        [
-                            'matchers' => [
-                                'Map\URI' => [
-                                    'map' => ['key' => 'value'],
-                                ],
-                                'Map\Host' => [
-                                    'map' => ['key' => 'value'],
-                                ],
-                            ],
-                            'match' => 'site_access_name',
-                        ],
-                    ]
-                ),
+                $logicalOr,
+                $expectedLogicalOr,
             ],
         ];
     }
