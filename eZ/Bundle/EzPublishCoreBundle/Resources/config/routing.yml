@@ -36,6 +36,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ezpublish.serializer.compound_matcher_normalizer:
+        class: eZ\Publish\Core\MVC\Symfony\Component\Serializer\CompoundMatcherNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
     ezpublish.url_generator.base:
         class: "%ezpublish.url_generator.base.class%"
         abstract: true
