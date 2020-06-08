@@ -130,7 +130,7 @@ class DoctrineDatabase extends Gateway
         $query = $this->handler->createSelectQuery();
         $query
             ->select('*')
-            ->from($this->handler->quoteTable('ezcontentobject_trash'))
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $query->expr->eq(
                     $this->handler->quoteColumn('contentobject_id'),
@@ -157,15 +157,19 @@ class DoctrineDatabase extends Gateway
      */
     public function loadLocationDataByTrashContent($contentId, $rootLocationId = null)
     {
-        $query = $this->connection->createQueryBuilder();
+        $query = $this->handler->createSelectQuery();
         $query
             ->select('*')
             ->from($this->connection->quoteIdentifier('ezcontentobject_trash'))
-            ->where('contentobject_id = :contentobject_id')
-            ->setParameter('contentobject_id', $contentId, ParameterType::INTEGER);
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn('contentobject_id'),
+                    $query->bindValue($contentId)
+                )
+            );
 
         if ($rootLocationId !== null) {
-            $this->applySubtreeLimitation($query, $rootLocationId);
+            $this->applySubtreeLimitation($query, $rootLocationId, 'ezcontentobject_trash');
         }
         $statement = $query->prepare();
         $statement->execute();
@@ -255,12 +259,13 @@ class DoctrineDatabase extends Gateway
      *
      * @param \eZ\Publish\Core\Persistence\Database\Query $query
      * @param string $rootLocationId
+     * @param string $tableName
      */
-    protected function applySubtreeLimitation(DatabaseQuery $query, $rootLocationId)
+    protected function applySubtreeLimitation(DatabaseQuery $query, $rootLocationId, string $tableName = 'ezcontentobject_tree')
     {
         $query->where(
             $query->expr->like(
-                $this->handler->quoteColumn('path_string', 'ezcontentobject_tree'),
+                $this->handler->quoteColumn('path_string', $tableName),
                 $query->bindValue('%/' . $rootLocationId . '/%')
             )
         );
