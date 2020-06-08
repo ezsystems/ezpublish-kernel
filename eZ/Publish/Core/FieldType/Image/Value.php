@@ -26,7 +26,7 @@ class Value extends BaseValue
      *
      * Required.
      *
-     * @var mixed
+     * @var mixed|null
      */
     public $id;
 
@@ -42,7 +42,7 @@ class Value extends BaseValue
      *
      * Required.
      *
-     * @var string
+     * @var string|null
      */
     public $fileName;
 
@@ -51,42 +51,42 @@ class Value extends BaseValue
      *
      * Required.
      *
-     * @var int
+     * @var int|null
      */
     public $fileSize;
 
     /**
      * The image's HTTP URI.
      *
-     * @var string
+     * @var string|null
      */
     public $uri;
 
     /**
      * External image ID (required by REST for now, see https://jira.ez.no/browse/EZP-20831).
      *
-     * @var mixed
+     * @var mixed|null
      */
     public $imageId;
 
     /**
      * Input image file URI.
      *
-     * @var string
+     * @var string|null
      */
     public $inputUri;
 
     /**
      * Original image width.
      *
-     * @var int
+     * @var int|null
      */
     public $width;
 
     /**
      * Original image height.
      *
-     * @var int
+     * @var int|null
      */
     public $height;
 

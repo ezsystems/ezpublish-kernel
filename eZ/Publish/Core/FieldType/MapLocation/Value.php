@@ -16,21 +16,21 @@ class Value extends BaseValue
     /**
      * Latitude of the location.
      *
-     * @var float
+     * @var float|null
      */
     public $latitude;
 
     /**
      * Longitude of the location.
      *
-     * @var float
+     * @var float|null
      */
     public $longitude;
 
     /**
      * Display address for the location.
      *
-     * @var string
+     * @var string|null
      */
     public $address;
 
