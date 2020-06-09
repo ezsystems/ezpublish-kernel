@@ -26,4 +26,9 @@ class RestViewInput extends RestValue
      * @var string
      */
     public $identifier;
+
+    /**
+     * @var string|null
+     */
+    public $languageCode;
 }

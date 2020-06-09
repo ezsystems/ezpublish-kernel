@@ -53,7 +53,7 @@ class Views extends Controller
                 'identifier' => $viewInput->identifier,
                 'searchResults' => $this->searchService->$method(
                     $viewInput->query,
-                    ['languages' => Language::ALL]
+                    ['languages' => null !== $viewInput->languageCode ? [$viewInput->languageCode] : Language::ALL]
                 ),
             ]
         );
