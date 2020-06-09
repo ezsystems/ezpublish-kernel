@@ -116,7 +116,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data for all Locations for $contentId in trash, optionally only in the
+     * Loads data for all Locations for $contentId, optionally only in the
      * subtree starting at $rootLocationId.
      *
      * @param int $contentId
@@ -146,15 +146,10 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data for all Locations for $contentId, optionally only in the
+     * Loads data for all Locations for $contentId in trash, optionally only in the
      * subtree starting at $rootLocationId.
-     *
-     * @param int $contentId
-     * @param int $rootLocationId
-     *
-     * @return array
      */
-    public function loadLocationDataByTrashContent($contentId, $rootLocationId = null)
+    public function loadLocationDataByTrashContent(int $contentId, int $rootLocationId = null): array
     {
         $query = $this->handler->createSelectQuery();
         $query

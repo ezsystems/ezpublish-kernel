@@ -148,7 +148,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
     /**
      * {@inheritdoc}
      */
-    public function loadLocationsByTrashContent($contentId, $rootLocationId = null)
+    public function loadLocationsByTrashContent(int $contentId, int $rootLocationId = null): array
     {
         $this->logger->logCall(__METHOD__, ['content' => $contentId, 'root' => $rootLocationId]);
 

@@ -164,12 +164,9 @@ class Handler implements BaseLocationHandler
      * Loads all locations for $contentId in trash, optionally limited to a sub tree
      * identified by $rootLocationId.
      *
-     * @param int $contentId
-     * @param int $rootLocationId
-     *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
-    public function loadLocationsByTrashContent($contentId, $rootLocationId = null)
+    public function loadLocationsByTrashContent(int $contentId, int $rootLocationId = null): array
     {
         $rows = $this->locationGateway->loadLocationDataByTrashContent($contentId, $rootLocationId);
 
