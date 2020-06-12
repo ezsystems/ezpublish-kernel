@@ -79,6 +79,8 @@ abstract class Gateway
     /**
      * Loads data for all Locations for $contentId in trash, optionally only in the
      * subtree starting at $rootLocationId.
+     *
+     * @return string[]
      */
     abstract public function loadLocationDataByTrashContent(int $contentId, int $rootLocationId = null): array;
 

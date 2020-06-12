@@ -146,8 +146,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data for all Locations for $contentId in trash, optionally only in the
-     * subtree starting at $rootLocationId.
+     * {@inheritdoc}
      */
     public function loadLocationDataByTrashContent(int $contentId, int $rootLocationId = null): array
     {

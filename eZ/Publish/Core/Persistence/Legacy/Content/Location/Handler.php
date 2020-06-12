@@ -161,10 +161,7 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Loads all locations for $contentId in trash, optionally limited to a sub tree
-     * identified by $rootLocationId.
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     * {@inheritdoc}
      */
     public function loadLocationsByTrashContent(int $contentId, int $rootLocationId = null): array
     {
