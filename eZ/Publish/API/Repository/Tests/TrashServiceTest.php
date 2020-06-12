@@ -825,14 +825,14 @@ class TrashServiceTest extends BaseTrashServiceTest
         $this->createRoleWithPolicies('roleTrashCleaner', [
             [
                 'module' => 'content',
-                'function' => 'cleantrash'
+                'function' => 'cleantrash',
             ],
             [
                 'module' => 'content',
                 'function' => 'read',
                 'limitations' => [
-                    new SubtreeLimitation(['limitationValues' => [sprintf('/1/2/%d/', $folderLocationId)]])
-                ]
+                    new SubtreeLimitation(['limitationValues' => [sprintf('/1/2/%d/', $folderLocationId)]]),
+                ],
             ],
         ]);
         $user = $this->createCustomUserWithLogin(
