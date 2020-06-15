@@ -36,7 +36,7 @@ class ViewInput extends BaseParser
         }
         $restViewInput->identifier = $data['identifier'];
         $restViewInput->languageCode = $data['languageCode'] ?? null;
-        $restViewInput->useAlwaysAvailable = $data['useAlwaysAvailable'] ?? true;
+        $restViewInput->useAlwaysAvailable = $data['useAlwaysAvailable'] ?? null;
 
         // query
         if (!array_key_exists('Query', $data) || !is_array($data['Query'])) {
