@@ -19,6 +19,7 @@ use eZ\Publish\Core\Repository\Mapper;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
+use eZ\Publish\SPI\Repository\Validator\ContentValidator;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -80,6 +81,8 @@ class RepositoryFactory implements ContainerAwareInterface
         Mapper\ContentDomainMapper $contentDomainMapper,
         Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
         Mapper\RoleDomainMapper $roleDomainMapper,
+        Mapper\ContentMapper $contentMapper,
+        ContentValidator $contentValidator,
         LimitationService $limitationService,
         PermissionService $permissionService
     ): Repository {
@@ -97,6 +100,8 @@ class RepositoryFactory implements ContainerAwareInterface
             $contentDomainMapper,
             $contentTypeDomainMapper,
             $roleDomainMapper,
+            $contentMapper,
+            $contentValidator,
             $limitationService,
             $this->languageResolver,
             $permissionService,

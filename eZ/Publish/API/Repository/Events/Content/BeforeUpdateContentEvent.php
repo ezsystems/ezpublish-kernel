@@ -25,10 +25,17 @@ final class BeforeUpdateContentEvent extends BeforeEvent
     /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
     private $content;
 
-    public function __construct(VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct)
-    {
+    /** @var string[]|null */
+    private $fieldIdentifiersToValidate;
+
+    public function __construct(
+        VersionInfo $versionInfo,
+        ContentUpdateStruct $contentUpdateStruct,
+        ?array $fieldIdentifiersToValidate = null
+    ) {
         $this->versionInfo = $versionInfo;
         $this->contentUpdateStruct = $contentUpdateStruct;
+        $this->fieldIdentifiersToValidate = $fieldIdentifiersToValidate;
     }
 
     public function getVersionInfo(): VersionInfo
@@ -39,6 +46,14 @@ final class BeforeUpdateContentEvent extends BeforeEvent
     public function getContentUpdateStruct(): ContentUpdateStruct
     {
         return $this->contentUpdateStruct;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getFieldIdentifiersToValidate(): ?array
+    {
+        return $this->fieldIdentifiersToValidate;
     }
 
     public function getContent(): Content

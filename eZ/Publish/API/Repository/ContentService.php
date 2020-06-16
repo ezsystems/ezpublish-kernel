@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class provides service methods for managing content.
@@ -199,10 +200,12 @@ interface ContentService
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
      * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
      *                                                                                                While optional, it's highly recommended to use Locations for content as a lot of features in the system is usually tied to the tree structure (including default Role policies).
+     * @param string[]|null $fieldIdentifiersToValidate List of field identifiers for partial validation or null
+     *                      for case of full validation. Empty identifiers array is equal to no validation.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = []): Content;
+    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = [], ?array $fieldIdentifiersToValidate = null): Content;
 
     /**
      * Updates the metadata.
@@ -307,10 +310,12 @@ interface ContentService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
+     * @param string[]|null $fieldIdentifiersToValidate List of field identifiers for partial validation or null
+     *                      for case of full validation. Empty identifiers array is equal to no validation.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the updated fields
      */
-    public function updateContent(VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct): Content;
+    public function updateContent(VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct, ?array $fieldIdentifiersToValidate = null): Content;
 
     /**
      * Publishes a content version.
@@ -538,4 +543,18 @@ interface ContentService
      * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
     public function newContentUpdateStruct(): ContentUpdateStruct;
+
+    /**
+     * Validates given content related ValueObject returning field errors structure as a result.
+     *
+     * @param array $context Additional context parameters to be used by validators.
+     * @param string[]|null $fieldIdentifiersToValidate List of field identifiers for partial validation or null
+     *                      for case of full validation. Empty identifiers array is equal to no validation.
+     *
+     * @return array Validation errors grouped by field definition and language code, in format:
+     *           $returnValue[string|int $fieldDefinitionId][string $languageCode] = $fieldErrors;
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function validate(ValueObject $object, array $context, ?array $fieldIdentifiersToValidate = null): array;
 }

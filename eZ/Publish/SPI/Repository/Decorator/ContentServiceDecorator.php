@@ -26,6 +26,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 abstract class ContentServiceDecorator implements ContentService
 {
@@ -111,9 +112,10 @@ abstract class ContentServiceDecorator implements ContentService
 
     public function createContent(
         ContentCreateStruct $contentCreateStruct,
-        array $locationCreateStructs = []
+        array $locationCreateStructs = [],
+        ?array $fieldIdentifiersToValidate = null
     ): Content {
-        return $this->innerService->createContent($contentCreateStruct, $locationCreateStructs);
+        return $this->innerService->createContent($contentCreateStruct, $locationCreateStructs, $fieldIdentifiersToValidate);
     }
 
     public function updateContentMetadata(
@@ -154,9 +156,10 @@ abstract class ContentServiceDecorator implements ContentService
 
     public function updateContent(
         VersionInfo $versionInfo,
-        ContentUpdateStruct $contentUpdateStruct
+        ContentUpdateStruct $contentUpdateStruct,
+        ?array $fieldIdentifiersToValidate = null
     ): Content {
-        return $this->innerService->updateContent($versionInfo, $contentUpdateStruct);
+        return $this->innerService->updateContent($versionInfo, $contentUpdateStruct, $fieldIdentifiersToValidate);
     }
 
     public function publishVersion(VersionInfo $versionInfo, array $translations = Language::ALL): Content
@@ -255,5 +258,13 @@ abstract class ContentServiceDecorator implements ContentService
     public function newContentUpdateStruct(): ContentUpdateStruct
     {
         return $this->innerService->newContentUpdateStruct();
+    }
+
+    public function validate(
+        ValueObject $object,
+        array $context,
+        ?array $fieldIdentifiersToValidate = null
+    ): array {
+        return $this->innerService->validate($object, $context, $fieldIdentifiersToValidate);
     }
 }

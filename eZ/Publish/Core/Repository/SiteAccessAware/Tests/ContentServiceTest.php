@@ -117,6 +117,7 @@ class ContentServiceTest extends AbstractServiceTest
             ['newContentCreateStruct', [$contentType, 'eng-GB'], $contentCreateStruct],
             ['newContentMetadataUpdateStruct', [], $contentMetaStruct],
             ['newContentUpdateStruct', [], $contentUpdateStruct],
+            ['validate', [$contentUpdateStruct, []], []],
         ];
     }
 

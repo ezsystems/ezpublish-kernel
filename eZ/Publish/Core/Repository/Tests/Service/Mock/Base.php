@@ -10,14 +10,20 @@ use eZ\Publish\API\Repository\LanguageResolver;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\PermissionService;
 use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
+use eZ\Publish\Core\Repository\Mapper\ContentMapper;
 use eZ\Publish\Core\Repository\Mapper\RoleDomainMapper;
 use eZ\Publish\Core\Repository\Permission\LimitationService;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
+use eZ\Publish\Core\Repository\Strategy\ContentValidator\ContentValidatorStrategy;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
+use eZ\Publish\Core\Repository\Validator\ContentCreateStructValidator;
+use eZ\Publish\Core\Repository\Validator\ContentUpdateStructValidator;
+use eZ\Publish\Core\Repository\Validator\VersionValidator;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
+use eZ\Publish\SPI\Repository\Validator\ContentValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Repository\Repository;
@@ -77,6 +83,12 @@ abstract class Base extends TestCase
     /** @var \eZ\Publish\Core\Repository\Mapper\RoleDomainMapper|\PHPUnit\Framework\MockObject\MockObject */
     protected $roleDomainMapperMock;
 
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentMapper|\PHPUnit\Framework\MockObject\MockObject */
+    protected $contentMapperMock;
+
+    /** @var \eZ\Publish\SPI\Repository\Validator\ContentValidator|\PHPUnit\Framework\MockObject\MockObject */
+    protected $contentValidatorStrategyMock;
+
     /**
      * Get Real repository with mocked dependencies.
      *
@@ -99,6 +111,8 @@ abstract class Base extends TestCase
                 $this->getContentDomainMapperMock(),
                 $this->getContentTypeDomainMapperMock(),
                 $this->getRoleDomainMapperMock(),
+                $this->getContentMapper(),
+                $this->getContentValidatorStrategy(),
                 $this->getLimitationServiceMock(),
                 $this->getLanguageResolverMock(),
                 $this->getPermissionServiceMock(),
@@ -374,5 +388,32 @@ abstract class Base extends TestCase
         }
 
         return $this->roleDomainMapperMock;
+    }
+
+    protected function getContentMapper(): ContentMapper
+    {
+        return new ContentMapper(
+            $this->getPersistenceMock()->contentLanguageHandler()
+        );
+    }
+
+    protected function getContentValidatorStrategy(): ContentValidator
+    {
+        $validators = [
+            new ContentCreateStructValidator(
+                $this->getContentMapper(),
+                $this->getFieldTypeRegistryMock()
+            ),
+            new ContentUpdateStructValidator(
+                $this->getContentMapper(),
+                $this->getFieldTypeRegistryMock(),
+                $this->getPersistenceMock()->contentLanguageHandler()
+            ),
+            new VersionValidator(
+                $this->getFieldTypeRegistryMock(),
+            ),
+        ];
+
+        return new ContentValidatorStrategy($validators);
     }
 }

@@ -28,6 +28,8 @@ services:
             - '@eZ\Publish\Core\Repository\Mapper\ContentDomainMapper'
             - '@eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper'
             - '@eZ\Publish\Core\Repository\Mapper\RoleDomainMapper'
+            - '@eZ\Publish\Core\Repository\Mapper\ContentMapper'
+            - '@eZ\Publish\SPI\Repository\Validator\ContentValidator'
             - '@eZ\Publish\Core\Repository\Permission\LimitationService'
             - '@eZ\Publish\API\Repository\PermissionService'
             - '%languages%'
@@ -158,6 +160,10 @@ services:
                 arguments:
                     $proxyFactory: '@eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface'
 
+    eZ\Publish\Core\Repository\Mapper\ContentMapper:
+        arguments:
+            $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
+
     eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper:
         parent: eZ\Publish\Core\Repository\Mapper\ProxyAwareDomainMapper
         arguments:
@@ -202,3 +208,30 @@ services:
         arguments:
             $innerPermissionResolver: '@eZ\Publish\Core\Repository\Permission\PermissionResolver'
             $permissionCriterionResolver: '@eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver'
+
+    eZ\Publish\Core\Repository\Strategy\ContentValidator\ContentValidatorStrategy:
+        arguments:
+            $contentValidators: !tagged_iterator ezplatform.spi.content.validator
+
+    eZ\Publish\Core\Repository\Validator\ContentCreateStructValidator:
+        arguments:
+            $contentMapper: '@eZ\Publish\Core\Repository\Mapper\ContentMapper'
+            $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
+        tags:
+            - ezplatform.spi.content.validator
+
+    eZ\Publish\Core\Repository\Validator\ContentUpdateStructValidator:
+        arguments:
+            $contentMapper: '@eZ\Publish\Core\Repository\Mapper\ContentMapper'
+            $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
+            $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
+        tags:
+            - ezplatform.spi.content.validator
+
+    eZ\Publish\Core\Repository\Validator\VersionValidator:
+        arguments:
+            $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
+        tags:
+            - ezplatform.spi.content.validator
+
+    eZ\Publish\SPI\Repository\Validator\ContentValidator: '@eZ\Publish\Core\Repository\Strategy\ContentValidator\ContentValidatorStrategy'

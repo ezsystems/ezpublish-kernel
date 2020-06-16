@@ -24,14 +24,19 @@ final class UpdateContentEvent extends AfterEvent
     /** @var \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct */
     private $contentUpdateStruct;
 
+    /** @var string[]|null */
+    private $fieldIdentifiersToValidate;
+
     public function __construct(
         Content $content,
         VersionInfo $versionInfo,
-        ContentUpdateStruct $contentUpdateStruct
+        ContentUpdateStruct $contentUpdateStruct,
+        ?array $fieldIdentifiersToValidate = null
     ) {
         $this->content = $content;
         $this->versionInfo = $versionInfo;
         $this->contentUpdateStruct = $contentUpdateStruct;
+        $this->fieldIdentifiersToValidate = $fieldIdentifiersToValidate;
     }
 
     public function getContent(): Content
@@ -47,5 +52,13 @@ final class UpdateContentEvent extends AfterEvent
     public function getContentUpdateStruct(): ContentUpdateStruct
     {
         return $this->contentUpdateStruct;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getFieldIdentifiersToValidate(): ?array
+    {
+        return $this->fieldIdentifiersToValidate;
     }
 }

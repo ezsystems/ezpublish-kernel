@@ -40,6 +40,7 @@ use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
+use eZ\Publish\SPI\Repository\Validator\ContentValidator;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -244,6 +245,12 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\API\Repository\PermissionService */
     private $permissionService;
 
+    /** @var \eZ\Publish\Core\Repository\Mapper\ContentMapper */
+    private $contentMapper;
+
+    /** @var \eZ\Publish\SPI\Repository\Validator\ContentValidator */
+    private $contentValidator;
+
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
@@ -256,6 +263,8 @@ class Repository implements RepositoryInterface
         Mapper\ContentDomainMapper $contentDomainMapper,
         Mapper\ContentTypeDomainMapper $contentTypeDomainMapper,
         Mapper\RoleDomainMapper $roleDomainMapper,
+        Mapper\ContentMapper $contentMapper,
+        ContentValidator $contentValidator,
         LimitationService $limitationService,
         LanguageResolver $languageResolver,
         PermissionService $permissionService,
@@ -303,6 +312,8 @@ class Repository implements RepositoryInterface
         }
 
         $this->logger = null !== $logger ? $logger : new NullLogger();
+        $this->contentMapper = $contentMapper;
+        $this->contentValidator = $contentValidator;
     }
 
     /**
@@ -334,6 +345,8 @@ class Repository implements RepositoryInterface
             $this->getNameSchemaService(),
             $this->fieldTypeRegistry,
             $this->getPermissionResolver(),
+            $this->contentMapper,
+            $this->contentValidator,
             $this->serviceSettings['content'],
         );
 
