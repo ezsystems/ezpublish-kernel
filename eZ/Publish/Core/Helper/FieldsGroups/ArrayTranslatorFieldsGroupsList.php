@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Helper\FieldsGroups;
 
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -44,5 +45,25 @@ final class ArrayTranslatorFieldsGroupsList implements FieldsGroupsList
     public function getDefaultGroup()
     {
         return $this->defaultGroup;
+    }
+
+    public function getFieldGroup(FieldDefinition $fieldDefinition): string
+    {
+        if (empty($fieldDefinition->fieldGroup)) {
+            return $this->getDefaultGroup();
+        }
+
+        return $fieldDefinition->fieldGroup;
+    }
+
+    public function getFieldGroupTranslated(FieldDefinition $fieldDefinition): string
+    {
+        $groupId = $this->getFieldGroup($fieldDefinition);
+
+        if (array_key_exists($groupId, $this->groups)) {
+            return $this->groups[$groupId];
+        }
+
+        return $groupId;
     }
 }
