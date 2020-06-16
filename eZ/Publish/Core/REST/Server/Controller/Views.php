@@ -55,7 +55,7 @@ class Views extends Controller
         if (!empty($viewInput->query->query->value)) {
             $languageFilter['excludeTranslationsFromAlwaysAvailable'] = false;
         }
-        
+
         return new Values\RestExecutedView(
             [
                 'identifier' => $viewInput->identifier,
