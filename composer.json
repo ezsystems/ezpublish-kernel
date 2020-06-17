@@ -37,7 +37,7 @@
         "symfony/validator": "^5.0",
         "symfony/var-dumper": "^5.0",
         "ezsystems/doctrine-dbal-schema": "~1.0.0@dev",
-        "ezsystems/routing": "^2.2",
+        "symfony-cmf/routing": "^2.3",
         "guzzlehttp/guzzle": "^6.5",
         "php-http/guzzle6-adapter": "^2.0",
         "nelmio/cors-bundle": "^2.0",
