@@ -52,7 +52,8 @@ class Views extends Controller
             'languages' => null !== $viewInput->languageCode ? [$viewInput->languageCode] : Language::ALL,
             'useAlwaysAvailable' => $viewInput->useAlwaysAvailable ?? true,
         ];
-        if (!empty($viewInput->query->query->value)) {
+        $query = $viewInput->query->query;
+        if (!empty($query->value)) {
             $languageFilter['excludeTranslationsFromAlwaysAvailable'] = false;
         }
 
