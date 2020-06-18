@@ -258,8 +258,7 @@ class DoctrineDatabase extends Gateway
         DatabaseQuery $query,
         $rootLocationId,
         string $tableName = 'ezcontentobject_tree'
-    ): void
-    {
+    ): void {
         $query->where(
             $query->expr->like(
                 $this->handler->quoteColumn('path_string', $tableName),
