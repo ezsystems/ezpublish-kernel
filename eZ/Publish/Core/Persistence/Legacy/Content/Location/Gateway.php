@@ -82,7 +82,7 @@ abstract class Gateway
      *
      * @return string[]
      */
-    abstract public function loadLocationDataByTrashContent(int $contentId, int $rootLocationId = null): array;
+    abstract public function loadLocationDataByTrashContent(int $contentId, ?int $rootLocationId = null): array;
 
     /**
      * Loads data for all parent Locations for unpublished Content by given $contentId.

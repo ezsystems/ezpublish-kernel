@@ -71,7 +71,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadLocationDataByTrashContent(int $contentId, int $rootLocationId = null): array
+    public function loadLocationDataByTrashContent(int $contentId, ?int $rootLocationId = null): array
     {
         try {
             return $this->innerGateway->loadLocationDataByTrashContent($contentId, $rootLocationId);

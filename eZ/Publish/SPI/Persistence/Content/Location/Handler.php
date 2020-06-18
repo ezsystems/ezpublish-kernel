@@ -81,7 +81,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
-    public function loadLocationsByTrashContent(int $contentId, int $rootLocationId = null): array;
+    public function loadLocationsByTrashContent(int $contentId, ?int $rootLocationId = null): array;
 
     /**
      * Loads all parent Locations for unpublished Content by given $contentId.

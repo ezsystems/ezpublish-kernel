@@ -148,7 +148,7 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function loadLocationDataByTrashContent(int $contentId, int $rootLocationId = null): array
+    public function loadLocationDataByTrashContent(int $contentId, ?int $rootLocationId = null): array
     {
         $query = $this->handler->createSelectQuery();
         $query

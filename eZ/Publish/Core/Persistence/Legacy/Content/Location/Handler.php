@@ -163,7 +163,7 @@ class Handler implements BaseLocationHandler
     /**
      * {@inheritdoc}
      */
-    public function loadLocationsByTrashContent(int $contentId, int $rootLocationId = null): array
+    public function loadLocationsByTrashContent(int $contentId, ?int $rootLocationId = null): array
     {
         $rows = $this->locationGateway->loadLocationDataByTrashContent($contentId, $rootLocationId);
 

@@ -27,7 +27,7 @@ class Mapper
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function createLocationFromRow(array $data, $prefix = '', Location $location = null)
+    public function createLocationFromRow(array $data, $prefix = '', ?Location $location = null)
     {
         $location = $location ?: new Location();
 
@@ -60,7 +60,7 @@ class Mapper
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
-    public function createLocationsFromRows(array $rows, $prefix = '', Location $location = null)
+    public function createLocationsFromRows(array $rows, $prefix = '', ?Location $location = null)
     {
         $locations = [];
 
