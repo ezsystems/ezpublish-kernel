@@ -254,7 +254,11 @@ class DoctrineDatabase extends Gateway
      * @param string $rootLocationId
      * @param string $tableName
      */
-    protected function applySubtreeLimitation(DatabaseQuery $query, $rootLocationId, string $tableName = 'ezcontentobject_tree')
+    protected function applySubtreeLimitation(
+        DatabaseQuery $query,
+        $rootLocationId,
+        string $tableName = 'ezcontentobject_tree'
+    ): void
     {
         $query->where(
             $query->expr->like(

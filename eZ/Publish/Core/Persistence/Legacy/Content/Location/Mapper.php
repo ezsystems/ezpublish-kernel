@@ -23,7 +23,7 @@ class Mapper
      *
      * @param array $data
      * @param string $prefix
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location|null $location
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
@@ -56,7 +56,7 @@ class Mapper
      *
      * @param array $rows
      * @param string $prefix
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location|null $location
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */

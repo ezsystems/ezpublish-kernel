@@ -844,11 +844,6 @@ class TrashServiceTest extends BaseTrashServiceTest
         $repository->getPermissionResolver()->setCurrentUserReference($user);
 
         $query = new Query();
-        $query->filter = new Criterion\LogicalAnd(
-            [
-                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
-            ]
-        );
 
         // Load all trashed locations
         $searchResult = $trashService->findTrashItems($query);
