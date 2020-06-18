@@ -51,7 +51,7 @@ abstract class FieldDefinition extends ValueObject implements MultiLanguageName,
     protected $fieldGroup;
 
     /**
-     * the position of the field definition in the content typr.
+     * the position of the field definition in the content type.
      *
      * @var int
      */
