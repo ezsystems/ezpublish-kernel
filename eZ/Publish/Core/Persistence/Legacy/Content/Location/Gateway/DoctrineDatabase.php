@@ -136,15 +136,38 @@ class DoctrineDatabase extends Gateway
                     $query->bindValue($contentId)
                 )
             );
-
         if ($rootLocationId !== null) {
             $this->applySubtreeLimitation($query, $rootLocationId);
         }
-
         $statement = $query->prepare();
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadLocationDataByTrashContent(int $contentId, ?int $rootLocationId = null): array
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select('*')
+            ->from($this->connection->quoteIdentifier('ezcontentobject_trash'))
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn('contentobject_id'),
+                    $query->bindValue($contentId)
+                )
+            );
+
+        if ($rootLocationId !== null) {
+            $this->applySubtreeLimitation($query, $rootLocationId, 'ezcontentobject_trash');
+        }
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -229,12 +252,16 @@ class DoctrineDatabase extends Gateway
      *
      * @param \eZ\Publish\Core\Persistence\Database\Query $query
      * @param string $rootLocationId
+     * @param string $tableName
      */
-    protected function applySubtreeLimitation(DatabaseQuery $query, $rootLocationId)
-    {
+    protected function applySubtreeLimitation(
+        DatabaseQuery $query,
+        $rootLocationId,
+        string $tableName = 'ezcontentobject_tree'
+    ): void {
         $query->where(
             $query->expr->like(
-                $this->handler->quoteColumn('path_string', 'ezcontentobject_tree'),
+                $this->handler->quoteColumn('path_string', $tableName),
                 $query->bindValue('%/' . $rootLocationId . '/%')
             )
         );
@@ -365,11 +392,11 @@ class DoctrineDatabase extends Gateway
             }
 
             $query->where(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn('node_id'),
-                        $query->bindValue($row['node_id'])
-                    )
-                );
+                $query->expr->eq(
+                    $this->handler->quoteColumn('node_id'),
+                    $query->bindValue($row['node_id'])
+                )
+            );
             $query->prepare()->execute();
         }
     }
@@ -829,13 +856,13 @@ class DoctrineDatabase extends Gateway
                 $this->handler->quoteColumn('parent_node'),
                 $query->bindValue($parentNodeId, null, \PDO::PARAM_INT)
             )->set(
-                // parent_remote_id column should contain the remote id of the corresponding Location
+            // parent_remote_id column should contain the remote id of the corresponding Location
                 $this->handler->quoteColumn('parent_remote_id'),
                 $query->bindValue($createStruct->remoteId, null, \PDO::PARAM_STR)
             )->set(
-                // remote_id column should contain the remote id of the node assignment itself,
-                // however this was never implemented completely in Legacy Stack, so we just set
-                // it to default value '0'
+            // remote_id column should contain the remote id of the node assignment itself,
+            // however this was never implemented completely in Legacy Stack, so we just set
+            // it to default value '0'
                 $this->handler->quoteColumn('remote_id'),
                 $query->bindValue('0', null, \PDO::PARAM_STR)
             )->set(

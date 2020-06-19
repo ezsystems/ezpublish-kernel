@@ -71,6 +71,15 @@ class ExceptionConversion extends Gateway
         }
     }
 
+    public function loadLocationDataByTrashContent(int $contentId, ?int $rootLocationId = null): array
+    {
+        try {
+            return $this->innerGateway->loadLocationDataByTrashContent($contentId, $rootLocationId);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
+        }
+    }
+
     public function loadParentLocationsDataForDraftContent($contentId)
     {
         try {

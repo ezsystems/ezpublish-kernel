@@ -802,6 +802,61 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
+     * Test Section Role Assignment Limitation against user/login.
+     */
+    public function testFindTrashItemsSubtreeLimitation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $contentTypeService = $repository->getContentTypeService();
+        $trashService = $repository->getTrashService();
+
+        $folder1 = $this->createFolder(['eng-GB' => 'Folder1'], 2);
+        $folderLocationId = $folder1->contentInfo->mainLocationId;
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
+        $newContent = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $newContent->setField('name', 'Media');
+        $draftContent = $contentService->createContent($newContent, [new LocationCreateStruct(['parentLocationId' => $folderLocationId])]);
+        $published = $contentService->publishVersion($draftContent->versionInfo);
+        $location = $locationService->loadLocation($published->contentInfo->mainLocationId);
+        $trashService->trash($location);
+
+        $this->createRoleWithPolicies('roleTrashCleaner', [
+            [
+                'module' => 'content',
+                'function' => 'cleantrash',
+            ],
+            [
+                'module' => 'content',
+                'function' => 'read',
+                'limitations' => [
+                    new SubtreeLimitation(['limitationValues' => [sprintf('/1/2/%d/', $folderLocationId)]]),
+                ],
+            ],
+        ]);
+        $user = $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            'roleTrashCleaners',
+            'roleTrashCleaner'
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        $query = new Query();
+
+        // Load all trashed locations
+        $searchResult = $trashService->findTrashItems($query);
+        /* END: Use Case */
+        $this->assertInstanceOf(
+            SearchResult::class,
+            $searchResult
+        );
+
+        $this->assertEquals(1, count($searchResult->items));
+    }
+
+    /**
      * Test for the emptyTrash() method.
      *
      * @see \eZ\Publish\API\Repository\TrashService::emptyTrash()

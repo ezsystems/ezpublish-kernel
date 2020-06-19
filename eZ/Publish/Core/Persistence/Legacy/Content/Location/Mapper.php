@@ -23,11 +23,11 @@ class Mapper
      *
      * @param array $data
      * @param string $prefix
-     * @param Location $location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location|null $location
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function createLocationFromRow(array $data, $prefix = '', Location $location = null)
+    public function createLocationFromRow(array $data, $prefix = '', ?Location $location = null)
     {
         $location = $location ?: new Location();
 
@@ -56,17 +56,18 @@ class Mapper
      *
      * @param array $rows
      * @param string $prefix
+     * @param \eZ\Publish\SPI\Persistence\Content\Location|null $location
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
-    public function createLocationsFromRows(array $rows, $prefix = '')
+    public function createLocationsFromRows(array $rows, $prefix = '', ?Location $location = null)
     {
         $locations = [];
 
         foreach ($rows as $row) {
             $id = $row[$prefix . 'node_id'];
             if (!isset($locations[$id])) {
-                $locations[$id] = $this->createLocationFromRow($row, $prefix);
+                $locations[$id] = $this->createLocationFromRow($row, $prefix, $location);
             }
         }
 
