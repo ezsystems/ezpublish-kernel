@@ -16,14 +16,14 @@ class Value extends BaseValue
     /**
      * Link content.
      *
-     * @var string
+     * @var string|null
      */
     public $link;
 
     /**
      * Text content.
      *
-     * @var string
+     * @var string|null
      */
     public $text;
 
