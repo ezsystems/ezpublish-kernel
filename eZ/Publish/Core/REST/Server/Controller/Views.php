@@ -48,12 +48,21 @@ class Views extends Controller
             $method = 'findContent';
         }
 
+        $languageFilter = [
+            'languages' => null !== $viewInput->languageCode ? [$viewInput->languageCode] : Language::ALL,
+            'useAlwaysAvailable' => $viewInput->useAlwaysAvailable ?? true,
+        ];
+        $query = $viewInput->query->query;
+        if (!empty($query->value)) {
+            $languageFilter['excludeTranslationsFromAlwaysAvailable'] = false;
+        }
+
         return new Values\RestExecutedView(
             [
                 'identifier' => $viewInput->identifier,
                 'searchResults' => $this->searchService->$method(
                     $viewInput->query,
-                    ['languages' => Language::ALL]
+                    $languageFilter
                 ),
             ]
         );

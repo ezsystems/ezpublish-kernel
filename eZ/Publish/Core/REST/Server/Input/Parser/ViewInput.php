@@ -35,6 +35,8 @@ class ViewInput extends BaseParser
             throw new Exceptions\Parser('Missing <identifier> attribute for <ViewInput>.');
         }
         $restViewInput->identifier = $data['identifier'];
+        $restViewInput->languageCode = $data['languageCode'] ?? null;
+        $restViewInput->useAlwaysAvailable = $data['useAlwaysAvailable'] ?? null;
 
         // query
         if (!array_key_exists('Query', $data) || !is_array($data['Query'])) {

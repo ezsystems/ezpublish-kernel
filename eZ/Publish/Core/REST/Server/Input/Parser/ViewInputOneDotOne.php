@@ -35,6 +35,8 @@ class ViewInputOneDotOne extends CriterionParser
             throw new Exceptions\Parser('Missing <identifier> attribute for <ViewInput>.');
         }
         $restViewInput->identifier = $data['identifier'];
+        $restViewInput->languageCode = $data['languageCode'] ?? null;
+        $restViewInput->useAlwaysAvailable = $data['useAlwaysAvailable'] ?? null;
 
         // query
         if (array_key_exists('ContentQuery', $data) && is_array($data['ContentQuery'])) {
