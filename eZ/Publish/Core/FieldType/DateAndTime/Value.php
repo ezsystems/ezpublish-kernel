@@ -19,7 +19,7 @@ class Value extends BaseValue
     /**
      * Date content.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     public $value;
 

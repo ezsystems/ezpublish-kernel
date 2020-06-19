@@ -28,35 +28,35 @@ abstract class Value extends BaseValue
     /**
      * Input file URI, as a path to a file on a disk.
      *
-     * @var string
+     * @var string|null
      */
     public $inputUri;
 
     /**
      * Display file name.
      *
-     * @var string
+     * @var string|null
      */
     public $fileName;
 
     /**
      * Size of the image file.
      *
-     * @var int
+     * @var int|null
      */
     public $fileSize;
 
     /**
      * Mime type of the file.
      *
-     * @var string
+     * @var string|null
      */
     public $mimeType;
 
     /**
      * HTTP URI.
      *
-     * @var string
+     * @var string|null
      */
     public $uri;
 
