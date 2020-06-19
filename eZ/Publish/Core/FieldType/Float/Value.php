@@ -16,7 +16,7 @@ class Value extends BaseValue
     /**
      * Float content.
      *
-     * @var float
+     * @var float|null
      */
     public $value;
 
