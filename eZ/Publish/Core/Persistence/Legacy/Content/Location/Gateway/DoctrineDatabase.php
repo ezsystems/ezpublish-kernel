@@ -131,6 +131,31 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function loadLocationDataByTrashContent(int $contentId, ?int $rootLocationId = null): array
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('*')
+            ->from($this->connection->quoteIdentifier('ezcontentobject_trash'), 't')
+            ->where('t.contentobject_id = :contentobject_id')
+            ->setParameter('contentobject_id', $contentId, ParameterType::INTEGER);
+
+        if ($rootLocationId !== null) {
+            $query
+                ->andWhere(
+                    $this->getSubtreeLimitationExpression($query, $rootLocationId)
+                )
+            ;
+        }
+
+        $statement = $query->execute();
+
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
     public function loadParentLocationsDataForDraftContent(int $contentId): array
     {
         $query = $this->connection->createQueryBuilder();
