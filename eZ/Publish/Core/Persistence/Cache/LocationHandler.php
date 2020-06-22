@@ -26,9 +26,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
     {
         $this->getLocationTags = static function (Location $location) {
             $tags = [
-                 'content-' . $location->contentId,
-                 'location-' . $location->id,
-             ];
+                'content-' . $location->contentId,
+                'location-' . $location->id,
+            ];
             foreach (\explode('/', \trim($location->pathString, '/')) as $pathId) {
                 $tags[] = 'location-path-' . $pathId;
             }
@@ -37,9 +37,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         };
         $this->getLocationKeys = function (Location $location, $keySuffix = '-1') {
             return [
-                 'ez-location-' . $location->id . $keySuffix,
-                 'ez-location-remoteid-' . $this->escapeForCacheKey($location->remoteId) . $keySuffix,
-             ];
+                'ez-location-' . $location->id . $keySuffix,
+                'ez-location-remoteid-' . $this->escapeForCacheKey($location->remoteId) . $keySuffix,
+            ];
         };
     }
 
@@ -143,6 +143,16 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->cache->save($cacheItem);
 
         return $locations;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadLocationsByTrashContent(int $contentId, ?int $rootLocationId = null): array
+    {
+        $this->logger->logCall(__METHOD__, ['content' => $contentId, 'root' => $rootLocationId]);
+
+        return $this->persistenceHandler->locationHandler()->loadLocationsByTrashContent($contentId, $rootLocationId);
     }
 
     /**

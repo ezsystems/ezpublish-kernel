@@ -141,12 +141,9 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
 
         // Load locations if no specific placement was provided
         if (empty($targets)) {
-            // Skip check if content is in trash and no location is provided to check against
             if ($object->isTrashed()) {
-                return self::ACCESS_ABSTAIN;
-            }
-
-            if ($object->isPublished()) {
+                $targets = $this->persistence->locationHandler()->loadLocationsByTrashContent($object->id);
+            } elseif ($object->isPublished()) {
                 $targets = $this->persistence->locationHandler()->loadLocationsByContent($object->id);
             } else {
                 // @todo Need support for draft locations to work correctly

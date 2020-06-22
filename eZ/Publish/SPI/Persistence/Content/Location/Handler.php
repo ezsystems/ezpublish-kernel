@@ -76,6 +76,14 @@ interface Handler
     public function loadLocationsByContent($contentId, $rootLocationId = null);
 
     /**
+     * Loads all locations for $contentId in trash, optionally limited to a sub tree
+     * identified by $rootLocationId.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function loadLocationsByTrashContent(int $contentId, ?int $rootLocationId = null): array;
+
+    /**
      * Loads all parent Locations for unpublished Content by given $contentId.
      *
      *
