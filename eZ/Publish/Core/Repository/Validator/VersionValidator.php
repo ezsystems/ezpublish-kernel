@@ -69,7 +69,7 @@ final class VersionValidator implements ContentValidator
 
                 if ($fieldType->isEmptyValue($fieldValue)) {
                     if ($fieldDefinition->isRequired) {
-                        $allFieldErrors[$fieldDefinition->id][$languageCode] = new ValidationError(
+                        $allFieldErrors[$fieldDefinition->identifier][$languageCode] = new ValidationError(
                             "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
                             null,
                             ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode],
