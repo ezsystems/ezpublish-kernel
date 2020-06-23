@@ -10,13 +10,6 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
 
-    ezpublish.cache_warmer.config_resolver_cleanup:
-        class: eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ConfigResolverCleanup
-        calls:
-            - [setContainer, ["@service_container"]]
-        tags:
-            - { name: kernel.cache_warmer }
-
     eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ProxyCacheWarmer:
         arguments:
             - '@eZ\Publish\Core\Repository\ProxyFactory\ProxyGeneratorInterface'
