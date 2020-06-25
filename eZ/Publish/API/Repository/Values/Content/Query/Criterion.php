@@ -127,14 +127,14 @@ abstract class Criterion implements CriterionInterface
      *     // The EQ operator expects a single value, either as an integer or a string
      *     new Specifications(
      *         Operator::EQ,
-     *         Specifications::INPUT_TYPE_SINGLE,
-     *         [Specifications::INPUT_VALUE_INTEGER, Specifications::INPUT_VALUE_STRING],
+     *         Specifications::FORMAT_SINGLE,
+     *         Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
      *     ),
      *     // The IN operator expects an array of values, of either integers or strings
      *     new Specifications(
      *         Operator::IN,
-     *         Specifications::INPUT_TYPE_ARRAY,
-     *         [Specifications::INPUT_VALUE_INTEGER, Specifications::INPUT_VALUE_STRING]
+     *         Specifications::FORMAT_ARRAY,
+     *         Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
      *     )
      * ]
      * </code>
