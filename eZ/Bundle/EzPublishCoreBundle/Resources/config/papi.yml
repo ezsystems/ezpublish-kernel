@@ -55,6 +55,7 @@ services:
         class: eZ\Publish\SPI\Search\Handler
         factory: ["@ezpublish.api.search_engine.factory", buildSearchEngine]
         public: false
+        lazy: true
 
     ezpublish.spi.search_engine.indexer:
         class: eZ\Publish\Core\Search\Common\Indexer
