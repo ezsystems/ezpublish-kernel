@@ -9,8 +9,11 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Persistence\Legacy\Filter\Gateway\Content\Doctrine;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\Core\Base\Exceptions\DatabaseException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Filter\Gateway\Gateway;
@@ -59,33 +62,35 @@ final class DoctrineGateway implements Gateway
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
-    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
-    private $databasePlatform;
-
     /** @var \eZ\Publish\SPI\Persistence\Filter\CriterionVisitor */
     private $criterionVisitor;
 
     /** @var \eZ\Publish\SPI\Persistence\Filter\SortClauseVisitor */
     private $sortClauseVisitor;
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     */
     public function __construct(
         Connection $connection,
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor
     ) {
         $this->connection = $connection;
-        $this->databasePlatform = $connection->getDatabasePlatform();
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
+    }
+
+    private function getDatabasePlatform(): AbstractPlatform
+    {
+        try {
+            return $this->connection->getDatabasePlatform();
+        } catch (DBALException $e) {
+            throw DatabaseException::wrap($e);
+        }
     }
 
     public function count(FilteringCriterion $criterion): int
     {
         $query = $this->buildQuery(
-            [$this->databasePlatform->getCountExpression('DISTINCT content.id')],
+            [$this->getDatabasePlatform()->getCountExpression('DISTINCT content.id')],
             $criterion
         );
 
