@@ -174,16 +174,12 @@ class Handler implements BaseTrashHandler
      */
     public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
-        // @TODO: This only works for direct SPI usage, any API/UI usage needs criteria to be taken into account so we
-        //        respect user rights here.
-        $totalCount = $this->locationGateway->countTrashed();
+        $totalCount = $this->locationGateway->countTrashed($criterion);
         if ($totalCount === 0) {
             return new TrashResult();
         }
 
-        // CBA: Ignore criterion for now.
-        // TODO: Refactor Legacy Search engine visitor code to be able to reuse for this as well as location/content fetching needs in persistence handlers.
-        $rows = $this->locationGateway->listTrashed($offset, $limit, $sort);
+        $rows = $this->locationGateway->listTrashed($offset, $limit, $sort, $criterion);
         $items = [];
 
         foreach ($rows as $row) {

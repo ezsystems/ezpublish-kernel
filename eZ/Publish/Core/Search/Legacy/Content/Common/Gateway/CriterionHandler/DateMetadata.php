@@ -37,8 +37,7 @@ class DateMetadata extends CriterionHandler
         Criterion $criterion,
         array $languageSettings
     ) {
-        $column = $criterion->target === Criterion\DateMetadata::MODIFIED ? 'modified' : 'published';
-        $column = "c.{$column}";
+        $column = $this->getColumnName($criterion);
 
         $value = (array)$criterion->value;
         switch ($criterion->operator) {
@@ -71,6 +70,18 @@ class DateMetadata extends CriterionHandler
                 throw new RuntimeException(
                     "Unknown operator '{$criterion->operator}' for DateMetadata Criterion handler."
                 );
+        }
+    }
+
+    private function getColumnName(Criterion $criterion): string
+    {
+        switch ($criterion->target) {
+            case Criterion\DateMetadata::TRASHED:
+                return 't.' . Criterion\DateMetadata::TRASHED;
+            case Criterion\DateMetadata::MODIFIED:
+                return 'c.' . Criterion\DateMetadata::MODIFIED;
+            default:
+                return 'c.' . Criterion\DateMetadata::PUBLISHED;
         }
     }
 }

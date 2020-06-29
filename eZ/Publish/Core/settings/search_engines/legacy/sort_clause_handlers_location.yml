@@ -16,12 +16,14 @@ services:
         class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location\Depth
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.trash}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.path:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location\Path
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.trash}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.is_main_location:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
@@ -34,6 +36,7 @@ services:
         class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location\Priority
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.trash}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.visibility:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base

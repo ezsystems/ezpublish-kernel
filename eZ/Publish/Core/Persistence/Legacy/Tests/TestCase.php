@@ -15,6 +15,10 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Tests\LegacySchemaImporter;
 use eZ\Publish\Core\Persistence\Legacy\SharedGateway;
 use eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory;
+use eZ\Publish\Core\Search\Legacy\Content;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter;
 use eZ\Publish\SPI\Tests\Persistence\FileFixtureFactory;
 use eZ\Publish\SPI\Tests\Persistence\FixtureImporter;
 use eZ\Publish\SPI\Tests\Persistence\YamlFixture;
@@ -310,5 +314,38 @@ abstract class TestCase extends BaseTestCase
         }
 
         return $installDir;
+    }
+
+    protected function getTrashCriteriaConverterDependency(): CriteriaConverter
+    {
+        $connection = $this->getDatabaseConnection();
+
+        return new CriteriaConverter(
+            [
+                new CriterionHandler\LogicalAnd($connection),
+                new CriterionHandler\SectionId($connection),
+                new CriterionHandler\ContentTypeId($connection),
+                new CriterionHandler\DateMetadata($connection),
+                new CriterionHandler\UserMetadata($connection),
+            ]
+        );
+    }
+
+    protected function getTrashSortClauseConverterDependency(): SortClauseConverter
+    {
+        $connection = $this->getDatabaseConnection();
+
+        return new SortClauseConverter(
+            [
+                new Content\Common\Gateway\SortClauseHandler\SectionName($connection),
+                new Content\Common\Gateway\SortClauseHandler\ContentName($connection),
+                new Content\Common\Gateway\SortClauseHandler\Trash\ContentTypeName($connection),
+                new Content\Common\Gateway\SortClauseHandler\Trash\UserLogin($connection),
+                new Content\Common\Gateway\SortClauseHandler\Trash\DateTrashed($connection),
+                new Content\Location\Gateway\SortClauseHandler\Location\Path($connection),
+                new Content\Location\Gateway\SortClauseHandler\Location\Depth($connection),
+                new Content\Location\Gateway\SortClauseHandler\Location\Priority($connection),
+            ]
+        );
     }
 }

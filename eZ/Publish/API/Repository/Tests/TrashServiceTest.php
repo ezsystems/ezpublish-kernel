@@ -652,39 +652,32 @@ class TrashServiceTest extends BaseTrashServiceTest
     }
 
     /**
-     * Test for the findTrashItems() method.
-     *
-     * @see \eZ\Publish\API\Repository\TrashService::findTrashItems()
-     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
+     * @covers \eZ\Publish\API\Repository\TrashService::findTrashItems
+     * @dataProvider trashFiltersProvider
      */
-    public function testFindTrashItems()
-    {
+    public function testFindTrashItems(
+        array $filters,
+        int $expectedCount
+    ): void {
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
-        /* BEGIN: Use Case */
-        $this->createTrashItem();
+        $this->trashDifferentContentItems();
 
-        // Create a search query for all trashed items
         $query = new Query();
-        $query->filter = new Criterion\LogicalAnd(
-            [
-                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
-            ]
-        );
+        $filtersCount = count($filters);
 
-        // Load all trashed locations
+        if ($filtersCount === 1) {
+            $query->filter = $filters[0];
+        } elseif ($filtersCount > 1) {
+            $query->filter = new Criterion\LogicalAnd(
+                $filters
+            );
+        }
+
         $searchResult = $trashService->findTrashItems($query);
-        /* END: Use Case */
 
-        $this->assertInstanceOf(
-            SearchResult::class,
-            $searchResult
-        );
-
-        // 4 trashed locations from the sub tree
-        $this->assertEquals(4, $searchResult->count);
-        $this->assertEquals(4, $searchResult->totalCount);
+        $this->assertEquals($expectedCount, $searchResult->totalCount);
     }
 
     /**
@@ -713,10 +706,6 @@ class TrashServiceTest extends BaseTrashServiceTest
         );
 
         $query = new Query();
-        $query->filter = new Criterion\ContentId([
-            $folder1->contentInfo->id,
-            $folder2->contentInfo->id,
-        ]);
 
         // Load all trashed locations, sorted by trashed date ASC
         $query->sortClauses = [new SortClause\Trash\DateTrashed(Query::SORT_ASC)];
@@ -731,6 +720,50 @@ class TrashServiceTest extends BaseTrashServiceTest
         self::assertEquals(2, $searchResult->totalCount);
         self::assertEquals($latestTrashItem->remoteId, $searchResult->items[0]->remoteId);
         self::assertEquals($firstTrashedItem->remoteId, $searchResult->items[1]->remoteId);
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\TrashService::findTrashItems
+     * @dataProvider trashSortClausesProvider
+     */
+    public function testFindTrashItemsSort(array $sortClausesClasses): void
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+
+        $expectedCount = 2;
+        $ascQuery = new Query();
+        $ascQuery->limit = $expectedCount;
+        $descQuery = clone $ascQuery;
+
+        $this->trashDifferentContentItems();
+
+        foreach ($sortClausesClasses as $sortClauseClass) {
+            $ascQuery->sortClauses[] = new $sortClauseClass(Query::SORT_ASC);
+        }
+
+        $ascResultsIds = [];
+        foreach ($trashService->findTrashItems($ascQuery) as $result) {
+            $ascResultsIds[] = $result->contentInfo->id;
+        }
+
+        $this->assertGreaterThanOrEqual($expectedCount, count($ascResultsIds));
+
+        foreach ($sortClausesClasses as $sortClauseClass) {
+            $descQuery->sortClauses[] = new $sortClauseClass(Query::SORT_DESC);
+        }
+
+        $descResultsIds = [];
+        foreach ($trashService->findTrashItems($descQuery) as $result) {
+            $descResultsIds[] = $result->contentInfo->id;
+        }
+
+        $this->assertNotSame($descResultsIds, $ascResultsIds);
+
+        krsort($descResultsIds);
+        $descResultsIds = array_values($descResultsIds);
+
+        $this->assertSame($descResultsIds, $ascResultsIds);
     }
 
     /**
@@ -880,11 +913,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // Create a search query for all trashed items
         $query = new Query();
-        $query->filter = new Criterion\LogicalAnd(
-            [
-                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
-            ]
-        );
+
         // Load all trashed locations, search result should be empty
         $searchResult = $trashService->findTrashItems($query);
         /* END: Use Case */
@@ -929,11 +958,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // Create a search query for all trashed items
         $query = new Query();
-        $query->filter = new Criterion\LogicalAnd(
-            [
-                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
-            ]
-        );
+
         // Load all trashed locations, search result should be empty
         $searchResult = $trashService->findTrashItems($query);
         /* END: Use Case */
@@ -975,11 +1000,6 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // Create a search query for all trashed items
         $query = new Query();
-        $query->filter = new Criterion\LogicalAnd(
-            [
-                new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
-            ]
-        );
 
         // Load all trashed locations, should only contain the Demo Design location
         $searchResult = $trashService->findTrashItems($query);
@@ -1019,6 +1039,151 @@ class TrashServiceTest extends BaseTrashServiceTest
             12345,
             12363
         ));
+    }
+
+    /**
+     * @return array
+     */
+    public function trashFiltersProvider(): array
+    {
+        return [
+            [
+                [],
+                2,
+            ],
+            [
+                [
+                    new Criterion\ContentTypeId(4),
+                ],
+                1,
+            ],
+            [
+                [
+                    new Criterion\ContentTypeId(999),
+                ],
+                0,
+            ],
+            [
+                [
+                    new Criterion\SectionId(2),
+                ],
+                1,
+            ],
+            [
+                [
+                    new Criterion\SectionId(999),
+                ],
+                0,
+            ],
+            [
+                [
+                    new Criterion\UserMetadata(
+                        Criterion\UserMetadata::OWNER,
+                        Criterion\Operator::EQ,
+                        14
+                    ),
+                ],
+                1,
+            ],
+            [
+                [
+                    new Criterion\UserMetadata(
+                        Criterion\UserMetadata::OWNER,
+                        Criterion\Operator::EQ,
+                        999
+                    ),
+                ],
+                0,
+            ],
+            [
+                [
+                    new Criterion\DateMetadata(
+                        Criterion\DateMetadata::TRASHED,
+                        Criterion\Operator::BETWEEN,
+                        [time(), time() + 86400]
+                    ),
+                ],
+                2,
+            ],
+            [
+                [
+                    new Criterion\DateMetadata(
+                        Criterion\DateMetadata::TRASHED,
+                        Criterion\Operator::BETWEEN,
+                        [time() - 90, time()]
+                    ),
+                ],
+                0,
+            ],
+            [
+                [
+                    new Criterion\ContentTypeId(1),
+                    new Criterion\SectionId(1),
+                    new Criterion\UserMetadata(
+                        Criterion\UserMetadata::OWNER,
+                        Criterion\Operator::EQ,
+                        14
+                    ),
+                    new Criterion\DateMetadata(
+                        Criterion\DateMetadata::TRASHED,
+                        Criterion\Operator::BETWEEN,
+                        [time(), time() + 86400]
+                    ),
+                ],
+                1,
+            ],
+            [
+                [
+                    new Criterion\ContentTypeId(999),
+                    new Criterion\SectionId(1),
+                    new Criterion\UserMetadata(
+                        Criterion\UserMetadata::OWNER,
+                        Criterion\Operator::EQ,
+                        10
+                    ),
+                    new Criterion\DateMetadata(
+                        Criterion\DateMetadata::TRASHED,
+                        Criterion\Operator::BETWEEN,
+                        [time() - 90, time() + 90]
+                    ),
+                ],
+                0,
+            ],
+        ];
+    }
+
+    public function trashSortClausesProvider(): array
+    {
+        return [
+            [
+                [
+                    SortClause\SectionName::class,
+                ],
+            ],
+            [
+                [
+                    SortClause\ContentName::class,
+                ],
+            ],
+            [
+                [
+                    SortClause\Trash\ContentTypeName::class,
+                ],
+            ],
+            [
+                [
+                    SortClause\Trash\UserLogin::class,
+                ],
+            ],
+            [
+                [
+                    SortClause\SectionName::class,
+                    SortClause\ContentName::class,
+                    SortClause\Trash\ContentTypeName::class,
+                    SortClause\Trash\UserLogin::class,
+                ],
+            ],
+        ];
     }
 
     /**
@@ -1120,5 +1285,42 @@ class TrashServiceTest extends BaseTrashServiceTest
             'parentLocationId' => $parentLocationId,
             'contentInfo' => new ContentInfo(['id' => $contentId]),
         ]);
+    }
+
+    private function trashDifferentContentItems(): void
+    {
+        $repository = $this->getRepository(false);
+        $permissionResolver = $repository->getPermissionResolver();
+        $trashService = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
+        $currentUser = $permissionResolver->getCurrentUserReference();
+
+        $folderContent = $this->createFolder(['eng-GB' => 'Folder'], 2);
+
+        $newCreator = $this->createUserWithPolicies(
+            'test_user',
+            [
+                ['module' => 'content', 'function' => 'create'],
+                ['module' => 'content', 'function' => 'read'],
+                ['module' => 'content', 'function' => 'publish'],
+            ]
+        );
+
+        $permissionResolver->setCurrentUserReference($newCreator);
+
+        $userContent = $this->createUser('test_user2', 'Some2', 'User2');
+
+        $permissionResolver->setCurrentUserReference($currentUser);
+
+        $locationIds = [
+            $userContent->contentInfo->mainLocationId,
+            $folderContent->contentInfo->mainLocationId,
+        ];
+
+        foreach ($locationIds as $locationId) {
+            $trashService->trash(
+                $locationService->loadLocation($locationId)
+            );
+        }
     }
 }

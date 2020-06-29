@@ -25,6 +25,7 @@ use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased;
 use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser;
 use eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler;
 use eZ\Publish\Core\Persistence\Utf8Converter;
+use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\TransactionHandler;
@@ -5428,7 +5429,9 @@ class UrlAliasHandlerTest extends TestCase
         if (!isset($this->locationGateway)) {
             $this->locationGateway = new DoctrineDatabaseLocation(
                 $this->getDatabaseConnection(),
-                $this->getLanguageMaskGenerator()
+                $this->getLanguageMaskGenerator(),
+                $this->getTrashCriteriaConverterDependency(),
+                $this->getTrashSortClauseConverterDependency()
             );
         }
 

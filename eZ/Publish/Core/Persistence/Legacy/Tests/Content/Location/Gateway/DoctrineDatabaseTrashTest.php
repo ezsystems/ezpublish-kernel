@@ -21,7 +21,9 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
     {
         return new DoctrineDatabase(
             $this->getDatabaseConnection(),
-            $this->getLanguageMaskGenerator()
+            $this->getLanguageMaskGenerator(),
+            $this->getTrashCriteriaConverterDependency(),
+            $this->getTrashSortClauseConverterDependency()
         );
     }
 

@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Trash\Query\Criterion as TrashCriterion;
 use InvalidArgumentException;
 
 /**
@@ -28,7 +29,7 @@ use InvalidArgumentException;
  * );
  * </code>
  */
-class UserMetadata extends Criterion
+class UserMetadata extends Criterion implements TrashCriterion
 {
     /**
      * UserMetadata target: Owner user.

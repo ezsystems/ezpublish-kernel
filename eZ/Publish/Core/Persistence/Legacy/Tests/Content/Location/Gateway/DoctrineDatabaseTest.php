@@ -10,6 +10,7 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase;
@@ -25,7 +26,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         return new DoctrineDatabase(
             $this->getDatabaseConnection(),
-            $this->getLanguageMaskGenerator()
+            $this->getLanguageMaskGenerator(),
+            $this->getTrashCriteriaConverterDependency(),
+            $this->getTrashSortClauseConverterDependency()
         );
     }
 

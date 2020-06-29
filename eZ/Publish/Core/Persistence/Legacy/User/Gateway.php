@@ -17,6 +17,8 @@ use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
  */
 abstract class Gateway
 {
+    public const USER_TABLE = 'ezuser';
+
     /**
      * Load a User by User ID.
      */

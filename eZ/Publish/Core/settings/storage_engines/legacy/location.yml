@@ -4,6 +4,8 @@ services:
         arguments:
             - "@ezpublish.api.storage_engine.legacy.connection"
             - "@ezpublish.persistence.legacy.language.mask_generator"
+            - '@ezplatform.trash.search.legacy.gateway.criteria_converter'
+            - '@ezplatform.trash.search.legacy.gateway.sort_clause_converter'
 
     ezpublish.persistence.legacy.location.gateway.exception_conversion:
         class: eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\ExceptionConversion

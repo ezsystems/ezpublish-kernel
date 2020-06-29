@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\DatabaseException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -331,19 +332,23 @@ final class ExceptionConversion extends Gateway
         }
     }
 
-    public function listTrashed(int $offset, ?int $limit, array $sort = null): array
-    {
+    public function listTrashed(
+        int $offset,
+        ?int $limit,
+        array $sort = null,
+        ?Criterion $criterion = null
+    ): array {
         try {
-            return $this->innerGateway->listTrashed($offset, $limit, $sort);
+            return $this->innerGateway->listTrashed($offset, $limit, $sort, $criterion);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
     }
 
-    public function countTrashed(): int
+    public function countTrashed(?Criterion $criterion = null): int
     {
         try {
-            return $this->innerGateway->countTrashed();
+            return $this->innerGateway->countTrashed($criterion);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }

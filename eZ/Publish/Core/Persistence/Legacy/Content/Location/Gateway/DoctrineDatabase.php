@@ -11,13 +11,16 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
-use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use RuntimeException;
 use PDO;
@@ -32,13 +35,6 @@ use function time;
  */
 final class DoctrineDatabase extends Gateway
 {
-    private const SORT_CLAUSE_TARGET_MAP = [
-        'location_depth' => 'depth',
-        'location_priority' => 'priority',
-        'location_path' => 'path_string',
-        'trashed' => 'trashed',
-    ];
-
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
@@ -48,14 +44,26 @@ final class DoctrineDatabase extends Gateway
     /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
     private $dbPlatform;
 
+    /** @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter */
+    private $trashCriteriaConverter;
+
+    /** @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter */
+    private $trashSortClauseConverter;
+
     /**
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function __construct(Connection $connection, MaskGenerator $languageMaskGenerator)
-    {
+    public function __construct(
+        Connection $connection,
+        MaskGenerator $languageMaskGenerator,
+        CriteriaConverter $trashCriteriaConverter,
+        SortClauseConverter $trashSortClauseConverter
+    ) {
         $this->connection = $connection;
         $this->dbPlatform = $this->connection->getDatabasePlatform();
         $this->languageMaskGenerator = $languageMaskGenerator;
+        $this->trashCriteriaConverter = $trashCriteriaConverter;
+        $this->trashSortClauseConverter = $trashSortClauseConverter;
     }
 
     public function getBasicNodeData(
@@ -1185,27 +1193,20 @@ final class DoctrineDatabase extends Gateway
         throw new NotFound('trash', $locationId);
     }
 
-    public function listTrashed(int $offset, ?int $limit, array $sort = null): array
-    {
+    public function listTrashed(
+        int $offset,
+        ?int $limit,
+        array $sort = null,
+        ?Criterion $criterion = null
+    ): array {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->select('*')
-            ->from('ezcontentobject_trash');
+            ->select('t.*')
+            ->from(self::TRASH_TABLE, 't')
+            ->leftJoin('t', ContentGateway::CONTENT_ITEM_TABLE, 'c', 't.contentobject_id = c.id');
 
-        $sort = $sort ?: [];
-        foreach ($sort as $condition) {
-            if (!isset(self::SORT_CLAUSE_TARGET_MAP[$condition->target])) {
-                // Only handle location related sort clause targets. The others
-                // require data aggregation which is not sensible here.
-                // Since also criteria are yet ignored, because they are
-                // simply not used yet in eZ Platform, we skip that for now.
-                throw new RuntimeException('Unhandled sort clause: ' . get_class($condition));
-            }
-            $query->addOrderBy(
-                self::SORT_CLAUSE_TARGET_MAP[$condition->target],
-                $condition->direction === Query::SORT_ASC ? 'ASC' : 'DESC'
-            );
-        }
+        $this->addSort($sort, $query);
+        $this->addConditionsByCriterion($criterion, $query);
 
         if ($limit !== null) {
             $query->setMaxResults($limit);
@@ -1217,11 +1218,14 @@ final class DoctrineDatabase extends Gateway
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
-    public function countTrashed(): int
+    public function countTrashed(?Criterion $criterion = null): int
     {
         $query = $this->connection->createQueryBuilder()
-            ->select($this->dbPlatform->getCountExpression('node_id'))
-            ->from('ezcontentobject_trash');
+            ->select($this->dbPlatform->getCountExpression(1))
+            ->from(self::TRASH_TABLE, 't')
+            ->innerJoin('t', ContentGateway::CONTENT_ITEM_TABLE, 'c', 't.contentobject_id = c.id');
+
+        $this->addConditionsByCriterion($criterion, $query);
 
         return (int)$query->execute()->fetchColumn();
     }
@@ -1543,5 +1547,32 @@ final class DoctrineDatabase extends Gateway
         $location->id = (int)$this->connection->lastInsertId(self::CONTENT_TREE_SEQ);
 
         return $location;
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     */
+    private function addConditionsByCriterion(?Criterion $criterion, QueryBuilder $query): void
+    {
+        if (null === $criterion) {
+            return;
+        }
+
+        $languageSettings = [];
+
+        $query->where(
+            $this->trashCriteriaConverter->convertCriteria($query, $criterion, $languageSettings)
+        );
+    }
+
+    private function addSort(?array $sort, QueryBuilder $query, array $languageSettings = []): void
+    {
+        if (empty($sort)) {
+            return;
+        }
+
+        $this->trashSortClauseConverter->applySelect($query, $sort);
+        $this->trashSortClauseConverter->applyJoin($query, $sort, $languageSettings);
+        $this->trashSortClauseConverter->applyOrderBy($query);
     }
 }

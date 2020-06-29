@@ -379,6 +379,14 @@ return array(
         array( 'contentobject_id' => 226, 'contentobject_version' => 1, 'from_node_id' => -1, 'id' => 214, 'is_main' => 1, 'op_code' => 3, 'parent_node' => 77, 'parent_remote_id' => '', 'remote_id' => 0, 'sort_field' => 1, 'sort_order' => 1, 'priority' => 0, 'is_hidden' => 0 ),
     ),
     'ezcontentobject' => array(
-        array( 'id' => 226, 'status' => 0 ),
+        ['id' => 226, 'status' => 0],
+        ['id' => 67, 'status' => 0],
+        ['id' => 68, 'status' => 0],
+        ['id' => 69, 'status' => 0],
+        ['id' => 70, 'status' => 0],
+        ['id' => 71, 'status' => 0],
+        ['id' => 72, 'status' => 0],
+        ['id' => 73, 'status' => 0],
+        ['id' => 74, 'status' => 0],
     ),
 );

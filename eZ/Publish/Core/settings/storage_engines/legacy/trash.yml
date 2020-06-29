@@ -7,3 +7,12 @@ services:
             - "@ezpublish.persistence.legacy.location.mapper"
             - "@ezpublish.spi.persistence.legacy.content.handler"
         lazy: true
+
+    # reusing parts of LSE
+    ezplatform.trash.search.legacy.gateway.criteria_converter:
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter
+        lazy: true
+
+    ezplatform.trash.search.legacy.gateway.sort_clause_converter:
+        class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter
+        lazy: true

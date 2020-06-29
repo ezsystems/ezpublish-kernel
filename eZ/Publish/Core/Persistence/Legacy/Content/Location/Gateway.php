@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
@@ -17,6 +18,8 @@ use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
  */
 abstract class Gateway
 {
+    public const TRASH_TABLE = 'ezcontentobject_trash';
+
     /**
      * Constants for node assignment op codes.
      */
@@ -290,16 +293,24 @@ abstract class Gateway
     /**
      * List trashed items.
      *
+     * @param int $offset
+     * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion|null $criterion
      *
      * @return array entries from ezcontentobject_trash.
      */
-    abstract public function listTrashed(int $offset, ?int $limit, array $sort = null): array;
+    abstract public function listTrashed(
+        int $offset,
+        ?int $limit,
+        array $sort = null,
+        ?Criterion $criterion = null
+    ): array;
 
     /**
      * Count trashed items.
      */
-    abstract public function countTrashed(): int;
+    abstract public function countTrashed(?Criterion $criterion = null): int;
 
     /**
      * Removes trashed element identified by $id from trash.

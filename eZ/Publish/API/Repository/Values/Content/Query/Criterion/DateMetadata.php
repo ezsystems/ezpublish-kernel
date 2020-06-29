@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Trash\Query\Criterion as TrashCriterion;
 use InvalidArgumentException;
 
 /**
@@ -30,30 +31,38 @@ use InvalidArgumentException;
  * );
  * </code>
  */
-class DateMetadata extends Criterion
+class DateMetadata extends Criterion implements TrashCriterion
 {
-    /**
-     * DateMetadata target: modification date.
-     */
     public const MODIFIED = 'modified';
 
-    /**
-     * DateMetadata target: creation date.
-     */
     public const CREATED = 'created';
+
+    public const PUBLISHED = 'published';
+
+    /**
+     * (applies to TrashService::findTrashItems only).
+     */
+    public const TRASHED = 'trashed';
+
+    public const TARGETS = [
+        self::MODIFIED,
+        self::CREATED,
+        self::PUBLISHED,
+        self::TRASHED,
+    ];
 
     /**
      * Creates a new DateMetadata criterion on $metadata.
      *
      * @throws \InvalidArgumentException If target is unknown
      *
-     * @param string $target One of DateMetadata::CREATED or DateMetadata::MODIFIED
+     * @param string $target One of DateMetadata::CREATED, DateMetadata::MODIFIED or DateMetadata::TRASHED (applies to TrashService::findTrashItems only)
      * @param string $operator One of the Operator constants
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator
      */
     public function __construct(string $target, string $operator, $value)
     {
-        if ($target != self::MODIFIED && $target != self::CREATED) {
+        if (!in_array($target, self::TARGETS)) {
             throw new InvalidArgumentException("Unknown DateMetadata $target");
         }
         parent::__construct($target, $operator, $value);
