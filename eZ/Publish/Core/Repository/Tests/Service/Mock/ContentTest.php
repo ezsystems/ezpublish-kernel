@@ -77,21 +77,23 @@ class ContentTest extends BaseServiceMockTest
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
         $fieldTypeRegistryMock = $this->getFieldTypeRegistryMock();
-        $permissionResolverMock = $this->getPermissionResolverMock();
+        $permissionServiceMock = $this->getPermissionServiceMock();
         $contentMapper = $this->getContentMapper();
         $contentValidatorStrategy = $this->getContentValidatorStrategy();
+        $contentFilteringHandlerMock = $this->getContentFilteringHandlerMock();
         $settings = ['default_version_archive_limit' => 10];
 
-        $service = new ContentService(
+        new ContentService(
             $repositoryMock,
             $persistenceHandlerMock,
             $contentDomainMapperMock,
             $relationProcessorMock,
             $nameSchemaServiceMock,
             $fieldTypeRegistryMock,
-            $permissionResolverMock,
+            $permissionServiceMock,
             $contentMapper,
             $contentValidatorStrategy,
+            $contentFilteringHandlerMock,
             $settings
         );
     }
@@ -6237,9 +6239,10 @@ class ContentTest extends BaseServiceMockTest
                         $this->getRelationProcessorMock(),
                         $this->getNameSchemaServiceMock(),
                         $this->getFieldTypeRegistryMock(),
-                        $this->getPermissionResolverMock(),
+                        $this->getPermissionServiceMock(),
                         $this->getContentMapper(),
                         $this->getContentValidatorStrategy(),
+                        $this->getContentFilteringHandlerMock(),
                         [],
                     ]
                 )

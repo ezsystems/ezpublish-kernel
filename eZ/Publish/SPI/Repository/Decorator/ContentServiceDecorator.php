@@ -4,10 +4,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-/**
- * @copyright Copyright (C) eZ Systems AS. All rights reserved.
- * @license For full copyright and license information view LICENSE file distributed with this source code.
- */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -27,6 +23,8 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\Content\ContentList;
+use eZ\Publish\API\Repository\Values\Filter\Filter;
 
 abstract class ContentServiceDecorator implements ContentService
 {
@@ -266,5 +264,10 @@ abstract class ContentServiceDecorator implements ContentService
         ?array $fieldIdentifiersToValidate = null
     ): array {
         return $this->innerService->validate($object, $context, $fieldIdentifiersToValidate);
+    }
+
+    public function find(Filter $filter, ?array $languages = null): ContentList
+    {
+        return $this->innerService->find($filter, $languages);
     }
 }

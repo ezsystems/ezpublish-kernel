@@ -10,11 +10,12 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringSortClause;
 
 /**
  * Sets sort direction on Section name for a content query.
  */
-class SectionName extends SortClause
+class SectionName extends SortClause implements FilteringSortClause
 {
     /**
      * Constructs a new SectionName SortClause.

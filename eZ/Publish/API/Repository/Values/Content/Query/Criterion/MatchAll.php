@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
 /**
  * A criterion that just matches everything.
  */
-class MatchAll extends Criterion
+class MatchAll extends Criterion implements FilteringCriterion
 {
     /**
      * Creates a new MatchAll criterion.

@@ -22,6 +22,8 @@ use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\Content\ContentList;
+use eZ\Publish\API\Repository\Values\Filter\Filter;
 
 /**
  * This class provides service methods for managing content.
@@ -557,4 +559,13 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function validate(ValueObject $object, array $context, ?array $fieldIdentifiersToValidate = null): array;
+
+    /**
+     * Fetch Content items from the Repository filtered by the given conditions.
+     *
+     * @param string[] $languages a list of language codes to be added as additional constraints.
+     *        If skipped, by default, unless SiteAccessAware layer has been disabled, languages set
+     *        for a SiteAccess in a current context will be used.
+     */
+    public function find(Filter $filter, ?array $languages = null): ContentList;
 }

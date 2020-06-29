@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Repository\Permission;
 
 use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriterionResolver;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
@@ -150,5 +151,22 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
         }
 
         return $type->getCriterion($limitation, $currentUserRef);
+    }
+
+    public function getQueryPermissionsCriterion(): Criterion
+    {
+        // Permission Criterion handling work-around to avoid rewriting old architecture of perm. sys.
+        $permissionCriterion = $this->getPermissionsCriterion(
+            'content',
+            'read'
+        );
+        if (true === $permissionCriterion) {
+            return new Criterion\MatchAll();
+        }
+        if (false === $permissionCriterion) {
+            return new Criterion\MatchNone();
+        }
+
+        return $permissionCriterion;
     }
 }

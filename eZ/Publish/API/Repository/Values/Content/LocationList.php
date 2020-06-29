@@ -27,15 +27,18 @@ class LocationList extends ValueObject implements IteratorAggregate
      *
      * @var int
      */
-    protected $totalCount;
+    protected $totalCount = 0;
 
     /**
      * the partial list of locations controlled by offset/limit.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Location[]
      */
-    protected $locations;
+    protected $locations = [];
 
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]|\Traversable
+     */
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->locations);

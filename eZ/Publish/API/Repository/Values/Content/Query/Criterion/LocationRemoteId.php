@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
 /**
  * A criterion that matches content based on remote ID of its locations.
@@ -18,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
  * - IN: will match from a list of location remote IDs
  * - EQ: will match against one location remote ID
  */
-class LocationRemoteId extends Criterion
+class LocationRemoteId extends Criterion implements FilteringCriterion
 {
     /**
      * Creates a new locationRemoteId criterion.

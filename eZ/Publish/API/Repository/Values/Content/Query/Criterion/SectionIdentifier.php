@@ -10,8 +10,9 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
-class SectionIdentifier extends Criterion
+class SectionIdentifier extends Criterion implements FilteringCriterion
 {
     /**
      * @param string|string[] $value

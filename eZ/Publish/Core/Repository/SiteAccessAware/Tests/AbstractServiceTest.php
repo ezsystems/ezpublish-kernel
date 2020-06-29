@@ -155,7 +155,7 @@ abstract class AbstractServiceTest extends TestCase
     {
         $languages = ['eng-GB', 'eng-US'];
 
-        $arguments = $this->setLanguagesLookupArguments($arguments, $languageArgumentIndex, $languages);
+        $arguments = $this->setLanguagesLookupArguments($arguments, $languageArgumentIndex);
 
         $expectedArguments = $this->setLanguagesLookupExpectedArguments($arguments, $languageArgumentIndex, $languages);
 

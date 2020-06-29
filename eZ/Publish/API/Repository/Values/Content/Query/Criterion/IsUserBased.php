@@ -10,8 +10,9 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
-class IsUserBased extends Criterion
+class IsUserBased extends Criterion implements FilteringCriterion
 {
     public function __construct(bool $value = true)
     {

@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringSortClause;
 
 /**
  * Sets sort direction on Content ID for a content query.
@@ -23,7 +24,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
  *
  * This reflects API definition of IDs as mixed type (integer or string).
  */
-class ContentId extends SortClause
+class ContentId extends SortClause implements FilteringSortClause
 {
     /**
      * Constructs a new ContentId SortClause.

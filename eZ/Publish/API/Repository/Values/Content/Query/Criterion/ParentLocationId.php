@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
 /**
  * A criterion that matches content based on its parent location id.
@@ -20,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
  * - IN: matches against a list of location ids
  * - EQ: matches against a unique location id
  */
-class ParentLocationId extends Criterion
+class ParentLocationId extends Criterion implements FilteringCriterion
 {
     /**
      * Creates a new ParentLocationId criterion.

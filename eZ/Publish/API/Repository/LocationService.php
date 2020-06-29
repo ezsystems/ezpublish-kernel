@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Filter\Filter;
 
 /**
  * Location service, used for complex subtree operations.
@@ -245,4 +246,13 @@ interface LocationService
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
     public function loadAllLocations(int $offset = 0, int $limit = 25): array;
+
+    /**
+     * Fetch a LocationList from the Repository filtered by the given conditions.
+     *
+     * @param string[] $languages a list of language codes to be added as additional constraints.
+     *        If skipped, by default, unless SiteAccessAware layer has been disabled, languages set
+     *        for a SiteAccess in a current context will be used.
+     */
+    public function find(Filter $filter, ?array $languages = null): LocationList;
 }

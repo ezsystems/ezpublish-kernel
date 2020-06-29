@@ -11,12 +11,13 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 use InvalidArgumentException;
 
 /**
  * A criterion that matches Location based on if it is main Location or not.
  */
-class IsMainLocation extends Location
+class IsMainLocation extends Location implements FilteringCriterion
 {
     /**
      * Main constant: is main.

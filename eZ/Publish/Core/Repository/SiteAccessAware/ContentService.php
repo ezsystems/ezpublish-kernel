@@ -23,6 +23,8 @@ use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\LanguageResolver;
+use eZ\Publish\API\Repository\Values\Content\ContentList;
+use eZ\Publish\API\Repository\Values\Filter\Filter;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -267,5 +269,13 @@ class ContentService implements ContentServiceInterface
         ?array $fieldIdentifiersToValidate = null
     ): array {
         return $this->service->validate($object, $context, $fieldIdentifiersToValidate);
+    }
+
+    public function find(Filter $filter, ?array $languages = null): ContentList
+    {
+        return $this->service->find(
+            $filter,
+            $this->languageResolver->getPrioritizedLanguages($languages)
+        );
     }
 }

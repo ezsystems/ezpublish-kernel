@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\RelationList;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
@@ -21,7 +22,12 @@ use eZ\Publish\Core\Repository\SiteAccessAware\ContentService;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentList;
+use eZ\Publish\API\Repository\Values\Filter\Filter;
 
+/**
+ * @property \eZ\Publish\API\Repository\ContentService $service
+ */
 class ContentServiceTest extends AbstractServiceTest
 {
     public function getAPIServiceClassName()
@@ -34,7 +40,7 @@ class ContentServiceTest extends AbstractServiceTest
         return ContentService::class;
     }
 
-    public function providerForPassTroughMethods()
+    public function providerForPassTroughMethods(): array
     {
         $contentInfo = new ContentInfo();
         $versionInfo = new VersionInfo();
@@ -121,11 +127,16 @@ class ContentServiceTest extends AbstractServiceTest
         ];
     }
 
-    public function providerForLanguagesLookupMethods()
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function providerForLanguagesLookupMethods(): array
     {
         $content = $this->createMock(Content::class);
         $contentInfo = new ContentInfo();
         $versionInfo = new VersionInfo();
+
+        $filter = new Filter(new ContentId(1));
 
         // string $method, array $arguments, bool $return, int $languageArgumentIndex
         return [
@@ -143,6 +154,9 @@ class ContentServiceTest extends AbstractServiceTest
 
             ['loadContentListByContentInfo', [[$contentInfo]], [], 1],
             ['loadContentListByContentInfo', [[$contentInfo], self::LANG_ARG, false], [], 1],
+
+            ['find', [$filter], new ContentList(1, [$content]), 1],
+            ['find', [$filter, self::LANG_ARG], new ContentList(1, [$content]), 1],
         ];
     }
 }

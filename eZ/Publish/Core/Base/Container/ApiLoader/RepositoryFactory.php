@@ -15,6 +15,8 @@ use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Mapper;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
+use eZ\Publish\SPI\Persistence\Filter\Content\Handler as ContentFilteringHandler;
+use eZ\Publish\SPI\Persistence\Filter\Location\Handler as LocationFilteringHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 use eZ\Publish\SPI\Repository\Validator\ContentValidator;
@@ -75,6 +77,8 @@ class RepositoryFactory implements ContainerAwareInterface
         ContentValidator $contentValidator,
         LimitationService $limitationService,
         PermissionService $permissionService,
+        ContentFilteringHandler $contentFilteringHandler,
+        LocationFilteringHandler $locationFilteringHandler,
         array $languages
     ): Repository {
         return new $this->repositoryClass(
@@ -94,6 +98,8 @@ class RepositoryFactory implements ContainerAwareInterface
             $limitationService,
             $this->languageResolver,
             $permissionService,
+            $contentFilteringHandler,
+            $locationFilteringHandler,
             [
                 'role' => [
                     'policyMap' => $this->policyMap,

@@ -9,8 +9,10 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
-use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\PermissionService;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\API\Repository\Values\Content\ContentDraftList;
@@ -25,6 +27,7 @@ use eZ\Publish\Core\Repository\Mapper\ContentMapper;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\SPI\Persistence\Filter\Content\Handler as ContentFilteringHandler;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -54,6 +57,11 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreat
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use Exception;
 use eZ\Publish\SPI\Repository\Validator\ContentValidator;
+use eZ\Publish\API\Repository\Values\Content\ContentList;
+use eZ\Publish\API\Repository\Values\Filter\Filter;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
+use function count;
+use function sprintf;
 
 /**
  * This class provides service methods for managing content.
@@ -90,6 +98,9 @@ class ContentService implements ContentServiceInterface
     /** @var \eZ\Publish\SPI\Repository\Validator\ContentValidator */
     private $contentValidator;
 
+    /** @var \eZ\Publish\SPI\Persistence\Filter\Content\Handler */
+    private $contentFilteringHandler;
+
     public function __construct(
         RepositoryInterface $repository,
         Handler $handler,
@@ -97,9 +108,10 @@ class ContentService implements ContentServiceInterface
         Helper\RelationProcessor $relationProcessor,
         Helper\NameSchemaService $nameSchemaService,
         FieldTypeRegistry $fieldTypeRegistry,
-        PermissionResolver $permissionResolver,
+        PermissionService $permissionService,
         ContentMapper $contentMapper,
         ContentValidator $contentValidator,
+        ContentFilteringHandler $contentFilteringHandler,
         array $settings = []
     ) {
         $this->repository = $repository;
@@ -113,7 +125,8 @@ class ContentService implements ContentServiceInterface
             // Version archive limit (0-50), only enforced on publish, not on un-publish.
             'default_version_archive_limit' => 5,
         ];
-        $this->permissionResolver = $permissionResolver;
+        $this->contentFilteringHandler = $contentFilteringHandler;
+        $this->permissionResolver = $permissionService;
         $this->contentMapper = $contentMapper;
         $this->contentValidator = $contentValidator;
     }
@@ -2369,5 +2382,37 @@ class ContentService implements ContentServiceInterface
             $context,
             $fieldIdentifiersToValidate
         );
+    }
+
+    public function find(Filter $filter, ?array $languages = null): ContentList
+    {
+        $filter = clone $filter;
+        if (!empty($languages)) {
+            $filter->andWithCriterion(new LanguageCode($languages));
+        }
+
+        $permissionCriterion = $this->permissionResolver->getQueryPermissionsCriterion();
+        if ($permissionCriterion instanceof Criterion\MatchNone) {
+            return new ContentList(0, []);
+        }
+
+        if (!$permissionCriterion instanceof Criterion\MatchAll) {
+            if (!$permissionCriterion instanceof FilteringCriterion) {
+                return new ContentList(0, []);
+            }
+            $filter->andWithCriterion($permissionCriterion);
+        }
+
+        $contentItems = [];
+        $contentItemsIterator = $this->contentFilteringHandler->find($filter);
+        foreach ($contentItemsIterator as $contentItem) {
+            $contentItems[] = $this->contentDomainMapper->buildContentDomainObjectFromPersistence(
+                $contentItem->content,
+                $contentItem->type,
+                $languages,
+            );
+        }
+
+        return new ContentList($contentItemsIterator->getTotalCount(), $contentItems);
     }
 }

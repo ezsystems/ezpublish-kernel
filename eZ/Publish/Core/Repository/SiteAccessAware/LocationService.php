@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\LanguageResolver;
+use eZ\Publish\API\Repository\Values\Filter\Filter;
 
 /**
  * LocationService for SiteAccessAware layer.
@@ -176,5 +177,13 @@ class LocationService implements LocationServiceInterface
     public function loadAllLocations(int $offset = 0, int $limit = 25): array
     {
         return $this->service->loadAllLocations($offset, $limit);
+    }
+
+    public function find(Filter $filter, ?array $languages = null): LocationList
+    {
+        return $this->service->find(
+            $filter,
+            $this->languageResolver->getPrioritizedLanguages($languages)
+        );
     }
 }

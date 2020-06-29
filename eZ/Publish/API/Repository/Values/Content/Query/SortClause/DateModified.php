@@ -10,11 +10,12 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringSortClause;
 
 /**
  * Sets sort direction on the content modification date for a content query.
  */
-class DateModified extends SortClause
+class DateModified extends SortClause implements FilteringSortClause
 {
     /**
      * Constructs a new DateModified SortClause.

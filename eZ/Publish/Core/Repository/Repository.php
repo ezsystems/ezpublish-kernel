@@ -38,6 +38,8 @@ use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
+use eZ\Publish\SPI\Persistence\Filter\Content\Handler as ContentFilteringHandler;
+use eZ\Publish\SPI\Persistence\Filter\Location\Handler as LocationFilteringHandler;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 use eZ\Publish\SPI\Repository\Validator\ContentValidator;
@@ -251,6 +253,12 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\SPI\Repository\Validator\ContentValidator */
     private $contentValidator;
 
+    /** @var \eZ\Publish\SPI\Persistence\Filter\Content\Handler */
+    private $contentFilteringHandler;
+
+    /** @var \eZ\Publish\SPI\Persistence\Filter\Location\Handler */
+    private $locationFilteringHandler;
+
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
@@ -268,6 +276,8 @@ class Repository implements RepositoryInterface
         LimitationService $limitationService,
         LanguageResolver $languageResolver,
         PermissionService $permissionService,
+        ContentFilteringHandler $contentFilteringHandler,
+        LocationFilteringHandler $locationFilteringHandler,
         array $serviceSettings = [],
         ?LoggerInterface $logger = null
     ) {
@@ -284,7 +294,9 @@ class Repository implements RepositoryInterface
         $this->roleDomainMapper = $roleDomainMapper;
         $this->limitationService = $limitationService;
         $this->languageResolver = $languageResolver;
+        $this->contentFilteringHandler = $contentFilteringHandler;
         $this->permissionService = $permissionService;
+        $this->locationFilteringHandler = $locationFilteringHandler;
 
         $this->serviceSettings = $serviceSettings + [
                 'content' => [],
@@ -344,9 +356,10 @@ class Repository implements RepositoryInterface
             $this->getRelationProcessor(),
             $this->getNameSchemaService(),
             $this->fieldTypeRegistry,
-            $this->getPermissionResolver(),
+            $this->getPermissionService(),
             $this->contentMapper,
             $this->contentValidator,
+            $this->contentFilteringHandler,
             $this->serviceSettings['content'],
         );
 
@@ -424,6 +437,7 @@ class Repository implements RepositoryInterface
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
             $this->getPermissionResolver(),
+            $this->locationFilteringHandler,
             $this->serviceSettings['location'],
             $this->logger
         );
@@ -691,9 +705,14 @@ class Repository implements RepositoryInterface
         return $this->fieldTypeService;
     }
 
-    public function getPermissionResolver(): PermissionResolverInterface
+    public function getPermissionService(): PermissionService
     {
         return $this->permissionService;
+    }
+
+    public function getPermissionResolver(): PermissionResolverInterface
+    {
+        return $this->getPermissionService();
     }
 
     /**
@@ -766,7 +785,7 @@ class Repository implements RepositoryInterface
 
     protected function getPermissionCriterionResolver(): PermissionCriterionResolverInterface
     {
-        return $this->permissionService;
+        return $this->getPermissionService();
     }
 
     /**

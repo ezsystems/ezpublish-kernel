@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 use InvalidArgumentException;
 
 /**
@@ -17,7 +18,7 @@ use InvalidArgumentException;
  *
  * Content will be matched if it is part of at least one of the given subtree path strings
  */
-class Subtree extends Criterion
+class Subtree extends Criterion implements FilteringCriterion
 {
     /**
      * Creates a new SubTree criterion.

@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Filter\Filter;
 
 abstract class LocationServiceDecorator implements LocationService
 {
@@ -147,5 +148,10 @@ abstract class LocationServiceDecorator implements LocationService
         int $limit = 25
     ): array {
         return $this->innerService->loadAllLocations($offset, $limit);
+    }
+
+    public function find(Filter $filter, ?array $languages = null): LocationList
+    {
+        return $this->innerService->find($filter, $languages);
     }
 }

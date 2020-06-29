@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
 /**
  * A criterion that matches Location based on its priority.
@@ -20,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
  * - GT, GTE: matches location whose priority is greater than/greater than or equals the given priority
  * - LT, LTE: matches location whose priority is lower than/lower than or equals the given priority
  */
-class Priority extends Location
+class Priority extends Location implements FilteringCriterion
 {
     /**
      * Creates a new LocationPriority criterion.

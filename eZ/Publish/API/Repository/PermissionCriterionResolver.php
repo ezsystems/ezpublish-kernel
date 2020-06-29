@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+
 /**
  * This service provides methods for resolving criterion permissions.
  *
@@ -28,4 +30,13 @@ interface PermissionCriterionResolver
      * @return bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     public function getPermissionsCriterion(string $module = 'content', string $function = 'read', ?array $targets = null);
+
+    /**
+     * Get composite Criterion for Querying permissions.
+     *
+     * {@see \eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchAll}
+     * and {@see \eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchNone} are returned
+     * for a user with full and no access respectively.
+     */
+    public function getQueryPermissionsCriterion(): Criterion;
 }

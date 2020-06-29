@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
 /**
  * A criterion that matches content based on its ContentType Identifier.
@@ -18,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
  * - IN: will match from a list of ContentTypeIdentifier
  * - EQ: will match against one ContentTypeIdentifier
  */
-class ContentTypeIdentifier extends Criterion
+class ContentTypeIdentifier extends Criterion implements FilteringCriterion
 {
     /**
      * Creates a new ContentType criterion.

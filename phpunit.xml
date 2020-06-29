@@ -70,7 +70,7 @@
         <directory>eZ/Publish/Core/Helper</directory>
     </testsuite>
     <testsuite name="eZ\Publish\API\Repository\Values\Content">
-      <directory>eZ/Publish/API/Repository/Tests/Values/Content</directory>
+      <directory>eZ/Publish/API/Repository/Tests/Values</directory>
     </testsuite>
   </testsuites>
   <filter>

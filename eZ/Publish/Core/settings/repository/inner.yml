@@ -32,6 +32,8 @@ services:
             - '@eZ\Publish\SPI\Repository\Validator\ContentValidator'
             - '@eZ\Publish\Core\Repository\Permission\LimitationService'
             - '@eZ\Publish\API\Repository\PermissionService'
+            - '@eZ\Publish\SPI\Persistence\Filter\Content\Handler'
+            - '@eZ\Publish\SPI\Persistence\Filter\Location\Handler'
             - '%languages%'
 
     ezpublish.api.service.inner_content:

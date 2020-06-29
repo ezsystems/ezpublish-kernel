@@ -12,8 +12,6 @@ use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\AllValidationErrorsOccur as PHPUnitConstraintAllValidationErrorsOccur;
-use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Language;
@@ -687,7 +685,7 @@ abstract class BaseTest extends TestCase
         ContentFieldValidationException $exception,
         string $expectedValidationErrorMessage
     ): void {
-        $constraint = new PHPUnitConstraintValidationErrorOccurs($expectedValidationErrorMessage);
+        $constraint = new PHPUnitConstraint\ValidationErrorOccurs($expectedValidationErrorMessage);
 
         self::assertThat($exception, $constraint);
     }
@@ -702,18 +700,28 @@ abstract class BaseTest extends TestCase
         ContentFieldValidationException $exception,
         array $expectedValidationErrorMessages
     ): void {
-        $constraint = new PHPUnitConstraintAllValidationErrorsOccur(
+        $constraint = new PHPUnitConstraint\AllValidationErrorsOccur(
             $expectedValidationErrorMessages
         );
 
         self::assertThat($exception, $constraint);
     }
 
+    protected function assertContentItemEquals(
+        Content $expected,
+        Content $actual,
+        string $message
+    ): void {
+        $constraint = new PHPUnitConstraint\ContentItemEquals($expected);
+
+        self::assertThat($actual, $constraint, $message);
+    }
+
     /**
      * Create 'folder' Content.
      *
      * @param array $names Folder names in the form of <code>['&lt;language_code&gt;' => '&lt;name&gt;']</code>
-     * @param int $parentLocationId
+     * @param int|null $parentLocationId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content published Content
      *
@@ -721,8 +729,11 @@ abstract class BaseTest extends TestCase
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    protected function createFolder(array $names, $parentLocationId)
-    {
+    public function createFolder(
+        array $names,
+        ?int $parentLocationId = null,
+        ?string $remoteId = null
+    ): Content {
         $repository = $this->getRepository(false);
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -737,12 +748,21 @@ abstract class BaseTest extends TestCase
             $contentTypeService->loadContentTypeByIdentifier('folder'),
             $mainLanguageCode
         );
+        $struct->remoteId = $remoteId;
         foreach ($names as $languageCode => $translatedName) {
             $struct->setField('name', $translatedName, $languageCode);
         }
+
+        $locationCreateStructList = [];
+        if (null !== $parentLocationId) {
+            $locationCreateStructList[] = $locationService->newLocationCreateStruct(
+                $parentLocationId
+            );
+        }
+
         $contentDraft = $contentService->createContent(
             $struct,
-            [$locationService->newLocationCreateStruct($parentLocationId)]
+            $locationCreateStructList
         );
 
         return $contentService->publishVersion($contentDraft->versionInfo);

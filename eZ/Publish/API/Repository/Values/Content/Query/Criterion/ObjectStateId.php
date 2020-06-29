@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
 /**
  * A criterion that matches content based on its state.
@@ -18,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
  * - IN: matches against a list of object state IDs
  * - EQ: matches against one object state ID
  */
-class ObjectStateId extends Criterion
+class ObjectStateId extends Criterion implements FilteringCriterion
 {
     /**
      * Creates a new ObjectStateId criterion.

@@ -110,7 +110,19 @@ class CachingHandler implements BaseLanguageHandler
             $languages += $loaded;
         }
 
-        return $languages;
+        // order languages by ID again so the result is deterministic regardless of cache
+        // note: can't yield due to array access of this result
+        $orderedLanguages = [];
+        foreach ($ids as $id) {
+            // BC: missing IDs are skipped
+            if (!isset($languages[$id])) {
+                continue;
+            }
+
+            $orderedLanguages[$id] = $languages[$id];
+        }
+
+        return $orderedLanguages;
     }
 
     /**

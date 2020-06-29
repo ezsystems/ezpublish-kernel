@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\PermissionResolver as APIPermissionResolver;
 use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriterionResolver;
 use eZ\Publish\API\Repository\PermissionService;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\User\LookupLimitationResult;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -149,5 +150,10 @@ class CachedPermissionService implements PermissionService
         --$this->sudoNestingLevel;
 
         return $returnValue;
+    }
+
+    public function getQueryPermissionsCriterion(): Criterion
+    {
+        return $this->permissionCriterionResolver->getQueryPermissionsCriterion();
     }
 }

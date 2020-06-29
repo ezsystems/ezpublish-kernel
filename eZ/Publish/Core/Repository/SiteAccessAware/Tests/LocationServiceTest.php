@@ -11,9 +11,11 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId;
 use eZ\Publish\Core\Repository\SiteAccessAware\LocationService;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Filter\Filter;
 
 class LocationServiceTest extends AbstractServiceTest
 {
@@ -27,7 +29,7 @@ class LocationServiceTest extends AbstractServiceTest
         return LocationService::class;
     }
 
-    public function providerForPassTroughMethods()
+    public function providerForPassTroughMethods(): array
     {
         $location = new Location();
         $contentInfo = new ContentInfo();
@@ -63,12 +65,14 @@ class LocationServiceTest extends AbstractServiceTest
         ];
     }
 
-    public function providerForLanguagesLookupMethods()
+    public function providerForLanguagesLookupMethods(): array
     {
         $location = new Location();
         $locationList = new LocationList();
         $contentInfo = new ContentInfo();
         $versionInfo = new VersionInfo();
+
+        $filter = new Filter(new LocationId(1));
 
         // string $method, array $arguments, mixed|null $return, int $languageArgumentIndex, ?callable $callback, ?int $alwaysAvailableArgumentIndex
         return [
@@ -92,6 +96,9 @@ class LocationServiceTest extends AbstractServiceTest
 
             ['loadParentLocationsForDraftContent', [$versionInfo], [$location], 1],
             ['loadParentLocationsForDraftContent', [$versionInfo, self::LANG_ARG], [$location], 1],
+
+            ['find', [$filter], $locationList, 1],
+            ['find', [$filter, self::LANG_ARG], $locationList, 1],
         ];
     }
 }

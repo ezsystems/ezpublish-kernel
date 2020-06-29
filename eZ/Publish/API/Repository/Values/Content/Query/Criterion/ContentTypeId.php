@@ -9,8 +9,9 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\SPI\Repository\Values\Trash\Query\Criterion as TrashCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
+use eZ\Publish\SPI\Repository\Values\Trash\Query\Criterion as TrashCriterion;
 
 /**
  * A criterion that matches content based on its ContentType id.
@@ -19,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
  * - IN: will match from a list of ContentTypeId
  * - EQ: will match against one ContentTypeId
  */
-class ContentTypeId extends Criterion implements TrashCriterion
+class ContentTypeId extends Criterion implements TrashCriterion, FilteringCriterion
 {
     /**
      * Creates a new ContentType criterion.

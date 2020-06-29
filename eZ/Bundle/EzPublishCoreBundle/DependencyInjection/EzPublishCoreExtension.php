@@ -18,6 +18,8 @@ use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\QueryType\QueryType;
 use eZ\Publish\SPI\MVC\EventSubscriber\ConfigScopeChangeSubscriber;
+use eZ\Publish\SPI\Repository\Values\Filter\CriterionQueryBuilder as FilteringCriterionQueryBuilder;
+use eZ\Publish\SPI\Repository\Values\Filter\SortClauseQueryBuilder as FilteringSortClauseQueryBuilder;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -141,18 +143,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         $this->buildPolicyMap($container);
 
-        $container->registerForAutoconfiguration(QueryType::class)
-            ->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG);
-
-        $container->registerForAutoconfiguration(ConfigScopeChangeSubscriber::class)
-                  ->addTag(
-                      'kernel.event_listener',
-                      ['method' => 'onConfigScopeChange', 'event' => MVCEvents::CONFIG_SCOPE_CHANGE]
-                  )
-                  ->addTag(
-                      'kernel.event_listener',
-                      ['method' => 'onConfigScopeChange', 'event' => MVCEvents::CONFIG_SCOPE_RESTORE]
-                  );
+        $this->registerForAutoConfiguration($container);
     }
 
     /**
@@ -578,5 +569,27 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         if ($container->getParameter('ezpublish.url_wildcards.enabled')) {
             $loader->load('url_wildcard.yml');
         }
+    }
+
+    private function registerForAutoConfiguration(ContainerBuilder $container): void
+    {
+        $container->registerForAutoconfiguration(QueryType::class)
+            ->addTag(QueryTypePass::QUERY_TYPE_SERVICE_TAG);
+
+        $container->registerForAutoconfiguration(ConfigScopeChangeSubscriber::class)
+            ->addTag(
+                'kernel.event_listener',
+                ['method' => 'onConfigScopeChange', 'event' => MVCEvents::CONFIG_SCOPE_CHANGE]
+            )
+            ->addTag(
+                'kernel.event_listener',
+                ['method' => 'onConfigScopeChange', 'event' => MVCEvents::CONFIG_SCOPE_RESTORE]
+            );
+
+        $container->registerForAutoconfiguration(FilteringCriterionQueryBuilder::class)
+            ->addTag(ServiceTags::FILTERING_CRITERION_QUERY_BUILDER);
+
+        $container->registerForAutoconfiguration(FilteringSortClauseQueryBuilder::class)
+            ->addTag(ServiceTags::FILTERING_SORT_CLAUSE_QUERY_BUILDER);
     }
 }

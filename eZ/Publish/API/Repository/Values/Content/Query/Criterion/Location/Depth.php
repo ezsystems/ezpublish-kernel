@@ -11,13 +11,14 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
 /**
  * The Depth Criterion class.
  *
  * Provides Location filtering based on depth
  */
-class Depth extends Location
+class Depth extends Location implements FilteringCriterion
 {
     /**
      * Creates a new Depth criterion.

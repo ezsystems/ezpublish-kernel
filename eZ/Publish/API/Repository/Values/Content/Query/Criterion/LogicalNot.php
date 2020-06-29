@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
 /**
  * A NOT logical criterion.
  */
-class LogicalNot extends LogicalOperator
+class LogicalNot extends LogicalOperator implements FilteringCriterion
 {
     /**
      * Creates a new NOT logic criterion.

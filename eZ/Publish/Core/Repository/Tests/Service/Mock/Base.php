@@ -7,7 +7,6 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\LanguageResolver;
-use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\PermissionService;
 use eZ\Publish\Core\Repository\Mapper\ContentDomainMapper;
 use eZ\Publish\Core\Repository\Mapper\ContentMapper;
@@ -22,6 +21,8 @@ use eZ\Publish\Core\Repository\Validator\ContentCreateStructValidator;
 use eZ\Publish\Core\Repository\Validator\ContentUpdateStructValidator;
 use eZ\Publish\Core\Repository\Validator\VersionValidator;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
+use eZ\Publish\SPI\Persistence\Filter\Content\Handler as ContentFilteringHandler;
+use eZ\Publish\SPI\Persistence\Filter\Location\Handler as LocationFilteringHandler;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\ThumbnailStrategy;
 use eZ\Publish\SPI\Repository\Validator\ContentValidator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -46,9 +47,6 @@ abstract class Base extends TestCase
 
     /** @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject */
     private $repositoryMock;
-
-    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
-    private $permissionResolverMock;
 
     /** @var \eZ\Publish\API\Repository\PermissionService|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionServiceMock;
@@ -89,6 +87,12 @@ abstract class Base extends TestCase
     /** @var \eZ\Publish\SPI\Repository\Validator\ContentValidator|\PHPUnit\Framework\MockObject\MockObject */
     protected $contentValidatorStrategyMock;
 
+    /** @var \eZ\Publish\SPI\Persistence\Filter\Content\Handler|\PHPUnit\Framework\MockObject\MockObject */
+    private $contentFilteringHandlerMock;
+
+    /** @var \eZ\Publish\SPI\Persistence\Filter\Location\Handler|\PHPUnit\Framework\MockObject\MockObject */
+    private $locationFilteringHandlerMock;
+
     /**
      * Get Real repository with mocked dependencies.
      *
@@ -116,6 +120,8 @@ abstract class Base extends TestCase
                 $this->getLimitationServiceMock(),
                 $this->getLanguageResolverMock(),
                 $this->getPermissionServiceMock(),
+                $this->getContentFilteringHandlerMock(),
+                $this->getLocationFilteringHandlerMock(),
                 $serviceSettings,
             );
 
@@ -175,7 +181,7 @@ abstract class Base extends TestCase
     protected function getRepositoryMock()
     {
         if (!isset($this->repositoryMock)) {
-            $this->repositoryMock = self::createMock(APIRepository::class);
+            $this->repositoryMock = $this->createMock(APIRepository::class);
         }
 
         return $this->repositoryMock;
@@ -186,11 +192,7 @@ abstract class Base extends TestCase
      */
     protected function getPermissionResolverMock()
     {
-        if (!isset($this->permissionResolverMock)) {
-            $this->permissionResolverMock = $this->createMock(PermissionResolver::class);
-        }
-
-        return $this->permissionResolverMock;
+        return $this->getPermissionServiceMock();
     }
 
     /**
@@ -415,5 +417,23 @@ abstract class Base extends TestCase
         ];
 
         return new ContentValidatorStrategy($validators);
+    }
+
+    protected function getContentFilteringHandlerMock(): ContentFilteringHandler
+    {
+        if (null === $this->contentFilteringHandlerMock) {
+            $this->contentFilteringHandlerMock = $this->createMock(ContentFilteringHandler::class);
+        }
+
+        return $this->contentFilteringHandlerMock;
+    }
+
+    private function getLocationFilteringHandlerMock(): LocationFilteringHandler
+    {
+        if (null === $this->locationFilteringHandlerMock) {
+            $this->locationFilteringHandlerMock = $this->createMock(LocationFilteringHandler::class);
+        }
+
+        return $this->locationFilteringHandlerMock;
     }
 }

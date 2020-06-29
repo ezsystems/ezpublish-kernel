@@ -10,11 +10,12 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringSortClause;
 
 /**
  * Sets sort direction on the Location visibility for a Location query.
  */
-class Visibility extends Location
+class Visibility extends Location implements FilteringSortClause
 {
     /**
      * Constructs a new Location Visibility SortClause.

@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
 
 /**
  * A criterion that matches content based on its language code and always-available state.
@@ -19,7 +20,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
  * - IN: matches against a list of language codes
  * - EQ: matches against one language code
  */
-class LanguageCode extends Criterion
+class LanguageCode extends Criterion implements FilteringCriterion
 {
     /**
      * Switch for matching Content that is always-available.

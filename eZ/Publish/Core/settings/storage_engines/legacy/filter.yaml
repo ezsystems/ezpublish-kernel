@@ -1,0 +1,58 @@
+imports:
+    - { resource: filter/query_builders.yaml }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    # injectables:
+    eZ\Publish\SPI\Persistence\Filter\Content\Handler:
+        alias: eZ\Publish\Core\Persistence\Legacy\Filter\Handler\ContentFilteringHandler
+
+    eZ\Publish\SPI\Persistence\Filter\Location\Handler:
+        alias: eZ\Publish\Core\Persistence\Legacy\Filter\Handler\LocationFilteringHandler
+
+    eZ\Publish\Core\Persistence\Legacy\Filter\Gateway\Content\GatewayDataMapper:
+        alias: eZ\Publish\Core\Persistence\Legacy\Filter\Gateway\Content\Mapper\DoctrineGatewayDataMapper
+
+    eZ\Publish\SPI\Persistence\Filter\CriterionVisitor:
+        alias: eZ\Publish\Core\Persistence\Legacy\Filter\CriterionVisitor
+
+    eZ\Publish\SPI\Persistence\Filter\SortClauseVisitor:
+        alias: eZ\Publish\Core\Persistence\Legacy\Filter\SortClauseVisitor
+
+    # implementations:
+    eZ\Publish\Core\Persistence\Legacy\Filter\Gateway\Content\Mapper\DoctrineGatewayDataMapper:
+        arguments:
+            $languageHandler: '@ezpublish.spi.persistence.language_handler'
+            $languageMaskGenerator: '@ezpublish.persistence.legacy.language.mask_generator'
+            $contentTypeHandler: '@ezpublish.spi.persistence.content_type_handler'
+            $converterRegistry: '@ezpublish.persistence.legacy.field_value_converter.registry'
+
+    eZ\Publish\Core\Persistence\Legacy\Filter\CriterionVisitor:
+        arguments:
+            $criterionQueryBuilders: !tagged_iterator ezplatform.filter.criterion.query_builder
+
+    eZ\Publish\Core\Persistence\Legacy\Filter\SortClauseVisitor:
+        arguments:
+            $sortClauseQueryBuilders: !tagged_iterator ezplatform.filter.sort_clause.query_builder
+
+    eZ\Publish\Core\Persistence\Legacy\Filter\Gateway\Content\Doctrine\DoctrineGateway:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
+
+    eZ\Publish\Core\Persistence\Legacy\Filter\Handler\ContentFilteringHandler:
+        arguments:
+            $gateway: '@eZ\Publish\Core\Persistence\Legacy\Filter\Gateway\Content\Doctrine\DoctrineGateway'
+            $fieldHandler: '@ezpublish.persistence.legacy.field_handler'
+
+    eZ\Publish\Core\Persistence\Legacy\Filter\Gateway\Location\Doctrine\DoctrineGateway:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
+
+    eZ\Publish\Core\Persistence\Legacy\Filter\Handler\LocationFilteringHandler:
+        arguments:
+            $gateway: '@eZ\Publish\Core\Persistence\Legacy\Filter\Gateway\Location\Doctrine\DoctrineGateway'
+            $locationMapper: '@ezpublish.persistence.legacy.location.mapper'

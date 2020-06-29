@@ -10,13 +10,14 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location;
+use eZ\Publish\SPI\Repository\Values\Filter\FilteringSortClause;
 
 /**
  * Sets sort direction on Location id for a Location query.
  *
  * Especially useful to get reproducible search results in tests.
  */
-class Id extends Location
+class Id extends Location implements FilteringSortClause
 {
     /**
      * Constructs a new LocationId SortClause.
