@@ -11,11 +11,12 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location;
 use eZ\Publish\SPI\Repository\Values\Filter\FilteringSortClause;
+use eZ\Publish\SPI\Repository\Values\Trash\Query\SortClause as TrashSortClause;
 
 /**
  * Sets sort direction on the Location path for a Location query.
  */
-class Path extends Location implements FilteringSortClause
+class Path extends Location implements FilteringSortClause, TrashSortClause
 {
     /**
      * Constructs a new LocationPath SortClause.

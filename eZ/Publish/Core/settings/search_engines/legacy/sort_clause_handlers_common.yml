@@ -17,7 +17,7 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.trash}
+            - {name: ezplatform.trash.search.legacy.gateway.sort_clause_handler}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.date_modified:
         parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler
@@ -62,7 +62,7 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.trash}
+            - {name: ezplatform.trash.search.legacy.gateway.sort_clause_handler}
 
     eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\RandomSortClauseHandlerFactory:
         arguments:
@@ -94,17 +94,17 @@ services:
     eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Trash\ContentTypeName:
         parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler
         tags:
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.trash}
+            - {name: ezplatform.trash.search.legacy.gateway.sort_clause_handler}
 
     eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Trash\UserLogin:
         parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler
         tags:
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.trash}
+            - {name: ezplatform.trash.search.legacy.gateway.sort_clause_handler}
 
     eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Trash\DateTrashed:
         parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler
         tags:
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.trash}
+            - {name: ezplatform.trash.search.legacy.gateway.sort_clause_handler}
 
     # BC
     ezpublish.search.legacy.gateway.sort_clause_handler.base: '@eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler'

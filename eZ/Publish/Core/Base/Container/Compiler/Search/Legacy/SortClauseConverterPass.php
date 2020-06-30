@@ -48,7 +48,7 @@ class SortClauseConverterPass implements CompilerPassInterface
         if ($container->hasDefinition('ezplatform.trash.search.legacy.gateway.sort_clause_converter')) {
             $sortClauseConverterTrash = $container->getDefinition('ezplatform.trash.search.legacy.gateway.sort_clause_converter');
 
-            $trashHandlers = $container->findTaggedServiceIds('ezpublish.search.legacy.gateway.sort_clause_handler.trash');
+            $trashHandlers = $container->findTaggedServiceIds('ezplatform.trash.search.legacy.gateway.sort_clause_handler');
 
             $this->addHandlers($sortClauseConverterTrash, $trashHandlers);
         }

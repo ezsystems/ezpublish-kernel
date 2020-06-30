@@ -10,11 +10,9 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Trash;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\SPI\Repository\Values\Trash\Query\SortClause as TrashSortClause;
 
-/**
- * Sets sort direction on the Trashed Location date for a Location query.
- */
-class DateTrashed extends SortClause
+class DateTrashed extends SortClause implements TrashSortClause
 {
     public function __construct(string $sortDirection = Query::SORT_ASC)
     {
