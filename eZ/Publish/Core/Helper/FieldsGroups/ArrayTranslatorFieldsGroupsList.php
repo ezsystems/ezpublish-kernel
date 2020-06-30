@@ -55,15 +55,4 @@ final class ArrayTranslatorFieldsGroupsList implements FieldsGroupsList
 
         return $fieldDefinition->fieldGroup;
     }
-
-    public function getFieldGroupTranslated(FieldDefinition $fieldDefinition): string
-    {
-        $groupId = $this->getFieldGroup($fieldDefinition);
-
-        if (array_key_exists($groupId, $this->groups)) {
-            return $this->groups[$groupId];
-        }
-
-        return $groupId;
-    }
 }

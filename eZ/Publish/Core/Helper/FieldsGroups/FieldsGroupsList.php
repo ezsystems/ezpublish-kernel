@@ -37,11 +37,4 @@ interface FieldsGroupsList
      * @return string
      */
     public function getFieldGroup(FieldDefinition $fieldDefinition): string;
-
-    /**
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
-     *
-     * @return string
-     */
-    public function getFieldGroupTranslated(FieldDefinition $fieldDefinition): string;
 }

@@ -85,42 +85,6 @@ class ArrayTranslatorFieldsGroupsListTest extends TestCase
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList::getFieldGroupTranslated
-     */
-    public function testGetFieldGroupTranslatedWhenFieldDefinitionHasGroup(): void
-    {
-        $fieldDefinitionMock = $this->getFieldDefinitionMock(
-            [['fieldGroup' => self::FIRST_GROUP_ID]],
-        );
-
-        $this->applyTranslationsForTranslationsMock();
-
-        $arrayTranslatorFieldsGroupsList = $this->getArrayTranslatorFieldsGroupsList();
-
-        $this->assertSame(
-            self::FIRST_GROUP_NAME,
-            $arrayTranslatorFieldsGroupsList->getFieldGroupTranslated($fieldDefinitionMock)
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList::getFieldGroupTranslated
-     */
-    public function testGetFieldGroupTranslatedWhenFieldDefinitionMissingGroup(): void
-    {
-        $fieldDefinitionMock = $this->getFieldDefinitionMock();
-
-        $this->applyTranslationsForTranslationsMock();
-
-        $arrayTranslatorFieldsGroupsList = $this->getArrayTranslatorFieldsGroupsList();
-
-        $this->assertSame(
-            self::DEFAULT_GROUP_NAME,
-            $arrayTranslatorFieldsGroupsList->getFieldGroupTranslated($fieldDefinitionMock)
-        );
-    }
-
     public function testUsesIdentifierIfNoTranslation(): void
     {
         $this->getTranslatorMock()
