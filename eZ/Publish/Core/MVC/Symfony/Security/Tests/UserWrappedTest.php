@@ -99,6 +99,16 @@ class UserWrappedTest extends TestCase
             ->will($this->returnValue(false));
         $this->assertFalse($user->isEqualTo($otherUser));
     }
+
+    public function testNotSerializeApiUser(): void
+    {
+        $originalUser = $this->createMock(UserInterface::class);
+        $user = new UserWrapped($originalUser, $this->apiUser);
+        $serialized = serialize($user);
+        $unserializedUser = unserialize($serialized);
+        $this->expectException(\LogicException::class);
+        $unserializedUser->getApiUser();
+    }
 }
 
 /**

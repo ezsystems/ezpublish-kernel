@@ -7,9 +7,11 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
+use InvalidArgumentException;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
-use InvalidArgumentException;
 
 /**
  * This class represents a UserWrapped object.
@@ -20,7 +22,7 @@ use InvalidArgumentException;
  *     - wrappedUser: containing the originally matched user.
  *     - apiUser: containing the API User (the one from the eZ Repository )
  */
-class UserWrapped implements UserInterface, EquatableInterface
+class UserWrapped implements ReferenceUserInterface, EquatableInterface
 {
     /** @var \Symfony\Component\Security\Core\User\UserInterface */
     private $wrappedUser;
@@ -28,10 +30,14 @@ class UserWrapped implements UserInterface, EquatableInterface
     /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $apiUser;
 
+    /** @var \eZ\Publish\API\Repository\Values\User\UserReference */
+    private $apiUserReference;
+
     public function __construct(CoreUserInterface $wrappedUser, APIUser $apiUser)
     {
         $this->setWrappedUser($wrappedUser);
         $this->apiUser = $apiUser;
+        $this->apiUserReference = new UserReference($apiUser->getUserId());
     }
 
     public function __toString()
@@ -45,6 +51,7 @@ class UserWrapped implements UserInterface, EquatableInterface
     public function setAPIUser(APIUser $apiUser)
     {
         $this->apiUser = $apiUser;
+        $this->apiUserReference = new UserReference($apiUser->getUserId());
     }
 
     /**
@@ -52,13 +59,28 @@ class UserWrapped implements UserInterface, EquatableInterface
      */
     public function getAPIUser()
     {
+        if (!$this->apiUser instanceof APIUser) {
+            throw new \LogicException(
+                'Attempted to get APIUser before it has been set by UserProvider, APIUser is not serialized to session'
+            );
+        }
+
         return $this->apiUser;
     }
 
     /**
-     * @throws InvalidArgumentException If $wrappedUser is instance of self or User to avoid duplicated APIUser in session.
-     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserReference
+     */
+    public function getAPIUserReference(): APIUserReference
+    {
+        return $this->apiUserReference;
+    }
+
+    /**
      * @param \Symfony\Component\Security\Core\User\UserInterface $wrappedUser
+     *
+     * @throws InvalidArgumentException If $wrappedUser is instance of self or User to avoid duplicated APIUser in
+     *     session.
      */
     public function setWrappedUser(CoreUserInterface $wrappedUser)
     {
@@ -106,6 +128,22 @@ class UserWrapped implements UserInterface, EquatableInterface
 
     public function isEqualTo(CoreUserInterface $user)
     {
+        if ($user instanceof self) {
+            $user = $user->wrappedUser;
+        }
+
         return $this->wrappedUser instanceof EquatableInterface ? $this->wrappedUser->isEqualTo($user) : true;
+    }
+
+    /*
+    * Make sure we don't serialize the whole API user object given it's a full fledged api content object. We set
+    * (& either way refresh) the user object in \eZ\Publish\Core\MVC\Symfony\Security\User\Provider->refreshUser()
+    * when object wakes back up from session.
+    *
+    * @return array
+    */
+    public function __sleep(): array
+    {
+        return ['wrappedUser', 'apiUserReference'];
     }
 }
