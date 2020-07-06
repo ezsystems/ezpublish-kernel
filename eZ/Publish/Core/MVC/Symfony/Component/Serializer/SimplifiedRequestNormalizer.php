@@ -7,9 +7,9 @@
 namespace eZ\Publish\Core\MVC\Symfony\Component\Serializer;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 
-final class SimplifiedRequestNormalizer implements ContextAwareNormalizerInterface
+final class SimplifiedRequestNormalizer extends PropertyNormalizer
 {
     /**
      * @see \Symfony\Component\Serializer\Normalizer\NormalizerInterface::normalize
