@@ -16,7 +16,6 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\Query;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use RuntimeException;
 
 /**
@@ -790,11 +789,14 @@ class DoctrineDatabase extends Gateway
      * @param string[] $urlHashes URL string hashes
      *
      * @return array
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function loadUrlAliasData(array $urlHashes)
+    public function loadUrlAliasData(array $urlHashes, ?int $languageMask = null): array
     {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
+        $databasePlatform = $this->connection->getDatabasePlatform();
 
         $count = count($urlHashes);
         foreach ($urlHashes as $level => $urlPartHash) {
@@ -836,6 +838,28 @@ class DoctrineDatabase extends Gateway
 
             $previousTableName = $tableAlias;
         }
+
+        if (null !== $languageMask) {
+            $query
+                ->andWhere(
+                    // top level: ezurlalias_ml AS u
+                    // u.lang_mask & $languageMask > 0
+                    $expr->gt(
+                        $databasePlatform->getBitAndComparisonExpression(
+                            'u.lang_mask',
+                            $query->createPositionalParameter(
+                                $languageMask,
+                                ParameterType::INTEGER
+                            )
+                        ),
+                        0
+                    )
+                );
+        } else {
+            // make sure is_alias=0 (system URL) goes first if no language was given
+            $query->orderBy('u.is_alias', 'ASC');
+        }
+
         $query->setMaxResults(1);
 
         $result = $query->execute()->fetch(FetchMode::ASSOCIATIVE);

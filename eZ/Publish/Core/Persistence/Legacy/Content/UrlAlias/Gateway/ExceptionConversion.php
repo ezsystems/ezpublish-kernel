@@ -176,10 +176,10 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadUrlAliasData(array $urlHashes)
+    public function loadUrlAliasData(array $urlHashes, ?int $languageMask = null)
     {
         try {
-            return $this->innerGateway->loadUrlAliasData($urlHashes);
+            return $this->innerGateway->loadUrlAliasData($urlHashes, $languageMask);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
