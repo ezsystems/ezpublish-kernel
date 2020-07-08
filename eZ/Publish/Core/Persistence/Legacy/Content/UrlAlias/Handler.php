@@ -316,7 +316,7 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function createCustomUrlAlias($locationId, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false)
+    public function createCustomUrlAlias($locationId, $path, $forwarding = false, $languageCode = '', $alwaysAvailable = false)
     {
         return $this->createUrlAlias(
             'eznode:' . $locationId,
@@ -347,7 +347,7 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function createGlobalUrlAlias($resource, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false)
+    public function createGlobalUrlAlias($resource, $path, $forwarding = false, $languageCode = '', $alwaysAvailable = false)
     {
         return $this->createUrlAlias(
             $resource,
@@ -390,7 +390,7 @@ class Handler implements UrlAliasHandlerInterface
                 if (empty($row)) {
                     $isPathNew = true;
                 } else {
-                    $parentId = $row['link'];
+                    $parentId = (int)$row['link'];
                 }
             }
 
@@ -404,7 +404,7 @@ class Handler implements UrlAliasHandlerInterface
 
         // If last (next to topmost) entry parent is special root entry we handle topmost entry as first level entry
         // That is why we need to reset $parentId to 0
-        if ($parentId != 0 && $this->gateway->isRootEntry($parentId)) {
+        if ($parentId !== 0 && $this->gateway->isRootEntry($parentId)) {
             $parentId = 0;
         }
 
@@ -424,33 +424,44 @@ class Handler implements UrlAliasHandlerInterface
             $row = $this->gateway->loadRow($parentId, $topElementMD5);
         }
 
-        // If nothing was returned perform insert
-        if ($isPathNew || empty($row)) {
+        $currentAliasMask = $languageId | (int)$alwaysAvailable;
+        // new alias if nothing was returned or an existing entry is not an alias, but is defined for a different language
+        if (
+            $isPathNew
+            || empty($row)
+            || ((int)$row['is_alias'] === 0 && ($currentAliasMask & (int)$row['lang_mask']) === 0)
+        ) {
             $data['lang_mask'] = $languageId | (int)$alwaysAvailable;
             $id = $this->gateway->insertRow($data);
-        } elseif ($row['action'] == 'nop:' || $row['is_original'] == 0) {
+        } elseif ($row['action'] === 'nop:' || (int)$row['is_original'] === 0) {
             // Row exists, check if it is reusable. There are 2 cases when this is possible:
             // 1. NOP entry
             // 2. history entry
             $data['lang_mask'] = $languageId | (int)$alwaysAvailable;
             // If history is reused move link to id
-            $data['link'] = $id = $row['id'];
+            $data['link'] = (int)$row['id'];
+
+            $id = $data['link'];
             $this->gateway->updateRow(
                 $parentId,
                 $topElementMD5,
                 $data
             );
-        } elseif ($row['action'] == $action && 0 === ((int)$row['lang_mask'] & $languageId)) {
-            // add another language to the same custom alias
-            $data['link'] = $id = $row['id'];
+        } elseif ($row['action'] === $action && 0 === ((int)$row['lang_mask'] & $languageId)) {
+            $data['link'] = (int)$row['id'];
             $data['lang_mask'] = $row['lang_mask'] | $languageId | (int)$alwaysAvailable;
+
+            $id = $data['link'];
             $this->gateway->updateRow(
                 $parentId,
                 $topElementMD5,
                 $data
             );
         } else {
-            throw new ForbiddenException("Path '%path%' already exists for the given language", ['%path%' => $path]);
+            throw new ForbiddenException(
+                "Path '%path%' already exists for the given language",
+                ['%path%' => $path]
+            );
         }
 
         $data['raw_path_data'] = $this->gateway->loadPathData($id);

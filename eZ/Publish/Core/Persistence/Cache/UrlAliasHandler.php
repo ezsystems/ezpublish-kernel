@@ -58,7 +58,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     /**
      * {@inheritdoc}
      */
-    public function createCustomUrlAlias($locationId, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false)
+    public function createCustomUrlAlias($locationId, $path, $forwarding = false, $languageCode = '', $alwaysAvailable = false)
     {
         $this->logger->logCall(
             __METHOD__,
@@ -87,7 +87,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     /**
      * {@inheritdoc}
      */
-    public function createGlobalUrlAlias($resource, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false)
+    public function createGlobalUrlAlias($resource, $path, $forwarding = false, $languageCode = '', $alwaysAvailable = false)
     {
         $this->logger->logCall(
             __METHOD__,

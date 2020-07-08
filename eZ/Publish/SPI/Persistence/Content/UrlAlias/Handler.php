@@ -39,12 +39,12 @@ interface Handler
      * @param mixed $locationId
      * @param string $path
      * @param bool $forwarding
-     * @param string|null $languageCode
+     * @param string $languageCode
      * @param bool $alwaysAvailable
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function createCustomUrlAlias($locationId, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false);
+    public function createCustomUrlAlias($locationId, $path, $forwarding = false, $languageCode = '', $alwaysAvailable = false);
 
     /**
      * Create a user chosen $alias pointing to a resource in $languageCode.
@@ -57,12 +57,12 @@ interface Handler
      * @param string $resource
      * @param string $path
      * @param bool $forwarding
-     * @param string|null $languageCode
+     * @param string $languageCode
      * @param bool $alwaysAvailable
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function createGlobalUrlAlias($resource, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false);
+    public function createGlobalUrlAlias($resource, $path, $forwarding = false, $languageCode = '', $alwaysAvailable = false);
 
     /**
      * List global aliases.
