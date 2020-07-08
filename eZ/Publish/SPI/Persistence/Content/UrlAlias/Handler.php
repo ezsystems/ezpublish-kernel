@@ -111,7 +111,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function lookup($url);
+    public function lookup($url, ?string $languageCode = null);
 
     /**
      * Loads URL alias by given $id.

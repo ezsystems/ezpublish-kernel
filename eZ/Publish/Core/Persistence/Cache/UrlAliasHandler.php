@@ -182,11 +182,13 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     /**
      * {@inheritdoc}
      */
-    public function lookup($url)
+    public function lookup($url, ?string $languageCode = null)
     {
-        $cacheItem = $this->cache->getItem(
-            'ez-urlAlias-url-' . $this->escapeForCacheKey($url)
-        );
+        $cacheKey = 'ez-urlAlias-url-' . $this->escapeForCacheKey($url);
+        if (null !== $languageCode) {
+            $cacheKey .= '-' . $this->escapeForCacheKey($languageCode);
+        }
+        $cacheItem = $this->cache->getItem($cacheKey);
         if ($cacheItem->isHit()) {
             $this->logger->logCacheHit(['url' => $url]);
 
@@ -197,9 +199,9 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             return $return;
         }
 
-        $this->logger->logCacheMiss(['url' => $url]);
+        $this->logger->logCacheMiss(['url' => $url, 'languageCode' => $languageCode]);
         try {
-            $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url);
+            $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url, $languageCode);
         } catch (APINotFoundException $e) {
             $cacheItem->set(self::NOT_FOUND)
                 ->expiresAfter(30)

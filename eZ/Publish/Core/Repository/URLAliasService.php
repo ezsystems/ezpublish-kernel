@@ -644,7 +644,7 @@ class URLAliasService implements URLAliasServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path exceeded maximum depth level
      *
      * @param string $url
-     * @param string $languageCode
+     * @param string|null $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
@@ -652,9 +652,9 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $url = $this->cleanUrl($url);
 
-        $spiUrlAlias = $this->urlAliasHandler->lookup($url);
+        $spiUrlAlias = $this->urlAliasHandler->lookup($url, $languageCode);
 
-        list($path, $languageCodes) = $this->matchPath($spiUrlAlias, $url, $languageCode);
+        [$path, $languageCodes] = $this->matchPath($spiUrlAlias, $url, $languageCode);
         if ($path === false || !$this->isPathLoadable($spiUrlAlias->pathData, $languageCodes)) {
             throw new NotFoundException('URLAlias', $url);
         }

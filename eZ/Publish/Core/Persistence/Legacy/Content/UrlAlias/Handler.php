@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\SwappedLocationProperties;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\UrlAliasForSwappedLocation;
 use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
@@ -554,7 +555,7 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function lookup($url)
+    public function lookup($url, ?string $languageCode = null): UrlAlias
     {
         $urlHashes = [];
         foreach (explode('/', $url) as $level => $text) {
@@ -566,7 +567,10 @@ class Handler implements UrlAliasHandlerInterface
             throw new InvalidArgumentException('$urlHashes', 'Exceeded maximum depth level of content url alias.');
         }
 
-        $data = $this->gateway->loadUrlAliasData($urlHashes);
+        $languageId = $languageCode !== null
+            ? $this->languageHandler->loadByLanguageCode($languageCode)->id
+            : null;
+        $data = $this->gateway->loadUrlAliasData($urlHashes, $languageId);
         if (empty($data)) {
             throw new NotFoundException('URLAlias', $url);
         }
@@ -575,7 +579,7 @@ class Handler implements UrlAliasHandlerInterface
         $isPathHistory = false;
         for ($level = 0; $level < $pathDepth; ++$level) {
             $prefix = $level === $pathDepth - 1 ? '' : 'ezurlalias_ml' . $level . '_';
-            $isPathHistory = $isPathHistory ?: ($data[$prefix . 'link'] != $data[$prefix . 'id']);
+            $isPathHistory = $isPathHistory ?: ($data[$prefix . 'link'] !== $data[$prefix . 'id']);
             $hierarchyData[$level] = [
                 'id' => $data[$prefix . 'id'],
                 'parent' => $data[$prefix . 'parent'],
@@ -584,7 +588,7 @@ class Handler implements UrlAliasHandlerInterface
         }
 
         $data['is_path_history'] = $isPathHistory;
-        $data['raw_path_data'] = ($data['action_type'] == 'eznode' && !$data['is_alias'])
+        $data['raw_path_data'] = ($data['action_type'] === 'eznode' && !$data['is_alias'])
             ? $this->gateway->loadPathDataByHierarchy($hierarchyData)
             : $this->gateway->loadPathData($data['id']);
 
