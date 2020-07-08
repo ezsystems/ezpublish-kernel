@@ -66,10 +66,21 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function cleanupAfterPublish($action, $languageId, $newId, $parentId, $textMD5)
-    {
+    public function cleanupAfterPublish(
+        string $action,
+        int $languageId,
+        int $newId,
+        int $parentId,
+        string $textMD5
+    ): void {
         try {
-            $this->innerGateway->cleanupAfterPublish($action, $languageId, $newId, $parentId, $textMD5);
+            $this->innerGateway->cleanupAfterPublish(
+                $action,
+                $languageId,
+                $newId,
+                $parentId,
+                $textMD5
+            );
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
@@ -120,7 +131,7 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    public function loadRow($parentId, $textMD5)
+    public function loadRow(int $parentId, string $textMD5): array
     {
         try {
             return $this->innerGateway->loadRow($parentId, $textMD5);
