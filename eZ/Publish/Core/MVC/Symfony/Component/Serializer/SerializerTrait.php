@@ -20,6 +20,7 @@ trait SerializerTrait
         return new Serializer(
             [
                 new CompoundMatcherNormalizer(),
+                new SimplifiedRequestNormalizer(),
                 (new PropertyNormalizer())->setIgnoredAttributes(['request', 'container', 'matcherBuilder']),
             ],
             [new JsonEncoder()]
