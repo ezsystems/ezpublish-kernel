@@ -4,8 +4,12 @@
         : ''
 %}
 
-{% if location is defined %}
-    <a href="{{ ez_path(location) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
+{% if objectParameters.doNotGenerateEmbedUrl is defined and objectParameters.doNotGenerateEmbedUrl %}
+    <span {% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</span>
 {% else %}
-    <a href="{{ ez_path(content) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
+    {% if location is defined %}
+        <a href="{{ ez_path(location) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
+    {% else %}
+        <a href="{{ ez_path(content) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
+    {% endif %}
 {% endif %}

@@ -154,6 +154,14 @@ class ContentViewBuilder implements ViewBuilder
             $view->setLocation($location);
         }
 
+        if (
+            $view->isEmbed()
+            && $this->permissionResolver->canUser('content', 'view_embed', $content->contentInfo)
+            && !$this->permissionResolver->canUser('content', 'read', $content->contentInfo)
+        ) {
+            $parameters['params']['objectParameters'] = ['doNotGenerateEmbedUrl' => true];
+        }
+
         $this->viewParametersInjector->injectViewParameters($view, $parameters);
         $this->viewConfigurator->configure($view);
 
