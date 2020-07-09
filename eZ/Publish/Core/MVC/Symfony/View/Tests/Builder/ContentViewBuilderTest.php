@@ -342,4 +342,56 @@ class ContentViewBuilderTest extends TestCase
 
         $this->assertEquals($expectedView, $this->contentViewBuilder->buildView($parameters));
     }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testBuildViewInsertsDoNotGenerateEmbedUrlParameter(): void
+    {
+        $contentInfo = new ContentInfo(['id' => 120]);
+        $content = new Content(
+            [
+                'versionInfo' => new VersionInfo(
+                    [
+                        'contentInfo' => $contentInfo,
+                        'status' => VersionInfo::STATUS_PUBLISHED,
+                    ]
+                ),
+            ]
+        );
+        $parameters = ['viewType' => 'embed', 'contentId' => 120, '_controller' => null];
+
+        $this->repository
+            ->expects($this->once())
+            ->method('sudo')
+            ->willReturn($content);
+
+        $this->permissionResolver
+            ->method('canUser')
+            ->willReturnMap(
+                [
+                    ['content', 'read', $contentInfo, [], false],
+                    ['content', 'view_embed', $contentInfo, [], true],
+                    ['content', 'view_embed', $contentInfo, true],
+                    ['content', 'read', $contentInfo, false],
+                ]
+            );
+
+        $this
+            ->parametersInjector
+            ->method('injectViewParameters')
+            ->with(
+                $this->isInstanceOf(ContentView::class),
+                array_merge(
+                    $parameters,
+                    // invocation expectation:
+                    ['params' => ['objectParameters' => ['doNotGenerateEmbedUrl' => true]]]
+                )
+            );
+
+        $this->contentViewBuilder->buildView(
+            $parameters
+        );
+    }
 }
