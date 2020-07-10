@@ -1,6 +1,9 @@
 -- Set storage engine schema version number
 UPDATE ezsite_data SET value='6.13.0' WHERE name='ezpublish-version';
 
+-- IMPORTANT:
+-- * Only covers database schema changes in eZ Platform, for other bundles you use (enterprise or otherwise), see doc!
+
 --
 -- EZP-25880: Make ezuser.login case in-sensitive across databases, using case in-sensitive index
 --
