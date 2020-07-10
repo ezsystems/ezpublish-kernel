@@ -361,7 +361,7 @@ class Mapper
                 $versionInfo->creationDate = (int)$row['ezcontentobject_version_created'];
                 $versionInfo->modificationDate = (int)$row['ezcontentobject_version_modified'];
                 $versionInfo->status = (int)$row['ezcontentobject_version_status'];
-                $versionInfo->names = $nameData[$versionId];
+                $versionInfo->names = $nameData[$versionId] ?? [];
                 $versionInfoList[$versionId] = $versionInfo;
                 $versionInfo->languageCodes = $this->extractLanguageCodesFromMask(
                     (int)$row['ezcontentobject_version_language_mask'],
