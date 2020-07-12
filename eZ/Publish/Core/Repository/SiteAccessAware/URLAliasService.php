@@ -73,6 +73,11 @@ class URLAliasService implements URLAliasServiceInterface
 
     public function lookup($url, $languageCode = null)
     {
+        if ($languageCode === null) {
+            $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages();
+            $languageCode = $prioritizedLanguages[0] ?? null;
+        }
+
         return $this->service->lookup($url, $languageCode);
     }
 
