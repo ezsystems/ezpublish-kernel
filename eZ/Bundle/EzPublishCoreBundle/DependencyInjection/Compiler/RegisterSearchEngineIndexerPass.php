@@ -6,16 +6,20 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use eZ\Publish\Core\Base\Container\Compiler\TaggedServiceIdsIterator\BackwardCompatibleIterator;
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use LogicException;
 
 /**
  * This compiler pass registers eZ Publish search engines indexers.
  */
 class RegisterSearchEngineIndexerPass implements CompilerPassInterface
 {
+    public const SEARCH_ENGINE_INDEXER_SERVICE_TAG = 'ezplatform.search_engine.indexer';
+    public const DEPRECATED_SEARCH_ENGINE_INDEXER_SERVICE_TAG = 'ezpublish.searchEngineIndexer';
+
     /**
      * Container service id of the SearchEngineIndexerFactory.
      *
@@ -39,12 +43,23 @@ class RegisterSearchEngineIndexerPass implements CompilerPassInterface
         }
 
         $searchEngineIndexerFactoryDefinition = $container->getDefinition($this->factoryId);
-        foreach ($container->findTaggedServiceIds('ezpublish.searchEngineIndexer') as $id => $attributes) {
+
+        $iterator = new BackwardCompatibleIterator(
+            $container,
+            self::SEARCH_ENGINE_INDEXER_SERVICE_TAG,
+            self::DEPRECATED_SEARCH_ENGINE_INDEXER_SERVICE_TAG
+        );
+
+        foreach ($iterator as $serviceId => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
-                        'ezpublish.searchEngineIndexer service tag needs an "alias" attribute to ' .
-                        'identify the search engine.'
+                        sprintf(
+                            'Service "%s" tagged with "%s" or "%s" needs an "alias" attribute to identify the search engine',
+                            $serviceId,
+                            self::SEARCH_ENGINE_INDEXER_SERVICE_TAG,
+                            self::DEPRECATED_SEARCH_ENGINE_INDEXER_SERVICE_TAG
+                        )
                     );
                 }
 
@@ -52,7 +67,7 @@ class RegisterSearchEngineIndexerPass implements CompilerPassInterface
                 $searchEngineIndexerFactoryDefinition->addMethodCall(
                     'registerSearchEngineIndexer',
                     [
-                        new Reference($id),
+                        new Reference($serviceId),
                         $attribute['alias'],
                     ]
                 );

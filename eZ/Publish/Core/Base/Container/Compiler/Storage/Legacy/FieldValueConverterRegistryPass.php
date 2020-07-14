@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy;
 
+use eZ\Publish\Core\Base\Container\Compiler\TaggedServiceIdsIterator\BackwardCompatibleIterator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
@@ -37,22 +38,13 @@ class FieldValueConverterRegistryPass implements CompilerPassInterface
 
         $registry = $container->getDefinition(self::CONVERTER_REGISTRY_SERVICE_ID);
 
-        $deprecatedFieldTypeStorageConverterTags = $container->findTaggedServiceIds(
+        $iterator = new BackwardCompatibleIterator(
+            $container,
+            self::CONVERTER_SERVICE_TAG,
             self::DEPRECATED_CONVERTER_SERVICE_TAG
         );
-        foreach ($deprecatedFieldTypeStorageConverterTags as $deprecatedFieldTypeStorageConverterTag) {
-            @trigger_error(
-                sprintf(
-                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
-                    self::DEPRECATED_CONVERTER_SERVICE_TAG,
-                    self::CONVERTER_SERVICE_TAG
-                ),
-                E_USER_DEPRECATED
-            );
-        }
-        $fieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::CONVERTER_SERVICE_TAG);
-        $storageConverterFieldTypesTags = array_merge($deprecatedFieldTypeStorageConverterTags, $fieldTypeStorageConverterTags);
-        foreach ($storageConverterFieldTypesTags as $id => $attributes) {
+
+        foreach ($iterator as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(

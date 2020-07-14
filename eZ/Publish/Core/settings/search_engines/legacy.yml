@@ -68,7 +68,7 @@ services:
             $languageHandler: '@ezpublish.spi.persistence.language_handler'
             $mapper: '@ezpublish.search.legacy.fulltext_mapper'
         tags:
-            - {name: ezpublish.searchEngine, alias: legacy}
+            - {name: ezplatform.search_engine, alias: legacy}
         lazy: true
 
     ezpublish.spi.search.legacy.indexer:
@@ -79,5 +79,5 @@ services:
             $connection: '@ezpublish.persistence.connection'
             $searchHandler: "@ezpublish.spi.search.legacy"
         tags:
-            - {name: ezpublish.searchEngineIndexer, alias: legacy}
+            - {name: ezplatform.search_engine.indexer, alias: legacy}
         lazy: true

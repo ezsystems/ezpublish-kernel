@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\Compiler\Storage;
 
+use eZ\Publish\Core\Base\Container\Compiler\TaggedServiceIdsIterator\BackwardCompatibleIterator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -41,30 +42,14 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
         // Alias attribute is the corresponding field type string.
         $externalStorageGateways = [];
 
-        $deprecatedExternalStorageHandlerGatewayTags = $container->findTaggedServiceIds(
-            self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
-        );
-
-        foreach ($deprecatedExternalStorageHandlerGatewayTags as $deprecatedExternalStorageHandlerGatewayTag) {
-            @trigger_error(
-                sprintf(
-                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
-                    self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG,
-                    self::EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
-                ),
-                E_USER_DEPRECATED
-            );
-        }
-
-        $externalStorageHandlerGatewayTags = array_merge(
-            $deprecatedExternalStorageHandlerGatewayTags,
-            $container->findTaggedServiceIds(
-                self::EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG
-            )
+        $externalStorageHandlerGatewayIterator = new BackwardCompatibleIterator(
+            $container,
+            self::EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG,
+            self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_GATEWAY_SERVICE_TAG,
         );
 
         // Referencing the services by alias (field type string)
-        foreach ($externalStorageHandlerGatewayTags as $id => $attributes) {
+        foreach ($externalStorageHandlerGatewayIterator as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
@@ -93,31 +78,15 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
             }
         }
 
-        $deprecatedExternalStorageHandlerTags = $container->findTaggedServiceIds(
+        $externalStorageHandlerIterator = new BackwardCompatibleIterator(
+            $container,
+            self::EXTERNAL_STORAGE_HANDLER_SERVICE_TAG,
             self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_SERVICE_TAG
-        );
-
-        foreach ($deprecatedExternalStorageHandlerTags as $deprecatedExternalStorageHandlerTag) {
-            @trigger_error(
-                sprintf(
-                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
-                    self::DEPRECATED_EXTERNAL_STORAGE_HANDLER_SERVICE_TAG,
-                    self::EXTERNAL_STORAGE_HANDLER_SERVICE_TAG
-                ),
-                E_USER_DEPRECATED
-            );
-        }
-
-        $externalStorageHandlerTags = array_merge(
-            $deprecatedExternalStorageHandlerTags,
-            $container->findTaggedServiceIds(
-                self::EXTERNAL_STORAGE_HANDLER_SERVICE_TAG
-            )
         );
 
         // External storage handlers for field types that need them.
         // Alias attribute is the field type string.
-        foreach ($externalStorageHandlerTags as $id => $attributes) {
+        foreach ($externalStorageHandlerIterator as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(

@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\Compiler\Search;
 
+use eZ\Publish\Core\Base\Container\Compiler\TaggedServiceIdsIterator\BackwardCompatibleIterator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -32,20 +33,13 @@ class FieldRegistryPass implements CompilerPassInterface
 
         $fieldRegistryDefinition = $container->getDefinition('ezpublish.search.common.field_registry');
 
-        $deprecatedIndexableFieldTypeTags = $container->findTaggedServiceIds(self::DEPRECATED_FIELD_TYPE_INDEXABLE_SERVICE_TAG);
-        foreach ($deprecatedIndexableFieldTypeTags as $deprecatedIndexableFieldTypeTag) {
-            @trigger_error(
-                sprintf(
-                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s`. instead.',
-                    self::DEPRECATED_FIELD_TYPE_INDEXABLE_SERVICE_TAG,
-                    self::FIELD_TYPE_INDEXABLE_SERVICE_TAG
-                ),
-                E_USER_DEPRECATED
-            );
-        }
-        $indexableFieldTypeTags = $container->findTaggedServiceIds(self::FIELD_TYPE_INDEXABLE_SERVICE_TAG);
-        $fieldTypesTags = array_merge($deprecatedIndexableFieldTypeTags, $indexableFieldTypeTags);
-        foreach ($fieldTypesTags as $id => $attributes) {
+        $fieldTypesIterator = new BackwardCompatibleIterator(
+            $container,
+            self::FIELD_TYPE_INDEXABLE_SERVICE_TAG,
+            self::DEPRECATED_FIELD_TYPE_INDEXABLE_SERVICE_TAG
+        );
+
+        foreach ($fieldTypesIterator as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(

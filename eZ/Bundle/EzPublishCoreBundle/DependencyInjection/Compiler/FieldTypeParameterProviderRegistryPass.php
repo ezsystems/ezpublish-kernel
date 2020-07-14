@@ -6,6 +6,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use eZ\Publish\Core\Base\Container\Compiler\TaggedServiceIdsIterator\BackwardCompatibleIterator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -31,20 +32,13 @@ class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
 
         $parameterProviderRegistryDef = $container->getDefinition('ezpublish.fieldType.parameterProviderRegistry');
 
-        $deprecatedFieldTypeParameterProviderTags = $container->findTaggedServiceIds(self::DEPRECATED_FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG);
-        foreach ($deprecatedFieldTypeParameterProviderTags as $deprecatedFieldTypeParameterProviderTag) {
-            @trigger_error(
-                sprintf(
-                    'Service tag `%s` is deprecated and will be removed in eZ Platform 4.0. Use `%s` instead.',
-                    self::DEPRECATED_FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG,
-                    self::FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG
-                ),
-                E_USER_DEPRECATED
-            );
-        }
-        $fieldTypeParameterProviderTags = $container->findTaggedServiceIds(self::FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG);
-        $parameterProviderFieldTypesTags = array_merge($deprecatedFieldTypeParameterProviderTags, $fieldTypeParameterProviderTags);
-        foreach ($parameterProviderFieldTypesTags as $id => $attributes) {
+        $iterator = new BackwardCompatibleIterator(
+            $container,
+            self::FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG,
+            self::DEPRECATED_FIELD_TYPE_PARAMETER_PROVIDER_SERVICE_TAG
+        );
+
+        foreach ($iterator as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new \LogicException(

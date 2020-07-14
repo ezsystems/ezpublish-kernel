@@ -6,16 +6,20 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use eZ\Publish\Core\Base\Container\Compiler\TaggedServiceIdsIterator\BackwardCompatibleIterator;
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use LogicException;
 
 /**
  * This compiler pass will register eZ Publish search engines.
  */
 class RegisterSearchEnginePass implements CompilerPassInterface
 {
+    public const SEARCH_ENGINE_SERVICE_TAG = 'ezplatform.search_engine';
+    public const DEPRECATED_SEATCH_ENGINE_SERVICE_TAG = 'ezpublish.searchEngine';
+
     /**
      * Container service id of the SearchEngineFactory.
      *
@@ -40,12 +44,22 @@ class RegisterSearchEnginePass implements CompilerPassInterface
 
         $searchEngineFactoryDefinition = $container->getDefinition($this->factoryId);
 
-        foreach ($container->findTaggedServiceIds('ezpublish.searchEngine') as $id => $attributes) {
+        $iterator = new BackwardCompatibleIterator(
+            $container,
+            self::SEARCH_ENGINE_SERVICE_TAG,
+            self::DEPRECATED_SEATCH_ENGINE_SERVICE_TAG
+        );
+
+        foreach ($iterator as $serviceId => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
-                        'ezpublish.searchEngine service tag needs an "alias" attribute to ' .
-                        'identify the search engine.'
+                        sprintf(
+                            'Service "%s" tagged with "%s" or "%s" needs an "alias" attribute to identify the search engine',
+                            $serviceId,
+                            self::SEARCH_ENGINE_SERVICE_TAG,
+                            self::DEPRECATED_SEATCH_ENGINE_SERVICE_TAG
+                        )
                     );
                 }
 
@@ -53,7 +67,7 @@ class RegisterSearchEnginePass implements CompilerPassInterface
                 $searchEngineFactoryDefinition->addMethodCall(
                     'registerSearchEngine',
                     [
-                        new Reference($id),
+                        new Reference($serviceId),
                         $attribute['alias'],
                     ]
                 );

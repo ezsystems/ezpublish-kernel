@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\Compiler;
 
+use eZ\Publish\Core\Base\Container\Compiler\TaggedServiceIdsIterator\BackwardCompatibleIterator;
 use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,24 +28,15 @@ abstract class AbstractFieldTypeBasedPass implements CompilerPassInterface
      *
      * @throws \LogicException
      */
-    public function getFieldTypeServiceIds(ContainerBuilder $container): array
+    public function getFieldTypeServiceIds(ContainerBuilder $container): iterable
     {
-        // Field types.
-        // Alias attribute is the field type string.
-        $deprecatedFieldTypeTags = $container->findTaggedServiceIds(self::DEPRECATED_FIELD_TYPE_SERVICE_TAG);
-        foreach ($deprecatedFieldTypeTags as $deprecatedFieldTypeTag) {
-            @trigger_error(
-                sprintf(
-                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s`. instead.',
-                    self::DEPRECATED_FIELD_TYPE_SERVICE_TAG,
-                    self::FIELD_TYPE_SERVICE_TAG
-                ),
-                E_USER_DEPRECATED
-            );
-        }
-        $fieldTypeTags = $container->findTaggedServiceIds(self::FIELD_TYPE_SERVICE_TAG);
-        $fieldTypesTags = array_merge($deprecatedFieldTypeTags, $fieldTypeTags);
-        foreach ($fieldTypesTags as $id => $attributes) {
+        $fieldTypesIterator = new BackwardCompatibleIterator(
+            $container,
+            self::FIELD_TYPE_SERVICE_TAG,
+            self::DEPRECATED_FIELD_TYPE_SERVICE_TAG
+        );
+
+        foreach ($fieldTypesIterator as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
@@ -58,7 +50,7 @@ abstract class AbstractFieldTypeBasedPass implements CompilerPassInterface
             }
         }
 
-        return $fieldTypesTags;
+        return $fieldTypesIterator;
     }
 
     abstract public function process(ContainerBuilder $container);
