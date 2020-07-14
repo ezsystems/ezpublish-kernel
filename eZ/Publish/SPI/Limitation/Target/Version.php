@@ -20,6 +20,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  * @property-read string $forUpdateInitialLanguageCode
  * @property-read string[] $forUpdateLanguageCodesList
  * @property-read string[] $forPublishLanguageCodesList
+ * @property-read \eZ\Publish\API\Repository\Values\Content\Field[] $updatedFields
  */
 final class Version extends ValueObject implements Target
 {
@@ -68,4 +69,7 @@ final class Version extends ValueObject implements Target
      * @var int|null
      */
     protected $newStatus;
+
+    /** @var \eZ\Publish\API\Repository\Values\Content\Field[] */
+    protected $updatedFields = [];
 }

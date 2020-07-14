@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository\Validator;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -43,10 +44,13 @@ final class VersionValidator implements ContentValidator
             throw new InvalidArgumentException('$object', 'Not supported');
         }
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo */
-        $versionInfo = $object;
+        if (empty($context['content']) || !$context['content'] instanceof Content) {
+            throw new InvalidArgumentException('$context', sprintf(
+                'Context "content" parameter is not an instance of %s',
+                Content::class
+            ));
+        }
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
         $content = $context['content'];
 
         $contentType = $content->getContentType();

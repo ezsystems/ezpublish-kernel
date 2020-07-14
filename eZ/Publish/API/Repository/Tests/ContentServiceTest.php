@@ -1601,8 +1601,8 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Now create an update struct and modify some fields
         $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField('title', 'An awesome² story about ezp.');
-        $contentUpdateStruct->setField('title', 'An awesome²³ story about ezp.', self::ENG_GB);
+        $contentUpdateStruct->setField('name', 'An awesome² story about ezp.');
+        $contentUpdateStruct->setField('name', 'An awesome²³ story about ezp.', self::ENG_GB);
 
         $contentUpdateStruct->initialLanguageCode = self::ENG_US;
 

@@ -681,7 +681,7 @@ class PermissionResolverTest extends BaseTest
         $contentService = $repository->getContentService();
 
         $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
-        $contentCreateStruct->setField('name', 'My awesome forums');
+        $contentCreateStruct->setField('title', 'My awesome forums');
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreateStruct->alwaysAvailable = true;
 

@@ -38,12 +38,14 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinitionCollection;
-use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
+use eZ\Publish\SPI\FieldType\FieldType;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct as SPIContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group as SPIObjectStateGroup;
 use eZ\Publish\SPI\Persistence\Content\ObjectState as SPIObjectState;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
@@ -58,10 +60,7 @@ use Exception;
  */
 class ContentTest extends BaseServiceMockTest
 {
-    /**
-     * Represents empty Field Value.
-     */
-    const EMPTY_FIELD_VALUE = 'empty';
+    private const EMPTY_FIELD_VALUE = 'empty';
 
     /**
      * Test for the __construct() method.
@@ -1357,6 +1356,12 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
+        $fieldTypeMock
+            ->method('toHash')
+            ->willReturnCallback(function (SPIValue $value) {
+                return ['value' => $value->value];
+            });
+
         $fieldTypeMock->expects($this->any())
             ->method('toPersistenceValue')
             ->will(
@@ -1367,13 +1372,13 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
-        $emptyValue = self::EMPTY_FIELD_VALUE;
+        $emptyValue = new ValueStub(self::EMPTY_FIELD_VALUE);
         $fieldTypeMock->expects($this->any())
             ->method('isEmptyValue')
             ->will(
                 $this->returnCallback(
                     function (ValueStub $value) use ($emptyValue) {
-                        return $emptyValue === (string)$value;
+                        return (string)$emptyValue === (string)$value;
                     }
                 )
             );
@@ -1482,7 +1487,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue',
+                    'value' => new ValueStub('newValue'),
                     'languageCode' => 'eng-US',
                 ]
             ),
@@ -1496,7 +1501,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
@@ -1510,7 +1515,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => null,
                         ]
                     ),
@@ -1542,7 +1547,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('someValue'),
                 ]
             ),
         ];
@@ -1562,7 +1567,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1',
+                    'value' => new ValueStub('newValue1'),
                     'languageCode' => 'eng-US',
                 ]
             ),
@@ -1570,7 +1575,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue2',
+                    'value' => new ValueStub('newValue2'),
                     'languageCode' => 'ger-DE',
                 ]
             ),
@@ -1584,14 +1589,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'ger-DE',
                         ]
                     ),
@@ -1605,14 +1610,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'ger-DE',
                         ]
                     ),
@@ -1644,7 +1649,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
             new FieldDefinition(
@@ -1654,7 +1659,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
         ];
@@ -1674,7 +1679,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'defaultValue2',
+                    'value' => new ValueStub('defaultValue2'),
                     'languageCode' => 'eng-US',
                 ]
             ),
@@ -1682,7 +1687,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'defaultValue4',
+                    'value' => new ValueStub('defaultValue4'),
                     'languageCode' => 'eng-US',
                 ]
             ),
@@ -1692,7 +1697,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1',
+                    'value' => new ValueStub('newValue1'),
                     'languageCode' => 'ger-DE',
                 ]
             ),
@@ -1700,7 +1705,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'defaultValue2',
+                    'value' => new ValueStub('defaultValue2'),
                     'languageCode' => 'ger-DE',
                 ]
             ),
@@ -1708,7 +1713,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue2',
+                    'value' => new ValueStub('newValue2'),
                     'languageCode' => 'eng-US',
                 ]
             ),
@@ -1716,7 +1721,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue4',
+                    'value' => new ValueStub('newValue4'),
                     'languageCode' => 'eng-US',
                 ]
             ),
@@ -1736,21 +1741,21 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'ger-DE',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier4',
-                            'value' => 'newValue4',
+                            'value' => new ValueStub('newValue4'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
@@ -1764,21 +1769,21 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'ger-DE',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier4',
-                            'value' => 'newValue4',
+                            'value' => new ValueStub('newValue4'),
                             'languageCode' => null,
                         ]
                     ),
@@ -1798,7 +1803,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
             new FieldDefinition(
@@ -1808,7 +1813,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue2',
+                    'defaultValue' => new ValueStub('defaultValue2'),
                 ]
             ),
             new FieldDefinition(
@@ -1818,7 +1823,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier3',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
             new FieldDefinition(
@@ -1828,7 +1833,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier4',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue4',
+                    'defaultValue' => new ValueStub('defaultValue4'),
                 ]
             ),
         ];
@@ -1867,7 +1872,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'Klingon',
                         ]
                     ),
@@ -1879,7 +1884,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -1908,10 +1913,40 @@ class ContentTest extends BaseServiceMockTest
         $domainMapperMock = $this->getContentDomainMapperMock();
         $permissionResolver = $this->getPermissionResolverMock();
 
+        $fieldTypeMock = $this->createMock(FieldType::class);
+        $fieldTypeMock->expects($this->any())
+            ->method('acceptValue')
+            ->will(
+                $this->returnCallback(
+                    function ($valueString) {
+                        return new ValueStub($valueString);
+                    }
+                )
+            );
+
+        $fieldTypeMock
+            ->method('toHash')
+            ->willReturnCallback(function (SPIValue $value) {
+                return ['value' => $value->value];
+            });
+
+        $this->getFieldTypeRegistryMock()->expects($this->any())
+            ->method('getFieldType')
+            ->will($this->returnValue($fieldTypeMock));
+
         $contentType = new ContentType(
             [
                 'id' => 123,
-                'fieldDefinitions' => new FieldDefinitionCollection([]),
+                'fieldDefinitions' => new FieldDefinitionCollection([
+                    new FieldDefinition([
+                        'id' => 'fieldDefinitionId',
+                        'fieldTypeIdentifier' => 'fieldTypeIdentifier',
+                        'isTranslatable' => false,
+                        'identifier' => 'identifier',
+                        'isRequired' => false,
+                        'defaultValue' => new ValueStub('someValue'),
+                    ]),
+                ]),
             ]
         );
         $contentCreateStruct = new ContentCreateStruct(
@@ -1950,7 +1985,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($contentTypeServiceMock));
 
         $that = $this;
-        $permissionResolver->expects($this->once())
+        $permissionResolver->expects($this->any())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -1993,6 +2028,27 @@ class ContentTest extends BaseServiceMockTest
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $permissionResolver = $this->getPermissionResolverMock();
 
+        $fieldTypeMock = $this->createMock(FieldType::class);
+        $fieldTypeMock->expects($this->any())
+            ->method('acceptValue')
+            ->will(
+                $this->returnCallback(
+                    function ($valueString) {
+                        return new ValueStub($valueString);
+                    }
+                )
+            );
+
+        $fieldTypeMock
+            ->method('toHash')
+            ->willReturnCallback(function (SPIValue $value) {
+                return ['value' => $value->value];
+            });
+
+        $this->getFieldTypeRegistryMock()->expects($this->any())
+            ->method('getFieldType')
+            ->will($this->returnValue($fieldTypeMock));
+
         $contentType = new ContentType(
             [
                 'id' => 123,
@@ -2019,7 +2075,7 @@ class ContentTest extends BaseServiceMockTest
             ->method('getContentTypeService')
             ->will($this->returnValue($contentTypeServiceMock));
 
-        $permissionResolver->expects($this->once())
+        $permissionResolver->expects($this->any())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -2028,7 +2084,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo([])
             )->will($this->returnValue(true));
 
-        $mockedService->expects($this->once())
+        $mockedService->expects($this->any())
             ->method('loadContentByRemoteId')
             ->with($contentCreateStruct->remoteId)
             ->will(
@@ -2047,7 +2103,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -2085,7 +2141,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
@@ -2115,7 +2171,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
         ];
@@ -2229,13 +2285,19 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
-        $emptyValue = self::EMPTY_FIELD_VALUE;
+        $fieldTypeMock
+            ->method('toHash')
+            ->willReturnCallback(function (SPIValue $value) {
+                return ['value' => $value->value];
+            });
+
+        $emptyValue = new ValueStub(self::EMPTY_FIELD_VALUE);
         $fieldTypeMock->expects($this->any())
             ->method('isEmptyValue')
             ->will(
                 $this->returnCallback(
                     function (ValueStub $value) use ($emptyValue) {
-                        return $emptyValue === (string)$value;
+                        return (string)$emptyValue === (string)$value;
                     }
                 )
             );
@@ -2260,7 +2322,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => null,
                         ]
                     ),
@@ -2295,7 +2357,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier',
                     'isRequired' => true,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('defaultValue'),
                 ]
             ),
         ];
@@ -2435,40 +2497,46 @@ class ContentTest extends BaseServiceMockTest
             $languageCodes
         );
         $allFieldErrors = [];
-        $validateCount = 0;
-        $emptyValue = self::EMPTY_FIELD_VALUE;
+        $emptyValue = new ValueStub(self::EMPTY_FIELD_VALUE);
+
+        $fieldTypeMock
+            ->method('acceptValue')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return $value instanceof SPIValue
+                            ? $value
+                            : new ValueStub($value);
+                    }
+                )
+            );
+
+        $fieldTypeMock
+            ->method('isEmptyValue')
+            ->will(
+                $this->returnCallback(
+                    function (ValueStub $value) use ($emptyValue) {
+                        return (string)$emptyValue === (string)$value;
+                    }
+                )
+            );
+
+        $fieldTypeMock
+            ->method('toHash')
+            ->willReturnCallback(function (SPIValue $value) {
+                return ['value' => $value->value];
+            });
+
+        $emptyValue = new ValueStub(self::EMPTY_FIELD_VALUE);
         foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
             foreach ($fieldValues[$fieldDefinition->identifier] as $languageCode => $value) {
-                $fieldTypeMock->expects($this->at($validateCount++))
-                    ->method('acceptValue')
-                    ->will(
-                        $this->returnCallback(
-                            function ($valueString) {
-                                return new ValueStub($valueString);
-                            }
-                        )
-                    );
-
-                $fieldTypeMock->expects($this->at($validateCount++))
-                    ->method('isEmptyValue')
-                    ->will(
-                        $this->returnCallback(
-                            function (ValueStub $value) use ($emptyValue) {
-                                return $emptyValue === (string)$value;
-                            }
-                        )
-                    );
-
-                if (self::EMPTY_FIELD_VALUE === (string)$value) {
+                if ((string)$emptyValue === (string)$value) {
                     continue;
                 }
 
-                $fieldTypeMock->expects($this->at($validateCount++))
+                $fieldTypeMock
                     ->method('validate')
-                    ->with(
-                        $this->equalTo($fieldDefinition),
-                        $this->equalTo($value)
-                    )->will($this->returnArgument(1));
+                    ->will($this->returnArgument(1));
 
                 $allFieldErrors[$fieldDefinition->id][$languageCode] = $value;
             }
@@ -2528,7 +2596,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'defaultValue',
+                    'value' => new ValueStub('defaultValue'),
                     'languageCode' => 'eng-US',
                 ]
             ),
@@ -2541,7 +2609,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('defaultValue'),
                 ]
             ),
         ];
@@ -2671,7 +2739,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('defaultValue'),
                 ]
             ),
         ];
@@ -2698,7 +2766,7 @@ class ContentTest extends BaseServiceMockTest
         $contentCreateStruct = new ContentCreateStruct(
             [
                 'fields' => [
-                    'fieldDefinitionId' => new Field([
+                    new Field([
                         'fieldDefIdentifier' => 'identifier',
                         'value' => 123,
                         'fieldTypeIdentifier' => 'fieldTypeIdentifier',
@@ -2723,6 +2791,27 @@ class ContentTest extends BaseServiceMockTest
                     }
                 )
             );
+
+        $fieldTypeMock = $this->createMock(FieldType::class);
+        $fieldTypeMock->expects($this->any())
+            ->method('acceptValue')
+            ->will(
+                $this->returnCallback(
+                    function ($valueString) {
+                        return new ValueStub($valueString);
+                    }
+                )
+            );
+
+        $fieldTypeMock
+            ->method('toHash')
+            ->willReturnCallback(function (SPIValue $value) {
+                return ['value' => $value->value];
+            });
+
+        $this->getFieldTypeRegistryMock()->expects($this->any())
+            ->method('getFieldType')
+            ->will($this->returnValue($fieldTypeMock));
 
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
@@ -2819,7 +2908,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'defaultValue',
+                    'value' => new ValueStub('defaultValue'),
                     'languageCode' => 'eng-US',
                 ]
             ),
@@ -2832,7 +2921,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('defaultValue'),
                 ]
             ),
         ];
@@ -2932,7 +3021,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('defaultValue'),
                 ]
             ),
         ];
@@ -2993,6 +3082,7 @@ class ContentTest extends BaseServiceMockTest
             [
                 'versionInfo' => $versionInfo,
                 'internalFields' => [],
+                'contentType' => new ContentType([]),
             ]
         );
 
@@ -3045,6 +3135,7 @@ class ContentTest extends BaseServiceMockTest
             [
                 'versionInfo' => $versionInfo,
                 'internalFields' => [],
+                'contentType' => new ContentType([]),
             ]
         );
 
@@ -3316,13 +3407,21 @@ class ContentTest extends BaseServiceMockTest
             ->method('acceptValue')
             ->will(
                 $this->returnCallback(
-                    function ($valueString) {
-                        return new ValueStub($valueString);
+                    function ($value) {
+                        return $value instanceof SPIValue
+                            ? $value
+                            : new ValueStub($value);
                     }
                 )
             );
 
-        $emptyValue = self::EMPTY_FIELD_VALUE;
+        $fieldTypeMock
+            ->method('toHash')
+            ->willReturnCallback(function (SPIValue $value) {
+                return ['value' => $value->value];
+            });
+
+        $emptyValue = new ValueStub(self::EMPTY_FIELD_VALUE);
         $fieldTypeMock->expects($this->any())
             ->method('toPersistenceValue')
             ->will(
@@ -3337,8 +3436,8 @@ class ContentTest extends BaseServiceMockTest
             ->method('isEmptyValue')
             ->will(
                 $this->returnCallback(
-                    function (ValueStub $value) use ($emptyValue) {
-                        return $emptyValue === (string)$value;
+                    function (SPIValue $value) use ($emptyValue) {
+                        return (string)$emptyValue === (string)$value;
                     }
                 )
             );
@@ -3462,7 +3561,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => '100',
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue',
+                    'value' => new ValueStub('newValue'),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -3477,7 +3576,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -3491,7 +3590,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => null,
                         ]
                     ),
@@ -3524,7 +3623,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier',
-                    'value' => 'initialValue',
+                    'value' => new ValueStub('id100'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -3538,7 +3637,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('defaultValue'),
                 ]
             ),
         ];
@@ -3560,7 +3659,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => '100',
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue',
+                    'value' => new ValueStub('newValue'),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -3572,7 +3671,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue',
+                    'value' => new ValueStub('newValue'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -3584,7 +3683,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue2',
+                    'value' => new ValueStub('newValue2'),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -3594,7 +3693,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1',
+                    'value' => new ValueStub('newValue1'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -3609,7 +3708,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -3623,7 +3722,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => null,
                         ]
                     ),
@@ -3637,7 +3736,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
@@ -3651,7 +3750,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => null,
                         ]
                     ),
@@ -3665,14 +3764,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -3686,14 +3785,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -3710,7 +3809,7 @@ class ContentTest extends BaseServiceMockTest
                             'id' => null,
                             'fieldDefinitionId' => 'fieldDefinitionId',
                             'type' => 'fieldTypeIdentifier',
-                            'value' => 'defaultValue',
+                            'value' => new ValueStub('defaultValue'),
                             'languageCode' => 'eng-US',
                             'versionNo' => 7,
                         ]
@@ -3737,7 +3836,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier',
-                    'value' => 'initialValue',
+                    'value' => new ValueStub('id100'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -3751,7 +3850,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('defaultValue'),
                 ]
             ),
         ];
@@ -3773,7 +3872,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1',
+                    'value' => new ValueStub('newValue1'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -3785,7 +3884,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue2',
+                    'value' => new ValueStub('newValue2'),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -3795,7 +3894,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1',
+                    'value' => new ValueStub('newValue1'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -3807,7 +3906,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue2',
+                    'value' => new ValueStub('newValue2'),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -3817,7 +3916,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1',
+                    'value' => new ValueStub('newValue1'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -3827,7 +3926,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => 101,
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue3',
+                    'value' => new ValueStub('newValue3'),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -3839,7 +3938,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'defaultValue1',
+                    'value' => new ValueStub('defaultValue1'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -3854,7 +3953,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
@@ -3868,7 +3967,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => null,
                         ]
                     ),
@@ -3882,14 +3981,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -3903,14 +4002,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -3924,21 +4023,21 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue3',
+                            'value' => new ValueStub('newValue3'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -3952,21 +4051,21 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue3',
+                            'value' => new ValueStub('newValue3'),
                             'languageCode' => null,
                         ]
                     ),
@@ -3999,7 +4098,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier1',
-                    'value' => 'initialValue1',
+                    'value' => new ValueStub('id100'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -4007,7 +4106,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '101',
                     'fieldDefIdentifier' => 'identifier2',
-                    'value' => 'initialValue2',
+                    'value' => new ValueStub('id101'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -4021,7 +4120,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue1',
+                    'defaultValue' => new ValueStub('defaultValue1'),
                 ]
             ),
             new FieldDefinition(
@@ -4031,7 +4130,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue2',
+                    'defaultValue' => new ValueStub('defaultValue2'),
                 ]
             ),
         ];
@@ -4053,7 +4152,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1',
+                    'value' => new ValueStub('newValue1'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -4065,7 +4164,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => self::EMPTY_FIELD_VALUE,
+                    'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -4075,7 +4174,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1',
+                    'value' => new ValueStub('newValue1'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -4087,7 +4186,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => self::EMPTY_FIELD_VALUE,
+                    'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -4102,7 +4201,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
@@ -4116,7 +4215,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => null,
                         ]
                     ),
@@ -4130,14 +4229,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => 'eng-US',
                         ]
                     ),
@@ -4151,14 +4250,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => null,
                         ]
                     ),
@@ -4172,14 +4271,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4193,14 +4292,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1',
+                            'value' => new ValueStub('newValue1'),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4214,14 +4313,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4236,14 +4335,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4263,7 +4362,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => 'eng-US',
                         ]
                     ),
@@ -4277,7 +4376,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => null,
                         ]
                     ),
@@ -4304,7 +4403,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier1',
-                    'value' => 'initialValue1',
+                    'value' => new ValueStub('id100'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -4312,7 +4411,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '101',
                     'fieldDefIdentifier' => 'identifier2',
-                    'value' => 'initialValue2',
+                    'value' => new ValueStub('id101'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -4326,7 +4425,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
             new FieldDefinition(
@@ -4336,7 +4435,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
         ];
@@ -4363,7 +4462,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1-eng-GB',
+                    'value' => new ValueStub('newValue1-eng-GB'),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -4373,7 +4472,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue4',
+                    'value' => new ValueStub('newValue4'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -4385,7 +4484,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1-eng-GB',
+                    'value' => new ValueStub('newValue1-eng-GB'),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -4395,7 +4494,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue2',
+                    'value' => new ValueStub('newValue2'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -4405,7 +4504,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'defaultValue4',
+                    'value' => new ValueStub('defaultValue4'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -4417,7 +4516,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue1-eng-GB',
+                    'value' => new ValueStub('newValue1-eng-GB'),
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
                 ]
@@ -4427,7 +4526,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'newValue2',
+                    'value' => new ValueStub('newValue2'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -4437,7 +4536,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'defaultValue4',
+                    'value' => new ValueStub('defaultValue4'),
                     'languageCode' => 'ger-DE',
                     'versionNo' => 7,
                 ]
@@ -4447,7 +4546,7 @@ class ContentTest extends BaseServiceMockTest
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
-                    'value' => 'defaultValue4',
+                    'value' => new ValueStub('defaultValue4'),
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
                 ]
@@ -4462,14 +4561,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier4',
-                            'value' => 'newValue4',
+                            'value' => new ValueStub('newValue4'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1-eng-GB',
+                            'value' => new ValueStub('newValue1-eng-GB'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4483,14 +4582,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier4',
-                            'value' => 'newValue4',
+                            'value' => new ValueStub('newValue4'),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1-eng-GB',
+                            'value' => new ValueStub('newValue1-eng-GB'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4504,14 +4603,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1-eng-GB',
+                            'value' => new ValueStub('newValue1-eng-GB'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4525,14 +4624,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => null,
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1-eng-GB',
+                            'value' => new ValueStub('newValue1-eng-GB'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4546,14 +4645,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1-eng-GB',
+                            'value' => new ValueStub('newValue1-eng-GB'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4567,14 +4666,14 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier2',
-                            'value' => 'newValue2',
+                            'value' => new ValueStub('newValue2'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier1',
-                            'value' => 'newValue1-eng-GB',
+                            'value' => new ValueStub('newValue1-eng-GB'),
                             'languageCode' => null,
                         ]
                     ),
@@ -4591,7 +4690,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier1',
-                    'value' => 'initialValue1',
+                    'value' => new ValueStub('initialValue1'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -4599,7 +4698,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '101',
                     'fieldDefIdentifier' => 'identifier2',
-                    'value' => 'initialValue2',
+                    'value' => new ValueStub('initialValue2'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -4607,7 +4706,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '102',
                     'fieldDefIdentifier' => 'identifier3',
-                    'value' => 'initialValue3',
+                    'value' => new ValueStub('initialValue3'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -4615,7 +4714,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '103',
                     'fieldDefIdentifier' => 'identifier4',
-                    'value' => 'initialValue4',
+                    'value' => new ValueStub('initialValue4'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -4629,7 +4728,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
             new FieldDefinition(
@@ -4639,7 +4738,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
             new FieldDefinition(
@@ -4649,7 +4748,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier3',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue3',
+                    'defaultValue' => new ValueStub('defaultValue3'),
                 ]
             ),
             new FieldDefinition(
@@ -4659,7 +4758,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier4',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue4',
+                    'defaultValue' => new ValueStub('defaultValue4'),
                 ]
             ),
         ];
@@ -4699,7 +4798,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => $this->createMock(Value::class),
                             'languageCode' => 'Klingon',
                         ]
                     ),
@@ -4711,7 +4810,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => $this->createMock(Value::class),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4734,6 +4833,7 @@ class ContentTest extends BaseServiceMockTest
 
         $permissionResolverMock = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(['loadContent', 'internalLoadContentById']);
+        $fieldTypeMock = $this->createMock(SPIFieldType::class);
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $versionInfo = new VersionInfo(
@@ -4750,13 +4850,35 @@ class ContentTest extends BaseServiceMockTest
                 'status' => VersionInfo::STATUS_DRAFT,
             ]
         );
+
+        $fieldValueMock = $this->createMock(Value::class);
+
         $content = new Content(
             [
                 'versionInfo' => $versionInfo,
-                'internalFields' => [],
-                'contentType' => new ContentType(),
+                'internalFields' => [
+                    new Field([
+                        'fieldDefIdentifier' => 'identifier',
+                        'value' => $fieldValueMock,
+                        'languageCode' => 'eng-GB',
+                    ]),
+                ],
+                'contentType' => new ContentType([
+                    'fieldDefinitions' => new FieldDefinitionCollection([
+                        new FieldDefinition([
+                            'identifier' => 'identifier',
+                            'defaultValue' => $fieldValueMock,
+                        ]),
+                    ]),
+                ]),
             ]
         );
+
+        $fieldTypeMock->expects($this->any())
+            ->method('acceptValue')->will($this->returnValue($fieldValueMock));
+
+        $this->getFieldTypeRegistryMock()->expects($this->any())
+            ->method('getFieldType')->will($this->returnValue($fieldTypeMock));
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -4817,7 +4939,6 @@ class ContentTest extends BaseServiceMockTest
         $mockedService = $this->getPartlyMockedContentService(['internalLoadContentById', 'loadContent']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
-        $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $versionInfo = new VersionInfo(
             [
                 'contentInfo' => new ContentInfo(
@@ -4842,6 +4963,29 @@ class ContentTest extends BaseServiceMockTest
                 'contentType' => $contentType,
             ]
         );
+
+        $fieldTypeMock = $this->createMock(FieldType::class);
+
+        $fieldTypeMock
+            ->method('acceptValue')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return $value instanceof SPIValue
+                            ? $value
+                            : new ValueStub($value);
+                    }
+                )
+            );
+
+        $fieldTypeMock
+            ->method('toHash')
+            ->willReturnCallback(function (SPIValue $value) {
+                return ['value' => $value->value];
+            });
+
+        $this->getFieldTypeRegistryMock()->expects($this->any())
+            ->method('getFieldType')->will($this->returnValue($fieldTypeMock));
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -4874,7 +5018,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $permissionResolverMock->expects($this->once())
+        $permissionResolverMock->expects($this->any())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -4909,7 +5053,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'eng-GB',
                         ]
                     ),
@@ -4947,7 +5091,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => 'newValue',
+                            'value' => new ValueStub('newValue'),
                             'languageCode' => 'eng-US',
                         ]
                     ),
@@ -4977,7 +5121,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => self::EMPTY_FIELD_VALUE,
+                    'defaultValue' => new ValueStub(self::EMPTY_FIELD_VALUE),
                 ]
             ),
         ];
@@ -5060,7 +5204,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $permissionResolver->expects($this->once())
+        $permissionResolver->expects($this->any())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
@@ -5079,13 +5223,13 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
-        $emptyValue = self::EMPTY_FIELD_VALUE;
+        $emptyValue = new ValueStub(self::EMPTY_FIELD_VALUE);
         $fieldTypeMock->expects($this->any())
             ->method('isEmptyValue')
             ->will(
                 $this->returnCallback(
                     function (ValueStub $value) use ($emptyValue) {
-                        return $emptyValue === (string)$value;
+                        return (string)$emptyValue === (string)$value;
                     }
                 )
             );
@@ -5120,7 +5264,7 @@ class ContentTest extends BaseServiceMockTest
                     new Field(
                         [
                             'fieldDefIdentifier' => 'identifier',
-                            'value' => self::EMPTY_FIELD_VALUE,
+                            'value' => new ValueStub(self::EMPTY_FIELD_VALUE),
                             'languageCode' => null,
                         ]
                     ),
@@ -5152,7 +5296,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier',
-                    'value' => 'initialValue',
+                    'value' => new ValueStub('initialValue'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -5165,7 +5309,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => true,
                     'identifier' => 'identifier',
                     'isRequired' => true,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('defaultValue'),
                 ]
             ),
         ];
@@ -5278,24 +5422,26 @@ class ContentTest extends BaseServiceMockTest
             $languageCodes
         );
         $allFieldErrors = [];
-        $emptyValue = self::EMPTY_FIELD_VALUE;
+        $emptyValue = new ValueStub(self::EMPTY_FIELD_VALUE);
 
-        $fieldTypeMock->expects($this->exactly(count($fieldValues) * count($languageCodes)))
+        $fieldTypeMock
             ->method('acceptValue')
             ->will(
                 $this->returnCallback(
-                    function ($valueString) {
-                        return new ValueStub($valueString);
+                    function ($value) {
+                        return $value instanceof SPIValue
+                            ? $value
+                            : new ValueStub($value);
                     }
                 )
             );
 
-        $fieldTypeMock->expects($this->exactly(count($fieldValues) * count($languageCodes)))
+        $fieldTypeMock
             ->method('isEmptyValue')
             ->will(
                 $this->returnCallback(
                     function (ValueStub $value) use ($emptyValue) {
-                        return $emptyValue === (string)$value;
+                        return (string)$emptyValue === (string)$value;
                     }
                 )
             );
@@ -5324,110 +5470,110 @@ class ContentTest extends BaseServiceMockTest
         $allFieldErrors = [
             [
                 'fieldDefinitionId1' => [
-                    'eng-GB' => 'newValue1-eng-GB',
-                    'eng-US' => 'newValue1-eng-GB',
+                    'eng-GB' => new ValueStub('newValue1-eng-GB'),
+                    'eng-US' => new ValueStub('newValue1-eng-GB'),
                 ],
                 'fieldDefinitionId2' => [
-                    'eng-GB' => 'initialValue2',
+                    'eng-GB' => new ValueStub('initialValue2'),
                 ],
                 'fieldDefinitionId3' => [
-                    'eng-GB' => 'initialValue3',
-                    'eng-US' => 'initialValue3',
+                    'eng-GB' => new ValueStub('initialValue3'),
+                    'eng-US' => new ValueStub('initialValue3'),
                 ],
                 'fieldDefinitionId4' => [
-                    'eng-GB' => 'initialValue4',
-                    'eng-US' => 'newValue4',
+                    'eng-GB' => new ValueStub('initialValue4'),
+                    'eng-US' => new ValueStub('newValue4'),
                 ],
             ],
             [
                 'fieldDefinitionId1' => [
-                    'eng-GB' => 'newValue1-eng-GB',
-                    'eng-US' => 'newValue1-eng-GB',
+                    'eng-GB' => new ValueStub('newValue1-eng-GB'),
+                    'eng-US' => new ValueStub('newValue1-eng-GB'),
                 ],
                 'fieldDefinitionId2' => [
-                    'eng-GB' => 'initialValue2',
+                    'eng-GB' => new ValueStub('initialValue2'),
                 ],
                 'fieldDefinitionId3' => [
-                    'eng-GB' => 'initialValue3',
-                    'eng-US' => 'initialValue3',
+                    'eng-GB' => new ValueStub('initialValue3'),
+                    'eng-US' => new ValueStub('initialValue3'),
                 ],
                 'fieldDefinitionId4' => [
-                    'eng-GB' => 'initialValue4',
-                    'eng-US' => 'newValue4',
+                    'eng-GB' => new ValueStub('initialValue4'),
+                    'eng-US' => new ValueStub('newValue4'),
                 ],
             ],
             [
                 'fieldDefinitionId1' => [
-                    'eng-GB' => 'newValue1-eng-GB',
-                    'eng-US' => 'newValue1-eng-GB',
+                    'eng-GB' => new ValueStub('newValue1-eng-GB'),
+                    'eng-US' => new ValueStub('newValue1-eng-GB'),
                 ],
                 'fieldDefinitionId2' => [
-                    'eng-GB' => 'initialValue2',
-                    'eng-US' => 'newValue2',
+                    'eng-GB' => new ValueStub('initialValue2'),
+                    'eng-US' => new ValueStub('newValue2'),
                 ],
                 'fieldDefinitionId3' => [
-                    'eng-GB' => 'initialValue3',
-                    'eng-US' => 'initialValue3',
+                    'eng-GB' => new ValueStub('initialValue3'),
+                    'eng-US' => new ValueStub('initialValue3'),
                 ],
                 'fieldDefinitionId4' => [
-                    'eng-GB' => 'initialValue4',
-                    'eng-US' => 'defaultValue4',
+                    'eng-GB' => new ValueStub('initialValue4'),
+                    'eng-US' => new ValueStub('defaultValue4'),
                 ],
             ],
             [
                 'fieldDefinitionId1' => [
-                    'eng-GB' => 'newValue1-eng-GB',
-                    'eng-US' => 'newValue1-eng-GB',
+                    'eng-GB' => new ValueStub('newValue1-eng-GB'),
+                    'eng-US' => new ValueStub('newValue1-eng-GB'),
                 ],
                 'fieldDefinitionId2' => [
-                    'eng-GB' => 'initialValue2',
-                    'eng-US' => 'newValue2',
+                    'eng-GB' => new ValueStub('initialValue2'),
+                    'eng-US' => new ValueStub('newValue2'),
                 ],
                 'fieldDefinitionId3' => [
-                    'eng-GB' => 'initialValue3',
-                    'eng-US' => 'initialValue3',
+                    'eng-GB' => new ValueStub('initialValue3'),
+                    'eng-US' => new ValueStub('initialValue3'),
                 ],
                 'fieldDefinitionId4' => [
-                    'eng-GB' => 'initialValue4',
-                    'eng-US' => 'defaultValue4',
+                    'eng-GB' => new ValueStub('initialValue4'),
+                    'eng-US' => new ValueStub('defaultValue4'),
                 ],
             ],
             [
                 'fieldDefinitionId1' => [
-                    'eng-GB' => 'newValue1-eng-GB',
-                    'ger-DE' => 'newValue1-eng-GB',
-                    'eng-US' => 'newValue1-eng-GB',
+                    'eng-GB' => new ValueStub('newValue1-eng-GB'),
+                    'ger-DE' => new ValueStub('newValue1-eng-GB'),
+                    'eng-US' => new ValueStub('newValue1-eng-GB'),
                 ],
                 'fieldDefinitionId2' => [
-                    'eng-GB' => 'initialValue2',
-                    'eng-US' => 'newValue2',
+                    'eng-GB' => new ValueStub('initialValue2'),
+                    'eng-US' => new ValueStub('newValue2'),
                 ],
                 'fieldDefinitionId3' => [
-                    'eng-GB' => 'initialValue3',
-                    'ger-DE' => 'initialValue3',
-                    'eng-US' => 'initialValue3',
+                    'eng-GB' => new ValueStub('initialValue3'),
+                    'ger-DE' => new ValueStub('initialValue3'),
+                    'eng-US' => new ValueStub('initialValue3'),
                 ],
                 'fieldDefinitionId4' => [
-                    'eng-GB' => 'initialValue4',
-                    'eng-US' => 'defaultValue4',
-                    'ger-DE' => 'defaultValue4',
+                    'eng-GB' => new ValueStub('initialValue4'),
+                    'eng-US' => new ValueStub('defaultValue4'),
+                    'ger-DE' => new ValueStub('defaultValue4'),
                 ],
             ],
             [
                 'fieldDefinitionId1' => [
-                    'eng-US' => 'newValue1-eng-GB',
-                    'ger-DE' => 'newValue1-eng-GB',
+                    'eng-US' => new ValueStub('newValue1-eng-GB'),
+                    'ger-DE' => new ValueStub('newValue1-eng-GB'),
                 ],
                 'fieldDefinitionId2' => [
-                    'eng-US' => 'newValue2',
+                    'eng-US' => new ValueStub('newValue2'),
                 ],
                 'fieldDefinitionId3' => [
-                    'ger-DE' => 'initialValue3',
-                    'eng-US' => 'initialValue3',
+                    'ger-DE' => new ValueStub('initialValue3'),
+                    'eng-US' => new ValueStub('initialValue3'),
                 ],
                 'fieldDefinitionId4' => [
-                    'ger-DE' => 'defaultValue4',
-                    'eng-US' => 'defaultValue4',
+                    'ger-DE' => new ValueStub('defaultValue4'),
+                    'eng-US' => new ValueStub('defaultValue4'),
                 ],
             ],
         ];
@@ -5488,7 +5634,7 @@ class ContentTest extends BaseServiceMockTest
                 [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier',
-                    'value' => 'initialValue',
+                    'value' => new ValueStub('initialValue'),
                     'languageCode' => 'eng-GB',
                 ]
             ),
@@ -5502,7 +5648,7 @@ class ContentTest extends BaseServiceMockTest
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
-                    'defaultValue' => 'defaultValue',
+                    'defaultValue' => new ValueStub('defaultValue'),
                 ]
             ),
         ];

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Limitation\Target\Builder;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -26,6 +27,16 @@ final class VersionBuilder
     public function build(): Target\Version
     {
         return new Target\Version($this->targetVersionProperties);
+    }
+
+    /**
+     * @param Field[] $updatedFields
+     */
+    public function updateFields(array $updatedFields): self
+    {
+        $this->targetVersionProperties['updatedFields'] = $updatedFields;
+
+        return $this;
     }
 
     /**

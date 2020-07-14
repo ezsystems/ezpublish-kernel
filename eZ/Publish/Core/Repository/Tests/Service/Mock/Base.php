@@ -395,7 +395,8 @@ abstract class Base extends TestCase
     protected function getContentMapper(): ContentMapper
     {
         return new ContentMapper(
-            $this->getPersistenceMock()->contentLanguageHandler()
+            $this->getPersistenceMock()->contentLanguageHandler(),
+            $this->getFieldTypeRegistryMock()
         );
     }
 

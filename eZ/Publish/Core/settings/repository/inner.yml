@@ -165,6 +165,7 @@ services:
     eZ\Publish\Core\Repository\Mapper\ContentMapper:
         arguments:
             $contentLanguageHandler: '@ezpublish.spi.persistence.language_handler'
+            $fieldTypeRegistry: '@eZ\Publish\Core\FieldType\FieldTypeRegistry'
 
     eZ\Publish\Core\Repository\Mapper\ContentTypeDomainMapper:
         parent: eZ\Publish\Core\Repository\Mapper\ProxyAwareDomainMapper

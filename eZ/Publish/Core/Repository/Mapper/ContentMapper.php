@@ -8,12 +8,15 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository\Mapper;
 
-use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
-use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
+use eZ\Publish\Core\FieldType\FieldTypeRegistry;
+use eZ\Publish\SPI\FieldType\Value;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler;
 
 /**
@@ -24,10 +27,15 @@ class ContentMapper
     /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler */
     private $contentLanguageHandler;
 
+    /** @var \eZ\Publish\Core\FieldType\FieldTypeRegistry */
+    private $fieldTypeRegistry;
+
     public function __construct(
-        Handler $contentLanguageHandler
+        Handler $contentLanguageHandler,
+        FieldTypeRegistry $fieldTypeRegistry
     ) {
         $this->contentLanguageHandler = $contentLanguageHandler;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     /**
@@ -41,7 +49,7 @@ class ContentMapper
      *
      * @return array
      */
-    public function mapFieldsForCreate(APIContentCreateStruct $contentCreateStruct): array
+    public function mapFieldsForCreate(ContentCreateStruct $contentCreateStruct): array
     {
         $fields = [];
 
@@ -82,7 +90,7 @@ class ContentMapper
      *
      * @return string[]
      */
-    public function getLanguageCodesForCreate(APIContentCreateStruct $contentCreateStruct): array
+    public function getLanguageCodesForCreate(ContentCreateStruct $contentCreateStruct): array
     {
         $languageCodes = [];
 
@@ -121,9 +129,9 @@ class ContentMapper
      * @return array
      */
     public function mapFieldsForUpdate(
-        APIContentUpdateStruct $contentUpdateStruct,
+        ContentUpdateStruct $contentUpdateStruct,
         ContentType $contentType,
-        string $mainLanguageCode
+        ?string $mainLanguageCode = null
     ): array {
         $fields = [];
 
@@ -159,6 +167,48 @@ class ContentMapper
         return $fields;
     }
 
+    public function getFieldValueForCreate(
+        FieldDefinition $fieldDefinition,
+        ?Field $field
+    ): Value {
+        if (null !== $field) {
+            $fieldValue = $field->value;
+        } else {
+            $fieldValue = $fieldDefinition->defaultValue;
+        }
+
+        $fieldType = $this->fieldTypeRegistry->getFieldType(
+            $fieldDefinition->fieldTypeIdentifier
+        );
+
+        return $fieldType->acceptValue($fieldValue);
+    }
+
+    public function getFieldValueForUpdate(
+        ?Field $newField,
+        ?Field $previousField,
+        FieldDefinition $fieldDefinition,
+        bool $isLanguageNew
+    ): Value {
+        $isFieldUpdated = null !== $newField;
+
+        if (!$isFieldUpdated && !$isLanguageNew) {
+            $fieldValue = $previousField->value;
+        } elseif (!$isFieldUpdated && $isLanguageNew && !$fieldDefinition->isTranslatable) {
+            $fieldValue = $previousField->value;
+        } elseif ($isFieldUpdated) {
+            $fieldValue = $newField->value;
+        } else {
+            $fieldValue = $fieldDefinition->defaultValue;
+        }
+
+        $fieldType = $this->fieldTypeRegistry->getFieldType(
+            $fieldDefinition->fieldTypeIdentifier
+        );
+
+        return $fieldType->acceptValue($fieldValue);
+    }
+
     /**
      * Returns all language codes used in given $fields.
      *
@@ -167,7 +217,7 @@ class ContentMapper
      *
      * @return string[]
      */
-    public function getLanguageCodesForUpdate(APIContentUpdateStruct $contentUpdateStruct, APIContent $content): array
+    public function getLanguageCodesForUpdate(ContentUpdateStruct $contentUpdateStruct, Content $content): array
     {
         $languageCodes = array_fill_keys($content->versionInfo->languageCodes, true);
         $languageCodes[$contentUpdateStruct->initialLanguageCode] = true;
@@ -187,7 +237,7 @@ class ContentMapper
      *
      * @return string[]
      */
-    public function getUpdatedLanguageCodes(APIContentUpdateStruct $contentUpdateStruct): array
+    public function getUpdatedLanguageCodes(ContentUpdateStruct $contentUpdateStruct): array
     {
         $languageCodes = [
             $contentUpdateStruct->initialLanguageCode => true,
@@ -226,5 +276,81 @@ class ContentMapper
         );
 
         return new Field($fieldData);
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Field[] $updatedFields
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
+     */
+    public function getFieldsForUpdate(array $updatedFields, Content $content): array
+    {
+        $contentType = $content->getContentType();
+        $fields = [];
+
+        foreach ($updatedFields as $updatedField) {
+            $fieldDefinition = $contentType->getFieldDefinition($updatedField->fieldDefIdentifier);
+
+            if ($fieldDefinition === null) {
+                throw new ContentValidationException(
+                    "Field definition '%identifier%' does not exist in given Content Type",
+                    ['%identifier%' => $updatedField->fieldDefIdentifier]
+                );
+            }
+
+            $fieldType = $this->fieldTypeRegistry->getFieldType($fieldDefinition->fieldTypeIdentifier);
+
+            $field = $content->getField($updatedField->fieldDefIdentifier);
+            $updatedFieldValue = $this->getFieldValueForUpdate(
+                $updatedField,
+                $field,
+                $contentType->getFieldDefinition($updatedField->fieldDefIdentifier),
+                !in_array($updatedField->languageCode, $content->versionInfo->languageCodes, true)
+            );
+
+            if (!empty($field)) {
+                $updatedFieldHash = md5(json_encode($fieldType->toHash($updatedFieldValue)));
+                $contentFieldHash = md5(json_encode($fieldType->toHash($field->value)));
+
+                if ($updatedFieldHash !== $contentFieldHash) {
+                    $fields[] = $updatedField;
+                }
+            }
+        }
+
+        return $fields;
+    }
+
+    public function getFieldsForCreate(array $createdFields, ContentType $contentType): array
+    {
+        $fields = [];
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\Field $createdField */
+        foreach ($createdFields as $createdField) {
+            $fieldDefinition = $contentType->getFieldDefinition($createdField->fieldDefIdentifier);
+
+            if ($fieldDefinition === null) {
+                throw new ContentValidationException(
+                    "Field definition '%identifier%' does not exist in the given Content Type",
+                    ['%identifier%' => $createdField->fieldDefIdentifier]
+                );
+            }
+
+            $fieldType = $this->fieldTypeRegistry->getFieldType($fieldDefinition->fieldTypeIdentifier);
+
+            $createdFieldValue = $this->getFieldValueForCreate(
+                $fieldDefinition,
+                $createdField
+            );
+
+            $createdFieldHash = md5(json_encode($fieldType->toHash($createdFieldValue)));
+            $defaultFieldHash = md5(json_encode($fieldType->toHash($fieldDefinition->defaultValue)));
+
+            if ($createdFieldHash !== $defaultFieldHash) {
+                $fields[] = $createdField;
+            }
+        }
+
+        return $fields;
     }
 }

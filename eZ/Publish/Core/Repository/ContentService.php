@@ -580,6 +580,11 @@ class ContentService implements ContentServiceInterface
             $contentCreateStruct->contentType->id
         );
 
+        $contentCreateStruct->fields = $this->contentMapper->getFieldsForCreate(
+            $contentCreateStruct->fields,
+            $contentCreateStruct->contentType
+        );
+
         if (empty($contentCreateStruct->sectionId)) {
             if (isset($locationCreateStructs[0])) {
                 $location = $this->repository->getLocationService()->loadLocation(
@@ -649,13 +654,11 @@ class ContentService implements ContentServiceInterface
                 $isEmptyValue = false;
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentCreateStruct->mainLanguageCode;
                 $isLanguageMain = $languageCode === $contentCreateStruct->mainLanguageCode;
-                if (isset($fields[$fieldDefinition->identifier][$valueLanguageCode])) {
-                    $fieldValue = $fields[$fieldDefinition->identifier][$valueLanguageCode]->value;
-                } else {
-                    $fieldValue = $fieldDefinition->defaultValue;
-                }
 
-                $fieldValue = $fieldType->acceptValue($fieldValue);
+                $fieldValue = $this->contentMapper->getFieldValueForCreate(
+                    $fieldDefinition,
+                    $fields[$fieldDefinition->identifier][$valueLanguageCode] ?? null
+                );
 
                 if ($fieldType->isEmptyValue($fieldValue)) {
                     $isEmptyValue = true;
@@ -1200,12 +1203,15 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo
         );
 
+        $updatedFields = $this->contentMapper->getFieldsForUpdate($contentUpdateStruct->fields, $content);
+
         if (!$this->repository->getPermissionResolver()->canUser(
             'content',
             'edit',
             $content,
             [
                 (new Target\Builder\VersionBuilder())
+                    ->updateFields($updatedFields)
                     ->updateFieldsTo(
                         $contentUpdateStruct->initialLanguageCode,
                         $contentUpdateStruct->fields
@@ -1301,17 +1307,16 @@ class ContentService implements ContentServiceInterface
 
                 if (!$isFieldUpdated && !$isLanguageNew) {
                     $isRetained = true;
-                    $fieldValue = $content->getField($fieldDefinition->identifier, $valueLanguageCode)->value;
                 } elseif (!$isFieldUpdated && $isLanguageNew && !$fieldDefinition->isTranslatable) {
                     $isCopied = true;
-                    $fieldValue = $content->getField($fieldDefinition->identifier, $valueLanguageCode)->value;
-                } elseif ($isFieldUpdated) {
-                    $fieldValue = $fields[$fieldDefinition->identifier][$valueLanguageCode]->value;
-                } else {
-                    $fieldValue = $fieldDefinition->defaultValue;
                 }
 
-                $fieldValue = $fieldType->acceptValue($fieldValue);
+                $fieldValue = $this->contentMapper->getFieldValueForUpdate(
+                    $fields[$fieldDefinition->identifier][$valueLanguageCode] ?? null,
+                    $content->getField($fieldDefinition->identifier, $valueLanguageCode),
+                    $fieldDefinition,
+                    $isLanguageNew
+                );
 
                 if ($fieldType->isEmptyValue($fieldValue)) {
                     $isEmpty = true;
