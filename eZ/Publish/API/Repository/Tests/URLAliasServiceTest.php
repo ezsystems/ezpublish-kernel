@@ -1050,10 +1050,11 @@ DOCBOOK
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testLookupOnMultilingualNestedLocations()
+    public function testLookupOnMultilingualNestedLocations(): array
     {
-        $urlAliasService = $this->getRepository()->getURLAliasService();
-        $locationService = $this->getRepository()->getLocationService();
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
 
         $topFolderNames = [
             'eng-GB' => 'My folder Name',
@@ -1075,7 +1076,7 @@ DOCBOOK
             )->contentInfo->mainLocationId
         );
         $urlAlias = $urlAliasService->lookup('/My-Folder-Name/Nested-Folder-Name');
-        self::assertPropertiesCorrect(
+        $this->assertPropertiesCorrect(
             [
                 'destination' => $nestedFolderLocation->id,
                 'path' => '/My-folder-Name/nested-Folder-name',
@@ -1087,7 +1088,7 @@ DOCBOOK
             $urlAlias
         );
         $urlAlias = $urlAliasService->lookup('/Ger-Folder-Name/Ger-Nested-Folder-Name');
-        self::assertPropertiesCorrect(
+        $this->assertPropertiesCorrect(
             [
                 'destination' => $nestedFolderLocation->id,
                 'path' => '/Ger-folder-Name/Ger-Nested-folder-Name',
@@ -1241,7 +1242,7 @@ DOCBOOK
             $this->createFolder($folderNames, 2)->contentInfo->mainLocationId
         );
         $urlAlias1 = $urlAliasService->lookup('/1');
-        self::assertPropertiesCorrect(
+        $this->assertPropertiesCorrect(
             [
                 'destination' => $folderLocation1->id,
                 'path' => '/1',
@@ -1257,7 +1258,7 @@ DOCBOOK
             $this->createFolder($folderNames, 2)->contentInfo->mainLocationId
         );
         $urlAlias2 = $urlAliasService->lookup('/2');
-        self::assertPropertiesCorrect(
+        $this->assertPropertiesCorrect(
             [
                 'destination' => $folderLocation2->id,
                 'path' => '/2',
