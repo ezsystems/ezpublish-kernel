@@ -414,7 +414,7 @@ CREATE TABLE ezurlalias_ml (
   parent integer NOT NULL DEFAULT 0,
   text clob NOT NULL,
   text_md5 text(32) NOT NULL,
-  PRIMARY KEY (parent,text_md5)
+  PRIMARY KEY (parent,text_md5,lang_mask)
 );
 CREATE INDEX ezurlalias_ml_act_org ON ezurlalias_ml (action,is_original);
 CREATE INDEX ezurlalias_ml_actt_org_al ON ezurlalias_ml (action_type,is_original,is_alias);

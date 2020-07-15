@@ -468,7 +468,7 @@ CREATE TABLE ezurlalias_ml (
   parent int(11) NOT NULL DEFAULT 0,
   text longtext NOT NULL,
   text_md5 varchar(32) NOT NULL DEFAULT '',
-  PRIMARY KEY (parent,text_md5),
+  PRIMARY KEY (parent,text_md5,lang_mask),
   KEY ezurlalias_ml_act_org (action(32),is_original),
   KEY ezurlalias_ml_actt_org_al (action_type,is_original,is_alias),
   KEY ezurlalias_ml_id (id),

@@ -46,7 +46,7 @@ return array(
             'action_type' => 'eznode',
             'alias_redirects' => '1',
             'id' => '5',
-            'is_alias' => '0',
+            'is_alias' => '1',
             'is_original' => '0',
             'lang_mask' => '4',
             'link' => '4',

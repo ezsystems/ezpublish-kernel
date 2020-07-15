@@ -808,7 +808,7 @@ ALTER TABLE ONLY ezurlalias
     ADD CONSTRAINT ezurlalias_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezurlalias_ml
-    ADD CONSTRAINT ezurlalias_ml_pkey PRIMARY KEY (parent, text_md5);
+    ADD CONSTRAINT ezurlalias_ml_pkey PRIMARY KEY (parent, text_md5, lang_mask);
 
 ALTER TABLE ONLY ezurlalias_ml_incr
     ADD CONSTRAINT ezurlalias_ml_incr_pkey PRIMARY KEY (id);

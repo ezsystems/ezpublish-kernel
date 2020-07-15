@@ -25,7 +25,7 @@ use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser;
 use eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler;
 use eZ\Publish\Core\Persistence\Utf8Converter;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\TransactionHandler;
 
 /**
@@ -1480,7 +1480,8 @@ class UrlAliasHandlerTest extends TestCase
         $urlAliasReusesHistory = $handler->lookup('one-history');
 
         self::assertEquals(
-            $countBeforeReusing,
+            // handler should generate one more entry instead of removing an archived one for the other language
+            $countBeforeReusing + 1,
             $this->countRows()
         );
 
@@ -1558,7 +1559,6 @@ class UrlAliasHandlerTest extends TestCase
             $this->countRows()
         );
 
-        self::assertInstanceOf(UrlAlias::class, $publishedLocationUrlAlias);
         self::assertEquals(
             new UrlAlias(
                 [
@@ -2268,15 +2268,18 @@ class UrlAliasHandlerTest extends TestCase
      * @group create
      * @group custom
      */
-    public function testCreateCustomUrlAliasAddLanguage()
+    public function testCreateCustomUrlAliasAddLanguage(): void
     {
         $handler = $this->getHandler();
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/publish_base.php');
 
+        // create a new custom entry since the existing one is a system URL
+        $handler->createCustomUrlAlias(314, 'custom-path314', false, 'cro-HR', true);
+
         $countBeforeReusing = $this->countRows();
         $handler->createCustomUrlAlias(
             314,
-            'path314',
+            'custom-path314',
             false,
             'eng-GB',
             true
@@ -2289,7 +2292,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals(
             new UrlAlias(
                 [
-                    'id' => '0-fdbbfa1e24e78ef56cb16ba4482c7771',
+                    'id' => '0-e8797691eeba6b598a353e5c5af99438',
                     'type' => UrlAlias::LOCATION,
                     'destination' => '314',
                     'languageCodes' => ['cro-HR', 'eng-GB'],
@@ -2297,8 +2300,8 @@ class UrlAliasHandlerTest extends TestCase
                         [
                             'always-available' => true,
                             'translations' => [
-                                'cro-HR' => 'path314',
-                                'eng-GB' => 'path314',
+                                'cro-HR' => 'custom-path314',
+                                'eng-GB' => 'custom-path314',
                             ],
                         ],
                     ],
@@ -2308,7 +2311,7 @@ class UrlAliasHandlerTest extends TestCase
                     'forward' => false,
                 ]
             ),
-            $handler->lookup('path314')
+            $handler->lookup('custom-path314')
         );
     }
 
@@ -2319,12 +2322,12 @@ class UrlAliasHandlerTest extends TestCase
      * @group create
      * @group custom
      */
-    public function testCreateCustomUrlAliasReusesHistoryOfDifferentLanguage()
+    public function testCreateCustomUrlAliasDoesNotReuseHistoryOfDifferentLanguage(): void
     {
         $handler = $this->getHandler();
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_reusing.php');
 
-        $countBeforeReusing = $this->countRows();
+        $countBeforeCreating = $this->countRows();
         $handler->createCustomUrlAlias(
             314,
             'history-hello',
@@ -2334,30 +2337,40 @@ class UrlAliasHandlerTest extends TestCase
         );
 
         self::assertEquals(
-            $countBeforeReusing,
+            $countBeforeCreating + 1,
             $this->countRows()
         );
-        self::assertEquals(
-            new UrlAlias(
-                [
-                    'id' => '0-da94285592c46d4396d3ca6904a4aa8f',
-                    'type' => UrlAlias::LOCATION,
-                    'destination' => 314,
-                    'languageCodes' => ['cro-HR'],
-                    'pathData' => [
-                        [
-                            'always-available' => true,
-                            'translations' => ['cro-HR' => 'history-hello'],
-                        ],
+        $expectedUrlAlias = new UrlAlias(
+            [
+                'id' => '0-da94285592c46d4396d3ca6904a4aa8f',
+                'type' => UrlAlias::LOCATION,
+                'destination' => 314,
+                'languageCodes' => ['cro-HR'],
+                'pathData' => [
+                    [
+                        'always-available' => true,
+                        'translations' => ['cro-HR' => 'history-hello'],
                     ],
-                    'alwaysAvailable' => true,
-                    'isHistory' => false,
-                    'isCustom' => true,
-                    'forward' => true,
-                ]
-            ),
-            $handler->lookup('history-hello')
+                ],
+                'alwaysAvailable' => true,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => true,
+            ]
         );
+        self::assertEquals($expectedUrlAlias, $handler->lookup('history-hello'));
+
+        // assert archived entry
+        $expectedUrlAlias->languageCodes = ['eng-GB'];
+        $expectedUrlAlias->pathData = [
+            [
+                'always-available' => false,
+                'translations' => ['eng-GB' => 'history-hello'],
+            ],
+        ];
+        $expectedUrlAlias->alwaysAvailable = false;
+        $expectedUrlAlias->isHistory = true;
+        self::assertEquals($expectedUrlAlias, $handler->lookup('history-hello', 'eng-GB'));
     }
 
     /**
@@ -2366,13 +2379,15 @@ class UrlAliasHandlerTest extends TestCase
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
      * @group create
      * @group custom
+     *
+     * @throws \Exception
      */
-    public function testCreateCustomUrlAliasReusesNopElement()
+    public function testCreateCustomUrlAliasReusesNopElement(): void
     {
         $handler = $this->getHandler();
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_reusing.php');
 
-        $countBeforeReusing = $this->countRows();
+        $countBeforeCreating = $this->countRows();
         $handler->createCustomUrlAlias(
             314,
             'nop-element',
@@ -2382,7 +2397,7 @@ class UrlAliasHandlerTest extends TestCase
         );
 
         self::assertEquals(
-            $countBeforeReusing,
+            $countBeforeCreating,
             $this->countRows()
         );
 
@@ -2415,7 +2430,7 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
-     * Test for the createUrlAlias() method.
+     * Test that archived entry for a different language is kept.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
      * @group create
@@ -3147,13 +3162,13 @@ class UrlAliasHandlerTest extends TestCase
      * Test for the loadUrlAlias() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::loadUrlAlias
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadUrlAliasThrowsNotFoundException()
     {
         $handler = $this->getHandler();
 
-        $handler->loadUrlAlias('non-existent');
+        $this->expectException(NotFoundException::class);
+        $handler->loadUrlAlias('1-non-existent');
     }
 
     public function providerForTestPublishUrlAliasForLocationSkipsReservedWord()
@@ -5312,21 +5327,15 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals('jedan', $locationData['path_identification_string']);
     }
 
-    /**
-     * @return int
-     */
-    protected function countRows()
+    protected function countRows(): int
     {
-        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
-        $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select(
-            $query->expr->count('*')
-        )->from(
-            $this->getDatabaseHandler()->quoteTable('ezurlalias_ml')
-        );
+        $connection = $this->getDatabaseConnection();
+        $query = $connection->createQueryBuilder();
+        $query
+            ->select($connection->getDatabasePlatform()->getCountExpression('*'))
+            ->from(UrlAliasGateway::TABLE);
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $query->execute();
 
         return (int)$statement->fetchColumn();
     }
