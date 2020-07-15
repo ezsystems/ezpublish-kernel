@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\SPI\Repository\Values\Filter;
 
 /**
- * Marker for Content & Location filtering Sort Slause.
+ * Marker for Content & Location filtering Sort Clause.
  */
 interface FilteringSortClause
 {
