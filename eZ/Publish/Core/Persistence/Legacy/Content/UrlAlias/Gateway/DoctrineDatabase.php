@@ -79,6 +79,9 @@ class DoctrineDatabase extends Gateway
     /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
+    /** @var \Doctrine\DBAL\Platforms\AbstractPlatform */
+    private $databasePlatform;
+
     /**
      * Creates a new DoctrineDatabase UrlAlias Gateway.
      *
@@ -1659,5 +1662,126 @@ class DoctrineDatabase extends Gateway
             );
 
         return $queryBuilder->execute();
+    }
+
+    public function loadRowsForPath(int $parentId, string $textHash): array
+    {
+        $query = $this->connection->createQueryBuilder();
+        $expressionBuilder = $query->expr();
+        $query
+            ->select(array_keys(self::URL_ALIAS_DATA_COLUMN_TYPE_MAP))
+            ->from($this->connection->quoteIdentifier($this->table))
+            ->where(
+                $expressionBuilder->eq(
+                    'parent',
+                    $query->createPositionalParameter(
+                        $parentId,
+                        ParameterType::INTEGER
+                    )
+                )
+            )
+            ->andWhere(
+                $expressionBuilder->eq(
+                    'text_md5',
+                    $query->createPositionalParameter(
+                        $textHash,
+                        ParameterType::STRING
+                    )
+                )
+            );
+
+        return $query->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    private function appendLanguageMaskMatchConstraint(
+        QueryBuilder $query,
+        int $languageMask,
+        string $langMaskColumnName = 'lang_mask',
+        bool $matchAlwaysAvailable = false
+    ): QueryBuilder {
+        $query->andWhere(
+            // lang_mask & $languageMask > $matchAlwaysAvailable
+            $this->getLanguageMaskMatchConstraint(
+                $query,
+                $languageMask,
+                $langMaskColumnName,
+                $matchAlwaysAvailable
+            )
+        );
+
+        return $query;
+    }
+
+    private function getLanguageMaskMatchConstraint(
+        QueryBuilder $query,
+        int $languageMask,
+        string $langMaskColumnName = 'lang_mask',
+        bool $matchAlwaysAvailable = false
+    ): string {
+        try {
+            $databasePlatform = $query->getConnection()->getDatabasePlatform();
+        } catch (DBALException $e) {
+            throw DatabaseException::wrap($e);
+        }
+        // intentionally 0 to match, see bitwise operation
+        $greaterThanValue = $matchAlwaysAvailable ? 0 : 1;
+
+        $expressionBuilder = $query->expr();
+        // lang_mask & $languageMask > $matchAlwaysAvailable
+        return $expressionBuilder->gt(
+            $databasePlatform->getBitAndComparisonExpression(
+                $langMaskColumnName,
+                $query->createPositionalParameter($languageMask, ParameterType::INTEGER)
+            ),
+            // "> 0" or "> 1" to match always available or not to, respectively
+            $query->createPositionalParameter($greaterThanValue, ParameterType::INTEGER)
+        );
+    }
+
+    private function buildSelectPathElementQuery(int $parentId, string $textHash): QueryBuilder
+    {
+        $query = $this->connection->createQueryBuilder();
+        $expressionBuilder = $query->expr();
+        $query
+            ->select(array_keys(self::URL_ALIAS_DATA_COLUMN_TYPE_MAP))
+            ->from($this->connection->quoteIdentifier($this->table))
+            ->where(
+                $expressionBuilder->eq(
+                    'parent',
+                    $query->createPositionalParameter(
+                        $parentId,
+                        ParameterType::INTEGER
+                    )
+                )
+            )
+            ->andWhere(
+                $expressionBuilder->eq(
+                    'text_md5',
+                    $query->createPositionalParameter(
+                        $textHash,
+                        ParameterType::STRING
+                    )
+                )
+            );
+
+        return $query;
+    }
+
+    /**
+     * Lazy database platform (engine) fetch (creates a connection, if not opened yet).
+     *
+     * @return \Doctrine\DBAL\Platforms\AbstractPlatform
+     */
+    private function getDatabasePlatform(): AbstractPlatform
+    {
+        if (null === $this->databasePlatform) {
+            try {
+                $this->databasePlatform = $this->connection->getDatabasePlatform();
+            } catch (DBALException $e) {
+                throw DatabaseException::wrap($e);
+            }
+        }
+
+        return $this->databasePlatform;
     }
 }
