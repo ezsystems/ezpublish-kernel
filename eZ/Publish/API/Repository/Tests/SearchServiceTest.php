@@ -4988,18 +4988,5 @@ class SearchServiceTest extends BaseTest
             // those are still Location IDs as it's LocationQuery
             [15, 5],
         ];
-
-        yield 'Content ID DESC' => [
-            new LocationQuery(
-                [
-                    'filter' => new Criterion\ContentId([4, 14]),
-                    'sortClauses' => [
-                        new SortClause\ContentId(LocationQuery::SORT_DESC),
-                    ],
-                ]
-            ),
-            // those are still Location IDs as it's LocationQuery
-            [15, 5],
-        ];
     }
 }
