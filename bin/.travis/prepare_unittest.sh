@@ -41,8 +41,9 @@ composer config -g github-oauth.github.com "d0285ed5c8644f30547572ead2ed897431c1
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
     # Install openJDK8 as default v11 is too new for SOLR
     sudo apt-get install openjdk-8-jdk
-    echo "> Require ezsystems/ezplatform-solr-search-engine:^3.0.0@dev"
-    composer require --no-update ezsystems/ezplatform-solr-search-engine:^3.0.0@dev
+    solr_require_cmd='composer require --no-update ezsystems/ezplatform-solr-search-engine:~3.1.1@dev'
+    echo "> ${solr_require_cmd}"
+    ${solr_require_cmd}
 fi
 
 # Switch to another Symfony version if asked for
