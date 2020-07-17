@@ -63,6 +63,11 @@ class DatabaseConnectionFactory
             $params['platform']->addEventSubscribers($this->eventManager);
         }
 
-        return DriverManager::getConnection($params, null, $this->eventManager);
+        $connection = DriverManager::getConnection($params, null, $this->eventManager);
+        $connection->setNestTransactionsWithSavepoints(
+            $connection->getDatabasePlatform()->supportsSavepoints()
+        );
+
+        return $connection;
     }
 }
