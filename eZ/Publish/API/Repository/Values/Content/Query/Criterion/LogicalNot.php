@@ -10,11 +10,12 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Repository\Values\Filter\FilteringCriterion;
+use eZ\Publish\SPI\Repository\Values\Trash\Query\Criterion as TrashCriterion;
 
 /**
  * A NOT logical criterion.
  */
-class LogicalNot extends LogicalOperator implements FilteringCriterion
+class LogicalNot extends LogicalOperator implements FilteringCriterion, TrashCriterion
 {
     /**
      * Creates a new NOT logic criterion.

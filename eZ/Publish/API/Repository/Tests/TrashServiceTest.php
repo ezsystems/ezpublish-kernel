@@ -1149,6 +1149,42 @@ class TrashServiceTest extends BaseTrashServiceTest
                 ],
                 0,
             ],
+            [
+                [
+                    new Criterion\MatchNone(),
+                ],
+                0,
+            ],
+            [
+                [
+                    new Criterion\MatchAll(),
+                ],
+                2,
+            ],
+            [
+                [
+                    new Criterion\LogicalNot(new Criterion\SectionId(2)),
+                ],
+                1,
+            ],
+            [
+                [
+                    new Criterion\LogicalOr([
+                        new Criterion\SectionId(1),
+                        new Criterion\ContentTypeId(4),
+                    ]),
+                ],
+                2,
+            ],
+            [
+                [
+                    new Criterion\LogicalAnd([
+                        new Criterion\SectionId(2),
+                        new Criterion\ContentTypeId(4),
+                    ]),
+                ],
+                1,
+            ],
         ];
     }
 

@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Values\Trash\Query;
 
+/**
+ * Marker for Content & Location trash Criterion.
+ */
 interface Criterion
 {
 }
