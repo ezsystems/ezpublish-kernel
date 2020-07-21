@@ -161,6 +161,7 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+            - {name: ezplatform.trash.search.legacy.gateway.criterion_handler}
 
     ezpublish.search.legacy.gateway.criterion_handler.common.logical_or:
         parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
@@ -168,6 +169,7 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+            - {name: ezplatform.trash.search.legacy.gateway.criterion_handler}
 
     ezpublish.search.legacy.gateway.criterion_handler.common.map_location_distance:
         parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldBase
@@ -182,6 +184,7 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+            - {name: ezplatform.trash.search.legacy.gateway.criterion_handler}
 
     ezpublish.search.legacy.gateway.criterion_handler.common.match_none:
         parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
@@ -189,6 +192,7 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+            - {name: ezplatform.trash.search.legacy.gateway.criterion_handler}
 
     ezpublish.search.legacy.gateway.criterion_handler.common.object_state_id:
         parent: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler
