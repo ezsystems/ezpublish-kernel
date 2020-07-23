@@ -68,6 +68,7 @@ branches:
 
 # setup requirements for running unit/integration/behat tests
 before_install:
+  - git log -1
   # Disable memory_limit for composer
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   # Disable XDebug for all jobs as we don't generate test coverge on travis
