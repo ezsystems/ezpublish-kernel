@@ -162,4 +162,3 @@ services:
 
     ezpublish.repository.location_resolver:
         alias: "ezpublish.repository.permission_aware_location_resolver"
-        lazy: true
