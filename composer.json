@@ -19,7 +19,7 @@
         "ext-xsl": "*",
         "ext-curl": "*",
         "ezsystems/doctrine-dbal-schema": "^0.1@dev",
-        "symfony/symfony": "^3.4.17",
+        "symfony/symfony": "^3.4@dev",
         "symfony-cmf/routing": "^2.1",
         "kriswallsmith/buzz": "^0.17.2",
         "sensio/distribution-bundle": "^5.0.22",
