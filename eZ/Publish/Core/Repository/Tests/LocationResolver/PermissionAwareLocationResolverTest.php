@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Repository\Tests\LocationResolver;
 
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -33,7 +35,7 @@ final class PermissionAwareLocationResolverTest extends TestCase
     /**
      * Test for the resolveLocation() method.
      *
-     * @covers \eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver::resolveLocation()
+     * @covers \eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver::resolveLocation
      */
     public function testResolveMainLocation(): void
     {
@@ -51,7 +53,7 @@ final class PermissionAwareLocationResolverTest extends TestCase
     /**
      * Test for the resolveLocation() method.
      *
-     * @covers \eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver::resolveLocation()
+     * @covers \eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver::resolveLocation
      */
     public function testResolveSecondaryLocation(): void
     {
@@ -69,5 +71,63 @@ final class PermissionAwareLocationResolverTest extends TestCase
             ->willReturn([$location1, $location2]);
 
         $this->assertSame($location1, $this->locationResolver->resolveLocation($contentInfo));
+    }
+
+    /**
+     * Test for the resolveLocation() method when Locations don't exist.
+     *
+     * @covers \eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver::resolveLocation
+     */
+    public function testExpectNotFoundExceptionWhenLocationDoesNotExist(): void
+    {
+        $contentInfo = new ContentInfo(['mainLocationId' => 42]);
+
+        $this->locationService
+            ->method('loadLocation')
+            ->willThrowException($this->createMock(NotFoundException::class));
+
+        $this->locationService
+            ->method('loadLocations')
+            ->willReturn([]);
+
+        $this->expectException(NotFoundException::class);
+
+        $this->locationResolver->resolveLocation($contentInfo);
+    }
+
+    /**
+     * Test for the resolveLocation() method when ContentInfo's mainLocationId is null.
+     *
+     * @covers \eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver::resolveLocation
+     */
+    public function testExpectNotFoundExceptionWhenMainLocationIdIsNull(): void
+    {
+        $contentInfo = new ContentInfo(['mainLocationId' => null]);
+
+        $this->expectException(NotFoundException::class);
+
+        $this->locationResolver->resolveLocation($contentInfo);
+    }
+
+    /**
+     * Test for the resolveLocation() method when Location is not yet published.
+     *
+     * @covers \eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver::resolveLocation
+     */
+    public function testExpectBadStateExceptionWhenContentNotYetPublished(): void
+    {
+        $contentInfo = new ContentInfo(['mainLocationId' => 42, 'status' => ContentInfo::STATUS_DRAFT]);
+
+        $this->locationService
+            ->method('loadLocation')
+            ->willThrowException($this->createMock(NotFoundException::class));
+
+        $this->locationService
+            ->method('loadLocations')
+            ->willThrowException($this->createMock(BadStateException::class));
+
+        $this->expectException(BadStateException::class);
+
+        $this->locationResolver->resolveLocation($contentInfo);
     }
 }

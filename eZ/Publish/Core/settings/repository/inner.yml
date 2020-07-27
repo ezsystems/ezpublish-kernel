@@ -155,10 +155,9 @@ services:
         calls:
             - ['setLogger', ['@?logger']]
 
-    ezpublish.repository.permission_aware_location_resolver:
-        class: "%ezpublish.repository.permission_aware_location_resolver.class%"
+    eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver:
         arguments:
             - '@ezpublish.api.service.location'
 
-    ezpublish.repository.location_resolver:
-        alias: "ezpublish.repository.permission_aware_location_resolver"
+    eZ\Publish\Core\Repository\LocationResolver\LocationResolver:
+        alias: eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver

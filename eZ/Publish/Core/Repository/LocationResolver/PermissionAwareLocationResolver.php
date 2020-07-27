@@ -13,7 +13,11 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFoundExceptionCore;
 
+/**
+ * @internal For internal use by eZ Platform core packages
+ */
 final class PermissionAwareLocationResolver implements LocationResolver
 {
     /** @var \eZ\Publish\API\Repository\LocationService */
@@ -32,6 +36,10 @@ final class PermissionAwareLocationResolver implements LocationResolver
     public function resolveLocation(ContentInfo $contentInfo): Location
     {
         try {
+            if (null === $contentInfo->mainLocationId) {
+                throw new NotFoundExceptionCore('location', $contentInfo->mainLocationId);
+            }
+
             $location = $this->locationService->loadLocation($contentInfo->mainLocationId);
         } catch (NotFoundException | UnauthorizedException $e) {
             // try different locations if main location is not accessible for the user

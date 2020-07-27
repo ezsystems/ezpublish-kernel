@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
- * @internal For internal use by ezsystems packages
+ * @internal For internal use by eZ Platform core packages
  */
 interface LocationResolver
 {
