@@ -24,8 +24,6 @@ parameters:
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
     ezpublish.api.search_engine.class: eZ\Publish\SPI\Search\Handler
 
-    ezpublish.repository.permission_aware_location_resolver.class: eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver
-
 services:
     ezpublish.api.repository.factory:
         class: "%ezpublish.api.repository.factory.class%"
