@@ -53,7 +53,7 @@ class DownloadController extends Controller
         }
 
         if ($content->contentInfo->isTrashed()) {
-            throw new NotFoundException('File', null);
+            throw new NotFoundException('File', $filename);
         }
 
         $field = $this->translationHelper->getTranslatedField(
