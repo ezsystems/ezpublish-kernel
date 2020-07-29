@@ -238,3 +238,11 @@ services:
             - ezplatform.spi.content.validator
 
     eZ\Publish\SPI\Repository\Validator\ContentValidator: '@eZ\Publish\Core\Repository\Strategy\ContentValidator\ContentValidatorStrategy'
+
+    # LocationResolver
+    eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver:
+        arguments:
+            - '@ezpublish.api.service.location'
+
+    eZ\Publish\Core\Repository\LocationResolver\LocationResolver:
+        alias: eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver
