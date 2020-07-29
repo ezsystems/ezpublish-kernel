@@ -24,7 +24,6 @@ parameters:
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
     ezpublish.api.search_engine.class: eZ\Publish\SPI\Search\Handler
 
-
 services:
     ezpublish.api.repository.factory:
         class: "%ezpublish.api.repository.factory.class%"
@@ -153,3 +152,10 @@ services:
             - '@ezpublish.api.persistence_handler'
         calls:
             - ['setLogger', ['@?logger']]
+
+    eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver:
+        arguments:
+            - '@ezpublish.api.service.location'
+
+    eZ\Publish\Core\Repository\LocationResolver\LocationResolver:
+        alias: eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver
