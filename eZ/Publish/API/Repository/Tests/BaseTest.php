@@ -698,8 +698,11 @@ abstract class BaseTest extends TestCase
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    protected function createFolder(array $names, $parentLocationId)
-    {
+    protected function createFolder(
+        array $names,
+        $parentLocationId,
+        bool $alwaysAvailable = true
+    ): Content {
         $repository = $this->getRepository(false);
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -714,6 +717,7 @@ abstract class BaseTest extends TestCase
             $contentTypeService->loadContentTypeByIdentifier('folder'),
             $mainLanguageCode
         );
+        $struct->alwaysAvailable = $alwaysAvailable;
         foreach ($names as $languageCode => $translatedName) {
             $struct->setField('name', $translatedName, $languageCode);
         }
