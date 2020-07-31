@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\SwappedLocationProperties;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\UrlAliasForSwappedLocation;
 use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
@@ -372,7 +373,7 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    protected function createUrlAlias($action, $path, $forward, $languageCode, $alwaysAvailable)
+    protected function createUrlAlias($action, $path, $forward, $languageCode, $alwaysAvailable): UrlAlias
     {
         $pathElements = explode('/', $path);
         $topElement = array_pop($pathElements);
@@ -399,11 +400,14 @@ class Handler implements UrlAliasHandlerInterface
         }
 
         // Handle topmost path element
-        $topElement = $this->slugConverter->convert($topElement, 'noname' . (count($pathElements) + 1));
+        $topElement = $this->slugConverter->convert(
+            $topElement,
+            'noname' . (count($pathElements) + 1)
+        );
 
         // If last (next to topmost) entry parent is special root entry we handle topmost entry as first level entry
         // That is why we need to reset $parentId to 0
-        if ($parentId != 0 && $this->gateway->isRootEntry($parentId)) {
+        if ($parentId !== 0 && $this->gateway->isRootEntry($parentId)) {
             $parentId = 0;
         }
 
@@ -427,7 +431,7 @@ class Handler implements UrlAliasHandlerInterface
         if ($isPathNew || empty($row)) {
             $data['lang_mask'] = $languageId | (int)$alwaysAvailable;
             $id = $this->gateway->insertRow($data);
-        } elseif ($row['action'] == 'nop:' || $row['is_original'] == 0) {
+        } elseif ($row['action'] === 'nop:' || (int)$row['is_original'] === 0) {
             // Row exists, check if it is reusable. There are 2 cases when this is possible:
             // 1. NOP entry
             // 2. history entry
