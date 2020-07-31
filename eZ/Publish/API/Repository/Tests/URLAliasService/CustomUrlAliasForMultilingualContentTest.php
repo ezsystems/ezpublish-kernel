@@ -41,7 +41,7 @@ final class CustomUrlAliasForMultilingualContentTest extends BaseTest
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Argument \'$path\' is invalid: Path \'Contact\' already exists for the given language'
+            'Argument \'$path\' is invalid: Path \'Contact\' already exists for the given context'
         );
         // attempt to create custom alias for German translation while a system one
         // for a different translation already exists

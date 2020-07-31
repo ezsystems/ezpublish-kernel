@@ -60,9 +60,10 @@ class URLAliasService implements URLAliasServiceInterface
      * @param bool $forwarding if true a redirect is performed
      * @param bool $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
-     *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given Location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function createUrlAlias(Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
     {

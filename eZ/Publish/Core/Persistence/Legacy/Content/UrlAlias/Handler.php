@@ -335,7 +335,7 @@ class Handler implements UrlAliasHandlerInterface
      * If $languageCode is null the $alias is created in the system's default
      * language. $alwaysAvailable makes the alias available in all languages.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given resource
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the path is broken
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
@@ -361,7 +361,7 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * Internal method for creating global or custom URL alias (these are handled in the same way).
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given context
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      *
@@ -457,7 +457,10 @@ class Handler implements UrlAliasHandlerInterface
                 $data
             );
         } else {
-            throw new ForbiddenException("Path '%path%' already exists for the given language", ['%path%' => $path]);
+            throw new ForbiddenException(
+                "Path '%path%' already exists for the given context",
+                ['%path%' => $path]
+            );
         }
 
         $data['raw_path_data'] = $this->gateway->loadPathData($id);
