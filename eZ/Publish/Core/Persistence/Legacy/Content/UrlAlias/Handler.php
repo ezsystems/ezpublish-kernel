@@ -439,7 +439,11 @@ class Handler implements UrlAliasHandlerInterface
                 $topElementMD5,
                 $data
             );
-        } elseif ($row['action'] == $action && 0 === ((int)$row['lang_mask'] & $languageId)) {
+        } elseif (
+            $row['action'] === $action &&
+            (int)$row['is_alias'] === 1 &&
+            0 === ((int)$row['lang_mask'] & $languageId)
+        ) {
             // add another language to the same custom alias
             $data['link'] = $id = $row['id'];
             $data['lang_mask'] = $row['lang_mask'] | $languageId | (int)$alwaysAvailable;
