@@ -2262,21 +2262,22 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
-     * Test for the createUrlAlias() method.
-     *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
      * @group create
      * @group custom
      */
-    public function testCreateCustomUrlAliasAddLanguage()
+    public function testCreateCustomUrlAliasAddLanguage(): void
     {
         $handler = $this->getHandler();
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/publish_base.php');
 
+        // create a new custom entry since the existing one is a system URL
+        $handler->createCustomUrlAlias(314, 'custom-path314', false, 'cro-HR', true);
+
         $countBeforeReusing = $this->countRows();
         $handler->createCustomUrlAlias(
             314,
-            'path314',
+            'custom-path314',
             false,
             'eng-GB',
             true
@@ -2289,7 +2290,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals(
             new UrlAlias(
                 [
-                    'id' => '0-fdbbfa1e24e78ef56cb16ba4482c7771',
+                    'id' => '0-e8797691eeba6b598a353e5c5af99438',
                     'type' => UrlAlias::LOCATION,
                     'destination' => '314',
                     'languageCodes' => ['cro-HR', 'eng-GB'],
@@ -2297,8 +2298,8 @@ class UrlAliasHandlerTest extends TestCase
                         [
                             'always-available' => true,
                             'translations' => [
-                                'cro-HR' => 'path314',
-                                'eng-GB' => 'path314',
+                                'cro-HR' => 'custom-path314',
+                                'eng-GB' => 'custom-path314',
                             ],
                         ],
                     ],
@@ -2308,7 +2309,7 @@ class UrlAliasHandlerTest extends TestCase
                     'forward' => false,
                 ]
             ),
-            $handler->lookup('path314')
+            $handler->lookup('custom-path314')
         );
     }
 
