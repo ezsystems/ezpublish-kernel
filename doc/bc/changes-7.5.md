@@ -26,6 +26,10 @@ Changes affecting version compatibility with former or future versions.
   contain any of the translations that are within the scope of the Language Limitations.
   This is due to the fact that when creating a Draft, an intent of translating is not known yet.
 
+* The `ForbiddenException` message thrown by `URLAliasService::createUrlAlias` and
+  `URLAliasService::createGlobalUrlAlias` methods states now `Path '%path%' already exists for the given context`
+  instead of `Path '%path%' already exists for the given language` for the same cases.
+
 ## Deprecations
 
 * The `\EzSystems\PlatformInstallerBundle\Installer\CleanInstaller` class and its Service Container
