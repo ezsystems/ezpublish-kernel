@@ -13,7 +13,6 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 
 /**
@@ -21,13 +20,6 @@ use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
  */
 class RestExecutedView extends ValueObjectVisitor
 {
-    /**
-     * Location service.
-     *
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
-    protected $locationService;
-
     /**
      * Content service.
      *
@@ -39,16 +31,13 @@ class RestExecutedView extends ValueObjectVisitor
     protected $locationResolver;
 
     /**
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\Core\Repository\LocationResolver\LocationResolver $locationResolver
      */
     public function __construct(
-        LocationService $locationService,
         ContentService $contentService,
         LocationResolver $locationResolver
     ) {
-        $this->locationService = $locationService;
         $this->contentService = $contentService;
         $this->locationResolver = $locationResolver;
     }
