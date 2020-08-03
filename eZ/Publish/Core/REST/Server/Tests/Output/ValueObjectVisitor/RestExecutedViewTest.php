@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\Core\Repository\LocationResolver\LocationResolver;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -112,7 +113,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
         return new ValueObjectVisitor\RestExecutedView(
             $this->getLocationServiceMock(),
             $this->getContentServiceMock(),
-            $this->getContentTypeServiceMock()
+            $this->getLocationResolverMock()
         );
     }
 
@@ -138,6 +139,14 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     public function getContentTypeServiceMock()
     {
         return $this->createMock(ContentTypeService::class);
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Repository\LocationResolver\LocationResolver|\PHPUnit\Framework\MockObject\MockObject
+     */
+    public function getLocationResolverMock()
+    {
+        return $this->createMock(LocationResolver::class);
     }
 
     /**
