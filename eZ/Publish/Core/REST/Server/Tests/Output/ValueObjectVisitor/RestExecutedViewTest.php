@@ -131,10 +131,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
         return $this->createMock(ContentTypeService::class);
     }
 
-    /**
-     * @return \eZ\Publish\Core\Repository\LocationResolver\LocationResolver|\PHPUnit\Framework\MockObject\MockObject
-     */
-    public function getLocationResolverMock()
+    public function getLocationResolverMock(): LocationResolver
     {
         return $this->createMock(LocationResolver::class);
     }
