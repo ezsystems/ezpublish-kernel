@@ -9,6 +9,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
@@ -41,6 +42,7 @@ class DownloadController extends Controller
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
+     * @return \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function downloadBinaryFileAction($contentId, $fieldIdentifier, $filename, Request $request)
     {
@@ -48,6 +50,10 @@ class DownloadController extends Controller
             $content = $this->contentService->loadContent($contentId, null, $request->query->get('version'));
         } else {
             $content = $this->contentService->loadContent($contentId);
+        }
+
+        if ($content->contentInfo->isTrashed()) {
+            throw new NotFoundException('File', $filename);
         }
 
         $field = $this->translationHelper->getTranslatedField(
