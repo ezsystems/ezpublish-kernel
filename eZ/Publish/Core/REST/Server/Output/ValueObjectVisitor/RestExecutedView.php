@@ -6,13 +6,15 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content as ApiValues;
-use eZ\Publish\Core\Repository\LocationResolver\LocationResolver;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 
 /**
@@ -21,25 +23,29 @@ use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 class RestExecutedView extends ValueObjectVisitor
 {
     /**
+     * Location service.
+     *
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
      * Content service.
      *
      * @var \eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
 
-    /** @var \eZ\Publish\Core\Repository\LocationResolver\LocationResolver */
-    protected $locationResolver;
-
     /**
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
-     * @param \eZ\Publish\Core\Repository\LocationResolver\LocationResolver $locationResolver
      */
     public function __construct(
-        ContentService $contentService,
-        LocationResolver $locationResolver
+        LocationService $locationService,
+        ContentService $contentService
     ) {
+        $this->locationService = $locationService;
         $this->contentService = $contentService;
-        $this->locationResolver = $locationResolver;
     }
 
     /**
@@ -109,9 +115,16 @@ class RestExecutedView extends ValueObjectVisitor
             if ($searchHit->valueObject instanceof ApiValues\Content) {
                 /** @var \eZ\Publish\API\Repository\Values\Content\Content $searchHit->valueObject */
                 $contentInfo = $searchHit->valueObject->contentInfo;
+
+                try {
+                    $mainLocation = $this->locationService->loadLocation($contentInfo->mainLocationId);
+                } catch (NotFoundException | UnauthorizedException $e) {
+                    $mainLocation = null;
+                }
+
                 $valueObject = new RestContentValue(
                     $contentInfo,
-                    $this->locationResolver->resolveLocation($contentInfo),
+                    $mainLocation,
                     $searchHit->valueObject,
                     $searchHit->valueObject->getContentType(),
                     $this->contentService->loadRelations($searchHit->valueObject->getVersionInfo())

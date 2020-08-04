@@ -8,10 +8,10 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\Core\Repository\LocationResolver\LocationResolver;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
@@ -110,9 +110,18 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     protected function internalGetVisitor()
     {
         return new ValueObjectVisitor\RestExecutedView(
+            $this->getLocationServiceMock(),
             $this->getContentServiceMock(),
-            $this->getLocationResolverMock()
+            $this->getContentTypeServiceMock()
         );
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject
+     */
+    public function getLocationServiceMock()
+    {
+        return $this->createMock(LocationService::class);
     }
 
     /**
@@ -129,11 +138,6 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     public function getContentTypeServiceMock()
     {
         return $this->createMock(ContentTypeService::class);
-    }
-
-    public function getLocationResolverMock(): LocationResolver
-    {
-        return $this->createMock(LocationResolver::class);
     }
 
     /**
