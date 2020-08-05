@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
@@ -637,6 +638,7 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
     protected function getSearchTargetValueOne()
     {
         $value = $this->getValidSearchValueOne();
+
         // ensure case-insensitivity
         return strtoupper($value->fileName);
     }
@@ -668,5 +670,135 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
                 'IMAGE/PNG',
             ],
         ];
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRemovingContentRemovesImages(): void
+    {
+        $repository = $this->getRepository();
+
+        // Load services
+        $contentService = $repository->getContentService();
+
+        $content = $this->publishNewImage('My Image', $this->getValidCreationFieldData());
+        $originalFileUri = $this->getImageURI($content);
+
+        // sanity check
+        self::assertTrue(
+            $this->uriExistsOnIO($originalFileUri),
+            "Asserting image file $originalFileUri exists"
+        );
+
+        $content = $this->updateImage($content, $this->getValidUpdateFieldData());
+        $updatedFileUri = $this->getImageURI($content);
+
+        // sanity check
+        self::assertNotEquals($originalFileUri, $updatedFileUri);
+
+        $contentService->deleteContent($content->contentInfo);
+
+        self::assertFalse(
+            $this->uriExistsOnIO($updatedFileUri),
+            "Asserting updated image file $updatedFileUri has been removed"
+        );
+
+        self::assertFalse(
+            $this->uriExistsOnIO($originalFileUri),
+            "Asserting original image file $originalFileUri has been removed"
+        );
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRemovingDraftRemovesOldImage(): void
+    {
+        $repository = $this->getRepository();
+
+        // Load services
+        $contentService = $repository->getContentService();
+
+        $contentVersion1 = $this->publishNewImage('My Image', $this->getValidCreationFieldData());
+        $originalFileUri = $this->getImageURI($contentVersion1);
+
+        // sanity check
+        self::assertTrue(
+            $this->uriExistsOnIO($originalFileUri),
+            "Asserting image file $originalFileUri exists"
+        );
+
+        $contentVersion2 = $this->updateImage($contentVersion1, $this->getValidUpdateFieldData());
+        $updatedFileUri = $this->getImageURI($contentVersion2);
+
+        // delete 1st version with original image
+        $contentService->deleteVersion(
+            // reload 1st version (its state changed) to delete
+            $contentService->loadVersionInfo(
+                $contentVersion1->contentInfo,
+                $contentVersion1->getVersionInfo()->versionNo
+            )
+        );
+
+        // updated image should be available, but original image should be gone now
+        self::assertTrue(
+            $this->uriExistsOnIO($updatedFileUri),
+            "Asserting image file {$updatedFileUri} exists"
+        );
+
+        self::assertFalse(
+            $this->uriExistsOnIO($originalFileUri),
+            "Asserting image file {$originalFileUri} has been removed"
+        );
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function publishNewImage(string $name, ImageValue $imageValue): Content
+    {
+        $repository = $this->getRepository(false);
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('image'),
+            'eng-GB'
+        );
+        $contentCreateStruct->setField('name', $name);
+        $contentCreateStruct->setField('image', $imageValue);
+
+        return $contentService->publishVersion(
+            $contentService->createContent($contentCreateStruct)->getVersionInfo()
+        );
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function updateImage(Content $publishedImageContent, ImageValue $newImageValue)
+    {
+        $repository = $this->getRepository(false);
+        $contentService = $repository->getContentService();
+
+        $contentDraft = $contentService->createContentDraft($publishedImageContent->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('image', $newImageValue);
+        $contentService->updateContent($contentDraft->getVersionInfo(), $contentUpdateStruct);
+
+        return $contentService->publishVersion($contentDraft->getVersionInfo());
+    }
+
+    private function getImageURI(Content $content): string
+    {
+        return $content->getField('image')->value->uri;
     }
 }
