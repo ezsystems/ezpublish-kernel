@@ -43,6 +43,9 @@ services:
     ezpublish.fieldType.ezimage.pathGenerator:
         class: "%ezpublish.fieldType.ezimage.pathGenerator.class%"
 
+    eZ\Publish\Core\FieldType\Image\NullAliasCleaner: ~
+    eZ\Publish\Core\FieldType\Image\AliasCleanerInterface: '@eZ\Publish\Core\FieldType\Image\NullAliasCleaner'
+
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.io_service:
         parent: ezpublish.core.io.service

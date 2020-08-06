@@ -19,14 +19,14 @@ services:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
 
     ezpublish.fieldType.ezimage.externalStorage:
-        class: "%ezpublish.fieldType.ezimage.externalStorage.class%"
+        class: '%ezpublish.fieldType.ezimage.externalStorage.class%'
         arguments:
-            - "@ezpublish.fieldType.ezimage.storage_gateway"
-            - "@ezpublish.fieldType.ezimage.io_service"
-            - "@ezpublish.fieldType.ezimage.pathGenerator"
-            - "@ezpublish.fieldType.metadataHandler.imagesize"
-            - "@ezpublish.utils.deprecation_warner"
-            - "@?ezpublish.image_alias.imagine.alias_cleaner"
+            $gateway: '@ezpublish.fieldType.ezimage.storage_gateway'
+            $IOService: '@ezpublish.fieldType.ezimage.io_service'
+            $pathGenerator: '@ezpublish.fieldType.ezimage.pathGenerator'
+            $imageSizeMetadataHandler: '@ezpublish.fieldType.metadataHandler.imagesize'
+            $deprecationWarner: '@ezpublish.utils.deprecation_warner'
+            $aliasCleaner: '@eZ\Publish\Core\FieldType\Image\AliasCleanerInterface'
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}
 

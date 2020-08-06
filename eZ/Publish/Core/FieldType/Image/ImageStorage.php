@@ -44,7 +44,7 @@ class ImageStorage extends GatewayBasedStorage
         PathGenerator $pathGenerator,
         MetadataHandler $imageSizeMetadataHandler,
         DeprecationWarner $deprecationWarner,
-        AliasCleanerInterface $aliasCleaner = null
+        AliasCleanerInterface $aliasCleaner
     ) {
         parent::__construct($gateway);
         $this->IOService = $IOService;
@@ -155,10 +155,9 @@ class ImageStorage extends GatewayBasedStorage
                 $this->gateway->removeImageReferences($storedFilePath, $versionInfo->versionNo, $fieldId);
                 if ($this->gateway->countImageReferences($storedFilePath) === 0) {
                     $binaryFile = $this->IOService->loadBinaryFileByUri($storedFilePath);
-                    if ($this->aliasCleaner) {
-                        // removeAliases expects original file "id" (relative path) to prepend alias prefixes
-                        $this->aliasCleaner->removeAliases($binaryFile->id);
-                    }
+                    // remove aliases (real path is prepended with alias prefixes)
+                    $this->aliasCleaner->removeAliases($binaryFile->id);
+                    // delete original file
                     $this->IOService->deleteBinaryFile($binaryFile);
                 }
             }
