@@ -22,7 +22,7 @@ services:
         class: '%ezpublish.fieldType.ezimage.externalStorage.class%'
         arguments:
             $gateway: '@ezpublish.fieldType.ezimage.storage_gateway'
-            $IOService: '@ezpublish.fieldType.ezimage.io_service'
+            $ioService: '@ezpublish.fieldType.ezimage.io_service'
             $pathGenerator: '@ezpublish.fieldType.ezimage.pathGenerator'
             $imageSizeMetadataHandler: '@ezpublish.fieldType.metadataHandler.imagesize'
             $deprecationWarner: '@ezpublish.utils.deprecation_warner'
