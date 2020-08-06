@@ -518,32 +518,28 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
     }
 
     /**
-     * covers EZP-23152.
+     * @see https://jira.ez.no/browse/EZP-23152
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testThatRemovingDraftDoesntRemovePublishedImages()
+    public function testThatRemovingDraftDoesntRemovePublishedImages(): void
     {
         $repository = $this->getRepository();
 
         // Load services
         $contentService = $repository->getContentService();
-        $contentTypeService = $repository->getContentTypeService();
-        $locationService = $repository->getLocationService();
 
         // create content and publish image
-        $contentCreateStruct = $contentService->newContentCreateStruct(
-            $contentTypeService->loadContentTypeByIdentifier('image'),
-            'eng-GB'
+        $content = $this->publishNewImage(
+            'EZP23152_1',
+            $this->getValidCreationFieldData(),
+            [2]
         );
-        $contentCreateStruct->setField('name', 'EZP23152_1');
-        $contentCreateStruct->setField('image', $this->getValidCreationFieldData());
+        $originalFileUri = $this->getImageURI($content);
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct(2);
-        $content = $contentService->createContent($contentCreateStruct, [$locationCreateStruct]);
-        $content = $contentService->publishVersion($content->getVersionInfo());
-
-        $originalFileUri = $content->fields['image']['eng-GB']->uri;
-
-        $this->assertTrue(
+        self::assertTrue(
             $this->uriExistsOnIO($originalFileUri),
             "Asserting image file $originalFileUri exists."
         );
@@ -556,34 +552,29 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         $updatedDraft = $contentService->updateContent($updatedDraft->versionInfo, $contentUpdateStruct);
 
         // remove the newly published content version, verify that the original file exists
-        $contentService->deleteVersion($updatedDraft->versionInfo, 2);
-        $this->assertTrue(
+        $contentService->deleteVersion($updatedDraft->versionInfo);
+        self::assertTrue(
             $this->uriExistsOnIO($originalFileUri),
             "Asserting original image file $originalFileUri exists."
         );
 
         // delete content
         $contentService->deleteContent($content->contentInfo);
-        $this->assertFalse(
+        self::assertFalse(
             $this->uriExistsOnIO($originalFileUri),
             "Asserting image file $originalFileUri has been removed."
         );
     }
 
-    public function testUpdateImageAltTextOnly()
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdateImageAltTextOnly(): void
     {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-        $contentTypeService = $repository->getContentTypeService();
-        $locationService = $repository->getLocationService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('image');
-        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
-
-        $createStruct->setField('name', __METHOD__);
-        $createStruct->setField(
-            'image',
+        $content = $this->publishNewImage(
+            __METHOD__,
             new ImageValue(
                 [
                     'inputUri' => __DIR__ . '/_fixtures/image.jpg',
@@ -591,24 +582,21 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
                     'fileSize' => filesize(__DIR__ . '/_fixtures/image.jpg'),
                     'alternativeText' => 'Initial alternative text',
                 ]
-            )
+            ),
+            [2]
         );
 
-        $content = $contentService->createContent(
-            $createStruct,
-            [$locationService->newLocationCreateStruct(2)]
-        );
-
+        /** @var \eZ\Publish\Core\FieldType\Image\Value $imageField */
         $imageField = $content->getFieldValue('image');
-        $imageField->alternativeText = 'Updated alternative text';
+        $updatedAlternativeText = 'Updated alternative text';
+        $imageField->alternativeText = $updatedAlternativeText;
 
-        $contentService->publishVersion($content->getVersionInfo());
+        $content = $this->updateImage($content, $imageField);
 
-        $updateStruct = $contentService->newContentUpdateStruct();
-        $updateStruct->setField('image', $imageField);
-
-        $newVersion = $contentService->createContentDraft($content->contentInfo);
-        $contentService->updateContent($newVersion->versionInfo, $updateStruct);
+        self::assertSame(
+            $updatedAlternativeText,
+            $content->getFieldValue('image')->alternativeText
+        );
     }
 
     protected function getValidSearchValueOne()
@@ -762,10 +750,14 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    private function publishNewImage(string $name, ImageValue $imageValue): Content
-    {
+    private function publishNewImage(
+        string $name,
+        ImageValue $imageValue,
+        array $parentLocationIDs = []
+    ): Content {
         $repository = $this->getRepository(false);
         $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
         $contentTypeService = $repository->getContentTypeService();
 
         $contentCreateStruct = $contentService->newContentCreateStruct(
@@ -775,16 +767,26 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         $contentCreateStruct->setField('name', $name);
         $contentCreateStruct->setField('image', $imageValue);
 
+        $locationCreateStructList = [];
+        foreach ($parentLocationIDs as $parentLocationID) {
+            $locationCreateStructList[] = $locationService->newLocationCreateStruct(
+                $parentLocationID
+            );
+        }
+
         return $contentService->publishVersion(
-            $contentService->createContent($contentCreateStruct)->getVersionInfo()
+            $contentService
+                ->createContent($contentCreateStruct, $locationCreateStructList)
+                ->getVersionInfo()
         );
     }
 
     /**
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    private function updateImage(Content $publishedImageContent, ImageValue $newImageValue)
+    private function updateImage(Content $publishedImageContent, ImageValue $newImageValue): Content
     {
         $repository = $this->getRepository(false);
         $contentService = $repository->getContentService();
@@ -794,11 +796,14 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         $contentUpdateStruct->setField('image', $newImageValue);
         $contentService->updateContent($contentDraft->getVersionInfo(), $contentUpdateStruct);
 
-        return $contentService->publishVersion($contentDraft->getVersionInfo());
+        $content = $contentService->publishVersion($contentDraft->getVersionInfo());
+
+        // reload Content to make sure proper data has been persisted
+        return $contentService->loadContentByContentInfo($content->contentInfo);
     }
 
     private function getImageURI(Content $content): string
     {
-        return $content->getField('image')->value->uri;
+        return $content->getFieldValue('image')->uri;
     }
 }
