@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `eznotification` (
   PRIMARY KEY (`id`),
   KEY `eznotification_owner` (`owner_id`),
   KEY `eznotification_owner_is_pending` (`owner_id`, `is_pending`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 COMMIT;
 
