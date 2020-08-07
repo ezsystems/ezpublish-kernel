@@ -6,6 +6,8 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content as ApiValues;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
@@ -113,9 +115,16 @@ class RestExecutedView extends ValueObjectVisitor
             if ($searchHit->valueObject instanceof ApiValues\Content) {
                 /** @var \eZ\Publish\API\Repository\Values\Content\Content $searchHit->valueObject */
                 $contentInfo = $searchHit->valueObject->contentInfo;
+
+                try {
+                    $mainLocation = $this->locationService->loadLocation($contentInfo->mainLocationId);
+                } catch (NotFoundException | UnauthorizedException $e) {
+                    $mainLocation = null;
+                }
+
                 $valueObject = new RestContentValue(
                     $contentInfo,
-                    $this->locationService->loadLocation($contentInfo->mainLocationId),
+                    $mainLocation,
                     $searchHit->valueObject,
                     $searchHit->valueObject->getContentType(),
                     $this->contentService->loadRelations($searchHit->valueObject->getVersionInfo())
