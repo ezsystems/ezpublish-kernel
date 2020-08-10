@@ -27,22 +27,7 @@ class ContentValidatorStrategyTest extends TestCase
     public function testKnownValidationObject(): void
     {
         $contentValidatorStrategy = new ContentValidatorStrategy([
-            new class() implements ContentValidator {
-                public function supports(ValueObject $object): bool
-                {
-                    return $object instanceof ObjectState;
-                }
-
-                public function validate(
-                    ValueObject $object,
-                    array $context = [],
-                    ?array $fieldIdentifiers = null
-                ): array {
-                    return [
-                        'test',
-                    ];
-                }
-            },
+            $this->buildContentValidator(ObjectState::class, ['test']),
         ]);
 
         $errors = $contentValidatorStrategy->validate(new ObjectState());
@@ -60,26 +45,72 @@ class ContentValidatorStrategyTest extends TestCase
     public function testSuportsKnownValidationObject(): void
     {
         $contentValidatorStrategy = new ContentValidatorStrategy([
-            new class() implements ContentValidator {
-                public function supports(ValueObject $object): bool
-                {
-                    return $object instanceof ObjectState;
-                }
-
-                public function validate(
-                    ValueObject $object,
-                    array $context = [],
-                    ?array $fieldIdentifiers = null
-                ): array {
-                    return [
-                        'test',
-                    ];
-                }
-            },
+            $this->buildContentValidator(ObjectState::class, ['test']),
         ]);
 
         $supports = $contentValidatorStrategy->supports(new ObjectState());
 
         $this->assertTrue($supports);
+    }
+
+    public function testMergeValidationErrors(): void
+    {
+        $contentValidatorStrategy = new ContentValidatorStrategy([
+            $this->buildContentValidator(ObjectState::class, [
+                123 => ['eng-GB' => '123-eng-GB'],
+                456 => ['pol-PL' => '456-pol-PL'],
+            ]),
+            $this->buildContentValidator(ObjectState::class, []),
+            $this->buildContentValidator(ObjectState::class, [
+                321 => ['pol-PL' => '321-pol-PL'],
+            ]),
+            $this->buildContentValidator(ObjectState::class, [
+                2345 => ['eng-GB' => '2345-eng-GB'],
+                456 => ['eng-GB' => '456-eng-GB'],
+            ]),
+        ]);
+
+        $errors = $contentValidatorStrategy->validate(new ObjectState());
+        $this->assertEquals([
+            123 => ['eng-GB' => '123-eng-GB'],
+            321 => ['pol-PL' => '321-pol-PL'],
+            456 => [
+                'pol-PL' => '456-pol-PL',
+                'eng-GB' => '456-eng-GB',
+            ],
+            2345 => ['eng-GB' => '2345-eng-GB'],
+        ], $errors);
+    }
+
+    private function buildContentValidator(string $classSupport, array $validationReturn): ContentValidator
+    {
+        return new class($classSupport, $validationReturn) implements ContentValidator {
+            /** @var string */
+            private $classSupport;
+
+            /** @var array */
+            private $validationReturn;
+
+            public function __construct(
+                string $classSupport,
+                array $validationReturn
+            ) {
+                $this->classSupport = $classSupport;
+                $this->validationReturn = $validationReturn;
+            }
+
+            public function supports(ValueObject $object): bool
+            {
+                return $object instanceof $this->classSupport;
+            }
+
+            public function validate(
+                ValueObject $object,
+                array $context = [],
+                ?array $fieldIdentifiers = null
+            ): array {
+                return $this->validationReturn;
+            }
+        };
     }
 }
