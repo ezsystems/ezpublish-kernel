@@ -16,7 +16,6 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\Query;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use RuntimeException;
 
 /**
