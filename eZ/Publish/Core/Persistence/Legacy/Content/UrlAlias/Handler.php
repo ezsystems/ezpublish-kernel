@@ -233,7 +233,11 @@ class Handler implements UrlAliasHandlerInterface
             // 1. NOP entry
             // 2. existing location or custom alias entry
             // 3. history entry
-            if ($row['action'] == 'nop:' || $row['action'] == $action || $row['is_original'] == 0) {
+            if (
+                $row['action'] === Gateway::NOP_ACTION ||
+                $row['action'] === $action ||
+                (int)$row['is_original'] === 0
+            ) {
                 // Check for existing location entry on this level, if it exists and it's id differs from reusable
                 // entry id then reusable entry should be updated with the existing location entry id.
                 // Note: existing location entry may be downgraded and relinked later, depending on its language.
@@ -431,7 +435,7 @@ class Handler implements UrlAliasHandlerInterface
         if ($isPathNew || empty($row)) {
             $data['lang_mask'] = $languageId | (int)$alwaysAvailable;
             $id = $this->gateway->insertRow($data);
-        } elseif ($row['action'] === 'nop:' || (int)$row['is_original'] === 0) {
+        } elseif ($row['action'] === Gateway::NOP_ACTION || (int)$row['is_original'] === 0) {
             // Row exists, check if it is reusable. There are 2 cases when this is possible:
             // 1. NOP entry
             // 2. history entry
@@ -482,7 +486,7 @@ class Handler implements UrlAliasHandlerInterface
         return $this->gateway->insertRow(
             [
                 'lang_mask' => 1,
-                'action' => 'nop:',
+                'action' => Gateway::NOP_ACTION,
                 'parent' => $parentId,
                 'text' => $text,
                 'text_md5' => $textMD5,
@@ -1144,8 +1148,8 @@ class Handler implements UrlAliasHandlerInterface
 
     private function insertAliasEntryAsNop(array $aliasEntry): void
     {
-        $aliasEntry['action'] = 'nop:';
-        $aliasEntry['action_type'] = 'nop';
+        $aliasEntry['action'] = Gateway::NOP_ACTION;
+        $aliasEntry['action_type'] = Gateway::NOP;
 
         $this->gateway->insertRow($aliasEntry);
     }

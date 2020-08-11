@@ -14,7 +14,10 @@ abstract class Gateway
     /**
      * Default database table.
      */
-    const TABLE = 'ezurlalias_ml';
+    public const TABLE = 'ezurlalias_ml';
+
+    public const NOP = 'nop';
+    public const NOP_ACTION = self::NOP . ':';
 
     /**
      * Changes the gateway database table.
