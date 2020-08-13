@@ -91,6 +91,9 @@ services:
         class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasCleaner
         arguments: ["@ezpublish.image_alias.imagine.cache_resolver"]
 
+    eZ\Publish\Core\FieldType\Image\AliasCleanerInterface:
+        alias: ezpublish.image_alias.imagine.alias_cleaner
+
     ezpublish.image_alias.imagine.placeholder_provider.configurator:
         class: 'eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderAliasGeneratorConfigurator'
         arguments:
