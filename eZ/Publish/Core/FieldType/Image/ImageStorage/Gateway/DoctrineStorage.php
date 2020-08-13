@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
 use DOMDocument;
 use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -159,14 +160,16 @@ class DoctrineStorage extends Gateway
      * @param string $uri File IO uri (not legacy)
      * @param int $versionNo
      * @param int $fieldId
+     *
+     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException
      */
-    public function removeImageReferences($uri, $versionNo, $fieldId)
+    public function removeImageReferences($uri, $versionNo, $fieldId): void
     {
-        $path = $this->redecorator->redecorateFromSource($uri);
-
-        if (!$this->canRemoveImageReference($path, $versionNo, $fieldId)) {
+        if (!$this->canRemoveImageReference($uri, $versionNo, $fieldId)) {
             return;
         }
+
+        $path = $this->redecorator->redecorateFromSource($uri);
 
         $deleteQuery = $this->connection->createQueryBuilder();
         $deleteQuery
@@ -225,48 +228,48 @@ class DoctrineStorage extends Gateway
      * @param string $path legacy image path (var/storage/images...)
      * @param int $versionNo
      * @param int $fieldId
-     *
-     * @return bool
      */
-    protected function canRemoveImageReference($path, $versionNo, $fieldId)
+    protected function canRemoveImageReference($path, $versionNo, $fieldId): bool
     {
         $selectQuery = $this->connection->createQueryBuilder();
+        $expressionBuilder = $selectQuery->expr();
         $selectQuery
-            ->select('COUNT(' . $this->connection->quoteIdentifier('attr.id') . ')')
+            ->select('attr.data_text')
             ->from($this->connection->quoteIdentifier('ezcontentobject_attribute'), 'attr')
             ->innerJoin(
                 'attr',
                 $this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE),
                 'img',
-                $selectQuery->expr()->eq(
+                $expressionBuilder->eq(
                     $this->connection->quoteIdentifier('img.contentobject_attribute_id'),
                     $this->connection->quoteIdentifier('attr.id')
                 )
             )
             ->where(
-                $selectQuery->expr()->andX(
-                    $selectQuery->expr()->eq(
-                        $this->connection->quoteIdentifier('contentobject_attribute_id'),
-                        ':fieldId'
-                    ),
-                    $selectQuery->expr()->neq(
-                        $this->connection->quoteIdentifier('version'),
-                        ':versionNo'
-                    ),
-                    $selectQuery->expr()->like(
-                        $this->connection->quoteIdentifier('filepath'),
-                        ':likePath'
-                    )
+                $expressionBuilder->eq(
+                    $this->connection->quoteIdentifier('contentobject_attribute_id'),
+                    ':fieldId'
+                )
+            )
+            ->andWhere(
+                $expressionBuilder->neq(
+                    $this->connection->quoteIdentifier('version'),
+                    ':versionNo'
                 )
             )
             ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
             ->setParameter(':versionNo', $versionNo, PDO::PARAM_INT)
-            ->setParameter(':likePath', $path . '%')
         ;
 
-        $statement = $selectQuery->execute();
+        $imageXMLs = $selectQuery->execute()->fetchAll(FetchMode::COLUMN);
+        foreach ($imageXMLs as $imageXML) {
+            $storedFilePath = $this->extractFilesFromXml($imageXML)['original'] ?? null;
+            if ($storedFilePath === $path) {
+                return false;
+            }
+        }
 
-        return (int) $statement->fetchColumn() === 0;
+        return true;
     }
 
     /**

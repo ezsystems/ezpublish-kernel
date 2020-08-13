@@ -151,14 +151,14 @@ class ImageStorage extends GatewayBasedStorage
                 continue;
             }
 
-            if ($this->aliasCleaner) {
-                $this->aliasCleaner->removeAliases($storedFiles['original']);
-            }
-
             foreach ($storedFiles as $storedFilePath) {
                 $this->gateway->removeImageReferences($storedFilePath, $versionInfo->versionNo, $fieldId);
                 if ($this->gateway->countImageReferences($storedFilePath) === 0) {
                     $binaryFile = $this->IOService->loadBinaryFileByUri($storedFilePath);
+                    if ($this->aliasCleaner) {
+                        // removeAliases expects original file "id" (relative path) to prepend alias prefixes
+                        $this->aliasCleaner->removeAliases($binaryFile->id);
+                    }
                     $this->IOService->deleteBinaryFile($binaryFile);
                 }
             }
