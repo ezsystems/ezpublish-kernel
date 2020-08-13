@@ -24,7 +24,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
      *
      * @var \eZ\Publish\Core\IO\IOServiceInterface
      */
-    protected $IOService;
+    protected $ioService;
 
     /** @var \eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator */
     protected $pathGenerator;
@@ -42,18 +42,18 @@ class BinaryBaseStorage extends GatewayBasedStorage
      * Construct from gateways.
      *
      * @param \eZ\Publish\SPI\FieldType\StorageGateway $gateway
-     * @param \eZ\Publish\Core\IO\IOServiceInterface $IOService
+     * @param \eZ\Publish\Core\IO\IOServiceInterface $ioService
      * @param \eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator $pathGenerator
      * @param \eZ\Publish\SPI\IO\MimeTypeDetector $mimeTypeDetector
      */
     public function __construct(
         StorageGateway $gateway,
-        IOServiceInterface $IOService,
+        IOServiceInterface $ioService,
         PathGenerator $pathGenerator,
         MimeTypeDetector $mimeTypeDetector
     ) {
         parent::__construct($gateway);
-        $this->IOService = $IOService;
+        $this->ioService = $ioService;
         $this->pathGenerator = $pathGenerator;
         $this->mimeTypeDetector = $mimeTypeDetector;
     }
@@ -76,9 +76,9 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         if (isset($field->value->externalData['inputUri'])) {
             $field->value->externalData['mimeType'] = $this->mimeTypeDetector->getFromPath($field->value->externalData['inputUri']);
-            $createStruct = $this->IOService->newBinaryCreateStructFromLocalFile($field->value->externalData['inputUri']);
+            $createStruct = $this->ioService->newBinaryCreateStructFromLocalFile($field->value->externalData['inputUri']);
             $createStruct->id = $this->pathGenerator->getStoragePathForField($field, $versionInfo);
-            $binaryFile = $this->IOService->createBinaryFile($createStruct);
+            $binaryFile = $this->ioService->createBinaryFile($createStruct);
 
             $field->value->externalData['id'] = $binaryFile->id;
             $field->value->externalData['mimeType'] = $createStruct->mimeType;
@@ -89,7 +89,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         // copy from another field
         if (!isset($field->value->externalData['mimeType']) && isset($field->value->externalData['id'])) {
-            $field->value->externalData['mimeType'] = $this->IOService->getMimeType($field->value->externalData['id']);
+            $field->value->externalData['mimeType'] = $this->ioService->getMimeType($field->value->externalData['id']);
         }
 
         $referenced = $this->gateway->getReferencedFiles([$field->id], $versionInfo->versionNo);
@@ -133,8 +133,8 @@ class BinaryBaseStorage extends GatewayBasedStorage
         $fileCounts = $this->gateway->countFileReferences([$fileReference['id']]);
 
         if ($fileCounts[$fileReference['id']] === 0) {
-            $binaryFile = $this->IOService->loadBinaryFile($fileReference['id']);
-            $this->IOService->deleteBinaryFile($binaryFile);
+            $binaryFile = $this->ioService->loadBinaryFile($fileReference['id']);
+            $this->ioService->deleteBinaryFile($binaryFile);
         }
     }
 
@@ -142,7 +142,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
     {
         $field->value->externalData = $this->gateway->getFileReferenceData($field->id, $versionInfo->versionNo);
         if ($field->value->externalData !== null) {
-            $binaryFile = $this->IOService->loadBinaryFile($field->value->externalData['id']);
+            $binaryFile = $this->ioService->loadBinaryFile($field->value->externalData['id']);
             $field->value->externalData['fileSize'] = $binaryFile->size;
             $field->value->externalData['uri'] = isset($this->downloadUrlGenerator) ?
                 $this->downloadUrlGenerator->getStoragePathForField($field, $versionInfo) :
@@ -164,8 +164,8 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         foreach ($referenceCountMap as $filePath => $count) {
             if ($count === 0) {
-                $binaryFile = $this->IOService->loadBinaryFile($filePath);
-                $this->IOService->deleteBinaryFile($binaryFile);
+                $binaryFile = $this->ioService->loadBinaryFile($filePath);
+                $this->ioService->deleteBinaryFile($binaryFile);
             }
         }
     }

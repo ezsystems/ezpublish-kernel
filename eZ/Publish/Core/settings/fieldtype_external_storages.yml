@@ -12,12 +12,12 @@ services:
     ezpublish.fieldType.ezimage.externalStorage:
         class: eZ\Publish\Core\FieldType\Image\ImageStorage
         arguments:
-            - "@ezpublish.fieldType.ezimage.storage_gateway"
-            - "@ezpublish.fieldType.ezimage.io_service"
-            - "@ezpublish.fieldType.ezimage.pathGenerator"
-            - "@ezpublish.fieldType.metadataHandler.imagesize"
-            - "@ezpublish.utils.deprecation_warner"
-            - "@?ezpublish.image_alias.imagine.alias_cleaner"
+            $gateway: '@ezpublish.fieldType.ezimage.storage_gateway'
+            $ioService: '@ezpublish.fieldType.ezimage.io_service'
+            $pathGenerator: '@ezpublish.fieldType.ezimage.pathGenerator'
+            $imageSizeMetadataHandler: '@ezpublish.fieldType.metadataHandler.imagesize'
+            $deprecationWarner: '@ezpublish.utils.deprecation_warner'
+            $aliasCleaner: '@eZ\Publish\Core\FieldType\Image\AliasCleanerInterface'
         tags:
             - {name: ezplatform.field_type.external_storage_handler, alias: ezimage}
 
