@@ -49,7 +49,7 @@ class LocationSearchHitAdapter implements AdapterInterface
         $countQuery = clone $this->query;
         $countQuery->limit = 0;
 
-        return $this->nbResults = $this->searchService->findLocations($countQuery)->totalCount;
+        return $this->nbResults = $this->searchService->findLocations($countQuery, $this->languageFilter)->totalCount;
     }
 
     /**
