@@ -125,6 +125,15 @@ class ObjectStateService implements ObjectStateServiceInterface
         return $this->buildDomainObjectStateGroupObject($spiObjectStateGroup, $prioritizedLanguages);
     }
 
+    public function loadObjectStateGroupByIdentifier(
+        string $objectStateGroupIdentifier,
+        array $prioritizedLanguages = []
+    ): APIObjectStateGroup {
+        $spiObjectStateGroup = $this->objectStateHandler->loadGroupByIdentifier($objectStateGroupIdentifier);
+
+        return $this->buildDomainObjectStateGroupObject($spiObjectStateGroup, $prioritizedLanguages);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -317,6 +326,19 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function loadObjectState(int $stateId, array $prioritizedLanguages = []): APIObjectState
     {
         $spiObjectState = $this->objectStateHandler->load($stateId);
+
+        return $this->buildDomainObjectStateObject($spiObjectState, null, $prioritizedLanguages);
+    }
+
+    public function loadObjectStateByIdentifier(
+        APIObjectStateGroup $objectStateGroup,
+        string $objectStateIdentifier,
+        array $prioritizedLanguages = []
+    ): APIObjectState {
+        $spiObjectState = $this->objectStateHandler->loadByIdentifier(
+            $objectStateIdentifier,
+            $objectStateGroup->id
+        );
 
         return $this->buildDomainObjectStateObject($spiObjectState, null, $prioritizedLanguages);
     }

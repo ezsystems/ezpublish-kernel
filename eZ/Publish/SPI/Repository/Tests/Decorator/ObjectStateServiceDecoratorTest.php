@@ -60,6 +60,31 @@ class ObjectStateServiceDecoratorTest extends TestCase
         $decoratedService->loadObjectStateGroup(...$parameters);
     }
 
+    public function testLoadObjectStateGroupByIdentifierDecorator(): void
+    {
+        $serviceMock = $this->createServiceMock();
+        $decoratedService = $this->createDecorator($serviceMock);
+        $expectedObjectStateGroup = $this->createMock(ObjectStateGroup::class);
+
+        $parameters = [
+            'ez_lock',
+            ['eng-GB'],
+        ];
+
+        $serviceMock
+            ->expects($this->once())
+            ->method('loadObjectStateGroupByIdentifier')
+            ->with(...$parameters)
+            ->willReturn($expectedObjectStateGroup);
+
+        $actualObjectStateGroup = $decoratedService->loadObjectStateGroupByIdentifier(...$parameters);
+
+        $this->assertEquals(
+            $expectedObjectStateGroup,
+            $actualObjectStateGroup
+        );
+    }
+
     public function testLoadObjectStateGroupsDecorator()
     {
         $serviceMock = $this->createServiceMock();
@@ -146,6 +171,32 @@ class ObjectStateServiceDecoratorTest extends TestCase
         $serviceMock->expects($this->once())->method('loadObjectState')->with(...$parameters);
 
         $decoratedService->loadObjectState(...$parameters);
+    }
+
+    public function testLoadObjectStateDecoratorByIdentifier(): void
+    {
+        $serviceMock = $this->createServiceMock();
+        $decoratedService = $this->createDecorator($serviceMock);
+        $expectedObjectState = $this->createMock(ObjectState::class);
+
+        $parameters = [
+            $this->createMock(ObjectStateGroup::class),
+            'locked',
+            ['eng-GB'],
+        ];
+
+        $serviceMock
+            ->expects($this->once())
+            ->method('loadObjectStateByIdentifier')
+            ->with(...$parameters)
+            ->willReturn($expectedObjectState);
+
+        $actualObjectState = $decoratedService->loadObjectStateByIdentifier(...$parameters);
+
+        $this->assertEquals(
+            $expectedObjectState,
+            $actualObjectState
+        );
     }
 
     public function testUpdateObjectStateDecorator()

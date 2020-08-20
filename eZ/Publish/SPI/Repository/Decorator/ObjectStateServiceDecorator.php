@@ -39,6 +39,13 @@ abstract class ObjectStateServiceDecorator implements ObjectStateService
         return $this->innerService->loadObjectStateGroup($objectStateGroupId, $prioritizedLanguages);
     }
 
+    public function loadObjectStateGroupByIdentifier(
+        string $objectStateGroupIdentifier,
+        array $prioritizedLanguages = []
+    ): ObjectStateGroup {
+        return $this->innerService->loadObjectStateGroupByIdentifier($objectStateGroupIdentifier, $prioritizedLanguages);
+    }
+
     public function loadObjectStateGroups(
         int $offset = 0,
         int $limit = -1,
@@ -78,6 +85,18 @@ abstract class ObjectStateServiceDecorator implements ObjectStateService
         array $prioritizedLanguages = []
     ): ObjectState {
         return $this->innerService->loadObjectState($stateId, $prioritizedLanguages);
+    }
+
+    public function loadObjectStateByIdentifier(
+        ObjectStateGroup $objectStateGroup,
+        string $objectStateIdentifier,
+        array $prioritizedLanguages = []
+    ): ObjectState {
+        return $this->innerService->loadObjectStateByIdentifier(
+            $objectStateGroup,
+            $objectStateIdentifier,
+            $prioritizedLanguages
+        );
     }
 
     public function updateObjectState(

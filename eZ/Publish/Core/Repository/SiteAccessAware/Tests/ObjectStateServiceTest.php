@@ -70,9 +70,11 @@ class ObjectStateServiceTest extends AbstractServiceTest
         // string $method, array $arguments, mixed $return, int $languageArgumentIndex
         return [
             ['loadObjectStateGroup', [11, self::LANG_ARG], $objectStateGroup, 1],
+            ['loadObjectStateGroupByIdentifier', ['ez_lock', self::LANG_ARG], $objectStateGroup, 1],
             ['loadObjectStateGroups', [50, 50, self::LANG_ARG], [$objectStateGroup], 2],
             ['loadObjectStates', [$objectStateGroup, self::LANG_ARG], [$objectState], 1],
             ['loadObjectState', [3, self::LANG_ARG], $objectState, 1],
+            ['loadObjectStateByIdentifier', [$objectStateGroup, 'locked', self::LANG_ARG], $objectState, 2],
         ];
     }
 }
