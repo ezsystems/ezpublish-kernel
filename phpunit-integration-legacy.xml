@@ -24,6 +24,7 @@
             <directory>eZ/Publish/API/Repository/Tests/Limitation</directory>
             <directory>eZ/Publish/API/Repository/Tests/SearchService</directory>
             <directory>eZ/Publish/API/Repository/Tests/Filtering</directory>
+            <directory>eZ/Publish/API/Repository/Tests/URLAliasService</directory>
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/PermissionResolverTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
