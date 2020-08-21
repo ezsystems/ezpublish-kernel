@@ -16,7 +16,6 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\Query;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use RuntimeException;
 
 /**
@@ -28,7 +27,7 @@ class DoctrineDatabase extends Gateway
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
      * on 64 bit systems.
      */
-    const MAX_LIMIT = 1073741824;
+    public const MAX_LIMIT = 1073741824;
 
     /**
      * Columns of database tables.
@@ -648,7 +647,7 @@ class DoctrineDatabase extends Gateway
         if ($values['is_alias']) {
             $values['is_original'] = 1;
         }
-        if ($values['action'] === 'nop:') {
+        if ($values['action'] === self::NOP_ACTION) {
             $values['is_original'] = 0;
         }
 
@@ -1504,7 +1503,7 @@ class DoctrineDatabase extends Gateway
             ->where(
                 sprintf('EXISTS (%s)', $wrapperQueryBuilder)
             )
-            ->setParameter('actionType', 'nop');
+            ->setParameter('actionType', self::NOP);
 
         return $queryBuilder->execute();
     }

@@ -163,10 +163,10 @@
         <note>key: Only version in status DRAFT can be updated</note>
         <jms:reference-file line="461">eZ/Publish/Core/REST/Server/Controller/Content.php</jms:reference-file>
       </trans-unit>
-      <trans-unit id="3467ebb6448f4d8dd9f8a99cbea79415f25fa26d" resname="Path '%path%' already exists for the given language">
-        <source>Path '%path%' already exists for the given language</source>
-        <target>Path '%path%' already exists for the given language</target>
-        <note>key: Path '%path%' already exists for the given language</note>
+      <trans-unit id="3467ebb6448f4d8dd9f8a99cbea79415f25fa26d" resname="Path '%path%' already exists for the given context">
+        <source>Path '%path%' already exists for the given context</source>
+        <target>Path '%path%' already exists for the given context</target>
+        <note>key: Path '%path%' already exists for the given context</note>
         <jms:reference-file line="397">eZ/Publish/Core/Persistence/Legacy/Content/UrlAlias/Handler.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="b2d83ff8d535b64b36eaab04237a3091fc10ee5a" resname="Placeholders are not matching with wildcards.">

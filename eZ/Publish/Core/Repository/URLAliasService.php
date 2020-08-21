@@ -83,7 +83,8 @@ class URLAliasService implements URLAliasServiceInterface
      * @param bool $alwaysAvailable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url alias
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given context
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */

@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\SwappedLocationProperties;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\UrlAliasForSwappedLocation;
 use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
@@ -232,7 +233,11 @@ class Handler implements UrlAliasHandlerInterface
             // 1. NOP entry
             // 2. existing location or custom alias entry
             // 3. history entry
-            if ($row['action'] == 'nop:' || $row['action'] == $action || $row['is_original'] == 0) {
+            if (
+                $row['action'] === Gateway::NOP_ACTION ||
+                $row['action'] === $action ||
+                (int)$row['is_original'] === 0
+            ) {
                 // Check for existing location entry on this level, if it exists and it's id differs from reusable
                 // entry id then reusable entry should be updated with the existing location entry id.
                 // Note: existing location entry may be downgraded and relinked later, depending on its language.
@@ -334,7 +339,7 @@ class Handler implements UrlAliasHandlerInterface
      * If $languageCode is null the $alias is created in the system's default
      * language. $alwaysAvailable makes the alias available in all languages.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given resource
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the path is broken
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
@@ -360,7 +365,7 @@ class Handler implements UrlAliasHandlerInterface
     /**
      * Internal method for creating global or custom URL alias (these are handled in the same way).
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given context
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      *
@@ -372,7 +377,7 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    protected function createUrlAlias($action, $path, $forward, $languageCode, $alwaysAvailable)
+    protected function createUrlAlias($action, $path, $forward, $languageCode, $alwaysAvailable): UrlAlias
     {
         $pathElements = explode('/', $path);
         $topElement = array_pop($pathElements);
@@ -399,11 +404,14 @@ class Handler implements UrlAliasHandlerInterface
         }
 
         // Handle topmost path element
-        $topElement = $this->slugConverter->convert($topElement, 'noname' . (count($pathElements) + 1));
+        $topElement = $this->slugConverter->convert(
+            $topElement,
+            'noname' . (count($pathElements) + 1)
+        );
 
         // If last (next to topmost) entry parent is special root entry we handle topmost entry as first level entry
         // That is why we need to reset $parentId to 0
-        if ($parentId != 0 && $this->gateway->isRootEntry($parentId)) {
+        if ($parentId !== 0 && $this->gateway->isRootEntry($parentId)) {
             $parentId = 0;
         }
 
@@ -427,7 +435,7 @@ class Handler implements UrlAliasHandlerInterface
         if ($isPathNew || empty($row)) {
             $data['lang_mask'] = $languageId | (int)$alwaysAvailable;
             $id = $this->gateway->insertRow($data);
-        } elseif ($row['action'] == 'nop:' || $row['is_original'] == 0) {
+        } elseif ($row['action'] === Gateway::NOP_ACTION || (int)$row['is_original'] === 0) {
             // Row exists, check if it is reusable. There are 2 cases when this is possible:
             // 1. NOP entry
             // 2. history entry
@@ -439,7 +447,11 @@ class Handler implements UrlAliasHandlerInterface
                 $topElementMD5,
                 $data
             );
-        } elseif ($row['action'] == $action && 0 === ((int)$row['lang_mask'] & $languageId)) {
+        } elseif (
+            $row['action'] === $action &&
+            (int)$row['is_alias'] === 1 &&
+            0 === ((int)$row['lang_mask'] & $languageId)
+        ) {
             // add another language to the same custom alias
             $data['link'] = $id = $row['id'];
             $data['lang_mask'] = $row['lang_mask'] | $languageId | (int)$alwaysAvailable;
@@ -449,7 +461,10 @@ class Handler implements UrlAliasHandlerInterface
                 $data
             );
         } else {
-            throw new ForbiddenException("Path '%path%' already exists for the given language", ['%path%' => $path]);
+            throw new ForbiddenException(
+                "Path '%path%' already exists for the given context",
+                ['%path%' => $path]
+            );
         }
 
         $data['raw_path_data'] = $this->gateway->loadPathData($id);
@@ -471,7 +486,7 @@ class Handler implements UrlAliasHandlerInterface
         return $this->gateway->insertRow(
             [
                 'lang_mask' => 1,
-                'action' => 'nop:',
+                'action' => Gateway::NOP_ACTION,
                 'parent' => $parentId,
                 'text' => $text,
                 'text_md5' => $textMD5,
@@ -1133,8 +1148,8 @@ class Handler implements UrlAliasHandlerInterface
 
     private function insertAliasEntryAsNop(array $aliasEntry): void
     {
-        $aliasEntry['action'] = 'nop:';
-        $aliasEntry['action_type'] = 'nop';
+        $aliasEntry['action'] = Gateway::NOP_ACTION;
+        $aliasEntry['action_type'] = Gateway::NOP;
 
         $this->gateway->insertRow($aliasEntry);
     }
