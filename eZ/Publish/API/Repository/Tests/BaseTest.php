@@ -732,7 +732,8 @@ abstract class BaseTest extends TestCase
     public function createFolder(
         array $names,
         ?int $parentLocationId = null,
-        ?string $remoteId = null
+        ?string $remoteId = null,
+        bool $alwaysAvailable = true
     ): Content {
         $repository = $this->getRepository(false);
         $contentService = $repository->getContentService();
@@ -749,6 +750,7 @@ abstract class BaseTest extends TestCase
             $mainLanguageCode
         );
         $struct->remoteId = $remoteId;
+        $struct->alwaysAvailable = $alwaysAvailable;
         foreach ($names as $languageCode => $translatedName) {
             $struct->setField('name', $translatedName, $languageCode);
         }

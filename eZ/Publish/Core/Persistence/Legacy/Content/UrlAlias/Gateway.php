@@ -23,6 +23,9 @@ abstract class Gateway
     public const INCR_TABLE = 'ezurlalias_ml_incr';
     public const INCR_TABLE_SEQ = 'ezurlalias_ml_incr_id_seq';
 
+    public const NOP = 'nop';
+    public const NOP_ACTION = self::NOP . ':';
+
     /**
      * Changes the gateway database table.
      *
