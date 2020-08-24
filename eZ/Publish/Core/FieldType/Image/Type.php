@@ -292,7 +292,6 @@ class Type extends FieldType
             'alternativeText' => $value->alternativeText,
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
-            'imageId' => $value->imageId,
             'uri' => $value->uri,
             'inputUri' => $value->inputUri,
             'width' => $value->width,
