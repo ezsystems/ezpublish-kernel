@@ -50,7 +50,7 @@ class ParameterProvider implements ParameterProviderInterface
 
         try {
             $contentInfo = $this->loadContentInfo(
-                $field->value->destinationContentId
+                (int)$field->value->destinationContentId
             );
 
             return [
