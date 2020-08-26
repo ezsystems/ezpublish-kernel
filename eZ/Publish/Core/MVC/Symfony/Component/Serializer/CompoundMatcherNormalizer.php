@@ -11,13 +11,19 @@ use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 
 class CompoundMatcherNormalizer extends PropertyNormalizer
 {
+    /**
+     * @see \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound::__sleep.
+     */
     public function normalize($object, $format = null, array $context = [])
     {
-        $data = parent::normalize($object, $format, $context);
-        $data['config'] = [];
-        $data['matchersMap'] = [];
+        $serializerSubMatchers = [];
+        foreach ($object->getSubMatchers() as $matcher) {
+            $serializerSubMatchers[] = parent::normalize($matcher, $format, $context);
+        }
 
-        return $data;
+        return [
+            'subMatchers' => $serializerSubMatchers,
+        ];
     }
 
     public function supportsNormalization($data, $format = null)
