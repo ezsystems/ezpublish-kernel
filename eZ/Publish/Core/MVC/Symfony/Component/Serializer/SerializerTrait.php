@@ -20,6 +20,10 @@ trait SerializerTrait
         return new Serializer(
             [
                 new CompoundMatcherNormalizer(),
+                new HostElementNormalizer(),
+                new MapNormalizer(),
+                new RegexNormalizer(),
+                new URIElementNormalizer(),
                 new SimplifiedRequestNormalizer(),
                 (new PropertyNormalizer())->setIgnoredAttributes(['request', 'container', 'matcherBuilder']),
             ],
