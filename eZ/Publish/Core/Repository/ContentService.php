@@ -1742,7 +1742,7 @@ class ContentService implements ContentServiceInterface
         $this->internalUpdateContent($versionInfo, $updateStruct);
     }
 
-    protected function equalsHash($fieldType, $newValue, $fieldValue): bool
+    protected function isHashEqual($fieldType, $newValue, $fieldValue): bool
     {
         $newHash = $fieldType->toHash($newValue);
         $currentHash = $fieldType->toHash($fieldValue);
