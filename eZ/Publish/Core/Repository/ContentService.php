@@ -1722,7 +1722,7 @@ class ContentService implements ContentServiceInterface
 
             if ($newValue !== null
                 && $field->value !== null
-                && $fieldType->toHash($newValue) === $fieldType->toHash($field->value)) {
+                && $this->equalsHash($fieldType, $newValue, $field->value)) {
                 continue;
             }
 
@@ -1740,6 +1740,21 @@ class ContentService implements ContentServiceInterface
         }
 
         $this->internalUpdateContent($versionInfo, $updateStruct);
+    }
+
+    protected function equalsHash($fieldType, $newValue, $fieldValue): bool
+    {
+        $newHash = $fieldType->toHash($newValue);
+        $currentHash = $fieldType->toHash($fieldValue);
+        if ($newHash === $currentHash) {
+            return true;
+        } elseif ($fieldType instanceof \eZ\Publish\Core\FieldType\Image\Type) {
+            $imageHashDiff = array_diff($newHash, $currentHash);
+
+            return count($imageHashDiff) === 1 && !empty($imageHashDiff['imageId']);
+        }
+
+        return false;
     }
 
     /**
