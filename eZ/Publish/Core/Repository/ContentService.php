@@ -1722,7 +1722,7 @@ class ContentService implements ContentServiceInterface
 
             if ($newValue !== null
                 && $field->value !== null
-                && $this->equalsHash($fieldType, $newValue, $field->value)) {
+                && $this->isHashEqual($fieldType, $newValue, $field->value)) {
                 continue;
             }
 
