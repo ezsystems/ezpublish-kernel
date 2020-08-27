@@ -83,8 +83,11 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             'urlAlias-location-' . $locationId,
             'urlAlias-location-path-' . $locationId,
             'urlAlias-notFound',
-            'urlAlias-' . $urlAlias->id,
         ]);
+
+        if ($urlAlias instanceof UrlAlias) {
+            $this->cache->invalidateTags(['urlAlias-' . $urlAlias->id]);
+        }
 
         return $urlAlias;
     }
