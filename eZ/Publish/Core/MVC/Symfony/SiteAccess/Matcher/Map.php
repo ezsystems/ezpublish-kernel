@@ -23,14 +23,14 @@ abstract class Map implements VersatileMatcher
      *
      * @var array
      */
-    protected $map;
+    protected $map = [];
 
     /**
      * Map used for reverse matching.
      *
      * @var array
      */
-    protected $reverseMap;
+    protected $reverseMap = [];
 
     /** @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest */
     protected $request;

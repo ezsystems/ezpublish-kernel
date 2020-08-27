@@ -9,22 +9,14 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\MVC\Symfony\Component\Tests\Serializer\Stubs;
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
-use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
 
-final class MatcherStub implements Matcher
+final class CompoundStub extends Compound
 {
-    /** @var mixed */
-    private $data;
-
-    public function __construct($data = null)
+    public function __construct(array $subMatchers)
     {
-        $this->data = $data;
-    }
-
-    public function setRequest(SimplifiedRequest $request)
-    {
-        throw new NotImplementedException(__METHOD__);
+        parent::__construct([]);
+        $this->subMatchers = $subMatchers;
     }
 
     public function match()
@@ -32,13 +24,8 @@ final class MatcherStub implements Matcher
         throw new NotImplementedException(__METHOD__);
     }
 
-    public function getName()
+    public function reverseMatch($siteAccessName)
     {
         throw new NotImplementedException(__METHOD__);
-    }
-
-    public function getData()
-    {
-        return $this->data;
     }
 }

@@ -26,6 +26,21 @@ final class SerializerStub implements SerializerInterface, NormalizerInterface
 
     public function normalize($object, $format = null, array $context = [])
     {
+        if (is_array($object)) {
+            $result = [];
+            foreach ($object as $key => $value) {
+                $result[$key] = $this->normalize($value, $format, $context);
+            }
+
+            return $result;
+        }
+
+        if ($object instanceof MatcherStub) {
+            return [
+                'data' => $object->getData(),
+            ];
+        }
+
         return $object;
     }
 

@@ -9,7 +9,9 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\MVC\Symfony\Component\Tests\Serializer;
 
 use eZ\Publish\Core\MVC\Symfony\Component\Serializer\CompoundMatcherNormalizer;
+use eZ\Publish\Core\MVC\Symfony\Component\Tests\Serializer\Stubs\CompoundStub;
 use eZ\Publish\Core\MVC\Symfony\Component\Tests\Serializer\Stubs\MatcherStub;
+use eZ\Publish\Core\MVC\Symfony\Component\Tests\Serializer\Stubs\SerializerStub;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
 use PHPUnit\Framework\TestCase;
@@ -18,22 +20,25 @@ final class CompoundMatcherNormalizerTest extends TestCase
 {
     public function testNormalization(): void
     {
-        $matcher = $this->createMock(Compound::class);
-        $matcher->method('getSubMatchers')->willReturn([
-            new MatcherStub('foo'),
-            new MatcherStub('bar'),
-            new MatcherStub('baz'),
+        $matcher = new CompoundStub([]);
+        $matcher->setSubMatchers([
+            'foo' => new MatcherStub('foo'),
+            'bar' => new MatcherStub('bar'),
+            'baz' => new MatcherStub('baz'),
         ]);
 
         $normalizer = new CompoundMatcherNormalizer();
+        $normalizer->setSerializer(new SerializerStub());
 
         $this->assertEquals(
             [
                 'subMatchers' => [
-                    ['data' => 'foo'],
-                    ['data' => 'bar'],
-                    ['data' => 'baz'],
+                    'foo' => ['data' => 'foo'],
+                    'bar' => ['data' => 'bar'],
+                    'baz' => ['data' => 'baz'],
                 ],
+                'config' => [],
+                'matchersMap' => [],
             ],
             $normalizer->normalize($matcher)
         );
