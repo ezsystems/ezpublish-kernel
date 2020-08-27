@@ -83,7 +83,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             'urlAlias-location-' . $locationId,
             'urlAlias-location-path-' . $locationId,
             'urlAlias-notFound',
-            'urlAlias-' . $urlAlias->id
+            'urlAlias-' . $urlAlias->id,
         ]);
 
         return $urlAlias;
