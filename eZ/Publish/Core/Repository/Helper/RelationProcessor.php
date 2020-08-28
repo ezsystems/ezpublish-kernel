@@ -116,7 +116,7 @@ class RelationProcessor
         // Map existing relations for easier handling
         $mappedRelations = [];
         foreach ($existingRelations as $relation) {
-            if ($relation->type & Relation::FIELD) {
+            if ($relation->type & Relation::FIELD && null !== $relation->sourceFieldDefinitionIdentifier) {
                 $fieldDefinition = $contentType->getFieldDefinition($relation->sourceFieldDefinitionIdentifier);
                 if ($fieldDefinition !== null) {
                     $mappedRelations[Relation::FIELD][$fieldDefinition->id][$relation->destinationContentInfo->id] = $relation;
