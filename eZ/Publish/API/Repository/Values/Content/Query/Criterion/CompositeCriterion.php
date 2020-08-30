@@ -23,6 +23,6 @@ abstract class CompositeCriterion extends Criterion
 
     public function getSpecifications(): array
     {
-        throw new NotImplementedException('getSpecifications() not implemented for AggregateCriterion');
+        throw new NotImplementedException('getSpecifications() not implemented for CompositeCriterion');
     }
 }
