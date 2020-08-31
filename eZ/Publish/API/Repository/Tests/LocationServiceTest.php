@@ -8,6 +8,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use Exception;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -2522,10 +2523,10 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the moveSubtree() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
+     * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
-    public function testMoveSubtree()
+    public function testMoveSubtree(): void
     {
         $repository = $this->getRepository();
 
@@ -2572,11 +2573,10 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the moveSubtree() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
+     * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testMoveSubtreeThrowsExceptionOnMoveNotIntoContainer()
+    public function testMoveSubtreeThrowsExceptionOnMoveNotIntoContainer(): void
     {
         $repository = $this->getRepository();
 
@@ -2599,17 +2599,17 @@ class LocationServiceTest extends BaseTest
         $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Move location from "Home" to "Demo Design" (not container)
+        $this->expectException(InvalidArgumentException::class);
         $locationService->moveSubtree($locationToMove, $newParentLocation);
     }
 
     /**
      * Test for the moveSubtree() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
+     * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testMoveSubtreeThrowsExceptionOnMoveToSame()
+    public function testMoveSubtreeThrowsExceptionOnMoveToSame(): void
     {
         $repository = $this->getRepository();
 
@@ -2628,16 +2628,17 @@ class LocationServiceTest extends BaseTest
         $newParentLocation = $locationService->loadLocation($locationToMove->parentLocationId);
 
         // Move location from "Home" to "Home"
+        $this->expectException(InvalidArgumentException::class);
         $locationService->moveSubtree($locationToMove, $newParentLocation);
     }
 
     /**
      * Test for the moveSubtree() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
+     * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
      */
-    public function testMoveSubtreeHidden()
+    public function testMoveSubtreeHidden(): void
     {
         $repository = $this->getRepository();
 
@@ -2971,9 +2972,8 @@ class LocationServiceTest extends BaseTest
      * Test for the moveSubtree() method.
      *
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testMoveSubtreeThrowsInvalidArgumentException()
+    public function testMoveSubtreeThrowsInvalidArgumentException(): void
     {
         $repository = $this->getRepository();
         $mediaLocationId = $this->generateId('location', 43);
@@ -2996,6 +2996,7 @@ class LocationServiceTest extends BaseTest
         $newParentLocation = $locationService->loadLocation($multimediaLocationId);
 
         // Throws an exception because new parent location is placed below location to move
+        $this->expectException(InvalidArgumentException::class);
         $locationService->moveSubtree(
             $locationToMove,
             $newParentLocation
