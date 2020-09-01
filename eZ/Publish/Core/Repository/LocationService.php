@@ -663,19 +663,19 @@ class LocationService implements LocationServiceInterface
 
         if ($newParentLocation->id === $location->parentLocationId) {
             throw new InvalidArgumentException(
-                '$newParentLocation', 'new parent location is the same as current'
+                '$newParentLocation', 'new parent Location is the same as the current one'
             );
         }
         if (strpos($newParentLocation->pathString, $location->pathString) === 0) {
             throw new InvalidArgumentException(
                 '$newParentLocation',
-                'new parent location is in a subtree of the given $location'
+                'new parent Location is in a subtree of the given $location'
             );
         }
         if (!$newParentLocation->getContent()->getContentType()->isContainer) {
             throw new InvalidArgumentException(
                 '$newParentLocation',
-                'Cannot move location to a parent that is not a container'
+                'Cannot move Location to a parent that is not a container'
             );
         }
 
