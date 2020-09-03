@@ -22,7 +22,7 @@ class CompoundMatcherNormalizer extends AbstractPropertyWhitelistNormalizer
         return $data;
     }
 
-    protected function getAllowedProperties(): array
+    protected function getAllowedProperties()
     {
         return ['subMatchers'];
     }
