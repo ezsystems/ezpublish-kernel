@@ -20,6 +20,14 @@ trait SerializerTrait
         return new Serializer(
             [
                 new CompoundMatcherNormalizer(),
+                new HostElementNormalizer(),
+                new MapNormalizer(),
+                new URITextNormalizer(),
+                new HostTextNormalizer(),
+                new RegexURINormalizer(),
+                new RegexHostNormalizer(),
+                new RegexNormalizer(),
+                new URIElementNormalizer(),
                 new SimplifiedRequestNormalizer(),
                 new PropertyNormalizer(),
             ],
