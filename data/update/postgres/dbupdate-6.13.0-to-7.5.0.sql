@@ -4,7 +4,7 @@ UPDATE ezsite_data SET value='7.5.0' WHERE name='ezpublish-version';
 -- * Only covers database schema changes in eZ Platform, for other bundles you use (enterprise or otherwise), see doc!
 
 
--- 7.1.0/6.13.0 - 7.2.0
+-- 6.13.0/7.1.0 - 7.2.0
 
 --
 -- EZP-29146: As a developer, I want a API to manage bookmarks
