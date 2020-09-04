@@ -1,7 +1,7 @@
 UPDATE ezsite_data SET value='7.5.0' WHERE name='ezpublish-version';
 
 -- IMPORTANT:
--- * Only covers database schema changes in eZ Platform, for other bundles you use (enterprise or otherwise), see doc!
+-- * This only covers eZ Platform kernel, see doc for all steps (incl. database schema) needed when updating: https://doc.ezplatform.com/en/2.5/updating/updating_ez_platform/
 
 
 -- 6.13.0/7.1.0 - 7.2.0
