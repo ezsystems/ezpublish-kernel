@@ -42,7 +42,7 @@ class FloatConverter implements Converter
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
         $storageFieldValue->dataFloat = $value->data;
-        $storageFieldValue->sortKeyInt = $value->sortKey;
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -54,7 +54,7 @@ class FloatConverter implements Converter
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
         $fieldValue->data = $value->dataFloat;
-        $fieldValue->sortKey = $value->sortKeyInt;
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -112,7 +112,7 @@ class FloatConverter implements Converter
      */
     public function getIndexColumn()
     {
-        return 'sort_key_int';
+        return 'sort_key_string';
     }
 
     /**

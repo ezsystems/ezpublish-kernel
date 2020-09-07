@@ -219,10 +219,12 @@ class Type extends FieldType
 
     /**
      * {@inheritdoc}
+     *
+     * @param \eZ\Publish\Core\FieldType\Float\Value $value
      */
     protected function getSortInfo(BaseValue $value)
     {
-        return false;
+        return $value->value;
     }
 
     /**
@@ -255,5 +257,10 @@ class Type extends FieldType
         }
 
         return $value->value;
+    }
+
+    public function isSearchable(): bool
+    {
+        return true;
     }
 }

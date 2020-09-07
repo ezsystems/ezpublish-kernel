@@ -351,10 +351,8 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
         return 25.59;
     }
 
-    protected function getFullTextIndexedFieldData()
+    public function checkFullTextSupport(): bool
     {
-        return [
-            ['25.519', '25.59'],
-        ];
+        return false;
     }
 }
