@@ -18,6 +18,8 @@ use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\SPI\FieldType\FieldType;
+use eZ\Publish\SPI\FieldType\Value;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -1742,7 +1744,7 @@ class ContentService implements ContentServiceInterface
         $this->internalUpdateContent($versionInfo, $updateStruct);
     }
 
-    protected function isHashEqual($fieldType, $newValue, $fieldValue): bool
+    protected function isHashEqual(FieldType $fieldType, Value $newValue, $fieldValue): bool
     {
         $newHash = $fieldType->toHash($newValue);
         $currentHash = $fieldType->toHash($fieldValue);
