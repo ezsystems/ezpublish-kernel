@@ -1744,16 +1744,16 @@ class ContentService implements ContentServiceInterface
         $this->internalUpdateContent($versionInfo, $updateStruct);
     }
 
-    protected function isHashEqual(FieldType $fieldType, Value $newValue, $fieldValue): bool
+    protected function isHashEqual(FieldType $fieldType, Value $newValue, Value $fieldValue): bool
     {
         $newHash = $fieldType->toHash($newValue);
         $currentHash = $fieldType->toHash($fieldValue);
-        if ($newHash === $currentHash) {
-            return true;
-        } elseif ($fieldType instanceof \eZ\Publish\Core\FieldType\Image\Type) {
+        if ($fieldType instanceof \eZ\Publish\Core\FieldType\Image\Type) {
             $imageHashDiff = array_diff($newHash, $currentHash);
 
             return count($imageHashDiff) === 1 && !empty($imageHashDiff['imageId']);
+        } elseif ($newHash === $currentHash) {
+            return true;
         }
 
         return false;
