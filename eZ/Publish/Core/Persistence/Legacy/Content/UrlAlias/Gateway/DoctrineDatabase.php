@@ -482,6 +482,10 @@ final class DoctrineDatabase extends Gateway
 
     public function historizeId(int $id, int $link): void
     {
+        if ($id === $link) {
+            return;
+        }
+
         $query = $this->connection->createQueryBuilder();
         $query->select(
             'parent',
