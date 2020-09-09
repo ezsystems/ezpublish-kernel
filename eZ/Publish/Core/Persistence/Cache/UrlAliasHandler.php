@@ -258,7 +258,9 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationMoved($locationId, $oldParentId, $newParentId);
 
-        $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId]);
+        if ($oldParentId !== $newParentId) {
+            $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId]);
+        }
 
         return $return;
     }
