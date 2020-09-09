@@ -505,6 +505,10 @@ class DoctrineDatabase extends Gateway
      */
     public function historizeId($id, $link)
     {
+        if ($id === $link) {
+            return;
+        }
+
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(

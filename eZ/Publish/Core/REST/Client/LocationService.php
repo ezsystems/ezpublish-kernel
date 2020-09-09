@@ -355,15 +355,7 @@ class LocationService implements APILocationService, Sessionable
     }
 
     /**
-     * Moves the subtree to $newParentLocation.
-     *
-     * If a user has the permission to move the location to a target location
-     * he can do it regardless of an existing descendant on which the user has no permission.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
+     * {@inheritdoc}
      */
     public function moveSubtree(Location $location, Location $newParentLocation)
     {
