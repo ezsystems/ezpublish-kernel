@@ -9,6 +9,7 @@ namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
+use eZ\Publish\SPI\FieldType\Comparable;
 
 /**
  * Value for Image field type.
@@ -19,7 +20,7 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
  * @todo Mime type?
  * @todo Dimensions?
  */
-class Value extends BaseValue
+class Value extends BaseValue implements Comparable
 {
     /**
      * Image id.
@@ -176,5 +177,20 @@ class Value extends BaseValue
         }
 
         throw new PropertyNotFoundException($propertyName, get_class($this));
+    }
+
+    /**
+     * @param array|null $newHash
+     * @param array|null $currentHash
+     */
+    public function isEquals($newHash, $currentHash): bool
+    {
+        if ($currentHash === null || $newHash === null) {
+            return $currentHash === $newHash;
+        }
+
+        $imageHashDiff = array_diff($newHash, $currentHash);
+
+        return count($imageHashDiff) === 1 && !empty($imageHashDiff['imageId']);
     }
 }

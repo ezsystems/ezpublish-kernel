@@ -1748,10 +1748,8 @@ class ContentService implements ContentServiceInterface
     {
         $newHash = $fieldType->toHash($newValue);
         $currentHash = $fieldType->toHash($fieldValue);
-        if ($fieldType instanceof \eZ\Publish\Core\FieldType\Image\Type) {
-            $imageHashDiff = array_diff($newHash, $currentHash);
-
-            return count($imageHashDiff) === 1 && !empty($imageHashDiff['imageId']);
+        if ($newValue instanceof \eZ\Publish\SPI\FieldType\Comparable) {
+            return $newValue->isEquals($newHash, $currentHash);
         } elseif ($newHash === $currentHash) {
             return true;
         }
