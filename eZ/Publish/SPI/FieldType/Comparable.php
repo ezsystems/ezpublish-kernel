@@ -8,5 +8,7 @@ namespace eZ\Publish\SPI\FieldType;
 
 interface Comparable
 {
-    public function isEquals($newHash, $currentHash): bool;
+    public function isEquals(Value $value): bool;
+
+    public function toHash(Value $value);
 }

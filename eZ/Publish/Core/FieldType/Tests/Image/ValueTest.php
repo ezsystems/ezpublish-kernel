@@ -23,20 +23,18 @@ class ValueTest extends TestCase
     /**
      * @dataProvider provideInputForIsEqual
      */
-    public function testIsEquals($inputValue, $correctValue, $incorrectValue)
+    public function testIsEquals(ImageValue $imageValue, ImageValue $correctValue, ImageValue $incorrectValue)
     {
-        $imageValue = new ImageValue();
+        $this->assertTrue($imageValue->isEquals($correctValue));
 
-        $this->assertTrue($imageValue->isEquals($inputValue, $correctValue));
-
-        $this->assertFalse($imageValue->isEquals($inputValue, $incorrectValue));
+        $this->assertFalse($imageValue->isEquals($incorrectValue));
     }
 
     public function provideInputForIsEqual()
     {
         return [
             [
-                [
+                new ImageValue([
                     'id' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
@@ -45,8 +43,8 @@ class ValueTest extends TestCase
                     'uri' => 'http://' . $this->getImageInputPath(),
                     'width' => 123,
                     'height' => 456,
-                ],
-                [
+                ]),
+                new ImageValue([
                     'id' => $this->getImageInputPath(),
                     'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
@@ -57,8 +55,8 @@ class ValueTest extends TestCase
                     'inputUri' => null,
                     'width' => 123,
                     'height' => 456,
-                ],
-                [
+                ]),
+                new ImageValue([
                     'id' => $this->getImageInputPath(),
                     'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
@@ -69,7 +67,7 @@ class ValueTest extends TestCase
                     'inputUri' => null,
                     'width' => 124,
                     'height' => 456,
-                ],
+                ]),
             ],
         ];
     }
