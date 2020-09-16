@@ -533,7 +533,7 @@ class LocationServiceTest extends BaseTest
     {
         $this->assertEquals(1, count($locations));
         foreach ($locations as $loadedLocation) {
-            $this->assertInstanceOf(Location::class, $loadedLocation);
+            self::assertInstanceOf(Location::class, $loadedLocation);
         }
 
         usort(
