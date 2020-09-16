@@ -465,7 +465,7 @@ class UrlAliasRouterTest extends TestCase
         $pathInfo = '/foo/bar';
         $request = $this->getRequestByPathInfo($pathInfo);
         $this->urlAliasService
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('lookup')
             ->with($pathInfo)
             ->will($this->throwException(new NotFoundException('URLAlias', $pathInfo)));
