@@ -4,8 +4,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-declare(strict_types=1);
-
 namespace eZ\Publish\Core\MVC\Symfony\Component\Tests\Serializer;
 
 use eZ\Publish\Core\MVC\Symfony\Component\Serializer\HostTextNormalizer;
@@ -16,7 +14,7 @@ use eZ\Publish\Core\Search\Tests\TestCase;
 
 final class HostTextNormalizerTest extends TestCase
 {
-    public function testNormalize(): void
+    public function testNormalize()
     {
         $normalizer = new HostTextNormalizer();
         $normalizer->setSerializer(new SerializerStub());
@@ -37,7 +35,7 @@ final class HostTextNormalizerTest extends TestCase
         );
     }
 
-    public function testSupportsNormalization(): void
+    public function testSupportsNormalization()
     {
         $normalizer = new HostTextNormalizer();
 

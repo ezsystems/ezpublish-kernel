@@ -802,28 +802,22 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationsContent(array $locations)
     {
-        $repository = $this->getRepository();
-        $locationService = $repository->getLocationService();
-
         $this->assertEquals(1, count($locations));
         foreach ($locations as $loadedLocation) {
-            $this->assertInstanceOf(
-                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
-                $loadedLocation
-            );
+            self::assertInstanceOf(Location::class, $loadedLocation);
         }
 
         usort(
             $locations,
-            function ($a, $b) {
-                strcmp($a->id, $b->id);
+            static function ($a, $b) {
+                return strcmp($a->id, $b->id);
             }
         );
 
         $this->assertEquals(
             [$this->generateId('location', 5)],
             array_map(
-                function (Location $location) {
+                static function (Location $location) {
                     return $location->id;
                 },
                 $locations

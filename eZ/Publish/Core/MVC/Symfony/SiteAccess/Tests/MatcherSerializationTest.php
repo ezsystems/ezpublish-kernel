@@ -138,7 +138,7 @@ class MatcherSerializationTest extends TestCase
         ];
     }
 
-    private function getMapPortMatcherTestCase(): array
+    private function getMapPortMatcherTestCase()
     {
         $matcherBeforeSerialization = new Matcher\Map\Port(['map' => ['key' => 'value']]);
         $matcherBeforeSerialization->setMapKey('map');
@@ -149,7 +149,7 @@ class MatcherSerializationTest extends TestCase
         return [$matcherBeforeSerialization, $matcherAfterDeserialization];
     }
 
-    private function getMapHostMatcherTestCase(): array
+    private function getMapHostMatcherTestCase()
     {
         $matcherBeforeSerialization = new Matcher\Map\Host(['map' => ['key' => 'value']]);
         $matcherBeforeSerialization->setMapKey('map');
@@ -160,7 +160,7 @@ class MatcherSerializationTest extends TestCase
         return [$matcherBeforeSerialization, $matcherAfterDeserialization];
     }
 
-    private function getMapURIMatcherTestCase(): array
+    private function getMapURIMatcherTestCase()
     {
         $matcherBeforeSerialization = new Matcher\Map\URI(['map' => ['key' => 'value']]);
         $matcherBeforeSerialization->setMapKey('map');
