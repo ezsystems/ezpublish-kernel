@@ -6,6 +6,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Routing;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter as BaseUrlAliasRouter;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,6 +57,12 @@ class UrlAliasRouter extends BaseUrlAliasRouter
             return parent::getUrlAlias($pathinfo);
         }
 
-        return $this->urlAliasService->lookup($pathPrefix . $pathinfo);
+        try {
+            return $this->urlAliasService->lookup($pathPrefix . $pathinfo);
+        } catch (NotFoundException $e) {
+            // It may occur that requested URL is placed at site root, therefore we won't need $pathPrefix prepend.
+            // As of now there is no other way to check whether URLAlias is placed in site root.
+            return $this->urlAliasService->lookup($pathinfo);
+        }
     }
 }
