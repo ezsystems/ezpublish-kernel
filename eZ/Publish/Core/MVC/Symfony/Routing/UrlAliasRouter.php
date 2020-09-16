@@ -141,7 +141,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                             // Specify not to prepend siteaccess while redirecting when applicable since it would be already present (see UrlAliasGenerator::doGenerate())
                             'prependSiteaccessOnRedirect' => false,
                         ];
-                    } elseif ($this->needsCaseRedirect($urlAlias, $requestedPath)) {
+                    } elseif ($this->needsCaseRedirect($urlAlias, $requestedPath, $pathPrefix)) {
                         $params += [
                             'semanticPathinfo' => $this->removePathPrefix($urlAlias->path, $pathPrefix),
                             'needsRedirect' => true,
@@ -165,7 +165,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                             'semanticPathinfo' => '/' . trim($urlAlias->destination, '/'),
                             'needsRedirect' => true,
                         ];
-                    } elseif ($this->needsCaseRedirect($urlAlias, $requestedPath)) {
+                    } elseif ($this->needsCaseRedirect($urlAlias, $requestedPath, $pathPrefix)) {
                         // Handle case-correction redirect
                         $params += [
                             'semanticPathinfo' => $this->removePathPrefix($urlAlias->path, $pathPrefix),
@@ -182,7 +182,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                 case URLAlias::VIRTUAL:
                     // Handle case-correction redirect
-                    if ($this->needsCaseRedirect($urlAlias, $requestedPath)) {
+                    if ($this->needsCaseRedirect($urlAlias, $requestedPath, $pathPrefix)) {
                         $params += [
                             'semanticPathinfo' => $this->removePathPrefix($urlAlias->path, $pathPrefix),
                             'needsRedirect' => true,
@@ -235,14 +235,20 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      *
      * @return bool
      */
-    protected function needsCaseRedirect(URLAlias $loadedUrlAlias, $requestedPath)
+    protected function needsCaseRedirect(URLAlias $loadedUrlAlias, $requestedPath, $pathPrefix)
     {
         // If requested path is excluded from tree root jail, compare it to loaded UrlAlias directly.
         if ($this->generator->isUriPrefixExcluded($requestedPath)) {
             return strcmp($loadedUrlAlias->path, $requestedPath) !== 0;
         }
 
-        return false;
+        // Compare loaded UrlAlias with requested path, prefixed with configured path prefix.
+        return
+            strcmp(
+                $loadedUrlAlias->path,
+                $pathPrefix . ($pathPrefix === '/' ? trim($requestedPath, '/') : rtrim($requestedPath, '/'))
+            ) !== 0
+        ;
     }
 
     /**
