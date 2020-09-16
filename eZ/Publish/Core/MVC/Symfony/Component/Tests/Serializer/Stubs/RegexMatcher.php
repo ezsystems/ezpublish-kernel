@@ -7,22 +7,11 @@
 namespace eZ\Publish\Core\MVC\Symfony\Component\Tests\Serializer\Stubs;
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex as BaseRegex;
 
-final class CompoundStub extends Compound
+final class RegexMatcher extends BaseRegex
 {
-    public function __construct(array $subMatchers)
-    {
-        parent::__construct([]);
-        $this->subMatchers = $subMatchers;
-    }
-
-    public function match()
-    {
-        throw new NotImplementedException(__METHOD__);
-    }
-
-    public function reverseMatch($siteAccessName)
+    public function getName()
     {
         throw new NotImplementedException(__METHOD__);
     }
