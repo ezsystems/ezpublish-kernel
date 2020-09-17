@@ -263,15 +263,22 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     /**
      * Returns the UrlAlias object to use, starting from the request.
      *
-     * @param $pathinfo
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
-     *
-     * @return URLAlias
      */
-    protected function getUrlAlias($pathinfo)
+    protected function getUrlAlias(string $pathinfo, bool $isPlacedOnSiteRoot = false): URLAlias
     {
-        return $this->urlAliasService->lookup($pathinfo);
+        $pathPrefix = $this->generator->getPathPrefixByRootLocationId($this->rootLocationId);
+
+        if (
+            $this->rootLocationId === null ||
+            $this->generator->isUriPrefixExcluded($pathinfo) ||
+            $pathPrefix === '/' ||
+            $isPlacedOnSiteRoot
+        ) {
+            return $this->urlAliasService->lookup($pathinfo);
+        }
+
+        return $this->urlAliasService->lookup($pathPrefix . $pathinfo);
     }
 
     /**

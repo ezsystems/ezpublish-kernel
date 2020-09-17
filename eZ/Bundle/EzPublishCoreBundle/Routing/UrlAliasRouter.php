@@ -34,30 +34,4 @@ class UrlAliasRouter extends BaseUrlAliasRouter
 
         return parent::matchRequest($request);
     }
-
-    /**
-     * Will return the right UrlAlias in regards to configured root location.
-     *
-     * @param string $pathinfo
-     * @param bool $isPlacedOnSiteRoot
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
-     */
-    protected function getUrlAlias($pathinfo, $isPlacedOnSiteRoot = false)
-    {
-        $pathPrefix = $this->generator->getPathPrefixByRootLocationId($this->rootLocationId);
-
-        if (
-            $this->rootLocationId === null ||
-            $this->generator->isUriPrefixExcluded($pathinfo) ||
-            $pathPrefix === '/' ||
-            $isPlacedOnSiteRoot
-        ) {
-            return parent::getUrlAlias($pathinfo);
-        }
-
-        return $this->urlAliasService->lookup($pathPrefix . $pathinfo);
-    }
 }

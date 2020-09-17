@@ -6,6 +6,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Routing;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\ContentService;
@@ -117,6 +118,68 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
             ->expects($this->once())
             ->method('lookup')
             ->with($prefix . $path)
+            ->will($this->returnValue($urlAlias));
+
+        $this->urlALiasGenerator
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->will($this->returnValue(new Location(['contentInfo' => new ContentInfo(['id' => 456])])));
+
+        $expected = [
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            '_controller' => UrlAliasRouter::VIEW_ACTION,
+            'locationId' => $locationId,
+            'contentId' => 456,
+            'viewType' => ViewManager::VIEW_TYPE_FULL,
+            'layout' => true,
+        ];
+        $request = $this->getRequestByPathInfo($path);
+        $this->assertEquals($expected, $this->router->matchRequest($request));
+    }
+
+    public function testMatchRequestWithRootLocationAndSiteRoot()
+    {
+        $rootLocationId = 123;
+        $this->resetConfigResolver();
+        $this->configResolver
+            ->expects($this->any())
+            ->method('getParameter')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['url_alias_router', null, null, true],
+                    ]
+                )
+            );
+        $this->router->setRootLocationId($rootLocationId);
+
+        $prefix = '/root/prefix';
+        $this->urlALiasGenerator
+            ->expects($this->exactly(3))
+            ->method('getPathPrefixByRootLocationId')
+            ->with($rootLocationId)
+            ->will($this->returnValue($prefix));
+
+        $locationId = 789;
+        $path = '/foo/bar';
+        $urlAlias = new URLAlias(
+            [
+                'destination' => $locationId,
+                'path' => $path,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false,
+            ]
+        );
+        $this->urlAliasService
+            ->expects($this->at(0))
+            ->method('lookup')
+            ->with($prefix . $path)
+            ->willThrowException($this->createMock(NotFoundException::class));
+
+        $this->urlAliasService
+            ->expects($this->at(1))
+            ->method('lookup')
+            ->with($path)
             ->will($this->returnValue($urlAlias));
 
         $this->urlALiasGenerator
