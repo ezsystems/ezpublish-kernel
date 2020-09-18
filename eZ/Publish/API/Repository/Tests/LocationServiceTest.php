@@ -131,6 +131,50 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createLocation() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testHideContent
+     */
+    public function testCreateLocationChecksContentVisibility()
+    {
+        $repository = $this->getRepository();
+
+        $contentId = $this->generateId('object', 41);
+        $parentLocationId = $this->generateId('location', 5);
+        /* BEGIN: Use Case */
+        // $contentId is the ID of an existing content object
+        // $parentLocationId is the ID of an existing location
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo($contentId);
+        $contentService->hideContent($contentInfo);
+
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
+        $locationCreate->priority = 23;
+        $locationCreate->hidden = false;
+        $locationCreate->remoteId = 'sindelfingen';
+        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        $location = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            $location
+        );
+
+        $this->assertTrue($location->invisible);
+    }
+
+    /**
      * Test for the createLocation() method with utilizing default ContentType sorting options.
      *
      * @covers \eZ\Publish\API\Repository\LocationService::createLocation
