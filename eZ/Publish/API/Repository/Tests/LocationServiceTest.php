@@ -133,11 +133,11 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the createLocation() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testHideContent
      */
-    public function testCreateLocationChecksContentVisibility()
+    public function testCreateLocationChecksContentVisibility(): void
     {
         $repository = $this->getRepository();
 
@@ -166,12 +166,9 @@ class LocationServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
-            $location
-        );
+        self::assertInstanceOf(Location::class, $location);
 
-        $this->assertTrue($location->invisible);
+        self::assertTrue($location->invisible);
     }
 
     /**
