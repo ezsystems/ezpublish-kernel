@@ -2,17 +2,18 @@ YOUR PR WILL ONLY BE HANDLED IF YOU EDIT THIS DESCRIPTION AND FOLLOW THE CHECKLI
 
 | Question                                  | Answer
 | ---------------------------------------- | ------------------
-| **JIRA issue**                          | [EZP-XXXXX](https://jira.ez.no/browse/EZP-XXXXX)
+| **JIRA issue**                          | EZP-XXXXX
 | **Type**                                   | feature/bug/improvement
-| **Target eZ Platform version** | `v3.x` - please update accordingly
+| **Target eZ Platform version** | `v3.x` - please update `x` accordingly
 | **BC breaks**                          | yes/no
-| **Tests pass**                          | yes/no
 | **Doc needed**                       | yes/no
 
 <!-- Replace this comment with Pull Request description -->
 
 #### Checklist:
-- [ ] PR description is updated.
-- [ ] Tests are implemented.
-- [ ] Added code follows Coding Standards (use `$ composer fix-cs`).
-- [ ] PR is ready for a review.
+- [ ] Provided PR description.
+- [ ] Tested the solution manually.
+- [ ] Provided automated test coverage.
+- [ ] Checked that target branch is set correctly (master for features, the oldest supported for bugs).
+- [ ] Ran PHP CS Fixer for new PHP code (use `$ composer fix-cs`).
+- [ ] Asked for a review (ping `@ezsystems/php-dev-team`).
