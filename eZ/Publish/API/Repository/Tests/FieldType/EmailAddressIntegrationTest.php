@@ -353,7 +353,7 @@ class EmailAddressIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getValidSearchValueTwo()
     {
-        return 'wyoming.knott@ez.no';
+        return 'wyoming.knott@o2.ru';
     }
 
     protected function getSearchTargetValueTwo()
@@ -365,7 +365,7 @@ class EmailAddressIntegrationTest extends SearchBaseIntegrationTest
     protected function getFullTextIndexedFieldData()
     {
         return [
-            ['holmes4@ez.no', 'wyoming.knott@ez.no'],
+            ['holmes4@ez.no', 'wyoming.knott@o2.ru'],
         ];
     }
 }
