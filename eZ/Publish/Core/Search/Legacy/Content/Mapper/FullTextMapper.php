@@ -101,6 +101,8 @@ class FullTextMapper
                     'isMainAndAlwaysAvailable' => (
                         $field->languageCode === $contentInfo->mainLanguageCode && $contentInfo->alwaysAvailable
                     ),
+                    'transformationRules' => $this->getTransformationRules($fieldDefinition),
+                    'splitFlag' => $this->getSplitFlag($fieldDefinition),
                 ]
             );
         }
@@ -133,5 +135,32 @@ class FullTextMapper
 
         // some full text fields are stored as an array of strings
         return !is_array($fullTextFieldValue) ? $fullTextFieldValue : implode(' ', $fullTextFieldValue);
+    }
+
+    /**
+     * Get transformation rules based on a given field type.
+     */
+    private function getTransformationRules(Type\FieldDefinition $fieldDefinition): array
+    {
+        $rules = [
+            'ezemail' => [
+                'space_normalize',
+                'latin1_lowercase',
+            ],
+        ];
+
+        return $rules[$fieldDefinition->fieldType] ?? [];
+    }
+
+    /**
+     * Get transformation rules based on a given field type.
+     */
+    private function getSplitFlag(Type\FieldDefinition $fieldDefinition): bool
+    {
+        $split = [
+            'ezemail' => false,
+        ];
+
+        return $split[$fieldDefinition->fieldType] ?? true;
     }
 }

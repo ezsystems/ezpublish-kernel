@@ -196,6 +196,9 @@ class FullText extends CriterionHandler
             $wordExpressions[] = $this->getWordExpression($subQuery, $token);
         }
 
+        // Search for provided string itself as well
+        $wordExpressions[] = $this->getWordExpression($subQuery, $string);
+
         $whereCondition = $subQuery->expr->lOr($wordExpressions);
 
         // If stop word threshold is below 100%, make it part of $whereCondition

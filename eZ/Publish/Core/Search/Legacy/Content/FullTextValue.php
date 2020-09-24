@@ -50,4 +50,18 @@ class FullTextValue extends ValueObject
      * @var bool
      */
     public $isMainAndAlwaysAvailable;
+
+    /**
+     * Array of rules to be used when transforming the value.
+     *
+     * @var array
+     */
+    public $transformationRules;
+
+    /**
+     * Flag whether the value should be split by non-words.
+     *
+     * @var bool
+     */
+    public $splitFlag;
 }
