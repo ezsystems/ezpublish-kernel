@@ -153,7 +153,7 @@ class FullTextMapper
     }
 
     /**
-     * Get transformation rules based on a given field type.
+     * Decide whether transformed string should be later split by non-words.
      */
     private function getSplitFlag(Type\FieldDefinition $fieldDefinition): bool
     {
