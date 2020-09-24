@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\SPI\FieldType\Comparable;
 use eZ\Publish\SPI\FieldType\FieldType;
 use eZ\Publish\SPI\FieldType\Value;
 use eZ\Publish\SPI\Persistence\Handler;
@@ -1708,6 +1709,7 @@ class ContentService implements ContentServiceInterface
             );
 
             $value = $field->value;
+
             if ($fieldDefinition->isRequired && $fieldType->isEmptyValue($value)) {
                 if (!$fieldType->isEmptyValue($fieldDefinition->defaultValue)) {
                     $value = $fieldDefinition->defaultValue;
@@ -1721,10 +1723,10 @@ class ContentService implements ContentServiceInterface
                 );
                 continue;
             }
-
             if ($newValue !== null
                 && $field->value !== null
-                && $this->isHashEqual($fieldType, $newValue, $field->value)) {
+                && $this->fieldValuesAreEqual($fieldType, $newValue, $field->value)
+            ) {
                 continue;
             }
 
@@ -1744,14 +1746,23 @@ class ContentService implements ContentServiceInterface
         $this->internalUpdateContent($versionInfo, $updateStruct);
     }
 
-    protected function isHashEqual(FieldType $fieldType, Value $newValue, Value $fieldValue): bool
+    protected function fieldValuesAreEqual(FieldType $fieldType, Value $value1, Value $value2): bool
     {
-        $newHash = $fieldType->toHash($newValue);
-        $currentHash = $fieldType->toHash($fieldValue);
-        if ($newValue instanceof \eZ\Publish\SPI\FieldType\Comparable) {
-            return $newValue->isEquals($newHash, $currentHash);
-        } elseif ($newHash === $currentHash) {
-            return true;
+        if ($fieldType instanceof Comparable) {
+            $fieldType->valuesEqual($value1, $value2);
+        } else {
+            @trigger_error(
+                \sprintf(
+                    'In eZ Platform 2.5 and 3.x %s should implement %s. ' .
+                    'Since the 4.0 major release FieldType\Comparable contract will be a part of %s',
+                    get_class($fieldType),
+                    Comparable::class,
+                    FieldType::class
+                ),
+                E_USER_DEPRECATED
+            );
+
+            return $fieldType->toHash($value1) === $fieldType->toHash($value2);
         }
 
         return false;

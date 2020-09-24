@@ -9,8 +9,6 @@ namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
-use eZ\Publish\SPI\FieldType\Comparable;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 /**
  * Value for Image field type.
@@ -21,7 +19,7 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
  * @todo Mime type?
  * @todo Dimensions?
  */
-class Value extends BaseValue implements Comparable
+class Value extends BaseValue
 {
     /**
      * Image id.
@@ -178,28 +176,5 @@ class Value extends BaseValue implements Comparable
         }
 
         throw new PropertyNotFoundException($propertyName, get_class($this));
-    }
-
-    public function isEquals(SPIValue $value): bool
-    {
-        return $this->toHash($value) === $this->toHash($this);
-    }
-
-    /**
-     * @return array
-     */
-    public function toHash(SPIValue $value)
-    {
-        return [
-            'id' => $value->id,
-            'path' => $value->inputUri ?: $value->id,
-            'alternativeText' => $value->alternativeText,
-            'fileName' => $value->fileName,
-            'fileSize' => $value->fileSize,
-            'uri' => $value->uri,
-            'inputUri' => $value->inputUri,
-            'width' => $value->width,
-            'height' => $value->height,
-        ];
     }
 }

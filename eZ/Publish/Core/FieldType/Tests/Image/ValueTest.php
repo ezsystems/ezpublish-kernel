@@ -20,16 +20,6 @@ class ValueTest extends TestCase
         return __DIR__ . '/squirrel-developers.jpg';
     }
 
-    /**
-     * @dataProvider provideInputForIsEqual
-     */
-    public function testIsEquals(ImageValue $imageValue, ImageValue $correctValue, ImageValue $incorrectValue)
-    {
-        $this->assertTrue($imageValue->isEquals($correctValue));
-
-        $this->assertFalse($imageValue->isEquals($incorrectValue));
-    }
-
     public function provideInputForIsEqual()
     {
         return [
