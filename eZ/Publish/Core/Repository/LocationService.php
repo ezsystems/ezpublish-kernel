@@ -654,22 +654,30 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * Moves the subtree to $newParentLocation.
-     *
-     * If a user has the permission to move the location to a target location
-     * he can do it regardless of an existing descendant on which the user has no permission.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user does not have read access to the whole source subtree
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new parent is in a subtree of the location
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
+     * {@inheritdoc}
      */
     public function moveSubtree(APILocation $location, APILocation $newParentLocation)
     {
         $location = $this->loadLocation($location->id);
         $newParentLocation = $this->loadLocation($newParentLocation->id);
+
+        if ($newParentLocation->id === $location->parentLocationId) {
+            throw new InvalidArgumentException(
+                '$newParentLocation', 'new parent Location is the same as the current one'
+            );
+        }
+        if (strpos($newParentLocation->pathString, $location->pathString) === 0) {
+            throw new InvalidArgumentException(
+                '$newParentLocation',
+                'new parent Location is in a subtree of the given $location'
+            );
+        }
+        if (!$newParentLocation->getContent()->getContentType()->isContainer) {
+            throw new InvalidArgumentException(
+                '$newParentLocation',
+                'Cannot move Location to a parent that is not a container'
+            );
+        }
 
         // check create permission on target location
         if (!$this->repository->canUser('content', 'create', $location->getContentInfo(), $newParentLocation)) {
@@ -699,13 +707,6 @@ class LocationService implements LocationServiceInterface
             if ($result->totalCount > 0) {
                 throw new UnauthorizedException('content', 'read');
             }
-        }
-
-        if (strpos($newParentLocation->pathString, $location->pathString) === 0) {
-            throw new InvalidArgumentException(
-                '$newParentLocation',
-                'new parent location is in a subtree of the given $location'
-            );
         }
 
         $this->repository->beginTransaction();

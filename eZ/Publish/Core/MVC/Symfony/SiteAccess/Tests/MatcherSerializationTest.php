@@ -86,6 +86,9 @@ class MatcherSerializationTest extends TestCase
         $expectedLogicalOr = new Matcher\Compound\LogicalOr([]);
         $expectedLogicalOr->setSubMatchers($subMatchers);
 
+        $expectedMapURI = new Matcher\Map\URI([]);
+        $expectedMapURI->setMapKey('site');
+
         return [
             'URIText' => [
                 new Matcher\URIText([
@@ -121,21 +124,9 @@ class MatcherSerializationTest extends TestCase
                     'elementNumber' => 2,
                 ]),
             ],
-            'MapURI' => [
-                new Matcher\Map\URI([
-                    'map' => ['key' => 'value'],
-                ]),
-            ],
-            'MapPort' => [
-                new Matcher\Map\Port([
-                    'map' => ['key' => 'value'],
-                ]),
-            ],
-            'MapHost' => [
-                new Matcher\Map\Host([
-                    'map' => ['key' => 'value'],
-                ]),
-            ],
+            'MapURI' => $this->getMapURIMatcherTestCase(),
+            'MapPort' => $this->getMapPortMatcherTestCase(),
+            'MapHost' => $this->getMapHostMatcherTestCase(),
             'CompoundAnd' => [
                 $logicalAnd,
                 $expectedLogicalAnd,
@@ -145,5 +136,38 @@ class MatcherSerializationTest extends TestCase
                 $expectedLogicalOr,
             ],
         ];
+    }
+
+    private function getMapPortMatcherTestCase()
+    {
+        $matcherBeforeSerialization = new Matcher\Map\Port(['map' => ['key' => 'value']]);
+        $matcherBeforeSerialization->setMapKey('map');
+
+        $matcherAfterDeserialization = new Matcher\Map\Port([]);
+        $matcherAfterDeserialization->setMapKey('map');
+
+        return [$matcherBeforeSerialization, $matcherAfterDeserialization];
+    }
+
+    private function getMapHostMatcherTestCase()
+    {
+        $matcherBeforeSerialization = new Matcher\Map\Host(['map' => ['key' => 'value']]);
+        $matcherBeforeSerialization->setMapKey('map');
+
+        $matcherAfterDeserialization = new Matcher\Map\Host([]);
+        $matcherAfterDeserialization->setMapKey('map');
+
+        return [$matcherBeforeSerialization, $matcherAfterDeserialization];
+    }
+
+    private function getMapURIMatcherTestCase()
+    {
+        $matcherBeforeSerialization = new Matcher\Map\URI(['map' => ['key' => 'value']]);
+        $matcherBeforeSerialization->setMapKey('map');
+
+        $matcherAfterDeserialization = new Matcher\Map\URI([]);
+        $matcherAfterDeserialization->setMapKey('map');
+
+        return [$matcherBeforeSerialization, $matcherAfterDeserialization];
     }
 }

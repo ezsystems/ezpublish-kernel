@@ -79,7 +79,12 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             $alwaysAvailable
         );
 
-        $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId, 'urlAlias-notFound']);
+        $this->cache->invalidateTags([
+            'urlAlias-location-' . $locationId,
+            'urlAlias-location-path-' . $locationId,
+            'urlAlias-notFound',
+            'urlAlias-' . $urlAlias->id,
+        ]);
 
         return $urlAlias;
     }
@@ -253,7 +258,9 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationMoved($locationId, $oldParentId, $newParentId);
 
-        $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId]);
+        if ($oldParentId !== $newParentId) {
+            $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId]);
+        }
 
         return $return;
     }

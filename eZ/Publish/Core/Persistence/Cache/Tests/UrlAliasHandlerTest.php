@@ -29,7 +29,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
         // string $method, array $arguments, array? $tags, array? $key, mixed? $returnValue
         return [
             ['publishUrlAliasForLocation', [44, 2, 'name', 'eng-GB', true, false], ['urlAlias-location-44', 'urlAlias-location-path-44', 'urlAlias-notFound']],
-            ['createCustomUrlAlias', [44, '1/2/44', true, null, false], ['urlAlias-location-44', 'urlAlias-location-path-44', 'urlAlias-notFound']],
+            ['createCustomUrlAlias', [44, '1/2/44', true, null, false], ['urlAlias-location-44', 'urlAlias-location-path-44', 'urlAlias-notFound', 'urlAlias-5'], null, new UrlAlias(['id' => 5])],
             ['createGlobalUrlAlias', ['something', '1/2/44', true, null, false], ['urlAlias-notFound']],
             ['createGlobalUrlAlias', ['something', '1/2/44', true, 'eng-GB', false], ['urlAlias-notFound']],
             ['listGlobalURLAliases', ['eng-GB', 10, 50]],

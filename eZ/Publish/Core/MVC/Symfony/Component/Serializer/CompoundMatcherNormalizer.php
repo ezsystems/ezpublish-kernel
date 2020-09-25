@@ -7,10 +7,12 @@
 namespace eZ\Publish\Core\MVC\Symfony\Component\Serializer;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
-use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 
-class CompoundMatcherNormalizer extends PropertyNormalizer
+class CompoundMatcherNormalizer extends AbstractPropertyWhitelistNormalizer
 {
+    /**
+     * @see \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound::__sleep.
+     */
     public function normalize($object, $format = null, array $context = [])
     {
         $data = parent::normalize($object, $format, $context);
@@ -18,6 +20,11 @@ class CompoundMatcherNormalizer extends PropertyNormalizer
         $data['matchersMap'] = [];
 
         return $data;
+    }
+
+    protected function getAllowedProperties()
+    {
+        return ['subMatchers'];
     }
 
     public function supportsNormalization($data, $format = null)
