@@ -1749,7 +1749,7 @@ class ContentService implements ContentServiceInterface
     protected function fieldValuesAreEqual(FieldType $fieldType, Value $value1, Value $value2): bool
     {
         if ($fieldType instanceof Comparable) {
-            $fieldType->valuesEqual($value1, $value2);
+            return $fieldType->valuesEqual($value1, $value2);
         } else {
             @trigger_error(
                 \sprintf(
