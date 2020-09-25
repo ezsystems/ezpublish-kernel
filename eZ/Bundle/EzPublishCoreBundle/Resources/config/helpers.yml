@@ -59,6 +59,9 @@ services:
             $configResolver: '@ezpublish.config.resolver'
             $siteAccessService: '@ezpublish.siteaccess_service'
 
+    eZ\Publish\SPI\SiteAccess\ConfigProcessor:
+        alias: eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\ComplexConfigProcessor
+
     eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\IOConfigResolver:
         arguments:
             $complexConfigProcessor: '@eZ\Bundle\EzPublishCoreBundle\SiteAccess\Config\ComplexConfigProcessor'

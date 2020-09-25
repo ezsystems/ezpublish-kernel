@@ -12,8 +12,10 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSetti
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessService;
+use eZ\Publish\SPI\SiteAccess\ConfigProcessor;
+use function str_replace;
 
-final class ComplexConfigProcessor
+final class ComplexConfigProcessor implements ConfigProcessor
 {
     private const DEFAULT_NAMESPACE = 'ezsettings';
 
@@ -23,12 +25,18 @@ final class ComplexConfigProcessor
     /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessService */
     private $siteAccessService;
 
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParserInterface */
+    private $complexSettingParser;
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         SiteAccessService $siteAccessService
     ) {
         $this->configResolver = $configResolver;
         $this->siteAccessService = $siteAccessService;
+
+        // instantiate non-injectable DI configuration parser
+        $this->complexSettingParser = new ComplexSettingParser();
     }
 
     public function processComplexSetting(string $setting): string
@@ -39,31 +47,35 @@ final class ComplexConfigProcessor
             throw new ParameterNotFoundException($setting, null, [$siteAccessName]);
         }
 
-        $complexSettingParser = new ComplexSettingParser();
         $settingValue = $this->configResolver->getParameter($setting, null, $siteAccessName);
 
-        if (!$complexSettingParser->containsDynamicSettings($settingValue)) {
+        if (!$this->complexSettingParser->containsDynamicSettings($settingValue)) {
             return $settingValue;
         }
 
         // we kind of need to process this as well, don't we ?
-        if ($complexSettingParser->isDynamicSetting($settingValue)) {
-            $parts = $complexSettingParser->parseDynamicSetting($settingValue);
+        if ($this->complexSettingParser->isDynamicSetting($settingValue)) {
+            $parts = $this->complexSettingParser->parseDynamicSetting($settingValue);
 
             return $this->configResolver->getParameter($parts['param'], null, $siteAccessName);
         }
 
-        $value = $settingValue;
-        foreach ($complexSettingParser->parseComplexSetting($settingValue) as $dynamicSetting) {
-            $parts = $complexSettingParser->parseDynamicSetting($dynamicSetting);
+        return $this->processSettingValue($settingValue);
+    }
+
+    public function processSettingValue(string $value): string
+    {
+        foreach ($this->complexSettingParser->parseComplexSetting($value) as $dynamicSetting) {
+            $parts = $this->complexSettingParser->parseDynamicSetting($dynamicSetting);
             if (!isset($parts['namespace'])) {
                 $parts['namespace'] = self::DEFAULT_NAMESPACE;
             }
-            if (!isset($parts['scope'])) {
-                $parts['scope'] = $siteAccessName;
-            }
 
-            $dynamicSettingValue = $this->configResolver->getParameter($parts['param'], $parts['namespace'], $parts['scope']);
+            $dynamicSettingValue = $this->configResolver->getParameter(
+                $parts['param'],
+                $parts['namespace'],
+                $parts['scope'] ?? $this->siteAccessService->getCurrent()->name
+            );
 
             $value = str_replace($dynamicSetting, $dynamicSettingValue, $value);
         }
