@@ -62,7 +62,8 @@ abstract class Flysystem implements ConfigurationFactory, ContainerAwareInterfac
     private function createFilesystem(ContainerBuilder $container, $name, $adapter)
     {
         $adapterId = sprintf('oneup_flysystem.%s_adapter', $adapter);
-        if (!$container->hasDefinition($adapterId)) {
+        // has either definition or alias
+        if (!$container->has($adapterId)) {
             throw new InvalidConfigurationException("Unknown flysystem adapter $adapter");
         }
 
