@@ -49,4 +49,6 @@ abstract class Gateway extends StorageGateway
      * @throws \Doctrine\DBAL\DBALException
      */
     abstract public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds): bool;
+
+    abstract public function countUsersWithUnsupportedHashType(): int;
 }

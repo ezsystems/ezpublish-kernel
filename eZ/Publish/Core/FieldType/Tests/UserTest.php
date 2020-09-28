@@ -12,12 +12,14 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\User\Type;
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
+use eZ\Publish\Core\Repository\Values\User\User as RepositoryUser;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Persistence\Cache\UserHandler;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition as CoreFieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\User;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 
@@ -577,6 +579,77 @@ class UserTest extends FieldTypeTest
                 'email'
             ),
         ], $validationErrors);
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\User\Type::toPersistenceValue
+     *
+     * @dataProvider providerForTestCreatePersistenceValue
+     */
+    public function testCreatePersistenceValue(array $userValueDate, array $expectedFieldValueExternalData): void
+    {
+        $passwordHashServiceMock = $this->createMock(PasswordHashServiceInterface::class);
+        $passwordHashServiceMock->method('getDefaultHashType')->willReturn(RepositoryUser::DEFAULT_PASSWORD_HASH);
+        $userType = new UserType(
+            $this->createMock(UserHandler::class),
+            $passwordHashServiceMock,
+            $this->createMock(PasswordValidatorInterface::class)
+        );
+
+        $value = new UserValue($userValueDate);
+        $fieldValue = $userType->toPersistenceValue($value);
+
+        $expected = new FieldValue(
+            [
+                'data' => null,
+                'externalData' => $expectedFieldValueExternalData,
+                'sortKey' => null,
+            ]);
+        self::assertEquals($expected, $fieldValue);
+    }
+
+    public function providerForTestCreatePersistenceValue(): iterable
+    {
+        $passwordUpdatedAt = new DateTimeImmutable();
+        $userData = [
+            'hasStoredLogin' => false,
+            'contentId' => 46,
+            'login' => 'validate_user',
+            'email' => 'test@test.ez',
+            'passwordHash' => '1234567890abcdef',
+            'enabled' => true,
+            'maxLogin' => 1000,
+            'plainPassword' => '',
+            'passwordUpdatedAt' => $passwordUpdatedAt,
+        ];
+
+        yield 'when password hash type is given' => [
+            $userValueData = [
+                'passwordHashType' => RepositoryUser::PASSWORD_HASH_PHP_DEFAULT,
+            ] + $userData,
+            $expectedFieldValueExternalData = [
+                'passwordHashType' => RepositoryUser::PASSWORD_HASH_PHP_DEFAULT,
+                'passwordUpdatedAt' => $passwordUpdatedAt->getTimestamp(),
+            ] + $userData,
+        ];
+        yield 'when password hash type is null' => [
+            $userValueData = [
+                    'passwordHashType' => null,
+                ] + $userData,
+            $expectedFieldValueExternalData = [
+                    'passwordHashType' => RepositoryUser::DEFAULT_PASSWORD_HASH,
+                    'passwordUpdatedAt' => $passwordUpdatedAt->getTimestamp(),
+                ] + $userData,
+        ];
+        yield 'when password hash type is unsupported' => [
+            $userValueData = [
+                    'passwordHashType' => '__UNSUPPORTED_HASH_TYPE__',
+                ] + $userData,
+            $expectedFieldValueExternalData = [
+                    'passwordHashType' => RepositoryUser::DEFAULT_PASSWORD_HASH,
+                    'passwordUpdatedAt' => $passwordUpdatedAt->getTimestamp(),
+                ] + $userData,
+        ];
     }
 
     public function testEmailFreeToUse(): void

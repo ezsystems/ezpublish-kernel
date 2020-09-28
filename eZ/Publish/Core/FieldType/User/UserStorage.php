@@ -112,4 +112,9 @@ class UserStorage extends GatewayBasedStorage
     public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {
     }
+
+    public function countUsersWithUnsupportedHashType(): int
+    {
+        return $this->gateway->countUsersWithUnsupportedHashType();
+    }
 }

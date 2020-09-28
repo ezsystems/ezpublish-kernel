@@ -9,6 +9,7 @@ namespace eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\ParameterType;
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 use eZ\Publish\Core\FieldType\User\UserStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -419,5 +420,24 @@ class DoctrineStorage extends Gateway
         $numRows = (int)$checkQuery->execute()->fetchColumn();
 
         return $numRows === 0;
+    }
+
+    public function countUsersWithUnsupportedHashType(): int
+    {
+        $selectQuery = $this->connection->createQueryBuilder();
+
+        $selectQuery
+            ->select(
+                $this->connection->getDatabasePlatform()->getCountExpression('u.login')
+            )
+            ->from(self::USER_TABLE, 'u')
+            ->andWhere(
+                $selectQuery->expr()->notIn('u.password_hash_type', ':supportedPasswordHashes')
+            )
+            ->setParameter('supportedPasswordHashes', User::SUPPORTED_PASSWORD_HASHES, Connection::PARAM_INT_ARRAY);
+
+        return $selectQuery
+            ->execute()
+            ->fetchColumn();
     }
 }

@@ -6,10 +6,13 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
+use eZ\Publish\API\Repository\Exceptions\PasswordInUnsupportedFormatException;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface as EzUserInterface;
+use eZ\Publish\Core\Repository\User\Exception\UnsupportedPasswordHashType;
 use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -59,5 +62,17 @@ class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
 
         // Finally inject current user in the Repository
         $this->permissionResolver->setCurrentUserReference($apiUser);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\PasswordInUnsupportedFormatException
+     */
+    public function authenticate(TokenInterface $token)
+    {
+        try {
+            return parent::authenticate($token);
+        } catch (UnsupportedPasswordHashType $exception) {
+            throw new PasswordInUnsupportedFormatException($exception);
+        }
     }
 }
