@@ -42,7 +42,7 @@ abstract class LegacyStorageFileRowReader implements FileRowReaderInterface
     {
         $row = $this->statement->fetch();
 
-        return $this->prependMimeToPath($row['filename'], $row['mime_type']);
+        return false !== $row ? $this->prependMimeToPath($row['filename'], $row['mime_type']) : null;
     }
 
     final public function getCount()
