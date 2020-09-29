@@ -24,6 +24,11 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  */
 abstract class User extends Content implements UserReference
 {
+    public const SUPPORTED_PASSWORD_HASHES = [
+        self::PASSWORD_HASH_BCRYPT,
+        self::PASSWORD_HASH_PHP_DEFAULT,
+    ];
+
     /** @var int Passwords in bcrypt */
     const PASSWORD_HASH_BCRYPT = 6;
 

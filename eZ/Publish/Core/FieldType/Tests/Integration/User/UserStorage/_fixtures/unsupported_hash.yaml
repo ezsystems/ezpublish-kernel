@@ -1,0 +1,4 @@
+ezuser:
+    - { contentobject_id: 10, email: nospam@ez.no, login: anonymous, password_hash: $2y$10$35gOSQs6JK4u4whyERaeUuVeQBi2TUBIZIfP7HEj7sfz.MxvTuOeC, password_hash_type: 7 }
+    - { contentobject_id: 16, email: test@link.invalid, login: test, password_hash: $2y$10$35gOSQs6JK4u4whyERaeUuVeQBi2TUBIZIfP7HEj7sfz.MxvTuOeC, password_hash_type: 5 }
+    - { contentobject_id: 14, email: spam@ez.no, login: admin, password_hash: $2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy, password_hash_type: 7 }

@@ -25,3 +25,10 @@ services:
             $repositoryConfigurationProvider: '@ezpublish.api.repository_configuration_provider'
         tags:
             - { name: console.command, command: ezplatform:install }
+
+    EzSystems\PlatformInstallerBundle\Command\ValidatePasswordHashesCommand:
+        arguments:
+            $userStorage: '@ezpublish.fieldType.ezuser.externalStorage'
+
+        tags:
+            - { name: console.command, command: ezplatform:user:validate-password-hashes }

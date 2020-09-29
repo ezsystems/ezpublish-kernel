@@ -10,7 +10,6 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Language;
@@ -2707,7 +2706,7 @@ class UserServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\UserService::createUser()
      */
-    public function testCreateUserInvalidPasswordHashTypeThrowsException()
+    public function testCreateUserWithDefaultPasswordHashTypeWhenHashTypeIsUnsupported(): void
     {
         $repository = $this->getRepository();
         $eventUserService = $repository->getUserService();
@@ -2743,12 +2742,11 @@ class UserServiceTest extends BaseTest
         // Set not supported hash type.
         $userValue->passwordHashType = 42424242;
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Argument 'hashType' is invalid: Password hash type '42424242' is not recognized");
-
         // Create a new user instance.
         // 13 is ID of the "Editors" user group in an eZ Publish demo installation.
-        $eventUserService->createUser($createStruct, [$eventUserService->loadUserGroup(13)]);
+        $createdUser = $eventUserService->createUser($createStruct, [$eventUserService->loadUserGroup(13)]);
+
+        self::assertEquals(User::DEFAULT_PASSWORD_HASH, $createdUser->hashAlgorithm);
     }
 
     /**

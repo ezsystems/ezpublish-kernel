@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
@@ -251,7 +252,7 @@ class Type extends FieldType
      */
     public function toPersistenceValue(SPIValue $value)
     {
-        $value->passwordHashType = $value->passwordHashType ?? $this->passwordHashService->getDefaultHashType();
+        $value->passwordHashType = $this->getPasswordHashTypeForPersistenceValue($value);
         if ($value->plainPassword) {
             $value->passwordHash = $this->passwordHashService->createPasswordHash(
                 $value->plainPassword,
@@ -267,6 +268,19 @@ class Type extends FieldType
                 'sortKey' => null,
             ]
         );
+    }
+
+    private function getPasswordHashTypeForPersistenceValue(SPIValue $value): int
+    {
+        if (null === $value->passwordHashType) {
+            return $this->passwordHashService->getDefaultHashType();
+        }
+
+        if (!in_array($value->passwordHashType, User::SUPPORTED_PASSWORD_HASHES, true)) {
+            return $this->passwordHashService->getDefaultHashType();
+        }
+
+        return $value->passwordHashType;
     }
 
     /**

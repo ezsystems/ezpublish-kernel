@@ -6,10 +6,12 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
+use eZ\Publish\API\Repository\Exceptions\PasswordInUnsupportedFormatException;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider;
+use eZ\Publish\Core\Repository\User\Exception\UnsupportedPasswordHashType;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -20,6 +22,8 @@ use eZ\Publish\Core\MVC\Symfony\Security\User;
 
 class RepositoryAuthenticationProviderTest extends TestCase
 {
+    private const UNSUPPORTED_USER_PASSWORD_HASH_TYPE = 5;
+
     /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface */
     private $encoderFactory;
 
@@ -29,6 +33,11 @@ class RepositoryAuthenticationProviderTest extends TestCase
     /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionResolver;
 
+    /**
+     * @var UserProviderInterface
+     */
+    private $userProvider;
+
     /** @var \eZ\Publish\API\Repository\UserService|\PHPUnit\Framework\MockObject\MockObject */
     private $userService;
 
@@ -36,8 +45,9 @@ class RepositoryAuthenticationProviderTest extends TestCase
     {
         parent::setUp();
         $this->encoderFactory = $this->createMock(EncoderFactoryInterface::class);
+        $this->userProvider = $this->createMock(UserProviderInterface::class);
         $this->authProvider = new RepositoryAuthenticationProvider(
-            $this->createMock(UserProviderInterface::class),
+            $this->userProvider,
             $this->createMock(UserCheckerInterface::class),
             'foo',
             $this->encoderFactory
@@ -174,5 +184,29 @@ class RepositoryAuthenticationProviderTest extends TestCase
         $method = new \ReflectionMethod($this->authProvider, 'checkAuthentication');
         $method->setAccessible(true);
         $method->invoke($this->authProvider, $user, $token);
+    }
+
+    public function testCheckAuthenticationFailedWhenPasswordInUnsupportedFormat()
+    {
+        $this->expectException(PasswordInUnsupportedFormatException::class);
+
+        $apiUser = $this->createMock(APIUser::class);
+        $user = $this->createMock(User::class);
+        $user->method('getAPIUser')
+            ->willReturn($apiUser);
+        $userName = 'my_username';
+        $password = 'foo';
+        $token = new UsernamePasswordToken($userName, $password, 'foo');
+        $this->userProvider
+            ->method('loadUserByUsername')
+            ->willReturn($user);
+
+        $this->userService
+            ->expects($this->once())
+            ->method('checkUserCredentials')
+            ->with($apiUser, $password)
+            ->willThrowException(new UnsupportedPasswordHashType(self::UNSUPPORTED_USER_PASSWORD_HASH_TYPE));
+
+        $this->authProvider->authenticate($token);
     }
 }

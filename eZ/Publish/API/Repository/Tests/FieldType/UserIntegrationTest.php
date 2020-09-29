@@ -260,7 +260,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                 'login' => 'changeLogin',
                 'email' => 'changeEmail@ez.no',
                 'passwordHash' => '*2',
-                'passwordHashType' => 1,
+                'passwordHashType' => User::DEFAULT_PASSWORD_HASH,
                 'enabled' => false,
             ]
         );
@@ -284,7 +284,7 @@ class UserIntegrationTest extends BaseIntegrationTest
             'hasStoredLogin' => true,
             'login' => 'changeLogin',
             'email' => 'changeEmail@ez.no',
-            'passwordHashType' => 1,
+            'passwordHashType' => User::DEFAULT_PASSWORD_HASH,
             'enabled' => false,
         ];
 
