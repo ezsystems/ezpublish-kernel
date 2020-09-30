@@ -1,0 +1,10 @@
+ezplatform:
+    siteaccess:
+        list: [site]
+        default_siteaccess: site
+        match:
+            URIElement: 1
+    system:
+        default:
+            io:
+                url_prefix: 'http://static.example.com/'
