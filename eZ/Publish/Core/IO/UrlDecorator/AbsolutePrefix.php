@@ -8,16 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\IO\UrlDecorator;
 
-use eZ\Publish\Core\IO\UrlDecorator;
-
 /**
  * Prefixes the URI with a string, and makes it absolute.
  */
-class AbsolutePrefix extends Prefix implements UrlDecorator
+class AbsolutePrefix extends Prefix
 {
     public function getPrefix(): string
     {
-        $prefix = $this->ioConfigResolver->getLegacyUrlPrefix();
+        $prefix = $this->ioConfigResolver->getUrlPrefix();
 
         if ($prefix !== '') {
             $urlParts = parse_url($prefix);

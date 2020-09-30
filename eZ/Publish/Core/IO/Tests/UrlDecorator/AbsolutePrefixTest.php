@@ -21,7 +21,7 @@ class AbsolutePrefixTest extends PrefixTest
     {
         $ioConfigResolverMock = $this->createMock(IOConfigProvider::class);
         $ioConfigResolverMock
-            ->method('getLegacyUrlPrefix')
+            ->method('getUrlPrefix')
             ->willReturn($prefix);
 
         return new AbsolutePrefix($ioConfigResolverMock);
