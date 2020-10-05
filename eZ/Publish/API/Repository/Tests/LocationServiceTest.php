@@ -132,6 +132,47 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createLocation() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testHideContent
+     */
+    public function testCreateLocationChecksContentVisibility(): void
+    {
+        $repository = $this->getRepository();
+
+        $contentId = $this->generateId('object', 41);
+        $parentLocationId = $this->generateId('location', 5);
+        /* BEGIN: Use Case */
+        // $contentId is the ID of an existing content object
+        // $parentLocationId is the ID of an existing location
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo($contentId);
+        $contentService->hideContent($contentInfo);
+
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
+        $locationCreate->priority = 23;
+        $locationCreate->hidden = false;
+        $locationCreate->remoteId = 'sindelfingen';
+        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        $location = $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
+
+        self::assertInstanceOf(Location::class, $location);
+
+        self::assertTrue($location->invisible);
+    }
+
+    /**
      * Test for the createLocation() method with utilizing default ContentType sorting options.
      *
      * @covers \eZ\Publish\API\Repository\LocationService::createLocation
@@ -809,28 +850,22 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationsContent(array $locations)
     {
-        $repository = $this->getRepository();
-        $locationService = $repository->getLocationService();
-
         $this->assertCount(1, $locations);
         foreach ($locations as $loadedLocation) {
-            $this->assertInstanceOf(
-                '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
-                $loadedLocation
-            );
+            self::assertInstanceOf(Location::class, $loadedLocation);
         }
 
         usort(
             $locations,
-            function ($a, $b) {
-                strcmp($a->id, $b->id);
+            static function ($a, $b) {
+                return strcmp($a->id, $b->id);
             }
         );
 
         $this->assertEquals(
             [$this->generateId('location', 5)],
             array_map(
-                function (Location $location) {
+                static function (Location $location) {
                     return $location->id;
                 },
                 $locations

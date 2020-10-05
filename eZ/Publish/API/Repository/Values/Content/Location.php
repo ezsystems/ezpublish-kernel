@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
  * @property-read int $id the id of the location
  * @property-read int $priority Position of the Location among its siblings when sorted using priority
  * @property-read bool $hidden Indicates that the Location entity is hidden (explicitly or hidden by content).
- * @property-read bool $invisible  Indicates that the Location is implicitly marked as hidden by a parent location
+ * @property-read bool $invisible Indicates that the Location is not visible, being either marked as hidden itself, or implicitly hidden by its Content or an ancestor Location
  * @property-read bool $explicitlyHidden Indicates that the Location entity has been explicitly marked as hidden.
  * @property-read string $remoteId a global unique id of the content object
  * @property-read int $parentLocationId the id of the parent location
@@ -121,8 +121,8 @@ abstract class Location extends ValueObject
     protected $hidden;
 
     /**
-     * Indicates that the Location is implicitly marked as hidden by a parent
-     * location.
+     * Indicates that the Location is not visible, being either marked as hidden itself,
+     * or implicitly hidden by its Content or an ancestor Location.
      *
      * @var bool
      */

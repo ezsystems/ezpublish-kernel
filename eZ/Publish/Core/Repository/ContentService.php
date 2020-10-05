@@ -808,7 +808,8 @@ class ContentService implements ContentServiceInterface
                 $mainLocation,
                 // For Content draft contentId and contentVersionNo are set in ContentHandler upon draft creation
                 null,
-                null
+                null,
+                false
             );
 
             // First Location in the list will be created as main Location
