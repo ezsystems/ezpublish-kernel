@@ -673,6 +673,7 @@ class ContentDomainMapper extends ProxyAwareDomainMapper
      * @param mixed $mainLocation
      * @param mixed $contentId
      * @param mixed $contentVersionNo
+     * @param bool $isContentHidden
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct
      */
@@ -681,7 +682,8 @@ class ContentDomainMapper extends ProxyAwareDomainMapper
         APILocation $parentLocation,
         $mainLocation,
         $contentId,
-        $contentVersionNo
+        $contentVersionNo,
+        bool $isContentHidden
     ) {
         if (!$this->isValidLocationPriority($locationCreateStruct->priority)) {
             throw new InvalidArgumentValue('priority', $locationCreateStruct->priority, 'LocationCreateStruct');
@@ -726,7 +728,7 @@ class ContentDomainMapper extends ProxyAwareDomainMapper
                 // Otherwise it picks up visibility from parent Location
                 // Note: There is no need to check for hidden status of parent, as hidden Location
                 // is always invisible as well
-                'invisible' => ($locationCreateStruct->hidden === true || $parentLocation->invisible),
+                'invisible' => ($locationCreateStruct->hidden === true || $parentLocation->invisible || $isContentHidden),
                 'remoteId' => $remoteId,
                 'contentId' => $contentId,
                 'contentVersion' => $contentVersionNo,

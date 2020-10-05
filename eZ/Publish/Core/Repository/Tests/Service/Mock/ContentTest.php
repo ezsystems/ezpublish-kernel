@@ -2659,7 +2659,8 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo($parentLocation),
                 $this->equalTo(true),
                 $this->equalTo(null),
-                $this->equalTo(null)
+                $this->equalTo(null),
+                $this->equalTo(false)
             )->will($this->returnValue($spiLocationCreateStruct));
 
         $domainMapperMock->expects($this->at(2))
@@ -2669,7 +2670,8 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo($parentLocation),
                 $this->equalTo(false),
                 $this->equalTo(null),
-                $this->equalTo(null)
+                $this->equalTo(null),
+                $this->equalTo(false)
             )->will($this->returnValue($spiLocationCreateStruct));
 
         $spiContentCreateStruct = new SPIContentCreateStruct(
@@ -2869,7 +2871,8 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo($parentLocation),
                 $this->equalTo(true),
                 $this->equalTo(null),
-                $this->equalTo(null)
+                $this->equalTo(null),
+                $this->equalTo(false)
             )->will($this->returnValue($spiLocationCreateStruct));
 
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
