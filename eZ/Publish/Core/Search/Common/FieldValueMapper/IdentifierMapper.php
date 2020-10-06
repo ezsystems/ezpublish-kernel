@@ -36,6 +36,10 @@ class IdentifierMapper extends FieldValueMapper
      */
     public function map(Field $field)
     {
+        if ($field->type->raw) {
+            return $field->value;
+        }
+
         return $this->convert($field->value);
     }
 

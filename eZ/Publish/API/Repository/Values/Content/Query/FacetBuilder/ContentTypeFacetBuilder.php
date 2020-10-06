@@ -14,6 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  * Building a content type facet.
  *
  * If provided the search service returns a ContentTypeFacet
+ *
+ * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
  */
 class ContentTypeFacetBuilder extends FacetBuilder
 {

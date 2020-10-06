@@ -19,4 +19,11 @@ class MultipleIdentifierField extends FieldType
      * @var string
      */
     protected $type = 'ez_mid';
+
+    /**
+     * Indicates that values will not be normalized.
+     *
+     * @var bool
+     */
+    protected $raw = false;
 }

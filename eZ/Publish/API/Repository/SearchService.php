@@ -108,6 +108,13 @@ interface SearchService
     public const CAPABILITY_ADVANCED_FULLTEXT = 64;
 
     /**
+     * Capability flag for aggregation feature for use with {@see ::supports()}.
+     *
+     * @since eZ Platform 3.2
+     */
+    public const CAPABILITY_AGGREGATIONS = 128;
+
+    /**
      * Finds content objects for the given query.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid

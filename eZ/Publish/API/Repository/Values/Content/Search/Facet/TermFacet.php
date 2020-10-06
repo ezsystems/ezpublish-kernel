@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
  * this class hold counts for content in sections.
+ *
+ * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
  */
 class TermFacet extends Facet
 {

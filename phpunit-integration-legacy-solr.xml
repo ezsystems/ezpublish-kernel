@@ -58,6 +58,7 @@
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTranslationLanguageFallbackTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceLocationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SearchServiceAggregationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchEngineIndexingTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/FieldTypeServiceTest.php</file>
         </testsuite>

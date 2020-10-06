@@ -280,4 +280,30 @@ class FieldNameResolver
 
         return [$field => $indexDefinition[$name]];
     }
+
+    public function getAggregationFieldName(
+        string $contentTypeIdentifier,
+        string $fieldDefinitionIdentifier,
+        string $name
+    ): ?string {
+        $fieldMap = $this->getSearchableFieldMap();
+
+        // First check if field exists in type, there is nothing to do if it doesn't
+        if (!isset($fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier])) {
+            return null;
+        }
+
+        $fieldName = array_keys(
+            $this->getIndexFieldName(
+                null,
+                $contentTypeIdentifier,
+                $fieldDefinitionIdentifier,
+                $fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier]['field_type_identifier'],
+                $name,
+                true
+            )
+        );
+
+        return reset($fieldName);
+    }
 }

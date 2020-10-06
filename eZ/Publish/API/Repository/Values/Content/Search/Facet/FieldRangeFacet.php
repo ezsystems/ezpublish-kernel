@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
  * This class represents a field range facet.
+ *
+ * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
  */
 class FieldRangeFacet extends Facet
 {

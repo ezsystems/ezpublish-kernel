@@ -19,4 +19,11 @@ class IdentifierField extends FieldType
      * @var string
      */
     protected $type = 'ez_id';
+
+    /**
+     * Indicates that value will not be normalized.
+     *
+     * @var bool
+     */
+    protected $raw = false;
 }

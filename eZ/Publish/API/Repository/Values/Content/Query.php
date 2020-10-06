@@ -67,6 +67,11 @@ class Query extends ValueObject
     public $facetBuilders = [];
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\Aggregation[]
+     */
+    public $aggregations = [];
+
+    /**
      * Query offset.
      *
      * Sets the offset for search hits, used for paging the results.

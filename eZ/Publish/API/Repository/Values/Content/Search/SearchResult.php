@@ -22,8 +22,15 @@ class SearchResult extends ValueObject implements IteratorAggregate
      * The facets for this search.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Search\Facet[]
+     *
+     * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
      */
     public $facets = [];
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Search\AggregationResultCollection
+     */
+    public $aggregations;
 
     /**
      * The value objects found for the query.
@@ -69,6 +76,15 @@ class SearchResult extends ValueObject implements IteratorAggregate
      * @var int|null
      */
     public $totalCount;
+
+    public function __construct(array $properties = [])
+    {
+        if (!isset($properties['aggregations'])) {
+            $properties['aggregations'] = new AggregationResultCollection();
+        }
+
+        parent::__construct($properties);
+    }
 
     public function getIterator(): Traversable
     {

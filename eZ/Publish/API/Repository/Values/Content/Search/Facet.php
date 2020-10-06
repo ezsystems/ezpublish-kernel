@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * Base class for facets.
+ *
+ * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
  */
 abstract class Facet extends ValueObject
 {

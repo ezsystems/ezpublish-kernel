@@ -38,7 +38,11 @@ class MultipleIdentifierMapper extends IdentifierMapper
         $values = [];
 
         foreach ($field->value as $value) {
-            $values[] = $this->convert($value);
+            if (!$field->type->raw) {
+                $value = $this->convert($value);
+            }
+
+            $values[] = $value;
         }
 
         return $values;

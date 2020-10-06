@@ -17,6 +17,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\Location;
  * contains the counts for all Locations below the child Locations.
  *
  * @todo: check hierarchical facets
+ *
+ * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
  */
 class LocationFacetBuilder extends Location
 {

@@ -16,6 +16,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  * If provided the search service returns a FieldFacet for the provided field path.
  * A field path starts with a field identifier and may contain a subpath in the case
  * of complex field types (e.g. author/name)
+ *
+ * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
  */
 class FieldFacetBuilder extends FacetBuilder
 {

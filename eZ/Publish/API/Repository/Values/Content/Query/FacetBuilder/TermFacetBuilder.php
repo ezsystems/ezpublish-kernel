@@ -15,6 +15,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  *
  * If provided the search service returns a TermFacet which contains the counts for
  * content containing terms in arbitrary fields
+ *
+ * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
  */
 class TermFacetBuilder extends FacetBuilder
 {

@@ -14,6 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\Facet;
  * This class represents a field facet which holds the collected terms for one or more fields.
  *
  * @author christianbacher
+ *
+ * @deprecated since eZ Platform 3.2.0, to be removed in eZ Platform 4.0.0.
  */
 class FieldFacet extends Facet
 {
