@@ -42,7 +42,7 @@ class ImageAssetThumbnailStrategy implements FieldTypeBasedThumbnailStrategy
 
     public function getThumbnail(Field $field): ?Thumbnail
     {
-        $content = $this->contentService->loadContent($field->value->destinationContentId);
+        $content = $this->contentService->loadContent((int) $field->value->destinationContentId);
 
         return $this->thumbnailStrategy->getThumbnail(
             $content->getContentType(),
