@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
 use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -31,9 +32,11 @@ class RememberMeRepositoryAuthenticationProvider extends RememberMeAuthenticatio
             throw new AuthenticationException('The token is not supported by this authentication provider.');
         }
 
-        $this->permissionResolver->setCurrentUserReference(
-            $authenticatedToken->getUser()->getAPIUser()
-        );
+        if ($authenticatedToken->getUser() instanceof UserInterface) {
+            $this->permissionResolver->setCurrentUserReference(
+                $authenticatedToken->getUser()->getAPIUser()
+            );
+        }
 
         return $authenticatedToken;
     }
