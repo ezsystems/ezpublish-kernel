@@ -8,7 +8,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Search\VersatileHandler as SearchHandlerInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
@@ -367,6 +367,11 @@ class Handler implements SearchHandlerInterface
         $this->indexerGateway->remove($contentId, $versionId);
     }
 
+    public function deleteTranslation(int $contentId, string $languageCode): void
+    {
+        // Not needed with Legacy Storage/Search Engine
+    }
+
     /**
      * Deletes a location from the index.
      *
@@ -394,5 +399,10 @@ class Handler implements SearchHandlerInterface
     public function commit($flush = false)
     {
         // Not needed with Legacy Storage/Search Engine
+    }
+
+    public function supports(int $capabilityFlag): bool
+    {
+        return false;
     }
 }

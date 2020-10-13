@@ -52,7 +52,7 @@ services:
         alias: ezpublish.spi.search_engine.indexer
 
     ezpublish.spi.search_engine:
-        class: eZ\Publish\SPI\Search\Handler
+        class: eZ\Publish\SPI\Search\VersatileHandler
         factory: ["@ezpublish.api.search_engine.factory", buildSearchEngine]
         public: false
         lazy: true
