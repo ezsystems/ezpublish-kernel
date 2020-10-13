@@ -37,7 +37,7 @@ final class RenderContentStrategy extends BaseRenderStrategy implements RenderSt
         $content = $valueObject;
 
         $currentRequest = $this->requestStack->getCurrentRequest();
-        $surrogateCapability = $currentRequest->get('Surrogate-Capability');
+        $surrogateCapability = $currentRequest->headers->get('Surrogate-Capability');
 
         $request = new Request();
         $request->headers->set('siteaccess', $this->siteAccess->name);

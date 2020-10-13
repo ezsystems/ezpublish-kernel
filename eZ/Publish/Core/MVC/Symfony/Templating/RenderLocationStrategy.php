@@ -38,7 +38,7 @@ final class RenderLocationStrategy extends BaseRenderStrategy implements RenderS
         $content = $location->getContent();
 
         $currentRequest = $this->requestStack->getCurrentRequest();
-        $surrogateCapability = $currentRequest->get('Surrogate-Capability');
+        $surrogateCapability = $currentRequest->headers->get('Surrogate-Capability');
 
         $request = new Request();
         $request->headers->set('siteaccess', $this->siteAccess->name);
