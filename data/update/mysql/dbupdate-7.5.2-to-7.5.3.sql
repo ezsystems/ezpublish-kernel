@@ -1,5 +1,9 @@
 UPDATE ezsite_data SET value='7.5.3' WHERE name='ezpublish-version';
 
+--
+-- EZP-30571: Legacy storage column size for default TextField value is too short
+--
+
 ALTER TABLE ezcontentclass_attribute MODIFY data_text1 VARCHAR(255);
 
 --
