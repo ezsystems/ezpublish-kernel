@@ -38,7 +38,7 @@ class SearchField implements Indexable
                 new Search\FieldType\FullTextField([
                     'space_normalize',
                     'latin1_lowercase',
-                ], true)
+                ], false)
             ),
         ];
     }
