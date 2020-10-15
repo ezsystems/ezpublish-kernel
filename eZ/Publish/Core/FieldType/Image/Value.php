@@ -9,7 +9,6 @@ namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 /**
  * Value for Image field type.
