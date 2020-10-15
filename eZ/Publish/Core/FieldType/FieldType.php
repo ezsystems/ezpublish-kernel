@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\FieldType;
 
+use eZ\Publish\SPI\FieldType\Comparable;
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
@@ -30,7 +31,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
  * Field types are primed and pre-configured with the Field Definitions found in
  * Content Types.
  */
-abstract class FieldType implements FieldTypeInterface
+abstract class FieldType implements FieldTypeInterface, Comparable
 {
     /**
      * The setting keys which are available on this field type.
@@ -574,5 +575,10 @@ abstract class FieldType implements FieldTypeInterface
     public function getRelations(SPIValue $fieldValue)
     {
         return [];
+    }
+
+    public function valuesEqual(SPIValue $value1, SPIValue $value2): bool
+    {
+        return $this->toHash($value1) === $this->toHash($value2);
     }
 }

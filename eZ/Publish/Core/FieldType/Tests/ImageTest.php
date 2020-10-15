@@ -811,4 +811,54 @@ class ImageTest extends FieldTypeTest
             ],
         ];
     }
+
+    public function provideInputForValuesEqual(): array
+    {
+        return [
+            [
+                new ImageValue(
+                    [
+                        'id' => $this->getImageInputPath(),
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'fileSize' => 23,
+                        'alternativeText' => 'This is so Sindelfingen!',
+                        'imageId' => '123-12345',
+                        'uri' => 'http://' . $this->getImageInputPath(),
+                        'width' => 123,
+                        'height' => 456,
+                    ]
+                ),
+                new ImageValue(
+                    [
+                        'id' => $this->getImageInputPath(),
+                        'path' => $this->getImageInputPath(),
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'fileSize' => 23,
+                        'alternativeText' => 'This is so Sindelfingen!',
+                        'imageId' => '123-12315',
+                        'uri' => 'http://' . $this->getImageInputPath(),
+                        'inputUri' => null,
+                        'width' => 123,
+                        'height' => 456,
+                    ]
+                ),
+            ],
+        ];
+    }
+
+    /**
+     * @param ImageValue $inputValue1
+     * @param ImageValue $inputValue2
+     *
+     * @dataProvider provideInputForValuesEqual
+     */
+    public function testValuesEqual($inputValue1, $inputValue2)
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $this->assertTrue(
+            $fieldType->valuesEqual($inputValue1, $inputValue2),
+            'valuesEqual() method did not create expected result.'
+        );
+    }
 }
