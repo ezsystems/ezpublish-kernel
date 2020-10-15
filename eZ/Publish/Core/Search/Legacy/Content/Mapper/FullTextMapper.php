@@ -85,7 +85,7 @@ class FullTextMapper
                 continue;
             }
 
-            $value = $this->getFullTextFieldValue($field, $fieldDefinition);
+            list($value, $transformationRules, $splitFlag) = $this->getFullTextFieldData($field, $fieldDefinition);
             if (empty($value)) {
                 continue;
             }
@@ -101,8 +101,8 @@ class FullTextMapper
                     'isMainAndAlwaysAvailable' => (
                         $field->languageCode === $contentInfo->mainLanguageCode && $contentInfo->alwaysAvailable
                     ),
-                    'transformationRules' => $this->getTransformationRules($fieldDefinition),
-                    'splitFlag' => $this->getSplitFlag($fieldDefinition),
+                    'transformationRules' => $transformationRules,
+                    'splitFlag' => $splitFlag,
                 ]
             );
         }
@@ -110,57 +110,30 @@ class FullTextMapper
         return $fullTextValues;
     }
 
-    /**
-     * Get FullTextField value.
-     *
-     * @param Content\Field $field
-     * @param Type\FieldDefinition $fieldDefinition
-     *
-     * @return string
-     */
-    private function getFullTextFieldValue(Content\Field $field, Type\FieldDefinition $fieldDefinition)
+    private function getFullTextFieldData(Content\Field $field, Type\FieldDefinition $fieldDefinition): array
     {
         $fieldType = $this->fieldRegistry->getType($field->type);
         $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
 
         // find value to be returned (stored in FullTextField)
         $fullTextFieldValue = '';
+        $fullTextFieldTransformationRules = [];
+        $fullTextFieldSplitFlag = true;
         foreach ($indexFields as $field) {
             /** @var \eZ\Publish\SPI\Search\Field $field */
             if ($field->type instanceof FieldType\FullTextField) {
                 $fullTextFieldValue = $field->value;
+                $fullTextFieldTransformationRules = $field->type->transformationRules;
+                $fullTextFieldSplitFlag = $field->type->splitFlag;
                 break;
             }
         }
 
         // some full text fields are stored as an array of strings
-        return !is_array($fullTextFieldValue) ? $fullTextFieldValue : implode(' ', $fullTextFieldValue);
-    }
-
-    /**
-     * Get transformation rules based on a given field type.
-     */
-    private function getTransformationRules(Type\FieldDefinition $fieldDefinition): array
-    {
-        $rules = [
-            'ezemail' => [
-                'space_normalize',
-                'latin1_lowercase',
-            ],
+        return [
+            !is_array($fullTextFieldValue) ? $fullTextFieldValue : implode(' ', $fullTextFieldValue),
+            $fullTextFieldTransformationRules,
+            $fullTextFieldSplitFlag,
         ];
-
-        return $rules[$fieldDefinition->fieldType] ?? [];
-    }
-
-    /**
-     * Decide whether transformed string should be later split by non-words.
-     */
-    private function getSplitFlag(Type\FieldDefinition $fieldDefinition): bool
-    {
-        $split = [
-            'ezemail' => false,
-        ];
-
-        return $split[$fieldDefinition->fieldType] ?? true;
     }
 }

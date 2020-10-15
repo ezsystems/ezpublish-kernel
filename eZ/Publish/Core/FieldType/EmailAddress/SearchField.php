@@ -35,7 +35,10 @@ class SearchField implements Indexable
             new Search\Field(
                 'fulltext',
                 $field->value->data,
-                new Search\FieldType\FullTextField()
+                new Search\FieldType\FullTextField([
+                    'space_normalize',
+                    'latin1_lowercase',
+                ], true)
             ),
         ];
     }
