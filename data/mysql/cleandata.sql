@@ -85,7 +85,7 @@ VALUES (1031216928, 14, 1, 1033922106, 14, 'Content'),
        (1032009743, 14, 3, 1033922120, 14, 'Media');
 
 INSERT INTO `ezcontentobject` (`contentclass_id`, `current_version`, `id`, `initial_language_id`, `language_mask`, `modified`, `name`, `owner_id`, `published`, `remote_id`, `section_id`, `status`)
-VALUES (1,9,1,2,3,1448889046,'eZ Platform',14,1448889046,'9459d3c29e15006e45197295722c7ade',1,1),
+VALUES (1,9,1,2,3,1448889046,'Ibexa Platform',14,1448889046,'9459d3c29e15006e45197295722c7ade',1,1),
        (3,1,4,2,3,1033917596,'Users',14,1033917596,'f5c88a2209584891056f987fd965b0ba',2,1),
        (4,2,10,2,3,1072180405,'Anonymous User',14,1033920665,'faaeb9be3bd98ed09f606fc16d144eca',2,1),
        (3,1,11,2,3,1033920746,'Guest accounts',14,1033920746,'5f7f0bdb3381d6a461d8c29ff53d908f',2,1),
@@ -99,8 +99,8 @@ VALUES (1,9,1,2,3,1448889046,'eZ Platform',14,1448889046,'9459d3c29e15006e451972
        (1,1,51,2,3,1080220233,'Multimedia',14,1080220233,'09082deb98662a104f325aaa8c4933d3',3,1);
 
 INSERT INTO `ezcontentobject_attribute` (`attribute_original_id`, `contentclassattribute_id`, `contentobject_id`, `data_float`, `data_int`, `data_text`, `data_type_string`, `id`, `language_code`, `language_id`, `sort_key_int`, `sort_key_string`, `version`)
-VALUES (0,4,1,NULL,NULL,'Welcome to eZ Platform','ezstring',1,'eng-GB',3,0,'welcome to ez platform',9),
-       (0,119,1,NULL,NULL,'<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>You are now ready to start your project.</para></section>','ezrichtext',2,'eng-GB',3,0,'',9),
+VALUES (0,4,1,NULL,NULL,'Ibexa Platform','ezstring',1,'eng-GB',3,0,'ibexa platform',9),
+       (0,119,1,NULL,NULL,'<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para><emphasis role="strong">You are now ready to start your project.</emphasis></para></section>','ezrichtext',2,'eng-GB',3,0,'',9),
        (0,7,4,NULL,NULL,'Main group','ezstring',7,'eng-GB',3,0,'',1),
        (0,6,4,NULL,NULL,'Users','ezstring',8,'eng-GB',3,0,'',1),
        (0,8,10,0,0,'Anonymous','ezstring',19,'eng-GB',3,0,'anonymous',2),
@@ -119,9 +119,9 @@ VALUES (0,4,1,NULL,NULL,'Welcome to eZ Platform','ezstring',1,'eng-GB',3,0,'welc
        (0,119,41,0,1045487555,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<section xmlns=\"http://docbook.org/ns/docbook\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ezxhtml=\"http://ez.no/xmlns/ezpublish/docbook/xhtml\" xmlns:ezcustom=\"http://ez.no/xmlns/ezpublish/docbook/custom\" version=\"5.0-variant ezpublish-1.0\"/>\n','ezrichtext',99,'eng-GB',3,0,'',1),
        (0,6,42,0,0,'Anonymous Users','ezstring',100,'eng-GB',3,0,'anonymous users',1),
        (0,7,42,0,0,'User group for the anonymous user','ezstring',101,'eng-GB',3,0,'user group for the anonymous user',1),
-       (0,155,1,NULL,NULL,'eZ Platform','ezstring',102,'eng-GB',3,0,'ez platform',9),
+       (0,155,1,NULL,NULL,'Ibexa Platform','ezstring',102,'eng-GB',3,0,'ibexa platform',9),
        (0,155,41,0,0,'','ezstring',103,'eng-GB',3,0,'',1),
-       (0,156,1,NULL,NULL,'<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>This is the clean installation coming with eZ Platform. It''s a bare-bones setup of the Platform, an excellent foundation to build upon if you want to start your project from scratch.</para></section>','ezrichtext',104,'eng-GB',3,0,'',9),
+       (0,156,1,NULL,NULL,'<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>This is the clean installation coming with Ibexa Platform.</para><para>It''s a bare-bones setup of the Platform, an excellent foundation to build upon if you want to start your project from scratch.</para></section>','ezrichtext',104,'eng-GB',3,0,'',9),
        (0,156,41,0,1045487555,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<section xmlns=\"http://docbook.org/ns/docbook\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ezxhtml=\"http://ez.no/xmlns/ezpublish/docbook/xhtml\" xmlns:ezcustom=\"http://ez.no/xmlns/ezpublish/docbook/custom\" version=\"5.0-variant ezpublish-1.0\"/>\n','ezrichtext',105,'eng-GB',3,0,'',1),
        (0,4,49,0,0,'Images','ezstring',142,'eng-GB',3,0,'images',1),
        (0,155,49,0,0,'','ezstring',143,'eng-GB',3,0,'',1),
@@ -141,7 +141,7 @@ VALUES (0,4,1,NULL,NULL,'Welcome to eZ Platform','ezstring',1,'eng-GB',3,0,'welc
        (0,180,14,0,0,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1301057722\"><original attribute_id=\"180\" attribute_version=\"3\" attribute_language=\"eng-GB\"/></ezimage>\n','ezimage',180,'eng-GB',3,0,'',3);
 
 INSERT INTO `ezcontentobject_name` (`content_translation`, `content_version`, `contentobject_id`, `language_id`, `name`, `real_translation`)
-VALUES ('eng-GB',9,1,2,'eZ Platform','eng-GB'),
+VALUES ('eng-GB',9,1,2,'Ibexa Platform','eng-GB'),
        ('eng-GB',1,4,3,'Users','eng-GB'),
        ('eng-GB',2,10,3,'Anonymous User','eng-GB'),
        ('eng-GB',1,11,3,'Guest accounts','eng-GB'),
