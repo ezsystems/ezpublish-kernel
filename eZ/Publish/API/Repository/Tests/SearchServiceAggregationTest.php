@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Tests;
 
 use DateTime;
+use DateTimeZone;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -158,29 +159,49 @@ final class SearchServiceAggregationTest extends BaseTest
             [$contentTypeService, 'loadContentTypeGroupByIdentifier']
         );
 
+        $timezone = new DateTimeZone('+0000');
+
         yield DateMetadataRangeAggregation::class . '::MODIFIED' => [
             new DateMetadataRangeAggregation(
                 'modification_date',
                 DateMetadataRangeAggregation::MODIFIED,
                 [
-                    new Range(null, new DateTime('2003-01-01')),
-                    new Range(new DateTime('2003-01-01'), new DateTime('2004-01-01')),
-                    new Range(new DateTime('2004-01-01'), null),
+                    new Range(
+                        null,
+                        new DateTime('2003-01-01', $timezone)
+                    ),
+                    new Range(
+                        new DateTime('2003-01-01', $timezone),
+                        new DateTime('2004-01-01', $timezone)
+                    ),
+                    new Range(
+                        new DateTime('2004-01-01', $timezone),
+                        null
+                    ),
                 ]
             ),
             new RangeAggregationResult(
                 'modification_date',
                 [
                     new RangeAggregationResultEntry(
-                        new Range(null, new DateTime('2003-01-01')),
+                        new Range(
+                            null,
+                            new DateTime('2003-01-01', $timezone)
+                        ),
                         3
                     ),
                     new RangeAggregationResultEntry(
-                        new Range(new DateTime('2003-01-01'), new DateTime('2004-01-01')),
+                        new Range(
+                            new DateTime('2003-01-01', $timezone),
+                            new DateTime('2004-01-01', $timezone)
+                        ),
                         3
                     ),
                     new RangeAggregationResultEntry(
-                        new Range(new DateTime('2004-01-01'), null),
+                        new Range(
+                            new DateTime('2004-01-01', $timezone),
+                            null
+                        ),
                         12
                     ),
                 ]
@@ -192,24 +213,42 @@ final class SearchServiceAggregationTest extends BaseTest
                 'publication_date',
                 DateMetadataRangeAggregation::PUBLISHED,
                 [
-                    new Range(null, new DateTime('2003-01-01')),
-                    new Range(new DateTime('2003-01-01'), new DateTime('2004-01-01')),
-                    new Range(new DateTime('2004-01-01'), null),
+                    new Range(
+                        null,
+                        new DateTime('2003-01-01', $timezone)
+                    ),
+                    new Range(
+                        new DateTime('2003-01-01', $timezone),
+                        new DateTime('2004-01-01', $timezone)
+                    ),
+                    new Range(
+                        new DateTime('2004-01-01', $timezone),
+                        null
+                    ),
                 ]
             ),
             new RangeAggregationResult(
                 'publication_date',
                 [
                     new RangeAggregationResultEntry(
-                        new Range(null, new DateTime('2003-01-01')),
+                        new Range(
+                            null,
+                            new DateTime('2003-01-01', $timezone)
+                        ),
                         6
                     ),
                     new RangeAggregationResultEntry(
-                        new Range(new DateTime('2003-01-01'), new DateTime('2004-01-01')),
+                        new Range(
+                            new DateTime('2003-01-01', $timezone),
+                            new DateTime('2004-01-01', $timezone)
+                        ),
                         2
                     ),
                     new RangeAggregationResultEntry(
-                        new Range(new DateTime('2004-01-01'), null),
+                        new Range(
+                            new DateTime('2004-01-01', $timezone),
+                            null
+                        ),
                         10
                     ),
                 ]
@@ -537,6 +576,8 @@ final class SearchServiceAggregationTest extends BaseTest
             },
         ];
 
+        $timezone = new DateTimeZone('+0000');
+
         yield DateRangeAggregation::class => [
             new DateRangeAggregation(
                 'date_range',
@@ -545,29 +586,29 @@ final class SearchServiceAggregationTest extends BaseTest
                 [
                     new Range(
                         null,
-                        new DateTime('2020-07-01 00:00:00')
+                        new DateTime('2020-07-01T00:00:00', $timezone)
                     ),
                     new Range(
-                        new DateTime('2020-07-01 00:00:00'),
-                        new DateTime('2020-08-01T00:00:00')
+                        new DateTime('2020-07-01T00:00:00', $timezone),
+                        new DateTime('2020-08-01T00:00:00', $timezone)
                     ),
                     new Range(
-                        new DateTime('2020-08-01T00:00:00'),
+                        new DateTime('2020-08-01T00:00:00', $timezone),
                         null
                     ),
                 ]
             ),
             'ezdate',
             [
-                new DateTime('2020-05-01T00:00:00Z'),
-                new DateTime('2020-06-30T00:00:00Z'),
-                new DateTime('2020-06-30T12:00:00Z'),
-                new DateTime('2020-07-01T00:00:00Z'),
-                new DateTime('2020-07-01T12:00:00Z'),
-                new DateTime('2020-07-30T12:00:00Z'),
-                new DateTime('2020-08-01T00:00:01Z'),
-                new DateTime('2020-08-01T00:00:02Z'),
-                new DateTime('2020-08-01T00:00:03Z'),
+                new DateTime('2020-05-01 00:00:00', $timezone),
+                new DateTime('2020-06-30 00:00:00', $timezone),
+                new DateTime('2020-06-30 12:00:00', $timezone),
+                new DateTime('2020-07-01 00:00:00', $timezone),
+                new DateTime('2020-07-01 12:00:00', $timezone),
+                new DateTime('2020-07-30 12:00:00', $timezone),
+                new DateTime('2020-08-01 00:00:01', $timezone),
+                new DateTime('2020-08-01 00:00:02', $timezone),
+                new DateTime('2020-08-01 00:00:03', $timezone),
             ],
             new RangeAggregationResult(
                 'date_range',
@@ -575,20 +616,20 @@ final class SearchServiceAggregationTest extends BaseTest
                     new RangeAggregationResultEntry(
                         new Range(
                             null,
-                            new DateTime('2020-07-01 00:00:00')
+                            new DateTime('2020-07-01 00:00:00', $timezone)
                         ),
                         3,
                     ),
                     new RangeAggregationResultEntry(
                         new Range(
-                            new DateTime('2020-07-01 00:00:00'),
-                            new DateTime('2020-08-01T00:00:00')
+                            new DateTime('2020-07-01T00:00:00', $timezone),
+                            new DateTime('2020-08-01T00:00:00', $timezone)
                         ),
                         3
                     ),
                     new RangeAggregationResultEntry(
                         new Range(
-                            new DateTime('2020-08-01T00:00:00'),
+                            new DateTime('2020-08-01T00:00:00', $timezone),
                             null
                         ),
                         3
@@ -603,37 +644,55 @@ final class SearchServiceAggregationTest extends BaseTest
                 'content_type',
                 'datetime_field',
                 [
-                    new Range(null, new DateTime('2020-06-30 00:00:01')),
-                    new Range(new DateTime('2020-06-30 12:00:00'), new DateTime('2020-07-30 00:00:00')),
-                    new Range(new DateTime('2020-07-30 00:00:01'), new DateTime('2020-08-01 00:00:03')),
+                    new Range(
+                        null,
+                        new DateTime('2020-06-30 00:00:01', $timezone)
+                    ),
+                    new Range(
+                        new DateTime('2020-06-30 12:00:00', $timezone),
+                        new DateTime('2020-07-30 00:00:00', $timezone)
+                    ),
+                    new Range(
+                        new DateTime('2020-07-30 00:00:01', $timezone),
+                        new DateTime('2020-08-01 00:00:03', $timezone)
+                    ),
                 ]
             ),
             'ezdatetime',
             [
-                new DateTime('2020-05-01 00:00:00'),
-                new DateTime('2020-06-30 00:00:00'),
-                new DateTime('2020-06-30 12:00:00'),
-                new DateTime('2020-07-01 00:00:00'),
-                new DateTime('2020-07-01 12:00:00'),
-                new DateTime('2020-07-30 00:00:00'),
-                new DateTime('2020-07-30 12:00:00'),
-                new DateTime('2020-08-01 00:00:01'),
-                new DateTime('2020-08-01 00:00:02'),
-                new DateTime('2020-08-01 00:00:03'),
+                new DateTime('2020-05-01 00:00:00', $timezone),
+                new DateTime('2020-06-30 00:00:00', $timezone),
+                new DateTime('2020-06-30 12:00:00', $timezone),
+                new DateTime('2020-07-01 00:00:00', $timezone),
+                new DateTime('2020-07-01 12:00:00', $timezone),
+                new DateTime('2020-07-30 00:00:00', $timezone),
+                new DateTime('2020-07-30 12:00:00', $timezone),
+                new DateTime('2020-08-01 00:00:01', $timezone),
+                new DateTime('2020-08-01 00:00:02', $timezone),
+                new DateTime('2020-08-01 00:00:03', $timezone),
             ],
             new RangeAggregationResult(
                 'datetime_range',
                 [
                     new RangeAggregationResultEntry(
-                        new Range(null, new DateTime('2020-06-30 00:00:01')),
+                        new Range(
+                            null,
+                            new DateTime('2020-06-30 00:00:01', $timezone)
+                        ),
                         2,
                     ),
                     new RangeAggregationResultEntry(
-                        new Range(new DateTime('2020-06-30 12:00:00'), new DateTime('2020-07-30 00:00:00')),
+                        new Range(
+                            new DateTime('2020-06-30 12:00:00', $timezone),
+                            new DateTime('2020-07-30 00:00:00', $timezone)
+                        ),
                         3
                     ),
                     new RangeAggregationResultEntry(
-                        new Range(new DateTime('2020-07-30 00:00:01'), new DateTime('2020-08-01 00:00:03')),
+                        new Range(
+                            new DateTime('2020-07-30 00:00:01', $timezone),
+                            new DateTime('2020-08-01 00:00:03', $timezone)
+                        ),
                         3
                     ),
                 ]
