@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Values\Content\Query\Aggregation;
+namespace eZ\Publish\API\Repository\Tests\Values\Content\Query\Aggregation;
 
 use DateTimeImmutable;
 use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Range;
