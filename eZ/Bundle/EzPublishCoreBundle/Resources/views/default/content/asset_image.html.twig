@@ -2,6 +2,7 @@
 
 {% if image_field_identifier is not null %}
     {{ ez_render_field(content, image_field_identifier, {
+        template: '@EzPublishCore/content_fields.html.twig',
         parameters: parameters
     }) }}
 {% endif %}
