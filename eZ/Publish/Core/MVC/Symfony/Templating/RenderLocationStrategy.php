@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\MVC\Templating\BaseRenderStrategy;
 use eZ\Publish\SPI\MVC\Templating\RenderStrategy;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 final class RenderLocationStrategy extends BaseRenderStrategy implements RenderStrategy
 {
@@ -38,23 +38,14 @@ final class RenderLocationStrategy extends BaseRenderStrategy implements RenderS
         $content = $location->getContent();
 
         $currentRequest = $this->requestStack->getCurrentRequest();
-        $surrogateCapability = $currentRequest->headers->get('Surrogate-Capability');
-
-        $request = new Request();
-        $request->headers->set('siteaccess', $this->siteAccess->name);
-        $request->headers->set('Surrogate-Capability', $surrogateCapability);
-
-        $request->attributes->add([
-            '_route' => '_ez_content_view',
-            '_controller' => 'ez_content::viewAction',
-            'siteaccess' => $this->siteAccess,
-            'locationId' => $location->id,
+        $controllerReference = new ControllerReference('ez_content::viewAction', [
             'contentId' => $content->id,
+            'locationId' => $location->id,
             'viewType' => $options->get('viewType', self::DEFAULT_VIEW_TYPE),
         ]);
 
-        $renderMethod = $this->getRenderMethod($options, $content);
+        $renderer = $this->getFragmentRenderer($options->get('method', $this->defaultRenderer));
 
-        return $renderMethod->render($request);
+        return $renderer->render($controllerReference, $currentRequest)->getContent();
     }
 }

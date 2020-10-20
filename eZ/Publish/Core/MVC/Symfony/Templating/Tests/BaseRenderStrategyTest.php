@@ -16,16 +16,17 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Search\Tests\TestCase;
-use eZ\Publish\SPI\MVC\Templating\RenderMethod;
 use eZ\Publish\SPI\MVC\Templating\RenderStrategy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface;
 
 abstract class BaseRenderStrategyTest extends TestCase
 {
     public function createRenderStrategy(
         string $typeClass,
-        array $renderMethods,
+        array $fragmentRenderers,
         string $defaultMethod = 'inline',
         string $siteAccessName = 'default',
         Request $request = null
@@ -36,40 +37,43 @@ abstract class BaseRenderStrategyTest extends TestCase
         $requestStack->push($request ?? new Request());
 
         return new $typeClass(
-            $renderMethods,
+            $fragmentRenderers,
             $defaultMethod,
             $siteAccess,
             $requestStack
         );
     }
 
-    public function createRenderMethod(
-        string $identifier = 'inline',
+    public function createFragmentRenderer(
+        string $name = 'inline',
         string $rendered = null
-    ): RenderMethod {
-        return new class($identifier, $rendered) implements RenderMethod {
+    ): FragmentRendererInterface {
+        return new class($name, $rendered) implements FragmentRendererInterface {
             /** @var string */
-            private $identifier;
+            private $name;
 
             /** @var string */
             private $rendered;
 
             public function __construct(
-                string $identifier,
+                string $name,
                 ?string $rendered
             ) {
-                $this->identifier = $identifier;
+                $this->name = $name;
                 $this->rendered = $rendered;
             }
 
-            public function getIdentifier(): string
+            public function getName(): string
             {
-                return $this->identifier;
+                return $this->name;
             }
 
-            public function render(Request $request): string
-            {
-                return $this->rendered ?? $this->identifier . '_rendered';
+            public function render(
+                $uri,
+                Request $request,
+                array $options = []
+            ): Response {
+                return new Response($this->rendered ?? $this->name . '_rendered');
             }
         };
     }

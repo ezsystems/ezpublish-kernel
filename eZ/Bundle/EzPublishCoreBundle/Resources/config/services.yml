@@ -165,6 +165,17 @@ services:
             - [setSiteAccess, ["@ezpublish.siteaccess"]]
         abstract: true
 
+    eZ\Bundle\EzPublishCoreBundle\Fragment\DirectFragmentRenderer:
+        arguments:
+            $kernel: '@kernel'
+            $controllerListener: '@ezpublish.view_controller_listener'
+            $controllerResolver: '@controller_resolver'
+            $argumentMetadataFactory: '@argument_metadata_factory'
+            $argumentValueResolver: '@argument_resolver.request_attribute'
+            $viewTemplateRenderer: '@ezpublish.view.template_renderer'
+        tags:
+            - { name: kernel.fragment_renderer, alias: !php/const eZ\Bundle\EzPublishCoreBundle\Fragment\DirectFragmentRenderer::NAME }
+
     ezpublish.param_converter.content:
         class: eZ\Bundle\EzPublishCoreBundle\Converter\ContentParamConverter
         arguments:

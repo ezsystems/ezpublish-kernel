@@ -8,19 +8,18 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\MVC\Templating;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\Templating\RenderOptions;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface;
 
 abstract class BaseRenderStrategy implements RenderStrategy
 {
-    /** @var string */
-    protected $defaultMethod;
+    /** @var \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface[] */
+    protected $fragmentRenderers;
 
-    /** @var \eZ\Publish\SPI\MVC\Templating\RenderMethod[] */
-    protected $renderMethods = [];
+    /** @var string */
+    protected $defaultRenderer;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     protected $siteAccess;
@@ -29,30 +28,28 @@ abstract class BaseRenderStrategy implements RenderStrategy
     protected $requestStack;
 
     public function __construct(
-        iterable $renderMethods,
-        string $defaultMethod,
+        iterable $fragmentRenderers,
+        string $defaultRenderer,
         SiteAccess $siteAccess,
         RequestStack $requestStack
     ) {
-        $this->defaultMethod = $defaultMethod;
-        $this->siteAccess = $siteAccess;
-
-        foreach ($renderMethods as $renderMethod) {
-            $this->renderMethods[$renderMethod->getIdentifier()] = $renderMethod;
+        foreach ($fragmentRenderers as $fragmentRenderer) {
+            $this->fragmentRenderers[$fragmentRenderer->getName()] = $fragmentRenderer;
         }
+
+        $this->defaultRenderer = $defaultRenderer;
+        $this->siteAccess = $siteAccess;
         $this->requestStack = $requestStack;
     }
 
-    protected function getRenderMethod(RenderOptions $options, ValueObject $valueObject): RenderMethod
+    protected function getFragmentRenderer(string $name): FragmentRendererInterface
     {
-        $method = $options->get('method', $this->defaultMethod);
-
-        if (empty($this->renderMethods[$method])) {
+        if (empty($this->fragmentRenderers[$name])) {
             throw new InvalidArgumentException('method', sprintf(
-                "Method '%s' is not supported for %s.", $method, get_class($valueObject)
+                'Fragment renderer "%s" does not exist.', $name
             ));
         }
 
-        return $this->renderMethods[$method];
+        return $this->fragmentRenderers[$name];
     }
 }

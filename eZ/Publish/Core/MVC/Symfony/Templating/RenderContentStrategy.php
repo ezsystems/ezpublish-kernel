@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\MVC\Symfony\Templating;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\MVC\Templating\BaseRenderStrategy;
 use eZ\Publish\SPI\MVC\Templating\RenderStrategy;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 final class RenderContentStrategy extends BaseRenderStrategy implements RenderStrategy
 {
@@ -29,7 +30,7 @@ final class RenderContentStrategy extends BaseRenderStrategy implements RenderSt
         if (!$this->supports($valueObject)) {
             throw new InvalidArgumentException(
                 'valueObject',
-                'Must be a type of ' . Content::class
+                'Must be a type of ' . Location::class
             );
         }
 
@@ -37,22 +38,13 @@ final class RenderContentStrategy extends BaseRenderStrategy implements RenderSt
         $content = $valueObject;
 
         $currentRequest = $this->requestStack->getCurrentRequest();
-        $surrogateCapability = $currentRequest->headers->get('Surrogate-Capability');
-
-        $request = new Request();
-        $request->headers->set('siteaccess', $this->siteAccess->name);
-        $request->headers->set('Surrogate-Capability', $surrogateCapability);
-
-        $request->attributes->add([
-            '_route' => '_ez_content_view',
-            '_controller' => 'ez_content::viewAction',
-            'siteaccess' => $this->siteAccess,
+        $controllerReference = new ControllerReference('ez_content::viewAction', [
             'contentId' => $content->id,
             'viewType' => $options->get('viewType', self::DEFAULT_VIEW_TYPE),
         ]);
 
-        $renderMethod = $this->getRenderMethod($options, $content);
+        $renderer = $this->getFragmentRenderer($options->get('method', $this->defaultRenderer));
 
-        return $renderMethod->render($request);
+        return $renderer->render($controllerReference, $currentRequest)->getContent();
     }
 }

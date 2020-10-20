@@ -184,8 +184,8 @@ services:
 
     eZ\Publish\Core\MVC\Symfony\Templating\RenderContentStrategy:
         arguments:
-            $defaultMethod: 'inline'
-            $renderMethods: !tagged_iterator ibexa.platform.render.method
+            $fragmentRenderers: !tagged_iterator kernel.fragment_renderer
+            $defaultRenderer: !php/const eZ\Bundle\EzPublishCoreBundle\Fragment\DirectFragmentRenderer::NAME
             $siteAccess: '@ezpublish.siteaccess'
             $requestStack: '@request_stack'
         tags:
@@ -193,36 +193,12 @@ services:
 
     eZ\Publish\Core\MVC\Symfony\Templating\RenderLocationStrategy:
         arguments:
-            $defaultMethod: 'inline'
-            $renderMethods: !tagged_iterator ibexa.platform.render.method
+            $fragmentRenderers: !tagged_iterator kernel.fragment_renderer
+            $defaultRenderer: !php/const eZ\Bundle\EzPublishCoreBundle\Fragment\DirectFragmentRenderer::NAME
             $siteAccess: '@ezpublish.siteaccess'
             $requestStack: '@request_stack'
         tags:
             - { name: ibexa.platform.render.strategy }
-
-    eZ\Publish\Core\MVC\Symfony\Templating\RenderMethod\RenderInline:
-        arguments:
-            $kernel: '@kernel'
-            $controllerListener: '@ezpublish.view_controller_listener'
-            $controllerResolver: '@controller_resolver'
-            $argumentMetadataFactory: '@argument_metadata_factory'
-            $argumentValueResolver: '@argument_resolver.request_attribute'
-            $viewTemplateRenderer: '@ezpublish.view.template_renderer'
-        tags:
-            - { name: ibexa.platform.render.method }
-
-    eZ\Publish\Core\MVC\Symfony\Templating\RenderMethod\RenderSubRequest:
-        arguments:
-            $kernel: '@kernel'
-        tags:
-            - { name: ibexa.platform.render.method }
-
-    eZ\Publish\Core\MVC\Symfony\Templating\RenderMethod\RenderEdgeSideInclude:
-        arguments:
-            $fragmentRenderer: '@fragment.renderer.esi'
-            $router: '@router'
-        tags:
-            - { name: ibexa.platform.render.method }
 
     ezpublish.twig.extension.image:
         class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
