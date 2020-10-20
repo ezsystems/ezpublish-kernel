@@ -3230,7 +3230,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $copiedType = $contentTypeService->copyContentType($commentType);
 
         $contentTypes = $contentTypeService->loadContentTypes($contentTypeGroup);
-        $contentTypeIdentifiers = array_map(function (ContentType $contentType) {
+        $contentTypeIdentifiers = array_map(static function (ContentType $contentType) {
             return $contentType->identifier;
         }, $contentTypes);
         /* END: Use Case */
