@@ -3222,15 +3222,27 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService = $repository->getContentTypeService();
 
         $commentType = $contentTypeService->loadContentTypeByIdentifier('comment');
+        $contentTypeGroup = $commentType->contentTypeGroups[0];
+        $contentTypes = $contentTypeService->loadContentTypes($contentTypeGroup);
+        $contentTypesCount = count($contentTypes);
 
         // Complete copy of the "comment" type
         $copiedType = $contentTypeService->copyContentType($commentType);
+
+        $contentTypes = $contentTypeService->loadContentTypes($contentTypeGroup);
+        $contentTypeIdentifiers = array_map(static function (ContentType $contentType) {
+            return $contentType->identifier;
+        }, $contentTypes);
         /* END: Use Case */
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType',
             $copiedType
         );
+
+        $this->assertContains($commentType->identifier, $contentTypeIdentifiers);
+        $this->assertContains($copiedType->identifier, $contentTypeIdentifiers);
+        $this->assertCount($contentTypesCount + 1, $contentTypes);
 
         return [
             'originalType' => $commentType,
