@@ -1783,9 +1783,10 @@ class UserServiceTest extends BaseTest
 
         // Make sure passwordUpdatedAt field has been updated together with password
         $this->assertNotNull($user->passwordUpdatedAt);
-        $this->assertGreaterThanOrEqual(
+        $this->assertEqualsWithDelta(
             $user->getVersionInfo()->modificationDate->getTimestamp(),
-            $user->passwordUpdatedAt->getTimestamp()
+            $user->passwordUpdatedAt->getTimestamp(),
+            2.0
         );
     }
 
