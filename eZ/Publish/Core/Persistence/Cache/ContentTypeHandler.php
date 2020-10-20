@@ -332,8 +332,17 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     public function copy($userId, $typeId, $status)
     {
         $this->logger->logCall(__METHOD__, ['user' => $userId, 'type' => $typeId, 'status' => $status]);
+        $copy = $this->persistenceHandler->contentTypeHandler()->copy($userId, $typeId, $status);
 
-        return $this->persistenceHandler->contentTypeHandler()->copy($userId, $typeId, $status);
+        // Clear loadContentTypes() cache as we effetely add an item to it's collection here.
+        $this->cache->deleteItems(array_map(
+            static function ($groupId) {
+                return 'ez-content-type-list-by-group-' . $groupId;
+            },
+            $copy->groupIds
+        ));
+
+        return $copy;
     }
 
     /**
