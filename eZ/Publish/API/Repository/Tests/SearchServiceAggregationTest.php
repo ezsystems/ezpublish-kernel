@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\ContentTypeGroupTermAggregation;
 use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\ContentTypeTermAggregation;
 use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\DateMetadataRangeAggregation;
+use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\AuthorTermAggregation;
 use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\CheckboxTermAggregation;
 use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\CountryTermAggregation;
 use eZ\Publish\API\Repository\Values\Content\Query\Aggregation\Field\DateRangeAggregation;
@@ -48,8 +49,10 @@ use eZ\Publish\API\Repository\Values\Content\Search\AggregationResult\TermAggreg
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\Core\FieldType\Author\Author;
 use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue;
 use eZ\Publish\Core\FieldType\Time\Value as TimeValue;
+use eZ\Publish\Core\FieldType\Author\Value as AuthorValue;
 
 /**
  * Test case for aggregations in the SearchService.
@@ -453,6 +456,84 @@ final class SearchServiceAggregationTest extends BaseTest
 
     public function dataProviderForTestFieldAggregation(): iterable
     {
+        yield AuthorTermAggregation::class => [
+            new AuthorTermAggregation('author_term', 'content_type', 'author'),
+            'ezauthor',
+            [
+                new AuthorValue([
+                    new Author([
+                        'name' => 'Boba Fett',
+                        'email' => 'boba.fett@example.com',
+                    ]),
+                    new Author([
+                        'name' => 'Luke Skywalker',
+                        'email' => 'luke.skywalker@example.com',
+                    ]),
+                ]),
+                new AuthorValue([
+                    new Author([
+                        'name' => 'Anakin Skywalker',
+                        'email' => 'anakin.skywalker@example.com',
+                    ]),
+                ]),
+                new AuthorValue([
+                    new Author([
+                        'name' => 'Boba Fett',
+                        'email' => 'boba.fett@example.com',
+                    ]),
+                ]),
+                new AuthorValue([
+                    new Author([
+                        'name' => 'Luke Skywalker',
+                        'email' => 'luke.skywalker@example.com',
+                    ]),
+                    new Author([
+                        'name' => 'Leia Organa',
+                        'email' => 'leia.organa@example.com',
+                    ]),
+                ]),
+                new AuthorValue([
+                    new Author([
+                        'name' => 'Leia Organa',
+                        'email' => 'leia.organa@example.com',
+                    ]),
+                ]),
+            ],
+            new TermAggregationResult(
+                'author_term',
+                [
+                    new TermAggregationResultEntry(
+                        new Author([
+                            'name' => 'Boba Fett',
+                            'email' => 'boba.fett@example.com',
+                        ]),
+                        2
+                    ),
+                    new TermAggregationResultEntry(
+                        new Author([
+                            'name' => 'Leia Organa',
+                            'email' => 'leia.organa@example.com',
+                        ]),
+                        2
+                    ),
+                    new TermAggregationResultEntry(
+                        new Author([
+                            'name' => 'Luke Skywalker',
+                            'email' => 'luke.skywalker@example.com',
+                        ]),
+                        2
+                    ),
+                    new TermAggregationResultEntry(
+                        new Author([
+                            'name' => 'Anakin Skywalker',
+                            'email' => 'anakin.skywalker@example.com',
+                        ]),
+                        1
+                    ),
+                ]
+            ),
+        ];
+
         yield CheckboxTermAggregation::class => [
             new CheckboxTermAggregation('checkbox_term', 'content_type', 'boolean'),
             'ezboolean',

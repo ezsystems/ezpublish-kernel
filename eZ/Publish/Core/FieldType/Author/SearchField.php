@@ -10,6 +10,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
+use eZ\Publish\SPI\Search\FieldType\MultipleIdentifierField;
 
 /**
  * Indexable definition for Author field type.
@@ -29,11 +30,17 @@ class SearchField implements Indexable
         $name = [];
         $id = [];
         $email = [];
+        $aggregationValues = [];
 
         foreach ($field->value->data as $author) {
             $name[] = $author['name'];
             $id[] = $author['id'];
             $email[] = $author['email'];
+
+            $aggregationValues[] = json_encode([
+                'name' => $author['name'],
+                'email' => $author['email'],
+            ]);
         }
 
         return [
@@ -56,6 +63,11 @@ class SearchField implements Indexable
                 'count',
                 count($field->value->data),
                 new Search\FieldType\IntegerField()
+            ),
+            new Search\Field(
+                'aggregation_value',
+                $aggregationValues,
+                new MultipleIdentifierField(['raw' => true]),
             ),
             new Search\Field(
                 'sort_value',
@@ -82,6 +94,7 @@ class SearchField implements Indexable
             'id' => new Search\FieldType\MultipleIntegerField(),
             'email' => new Search\FieldType\MultipleStringField(),
             'count' => new Search\FieldType\IntegerField(),
+            'aggregation_value' => new MultipleIdentifierField(['raw' => true]),
             'sort_value' => new Search\FieldType\StringField(),
         ];
     }
