@@ -336,7 +336,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
 
         // Clear loadContentTypes() cache as we remove an item from it's collection here.
         $this->cache->deleteItems(array_map(
-            function ($groupId) {
+            static function ($groupId) {
                 return 'ez-content-type-list-by-group-' . $groupId;
             },
             $copy->groupIds
