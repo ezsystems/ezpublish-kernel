@@ -3278,8 +3278,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $this->assertContains($copiedType->identifier, $contentTypeIdentifiers);
         $this->assertCount($contentTypesCount + 1, $contentTypes);
 
+        $originalType = $contentTypeService->loadContentTypeByIdentifier('comment');
+
         return [
-            'originalType' => $commentType,
+            'originalType' => $originalType,
             'copiedType' => $copiedType,
         ];
     }
