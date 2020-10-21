@@ -371,8 +371,7 @@ class Type extends FieldType
         $hashValue1 = $this->toHash($value1);
         $hashValue2 = $this->toHash($value2);
 
-        unset($hashValue1['imageId']);
-        unset($hashValue2['imageId']);
+        unset($hashValue1['imageId'], $hashValue2['imageId']);
 
         return $hashValue1 === $hashValue2;
     }

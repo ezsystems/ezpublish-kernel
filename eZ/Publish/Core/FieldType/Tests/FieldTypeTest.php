@@ -511,6 +511,11 @@ abstract class FieldTypeTest extends TestCase
         ];
     }
 
+    public function provideInputForValuesEqual(): array
+    {
+        return $this->provideInputForToHash();
+    }
+
     /**
      * Retrieves a test wide cached version of the field type under test.
      *
@@ -972,6 +977,19 @@ abstract class FieldTypeTest extends TestCase
         $validationErrors = $fieldType->validate($fieldDefinitionMock, $value);
 
         return $validationErrors;
+    }
+
+    /**
+     * @dataProvider provideInputForValuesEqual
+     */
+    public function testValuesEqual($inputValue1, $inputValue2)
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        self::assertTrue(
+            $fieldType->valuesEqual($inputValue1, $inputValue2),
+            'valuesEqual() method did not create expected result.'
+        );
     }
 
     // @todo: More test methods …

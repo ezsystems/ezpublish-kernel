@@ -845,20 +845,4 @@ class ImageTest extends FieldTypeTest
             ],
         ];
     }
-
-    /**
-     * @param ImageValue $inputValue1
-     * @param ImageValue $inputValue2
-     *
-     * @dataProvider provideInputForValuesEqual
-     */
-    public function testValuesEqual($inputValue1, $inputValue2)
-    {
-        $fieldType = $this->getFieldTypeUnderTest();
-
-        $this->assertTrue(
-            $fieldType->valuesEqual($inputValue1, $inputValue2),
-            'valuesEqual() method did not create expected result.'
-        );
-    }
 }
