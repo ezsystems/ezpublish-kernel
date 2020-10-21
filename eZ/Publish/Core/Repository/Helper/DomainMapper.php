@@ -683,6 +683,7 @@ class DomainMapper
      * @param mixed $mainLocation
      * @param mixed $contentId
      * @param mixed $contentVersionNo
+     * @param bool $isContentHidden
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct
      */
@@ -691,7 +692,8 @@ class DomainMapper
         APILocation $parentLocation,
         $mainLocation,
         $contentId,
-        $contentVersionNo
+        $contentVersionNo,
+        bool $isContentHidden
     ) {
         if (!$this->isValidLocationPriority($locationCreateStruct->priority)) {
             throw new InvalidArgumentValue('priority', $locationCreateStruct->priority, 'LocationCreateStruct');
@@ -733,10 +735,10 @@ class DomainMapper
                 'priority' => $locationCreateStruct->priority,
                 'hidden' => $locationCreateStruct->hidden,
                 // If we declare the new Location as hidden, it is automatically invisible
-                // Otherwise it picks up visibility from parent Location
+                // Otherwise it picks up visibility from parent Location and Content
                 // Note: There is no need to check for hidden status of parent, as hidden Location
                 // is always invisible as well
-                'invisible' => ($locationCreateStruct->hidden === true || $parentLocation->invisible),
+                'invisible' => ($locationCreateStruct->hidden === true || $parentLocation->invisible || $isContentHidden),
                 'remoteId' => $remoteId,
                 'contentId' => $contentId,
                 'contentVersion' => $contentVersionNo,

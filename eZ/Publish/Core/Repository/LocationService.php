@@ -468,7 +468,8 @@ class LocationService implements LocationServiceInterface
             $parentLocation,
             $contentInfo->mainLocationId ?? true,
             $contentInfo->id,
-            $contentInfo->currentVersionNo
+            $contentInfo->currentVersionNo,
+            $contentInfo->isHidden
         );
 
         $this->repository->beginTransaction();
