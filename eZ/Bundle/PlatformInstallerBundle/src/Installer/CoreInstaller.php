@@ -80,8 +80,10 @@ class CoreInstaller extends DbBasedInstaller implements Installer
         }
 
         $progressBar->finish();
-        // go to the next line after ProgressBar::finish
-        $this->output->writeln('');
+        // go to the next line after ProgressBar::finish and add one more extra blank line for readability
+        $this->output->writeln(PHP_EOL);
+        // clear any leftover progress bar parts in the output buffer
+        $progressBar->clear();
     }
 
     /**
