@@ -986,6 +986,12 @@ abstract class FieldTypeTest extends TestCase
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
+        if($inputValue1 === null) {
+            $inputValue1 = $fieldType->getEmptyValue();
+        }
+
+        $inputValue2 = $fieldType->acceptValue($inputValue2);
+
         self::assertTrue(
             $fieldType->valuesEqual($inputValue1, $inputValue2),
             'valuesEqual() method did not create expected result.'
