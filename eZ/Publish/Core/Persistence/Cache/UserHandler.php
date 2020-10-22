@@ -215,6 +215,21 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         return $user;
     }
 
+    public function updatePassword(User $user): void
+    {
+        $this->logger->logCall(__METHOD__, ['user-login' => $user->login]);
+
+        $this->persistenceHandler->userHandler()->updatePassword($user);
+
+        // Clear corresponding content cache as update of the User changes it's external data
+        $this->cache->invalidateTags(['content-' . $user->id, 'user-' . $user->id]);
+        // Clear especially by email key as it might already be cached and this might represent change to email
+        $this->cache->deleteItems([
+            'ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email',
+            'ez-users-' . $this->escapeForCacheKey($user->email) . '-by-email',
+        ]);
+    }
+
     /**
      * {@inheritdoc}
      */

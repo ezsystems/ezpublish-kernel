@@ -13,6 +13,7 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
+use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 use function time;
 
@@ -119,6 +120,29 @@ final class DoctrineDatabase extends Gateway
         $statement = $query->execute();
 
         return $statement->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    public function updateUserPassword(User $user): void
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+
+        $queryBuilder
+            ->update($this->connection->quoteIdentifier(self::USER_TABLE))
+            ->set('password_hash', ':passwordHash')
+            ->set('password_hash_type', ':passwordHashType')
+            ->set('password_updated_at', ':passwordUpdatedAt')
+            ->setParameter(':passwordHash', $user->passwordHash, ParameterType::STRING)
+            ->setParameter(':passwordHashType', $user->hashAlgorithm, ParameterType::INTEGER)
+            ->setParameter(':passwordUpdatedAt', $user->passwordUpdatedAt)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    $this->connection->quoteIdentifier('contentobject_id'),
+                    ':userId'
+                )
+            )
+            ->setParameter(':userId', $user->id, ParameterType::INTEGER);
+
+        $queryBuilder->execute();
     }
 
     public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct): void

@@ -92,6 +92,8 @@ interface Handler
      */
     public function update(User $user);
 
+    public function updatePassword(User $user): void;
+
     /**
      * Update the user information specified by the user token struct.
      *

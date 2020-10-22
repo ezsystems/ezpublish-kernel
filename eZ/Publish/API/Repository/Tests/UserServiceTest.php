@@ -2018,6 +2018,35 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\UserService::updateUserPassword
+     */
+    public function testUpdateUserPasswordWorksWithUserPasswordRole(): void
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
+
+        $this->createRoleWithPolicies('CanChangePassword', [
+            ['module' => 'user', 'function' => 'password'],
+        ]);
+
+        $user = $this->createCustomUserWithLogin(
+            'with_role_password',
+            'with_role_password@example.com',
+            'Anons',
+            'CanChangePassword'
+        );
+        $previousHash = $user->passwordHash;
+
+        $permissionResolver->setCurrentUserReference($user);
+
+        $userService->updateUserPassword($user, 'new password');
+
+        $user = $userService->loadUserByLogin('with_role_password');
+        $this->assertNotEquals($previousHash, $user->passwordHash);
+    }
+
+    /**
      * Test for the loadUserGroupsOfUser() method.
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser

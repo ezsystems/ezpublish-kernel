@@ -37,6 +37,7 @@ use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
+use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Filter\Content\Handler as ContentFilteringHandler;
 use eZ\Publish\SPI\Persistence\Filter\Location\Handler as LocationFilteringHandler;
@@ -259,6 +260,9 @@ class Repository implements RepositoryInterface
     /** @var \eZ\Publish\SPI\Persistence\Filter\Location\Handler */
     private $locationFilteringHandler;
 
+    /** @var PasswordValidatorInterface */
+    private $passwordValidator;
+
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
@@ -278,6 +282,7 @@ class Repository implements RepositoryInterface
         PermissionService $permissionService,
         ContentFilteringHandler $contentFilteringHandler,
         LocationFilteringHandler $locationFilteringHandler,
+        PasswordValidatorInterface $passwordValidator,
         array $serviceSettings = [],
         ?LoggerInterface $logger = null
     ) {
@@ -326,6 +331,7 @@ class Repository implements RepositoryInterface
         $this->logger = null !== $logger ? $logger : new NullLogger();
         $this->contentMapper = $contentMapper;
         $this->contentValidator = $contentValidator;
+        $this->passwordValidator = $passwordValidator;
     }
 
     /**
@@ -515,6 +521,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->userHandler(),
             $this->persistenceHandler->locationHandler(),
             $this->passwordHashService,
+            $this->passwordValidator,
             $this->serviceSettings['user']
         );
 

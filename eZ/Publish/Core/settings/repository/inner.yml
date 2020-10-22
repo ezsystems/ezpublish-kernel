@@ -34,6 +34,7 @@ services:
             - '@eZ\Publish\API\Repository\PermissionService'
             - '@eZ\Publish\SPI\Persistence\Filter\Content\Handler'
             - '@eZ\Publish\SPI\Persistence\Filter\Location\Handler'
+            - '@eZ\Publish\Core\Repository\User\PasswordValidatorInterface'
             - '%languages%'
 
     ezpublish.api.service.inner_content:

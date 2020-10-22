@@ -17,6 +17,7 @@ use eZ\Publish\Core\Repository\Strategy\ContentValidator\ContentValidatorStrateg
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\FieldType\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
+use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
 use eZ\Publish\Core\Repository\Validator\ContentCreateStructValidator;
 use eZ\Publish\Core\Repository\Validator\ContentUpdateStructValidator;
 use eZ\Publish\Core\Repository\Validator\VersionValidator;
@@ -122,6 +123,7 @@ abstract class Base extends TestCase
                 $this->getPermissionServiceMock(),
                 $this->getContentFilteringHandlerMock(),
                 $this->getLocationFilteringHandlerMock(),
+                $this->createMock(PasswordValidatorInterface::class),
                 $serviceSettings,
             );
 

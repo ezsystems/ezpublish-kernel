@@ -6,6 +6,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+
 /**
  * Test case for operations in the UserService using in memory storage.
  *
@@ -295,6 +297,31 @@ class UserServiceAuthorizationTest extends BaseTest
         // This call will fail with an "UnauthorizedException"
         $userService->updateUser($user, $userUpdateStruct);
         /* END: Use Case */
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\UserService::updateUserPassword
+     */
+    public function testUpdateUserPasswordThrowsUnauthorizedException(): void
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
+
+        $this->createRoleWithPolicies('CannotChangePassword', []);
+
+        $user = $this->createCustomUserWithLogin(
+            'without_role_password',
+            'without_role_password@example.com',
+            'Anons',
+            'CannotChangePassword'
+        );
+
+        // Now set the currently created "Editor" as current user
+        $permissionResolver->setCurrentUserReference($user);
+
+        $this->expectException(UnauthorizedException::class);
+        $userService->updateUserPassword($user, 'new password');
     }
 
     /**

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 use eZ\Publish\Core\Base\Exceptions\DatabaseException;
 use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 use Doctrine\DBAL\DBALException;
+use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 use PDOException;
 
@@ -67,6 +68,15 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadUserByToken($hash);
+        } catch (DBALException | PDOException $e) {
+            throw DatabaseException::wrap($e);
+        }
+    }
+
+    public function updateUserPassword(User $user): void
+    {
+        try {
+            $this->innerGateway->updateUserPassword($user);
         } catch (DBALException | PDOException $e) {
             throw DatabaseException::wrap($e);
         }
