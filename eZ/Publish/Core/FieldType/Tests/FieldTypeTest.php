@@ -986,7 +986,7 @@ abstract class FieldTypeTest extends TestCase
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        if($inputValue1 === null) {
+        if ($inputValue1 === null) {
             $inputValue1 = $fieldType->getEmptyValue();
         }
 
