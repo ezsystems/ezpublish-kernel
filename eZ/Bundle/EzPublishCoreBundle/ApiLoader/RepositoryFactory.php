@@ -16,6 +16,7 @@ use eZ\Publish\Core\Repository\ProxyFactory\ProxyDomainMapperFactoryInterface;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Mapper;
+use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Filter\Content\Handler as ContentFilteringHandler;
 use eZ\Publish\SPI\Persistence\Filter\Location\Handler as LocationFilteringHandler;
@@ -88,7 +89,8 @@ class RepositoryFactory implements ContainerAwareInterface
         LimitationService $limitationService,
         PermissionService $permissionService,
         ContentFilteringHandler $contentFilteringHandler,
-        LocationFilteringHandler $locationFilteringHandler
+        LocationFilteringHandler $locationFilteringHandler,
+        PasswordValidatorInterface $passwordValidator
     ): Repository {
         $config = $this->container->get('ezpublish.api.repository_configuration_provider')->getRepositoryConfig();
 
@@ -111,6 +113,7 @@ class RepositoryFactory implements ContainerAwareInterface
             $permissionService,
             $contentFilteringHandler,
             $locationFilteringHandler,
+            $passwordValidator,
             [
                 'role' => [
                     'policyMap' => $this->policyMap,

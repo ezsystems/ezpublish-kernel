@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
+use eZ\Publish\API\Repository\Events\User\BeforeUpdateUserPasswordEvent;
+use eZ\Publish\API\Repository\Events\User\UpdateUserPasswordEvent;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -223,6 +225,58 @@ class UserService extends UserServiceDecorator
 
         $this->eventDispatcher->dispatch(
             new UpdateUserEvent($updatedUser, ...$eventData)
+        );
+
+        return $updatedUser;
+    }
+
+    public function updateUserPassword(
+        User $user,
+        string $newPassword
+    ): User {
+        $eventData = [
+            $user,
+            new UserUpdateStruct([
+                'password' => $newPassword,
+            ]),
+        ];
+
+        /**
+         * @deprecated since eZ Platform by Ibexa v3.1. listening on BeforeUpdateUserEvent when updating password has been deprecated. Use BeforeUpdateUserPasswordEvent instead.
+         */
+        $beforeEvent = new BeforeUpdateUserEvent(...$eventData);
+
+        $this->eventDispatcher->dispatch($beforeEvent);
+        if ($beforeEvent->isPropagationStopped()) {
+            return $beforeEvent->getUpdatedUser();
+        }
+
+        $beforePasswordEvent = new BeforeUpdateUserPasswordEvent($user, $newPassword);
+
+        $this->eventDispatcher->dispatch($beforePasswordEvent);
+        if ($beforePasswordEvent->isPropagationStopped()) {
+            return $beforePasswordEvent->getUpdatedUser();
+        }
+
+        if ($beforeEvent->hasUpdatedUser()) {
+            $updatedUser = $beforeEvent->getUpdatedUser();
+        } elseif ($beforePasswordEvent->hasUpdatedUser()) {
+            $updatedUser = $beforePasswordEvent->getUpdatedUser();
+        } else {
+            $updatedUser = $this->innerService->updateUserPassword($user, $newPassword);
+        }
+
+        /**
+         * @deprecated since eZ Platform by Ibexa v3.1. Listening on UpdateUserEvent when updating password has been deprecated. Use UpdateUserPasswordEvent instead.
+         */
+        $afterEvent = new UpdateUserEvent($updatedUser, ...$eventData);
+        $this->eventDispatcher->dispatch(
+            $afterEvent
+        );
+
+        $afterPasswordEvent = new UpdateUserPasswordEvent($updatedUser, $user, $newPassword);
+        $this->eventDispatcher->dispatch(
+            $afterPasswordEvent
         );
 
         return $updatedUser;

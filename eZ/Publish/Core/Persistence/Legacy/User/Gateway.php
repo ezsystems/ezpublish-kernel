@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\User;
 
+use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 
 /**
@@ -38,6 +39,13 @@ abstract class Gateway
      * Load a User by User token.
      */
     abstract public function loadUserByToken(string $hash): array;
+
+    /**
+     * Update the user password as specified by the user struct.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User $user
+     */
+    abstract public function updateUserPassword(User $user): void;
 
     /**
      * Update a User token specified by UserTokenUpdateStruct.

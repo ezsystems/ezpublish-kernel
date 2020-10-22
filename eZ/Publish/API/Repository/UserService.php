@@ -234,6 +234,14 @@ interface UserService
     public function updateUser(User $user, UserUpdateStruct $userUpdateStruct): User;
 
     /**
+     * Updates user's password.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if new password does not pass validation
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user
+     */
+    public function updateUserPassword(User $user, string $newPassword): User;
+
+    /**
      * Update the user token information specified by the user token struct.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user

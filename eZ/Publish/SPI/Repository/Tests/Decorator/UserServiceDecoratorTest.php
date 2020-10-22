@@ -247,6 +247,21 @@ class UserServiceDecoratorTest extends TestCase
         $decoratedService->updateUser(...$parameters);
     }
 
+    public function testUpdateUserPasswordDecorator(): void
+    {
+        $serviceMock = $this->createServiceMock();
+        $decoratedService = $this->createDecorator($serviceMock);
+
+        $parameters = [
+            $this->createMock(User::class),
+            'H@xi0r!',
+        ];
+
+        $serviceMock->expects($this->once())->method('updateUserPassword')->with(...$parameters);
+
+        $decoratedService->updateUserPassword(...$parameters);
+    }
+
     public function testUpdateUserTokenDecorator()
     {
         $serviceMock = $this->createServiceMock();

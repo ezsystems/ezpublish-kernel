@@ -30,6 +30,9 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\User\PasswordInfo;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
+use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
+use eZ\Publish\Core\Base\Exceptions\MissingUserFieldTypeException;
+use eZ\Publish\Core\Repository\User\PasswordValidatorInterface;
 use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
 use eZ\Publish\Core\Repository\User\PasswordHashServiceInterface;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
@@ -40,7 +43,6 @@ use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
-use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
@@ -61,6 +63,8 @@ use Psr\Log\LoggerInterface;
  */
 class UserService implements UserServiceInterface
 {
+    private const USER_FIELD_TYPE_NAME = 'ezuser';
+
     /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
@@ -82,6 +86,9 @@ class UserService implements UserServiceInterface
     /** @var \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface */
     private $passwordHashService;
 
+    /** @var PasswordValidatorInterface */
+    private $passwordValidator;
+
     public function setLogger(LoggerInterface $logger = null)
     {
         $this->logger = $logger;
@@ -91,8 +98,11 @@ class UserService implements UserServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
+     * @param \eZ\Publish\Core\Repository\User\PasswordHashServiceInterface $passwordHashGenerator
+     * @param \eZ\Publish\Core\Repository\User\PasswordValidatorInterface $passwordValidator
      * @param array $settings
      */
     public function __construct(
@@ -101,6 +111,7 @@ class UserService implements UserServiceInterface
         Handler $userHandler,
         LocationHandler $locationHandler,
         PasswordHashServiceInterface $passwordHashGenerator,
+        PasswordValidatorInterface $passwordValidator,
         array $settings = []
     ) {
         $this->repository = $repository;
@@ -116,6 +127,7 @@ class UserService implements UserServiceInterface
             'siteName' => 'ez.no',
         ];
         $this->passwordHashService = $passwordHashGenerator;
+        $this->passwordValidator = $passwordValidator;
     }
 
     /**
@@ -414,7 +426,7 @@ class UserService implements UserServiceInterface
         // Search for the first ezuser field type in content type
         $userFieldDefinition = $this->getUserFieldDefinition($userCreateStruct->contentType);
         if ($userFieldDefinition === null) {
-            throw new ContentValidationException('the provided Content Type does not contain the ezuser Field Type');
+            throw new MissingUserFieldTypeException($userCreateStruct->contentType, self::USER_FIELD_TYPE_NAME);
         }
 
         $this->repository->beginTransaction();
@@ -497,45 +509,6 @@ class UserService implements UserServiceInterface
     public function checkUserCredentials(APIUser $user, string $credentials): bool
     {
         return $this->comparePasswordHashForAPIUser($user, $credentials);
-    }
-
-    /**
-     * Update password hash to the type configured for the service, if they differ.
-     *
-     * @param string $login User login
-     * @param string $password User password
-     * @param \eZ\Publish\SPI\Persistence\User $spiUser
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException if the password is not correctly saved, in which case the update is reverted
-     */
-    private function updatePasswordHash(string $login, string $password, SPIUser $spiUser)
-    {
-        $hashType = $this->passwordHashService->getDefaultHashType();
-        if ($spiUser->hashAlgorithm === $hashType) {
-            return;
-        }
-
-        $spiUser->passwordHash = $this->passwordHashService->createPasswordHash($password, $hashType);
-        $spiUser->hashAlgorithm = $hashType;
-
-        $this->repository->beginTransaction();
-        $this->userHandler->update($spiUser);
-        $reloadedSpiUser = $this->userHandler->load($spiUser->id);
-
-        if ($reloadedSpiUser->passwordHash === $spiUser->passwordHash) {
-            $this->repository->commit();
-        } else {
-            // Password hash was not correctly saved, possible cause: EZP-28692
-            $this->repository->rollback();
-            if (isset($this->logger)) {
-                $this->logger->critical('Password hash could not be updated. Please verify that your database schema is up to date.');
-            }
-
-            throw new BadStateException(
-                'user',
-                'Could not save updated password hash, reverting to previous hash. Please verify that your database schema is up to date.'
-            );
-        }
     }
 
     /**
@@ -685,16 +658,9 @@ class UserService implements UserServiceInterface
             throw new UnauthorizedException('content', 'edit');
         }
 
-        $userFieldDefinition = null;
-        foreach ($loadedUser->getContentType()->fieldDefinitions as $fieldDefinition) {
-            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
-                $userFieldDefinition = $fieldDefinition;
-                break;
-            }
-        }
-
+        $userFieldDefinition = $this->getUserFieldDefinition($loadedUser->getContentType());
         if ($userFieldDefinition === null) {
-            throw new ContentValidationException('The provided Content Type does not contain the ezuser Field Type');
+            throw new MissingUserFieldTypeException($loadedUser->getContentType(), self::USER_FIELD_TYPE_NAME);
         }
 
         $userUpdateStruct->contentUpdateStruct = $userUpdateStruct->contentUpdateStruct ?? $contentService->newContentUpdateStruct();
@@ -757,6 +723,63 @@ class UserService implements UserServiceInterface
                         'id' => $loadedUser->id,
                         'login' => $loadedUser->login,
                         'email' => $userUpdateStruct->email ?: $loadedUser->email,
+                    ]
+                )
+            );
+
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->loadUser($loadedUser->id);
+    }
+
+    /**
+     * Validates and updates just the user's password.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param string $newPassword
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\Core\Base\Exceptions\MissingUserFieldTypeException
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function updateUserPassword(APIUser $user, string $newPassword): APIUser
+    {
+        $loadedUser = $this->loadUser($user->id);
+
+        if (!$this->permissionResolver->canUser('content', 'edit', $loadedUser)
+            && !$this->permissionResolver->canUser('user', 'password', $loadedUser)
+        ) {
+            throw new UnauthorizedException('user', 'password');
+        }
+
+        $userFieldDefinition = $this->getUserFieldDefinition($loadedUser->getContentType());
+        if ($userFieldDefinition === null) {
+            throw new MissingUserFieldTypeException($loadedUser->getContentType(), self::USER_FIELD_TYPE_NAME);
+        }
+
+        $errors = $this->passwordValidator->validatePassword($newPassword, $userFieldDefinition);
+        if (!empty($errors)) {
+            throw new ContentFieldValidationException($errors);
+        }
+
+        $passwordHash = $this->passwordHashService->createPasswordHash($newPassword, (int) $loadedUser->hashAlgorithm);
+
+        $this->repository->beginTransaction();
+        try {
+            $this->userHandler->updatePassword(
+                new SPIUser(
+                    [
+                        'id' => $loadedUser->id,
+                        'login' => $loadedUser->login,
+                        'email' => $loadedUser->email,
+                        'passwordHash' => $passwordHash,
+                        'hashAlgorithm' => $loadedUser->hashAlgorithm,
+                        'passwordUpdatedAt' => time(),
                     ]
                 )
             );
@@ -1057,7 +1080,7 @@ class UserService implements UserServiceInterface
         // For users we ultimately need to look for ezuser type as content type id could be several for users.
         // And config might be different from one SA to the next, which we don't care about here.
         foreach ($content->getFields() as $field) {
-            if ($field->fieldTypeIdentifier === 'ezuser') {
+            if ($field->fieldTypeIdentifier === self::USER_FIELD_TYPE_NAME) {
                 return true;
             }
         }
@@ -1094,7 +1117,7 @@ class UserService implements UserServiceInterface
 
         $fieldDefIdentifier = '';
         foreach ($contentType->fieldDefinitions as $fieldDefinition) {
-            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
+            if ($fieldDefinition->fieldTypeIdentifier === self::USER_FIELD_TYPE_NAME) {
                 $fieldDefIdentifier = $fieldDefinition->identifier;
                 break;
             }
@@ -1112,7 +1135,7 @@ class UserService implements UserServiceInterface
                     new Field([
                         'fieldDefIdentifier' => $fieldDefIdentifier,
                         'languageCode' => $mainLanguageCode,
-                        'fieldTypeIdentifier' => 'ezuser',
+                        'fieldTypeIdentifier' => self::USER_FIELD_TYPE_NAME,
                         'value' => new UserValue([
                             'login' => $login,
                             'email' => $email,
@@ -1191,7 +1214,7 @@ class UserService implements UserServiceInterface
         // Search for the first ezuser field type in content type
         $userFieldDefinition = $this->getUserFieldDefinition($context->contentType);
         if ($userFieldDefinition === null) {
-            throw new ContentValidationException('The provided Content Type does not contain the ezuser Field Type');
+            throw new MissingUserFieldTypeException($context->contentType, self::USER_FIELD_TYPE_NAME);
         }
 
         $configuration = $userFieldDefinition->getValidatorConfiguration();
@@ -1308,13 +1331,13 @@ class UserService implements UserServiceInterface
 
     private function getUserFieldDefinition(ContentType $contentType): ?FieldDefinition
     {
-        return $contentType->getFirstFieldDefinitionOfType('ezuser');
+        return $contentType->getFirstFieldDefinitionOfType(self::USER_FIELD_TYPE_NAME);
     }
 
     /**
      * Verifies if the provided login and password are valid for eZ\Publish\SPI\Persistence\User.
      *
-     * @return bool return true if the login and password are sucessfully validated and false, if not.
+     * @return bool return true if the login and password are successfully validated and false, if not.
      */
     protected function comparePasswordHashForSPIUser(SPIUser $user, string $password): bool
     {
@@ -1324,7 +1347,7 @@ class UserService implements UserServiceInterface
     /**
      * Verifies if the provided login and password are valid for eZ\Publish\API\Repository\Values\User\User.
      *
-     * @return bool return true if the login and password are sucessfully validated and false, if not.
+     * @return bool return true if the login and password are successfully validated and false, if not.
      */
     protected function comparePasswordHashForAPIUser(APIUser $user, string $password): bool
     {
@@ -1338,7 +1361,7 @@ class UserService implements UserServiceInterface
      * @param string $passwordHash User password hash
      * @param int $hashAlgorithm Hash type
      *
-     * @return bool return true if the login and password are sucessfully validated and false, if not.
+     * @return bool return true if the login and password are successfully validated and false, if not.
      */
     private function comparePasswordHashes(
         string $plainPassword,

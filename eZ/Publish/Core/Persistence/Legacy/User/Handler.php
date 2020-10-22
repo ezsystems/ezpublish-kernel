@@ -199,6 +199,11 @@ class Handler implements BaseUserHandler
         throw new NotImplementedException('This method should not be called, update is done via content handler.');
     }
 
+    public function updatePassword(User $user): void
+    {
+        $this->userGateway->updateUserPassword($user);
+    }
+
     /**
      * Update the user token information specified by the userToken struct.
      *
