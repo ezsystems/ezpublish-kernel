@@ -52,7 +52,8 @@
         "twig/twig": "^3.0",
         "twig/extra-bundle": "^3.0",
         "friendsofsymfony/jsrouting-bundle": "^2.5",
-        "psr/event-dispatcher": "^1.0"
+        "psr/event-dispatcher": "^1.0",
+        "composer/package-versions-deprecated": "^1.11"
     },
     "require-dev": {
         "behat/behat": "^3.6.1",
