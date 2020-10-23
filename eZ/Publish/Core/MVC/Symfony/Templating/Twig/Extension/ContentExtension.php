@@ -273,6 +273,8 @@ class ContentExtension extends Twig_Extension
         } elseif ($content instanceof ContentInfo) {
             return $this->repository->getContentTypeService()->loadContentType($content->contentTypeId);
         }
+
+        return null;
     }
 
     public function getFirstFilledImageFieldIdentifier(Content $content)
