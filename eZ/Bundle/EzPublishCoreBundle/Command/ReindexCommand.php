@@ -212,12 +212,7 @@ EOT
             $output->writeln('Re-indexing started for search engine: ' . $this->searchIndexer->getName());
             $output->writeln('');
 
-            $return = $this->indexIncrementally($input, $output, $iterationCount, $commit);
-
-            $output->writeln('');
-            $output->writeln('Finished re-indexing');
-
-            return $return;
+            return $this->indexIncrementally($input, $output, $iterationCount, $commit);
         }
 
         return 0;
@@ -298,6 +293,11 @@ EOT
         }
 
         $progress->finish();
+        $output->writeln('');
+        $output->writeln('Finished re-indexing');
+        $output->writeln('');
+        // clear leftover progress bar parts
+        $progress->clear();
 
         return 0;
     }
