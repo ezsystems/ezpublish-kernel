@@ -220,8 +220,8 @@ services:
 
     ezpublish.view_builder.registry:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\Registry\ControllerMatch
-        calls:
-            - [addToRegistry, [["@ezpublish.view_builder.content"]]]
+        arguments:
+            $viewBuilders: !tagged_iterator { tag: ibexa.view_builder }
 
     ezpublish.view_builder.content:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder
@@ -231,6 +231,8 @@ services:
             - "@ezpublish.view.view_parameters.injector.dispatcher"
             - "@request_stack"
             - "@ezpublish.content_info_location_loader.main"
+        tags:
+            - { name: ibexa.view_builder }
 
     ezpublish.view.builder_parameter_collector.request_attributes:
         class: eZ\Publish\Core\MVC\Symfony\View\Builder\ParametersFilter\RequestAttributes

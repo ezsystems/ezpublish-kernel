@@ -17,6 +17,15 @@ class ControllerMatch implements ViewBuilderRegistry
     /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder[] */
     private $registry = [];
 
+    public function __construct(iterable $viewBuilders = [])
+    {
+        $toAdd = [];
+        foreach ($viewBuilders as $viewBuilder) {
+            $toAdd[] = $viewBuilder;
+        }
+        $this->addToRegistry($toAdd);
+    }
+
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder[] $viewBuilders
      */
