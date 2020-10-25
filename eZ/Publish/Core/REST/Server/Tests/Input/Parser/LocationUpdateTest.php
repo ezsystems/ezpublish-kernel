@@ -96,8 +96,7 @@ class LocationUpdateTest extends BaseTest
             $result->locationUpdateStruct
         );
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $result->locationUpdateStruct->sortField
         );
     }
@@ -126,8 +125,7 @@ class LocationUpdateTest extends BaseTest
             $result->locationUpdateStruct
         );
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $result->locationUpdateStruct->sortOrder
         );
     }
