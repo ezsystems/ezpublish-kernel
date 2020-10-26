@@ -75,7 +75,7 @@ class LocationUpdateTest extends BaseTest
     /**
      * Test LocationUpdate parser with missing sort field.
      */
-    public function testParseExceptionOnMissingSortField()
+    public function testParseWithMissingSortField()
     {
         $inputArray = [
             'priority' => 0,
@@ -104,7 +104,7 @@ class LocationUpdateTest extends BaseTest
     /**
      * Test LocationUpdate parser with missing sort order.
      */
-    public function testParseExceptionOnMissingSortOrder()
+    public function testParseWithMissingSortOrder()
     {
         $inputArray = [
             'priority' => 0,
