@@ -513,7 +513,7 @@ abstract class FieldTypeTest extends TestCase
 
     public function provideInputForValuesEqual(): array
     {
-        return $this->provideInputForToHash();
+        return $this->provideInputForFromHash();
     }
 
     /**
@@ -986,11 +986,7 @@ abstract class FieldTypeTest extends TestCase
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        if ($inputValue1 === null) {
-            $inputValue1 = $fieldType->getEmptyValue();
-        }
-
-        $inputValue2 = $fieldType->acceptValue($inputValue2);
+        $inputValue1 = $fieldType->fromHash($inputValue1);
 
         self::assertTrue(
             $fieldType->valuesEqual($inputValue1, $inputValue2),

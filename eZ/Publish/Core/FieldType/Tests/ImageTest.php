@@ -816,18 +816,16 @@ class ImageTest extends FieldTypeTest
     {
         return [
             [
-                new ImageValue(
-                    [
-                        'id' => $this->getImageInputPath(),
-                        'fileName' => 'Sindelfingen-Squirrels.jpg',
-                        'fileSize' => 23,
-                        'alternativeText' => 'This is so Sindelfingen!',
-                        'imageId' => '123-12345',
-                        'uri' => 'http://' . $this->getImageInputPath(),
-                        'width' => 123,
-                        'height' => 456,
-                    ]
-                ),
+                [
+                    'id' => $this->getImageInputPath(),
+                    'fileName' => 'Sindelfingen-Squirrels.jpg',
+                    'fileSize' => 23,
+                    'alternativeText' => 'This is so Sindelfingen!',
+                    'imageId' => '123-12345',
+                    'uri' => 'http://' . $this->getImageInputPath(),
+                    'width' => 123,
+                    'height' => 456,
+                ],
                 new ImageValue(
                     [
                         'id' => $this->getImageInputPath(),
@@ -835,7 +833,7 @@ class ImageTest extends FieldTypeTest
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
-                        'imageId' => '123-12315',
+                        'imageId' => '123-12317',
                         'uri' => 'http://' . $this->getImageInputPath(),
                         'inputUri' => null,
                         'width' => 123,
