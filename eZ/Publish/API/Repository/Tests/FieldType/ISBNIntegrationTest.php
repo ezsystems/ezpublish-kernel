@@ -358,4 +358,11 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
     {
         return '9780380448340';
     }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return [
+            ['9780099067504', '9780380448340'],
+        ];
+    }
 }

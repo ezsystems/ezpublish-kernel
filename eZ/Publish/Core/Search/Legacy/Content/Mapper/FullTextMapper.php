@@ -10,6 +10,7 @@ use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\Core\Search\Legacy\Content\FullTextData;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Search\Legacy\Content\FullTextValue;
@@ -73,8 +74,10 @@ class FullTextMapper
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return \eZ\Publish\Core\Search\Legacy\Content\FullTextValue[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    protected function getFullTextValues(Content $content)
+    protected function getFullTextValues(Content $content): array
     {
         $fullTextValues = [];
         foreach ($content->fields as $field) {
@@ -85,10 +88,13 @@ class FullTextMapper
                 continue;
             }
 
-            $value = $this->getFullTextFieldValue($field, $fieldDefinition);
-            if (empty($value)) {
+            $fullTextField = $this->extractFullTextField($field, $fieldDefinition);
+            if (null === $fullTextField || empty($fullTextField->value)) {
                 continue;
             }
+            $fullTextValue = !is_array($fullTextField->value)
+                ? $fullTextField->value
+                : implode(' ', $fullTextField->value);
 
             $contentInfo = $content->versionInfo->contentInfo;
             $fullTextValues[] = new FullTextValue(
@@ -97,10 +103,12 @@ class FullTextMapper
                     'fieldDefinitionId' => $field->fieldDefinitionId,
                     'fieldDefinitionIdentifier' => $fieldDefinition->identifier,
                     'languageCode' => $field->languageCode,
-                    'value' => !is_array($value) ? $value : implode(' ', $value),
+                    'value' => $fullTextValue,
                     'isMainAndAlwaysAvailable' => (
                         $field->languageCode === $contentInfo->mainLanguageCode && $contentInfo->alwaysAvailable
                     ),
+                    'transformationRules' => $fullTextField->type->transformationRules,
+                    'splitFlag' => $fullTextField->type->splitFlag,
                 ]
             );
         }
@@ -108,30 +116,18 @@ class FullTextMapper
         return $fullTextValues;
     }
 
-    /**
-     * Get FullTextField value.
-     *
-     * @param Content\Field $field
-     * @param Type\FieldDefinition $fieldDefinition
-     *
-     * @return string
-     */
-    private function getFullTextFieldValue(Content\Field $field, Type\FieldDefinition $fieldDefinition)
-    {
+    private function extractFullTextField(
+        Content\Field $field,
+        Type\FieldDefinition $fieldDefinition
+    ): ?Field {
         $fieldType = $this->fieldRegistry->getType($field->type);
-        $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
-
-        // find value to be returned (stored in FullTextField)
-        $fullTextFieldValue = '';
-        foreach ($indexFields as $field) {
-            /** @var \eZ\Publish\SPI\Search\Field $field */
-            if ($field->type instanceof FieldType\FullTextField) {
-                $fullTextFieldValue = $field->value;
-                break;
+        $fullTextFields = array_filter(
+            $fieldType->getIndexData($field, $fieldDefinition),
+            static function ($indexField) {
+                return $indexField->type instanceof FieldType\FullTextField;
             }
-        }
+        );
 
-        // some full text fields are stored as an array of strings
-        return !is_array($fullTextFieldValue) ? $fullTextFieldValue : implode(' ', $fullTextFieldValue);
+        return !empty($fullTextFields) ? array_values($fullTextFields)[0] : null;
     }
 }

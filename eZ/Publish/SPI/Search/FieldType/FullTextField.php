@@ -19,4 +19,26 @@ class FullTextField extends FieldType
      * @var string
      */
     protected $type = 'ez_fulltext';
+
+    /**
+     * Transformation rules to be used when transforming the given string.
+     *
+     * @var array
+     */
+    public $transformationRules;
+
+    /**
+     * Flag whether the string should be split by non-words.
+     *
+     * @var bool
+     */
+    public $splitFlag;
+
+    public function __construct(array $transformationRules = [], bool $splitFlag = true)
+    {
+        $this->transformationRules = $transformationRules;
+        $this->splitFlag = $splitFlag;
+
+        parent::__construct();
+    }
 }
