@@ -812,6 +812,9 @@ class ImageTest extends FieldTypeTest
         ];
     }
 
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
     public function provideInputForValuesEqual(): array
     {
         return [

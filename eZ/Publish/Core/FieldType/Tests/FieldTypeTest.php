@@ -982,7 +982,7 @@ abstract class FieldTypeTest extends TestCase
     /**
      * @dataProvider provideInputForValuesEqual
      */
-    public function testValuesEqual($inputValue1, $inputValue2)
+    public function testValuesEqual($inputValue1, $inputValue2): void
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
