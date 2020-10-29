@@ -180,7 +180,7 @@ class FullText extends CriterionHandler
         }
 
         // Search for provided string itself as well
-        $wordExpressions[] = $this->getWordExpression($subQuery, $string);
+        $wordExpressions[] = $this->getWordExpression($query, $string);
 
         $whereCondition = $subQuery->expr()->orX(...$wordExpressions);
 
