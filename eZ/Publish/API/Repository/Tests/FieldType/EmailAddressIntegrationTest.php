@@ -353,12 +353,19 @@ class EmailAddressIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getValidSearchValueTwo()
     {
-        return 'wyoming.knott@ez.no';
+        return 'wyoming.knott@o2.ru';
     }
 
     protected function getSearchTargetValueTwo()
     {
         // ensure case-insensitivity
         return strtoupper($this->getValidSearchValueTwo());
+    }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return [
+            ['holmes4@ez.no', 'wyoming.knott@o2.ru'],
+        ];
     }
 }
