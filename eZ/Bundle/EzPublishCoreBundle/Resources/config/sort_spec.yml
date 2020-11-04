@@ -29,6 +29,7 @@ services:
                 date_published: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished
                 section_identifier: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionIdentifier
                 section_name: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionName
+                score: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Score
                 location_depth: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Depth
                 location_id: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Id
                 location_is_main: \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\IsMainLocation
