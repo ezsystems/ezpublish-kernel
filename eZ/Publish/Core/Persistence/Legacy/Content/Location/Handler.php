@@ -332,24 +332,30 @@ class Handler implements BaseLocationHandler
         }
 
         $destinationParentSectionId = $this->getSectionId($destinationParentId);
-        $this->updateSubtreeSectionIfNecessary($copiedSubtreeRootLocation, $destinationParentSectionId);
+
+        // potentially it may occur that the destination Location doesn't have a section (like in Location ID = 1),
+        // therefore assigning any or empty section will be invalid here
+        if ($destinationParentSectionId) {
+            $this->updateSubtreeSectionIfNecessary($copiedSubtreeRootLocation, $destinationParentSectionId);
+        }
 
         return $copiedSubtreeRootLocation;
     }
 
     /**
      * Retrieves section ID of the location's content.
-     *
-     * @param int $locationId
-     *
-     * @return int
      */
-    private function getSectionId($locationId)
+    private function getSectionId(int $locationId): ?int
     {
         $location = $this->load($locationId);
-        $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
 
-        return $locationContentInfo->sectionId;
+        try {
+            $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
+
+            return $locationContentInfo->sectionId;
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     /**
@@ -410,7 +416,12 @@ class Handler implements BaseLocationHandler
 
         $sourceLocation = $this->load($sourceId);
         $destinationParentSectionId = $this->getSectionId($destinationParentId);
-        $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
+
+        // potentially it may occur that the destination Location doesn't have a section (like in Location ID = 1),
+        // therefore assigning any or empty section will be invalid here
+        if ($destinationParentSectionId) {
+            $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
+        }
     }
 
     /**

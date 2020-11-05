@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
@@ -248,9 +249,18 @@ class TreeHandler
         );
 
         // Update subtree section to the one of the new main location parent location content
-        $this->setSectionForSubtree(
-            $locationId,
-            $this->loadContentInfo($this->loadLocation($parentLocationId)->contentId)->sectionId
-        );
+        $destinationContentId = $this->loadLocation($parentLocationId)->contentId;
+        try {
+            $sectionId = $this->loadContentInfo($destinationContentId)->sectionId;
+        } catch (NotFoundException $e) {
+            $sectionId = null;
+        }
+
+        if ($sectionId) {
+            $this->setSectionForSubtree(
+                $locationId,
+                $sectionId
+            );
+        }
     }
 }

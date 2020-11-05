@@ -673,7 +673,8 @@ class LocationService implements LocationServiceInterface
                 'new parent Location is in a subtree of the given $location'
             );
         }
-        if (!$newParentLocation->getContent()->getContentType()->isContainer) {
+        $contentTypeId = $newParentLocation->contentInfo->contentTypeId;
+        if (!$this->repository->getContentTypeService()->loadContentType($contentTypeId)->isContainer) {
             throw new InvalidArgumentException(
                 '$newParentLocation',
                 'Cannot move Location to a parent that is not a container'
