@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
@@ -335,7 +336,7 @@ class Handler implements BaseLocationHandler
 
         // potentially it may occur that the destination Location doesn't have a section (like in Location ID = 1),
         // therefore assigning any or empty section will be invalid here
-        if ($destinationParentSectionId) {
+        if ($destinationParentSectionId !== null) {
             $this->updateSubtreeSectionIfNecessary($copiedSubtreeRootLocation, $destinationParentSectionId);
         }
 
@@ -344,8 +345,12 @@ class Handler implements BaseLocationHandler
 
     /**
      * Retrieves section ID of the location's content.
+     *
+     * @param int $locationId
+     *
+     * @return int|null
      */
-    private function getSectionId(int $locationId): ?int
+    private function getSectionId($locationId)
     {
         $location = $this->load($locationId);
 
@@ -353,7 +358,7 @@ class Handler implements BaseLocationHandler
             $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
 
             return $locationContentInfo->sectionId;
-        } catch (\Throwable $e) {
+        } catch (NotFoundException $e) {
             return null;
         }
     }
@@ -419,7 +424,7 @@ class Handler implements BaseLocationHandler
 
         // potentially it may occur that the destination Location doesn't have a section (like in Location ID = 1),
         // therefore assigning any or empty section will be invalid here
-        if ($destinationParentSectionId) {
+        if ($destinationParentSectionId !== null) {
             $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
         }
     }

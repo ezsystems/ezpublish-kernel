@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\PermissionCriterionResolver;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -64,6 +65,9 @@ class LocationService implements LocationServiceInterface
     /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
+    protected $contentTypeService;
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
@@ -72,6 +76,7 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
      * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
+     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param array $settings
      * @param \Psr\Log\LoggerInterface|null $logger
      */
@@ -81,6 +86,7 @@ class LocationService implements LocationServiceInterface
         Helper\DomainMapper $domainMapper,
         Helper\NameSchemaService $nameSchemaService,
         PermissionCriterionResolver $permissionCriterionResolver,
+        ContentTypeService $contentTypeService,
         array $settings = [],
         LoggerInterface $logger = null
     ) {
@@ -93,6 +99,7 @@ class LocationService implements LocationServiceInterface
             //'defaultSetting' => array(),
         ];
         $this->permissionCriterionResolver = $permissionCriterionResolver;
+        $this->contentTypeService = $contentTypeService;
         $this->logger = null !== $logger ? $logger : new NullLogger();
     }
 
@@ -674,7 +681,7 @@ class LocationService implements LocationServiceInterface
             );
         }
         $contentTypeId = $newParentLocation->contentInfo->contentTypeId;
-        if (!$this->repository->getContentTypeService()->loadContentType($contentTypeId)->isContainer) {
+        if (!$this->contentTypeService->loadContentType($contentTypeId)->isContainer) {
             throw new InvalidArgumentException(
                 '$newParentLocation',
                 'Cannot move Location to a parent that is not a container'

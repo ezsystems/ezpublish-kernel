@@ -256,7 +256,7 @@ class TreeHandler
             $sectionId = null;
         }
 
-        if ($sectionId) {
+        if ($sectionId !== null) {
             $this->setSectionForSubtree(
                 $locationId,
                 $sectionId

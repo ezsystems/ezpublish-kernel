@@ -532,6 +532,7 @@ class Repository implements RepositoryInterface
             $this->getDomainMapper(),
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
+            $this->getContentTypeService(),
             $this->serviceSettings['location'],
             $this->logger
         );
