@@ -2611,6 +2611,41 @@ class LocationServiceTest extends BaseTest
      * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
+    public function testMoveSubtreeToLocationWithoutContent(): void
+    {
+        $repository = $this->getRepository();
+
+        $rootLocationId = $this->generateId('location', 1);
+        $demoDesignLocationId = $this->generateId('location', 56);
+        $locationService = $repository->getLocationService();
+        $locationToMove = $locationService->loadLocation($demoDesignLocationId);
+        $newParentLocation = $locationService->loadLocation($rootLocationId);
+
+        $locationService->moveSubtree(
+            $locationToMove,
+            $newParentLocation
+        );
+
+        $movedLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        $this->assertPropertiesCorrect(
+            [
+                'hidden' => false,
+                'invisible' => false,
+                'depth' => $newParentLocation->depth + 1,
+                'parentLocationId' => $newParentLocation->id,
+                'pathString' => $newParentLocation->pathString . $this->parseId('location', $movedLocation->id) . '/',
+            ],
+            $movedLocation
+        );
+    }
+
+    /**
+     * Test for the moveSubtree() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
     public function testMoveSubtreeThrowsExceptionOnMoveNotIntoContainer(): void
     {
         $repository = $this->getRepository();
