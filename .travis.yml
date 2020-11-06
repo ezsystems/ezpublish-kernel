@@ -85,6 +85,7 @@ before_install:
   - if [ "$BEHAT_OPTS" != "" ] ; then ./bin/.travis/enable_swap.sh ; fi
   - if [ "$BEHAT_OPTS" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
   - if [ "$REST_TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
+  - if [ "$CHECK_CS" != "" ] ; then travis_retry composer self-update --1 ; fi
   # Execute Symfony command if specified
   - if [ "$SF_CMD" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "app/console $SF_CMD" ; fi
   # Detecting timezone issues by testing on random timezone
