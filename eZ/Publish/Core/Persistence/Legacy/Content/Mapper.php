@@ -361,7 +361,8 @@ class Mapper
                 $versionInfo->creationDate = (int)$row['ezcontentobject_version_created'];
                 $versionInfo->modificationDate = (int)$row['ezcontentobject_version_modified'];
                 $versionInfo->status = (int)$row['ezcontentobject_version_status'];
-                $versionInfo->names = $nameData[$versionId];
+                // Versions with VersionInfo::STATUS_INTERNAL_DRAFT might not have a row in ezcontentobject_name
+                $versionInfo->names = isset($nameData[$versionId]) ? $nameData[$versionId] : null;
                 $versionInfoList[$versionId] = $versionInfo;
                 $versionInfo->languageCodes = $this->extractLanguageCodesFromMask(
                     (int)$row['ezcontentobject_version_language_mask'],
