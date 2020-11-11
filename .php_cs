@@ -26,6 +26,12 @@ return PhpCsFixer\Config::create()
         'php_unit_construct' => false,
         'standardize_increment' => false,
         'fopen_flags' => false,
+        // Rules changed between php-cs-fixer 2.15.3 and 2.15.9 that we don't care to adapt 6.13 for at this point due to conflicts
+        'no_superfluous_phpdoc_tags' => false,
+        'ordered_imports' => false,
+        'phpdoc_trim' => false,
+        'phpdoc_trim_consecutive_blank_line_separation' => false,
+        'function_to_constant' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder(

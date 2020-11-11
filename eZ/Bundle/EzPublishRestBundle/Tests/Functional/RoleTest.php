@@ -9,7 +9,6 @@
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTestCase;
-use eZ\Publish\API\Repository\Values\User\Limitation;
 
 class RoleTest extends RESTFunctionalTestCase
 {
