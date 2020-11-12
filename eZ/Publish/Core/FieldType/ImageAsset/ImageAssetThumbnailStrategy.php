@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\FieldType\ImageAsset;
 
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Thumbnail;
 use eZ\Publish\SPI\Repository\Strategy\ContentThumbnail\Field\FieldTypeBasedThumbnailStrategy;
@@ -42,7 +43,11 @@ class ImageAssetThumbnailStrategy implements FieldTypeBasedThumbnailStrategy
 
     public function getThumbnail(Field $field): ?Thumbnail
     {
-        $content = $this->contentService->loadContent((int) $field->value->destinationContentId);
+        try {
+            $content = $this->contentService->loadContent((int) $field->value->destinationContentId);
+        } catch (NotFoundException $e) {
+            return null;
+        }
 
         return $this->thumbnailStrategy->getThumbnail(
             $content->getContentType(),
