@@ -981,12 +981,14 @@ abstract class FieldTypeTest extends TestCase
 
     /**
      * @dataProvider provideInputForValuesEqual
+     *
+     * @param mixed $inputValue1Hash
      */
-    public function testValuesEqual($inputValue1, SPIValue $inputValue2): void
+    public function testValuesEqual($inputValue1Hash, SPIValue $inputValue2): void
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $inputValue1 = $fieldType->fromHash($inputValue1);
+        $inputValue1 = $fieldType->fromHash($inputValue1Hash);
 
         self::assertTrue(
             $fieldType->valuesEqual($inputValue1, $inputValue2),
