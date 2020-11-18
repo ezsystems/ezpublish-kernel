@@ -811,4 +811,39 @@ class ImageTest extends FieldTypeTest
             ],
         ];
     }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function provideInputForValuesEqual(): array
+    {
+        return [
+            [
+                [
+                    'id' => $this->getImageInputPath(),
+                    'fileName' => 'Sindelfingen-Squirrels.jpg',
+                    'fileSize' => 23,
+                    'alternativeText' => 'This is so Sindelfingen!',
+                    'imageId' => '123-12345',
+                    'uri' => 'http://' . $this->getImageInputPath(),
+                    'width' => 123,
+                    'height' => 456,
+                ],
+                new ImageValue(
+                    [
+                        'id' => $this->getImageInputPath(),
+                        'path' => $this->getImageInputPath(),
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'fileSize' => 23,
+                        'alternativeText' => 'This is so Sindelfingen!',
+                        'imageId' => '123-12317',
+                        'uri' => 'http://' . $this->getImageInputPath(),
+                        'inputUri' => null,
+                        'width' => 123,
+                        'height' => 456,
+                    ]
+                ),
+            ],
+        ];
+    }
 }
