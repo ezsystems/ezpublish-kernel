@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
@@ -332,7 +333,12 @@ class Handler implements BaseLocationHandler
         }
 
         $destinationParentSectionId = $this->getSectionId($destinationParentId);
-        $this->updateSubtreeSectionIfNecessary($copiedSubtreeRootLocation, $destinationParentSectionId);
+
+        // potentially it may occur that the destination Location doesn't have a section (like in Location ID = 1),
+        // therefore assigning any or empty section will be invalid here
+        if ($destinationParentSectionId !== null) {
+            $this->updateSubtreeSectionIfNecessary($copiedSubtreeRootLocation, $destinationParentSectionId);
+        }
 
         return $copiedSubtreeRootLocation;
     }
@@ -342,14 +348,19 @@ class Handler implements BaseLocationHandler
      *
      * @param int $locationId
      *
-     * @return int
+     * @return int|null
      */
     private function getSectionId($locationId)
     {
         $location = $this->load($locationId);
-        $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
 
-        return $locationContentInfo->sectionId;
+        try {
+            $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
+
+            return $locationContentInfo->sectionId;
+        } catch (NotFoundException $e) {
+            return null;
+        }
     }
 
     /**
@@ -410,7 +421,12 @@ class Handler implements BaseLocationHandler
 
         $sourceLocation = $this->load($sourceId);
         $destinationParentSectionId = $this->getSectionId($destinationParentId);
-        $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
+
+        // potentially it may occur that the destination Location doesn't have a section (like in Location ID = 1),
+        // therefore assigning any or empty section will be invalid here
+        if ($destinationParentSectionId !== null) {
+            $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
+        }
     }
 
     /**

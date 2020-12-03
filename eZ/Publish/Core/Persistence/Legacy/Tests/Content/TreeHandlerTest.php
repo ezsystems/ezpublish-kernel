@@ -331,6 +331,48 @@ class TreeHandlerTest extends TestCase
         $treeHandler->changeMainLocation(12, 34);
     }
 
+    public function testChangeMainLocationToLocationWithoutContentInfo()
+    {
+        $treeHandler = $this->getPartlyMockedTreeHandler(
+            [
+                'loadLocation',
+                'setSectionForSubtree',
+                'loadContentInfo',
+            ]
+        );
+
+        $treeHandler
+            ->expects($this->at(0))
+            ->method('loadLocation')
+            ->with(34)
+            ->will($this->returnValue(new Location(['parentId' => 1])));
+
+        $treeHandler
+            ->expects($this->at(1))
+            ->method('loadContentInfo')
+            ->with('12')
+            ->will($this->returnValue(new ContentInfo(['currentVersionNo' => 1])));
+
+        $treeHandler
+            ->expects($this->at(2))
+            ->method('loadLocation')
+            ->with(1)
+            ->will($this->returnValue(new Location(['contentId' => 84])));
+
+        $treeHandler
+            ->expects($this->at(3))
+            ->method('loadContentInfo')
+            ->with('84')
+            ->will($this->returnValue(new ContentInfo(['sectionId' => 4])));
+
+        $this->getLocationGatewayMock()
+            ->expects($this->once())
+            ->method('changeMainLocation')
+            ->with(12, 34, 1, 1);
+
+        $treeHandler->changeMainLocation(12, 34);
+    }
+
     public function testLoadLocation()
     {
         $treeHandler = $this->getTreeHandler();
