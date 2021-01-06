@@ -75,7 +75,7 @@ class Image extends AbstractParser implements SuggestionCollectorAwareInterface
                     ->children()
                         ->scalarNode('reference')
                             ->info('Tells the system which original variation to use as reference image. Defaults to original')
-                            ->example(['reference' => 'large'])
+                            ->example('large')
                         ->end()
                         ->arrayNode('filters')
                             ->info('A list of filters to run, each filter must be supported by the active image converters')
