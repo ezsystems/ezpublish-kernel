@@ -141,6 +141,7 @@ parameters:
         KI: {Name: "Kiribati", Alpha2: "KI", Alpha3: "KIR", IDC: "686"}
         KP: {Name: "Korea, Democratic People's Republic of", Alpha2: "KP", Alpha3: "PRK", IDC: "850"}
         KR: {Name: "Korea, Republic of", Alpha2: "KR", Alpha3: "KOR", IDC: "82"}
+        XK: {Name: "Kosovo", Alpha2: "XK", Alpha3: "XXK", IDC: "383"}
         KW: {Name: "Kuwait", Alpha2: "KW", Alpha3: "KWT", IDC: "965"}
         KG: {Name: "Kyrgyzstan", Alpha2: "KG", Alpha3: "KGZ", IDC: "996"}
         LA: {Name: "Lao People's Democratic Republic", Alpha2: "LA", Alpha3: "LAO", IDC: "856"}
@@ -153,7 +154,6 @@ parameters:
         LT: {Name: "Lithuania", Alpha2: "LT", Alpha3: "LTU", IDC: "370"}
         LU: {Name: "Luxembourg", Alpha2: "LU", Alpha3: "LUX", IDC: "352"}
         MO: {Name: "Macau", Alpha2: "MO", Alpha3: "MAC", IDC: "853"}
-        MK: {Name: "Macedonia, The Former Yugoslav Republic of", Alpha2: "MK", Alpha3: "MKD", IDC: "389"}
         MG: {Name: "Madagascar", Alpha2: "MG", Alpha3: "MDG", IDC: "261"}
         MW: {Name: "Malawi", Alpha2: "MW", Alpha3: "MWI", IDC: "265"}
         MY: {Name: "Malaysia", Alpha2: "MY", Alpha3: "MYS", IDC: "60"}
@@ -188,6 +188,7 @@ parameters:
         NU: {Name: "Niue", Alpha2: "NU", Alpha3: "NIU", IDC: "683"}
         NF: {Name: "Norfolk Island", Alpha2: "NF", Alpha3: "NFK", IDC: "6723"}
         MP: {Name: "Northern Mariana Islands", Alpha2: "MP", Alpha3: "MNP", IDC: "1670"}
+        MK: {Name: "North Macedonia, Republic of", Alpha2: "MK", Alpha3: "MKD", IDC: "389"}
         NO: {Name: "Norway", Alpha2: "NO", Alpha3: "NOR", IDC: "47"}
         OM: {Name: "Oman", Alpha2: "OM", Alpha3: "OMN", IDC: "968"}
         PK: {Name: "Pakistan", Alpha2: "PK", Alpha3: "PAK", IDC: "92"}
@@ -229,6 +230,7 @@ parameters:
         SO: {Name: "Somalia", Alpha2: "SO", Alpha3: "SOM", IDC: "252"}
         ZA: {Name: "South Africa", Alpha2: "ZA", Alpha3: "ZAF", IDC: "27"}
         GS: {Name: "South Georgia and The South Sandwich Islands", Alpha2: "GS", Alpha3: "SGS", IDC: "500"}
+        SS: {Name: "South Sudan, Republic of", Alpha2: "SS", Alpha3: "SSD", IDC: "211"}
         ES: {Name: "Spain", Alpha2: "ES", Alpha3: "ESP", IDC: "34"}
         LK: {Name: "Sri Lanka", Alpha2: "LK", Alpha3: "LKA", IDC: "94"}
         SD: {Name: "Sudan", Alpha2: "SD", Alpha3: "SDN", IDC: "249"}

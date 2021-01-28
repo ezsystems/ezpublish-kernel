@@ -462,6 +462,11 @@
           <xsd:documentation>SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
+      <xsd:enumeration value="SS">
+        <xsd:annotation>
+          <xsd:documentation>SOUTH SUDAN, REPUBLIC OF</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
       <xsd:enumeration value="GT">
         <xsd:annotation>
           <xsd:documentation>GUATEMALA</xsd:documentation>
@@ -622,6 +627,11 @@
           <xsd:documentation>KOREA, REPUBLIC OF</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
+      <xsd:enumeration value="XK">
+        <xsd:annotation>
+          <xsd:documentation>KOSOVO</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
       <xsd:enumeration value="KW">
         <xsd:annotation>
           <xsd:documentation>KUWAIT</xsd:documentation>
@@ -729,7 +739,7 @@
       </xsd:enumeration>
       <xsd:enumeration value="MK">
         <xsd:annotation>
-          <xsd:documentation>MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF</xsd:documentation>
+          <xsd:documentation>NORTH MACEDONIA, REPUBLIC OF</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
       <xsd:enumeration value="ML">
