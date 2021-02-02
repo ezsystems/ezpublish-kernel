@@ -138,22 +138,19 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
                 $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent($object->id);
             }
         }
-        /** @var \eZ\Publish\API\Repository\Values\Content\Location[]|\eZ\Publish\SPI\Persistence\Content\Location[] $targets */
-        $targets = array_filter($targets, function ($target) {
-            return $target instanceof Location || $target instanceof SPILocation;
-        });
-
-        if (empty($targets)) {
-            throw new InvalidArgumentException('$targets', 'Must contain at least one Location object');
-        }
 
         foreach ($targets as $target) {
+            if (!$target instanceof Location && !$target instanceof SPILocation) {
+                throw new InvalidArgumentException('$targets', 'Must contain objects of type: Location');
+            }
+
+            // Single match is sufficient
             if (in_array($target->id, $value->limitationValues)) {
-                return self::ACCESS_GRANTED;
+                return true;
             }
         }
 
-        return self::ACCESS_DENIED;
+        return false;
     }
 
     /**
