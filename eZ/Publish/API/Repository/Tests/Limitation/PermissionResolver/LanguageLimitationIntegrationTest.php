@@ -189,7 +189,7 @@ class LanguageLimitationIntegrationTest extends BaseLimitationIntegrationTest
     /**
      * @dataProvider providerForCanUserDeleteContent
      *
-     * @param array $limitations
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
      * @param bool $expectedResult
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
@@ -217,7 +217,7 @@ class LanguageLimitationIntegrationTest extends BaseLimitationIntegrationTest
      *
      * @see testCanUserDeleteContentTranslation
      */
-    public function providerForCanUserDeleteContentTranslation(): array
+    public function providerForCanUserDeleteContentTranslation(): iterable
     {
         $limitationForGerman = new LanguageLimitation();
         $limitationForGerman->limitationValues = [self::LANG_GER_DE];
@@ -228,20 +228,29 @@ class LanguageLimitationIntegrationTest extends BaseLimitationIntegrationTest
         $multilingualLimitation = new LanguageLimitation();
         $multilingualLimitation->limitationValues = [self::LANG_ENG_US, self::LANG_GER_DE];
 
-        return [
-            // dealing with British translation, so true for British Language Limitation
-            [[$limitationForBritishEnglish], self::LANG_ENG_GB, true],
-            // dealing with British translation, so false for German Language Limitation
-            [[$limitationForGerman], self::LANG_ENG_GB, false],
-            // dealing with US translation, so true for multilingual(us, ger) Limitation
-            [[$multilingualLimitation], self::LANG_ENG_US, true],
+        yield 'Limitation with eng-GB should return true for eng-GB translation' => [
+            [$limitationForBritishEnglish],
+            self::LANG_ENG_GB,
+            true,
+        ];
+
+        yield 'Limitation with ger-de should return false for eng-GB translation' => [
+            [$limitationForGerman],
+            self::LANG_ENG_GB,
+            false,
+        ];
+
+        yield 'Limitation with neg-US and ger-de should return true for eng-US translation' => [
+            [$multilingualLimitation],
+            self::LANG_ENG_US,
+            true,
         ];
     }
 
     /**
      * @dataProvider providerForCanUserDeleteContentTranslation
      *
-     * @param array $limitations
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
      * @param string $translation
      * @param bool $expectedResult
      *
