@@ -6,7 +6,9 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
@@ -382,6 +384,41 @@ class LocationServiceAuthorizationTest extends BaseTest
         // This call will fail with an "UnauthorizedException"
         $locationService->deleteLocation($location);
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the deleteLocation() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     */
+    public function testDeleteLocationThrowsUnauthorizedExceptionWithLanguageLimitation()
+    {
+        $repository = $this->getRepository();
+        $mediaLocationId = $this->generateId('location', 43);
+
+        $locationService = $repository->getLocationService();
+        $location = $locationService->loadLocation($mediaLocationId);
+
+        $limitations = [
+            new LanguageLimitation(['limitationValues' => ['ger-DE']]),
+        ];
+
+        $user = $this->createUserWithPolicies(
+            'user',
+            [
+                ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
+                ['module' => 'content', 'function' => 'read'],
+                ['module' => 'content', 'function' => 'manage_locations'],
+            ]
+        );
+
+        $permissionResolver = $repository->getPermissionResolver();
+        $permissionResolver->setCurrentUserReference($user);
+
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'remove\' \'content\'/');
+
+        $locationService->deleteLocation($location);
     }
 
     /**

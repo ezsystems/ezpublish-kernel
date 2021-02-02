@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\API\Repository\Tests\Limitation\PermissionResolver;
 
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
+use eZ\Publish\SPI\Limitation\Target;
 
 /**
  * Integration test for chosen use cases of calls to PermissionResolver::canUser.
@@ -159,5 +160,109 @@ class LanguageLimitationIntegrationTest extends BaseLimitationIntegrationTest
         $this->loginAsEditorUserWithLimitations('content', 'publish', $limitations);
 
         $this->assertCanUser($expectedResult, 'content', 'publish', $limitations, $content);
+    }
+
+    /**
+     * Data provider for testCanUserDeleteContent.
+     *
+     * @see testCanUserDeleteContent
+     */
+    public function providerForCanUserDeleteContent(): array
+    {
+        $limitationForGerman = new LanguageLimitation();
+        $limitationForGerman->limitationValues = [self::LANG_GER_DE];
+
+        $limitationForBritishEnglish = new LanguageLimitation();
+        $limitationForBritishEnglish->limitationValues = [self::LANG_ENG_GB];
+
+        $multilingualLimitation = new LanguageLimitation();
+        $multilingualLimitation->limitationValues = [self::LANG_ENG_GB, self::LANG_GER_DE];
+
+        return [
+            [[$limitationForBritishEnglish], false],
+            [[$limitationForGerman], false],
+            // dealing with British and German content, so true only for multilingual Language Limitation
+            [[$multilingualLimitation], true],
+        ];
+    }
+
+    /**
+     * @dataProvider providerForCanUserDeleteContent
+     *
+     * @param array $limitations
+     * @param bool $expectedResult
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCanUserDeleteContent(array $limitations, bool $expectedResult): void
+    {
+        $content = $this->createFolder(
+            [
+                self::LANG_ENG_GB => 'British Folder',
+                self::LANG_GER_DE => 'German Folder',
+            ],
+            2
+        );
+
+        $this->loginAsEditorUserWithLimitations('content', 'remove', $limitations);
+
+        $target = (new Target\Version())->deleteTranslations($content->getVersionInfo()->languageCodes);
+        $this->assertCanUser($expectedResult, 'content', 'remove', $limitations, $content, [$target]);
+    }
+
+    /**
+     * Data provider for testCanUserDeleteContentTranslation.
+     *
+     * @see testCanUserDeleteContentTranslation
+     */
+    public function providerForCanUserDeleteContentTranslation(): array
+    {
+        $limitationForGerman = new LanguageLimitation();
+        $limitationForGerman->limitationValues = [self::LANG_GER_DE];
+
+        $limitationForBritishEnglish = new LanguageLimitation();
+        $limitationForBritishEnglish->limitationValues = [self::LANG_ENG_GB];
+
+        $multilingualLimitation = new LanguageLimitation();
+        $multilingualLimitation->limitationValues = [self::LANG_ENG_US, self::LANG_GER_DE];
+
+        return [
+            // dealing with British translation, so true for British Language Limitation
+            [[$limitationForBritishEnglish], self::LANG_ENG_GB, true],
+            // dealing with British translation, so false for German Language Limitation
+            [[$limitationForGerman], self::LANG_ENG_GB, false],
+            // dealing with US translation, so true for multilingual(us, ger) Limitation
+            [[$multilingualLimitation], self::LANG_ENG_US, true],
+        ];
+    }
+
+    /**
+     * @dataProvider providerForCanUserDeleteContentTranslation
+     *
+     * @param array $limitations
+     * @param string $translation
+     * @param bool $expectedResult
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCanUserDeleteContentTranslation(array $limitations, string $translation, bool $expectedResult): void
+    {
+        $content = $this->createFolder(
+            [
+                self::LANG_ENG_GB => 'British Folder',
+                self::LANG_GER_DE => 'German Folder',
+                self::LANG_ENG_US => 'US Folder',
+            ],
+            2
+        );
+
+        $this->loginAsEditorUserWithLimitations('content', 'remove', $limitations);
+
+        $target = (new Target\Builder\VersionBuilder())->translateToAnyLanguageOf([$translation])->build();
+        $this->assertCanUser($expectedResult, 'content', 'remove', $limitations, $content, [$target]);
     }
 }

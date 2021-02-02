@@ -68,4 +68,29 @@ final class Version extends ValueObject implements Target
      * @var int|null
      */
     protected $newStatus;
+
+    /**
+     * List of language codes of translations to delete. All must match Limitation values.
+     *
+     * @var string[]
+     */
+    private $translationsToDelete = [];
+
+    /**
+     * @param string[] $translationsToDelete List of language codes of translations to delete
+     */
+    public function deleteTranslations(array $translationsToDelete): self
+    {
+        $this->translationsToDelete = $translationsToDelete;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTranslationsToDelete(): array
+    {
+        return $this->translationsToDelete;
+    }
 }
