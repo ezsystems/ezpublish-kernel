@@ -82,11 +82,8 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      *
      * @covers \eZ\Publish\API\Repository\TrashService::trash
      */
-    public function testTrashThrowsUnauthorizedExceptionWithLanguageLimitation()
+    public function testTrashThrowsUnauthorizedExceptionWithLanguageLimitation(): void
     {
-        $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage('User does not have access to \'remove\' \'content\'');
-
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
@@ -108,6 +105,10 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         );
 
         $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessage('User does not have access to \'remove\' \'content\'');
+
         $trashService->trash($mediaLocation);
     }
 

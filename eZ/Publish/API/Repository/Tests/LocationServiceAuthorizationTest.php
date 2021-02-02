@@ -387,11 +387,9 @@ class LocationServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the deleteLocation() method.
-     *
-     * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     * @covers \eZ\Publish\API\Repository\LocationService::deleteLocation()
      */
-    public function testDeleteLocationThrowsUnauthorizedExceptionWithLanguageLimitation()
+    public function testDeleteLocationThrowsUnauthorizedExceptionWithLanguageLimitation(): void
     {
         $repository = $this->getRepository();
         $mediaLocationId = $this->generateId('location', 43);

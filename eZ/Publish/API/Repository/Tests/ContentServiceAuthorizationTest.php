@@ -586,11 +586,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
-     * Test for the deleteContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
+     * @covers \eZ\Publish\API\Repository\ContentService::deleteContent()
      */
-    public function testDeleteContentThrowsUnauthorizedExceptionWithLanguageLimitation()
+    public function testDeleteContentThrowsUnauthorizedExceptionWithLanguageLimitation(): void
     {
         $contentVersion2 = $this->createMultipleLanguageContentVersion2();
         $contentInfo = $contentVersion2->contentInfo;
@@ -614,11 +612,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
-     * Test for the deleteContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
+     * @covers \eZ\Publish\API\Repository\ContentService::deleteContent()
      */
-    public function testDeleteContentWithLanguageLimitation()
+    public function testDeleteContentWithLanguageLimitation(): void
     {
         $contentVersion2 = $this->createMultipleLanguageContentVersion2();
         $contentInfo = $contentVersion2->contentInfo;
