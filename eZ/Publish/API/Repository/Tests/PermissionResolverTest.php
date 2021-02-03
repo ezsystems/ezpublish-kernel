@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\SPI\Limitation\Target\Builder\VersionBuilder;
 use function array_filter;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
@@ -1235,6 +1236,74 @@ class PermissionResolverTest extends BaseTest
         self::assertEquals(
             $expected,
             $permissionResolver->lookupLimitations($module, $function, $this->getContentCreateStruct($repository), [])
+        );
+    }
+
+    public function testLookupLimitationsWithMixedTargets(): void
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $permissionResolver = $repository->getPermissionResolver();
+        $roleService = $repository->getRoleService();
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation(2);
+        $module = 'content';
+        $function = 'edit';
+
+        $role = $this->createRoleWithPolicies(
+            'role_' . __FUNCTION__,
+            [
+                [
+                    'module' => $module,
+                    'function' => $function,
+                    'limitations' => [
+                        new Limitation\LocationLimitation(['limitationValues' => [$location->id]])
+                    ]
+                ],
+                [
+                    'module' => $module,
+                    'function' => $function,
+                    'limitations' => [
+                        new Limitation\LanguageLimitation(['limitationValues' => ['eng-GB']])
+                    ]
+                ],
+
+            ]
+        );
+        $user = $this->createUser('user', 'John', 'Doe', $userService->loadUserGroup(4));
+        $roleService->assignRoleToUser($role, $user);
+        $permissionResolver->setCurrentUserReference($user);
+
+        $expected = new LookupLimitationResult(
+            true,
+            [],
+            [
+                new LookupPolicyLimitations(
+                    $role->getPolicies()[0],
+                    []
+                ),
+                new LookupPolicyLimitations(
+                    $role->getPolicies()[1],
+                    [
+                        new Limitation\LanguageLimitation(['limitationValues' => ['eng-GB']]),
+                    ]
+                ),
+            ]
+        );
+
+        self::assertEquals(
+            $expected,
+            $permissionResolver->lookupLimitations(
+                $module,
+                $function,
+                $location->contentInfo,
+                [
+                    (new VersionBuilder())->translateToAnyLanguageOf(['eng-GB'])->build(),
+                    $location
+                ],
+                [Limitation::LANGUAGE]
+            )
         );
     }
 
