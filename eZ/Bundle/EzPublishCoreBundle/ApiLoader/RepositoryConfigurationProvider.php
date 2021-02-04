@@ -40,10 +40,7 @@ class RepositoryConfigurationProvider
         // Takes configured repository as the reference, if it exists.
         // If not, the first configured repository is considered instead.
         $repositoryAlias = $this->configResolver->getParameter('repository');
-        if ($repositoryAlias === null) {
-            $aliases = array_keys($this->repositories);
-            $repositoryAlias = array_shift($aliases);
-        }
+        $repositoryAlias = $repositoryAlias ?: $this->pullDefaultRepository();
 
         if (empty($repositoryAlias) || !isset($this->repositories[$repositoryAlias])) {
             throw new InvalidRepositoryException(
@@ -54,6 +51,13 @@ class RepositoryConfigurationProvider
         return ['alias' => $repositoryAlias] + $this->repositories[$repositoryAlias];
     }
 
+    public function pullDefaultRepository(): ?string
+    {
+        $aliases = array_keys($this->repositories);
+
+        return array_shift($aliases);
+    }
+
     public function getStorageConnectionName(): string
     {
         $repositoryConfig = $this->getRepositoryConfig();
@@ -61,5 +65,10 @@ class RepositoryConfigurationProvider
         return $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION]
             ? $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION]
             : self::DEFAULT_CONNECTION_NAME;
+    }
+
+    public function getRepositories(): array
+    {
+        return $this->repositories;
     }
 }
