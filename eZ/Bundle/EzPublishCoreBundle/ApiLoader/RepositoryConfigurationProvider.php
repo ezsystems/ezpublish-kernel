@@ -66,9 +66,4 @@ class RepositoryConfigurationProvider
             ? $repositoryConfig[self::REPOSITORY_STORAGE][self::REPOSITORY_CONNECTION]
             : self::DEFAULT_CONNECTION_NAME;
     }
-
-    public function getRepositories(): array
-    {
-        return $this->repositories;
-    }
 }
