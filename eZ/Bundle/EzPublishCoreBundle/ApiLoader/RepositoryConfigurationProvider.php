@@ -40,7 +40,7 @@ class RepositoryConfigurationProvider
         // Takes configured repository as the reference, if it exists.
         // If not, the first configured repository is considered instead.
         $repositoryAlias = $this->configResolver->getParameter('repository');
-        $repositoryAlias = $repositoryAlias ?: $this->pullDefaultRepository();
+        $repositoryAlias = $repositoryAlias ?: $this->getDefaultRepositoryAlias();
 
         if (empty($repositoryAlias) || !isset($this->repositories[$repositoryAlias])) {
             throw new InvalidRepositoryException(
@@ -51,7 +51,12 @@ class RepositoryConfigurationProvider
         return ['alias' => $repositoryAlias] + $this->repositories[$repositoryAlias];
     }
 
-    public function pullDefaultRepository(): ?string
+    public function getCurrentRepositoryAlias(): string
+    {
+        return $this->getRepositoryConfig()['alias'];
+    }
+
+    public function getDefaultRepositoryAlias(): ?string
     {
         $aliases = array_keys($this->repositories);
 
