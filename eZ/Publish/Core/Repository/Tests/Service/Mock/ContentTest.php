@@ -734,8 +734,26 @@ class ContentTest extends BaseServiceMockTest
 
         $contentInfo->expects($this->any())
             ->method('__get')
-            ->with('id')
-            ->will($this->returnValue(42));
+            ->willReturnMap(
+                [
+                    ['id', 42],
+                    ['currentVersionNo', 7],
+                ]
+            );
+
+        $persistenceHandlerMock = $this->getPersistenceMockHandler('Handler');
+        /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+
+        $contentHandler
+            ->expects($this->once())
+            ->method('loadVersionInfo')
+            ->with(
+                $this->equalTo(42),
+                $this->equalTo(7)
+            )->will(
+                $this->returnValue(new SPIVersionInfo())
+            );
 
         $contentService->expects($this->once())
             ->method('internalLoadContentInfo')
@@ -782,8 +800,26 @@ class ContentTest extends BaseServiceMockTest
 
         $contentInfo->expects($this->any())
             ->method('__get')
-            ->with('id')
-            ->will($this->returnValue(42));
+            ->willReturnMap(
+                [
+                    ['id', 42],
+                    ['currentVersionNo', 7],
+                ]
+            );
+
+        $persistenceHandlerMock = $this->getPersistenceMockHandler('Handler');
+        /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+
+        $contentHandler
+            ->expects($this->once())
+            ->method('loadVersionInfo')
+            ->with(
+                $this->equalTo(42),
+                $this->equalTo(7)
+            )->will(
+                $this->returnValue(new SPIVersionInfo())
+            );
 
         $repository->expects($this->once())->method('beginTransaction');
 
@@ -840,8 +876,26 @@ class ContentTest extends BaseServiceMockTest
 
         $contentInfo->expects($this->any())
             ->method('__get')
-            ->with('id')
-            ->will($this->returnValue(42));
+            ->willReturnMap(
+                [
+                    ['id', 42],
+                    ['currentVersionNo', 7],
+                ]
+            );
+
+        $persistenceHandlerMock = $this->getPersistenceMockHandler('Handler');
+        /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+
+        $contentHandler
+            ->expects($this->once())
+            ->method('loadVersionInfo')
+            ->with(
+                $this->equalTo(42),
+                $this->equalTo(7)
+            )->will(
+                $this->returnValue(new SPIVersionInfo())
+            );
 
         $repository->expects($this->once())->method('beginTransaction');
 
