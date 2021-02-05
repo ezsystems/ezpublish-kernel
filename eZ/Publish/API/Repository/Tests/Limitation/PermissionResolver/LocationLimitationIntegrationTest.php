@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Tests\Limitation\PermissionResolver;
 
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\SPI\Limitation\Target\Version;
 

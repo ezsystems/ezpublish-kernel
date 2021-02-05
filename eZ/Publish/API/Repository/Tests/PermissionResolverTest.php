@@ -1258,17 +1258,16 @@ class PermissionResolverTest extends BaseTest
                     'module' => $module,
                     'function' => $function,
                     'limitations' => [
-                        new Limitation\LocationLimitation(['limitationValues' => [$location->id]])
-                    ]
+                        new Limitation\LocationLimitation(['limitationValues' => [$location->id]]),
+                    ],
                 ],
                 [
                     'module' => $module,
                     'function' => $function,
                     'limitations' => [
-                        new Limitation\LanguageLimitation(['limitationValues' => ['eng-GB']])
-                    ]
+                        new Limitation\LanguageLimitation(['limitationValues' => ['eng-GB']]),
+                    ],
                 ],
-
             ]
         );
         $user = $this->createUser('user', 'John', 'Doe', $userService->loadUserGroup(4));
@@ -1300,7 +1299,7 @@ class PermissionResolverTest extends BaseTest
                 $location->contentInfo,
                 [
                     (new VersionBuilder())->translateToAnyLanguageOf(['eng-GB'])->build(),
-                    $location
+                    $location,
                 ],
                 [Limitation::LANGUAGE]
             )
