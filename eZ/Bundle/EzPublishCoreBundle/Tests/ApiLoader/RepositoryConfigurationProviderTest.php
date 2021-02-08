@@ -93,6 +93,26 @@ class RepositoryConfigurationProviderTest extends TestCase
         $provider->getRepositoryConfig();
     }
 
+    public function testGetDefaultAndCurrentRepositoryAlias(): void
+    {
+        $configResolver = $this->getConfigResolverMock();
+
+        $repositories = [
+            'first' => [
+                'engine' => 'foo',
+            ],
+            'second' => [
+                'engine' => 'bar',
+            ],
+        ];
+
+        $provider = new RepositoryConfigurationProvider($configResolver, $repositories);
+        $provider->getRepositoryConfig();
+
+        $this->assertSame('first', $provider->getDefaultRepositoryAlias());
+        $this->assertSame('first', $provider->getCurrentRepositoryAlias());
+    }
+
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
      */
