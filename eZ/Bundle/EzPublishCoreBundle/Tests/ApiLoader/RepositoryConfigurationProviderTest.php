@@ -97,7 +97,7 @@ class RepositoryConfigurationProviderTest extends TestCase
         $provider = new RepositoryConfigurationProvider($configResolver, $repositories);
         $provider->getRepositoryConfig();
 
-        $this->assertSame('first', $provider->getDefaultRepositoryAlias());
+        self::assertSame('first', $provider->getDefaultRepositoryAlias());
     }
 
     /**
@@ -110,7 +110,7 @@ class RepositoryConfigurationProviderTest extends TestCase
         $provider = new RepositoryConfigurationProvider($configResolver, $repositories);
         $provider->getRepositoryConfig();
 
-        $this->assertSame('first', $provider->getCurrentRepositoryAlias());
+        self::assertSame('first', $provider->getCurrentRepositoryAlias());
     }
 
     public function providerForRepositories(): array
