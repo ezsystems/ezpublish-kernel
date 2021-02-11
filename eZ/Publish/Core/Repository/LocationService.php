@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\SPI\Limitation\Target;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
@@ -757,11 +758,18 @@ class LocationService implements LocationServiceInterface
     public function deleteLocation(APILocation $location)
     {
         $location = $this->loadLocation($location->id);
+        $contentInfo = $location->contentInfo;
+        $versionInfo = $this->persistenceHandler->contentHandler()->loadVersionInfo(
+            $contentInfo->id,
+            $contentInfo->currentVersionNo
+        );
+        $translations = $versionInfo->languageCodes;
+        $target = (new Target\Version())->deleteTranslations($translations);
 
         if (!$this->repository->canUser('content', 'manage_locations', $location->getContentInfo())) {
             throw new UnauthorizedException('content', 'manage_locations', ['locationId' => $location->id]);
         }
-        if (!$this->repository->canUser('content', 'remove', $location->getContentInfo(), $location)) {
+        if (!$this->repository->canUser('content', 'remove', $location->getContentInfo(), [$location, $target])) {
             throw new UnauthorizedException('content', 'remove', ['locationId' => $location->id]);
         }
 

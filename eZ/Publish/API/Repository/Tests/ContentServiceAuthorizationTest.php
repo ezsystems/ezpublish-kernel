@@ -10,6 +10,7 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
@@ -582,6 +583,56 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $this->expectExceptionMessageRegExp('/\'remove\' \'content\'/');
 
         $this->contentService->deleteContent($contentInfo);
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentService::deleteContent()
+     */
+    public function testDeleteContentThrowsUnauthorizedExceptionWithLanguageLimitation(): void
+    {
+        $contentVersion2 = $this->createMultipleLanguageContentVersion2();
+        $contentInfo = $contentVersion2->contentInfo;
+        $limitations = [
+            new LanguageLimitation(['limitationValues' => ['eng-US']]),
+        ];
+
+        $user = $this->createUserWithPolicies(
+            'user',
+            [
+                ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
+            ]
+        );
+
+        $this->permissionResolver->setCurrentUserReference($user);
+
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/\'remove\' \'content\'/');
+
+        $this->contentService->deleteContent($contentInfo);
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentService::deleteContent()
+     */
+    public function testDeleteContentWithLanguageLimitation(): void
+    {
+        $contentVersion2 = $this->createMultipleLanguageContentVersion2();
+        $contentInfo = $contentVersion2->contentInfo;
+
+        $limitations = [
+            new LanguageLimitation(['limitationValues' => ['eng-US', 'eng-GB']]),
+        ];
+
+        $user = $this->createUserWithPolicies(
+            'user',
+            [
+                ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
+            ]
+        );
+
+        $this->permissionResolver->setCurrentUserReference($user);
+
+        self::assertSame([$contentInfo->mainLocationId], $this->contentService->deleteContent($contentInfo));
     }
 
     /**

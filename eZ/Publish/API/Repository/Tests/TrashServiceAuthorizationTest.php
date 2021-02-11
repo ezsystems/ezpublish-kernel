@@ -8,6 +8,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\TrashService;
@@ -73,6 +74,41 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $repository->getPermissionResolver()->setCurrentUserReference(
             $this->createUserWithPolicies('trash_test_user', [])
         );
+        $trashService->trash($mediaLocation);
+    }
+
+    /**
+     * Test for the trash() method without proper permissions.
+     *
+     * @covers \eZ\Publish\API\Repository\TrashService::trash
+     */
+    public function testTrashThrowsUnauthorizedExceptionWithLanguageLimitation(): void
+    {
+        $repository = $this->getRepository();
+        $trashService = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
+
+        // Load "Media" page location to be trashed
+        $mediaLocation = $locationService->loadLocationByRemoteId(
+            '75c715a51699d2d309a924eca6a95145'
+        );
+
+        $limitations = [
+            new LanguageLimitation(['limitationValues' => ['ger-DE']]),
+        ];
+
+        $user = $this->createUserWithPolicies(
+            'user',
+            [
+                ['module' => 'content', 'function' => 'remove', 'limitations' => $limitations],
+            ]
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($user);
+
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessage('User does not have access to \'remove\' \'content\'');
+
         $trashService->trash($mediaLocation);
     }
 
