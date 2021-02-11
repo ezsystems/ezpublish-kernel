@@ -33,6 +33,9 @@ class IOService implements IOServiceInterface
     /** @var \eZ\Publish\SPI\IO\MimeTypeDetector */
     protected $mimeTypeDetector;
 
+    /** @var array */
+    protected $settings;
+
     public function __construct(
         IOMetadataHandler $metadataHandler,
         IOBinarydataHandler $binarydataHandler,
