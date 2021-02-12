@@ -339,7 +339,12 @@ class PermissionResolver implements PermissionResolverInterface
         ?array $targets
     ): bool {
         $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
-        $accessVote = $type->evaluate($limitation, $currentUserReference, $object, $targets);
+        $accessVote = $type->evaluate(
+            $limitation,
+            $currentUserReference,
+            $object,
+            $this->prepareTargetsForType($targets, $type)
+        );
 
         return $accessVote === LimitationType::ACCESS_GRANTED;
     }
@@ -366,7 +371,12 @@ class PermissionResolver implements PermissionResolverInterface
         }
 
         $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
-        $accessVote = $type->evaluate($limitation, $currentUserReference, $object, $targets);
+        $accessVote = $type->evaluate(
+            $limitation,
+            $currentUserReference,
+            $object,
+            $this->prepareTargetsForType($targets, $type)
+        );
 
         return $accessVote === LimitationType::ACCESS_DENIED;
     }
