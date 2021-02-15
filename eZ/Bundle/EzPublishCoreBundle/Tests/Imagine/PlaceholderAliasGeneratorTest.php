@@ -9,6 +9,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderAliasGenerator;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
@@ -16,6 +17,7 @@ use eZ\Publish\Core\FieldType\Null\Value as NullValue;
 use eZ\Publish\Core\FieldType\Value as FieldTypeValue;
 use eZ\Publish\Core\FieldType\Value;
 use eZ\Publish\Core\IO\IOServiceInterface;
+use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
@@ -151,6 +153,74 @@ class PlaceholderAliasGeneratorTest extends TestCase
             ->method('resolve')
             ->with($field->value->id, IORepositoryResolver::VARIATION_ORIGINAL)
             ->willThrowException($this->createMock(NotResolvableException::class));
+
+        $this->placeholderProvider
+            ->expects($this->once())
+            ->method('getPlaceholder')
+            ->with($field->value, $this->placeholderOptions)
+            ->willReturn($placeholderPath);
+
+        $this->ioService
+            ->expects($this->once())
+            ->method('newBinaryCreateStructFromLocalFile')
+            ->with($placeholderPath)
+            ->willReturn($binaryCreateStruct);
+
+        $this->ioService
+            ->expects($this->once())
+            ->method('createBinaryFile')
+            ->with($binaryCreateStruct);
+
+        $this->aliasGenerator->setPlaceholderProvider(
+            $this->placeholderProvider,
+            $this->placeholderOptions
+        );
+
+        $this->innerAliasGenerator
+            ->expects($this->once())
+            ->method('getVariation')
+            ->with($field, $versionInfo, $variationName, $parameters)
+            ->willReturn($expectedVariation);
+
+        $actualVariation = $this->aliasGenerator->getVariation(
+            $field, $versionInfo, $variationName, $parameters
+        );
+
+        $this->assertEquals($field->value->id, $binaryCreateStruct->id);
+        $this->assertEquals($expectedVariation, $actualVariation);
+    }
+
+    /**
+     * @dataProvider getVariationProvider
+     */
+    public function testGetVariationReturnsPlaceholderIfBinaryDataIsNotAvailable(
+        Field $field,
+        APIVersionInfo $versionInfo,
+        string $variationName,
+        array $parameters
+    ): void {
+        $this->aliasGenerator->setVerifyBinaryDataAvailability(true);
+
+        $placeholderPath = '/tmp/placeholder.jpg';
+        $binaryCreateStruct = new BinaryFileCreateStruct();
+        $expectedVariation = $this->createMock(ImageVariation::class);
+        $binaryFile = $this->createMock(BinaryFile::class);
+
+        $this->ioResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($field->value->id, IORepositoryResolver::VARIATION_ORIGINAL)
+            ->willReturn('/path/to/original/image.png');
+
+        $this->ioService
+            ->method('loadBinaryFile')
+            ->with($field->value->id)
+            ->willReturn($binaryFile);
+
+        $this->ioService
+            ->method('getFileInputStream')
+            ->with($binaryFile)
+            ->willThrowException($this->createMock(NotFoundException::class));
 
         $this->placeholderProvider
             ->expects($this->once())

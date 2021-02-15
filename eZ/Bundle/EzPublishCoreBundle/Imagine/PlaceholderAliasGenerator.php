@@ -8,6 +8,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidArgumentException;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\Value;
 use eZ\Publish\Core\IO\IOServiceInterface;
@@ -33,18 +35,14 @@ class PlaceholderAliasGenerator implements VariationHandler
     /** @var array */
     private $placeholderOptions = [];
 
-    /**
-     * PlaceholderAliasGenerator constructor.
-     *
-     * @param \eZ\Publish\SPI\Variation\VariationHandler $aliasGenerator
-     * @param \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface $ioResolver
-     * @param \eZ\Publish\Core\IO\IOServiceInterface $ioService
-     */
+    /** @var bool */
+    private $verifyBinaryDataAvailability = false;
+
     public function __construct(
         VariationHandler $aliasGenerator,
         ResolverInterface $ioResolver,
-        IOServiceInterface $ioService)
-    {
+        IOServiceInterface $ioService
+    ) {
         $this->aliasGenerator = $aliasGenerator;
         $this->ioResolver = $ioResolver;
         $this->ioService = $ioService;
@@ -62,10 +60,7 @@ class PlaceholderAliasGenerator implements VariationHandler
                 throw new InvalidArgumentException("Value for field #{$field->id} ($field->fieldDefIdentifier) cannot be used for image placeholder generation.");
             }
 
-            try {
-                $this->ioResolver->resolve($imageValue->id, IORepositoryResolver::VARIATION_ORIGINAL);
-            } catch (NotResolvableException $e) {
-                // Generate placeholder for original image
+            if (!$this->isOriginalImageAvailable($imageValue)) {
                 $binary = $this->ioService->newBinaryCreateStructFromLocalFile(
                     $this->placeholderProvider->getPlaceholder($imageValue, $this->placeholderOptions)
                 );
@@ -84,8 +79,40 @@ class PlaceholderAliasGenerator implements VariationHandler
         $this->placeholderOptions = $options;
     }
 
+    /**
+     * Enable/disable binary data availability verification.
+     *
+     * If enabled then binary data storage will be used to check if original file exists. Required for DFS setup.
+     *
+     * @param bool $verifyBinaryDataAvailability
+     */
+    public function setVerifyBinaryDataAvailability(bool $verifyBinaryDataAvailability): void
+    {
+        $this->verifyBinaryDataAvailability = $verifyBinaryDataAvailability;
+    }
+
     public function supportsValue(Value $value): bool
     {
         return $value instanceof ImageValue;
+    }
+
+    private function isOriginalImageAvailable(ImageValue $imageValue): bool
+    {
+        try {
+            $this->ioResolver->resolve($imageValue->id, IORepositoryResolver::VARIATION_ORIGINAL);
+        } catch (NotResolvableException $e) {
+            return false;
+        }
+
+        if ($this->verifyBinaryDataAvailability) {
+            try {
+                // Try to open input stream to original file
+                $this->ioService->getFileInputStream($this->ioService->loadBinaryFile($imageValue->id));
+            } catch (NotFoundException | APIInvalidArgumentException $e) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
