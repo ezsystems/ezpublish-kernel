@@ -1274,36 +1274,39 @@ class PermissionResolverTest extends BaseTest
         $roleService->assignRoleToUser($role, $user);
         $permissionResolver->setCurrentUserReference($user);
 
-        $expected = new LookupLimitationResult(
-            true,
-            [],
+        $actual = $permissionResolver->lookupLimitations(
+            $module,
+            $function,
+            $location->contentInfo,
             [
+                (new VersionBuilder())->translateToAnyLanguageOf(['eng-GB'])->build(),
+                $location,
+            ],
+            [Limitation::LANGUAGE]
+        );
+
+        self::assertTrue($actual->hasAccess);
+        self::assertEmpty($actual->roleLimitations);
+        self::assertCount(2, $actual->lookupPolicyLimitations);
+
+        self::assertTrue(
+            in_array(
                 new LookupPolicyLimitations(
                     $role->getPolicies()[0],
                     []
                 ),
+                $actual->lookupPolicyLimitations
+        ));
+        self::assertTrue(
+            in_array(
                 new LookupPolicyLimitations(
                     $role->getPolicies()[1],
                     [
                         new Limitation\LanguageLimitation(['limitationValues' => ['eng-GB']]),
                     ]
                 ),
-            ]
-        );
-
-        self::assertEquals(
-            $expected,
-            $permissionResolver->lookupLimitations(
-                $module,
-                $function,
-                $location->contentInfo,
-                [
-                    (new VersionBuilder())->translateToAnyLanguageOf(['eng-GB'])->build(),
-                    $location,
-                ],
-                [Limitation::LANGUAGE]
-            )
-        );
+                $actual->lookupPolicyLimitations
+            ));
     }
 
     /**
