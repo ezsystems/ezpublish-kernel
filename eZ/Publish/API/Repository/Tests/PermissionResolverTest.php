@@ -1289,24 +1289,43 @@ class PermissionResolverTest extends BaseTest
         self::assertEmpty($actual->roleLimitations);
         self::assertCount(2, $actual->lookupPolicyLimitations);
 
+        $firstPolicy = $actual->lookupPolicyLimitations[0]->policy;
+        if ($firstPolicy->limitations[0] instanceof Limitation\LanguageLimitation) {
+            $lookupPolicyLanguageLimitation = new LookupPolicyLimitations(
+                $firstPolicy,
+                [
+                    new Limitation\LanguageLimitation(['limitationValues' => ['eng-GB']]),
+                ]
+            );
+            $lookupPolicyLocationLimitation = new LookupPolicyLimitations(
+                $actual->lookupPolicyLimitations[1]->policy,
+                []
+            );
+        } else {
+            $lookupPolicyLanguageLimitation = new LookupPolicyLimitations(
+                $actual->lookupPolicyLimitations[1]->policy,
+                [
+                    new Limitation\LanguageLimitation(['limitationValues' => ['eng-GB']]),
+                ]
+            );
+            $lookupPolicyLocationLimitation = new LookupPolicyLimitations(
+                $firstPolicy,
+                []
+            );
+        }
+
         self::assertTrue(
             in_array(
-                new LookupPolicyLimitations(
-                    $role->getPolicies()[0],
-                    []
-                ),
+                $lookupPolicyLanguageLimitation,
                 $actual->lookupPolicyLimitations
-        ));
+            )
+        );
         self::assertTrue(
             in_array(
-                new LookupPolicyLimitations(
-                    $role->getPolicies()[1],
-                    [
-                        new Limitation\LanguageLimitation(['limitationValues' => ['eng-GB']]),
-                    ]
-                ),
+                $lookupPolicyLocationLimitation,
                 $actual->lookupPolicyLimitations
-            ));
+            )
+        );
     }
 
     /**
