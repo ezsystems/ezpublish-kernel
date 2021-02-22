@@ -619,6 +619,7 @@ EOT;
                                 ->defaultValue([])
                             ->end()
                             ->booleanNode('verify_binary_data_availability')
+                                ->info('Enable additional binary data availability check for source image. Will cause additional IO operation.')
                                 ->defaultFalse()
                             ->end()
                         ->end()
