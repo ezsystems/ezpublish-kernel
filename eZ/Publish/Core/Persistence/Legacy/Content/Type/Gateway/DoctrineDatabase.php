@@ -1228,23 +1228,6 @@ class DoctrineDatabase extends Gateway
      */
     public function deleteFieldDefinitionsForType($typeId, $status)
     {
-        $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom(
-            $this->dbHandler->quoteTable('ezcontentclass_attribute')
-        )->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('contentclass_id'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
-                )
-            )
-        );
-
-        $q->prepare()->execute();
         $subQuery = $this->connection->createQueryBuilder();
         $subQuery
             ->select('attr.id as ezcontentclass_attribute_id')
@@ -1263,6 +1246,23 @@ class DoctrineDatabase extends Gateway
             ->setParameter('status', $status, ParameterType::INTEGER);
 
         $deleteQuery->execute();
+
+        $q = $this->dbHandler->createDeleteQuery();
+        $q->deleteFrom(
+            $this->dbHandler->quoteTable('ezcontentclass_attribute')
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn('contentclass_id'),
+                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn('version'),
+                    $q->bindValue($status, null, \PDO::PARAM_INT)
+                )
+            )
+        );
+        $q->prepare()->execute();
     }
 
     /**
