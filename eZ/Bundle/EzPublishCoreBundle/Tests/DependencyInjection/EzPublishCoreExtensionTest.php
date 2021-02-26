@@ -232,6 +232,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                         'foo' => 'Foo',
                         'bar' => 'Bar',
                     ],
+                    'verify_binary_data_availability' => true,
                 ],
                 'fancy' => [
                     'provider' => 'remote',
@@ -246,10 +247,12 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'foo' => 'Foo',
                     'bar' => 'Bar',
                 ],
+                'verify_binary_data_availability' => true,
             ],
             'fancy' => [
                 'provider' => 'remote',
                 'options' => [],
+                'verify_binary_data_availability' => false,
             ],
         ], $this->container->getParameter('image_alias.placeholder_providers'));
     }

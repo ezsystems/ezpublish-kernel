@@ -19,15 +19,11 @@ class PlaceholderAliasGeneratorConfigurator
     /** @var array */
     private $providersConfig;
 
-    /**
-     * PlaceholderAliasGeneratorConfigurator constructor.
-     *
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
-     * @param \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry $providerRegistry
-     * @param array $providersConfig
-     */
-    public function __construct(ConfigResolverInterface $configResolver, PlaceholderProviderRegistry $providerRegistry, array $providersConfig)
-    {
+    public function __construct(
+        ConfigResolverInterface $configResolver,
+        PlaceholderProviderRegistry $providerRegistry,
+        array $providersConfig
+    ) {
         $this->configResolver = $configResolver;
         $this->providerRegistry = $providerRegistry;
         $this->providersConfig = $providersConfig;
@@ -38,10 +34,12 @@ class PlaceholderAliasGeneratorConfigurator
         $binaryHandlerName = $this->configResolver->getParameter('io.binarydata_handler');
 
         if (isset($this->providersConfig[$binaryHandlerName])) {
-            $providersConfig = $this->providersConfig[$binaryHandlerName];
+            $config = $this->providersConfig[$binaryHandlerName];
 
-            $provider = $this->providerRegistry->getProvider($providersConfig['provider']);
-            $generator->setPlaceholderProvider($provider, $providersConfig['options']);
+            $provider = $this->providerRegistry->getProvider($config['provider']);
+
+            $generator->setPlaceholderProvider($provider, $config['options']);
+            $generator->setVerifyBinaryDataAvailability($config['verify_binary_data_availability'] ?? false);
         }
     }
 }
