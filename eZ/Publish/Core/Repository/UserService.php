@@ -572,7 +572,7 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue('login', $login);
         }
 
-        if (!is_string($password)) {
+        if (!is_string($password) && $password !== null) {
             throw new InvalidArgumentValue('password', $password);
         }
 

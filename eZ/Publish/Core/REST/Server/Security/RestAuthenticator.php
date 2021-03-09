@@ -38,6 +38,10 @@ use Symfony\Component\Security\Http\SecurityEvents;
  */
 class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
 {
+    const DEFAULT_MIN_SLEEP_VALUE = 30000;
+
+    const DEFAULT_MAX_SLEEP_VALUE = 500000;
+
     /**
      * @var \Psr\Log\LoggerInterface
      */
@@ -77,6 +81,16 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
      */
     private $logoutHandlers = [];
 
+    /**
+     * @var int|null
+     */
+    private $minSleepTime;
+
+    /**
+     * @var int|null
+     */
+    private $maxSleepTime;
+
     public function __construct(
         TokenStorageInterface $tokenStorage,
         AuthenticationManagerInterface $authenticationManager,
@@ -84,7 +98,9 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
         EventDispatcherInterface $dispatcher,
         ConfigResolverInterface $configResolver,
         SessionStorageInterface $sessionStorage,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        $minSleepTime = self::DEFAULT_MIN_SLEEP_VALUE,
+        $maxSleepTime = self::DEFAULT_MAX_SLEEP_VALUE
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->authenticationManager = $authenticationManager;
@@ -93,6 +109,8 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
         $this->configResolver = $configResolver;
         $this->sessionStorage = $sessionStorage;
         $this->logger = $logger;
+        $this->minSleepTime = !is_int($minSleepTime) ? self::DEFAULT_MIN_SLEEP_VALUE : $minSleepTime;
+        $this->maxSleepTime = !is_int($maxSleepTime) ? self::DEFAULT_MAX_SLEEP_VALUE : $maxSleepTime;
     }
 
     /**
@@ -107,6 +125,8 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
 
     public function authenticate(Request $request)
     {
+        usleep(random_int($this->minSleepTime, $this->maxSleepTime));
+
         // If a token already exists and username is the same as the one we request authentication for,
         // then return it and mark it as coming from session.
         $previousToken = $this->tokenStorage->getToken();
