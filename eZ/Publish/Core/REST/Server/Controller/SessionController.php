@@ -59,7 +59,7 @@ class SessionController extends Controller
             )
         );
         $request->attributes->set('username', $sessionInput->login);
-        $request->attributes->set('password', $sessionInput->password);
+        $request->attributes->set('password', (string) $sessionInput->password);
 
         try {
             $session = $request->getSession();
