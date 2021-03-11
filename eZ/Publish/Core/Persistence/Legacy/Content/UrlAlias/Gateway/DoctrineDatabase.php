@@ -1438,7 +1438,7 @@ class DoctrineDatabase extends Gateway
                 $updateQueryBuilder->execute();
             } catch (UniqueConstraintViolationException $e) {
                 // edge case: if such row already exists, there's no way to restore history
-                $this->deleteRow($urlAliasData['parent'], $urlAliasData['text_md5']);
+                $this->deleteRow((int) $urlAliasData['parent'], $urlAliasData['text_md5']);
             }
         }
     }
