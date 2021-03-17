@@ -111,6 +111,16 @@ parameters:
         - pht
         - phtml
         - pgif
+        - hta
+        - htm
+        - html
+        - xhtm
+        - xhtml
+        - jar
+        - js
+        - jse
+        - svg
+        - swf
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)
