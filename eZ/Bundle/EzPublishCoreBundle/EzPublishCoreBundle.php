@@ -13,6 +13,8 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverPar
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConsoleCacheWarmupPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\InjectEntityManagerMappingsPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LazyDoctrineRepositoriesPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\NotificationRendererPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\PlaceholderProviderPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ImaginePass;
@@ -84,6 +86,8 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new PlaceholderProviderPass());
         $container->addCompilerPass(new NotificationRendererPass());
         $container->addCompilerPass(new ConsoleCacheWarmupPass());
+        $container->addCompilerPass(new LazyDoctrineRepositoriesPass());
+        $container->addCompilerPass(new InjectEntityManagerMappingsPass());
 
         // Storage passes
         $container->addCompilerPass(new ExternalStorageRegistryPass());

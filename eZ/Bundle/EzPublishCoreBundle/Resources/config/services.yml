@@ -281,3 +281,15 @@ services:
             $imagine: '@liip_imagine'
         tags:
             - { name: console.command, command: ezplatform:images:resize-original }
+
+    ibexa.doctrine.orm.entity_manager:
+        class: Doctrine\ORM\EntityManager
+        lazy: true
+        factory: ['@ibexa.doctrine.orm.entity_manager_factory', 'getEntityManager']
+
+    ibexa.doctrine.orm.entity_manager_factory:
+        class: eZ\Bundle\EzPublishCoreBundle\Entity\EntityManagerFactory
+        arguments:
+            - '@ezpublish.api.repository_configuration_provider'
+            - '@service_container'
+            - '%doctrine.default_entity_manager%'

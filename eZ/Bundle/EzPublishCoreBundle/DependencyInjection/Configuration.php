@@ -57,6 +57,7 @@ class Configuration extends SiteAccessConfiguration
         $this->addUrlAliasSection($rootNode);
         $this->addImagePlaceholderSection($rootNode);
         $this->addUrlWildcardsSection($rootNode);
+        $this->addOrmSection($rootNode);
 
         // Delegate SiteAccess config to configuration parsers
         $this->mainConfigParser->addSemanticConfig($this->generateScopeBaseNode($rootNode));
@@ -698,6 +699,57 @@ EOT;
                         ->booleanNode('enabled')
                             ->info('Enable UrlWildcards support')
                             ->defaultFalse()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+    }
+
+    /**
+     * Defines configuration for Doctrine ORM.
+     *
+     * The configuration is available at:
+     * <code>
+     * ezpublish:
+     *     orm:
+     *         entity_mappings:
+     *              EzPublishCoreBundle:
+     *                  is_bundle: true
+     *                  type: annotation
+     *                  dir: Entity
+     *                  prefix: eZ\Bundle\EzPublishCoreBundle\Entity
+     *
+     * </code>
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
+    private function addOrmSection($rootNode): ArrayNodeDefinition
+    {
+        return $rootNode
+            ->children()
+                ->arrayNode('orm')
+                    ->children()
+                        ->arrayNode('entity_mappings')
+                            ->info('Entity Mapping configuration compatible with Doctrine ORM bundle')
+                            ->useAttributeAsKey('name')
+                            ->defaultValue([])
+                            ->arrayPrototype()
+                                ->children()
+                                    ->booleanNode('is_bundle')->defaultTrue()->end()
+                                    ->booleanNode('mapping')->defaultTrue()->end()
+                                    ->scalarNode('type')
+                                        ->isRequired()
+                                    ->end()
+                                    ->scalarNode('dir')
+                                        ->isRequired()
+                                    ->end()
+                                    ->scalarNode('prefix')
+                                        ->isRequired()
+                                    ->end()
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
