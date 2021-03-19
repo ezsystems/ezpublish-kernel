@@ -334,6 +334,10 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
     private function registerOrmConfiguration(array $config, ContainerBuilder $container): void
     {
+        if (!isset($config['orm']['entity_mappings'])) {
+            return;
+        }
+
         $entityMappings = $config['orm']['entity_mappings'];
         $container->setParameter('ibexa.orm.entity_mappings', $entityMappings);
     }
