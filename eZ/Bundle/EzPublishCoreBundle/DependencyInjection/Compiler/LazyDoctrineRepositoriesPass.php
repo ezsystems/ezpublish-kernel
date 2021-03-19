@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use RuntimeException;
@@ -14,7 +16,7 @@ final class LazyDoctrineRepositoriesPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        $affectedServices = [];
+        $nonLazyServices = [];
         foreach ($container->getDefinitions() as $serviceId => $definition) {
             if (!is_array($definition->getFactory())) {
                 continue;
@@ -31,19 +33,19 @@ final class LazyDoctrineRepositoriesPass implements CompilerPassInterface
                 continue;
             }
 
-            $affectedServices[] = $serviceId;
+            $nonLazyServices[] = $serviceId;
         }
 
-        if (empty($affectedServices)) {
+        if (empty($nonLazyServices)) {
             return;
         }
 
         throw new RuntimeException(
             sprintf(
-                'Services: %s have a dependency on repository aware Entity Manager. '
+                'Services: "%s" have a dependency on repository aware Entity Manager. '
                 . 'To prevent premature Entity Manager initialization before siteaccess is resolved '
                 . "you need to mark these services as 'lazy'.",
-                implode(', ', $affectedServices)
+                implode('", "', $nonLazyServices)
             )
         );
     }

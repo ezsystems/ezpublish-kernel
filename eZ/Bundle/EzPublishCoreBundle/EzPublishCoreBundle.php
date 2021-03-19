@@ -86,7 +86,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new PlaceholderProviderPass());
         $container->addCompilerPass(new NotificationRendererPass());
         $container->addCompilerPass(new ConsoleCacheWarmupPass());
-        $container->addCompilerPass(new LazyDoctrineRepositoriesPass());
+        $container->addCompilerPass(new LazyDoctrineRepositoriesPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new InjectEntityManagerMappingsPass());
 
         // Storage passes

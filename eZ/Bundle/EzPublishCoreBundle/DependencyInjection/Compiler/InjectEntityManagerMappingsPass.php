@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -98,14 +100,20 @@ final class InjectEntityManagerMappingsPass implements CompilerPassInterface
                 }
 
                 if (null === $bundle) {
-                    throw new \InvalidArgumentException(sprintf('Bundle "%s" does not exist or it is not enabled.', $mappingName));
+                    throw new \InvalidArgumentException(sprintf(
+                        'Bundle "%s" does not exist or it is not enabled.',
+                        $mappingName)
+                    );
                 }
 
-                $config = $this->getMappingDriverBundleConfigDefaults($config, $bundle, $container);
+                $config = $this->getMappingDriverBundleConfigDefaults($config, $bundle);
             }
 
             if (!is_dir($config['dir'])) {
-                throw new \InvalidArgumentException(sprintf('Invalid Doctrine mapping path given. Cannot load Doctrine mapping/bundle named "%s".', $mappingName));
+                throw new \InvalidArgumentException(sprintf(
+                    'Invalid Doctrine mapping path given. Cannot load Doctrine mapping/bundle named "%s".',
+                    $mappingName
+                ));
             }
 
             $driverConfig[$config['type']][$config['prefix']] = realpath($config['dir']) ?: $config['dir'];
@@ -114,12 +122,16 @@ final class InjectEntityManagerMappingsPass implements CompilerPassInterface
         return $driverConfig;
     }
 
-    private function getMappingDriverBundleConfigDefaults(array $bundleConfig, \ReflectionClass $bundle, ContainerBuilder $container)
-    {
+    private function getMappingDriverBundleConfigDefaults(
+        array $bundleConfig,
+        \ReflectionClass $bundle
+    ): array {
         $bundleDir = \dirname($bundle->getFileName());
 
         if (!$bundleConfig['type'] || !$bundleConfig['dir'] || !$bundleConfig['prefix']) {
-            return false;
+            throw new \InvalidArgumentException(
+                "Entity Mapping has invalid configuration. Please provide 'type', 'dir' and 'prefix' parameters."
+            );
         }
 
         $bundleConfig['dir'] = $bundleDir . '/' . $bundleConfig['dir'];

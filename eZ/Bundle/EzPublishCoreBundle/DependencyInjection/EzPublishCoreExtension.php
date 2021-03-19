@@ -692,7 +692,9 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
             if (isset($config['repositories'])) {
                 $repositoryConnections[] = array_map(
                     static function (array $repository) use ($processedDoctrineConfig): ?string {
-                        return $repository['storage']['connection'] ?? $processedDoctrineConfig['dbal']['default_connection'] ?? 'default';
+                        return $repository['storage']['connection']
+                            ?? $processedDoctrineConfig['dbal']['default_connection']
+                            ?? 'default';
                     },
                     $config['repositories']
                 );
@@ -700,7 +702,12 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
 
         // compose clean array with all connection identifiers
-        $connections = array_values(array_filter(array_unique(array_merge(...$repositoryConnections) ?? [])));
+        $connections = array_values(
+            array_filter(
+                array_unique(
+                    array_merge(...$repositoryConnections) ?? [])
+            )
+        );
 
         $doctrineConfig = [
             'orm' => [

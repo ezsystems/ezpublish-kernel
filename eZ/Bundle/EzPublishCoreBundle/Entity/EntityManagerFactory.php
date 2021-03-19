@@ -12,6 +12,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * @internal
+ */
 class EntityManagerFactory
 {
     /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider */
