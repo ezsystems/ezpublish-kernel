@@ -11,9 +11,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Entity;
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use eZ\Bundle\EzPublishCoreBundle\Entity\EntityManagerFactory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class EntityManagerFactoryTest extends AbstractParamConverterTest
+class EntityManagerFactoryTest extends TestCase
 {
     private const DEFAULT_ENTITY_MANAGER = 'doctrine.orm.ibexa_default_entity_manager';
     private const INVALID_ENTITY_MANAGER = 'doctrine.orm.ibexa_invalid_entity_manager';
