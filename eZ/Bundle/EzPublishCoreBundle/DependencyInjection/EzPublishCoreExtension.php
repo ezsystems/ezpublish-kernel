@@ -679,11 +679,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
             return;
         }
 
-        $processedDoctrineConfig = $this->processConfiguration(
-            new DoctrineConfiguration(false),
-            $container->getExtensionConfig('doctrine')
-        );
-
         $kernelConfigs = $container->getExtensionConfig('ezpublish');
         $entityMappings = [];
 
@@ -695,9 +690,8 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
             if (isset($config['repositories'])) {
                 $repositoryConnections[] = array_map(
-                    static function (array $repository) use ($processedDoctrineConfig): ?string {
+                    static function (array $repository): ?string {
                         return $repository['storage']['connection']
-                            ?? $processedDoctrineConfig['dbal']['default_connection']
                             ?? 'default';
                     },
                     $config['repositories']
