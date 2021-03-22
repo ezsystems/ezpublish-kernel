@@ -6,7 +6,6 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
-use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Configuration as DoctrineConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
