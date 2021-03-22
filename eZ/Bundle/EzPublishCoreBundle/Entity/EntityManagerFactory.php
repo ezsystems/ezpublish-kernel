@@ -46,7 +46,7 @@ class EntityManagerFactory
 
         if (!$this->container->has($entityManagerId)) {
             throw new \InvalidArgumentException(
-                "Invalid Doctrine Entity Manager '{$entityManagerId}' for Repository '{$repositoryConfig['alias']}'." .
+                "Invalid Doctrine Entity Manager '{$entityManagerId}' for Repository '{$repositoryConfig['alias']}'. " .
                 'Valid Entity Managers are: ' . implode(', ', array_keys($this->container->getParameter('doctrine.entity_managers')))
             );
         }
