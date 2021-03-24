@@ -11,6 +11,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BinaryContentDown
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConsoleCacheWarmupPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\EntityMangerFactoryServiceLocatorPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\InjectEntityManagerMappingsPass;
@@ -87,6 +88,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new NotificationRendererPass());
         $container->addCompilerPass(new ConsoleCacheWarmupPass());
         $container->addCompilerPass(new LazyDoctrineRepositoriesPass(), PassConfig::TYPE_BEFORE_REMOVING);
+        $container->addCompilerPass(new EntityMangerFactoryServiceLocatorPass());
         $container->addCompilerPass(new InjectEntityManagerMappingsPass());
 
         // Storage passes

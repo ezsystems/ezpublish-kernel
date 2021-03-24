@@ -10,7 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Entity;
 
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 
 /**
  * @internal
@@ -20,15 +20,25 @@ class EntityManagerFactory
     /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider */
     private $repositoryConfigurationProvider;
 
-    /** @var \Symfony\Component\DependencyInjection\ContainerInterface */
-    private $container;
+    /** @var \Symfony\Component\DependencyInjection\ServiceLocator */
+    private $serviceLocator;
+
+    /** @var string */
+    private $defaultConnection;
+
+    /** @var Array<string, string> */
+    private $entityManagers;
 
     public function __construct(
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
-        ContainerInterface $container
+        ServiceLocator $serviceLocator,
+        string $defaultConnection,
+        array $entityManagers
     ) {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
-        $this->container = $container;
+        $this->serviceLocator = $serviceLocator;
+        $this->defaultConnection = $defaultConnection;
+        $this->entityManagers = $entityManagers;
     }
 
     public function getEntityManager(): EntityManagerInterface
@@ -38,20 +48,20 @@ class EntityManagerFactory
         if (isset($repositoryConfig['storage']['connection'])) {
             $entityManagerId = $this->getEntityManagerServiceId($repositoryConfig['storage']['connection']);
         } else {
-            $defaultEntityManagerId = $this->getEntityManagerServiceId($this->container->getParameter('doctrine.default_connection'));
-            $entityManagerId = $this->container->has($defaultEntityManagerId)
+            $defaultEntityManagerId = $this->getEntityManagerServiceId($this->defaultConnection);
+            $entityManagerId = $this->serviceLocator->has($defaultEntityManagerId)
                 ? $defaultEntityManagerId
                 : 'doctrine.orm.entity_manager';
         }
 
-        if (!$this->container->has($entityManagerId)) {
+        if (!$this->serviceLocator->has($entityManagerId)) {
             throw new \InvalidArgumentException(
                 "Invalid Doctrine Entity Manager '{$entityManagerId}' for Repository '{$repositoryConfig['alias']}'. " .
-                'Valid Entity Managers are: ' . implode(', ', array_keys($this->container->getParameter('doctrine.entity_managers')))
+                'Valid Entity Managers are: ' . implode(', ', array_keys($this->entityManagers))
             );
         }
 
-        return $this->container->get($entityManagerId);
+        return $this->serviceLocator->get($entityManagerId);
     }
 
     protected function getEntityManagerServiceId(string $connection): string

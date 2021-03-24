@@ -291,4 +291,5 @@ services:
         class: eZ\Bundle\EzPublishCoreBundle\Entity\EntityManagerFactory
         arguments:
             $repositoryConfigurationProvider: '@ezpublish.api.repository_configuration_provider'
-            $container: '@service_container'
+            $defaultConnection: '%doctrine.default_connection%'
+            $entityManagers: '%doctrine.entity_managers%'
