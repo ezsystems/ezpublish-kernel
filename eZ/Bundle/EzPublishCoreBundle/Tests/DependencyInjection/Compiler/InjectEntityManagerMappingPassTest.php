@@ -43,6 +43,7 @@ class InjectEntityManagerMappingPassTest extends AbstractCompilerPassTestCase
         parent::setUp();
 
         $this->setDefinition('doctrine.orm.ibexa_connection_metadata_driver', new Definition());
+        $this->setDefinition('doctrine.orm.ibexa_connection_configuration', new Definition());
         $this->setParameter('doctrine.orm.metadata.annotation.class', 'Vendor/Doctrine/Metadata/Driver/AnnotationDriver');
         $this->setParameter('doctrine.orm.metadata.yml.class', 'Vendor/Doctrine/Metadata/Driver/YmlDriver');
         $this->setParameter('doctrine.orm.metadata.xml.class', 'Vendor/Doctrine/Metadata/Driver/XmlDriver');
@@ -70,8 +71,18 @@ class InjectEntityManagerMappingPassTest extends AbstractCompilerPassTestCase
             ],
         ];
 
+        $expectedEntityNamespaces = [
+            'AnnotationEntityBundle' => self::ENTITY_MAPPINGS['AnnotationEntityBundle']['prefix'],
+            'XmlEntityBundle' => self::ENTITY_MAPPINGS['XmlEntityBundle']['prefix'],
+        ];
+
         foreach (self::ENTITY_MANAGERS as $name => $serviceId) {
             $this->assertContainerBuilderHasService("doctrine.orm.{$name}_metadata_driver");
+            $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+                "doctrine.orm.{$name}_configuration",
+                'setEntityNamespaces',
+                [$expectedEntityNamespaces]
+            );
 
             foreach (self::ENTITY_MAPPINGS as $mappingName => $config) {
                 $metadataDriver = "doctrine.orm.{$name}_{$config['type']}_metadata_driver";

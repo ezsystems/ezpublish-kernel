@@ -35,6 +35,13 @@ final class InjectEntityManagerMappingsPass implements CompilerPassInterface
                 sprintf('doctrine.orm.%s_metadata_driver', $entityManagerName)
             );
 
+            $ormConfigDefinition = $container->getDefinition(
+                sprintf('doctrine.orm.%s_configuration', $entityManagerName)
+            );
+
+            $entityMap = $this->getEntityMapForConfigurationService($entityMappings);
+            $ormConfigDefinition->addMethodCall('setEntityNamespaces', [$entityMap]);
+
             foreach ($mappingDriverConfig as $driverType => $driverPaths) {
                 $metadataDriverServiceName = "doctrine.orm.{$entityManagerName}_{$driverType}_metadata_driver";
                 $metadataDriverDefinition = $this->createMetadataDriverDefinition($driverType, $driverPaths);
@@ -137,5 +144,13 @@ final class InjectEntityManagerMappingsPass implements CompilerPassInterface
         $bundleConfig['dir'] = $bundleDir . '/' . $bundleConfig['dir'];
 
         return $bundleConfig;
+    }
+
+    private function getEntityMapForConfigurationService(array $entityMappings): array
+    {
+        return array_combine(
+            array_keys($entityMappings),
+            array_column($entityMappings, 'prefix')
+        );
     }
 }
