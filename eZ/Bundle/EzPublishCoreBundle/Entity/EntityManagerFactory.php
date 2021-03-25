@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Entity;
 
 use Doctrine\ORM\EntityManagerInterface;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
 /**
@@ -20,8 +21,8 @@ class EntityManagerFactory
     /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider */
     private $repositoryConfigurationProvider;
 
-    /** @var \Symfony\Component\DependencyInjection\ServiceLocator */
-    private $serviceLocator;
+    /** @var ContainerInterface */
+    private $container;
 
     /** @var string */
     private $defaultConnection;

@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\EntityMangerFactoryServiceLocatorPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\EntityManagerFactoryServiceLocatorPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -38,7 +38,7 @@ class EntityManagerFactoryServiceLocatorPassTest extends AbstractCompilerPassTes
 
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
-        $container->addCompilerPass(new EntityMangerFactoryServiceLocatorPass());
+        $container->addCompilerPass(new EntityManagerFactoryServiceLocatorPass());
     }
 
     public function testAddServiceLocatorArgument(): void
