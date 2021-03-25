@@ -311,6 +311,6 @@ parameters:
     ezpublish.siteaccesses_by_language: {}
 
     ##
-    # Siteaccess aware Entity Managr
+    # Siteaccess aware Entity Manager
     ##
     ibexa.orm.entity_mappings: []
