@@ -27,6 +27,7 @@
         "hautelook/templated-uri-bundle": "^2.1",
         "pagerfanta/pagerfanta": "^2.0",
         "ocramius/proxy-manager": "^2.1",
+        "doctrine/orm": "^2.7",
         "doctrine/doctrine-bundle": "~1.6",
         "liip/imagine-bundle": "^2.1",
         "oneup/flysystem-bundle": "^3.0",
