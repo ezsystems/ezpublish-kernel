@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\API\Repository\Tests\Limitation\PermissionResolver;
 
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\SPI\Limitation\Target\Version;
 
@@ -60,6 +61,37 @@ class LocationLimitationIntegrationTest extends BaseLimitationIntegrationTest
             $limitations,
             $location->contentInfo,
             [$location, new Version(['allLanguageCodesList' => 'eng-GB'])]
+        );
+    }
+
+    /**
+     * @dataProvider providerForCanUserEditOrPublishContent
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCanUserReadTrashedContent(array $limitations, bool $expectedResult): void
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $location = $locationService->loadLocation(2);
+
+        $this->loginAsEditorUserWithLimitations('content', 'read', $limitations);
+
+        $trashItem = $repository->sudo(
+            function (Repository $repository) use ($location) {
+                return $repository->getTrashService()->trash($location);
+            }
+        );
+
+        $this->assertCanUser(
+            $expectedResult,
+            'content',
+            'read',
+            $limitations,
+            $trashItem->contentInfo
         );
     }
 }
