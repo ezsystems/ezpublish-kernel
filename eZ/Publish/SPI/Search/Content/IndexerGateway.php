@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Search\Content;
 
-use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Driver\ResultStatement;
 use Generator;
 
@@ -20,7 +20,7 @@ interface IndexerGateway
     /**
      * @throws \Doctrine\DBAL\Exception
      */
-    public function getStatementContentSince(DateTime $since, bool $count = false): ResultStatement;
+    public function getStatementContentSince(DateTimeInterface $since, bool $count = false): ResultStatement;
 
     /**
      * @throws \Doctrine\DBAL\Exception

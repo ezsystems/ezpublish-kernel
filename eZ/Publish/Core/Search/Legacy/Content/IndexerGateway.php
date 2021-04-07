@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
-use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\DBAL\ParameterType;
@@ -29,7 +29,7 @@ final class IndexerGateway implements SPIIndexerGateway
         $this->connection = $connection;
     }
 
-    public function getStatementContentSince(DateTime $since, bool $count = false): ResultStatement
+    public function getStatementContentSince(DateTimeInterface $since, bool $count = false): ResultStatement
     {
         $q = $this->connection->createQueryBuilder()
             ->select($count ? 'count(c.id)' : 'c.id')
