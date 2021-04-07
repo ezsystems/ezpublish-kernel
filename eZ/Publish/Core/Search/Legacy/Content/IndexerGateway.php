@@ -33,6 +33,7 @@ final class IndexerGateway implements SPIIndexerGateway
     public function getContentSince(DateTimeInterface $since, int $iterationCount): Generator
     {
         $query = $this->buildQueryForContentSince($since);
+        $query->orderBy('c.modified');
 
         yield from $this->fetchIteration($query->execute(), $iterationCount);
     }
@@ -84,7 +85,6 @@ final class IndexerGateway implements SPIIndexerGateway
             ->select('c.id')
             ->from('ezcontentobject', 'c')
             ->where('c.status = :status')->andWhere('c.modified >= :since')
-            ->orderBy('c.modified')
             ->setParameter('status', ContentInfo::STATUS_PUBLISHED, ParameterType::INTEGER)
             ->setParameter('since', $since->getTimestamp(), ParameterType::INTEGER);
     }
