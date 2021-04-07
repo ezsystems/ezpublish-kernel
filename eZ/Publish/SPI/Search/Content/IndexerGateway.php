@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace eZ\Publish\SPI\Search\Content;
 
 use DateTimeInterface;
-use Doctrine\DBAL\Driver\ResultStatement;
 use Generator;
 
 /**
@@ -19,21 +18,37 @@ interface IndexerGateway
 {
     /**
      * @throws \Doctrine\DBAL\Exception
+     *
+     * @return \Generator list of Content IDs for each iteration
      */
-    public function getStatementContentSince(DateTimeInterface $since, bool $count = false): ResultStatement;
+    public function getContentSince(DateTimeInterface $since, int $iterationCount): Generator;
 
     /**
      * @throws \Doctrine\DBAL\Exception
      */
-    public function getStatementSubtree(string $locationPath, bool $count = false): ResultStatement;
+    public function countContentSince(DateTimeInterface $since): int;
+
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     *
+     * @return \Generator list of Content IDs for each iteration
+     */
+    public function getContentInSubtree(string $locationPath, int $iterationCount): Generator;
 
     /**
      * @throws \Doctrine\DBAL\Exception
      */
-    public function getStatementContentAll(bool $count = false): ResultStatement;
+    public function countContentInSubtree(string $locationPath): int;
 
     /**
-     * @return \Generator a list of Content IDs for each iteration
+     * @throws \Doctrine\DBAL\Exception
+     *
+     * @return \Generator list of Content IDs for each iteration
      */
-    public function fetchIteration(ResultStatement $stmt, int $iterationCount): Generator;
+    public function getAllContent(int $iterationCount): Generator;
+
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function countAllContent(): int;
 }

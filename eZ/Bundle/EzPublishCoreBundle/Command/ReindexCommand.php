@@ -209,18 +209,18 @@ EOT
         }
 
         if ($since = $input->getOption('since')) {
-            $stmt = $this->gateway->getStatementContentSince(new DateTime($since));
-            $count = (int)$this->gateway->getStatementContentSince(new DateTime($since), true)->fetchColumn();
+            $count = $this->gateway->countContentSince(new DateTime($since));
+            $generator = $this->gateway->getContentSince(new DateTime($since), $iterationCount);
             $purge = false;
         } elseif ($locationId = (int) $input->getOption('subtree')) {
             /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
             $location = $this->locationHandler->load($locationId);
-            $stmt = $this->gateway->getStatementSubtree($location->pathString);
-            $count = (int) $this->gateway->getStatementSubtree($location->pathString, true)->fetchColumn();
+            $count = $this->gateway->countContentInSubtree($location->pathString);
+            $generator = $this->gateway->getContentInSubtree($location->pathString, $iterationCount);
             $purge = false;
         } else {
-            $stmt = $this->gateway->getStatementContentAll();
-            $count = (int) $this->gateway->getStatementContentAll(true)->fetchColumn();
+            $count = $this->gateway->countAllContent();
+            $generator = $this->gateway->getAllContent($iterationCount);
             $purge = !$input->getOption('no-purge');
         }
 
@@ -252,7 +252,6 @@ EOT
         $progress = new ProgressBar($output);
         $progress->start($iterations);
 
-        $generator = $this->gateway->fetchIteration($stmt, $iterationCount);
         if ($processCount > 1) {
             $this->runParallelProcess(
                 $progress,

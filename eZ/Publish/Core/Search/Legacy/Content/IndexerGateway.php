@@ -12,6 +12,7 @@ use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Search\Content\IndexerGateway as SPIIndexerGateway;
 use Generator;
@@ -29,45 +30,104 @@ final class IndexerGateway implements SPIIndexerGateway
         $this->connection = $connection;
     }
 
-    public function getStatementContentSince(DateTimeInterface $since, bool $count = false): ResultStatement
+    public function getContentSince(DateTimeInterface $since, int $iterationCount): Generator
     {
-        $q = $this->connection->createQueryBuilder()
-            ->select($count ? 'count(c.id)' : 'c.id')
+        $query = $this->buildQueryForContentSince($since);
+
+        yield from $this->fetchIteration($query->execute(), $iterationCount);
+    }
+
+    public function countContentSince(DateTimeInterface $since): int
+    {
+        $query = $this->buildCountingQuery(
+            $this->buildQueryForContentSince($since)
+        );
+
+        return (int)$query->execute()->fetchOne();
+    }
+
+    public function getContentInSubtree(string $locationPath, int $iterationCount): Generator
+    {
+        $query = $this->buildQueryForContentInSubtree($locationPath);
+
+        yield from $this->fetchIteration($query->execute(), $iterationCount);
+    }
+
+    public function countContentInSubtree(string $locationPath): int
+    {
+        $query = $this->buildCountingQuery(
+            $this->buildQueryForContentInSubtree($locationPath)
+        );
+
+        return (int)$query->execute()->fetchOne();
+    }
+
+    public function getAllContent(int $iterationCount): Generator
+    {
+        $query = $this->buildQueryForAllContent();
+
+        yield from $this->fetchIteration($query->execute(), $iterationCount);
+    }
+
+    public function countAllContent(): int
+    {
+        $query = $this->buildCountingQuery(
+            $this->buildQueryForAllContent()
+        );
+
+        return (int)$query->execute()->fetchOne();
+    }
+
+    private function buildQueryForContentSince(DateTimeInterface $since): QueryBuilder
+    {
+        return $this->connection->createQueryBuilder()
+            ->select('c.id')
             ->from('ezcontentobject', 'c')
             ->where('c.status = :status')->andWhere('c.modified >= :since')
             ->orderBy('c.modified')
             ->setParameter('status', ContentInfo::STATUS_PUBLISHED, ParameterType::INTEGER)
             ->setParameter('since', $since->getTimestamp(), ParameterType::INTEGER);
-
-        return $q->execute();
     }
 
-    public function getStatementSubtree(string $locationPath, bool $count = false): ResultStatement
+    private function buildQueryForContentInSubtree(string $locationPath): QueryBuilder
     {
-        $q = $this->connection->createQueryBuilder()
-            ->select($count ? 'count(DISTINCT c.id)' : 'DISTINCT c.id')
+        return $this->connection->createQueryBuilder()
+            ->select('DISTINCT c.id')
             ->from('ezcontentobject', 'c')
             ->innerJoin('c', 'ezcontentobject_tree', 't', 't.contentobject_id = c.id')
             ->where('c.status = :status')
             ->andWhere('t.path_string LIKE :path')
             ->setParameter('status', ContentInfo::STATUS_PUBLISHED, ParameterType::INTEGER)
             ->setParameter('path', $locationPath . '%', ParameterType::STRING);
-
-        return $q->execute();
     }
 
-    public function getStatementContentAll(bool $count = false): ResultStatement
+    private function buildQueryForAllContent(): QueryBuilder
     {
-        $q = $this->connection->createQueryBuilder()
-            ->select($count ? 'count(c.id)' : 'c.id')
+        return $this->connection->createQueryBuilder()
+            ->select('c.id')
             ->from('ezcontentobject', 'c')
             ->where('c.status = :status')
             ->setParameter('status', ContentInfo::STATUS_PUBLISHED, ParameterType::INTEGER);
-
-        return $q->execute();
     }
 
-    public function fetchIteration(ResultStatement $stmt, int $iterationCount): Generator
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private function buildCountingQuery(QueryBuilder $query): QueryBuilder
+    {
+        $databasePlatform = $this->connection->getDatabasePlatform();
+
+        // wrap existing select part in count expression
+        $query->select(
+            $databasePlatform->getCountExpression(
+                $query->getQueryPart('select')[0]
+            )
+        );
+
+        return $query;
+    }
+
+    private function fetchIteration(ResultStatement $stmt, int $iterationCount): Generator
     {
         do {
             $contentIds = [];
