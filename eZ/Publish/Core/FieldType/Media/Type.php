@@ -120,10 +120,12 @@ class Type extends BaseType
      *
      * @param array $inputValue
      *
-     * @return Value
+     * @return \eZ\Publish\Core\FieldType\Media\Value
      */
     protected function createValue(array $inputValue)
     {
+        $inputValue = $this->regenerateUri($inputValue);
+
         return new Value($inputValue);
     }
 

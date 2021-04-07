@@ -44,10 +44,12 @@ class Type extends BinaryBaseType
      *
      * @param array $inputValue
      *
-     * @return Value
+     * @return \eZ\Publish\Core\FieldType\BinaryFile\Value
      */
     protected function createValue(array $inputValue)
     {
+        $inputValue = $this->regenerateUri($inputValue);
+
         return new Value($inputValue);
     }
 

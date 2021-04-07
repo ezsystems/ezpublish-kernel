@@ -9,7 +9,7 @@ namespace eZ\Publish\SPI\FieldType\BinaryBase;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
-abstract class PathGenerator
+abstract class PathGenerator implements PathGeneratorInterface
 {
     abstract public function getStoragePathForField(Field $field, VersionInfo $versionInfo);
 }

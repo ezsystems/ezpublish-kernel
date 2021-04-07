@@ -292,6 +292,8 @@ services:
         class: "%ezpublish.fieldType.ezbinaryfile.class%"
         arguments:
             - ['@ezpublish.fieldType.validator.black_list']
+        calls:
+            - [setRouteAwarePathGenerator, ["@?ezpublish.fieldType.ezbinarybase.download_url_generator"]]
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
