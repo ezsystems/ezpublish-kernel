@@ -622,7 +622,7 @@ abstract class BaseTest extends TestCase
      *
      * @throws \ErrorException
      */
-    protected function getRawDatabaseConnection()
+    protected function getRawDatabaseConnection(): Connection
     {
         $connection = $this
             ->getSetupFactory()

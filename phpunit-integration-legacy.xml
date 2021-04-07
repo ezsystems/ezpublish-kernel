@@ -69,6 +69,9 @@
         <testsuite name="eZ\Publish\Core\FieldType\Tests\Integration">
             <directory>eZ/Publish/Core/FieldType/Tests/Integration</directory>
         </testsuite>
+        <testsuite name="gateway-integration">
+            <file>eZ/Publish/SPI/Tests/Search/Content/IndexerGatewayTest.php</file>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist>
