@@ -127,12 +127,12 @@ final class IndexerGateway implements SPIIndexerGateway
         return $query;
     }
 
-    private function fetchIteration(ResultStatement $stmt, int $iterationCount): Generator
+    private function fetchIteration(ResultStatement $statement, int $iterationCount): Generator
     {
         do {
             $contentIds = [];
             for ($i = 0; $i < $iterationCount; ++$i) {
-                if ($contentId = $stmt->fetchOne()) {
+                if ($contentId = $statement->fetchOne()) {
                     $contentIds[] = $contentId;
                 } elseif (empty($contentIds)) {
                     return;
