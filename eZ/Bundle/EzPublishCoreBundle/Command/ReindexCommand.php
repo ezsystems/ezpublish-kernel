@@ -48,6 +48,7 @@ class ReindexCommand extends ContainerAwareCommand
 
     /** @var \eZ\Publish\SPI\Search\Content\IndexerGateway */
     private $gateway;
+
     /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
     private $locationHandler;
 
