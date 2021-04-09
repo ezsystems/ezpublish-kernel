@@ -104,3 +104,7 @@ services:
         tags:
             - {name: ezpublish.searchEngineIndexer, alias: legacy}
         lazy: true
+
+    eZ\Publish\Core\Search\Legacy\Content\IndexerGateway:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'

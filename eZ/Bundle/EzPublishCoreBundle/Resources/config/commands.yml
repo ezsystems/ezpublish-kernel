@@ -15,3 +15,9 @@ services:
             - "@ezpublish.siteaccess"
         tags:
             - { name: console.command }
+
+    eZ\Bundle\EzPublishCoreBundle\Command\ReindexCommand:
+        autowire: true
+        autoconfigure: true
+        arguments:
+            $locationHandler: '@ezpublish.spi.persistence.location_handler'

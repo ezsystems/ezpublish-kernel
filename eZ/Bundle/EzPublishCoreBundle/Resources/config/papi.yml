@@ -98,3 +98,6 @@ services:
             - '@ezpublish.spi.search'
         tags:
             - { name: kernel.event_subscriber }
+
+    eZ\Publish\SPI\Search\Content\IndexerGateway:
+        alias: eZ\Publish\Core\Search\Legacy\Content\IndexerGateway
