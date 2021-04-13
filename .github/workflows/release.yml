@@ -1,0 +1,46 @@
+name: Automatic Changelog Generator for tag
+
+on:  
+  push:
+    tags:
+      - 'v*'
+      - '!v*-alpha*'
+      - '!v*-beta*'
+      - '!v*-rc*'
+
+jobs:  
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Set Environment
+        run: |
+          echo "BUILD_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+      - name: Get previous release tag based on type
+        id: prevrelease
+        uses: ibexa/version-logic-action@master
+        with:
+          currentTag: ${{ env.BUILD_TAG }}
+
+      - name: Generate changelog
+        id: changelog
+        uses: ibexa/changelog-generator-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          currentTag: ${{ env.BUILD_TAG }}
+          previousTag: ${{ steps.prevrelease.outputs.previousTag }}
+
+      - name: Print the changelog
+        run: echo "${{ steps.changelog.outputs.changelog }}"
+
+      - name: Create Release
+        id: create_release
+        uses: zendesk/action-create-release@v1
+        with:
+          tag_name: ${{ env.BUILD_TAG }}
+          body: |
+            ${{ steps.changelog.outputs.changelog }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
