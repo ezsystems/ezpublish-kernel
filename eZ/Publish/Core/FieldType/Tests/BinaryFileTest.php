@@ -9,11 +9,15 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType;
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\BinaryBase\RouteAwarePathGenerator;
 
 /**
  * @group fieldType
  * @group ezbinaryfile
+ *
+ * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type
  */
 class BinaryFileTest extends BinaryBaseTest
 {
@@ -26,11 +30,14 @@ class BinaryFileTest extends BinaryBaseTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\Core\FieldType\FieldType
      */
-    protected function createFieldTypeUnderTest()
+    protected function createFieldTypeUnderTest(): FieldType
     {
-        $fieldType = new BinaryFileType([$this->getBlackListValidatorMock()]);
+        $fieldType = new BinaryFileType(
+            [$this->getBlackListValidatorMock()],
+            $this->getRouteAwarePathGenerator()
+        );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -445,6 +452,55 @@ class BinaryFileTest extends BinaryBaseTest
                     ]
                 ),
             ],
+            [
+                [
+                    'id' => __FILE__,
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                    'uri' => 'some_uri_acquired_from_SPI',
+                    'route' => 'some_route',
+                ],
+                new BinaryFileValue(
+                    [
+                        'id' => null,
+                        'inputUri' => __FILE__,
+                        'path' => __FILE__,
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                        'uri' => '__GENERATED_URI__',
+                    ]
+                ),
+            ],
+            [
+                [
+                    'id' => __FILE__,
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                    'uri' => 'some_uri_acquired_from_SPI',
+                    'route' => 'some_route',
+                    'route_parameters' => [
+                        'any_param' => true,
+                    ],
+                ],
+                new BinaryFileValue(
+                    [
+                        'id' => null,
+                        'inputUri' => __FILE__,
+                        'path' => __FILE__,
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                        'uri' => '__GENERATED_URI_WITH_PARAMS__',
+                    ]
+                ),
+            ],
             // @todo: Provide upload struct (via REST)!
         ];
     }
@@ -581,5 +637,20 @@ class BinaryFileTest extends BinaryBaseTest
                 ],
             ],
         ];
+    }
+
+    private function getRouteAwarePathGenerator(): RouteAwarePathGenerator
+    {
+        $mock = $this->createMock(RouteAwarePathGenerator::class);
+        $mock->method('generate')
+            ->willReturnCallback(static function (string $route, array $routeParameters = []): string {
+                if ($routeParameters) {
+                    return '__GENERATED_URI_WITH_PARAMS__';
+                }
+
+                return '__GENERATED_URI__';
+            });
+
+        return $mock;
     }
 }

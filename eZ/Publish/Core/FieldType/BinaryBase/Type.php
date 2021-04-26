@@ -22,7 +22,7 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 abstract class Type extends FieldType
 {
     /**
-     * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
+     * @see \eZ\Publish\Core\FieldType\FieldType::$validatorConfigurationSchema
      */
     protected $validatorConfigurationSchema = [
         'FileSizeValidator' => [
@@ -62,7 +62,7 @@ abstract class Type extends FieldType
         if (isset($this->routeAwarePathGenerator, $inputValue['route'])) {
             $inputValue['uri'] = $this->routeAwarePathGenerator->generate(
                 $inputValue['route'],
-                $inputValue['route_parameters'] ?? null
+                $inputValue['route_parameters'] ?? []
             );
 
             unset($inputValue['route'], $inputValue['route_parameters']);
