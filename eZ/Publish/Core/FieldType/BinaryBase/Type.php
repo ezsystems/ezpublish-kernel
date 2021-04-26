@@ -42,13 +42,9 @@ abstract class Type extends FieldType
     /**
      * @param \eZ\Publish\Core\FieldType\Validator[] $validators
      */
-    public function __construct(array $validators)
+    public function __construct(array $validators, ?RouteAwarePathGenerator $routeAwarePathGenerator = null)
     {
         $this->validators = $validators;
-    }
-
-    public function setRouteAwarePathGenerator(?RouteAwarePathGenerator $routeAwarePathGenerator): void
-    {
         $this->routeAwarePathGenerator = $routeAwarePathGenerator;
     }
 
