@@ -8,8 +8,10 @@ namespace eZ\Publish\Core\FieldType\BinaryBase;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\FieldType\Media\Value;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\FieldType\BinaryBase\RouteAwarePathGenerator;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
@@ -20,7 +22,7 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 abstract class Type extends FieldType
 {
     /**
-     * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
+     * @see \eZ\Publish\Core\FieldType\FieldType::$validatorConfigurationSchema
      */
     protected $validatorConfigurationSchema = [
         'FileSizeValidator' => [
@@ -34,12 +36,16 @@ abstract class Type extends FieldType
     /** @var \eZ\Publish\Core\FieldType\Validator[] */
     private $validators;
 
+    /** @var \eZ\Publish\SPI\FieldType\BinaryBase\RouteAwarePathGenerator|null */
+    protected $routeAwarePathGenerator;
+
     /**
      * @param \eZ\Publish\Core\FieldType\Validator[] $validators
      */
-    public function __construct(array $validators)
+    public function __construct(array $validators, ?RouteAwarePathGenerator $routeAwarePathGenerator = null)
     {
         $this->validators = $validators;
+        $this->routeAwarePathGenerator = $routeAwarePathGenerator;
     }
 
     /**
@@ -50,6 +56,20 @@ abstract class Type extends FieldType
      * @return Value
      */
     abstract protected function createValue(array $inputValue);
+
+    final protected function regenerateUri(array $inputValue): array
+    {
+        if (isset($this->routeAwarePathGenerator, $inputValue['route'])) {
+            $inputValue['uri'] = $this->routeAwarePathGenerator->generate(
+                $inputValue['route'],
+                $inputValue['route_parameters'] ?? []
+            );
+
+            unset($inputValue['route'], $inputValue['route_parameters']);
+        }
+
+        return $inputValue;
+    }
 
     /**
      * Returns the name of the given field value.
@@ -252,27 +272,23 @@ abstract class Type extends FieldType
     {
         // Restored data comes in $data, since it has already been processed
         // there might be more data in the persistence value than needed here
-        $result = $this->fromHash(
-            [
-                'id' => (isset($fieldValue->externalData['id'])
-                    ? $fieldValue->externalData['id']
-                    : null),
-                'fileName' => (isset($fieldValue->externalData['fileName'])
-                    ? $fieldValue->externalData['fileName']
-                    : null),
-                'fileSize' => (isset($fieldValue->externalData['fileSize'])
-                    ? $fieldValue->externalData['fileSize']
-                    : null),
-                'mimeType' => (isset($fieldValue->externalData['mimeType'])
-                    ? $fieldValue->externalData['mimeType']
-                    : null),
-                'uri' => (isset($fieldValue->externalData['uri'])
-                    ? $fieldValue->externalData['uri']
-                    : null),
-            ]
-        );
+        $hash = [
+            'id' => $fieldValue->externalData['id'] ?? null,
+            'fileName' => $fieldValue->externalData['fileName'] ?? null,
+            'fileSize' => $fieldValue->externalData['fileSize'] ?? null,
+            'mimeType' => $fieldValue->externalData['mimeType'] ?? null,
+            'uri' => $fieldValue->externalData['uri'] ?? null,
+        ];
 
-        return $result;
+        if (isset($fieldValue->externalData['route'])) {
+            $hash['route'] = $fieldValue->externalData['route'];
+        }
+
+        if (isset($fieldValue->externalData['route_parameters'])) {
+            $hash['route_parameters'] = $fieldValue->externalData['route_parameters'];
+        }
+
+        return $this->fromHash($hash);
     }
 
     /**

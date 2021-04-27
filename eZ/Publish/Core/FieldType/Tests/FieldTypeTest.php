@@ -685,7 +685,7 @@ abstract class FieldTypeTest extends TestCase
     }
 
     /**
-     * @param mixed $inputValue
+     * @param mixed $inputHash
      * @param array $expectedResult
      *
      * @dataProvider provideInputForFromHash

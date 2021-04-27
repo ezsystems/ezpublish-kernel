@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\FieldType\BinaryBase;
 
+use eZ\Publish\SPI\FieldType\BinaryBase\RouteAwarePathGenerator;
 use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator;
@@ -32,7 +33,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
     /** @var \eZ\Publish\SPI\IO\MimeTypeDetector */
     protected $mimeTypeDetector;
 
-    /** @var PathGenerator */
+    /** @var \eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator */
     protected $downloadUrlGenerator;
 
     /** @var \eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway */
@@ -59,7 +60,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param PathGenerator $downloadUrlGenerator
+     * @param \eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator $downloadUrlGenerator
      */
     public function setDownloadUrlGenerator(PathGenerator $downloadUrlGenerator)
     {
@@ -144,9 +145,21 @@ class BinaryBaseStorage extends GatewayBasedStorage
         if ($field->value->externalData !== null) {
             $binaryFile = $this->ioService->loadBinaryFile($field->value->externalData['id']);
             $field->value->externalData['fileSize'] = $binaryFile->size;
-            $field->value->externalData['uri'] = isset($this->downloadUrlGenerator) ?
-                $this->downloadUrlGenerator->getStoragePathForField($field, $versionInfo) :
-                $binaryFile->uri;
+
+            $uri = $binaryFile->uri;
+            if (isset($this->downloadUrlGenerator)) {
+                $uri = $this->downloadUrlGenerator->getStoragePathForField($field, $versionInfo);
+
+                if ($this->downloadUrlGenerator instanceof RouteAwarePathGenerator) {
+                    $field->value->externalData['route'] = $this->downloadUrlGenerator->getRoute($field, $versionInfo);
+                    $field->value->externalData['route_parameters'] = $this->downloadUrlGenerator->getParameters(
+                        $field,
+                        $versionInfo
+                    );
+                }
+            }
+
+            $field->value->externalData['uri'] = $uri;
         }
     }
 
