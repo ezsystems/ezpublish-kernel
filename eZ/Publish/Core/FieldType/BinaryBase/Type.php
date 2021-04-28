@@ -64,9 +64,9 @@ abstract class Type extends FieldType
                 $inputValue['route'],
                 $inputValue['route_parameters'] ?? []
             );
-
-            unset($inputValue['route'], $inputValue['route_parameters']);
         }
+
+        unset($inputValue['route'], $inputValue['route_parameters']);
 
         return $inputValue;
     }

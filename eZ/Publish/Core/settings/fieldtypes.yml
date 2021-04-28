@@ -372,6 +372,7 @@ services:
         class: "%ezpublish.fieldType.ezmedia.class%"
         arguments:
             - ['@ezpublish.fieldType.validator.black_list']
+            - "@?ezpublish.fieldType.ezbinarybase.download_url_generator"
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
