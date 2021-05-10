@@ -96,10 +96,10 @@ class RemoveField extends Action
 
         // Delete from relations storage
         if (
-            $this->fieldDefinition->fieldType === 'ezobjectrelationlist'
+            $this->fieldDefinition->fieldType === 'ezobjectrelation'
             || $this->fieldDefinition->fieldType === 'ezobjectrelationlist'
         ) {
-            $this->contentGateway->removeRelationsViaFieldDefinitionId($this->fieldDefinition->id);
+            $this->contentGateway->removeRelationsByFieldDefinitionId($this->fieldDefinition->id);
         }
         // Delete from internal storage -- field is always deleted from _all_ versions
         foreach (array_keys($fieldIdSet) as $fieldId) {

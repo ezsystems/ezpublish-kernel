@@ -1525,7 +1525,7 @@ HEREDOC;
         }
     }
 
-    public function removeRelationsViaFieldDefinitionId(int $fieldDefinitionId)
+    public function removeRelationsByFieldDefinitionId(int $fieldDefinitionId)
     {
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom($this->dbHandler->quoteTable('ezcontentobject_link'))

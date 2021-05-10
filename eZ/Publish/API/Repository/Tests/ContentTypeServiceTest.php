@@ -1997,6 +1997,60 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test for the removeFieldDefinition() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
+     */
+    public function testRemoveFieldDefinitionRemovesOrphanedRelations(): void
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $relationFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'relation',
+            'ezobjectrelation'
+        );
+        $relationFieldCreate->names = ['eng-US' => 'Relation'];
+        $relationFieldCreate->descriptions = ['eng-US' => 'Relation to any Content'];
+        $relationFieldCreate->fieldGroup = 'blog-content';
+        $relationFieldCreate->position = 3;
+        $relationFieldCreate->isTranslatable = false;
+        $relationFieldCreate->isRequired = false;
+        $relationFieldCreate->isInfoCollector = false;
+        $relationFieldCreate->validatorConfiguration = [];
+        $relationFieldCreate->isSearchable = false;
+
+        // Create ContentType
+        $contentTypeDraft = $this->createContentTypeDraft([$relationFieldCreate]);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+        $publishedType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        // Create Content with Relation
+        $contentDraft = $this->createContentDraft();
+        $publishedVersion = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $newDraft = $contentService->createContentDraft($publishedVersion->contentInfo);
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField('relation', 14, 'eng-US');
+        $contentDraft = $contentService->updateContent($newDraft->versionInfo, $updateStruct);
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        // Remove field definition from ContentType
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($publishedType);
+        $relationField = $contentTypeDraft->getFieldDefinition('relation');
+        $contentTypeService->removeFieldDefinition($contentTypeDraft, $relationField);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        // Load Content
+        $content = $contentService->loadContent($publishedContent->contentInfo->id);
+        $relationsCount = count($contentService->loadRelations($content->versionInfo));
+
+        $this->assertEquals(0, $relationsCount);
+    }
+
+    /**
      * Test for the addFieldDefinition() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()

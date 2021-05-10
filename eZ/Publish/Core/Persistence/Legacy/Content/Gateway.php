@@ -339,7 +339,7 @@ abstract class Gateway
     /**
      * Removes orphaned relations resulting from deleted relation fieldtype.
      */
-    abstract public function removeRelationsViaFieldDefinitionId(int $fieldDefinitionId);
+    abstract public function removeRelationsByFieldDefinitionId(int $fieldDefinitionId);
 
     /**
      * Deletes the field with the given $fieldId.
