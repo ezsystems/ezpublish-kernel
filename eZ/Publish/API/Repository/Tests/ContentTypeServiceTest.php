@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\Translation\Message;
 use Exception;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
@@ -1997,9 +1998,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
-     * Test for the removeFieldDefinition() method.
-     *
-     * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
      */
     public function testRemoveFieldDefinitionRemovesOrphanedRelations(): void
     {
@@ -2008,22 +2007,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
 
-        $relationFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'relation',
-            'ezobjectrelation'
-        );
-        $relationFieldCreate->names = ['eng-US' => 'Relation'];
-        $relationFieldCreate->descriptions = ['eng-US' => 'Relation to any Content'];
-        $relationFieldCreate->fieldGroup = 'blog-content';
-        $relationFieldCreate->position = 3;
-        $relationFieldCreate->isTranslatable = false;
-        $relationFieldCreate->isRequired = false;
-        $relationFieldCreate->isInfoCollector = false;
-        $relationFieldCreate->validatorConfiguration = [];
-        $relationFieldCreate->isSearchable = false;
-
         // Create ContentType
-        $contentTypeDraft = $this->createContentTypeDraft([$relationFieldCreate]);
+        $contentTypeDraft = $this->createContentTypeDraft([$this->getRelationFieldDefinition()]);
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
         $publishedType = $contentTypeService->loadContentType($contentTypeDraft->id);
 
@@ -2045,9 +2030,31 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         // Load Content
         $content = $contentService->loadContent($publishedContent->contentInfo->id);
-        $relationsCount = count($contentService->loadRelations($content->versionInfo));
 
-        $this->assertEquals(0, $relationsCount);
+        $this->assertCount(0, $contentService->loadRelations($content->versionInfo));
+    }
+
+    private function getRelationFieldDefinition(): FieldDefinitionCreateStruct
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $relationFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'relation',
+            'ezobjectrelation'
+        );
+        $relationFieldCreate->names = ['eng-US' => 'Relation'];
+        $relationFieldCreate->descriptions = ['eng-US' => 'Relation to any Content'];
+        $relationFieldCreate->fieldGroup = 'blog-content';
+        $relationFieldCreate->position = 3;
+        $relationFieldCreate->isTranslatable = false;
+        $relationFieldCreate->isRequired = false;
+        $relationFieldCreate->isInfoCollector = false;
+        $relationFieldCreate->validatorConfiguration = [];
+        $relationFieldCreate->isSearchable = false;
+
+        return $relationFieldCreate;
     }
 
     /**
