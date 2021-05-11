@@ -17,12 +17,8 @@ class DateMetadataTest extends BaseTest
     {
         return [
             [
-                ['DateMetadataCriterion' => ['Target' => 'modified', 'Value' => '14,1620739489', 'Operator' => 'BETWEEN']],
+                ['DateMetadataCriterion' => ['Target' => 'modified', 'Value' => [14, 1620739489], 'Operator' => 'BETWEEN']],
                 new DateMetadataCriterion('modified', Operator::BETWEEN, [14, 1620739489]),
-            ],
-            [
-                ['DateMetadataCriterion' => ['Target' => 'created', 'Value' => [14, 1620739489], 'Operator' => 'BETWEEN']],
-                new DateMetadataCriterion('created', Operator::BETWEEN, [14, 1620739489]),
             ],
             [
                 ['DateMetadataCriterion' => ['Target' => 'modified', 'Value' => 14, 'Operator' => 'GT']],
@@ -93,7 +89,7 @@ class DateMetadataTest extends BaseTest
     public function testParseExceptionOnInvalidTargetFormat()
     {
         $inputArray = [
-            'DateMetaDataCriterion' => [
+            'DateMetadataCriterion' => [
                 'foo' => 'Mock around the clock',
                 'Value' => 42,
             ],
@@ -112,7 +108,7 @@ class DateMetadataTest extends BaseTest
     public function testParseExceptionOnWrongTargetType()
     {
         $inputArray = [
-            'DateMetaDataCriterion' => [
+            'DateMetadataCriterion' => [
                 'Target' => 'Mock around the clock',
                 'Value' => 42,
             ],
@@ -131,8 +127,8 @@ class DateMetadataTest extends BaseTest
     public function testParseExceptionOnInvalidValueFormat()
     {
         $inputArray = [
-            'DateMetaDataCriterion' => [
-                'Target' => 'Moxette',
+            'DateMetadataCriterion' => [
+                'Target' => 'modified',
                 'foo' => 42,
             ],
         ];
@@ -150,8 +146,8 @@ class DateMetadataTest extends BaseTest
     public function testParseExceptionOnWrongValueType()
     {
         $inputArray = [
-            'DateMetaDataCriterion' => [
-                'Target' => 'We will mock you',
+            'DateMetadataCriterion' => [
+                'Target' => 'modified',
                 'Value' => new \stdClass(),
             ],
         ];
@@ -169,29 +165,9 @@ class DateMetadataTest extends BaseTest
     public function testParseExceptionOnInvalidOperatorFormat()
     {
         $inputArray = [
-            'DateMetaDataCriterion' => [
-                'Target' => 'modified',
-                'foo' => 42,
-            ],
-        ];
-
-        $dataKeyValueObjectClass = $this->getParser();
-        $dataKeyValueObjectClass->parse($inputArray, $this->getParsingDispatcherMock());
-    }
-
-    /**
-     * Test DateMetaData parser throwing exception on wrong type of value format.
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid <Operator> format
-     */
-    public function testParseExceptionOnWrongOperatorType()
-    {
-        $inputArray = [
-            'DateMetaDataCriterion' => [
+            'DateMetadataCriterion' => [
                 'Target' => 'modified',
                 'Value' => 42,
-                'Operator' => 'GTE',
             ],
         ];
 

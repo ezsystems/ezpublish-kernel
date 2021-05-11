@@ -76,9 +76,7 @@ class DateMetadata extends BaseParser
             throw new Exceptions\Parser('Invalid <Value> format');
         }
 
-        $value = is_array($dateMetadata['Value'])
-            ? $dateMetadata['Value']
-            : explode(',', $dateMetadata['Value']);
+        $value = $dateMetadata['Value'];
 
         if (!isset($dateMetadata['Operator'])) {
             throw new Exceptions\Parser('Invalid <Operator> format');
