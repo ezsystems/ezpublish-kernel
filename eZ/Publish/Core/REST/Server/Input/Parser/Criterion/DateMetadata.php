@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\DateMetadata as Dat
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
- * Parser for DateMetadata Criterion.
+ * Parser for ViewInput Criterion.
  */
 class DateMetadata extends BaseParser
 {
