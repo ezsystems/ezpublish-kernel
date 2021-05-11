@@ -64,7 +64,7 @@ class DateMetadata extends BaseParser
 
         $target = strtolower($dateMetadata['Target']);
 
-        if (!in_array($target, self::TARGETS)) {
+        if (!in_array($target, self::TARGETS, true)) {
             throw new Exceptions\Parser('Invalid <Target> format');
         }
 
@@ -72,7 +72,7 @@ class DateMetadata extends BaseParser
             throw new Exceptions\Parser('Invalid <Value> format');
         }
 
-        if (!in_array(gettype($dateMetadata['Value']), ['integer', 'array'])) {
+        if (!in_array(gettype($dateMetadata['Value']), ['integer', 'array'], true)) {
             throw new Exceptions\Parser('Invalid <Value> format');
         }
 
