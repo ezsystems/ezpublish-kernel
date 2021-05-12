@@ -10,10 +10,11 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\DateMetadata as Dat
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion\DateMetadata;
 use eZ\Publish\Core\REST\Server\Tests\Input\Parser\BaseTest;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
-class DateMetadataTest extends BaseTest
+final class DateMetadataTest extends BaseTest
 {
-    public function testParseProvider()
+    public function testParseProvider(): iterable
     {
         return [
             [
@@ -52,7 +53,7 @@ class DateMetadataTest extends BaseTest
      *
      * @dataProvider testParseProvider
      */
-    public function testParse($data, $expected)
+    public function testParse($data, $expected): void
     {
         $dateMetadata = $this->getParser();
         $result = $dateMetadata->parse($data, $this->getParsingDispatcherMock());
@@ -64,14 +65,10 @@ class DateMetadataTest extends BaseTest
         );
     }
 
-    /**
-     * Test DateMetaData parser throwing exception on invalid UserMetadataCriterion format.
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid <DateMetaDataCriterion> format
-     */
-    public function testParseExceptionOnInvalidCriterionFormat()
+    public function testParseExceptionOnInvalidCriterionFormat(): void
     {
+        $this->expectExceptionMessage("Invalid <DateMetaDataCriterion> format");
+        $this->expectException(Exceptions\Parser::class);
         $inputArray = [
             'foo' => 'Michael learns to mock',
         ];
@@ -80,14 +77,11 @@ class DateMetadataTest extends BaseTest
         $dataKeyValueObjectClass->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
-    /**
-     * Test DateMetaData parser throwing exception on invalid target format.
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid <Target> format
-     */
-    public function testParseExceptionOnInvalidTargetFormat()
+    public function testParseExceptionOnInvalidTargetFormat(): void
     {
+        $this->expectExceptionMessage("Invalid <Target> format");
+        $this->expectException(Exceptions\Parser::class);
+
         $inputArray = [
             'DateMetadataCriterion' => [
                 'foo' => 'Mock around the clock',
@@ -99,14 +93,11 @@ class DateMetadataTest extends BaseTest
         $dataKeyValueObjectClass->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
-    /**
-     * Test DateMetaData parser throwing exception on wrong target format.
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid <Target> format
-     */
-    public function testParseExceptionOnWrongTargetType()
+    public function testParseExceptionOnWrongTargetType(): void
     {
+        $this->expectExceptionMessage("Invalid <Target> format");
+        $this->expectException(Exceptions\Parser::class);
+
         $inputArray = [
             'DateMetadataCriterion' => [
                 'Target' => 'Mock around the clock',
@@ -118,14 +109,11 @@ class DateMetadataTest extends BaseTest
         $dataKeyValueObjectClass->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
-    /**
-     * Test DateMetaData parser throwing exception on invalid value format.
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid <Value> format
-     */
-    public function testParseExceptionOnInvalidValueFormat()
+    public function testParseExceptionOnInvalidValueFormat(): void
     {
+        $this->expectExceptionMessage("Invalid <Value> format");
+        $this->expectException(Exceptions\Parser::class);
+
         $inputArray = [
             'DateMetadataCriterion' => [
                 'Target' => 'modified',
@@ -137,14 +125,11 @@ class DateMetadataTest extends BaseTest
         $dataKeyValueObjectClass->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
-    /**
-     * Test DateMetaData parser throwing exception on wrong type of value format.
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid <Value> format
-     */
-    public function testParseExceptionOnWrongValueType()
+    public function testParseExceptionOnWrongValueType(): void
     {
+        $this->expectExceptionMessage("Invalid <Value> format");
+        $this->expectException(Exceptions\Parser::class);
+
         $inputArray = [
             'DateMetadataCriterion' => [
                 'Target' => 'modified',
@@ -156,14 +141,11 @@ class DateMetadataTest extends BaseTest
         $dataKeyValueObjectClass->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
-    /**
-     * Test DateMetaData parser throwing exception on invalid value format.
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid <Operator> format
-     */
-    public function testParseExceptionOnInvalidOperatorFormat()
+    public function testParseExceptionOnInvalidOperatorFormat(): void
     {
+        $this->expectExceptionMessage("Invalid <Operator> format");
+        $this->expectException(Exceptions\Parser::class);
+
         $inputArray = [
             'DateMetadataCriterion' => [
                 'Target' => 'modified',
@@ -175,12 +157,7 @@ class DateMetadataTest extends BaseTest
         $dataKeyValueObjectClass->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
-    /**
-     * Returns the DateMetaData criterion parser.
-     *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\Criterion\DateMetadata
-     */
-    protected function internalGetParser()
+    protected function internalGetParser(): DateMetadata
     {
         return new DateMetadata();
     }

@@ -17,7 +17,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
  */
 class DateMetadata extends BaseParser
 {
-    const OPERATORS = [
+    public const OPERATORS = [
         'IN' => Operator::IN,
         'EQ' => Operator::EQ,
         'GT' => Operator::GT,
@@ -30,12 +30,12 @@ class DateMetadata extends BaseParser
     /**
      * DateMetadata target: modification date.
      */
-    const MODIFIED = 'modified';
+    public const MODIFIED = 'modified';
 
     /**
      * DateMetadata target: creation date.
      */
-    const CREATED = 'created';
+    public const CREATED = 'created';
 
     public const TARGETS = [
         self::MODIFIED,
