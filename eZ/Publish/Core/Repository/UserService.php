@@ -847,6 +847,7 @@ class UserService implements UserServiceInterface
         }
 
         if (!empty($userUpdateStruct->password) &&
+            !$canEditContent &&
             !$this->permissionResolver->canUser('user', 'password', $loadedUser, [$loadedUser])
         ) {
             throw new UnauthorizedException('user', 'password');
