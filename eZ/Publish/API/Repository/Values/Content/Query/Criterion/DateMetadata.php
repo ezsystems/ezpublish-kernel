@@ -33,12 +33,12 @@ class DateMetadata extends Criterion
     /**
      * DateMetadata target: modification date.
      */
-    const MODIFIED = 'modified';
+    public const MODIFIED = 'modified';
 
     /**
      * DateMetadata target: creation date.
      */
-    const CREATED = 'created';
+    public const CREATED = 'created';
 
     /**
      * Creates a new DateMetadata criterion on $metadata.

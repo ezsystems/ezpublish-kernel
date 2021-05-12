@@ -27,19 +27,9 @@ class DateMetadata extends BaseParser
         'BETWEEN' => Operator::BETWEEN,
     ];
 
-    /**
-     * DateMetadata target: modification date.
-     */
-    public const MODIFIED = 'modified';
-
-    /**
-     * DateMetadata target: creation date.
-     */
-    public const CREATED = 'created';
-
     public const TARGETS = [
-        self::MODIFIED,
-        self::CREATED,
+        DateMetadataCriterion::MODIFIED,
+        DateMetadataCriterion::CREATED,
     ];
 
     /**
