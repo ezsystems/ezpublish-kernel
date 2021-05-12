@@ -67,7 +67,7 @@ final class DateMetadataTest extends BaseTest
 
     public function testParseExceptionOnInvalidCriterionFormat(): void
     {
-        $this->expectExceptionMessage("Invalid <DateMetaDataCriterion> format");
+        $this->expectExceptionMessage('Invalid <DateMetaDataCriterion> format');
         $this->expectException(Exceptions\Parser::class);
         $inputArray = [
             'foo' => 'Michael learns to mock',
@@ -79,7 +79,7 @@ final class DateMetadataTest extends BaseTest
 
     public function testParseExceptionOnInvalidTargetFormat(): void
     {
-        $this->expectExceptionMessage("Invalid <Target> format");
+        $this->expectExceptionMessage('Invalid <Target> format');
         $this->expectException(Exceptions\Parser::class);
 
         $inputArray = [
@@ -95,7 +95,7 @@ final class DateMetadataTest extends BaseTest
 
     public function testParseExceptionOnWrongTargetType(): void
     {
-        $this->expectExceptionMessage("Invalid <Target> format");
+        $this->expectExceptionMessage('Invalid <Target> format');
         $this->expectException(Exceptions\Parser::class);
 
         $inputArray = [
@@ -111,7 +111,7 @@ final class DateMetadataTest extends BaseTest
 
     public function testParseExceptionOnInvalidValueFormat(): void
     {
-        $this->expectExceptionMessage("Invalid <Value> format");
+        $this->expectExceptionMessage('Invalid <Value> format');
         $this->expectException(Exceptions\Parser::class);
 
         $inputArray = [
@@ -127,7 +127,7 @@ final class DateMetadataTest extends BaseTest
 
     public function testParseExceptionOnWrongValueType(): void
     {
-        $this->expectExceptionMessage("Invalid <Value> format");
+        $this->expectExceptionMessage('Invalid <Value> format');
         $this->expectException(Exceptions\Parser::class);
 
         $inputArray = [
@@ -143,7 +143,7 @@ final class DateMetadataTest extends BaseTest
 
     public function testParseExceptionOnInvalidOperatorFormat(): void
     {
-        $this->expectExceptionMessage("Invalid <Operator> format");
+        $this->expectExceptionMessage('Invalid <Operator> format');
         $this->expectException(Exceptions\Parser::class);
 
         $inputArray = [
