@@ -17,7 +17,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
  */
 class DateMetadata extends BaseParser
 {
-    public const OPERATORS = [
+    private const OPERATORS = [
         'IN' => Operator::IN,
         'EQ' => Operator::EQ,
         'GT' => Operator::GT,
@@ -27,7 +27,7 @@ class DateMetadata extends BaseParser
         'BETWEEN' => Operator::BETWEEN,
     ];
 
-    public const TARGETS = [
+    private const TARGETS = [
         DateMetadataCriterion::MODIFIED,
         DateMetadataCriterion::CREATED,
     ];
