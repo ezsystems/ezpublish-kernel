@@ -14,6 +14,7 @@ use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use League\Flysystem\Util;
 
 /**
  * Converter for Image field type external storage.
@@ -73,6 +74,7 @@ class ImageStorage extends GatewayBasedStorage
                 ),
                 $field->value->externalData['fileName']
             );
+            $targetPath = Util::normalizePath($targetPath);
 
             if (isset($field->value->externalData['inputUri'])) {
                 $localFilePath = $field->value->externalData['inputUri'];
