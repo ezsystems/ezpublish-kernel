@@ -23,6 +23,10 @@ final class LazyDoctrineRepositoriesPass implements CompilerPassInterface
             }
 
             $factory = $definition->getFactory();
+            if (!is_string($factory[0]) && !$factory[0] instanceof Reference) {
+                continue;
+            }
+
             $factoryServiceId = (string) $factory[0];
 
             if ($factoryServiceId !== 'ibexa.doctrine.orm.entity_manager') {
