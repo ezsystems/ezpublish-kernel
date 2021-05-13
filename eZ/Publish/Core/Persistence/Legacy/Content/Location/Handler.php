@@ -287,7 +287,10 @@ class Handler implements BaseLocationHandler
             $createStruct->contentId = $contentMap[$child['contentobject_id']];
             $parentData = $locationMap[$child['parent_node_id']];
             $createStruct->parentId = $parentData['id'];
-            $createStruct->invisible = $createStruct->hidden || $parentData['hidden'] || $parentData['invisible'];
+            $createStruct->invisible = $createStruct->invisible
+                || $createStruct->hidden
+                || $parentData['hidden']
+                || $parentData['invisible'];
             $pathString = explode('/', $child['path_identification_string']);
             $pathString = end($pathString);
             $createStruct->pathIdentificationString = strlen($pathString) > 0

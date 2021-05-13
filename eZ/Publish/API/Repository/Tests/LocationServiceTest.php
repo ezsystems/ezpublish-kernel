@@ -2521,6 +2521,47 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\LocationService::copySubtree()
+     */
+    public function testCopySubtreeWithInvisibleChild(): void
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        // Hide child Location
+        $locationService->hideLocation($locationService->loadLocation($this->generateId('location', 53)));
+
+        $locationToCopy = $locationService->loadLocation($this->generateId('location', 43));
+
+        $expected = $this->loadSubtreeProperties($locationToCopy);
+
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+        $locationService = $repository->getLocationService();
+
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
+
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        $copiedLocation = $locationService->copySubtree(
+            $locationToCopy,
+            $newParentLocation
+        );
+
+        $this->refreshSearch($repository);
+
+        // Load Subtree properties after copy
+        $actual = $this->loadSubtreeProperties($copiedLocation);
+
+        self::assertEquals(count($expected), count($actual));
+
+        foreach ($actual as $key => $properties) {
+            self::assertEquals($expected[$key]['hidden'], $properties['hidden']);
+            self::assertEquals($expected[$key]['invisible'], $properties['invisible']);
+        }
+    }
+
+    /**
      * Test for the copySubtree() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
