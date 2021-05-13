@@ -95,18 +95,11 @@ class RemoveField extends Action
         }
 
         // Delete from relations storage
-        if ($this->isRelationFieldType($this->fieldDefinition)) {
-            $this->contentGateway->removeRelationsByFieldDefinitionId($this->fieldDefinition->id);
-        }
+        $this->contentGateway->removeRelationsByFieldDefinitionId($this->fieldDefinition->id);
+
         // Delete from internal storage -- field is always deleted from _all_ versions
         foreach (array_keys($fieldIdSet) as $fieldId) {
             $this->contentGateway->deleteField($fieldId);
         }
-    }
-
-    private function isRelationFieldType(FieldDefinition $fieldDefinition): bool
-    {
-        return $fieldDefinition->fieldType === 'ezobjectrelation'
-            || $fieldDefinition->fieldType === 'ezobjectrelationlist';
     }
 }
