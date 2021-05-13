@@ -1977,6 +1977,37 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\UserService::updateUser
+     */
+    public function testUpdateUserByUserWithLimitations(): void
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $user = $this->createTestUserWithPassword('H@xxxiR!_1', $this->createUserContentTypeWithStrongPassword());
+
+        $currentUser = $this->createUserWithPolicies(
+            'user',
+            [
+                ['module' => 'content', 'function' => 'edit'],
+                ['module' => 'user', 'function' => 'password'],
+            ],
+            new SubtreeLimitation(['limitationValues' => ['/1/2']])
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($currentUser);
+
+        /* BEGIN: Use Case */
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+        $userUpdate->password = 'H@xxxiR!_2';
+
+        $user = $userService->updateUser($user, $userUpdate);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(User::class, $user);
+    }
+
+    /**
      * Test for the loadUserGroupsOfUser() method.
      *
      * @covers \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser
