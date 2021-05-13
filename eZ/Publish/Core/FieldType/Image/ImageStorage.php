@@ -8,13 +8,13 @@ namespace eZ\Publish\Core\FieldType\Image;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface as DeprecationWarner;
+use eZ\Publish\Core\IO\FilePathNormalizerInterface;
 use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use League\Flysystem\Util;
 
 /**
  * Converter for Image field type external storage.
@@ -39,13 +39,17 @@ class ImageStorage extends GatewayBasedStorage
     /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway */
     protected $gateway;
 
+    /** @var \eZ\Publish\Core\IO\FilePathNormalizerInterface */
+    protected $filePathNormalizer;
+
     public function __construct(
         StorageGateway $gateway,
         IOServiceInterface $ioService,
         PathGenerator $pathGenerator,
         MetadataHandler $imageSizeMetadataHandler,
         DeprecationWarner $deprecationWarner,
-        AliasCleanerInterface $aliasCleaner
+        AliasCleanerInterface $aliasCleaner,
+        FilePathNormalizerInterface $filePathNormalizer
     ) {
         parent::__construct($gateway);
         $this->ioService = $ioService;
@@ -53,6 +57,7 @@ class ImageStorage extends GatewayBasedStorage
         $this->imageSizeMetadataHandler = $imageSizeMetadataHandler;
         $this->deprecationWarner = $deprecationWarner;
         $this->aliasCleaner = $aliasCleaner;
+        $this->filePathNormalizer = $filePathNormalizer;
     }
 
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
@@ -74,7 +79,7 @@ class ImageStorage extends GatewayBasedStorage
                 ),
                 $field->value->externalData['fileName']
             );
-            $targetPath = Util::normalizePath($targetPath);
+            $targetPath = $this->filePathNormalizer->normalizePath($targetPath);
 
             if (isset($field->value->externalData['inputUri'])) {
                 $localFilePath = $field->value->externalData['inputUri'];
