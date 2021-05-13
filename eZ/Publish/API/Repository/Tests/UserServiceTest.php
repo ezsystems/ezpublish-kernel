@@ -1996,15 +1996,13 @@ class UserServiceTest extends BaseTest
         );
         $repository->getPermissionResolver()->setCurrentUserReference($currentUser);
 
-        /* BEGIN: Use Case */
         // Create a new update struct instance
         $userUpdate = $userService->newUserUpdateStruct();
         $userUpdate->password = 'H@xxxiR!_2';
 
         $user = $userService->updateUser($user, $userUpdate);
-        /* END: Use Case */
 
-        $this->assertInstanceOf(User::class, $user);
+        self::assertInstanceOf(User::class, $user);
     }
 
     /**
