@@ -232,12 +232,12 @@ class RemoveFieldTest extends TestCase
             ->will($this->returnValue([$content2]));
 
         $this->getContentGatewayMock()
-            ->expects($this->at(4))
+            ->expects($this->at(5))
             ->method('deleteField')
             ->with($this->equalTo('3-cro-HR'));
 
         $this->getContentGatewayMock()
-            ->expects($this->at(5))
+            ->expects($this->at(6))
             ->method('deleteField')
             ->with($this->equalTo('3-hun-HU'));
 
@@ -258,6 +258,11 @@ class RemoveFieldTest extends TestCase
                 $content2->versionInfo,
                 $this->equalTo(['3-cro-HR', '3-hun-HU'])
             );
+
+        $this->getContentGatewayMock()
+            ->expects($this->at(4))
+            ->method('removeRelationsByFieldDefinitionId')
+            ->with($this->equalTo(42));
 
         $action->apply($contentId);
     }

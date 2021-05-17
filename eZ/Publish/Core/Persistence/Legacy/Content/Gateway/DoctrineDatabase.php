@@ -1525,6 +1525,20 @@ HEREDOC;
         }
     }
 
+    public function removeRelationsByFieldDefinitionId(int $fieldDefinitionId)
+    {
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom($this->dbHandler->quoteTable('ezcontentobject_link'))
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('contentclassattribute_id'),
+                    $query->bindValue($fieldDefinitionId, null, \PDO::PARAM_INT)
+                )
+            );
+
+        $query->prepare()->execute();
+    }
+
     /**
      * Updates field value of RelationList field type identified by given $row data,
      * removing relations toward given $contentId.

@@ -94,6 +94,9 @@ class RemoveField extends Action
             );
         }
 
+        // Delete from relations storage
+        $this->contentGateway->removeRelationsByFieldDefinitionId($this->fieldDefinition->id);
+
         // Delete from internal storage -- field is always deleted from _all_ versions
         foreach (array_keys($fieldIdSet) as $fieldId) {
             $this->contentGateway->deleteField($fieldId);
