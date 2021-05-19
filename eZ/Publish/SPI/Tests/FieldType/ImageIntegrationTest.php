@@ -125,6 +125,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         if (!isset($this->filePathNormalizer)) {
             $this->filePathNormalizer = $this->createMock(IO\FilePathNormalizerInterface::class);
+            $this->filePathNormalizer->method('normalizePath')->willReturnArgument(0);
         }
 
         return $this->filePathNormalizer;
