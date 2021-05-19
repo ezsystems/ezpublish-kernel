@@ -51,9 +51,10 @@ final class DateMetadataTest extends BaseTest
     /**
      * Tests the DateMetaData parser.
      *
+     * @param string[] $data
      * @dataProvider testParseProvider
      */
-    public function testParse($data, $expected): void
+    public function testParse(array $data, DateMetadataCriterion $expected): void
     {
         $dateMetadata = $this->getParser();
         $result = $dateMetadata->parse($data, $this->getParsingDispatcherMock());
