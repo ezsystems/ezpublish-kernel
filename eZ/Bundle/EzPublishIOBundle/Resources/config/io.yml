@@ -170,6 +170,3 @@ services:
             - "@ezpublish.config.resolver"
         tags:
             - { name: kernel.event_subscriber }
-
-    eZ\Publish\Core\IO\FilePathNormalizer\Flysystem: ~
-    eZ\Publish\Core\IO\FilePathNormalizerInterface: '@eZ\Publish\Core\IO\FilePathNormalizer\Flysystem'

@@ -44,6 +44,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $aliasCleanerMock;
 
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    private $filePathNormalizer;
+
     /**
      * Returns the storage identifier prefix used by the file service.
      *
@@ -94,7 +97,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
                 new IO\MetadataHandler\ImageSize(),
                 $this->getDeprecationWarnerMock(),
-                $this->getAliasCleanerMock()
+                $this->getAliasCleanerMock(),
+                $this->getFilePathNormalizerMock()
             )
         );
     }
@@ -115,6 +119,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         }
 
         return $this->aliasCleanerMock;
+    }
+
+    public function getFilePathNormalizerMock()
+    {
+        if (!isset($this->filePathNormalizer)) {
+            $this->filePathNormalizer = $this->createMock(IO\FilePathNormalizerInterface::class);
+        }
+
+        return $this->filePathNormalizer;
     }
 
     /**
