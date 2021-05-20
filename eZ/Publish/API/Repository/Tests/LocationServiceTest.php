@@ -2531,6 +2531,8 @@ class LocationServiceTest extends BaseTest
         // Hide child Location
         $locationService->hideLocation($locationService->loadLocation($this->generateId('location', 53)));
 
+        $this->refreshSearch($repository);
+
         $locationToCopy = $locationService->loadLocation($this->generateId('location', 43));
 
         $expected = $this->loadSubtreeProperties($locationToCopy);
