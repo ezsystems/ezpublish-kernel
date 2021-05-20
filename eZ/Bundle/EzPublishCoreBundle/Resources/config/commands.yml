@@ -21,3 +21,7 @@ services:
         autoconfigure: true
         arguments:
             $locationHandler: '@ezpublish.spi.persistence.location_handler'
+
+    eZ\Bundle\EzPublishCoreBundle\Command\NormalizeImagesPathsCommand:
+        autowire: true
+        autoconfigure: true

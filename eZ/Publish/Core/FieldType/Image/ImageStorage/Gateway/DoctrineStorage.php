@@ -154,6 +154,38 @@ class DoctrineStorage extends Gateway
         return $fieldLookup;
     }
 
+    public function getAllVersionsImageXmlForFieldId(int $fieldId): array
+    {
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select(
+                $this->connection->quoteIdentifier('id'),
+                $this->connection->quoteIdentifier('version'),
+                $this->connection->quoteIdentifier('data_text')
+            )
+            ->from($this->connection->quoteIdentifier('ezcontentobject_attribute'))
+            ->where(
+                $selectQuery->expr()->eq(
+                    $this->connection->quoteIdentifier('id'),
+                    ':fieldId'
+                )
+            )
+            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
+        ;
+
+        $statement = $selectQuery->execute();
+
+        $fieldLookup = [];
+        foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $fieldLookup[$row['id']] = [
+                'version' => $row['version'],
+                'data_text' => $row['data_text'],
+            ];
+        }
+
+        return $fieldLookup;
+    }
+
     /**
      * Remove all references from $fieldId to a path that starts with $path.
      *
@@ -312,5 +344,81 @@ class DoctrineStorage extends Gateway
         }
 
         return null;
+    }
+
+    public function getAllImagesData(): array
+    {
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select(
+                $this->connection->quoteIdentifier('contentobject_attribute_id'),
+                $this->connection->quoteIdentifier('filepath')
+            )->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
+            ->distinct()
+        ;
+
+        return $selectQuery->execute()->fetchAllAssociative();
+    }
+
+    public function updateImageData(int $fieldId, int $versionNo, string $xml): void
+    {
+        $updateQuery = $this->connection->createQueryBuilder();
+        $expressionBuilder = $updateQuery->expr();
+        $updateQuery
+            ->update(
+                $this->connection->quoteIdentifier('ezcontentobject_attribute')
+            )
+            ->set(
+                $this->connection->quoteIdentifier('data_text'),
+                ':xml'
+            )
+            ->where(
+                $expressionBuilder->eq(
+                    $this->connection->quoteIdentifier('id'),
+                    ':fieldId'
+                )
+            )
+            ->andWhere(
+                $expressionBuilder->eq(
+                    $this->connection->quoteIdentifier('version'),
+                    ':versionNo'
+                )
+            )
+            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
+            ->setParameter(':versionNo', $versionNo, PDO::PARAM_INT)
+            ->setParameter(':xml', $xml, PDO::PARAM_STR)
+            ->execute()
+        ;
+    }
+
+    public function updateImagePath(int $fieldId, string $oldPath, string $newPath): void
+    {
+        $updateQuery = $this->connection->createQueryBuilder();
+        $expressionBuilder = $updateQuery->expr();
+        $updateQuery
+            ->update(
+                $this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE)
+            )
+            ->set(
+                $this->connection->quoteIdentifier('filepath'),
+                ':newPath'
+            )
+            ->where(
+                $expressionBuilder->eq(
+                    $this->connection->quoteIdentifier('contentobject_attribute_id'),
+                    ':fieldId'
+                )
+            )
+            ->andWhere(
+                $expressionBuilder->eq(
+                    $this->connection->quoteIdentifier('filepath'),
+                    ':oldPath'
+                )
+            )
+            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
+            ->setParameter(':oldPath', $oldPath, PDO::PARAM_STR)
+            ->setParameter(':newPath', $newPath, PDO::PARAM_STR)
+            ->execute()
+        ;
     }
 }
