@@ -9,9 +9,9 @@ namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use DOMDocument;
+use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use PDO;
 
 /**
@@ -48,8 +48,6 @@ class DoctrineStorage extends Gateway
 
     /**
      * Return the node path string of $versionInfo.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      *
      * @return string
      */
@@ -115,7 +113,6 @@ class DoctrineStorage extends Gateway
      * Return an XML content stored for the given $fieldIds.
      *
      * @param int $versionNo
-     * @param array $fieldIds
      *
      * @return array
      */
@@ -254,6 +251,23 @@ class DoctrineStorage extends Gateway
         return (int) $statement->fetchColumn();
     }
 
+    public function countDistinctImages(): int
+    {
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select(
+                'COUNT(DISTINCT ' . $this->connection->quoteIdentifier('contentobject_attribute_id') .
+                ', ' . $this->connection->quoteIdentifier('filepath') . ')'
+            )
+            ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
+            ->distinct()
+        ;
+
+        $statement = $selectQuery->execute();
+
+        return (int) $statement->fetchColumn();
+    }
+
     /**
      * Check if image $path can be removed when deleting $versionNo and $fieldId.
      *
@@ -346,7 +360,7 @@ class DoctrineStorage extends Gateway
         return null;
     }
 
-    public function getAllImagesData(): array
+    public function getImagesData(int $offset, int $limit): array
     {
         $selectQuery = $this->connection->createQueryBuilder();
         $selectQuery
@@ -355,7 +369,8 @@ class DoctrineStorage extends Gateway
                 $this->connection->quoteIdentifier('filepath')
             )->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
             ->distinct()
-        ;
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
 
         return $selectQuery->execute()->fetchAllAssociative();
     }

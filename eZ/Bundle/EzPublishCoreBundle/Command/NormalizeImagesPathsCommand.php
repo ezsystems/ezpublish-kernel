@@ -6,6 +6,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
+use Doctrine\DBAL\Driver\Connection;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\DoctrineStorage;
 use eZ\Publish\Core\IO\FilePathNormalizerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -15,6 +16,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class NormalizeImagesPathsCommand extends Command
 {
+    const IMAGE_LIMIT = 100;
+
     const BEFORE_RUNNING_HINTS = <<<EOT
 <error>Before you continue:</error>
 - Make sure to back up your database.
@@ -28,21 +31,35 @@ EOT;
     /** @var \eZ\Publish\Core\IO\FilePathNormalizerInterface */
     private $filePathNormalizer;
 
+    /** @var \Doctrine\DBAL\Driver\Connection */
+    private $connection;
+
     public function __construct(
         DoctrineStorage $imageGateway,
-        FilePathNormalizerInterface $filePathNormalizer
+        FilePathNormalizerInterface $filePathNormalizer,
+        Connection $connection
     ) {
         parent::__construct();
 
         $this->imageGateway = $imageGateway;
         $this->filePathNormalizer = $filePathNormalizer;
+        $this->connection = $connection;
     }
 
     protected function configure()
     {
+        $beforeRunningHints = self::BEFORE_RUNNING_HINTS;
+
         $this
             ->setName('ezplatform:normalize-image-paths')
-            ->setDescription('Normalizes stored paths for images.');
+            ->setDescription('Normalizes stored paths for images.')
+            ->setHelp(
+                <<<EOT
+The command <info>%command.name%</info> normalizes paths for images.
+
+{$beforeRunningHints}
+EOT
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -55,19 +72,28 @@ EOT;
             'It may take a minute or two...',
         ]);
 
-        $imagesData = $this->imageGateway->getAllImagesData();
+        $imagesCount = $this->imageGateway->countDistinctImages();
         $imagePathsToNormalize = [];
-        foreach ($imagesData as $imageData) {
-            $filePath = $imageData['filepath'];
-            $normalizedImagePath = $this->filePathNormalizer->normalizePath($imageData['filepath']);
-            if ($normalizedImagePath !== $filePath) {
-                $imagePathsToNormalize[] = [
-                    'fieldId' => (int) $imageData['contentobject_attribute_id'],
-                    'oldPath' => $filePath,
-                    'newPath' => $normalizedImagePath,
-                ];
+        $iterations = ceil($imagesCount / self::IMAGE_LIMIT);
+        $io->progressStart($imagesCount);
+        for ($i = 0; $i < $iterations; ++$i) {
+            $imagesData = $this->imageGateway->getImagesData($i * self::IMAGE_LIMIT, self::IMAGE_LIMIT);
+
+            foreach ($imagesData as $imageData) {
+                $filePath = $imageData['filepath'];
+                $normalizedImagePath = $this->filePathNormalizer->normalizePath($imageData['filepath']);
+                if ($normalizedImagePath !== $filePath) {
+                    $imagePathsToNormalize[] = [
+                        'fieldId' => (int) $imageData['contentobject_attribute_id'],
+                        'oldPath' => $filePath,
+                        'newPath' => $normalizedImagePath,
+                    ];
+                }
+
+                $io->progressAdvance();
             }
         }
+        $io->progressFinish();
 
         $imagePathsToNormalizeCount = \count($imagePathsToNormalize);
         $io->note(sprintf('Found: %d', $imagePathsToNormalizeCount));
@@ -83,14 +109,22 @@ EOT;
 
         $io->writeln('Normalizing images paths. Please wait...');
         $io->progressStart($imagePathsToNormalizeCount);
-        foreach ($imagePathsToNormalize as $imagePathToNormalize) {
-            $this->updateImagePath(
-                $imagePathToNormalize['fieldId'],
-                $imagePathToNormalize['oldPath'],
-                $imagePathToNormalize['newPath']
-            );
-            $io->progressAdvance(1);
+
+        $this->connection->beginTransaction();
+        try {
+            foreach ($imagePathsToNormalize as $imagePathToNormalize) {
+                $this->updateImagePath(
+                    $imagePathToNormalize['fieldId'],
+                    $imagePathToNormalize['oldPath'],
+                    $imagePathToNormalize['newPath']
+                );
+                $io->progressAdvance(1);
+            }
+            $this->connection->commit();
+        } catch (\Exception $e) {
+            $this->connection->rollBack();
         }
+
         $io->progressFinish();
         $io->success('Done!');
 
