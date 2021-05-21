@@ -8,6 +8,7 @@ namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
 use DOMDocument;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use eZ\Publish\Core\IO\UrlRedecoratorInterface;
@@ -156,24 +157,24 @@ class DoctrineStorage extends Gateway
         $selectQuery = $this->connection->createQueryBuilder();
         $selectQuery
             ->select(
-                $this->connection->quoteIdentifier('id'),
-                $this->connection->quoteIdentifier('version'),
-                $this->connection->quoteIdentifier('data_text')
+                'field.id',
+                'field.version',
+                'field.data_text'
             )
-            ->from($this->connection->quoteIdentifier('ezcontentobject_attribute'))
+            ->from($this->connection->quoteIdentifier('ezcontentobject_attribute'), 'field')
             ->where(
                 $selectQuery->expr()->eq(
                     $this->connection->quoteIdentifier('id'),
-                    ':fieldId'
+                    ':field_id'
                 )
             )
-            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
+            ->setParameter(':field_id', $fieldId, PDO::PARAM_INT)
         ;
 
         $statement = $selectQuery->execute();
 
         $fieldLookup = [];
-        foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        foreach ($statement->fetchAllAssociative() as $row) {
             $fieldLookup[$row['id']] = [
                 'version' => $row['version'],
                 'data_text' => $row['data_text'],
@@ -365,10 +366,11 @@ class DoctrineStorage extends Gateway
         $selectQuery = $this->connection->createQueryBuilder();
         $selectQuery
             ->select(
-                $this->connection->quoteIdentifier('contentobject_attribute_id'),
-                $this->connection->quoteIdentifier('filepath')
-            )->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
+                'img.contentobject_attribute_id',
+                'img.filepath'
+            )
             ->distinct()
+            ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE), 'img')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
@@ -390,18 +392,18 @@ class DoctrineStorage extends Gateway
             ->where(
                 $expressionBuilder->eq(
                     $this->connection->quoteIdentifier('id'),
-                    ':fieldId'
+                    ':field_id'
                 )
             )
             ->andWhere(
                 $expressionBuilder->eq(
                     $this->connection->quoteIdentifier('version'),
-                    ':versionNo'
+                    ':version_no'
                 )
             )
-            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
-            ->setParameter(':versionNo', $versionNo, PDO::PARAM_INT)
-            ->setParameter(':xml', $xml, PDO::PARAM_STR)
+            ->setParameter(':field_id', $fieldId, ParameterType::INTEGER)
+            ->setParameter(':version_no', $versionNo, ParameterType::INTEGER)
+            ->setParameter(':xml', $xml, ParameterType::STRING)
             ->execute()
         ;
     }
@@ -416,23 +418,23 @@ class DoctrineStorage extends Gateway
             )
             ->set(
                 $this->connection->quoteIdentifier('filepath'),
-                ':newPath'
+                ':new_path'
             )
             ->where(
                 $expressionBuilder->eq(
                     $this->connection->quoteIdentifier('contentobject_attribute_id'),
-                    ':fieldId'
+                    ':field_id'
                 )
             )
             ->andWhere(
                 $expressionBuilder->eq(
                     $this->connection->quoteIdentifier('filepath'),
-                    ':oldPath'
+                    ':old_path'
                 )
             )
-            ->setParameter(':fieldId', $fieldId, PDO::PARAM_INT)
-            ->setParameter(':oldPath', $oldPath, PDO::PARAM_STR)
-            ->setParameter(':newPath', $newPath, PDO::PARAM_STR)
+            ->setParameter(':field_id', $fieldId, ParameterType::INTEGER)
+            ->setParameter(':old_path', $oldPath, ParameterType::STRING)
+            ->setParameter(':new_path', $newPath, ParameterType::STRING)
             ->execute()
         ;
     }

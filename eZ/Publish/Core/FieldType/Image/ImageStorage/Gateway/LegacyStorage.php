@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -312,5 +313,37 @@ class LegacyStorage extends Gateway
         }
 
         return null;
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     */
+    public function getAllVersionsImageXmlForFieldId(int $fieldId): array
+    {
+        throw new NotImplementedException('getAllVersionsImageXmlForFieldId is not supported with LegacyStorage gateway, inject DoctrineStorage gateway instead to use it');
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     */
+    public function updateImageData(int $fieldId, int $versionNo, string $xml): void
+    {
+        throw new NotImplementedException('updateImageData is not supported with LegacyStorage gateway, inject DoctrineStorage gateway instead to use it');
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     */
+    public function getImagesData(int $offset, int $limit): array
+    {
+        throw new NotImplementedException('getImagesData is not supported with LegacyStorage gateway, inject DoctrineStorage gateway instead to use it');
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     */
+    public function updateImagePath(int $fieldId, string $oldPath, string $newPath): void
+    {
+        throw new NotImplementedException('updateImagePath is not supported with LegacyStorage gateway, inject DoctrineStorage gateway instead to use it');
     }
 }

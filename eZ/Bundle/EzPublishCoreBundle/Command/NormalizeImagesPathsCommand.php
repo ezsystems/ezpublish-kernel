@@ -4,28 +4,32 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Doctrine\DBAL\Driver\Connection;
-use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\DoctrineStorage;
+use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway as ImageStorageGateway;
 use eZ\Publish\Core\IO\FilePathNormalizerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class NormalizeImagesPathsCommand extends Command
+/**
+ * @internal
+ */
+final class NormalizeImagesPathsCommand extends Command
 {
-    const IMAGE_LIMIT = 100;
-
-    const BEFORE_RUNNING_HINTS = <<<EOT
+    private const IMAGE_LIMIT = 100;
+    private const BEFORE_RUNNING_HINTS = <<<EOT
 <error>Before you continue:</error>
 - Make sure to back up your database.
 - Run this command in production environment using <info>--env=prod</info>
 - Manually clear SPI/HTTP cache after running this command.
 EOT;
 
-    /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\DoctrineStorage */
+    /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway */
     private $imageGateway;
 
     /** @var \eZ\Publish\Core\IO\FilePathNormalizerInterface */
@@ -35,7 +39,7 @@ EOT;
     private $connection;
 
     public function __construct(
-        DoctrineStorage $imageGateway,
+        ImageStorageGateway $imageGateway,
         FilePathNormalizerInterface $filePathNormalizer,
         Connection $connection
     ) {
@@ -51,7 +55,7 @@ EOT;
         $beforeRunningHints = self::BEFORE_RUNNING_HINTS;
 
         $this
-            ->setName('ezplatform:normalize-image-paths')
+            ->setName('ezplatform:images:normalize-paths')
             ->setDescription('Normalizes stored paths for images.')
             ->setHelp(
                 <<<EOT
@@ -62,14 +66,14 @@ EOT
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Normalize images paths');
+        $io->title('Normalize image paths');
 
         $io->writeln([
             'Determining the number of images that require path normalization.',
-            'It may take a minute or two...',
+            'It may take some time.',
         ]);
 
         $imagesCount = $this->imageGateway->countDistinctImages();
@@ -98,7 +102,7 @@ EOT
         $imagePathsToNormalizeCount = \count($imagePathsToNormalize);
         $io->note(sprintf('Found: %d', $imagePathsToNormalizeCount));
         if ($imagePathsToNormalizeCount === 0) {
-            $io->success('Nothing to do. Bye!');
+            $io->success('No paths to normalize.');
 
             return 0;
         }
@@ -107,7 +111,7 @@ EOT
             return 0;
         }
 
-        $io->writeln('Normalizing images paths. Please wait...');
+        $io->writeln('Normalizing image paths. Please wait...');
         $io->progressStart($imagePathsToNormalizeCount);
 
         $this->connection->beginTransaction();
@@ -145,15 +149,16 @@ EOT
             $dom = new \DOMDocument();
             $dom->loadXml($xmlData['data_text']);
 
-            $ezimageTag = $dom->getElementsByTagName('ezimage')->item(0);
+            /** @var \DOMElement $imageTag */
+            $imageTag = $dom->getElementsByTagName('ezimage')->item(0);
             $this->imageGateway->updateImagePath($fieldId, $oldPath, $newPath);
-            if ($ezimageTag && $ezimageTag->getAttribute('filename') === $oldFileName) {
-                $ezimageTag->setAttribute('filename', $newFilename);
-                $ezimageTag->setAttribute('basename', $newBaseName);
-                $ezimageTag->setAttribute('dirpath', $newPath);
-                $ezimageTag->setAttribute('url', $newPath);
+            if ($imageTag && $imageTag->getAttribute('filename') === $oldFileName) {
+                $imageTag->setAttribute('filename', $newFilename);
+                $imageTag->setAttribute('basename', $newBaseName);
+                $imageTag->setAttribute('dirpath', $newPath);
+                $imageTag->setAttribute('url', $newPath);
 
-                $this->imageGateway->updateImageData($fieldId, $xmlData['version'], $dom->saveXML());
+                $this->imageGateway->updateImageData($fieldId, (int) $xmlData['version'], $dom->saveXML());
                 $this->imageGateway->updateImagePath($fieldId, $oldPath, $newPath);
             }
         }

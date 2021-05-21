@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\IO\FilePathNormalizer;
 use eZ\Publish\Core\IO\FilePathNormalizerInterface;
 use League\Flysystem\Util;
 
-class Flysystem implements FilePathNormalizerInterface
+final class Flysystem implements FilePathNormalizerInterface
 {
     public function normalizePath(string $filePath): string
     {
