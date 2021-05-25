@@ -39,7 +39,12 @@ class LazyDoctrineRepositoriesPassTest extends AbstractCompilerPassTestCase
         $myServiceWithFactory->setFactory([new Reference('my_factory'), 'getService']);
         $myServiceWithFactory->setLazy(true);
 
+        $myOtherServiceWithFactory = new Definition();
+        $myOtherServiceWithFactory->setFactory([new Definition('\My\Class'), 'getService']);
+        $myOtherServiceWithFactory->setLazy(true);
+
         $this->setDefinition('my_service', $myServiceWithFactory);
+        $this->setDefinition('my_other_service', $myOtherServiceWithFactory);
         $this->setDefinition('my_entity_manager', $myServiceWithEntityManagerFactory);
         $this->setDefinition('my_lazy_entity_manager', $myLazyServiceWithEntityManagerFactory);
 
