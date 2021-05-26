@@ -2059,6 +2059,54 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Updates Content's attribute text value.
+     *
+     * @param int $attributeId
+     * @param int $version
+     * @param string $text
+     */
+    public function updateContentObjectAttributeText($attributeId, $version, $text)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update('ezcontentobject_attribute', 'oa')
+            ->set('data_text', ':text')
+            ->where('oa.id = :id')
+            ->andWhere('oa.version = :version')
+            ->setParameters([
+                'text' => $text,
+                'id' => $attributeId,
+                'version' => $version,
+            ], [
+                'text' => PDO::PARAM_STR,
+                'id' => PDO::PARAM_INT,
+                'version' => PDO::PARAM_INT,
+            ]);
+
+        $query->execute();
+    }
+
+    /**
+     * Returns an array containing all content attributes with the specified id.
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getContentObjectAttributesById($id)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('oa.data_text, oa.id, oa.version')
+            ->from('ezcontentobject_attribute', 'oa')
+            ->where('oa.id = :id')
+            ->setParameter('id', $id, PDO::PARAM_INT);
+        $statement = $query->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Remove the specified translation from the Content Object Version.
      *
      * @param int $contentId
