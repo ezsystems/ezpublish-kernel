@@ -29,6 +29,8 @@ final class NormalizeImagesPathsCommand extends Command
 - Manually clear SPI/HTTP cache after running this command.
 EOT;
 
+    protected static $defaultName = 'ezplatform:images:normalize-paths';
+
     /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway */
     private $imageGateway;
 
@@ -55,7 +57,6 @@ EOT;
         $beforeRunningHints = self::BEFORE_RUNNING_HINTS;
 
         $this
-            ->setName('ezplatform:images:normalize-paths')
             ->setDescription('Normalizes stored paths for images.')
             ->setHelp(
                 <<<EOT
@@ -122,7 +123,7 @@ EOT
                     $imagePathToNormalize['oldPath'],
                     $imagePathToNormalize['newPath']
                 );
-                $io->progressAdvance(1);
+                $io->progressAdvance();
             }
             $this->connection->commit();
         } catch (\Exception $e) {

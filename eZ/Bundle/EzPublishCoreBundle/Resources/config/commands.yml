@@ -25,3 +25,5 @@ services:
     eZ\Bundle\EzPublishCoreBundle\Command\NormalizeImagesPathsCommand:
         autowire: true
         autoconfigure: true
+        arguments:
+            $connection: '@ezpublish.persistence.connection'

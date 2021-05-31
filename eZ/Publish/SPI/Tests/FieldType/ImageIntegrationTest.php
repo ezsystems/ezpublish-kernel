@@ -44,7 +44,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $aliasCleanerMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\Core\IO\FilePathNormalizer\Flysystem */
     private $filePathNormalizer;
 
     /**
@@ -121,7 +121,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         return $this->aliasCleanerMock;
     }
 
-    public function getFilePathNormalizerMock()
+    private function getFilePathNormalizerMock(): IO\FilePathNormalizerInterface
     {
         if (!isset($this->filePathNormalizer)) {
             $this->filePathNormalizer = $this->createMock(IO\FilePathNormalizerInterface::class);
