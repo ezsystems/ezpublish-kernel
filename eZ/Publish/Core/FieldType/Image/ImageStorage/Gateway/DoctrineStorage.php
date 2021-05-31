@@ -256,12 +256,9 @@ class DoctrineStorage extends Gateway
     {
         $selectQuery = $this->connection->createQueryBuilder();
         $selectQuery
-            ->select(
-                'COUNT(DISTINCT ' . $this->connection->quoteIdentifier('contentobject_attribute_id') .
-                ', ' . $this->connection->quoteIdentifier('filepath') . ')'
-            )
+            ->select($this->connection->getDatabasePlatform()->getCountExpression('contentobject_attribute_id'))
             ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
-            ->distinct()
+            ->groupBy('contentobject_attribute_id', 'filepath')
         ;
 
         $statement = $selectQuery->execute();

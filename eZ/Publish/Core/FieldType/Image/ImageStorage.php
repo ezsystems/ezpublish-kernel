@@ -9,9 +9,9 @@ namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface as DeprecationWarner;
 use eZ\Publish\Core\IO\FilePathNormalizerInterface;
-use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
+use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
 use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -79,7 +79,7 @@ class ImageStorage extends GatewayBasedStorage
                 ),
                 $field->value->externalData['fileName']
             );
-//            $targetPath = $this->filePathNormalizer->normalizePath($targetPath);
+            $targetPath = $this->filePathNormalizer->normalizePath($targetPath);
 
             if (isset($field->value->externalData['inputUri'])) {
                 $localFilePath = $field->value->externalData['inputUri'];
@@ -97,10 +97,7 @@ class ImageStorage extends GatewayBasedStorage
             } elseif ($this->ioService->exists($targetPath)) {
                 $binaryFile = $this->ioService->loadBinaryFile($targetPath);
             } else {
-                throw new InvalidArgumentException(
-                    'inputUri',
-                    'No source image could be obtained from the given external data'
-                );
+                throw new InvalidArgumentException('inputUri', 'No source image could be obtained from the given external data');
             }
 
             $field->value->externalData['imageId'] = $this->buildImageId($versionInfo, $field);
@@ -183,9 +180,6 @@ class ImageStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     *
      * @return string
      */
     private function buildImageId(VersionInfo $versionInfo, Field $field)
