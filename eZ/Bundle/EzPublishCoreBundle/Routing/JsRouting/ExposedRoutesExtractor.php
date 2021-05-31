@@ -8,24 +8,26 @@ namespace eZ\Bundle\EzPublishCoreBundle\Routing\JsRouting;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use FOS\JsRoutingBundle\Extractor\ExposedRoutesExtractorInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Decorator of FOSJsRouting routes extractor.
  * Ensures that base URL contains the SiteAccess part when applicable.
+ *
+ * @internal
  */
 class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
 {
-    /** @var ExposedRoutesExtractorInterface */
+    /** @var \FOS\JsRoutingBundle\Extractor\ExposedRoutesExtractorInterface */
     private $innerExtractor;
 
-    /** @var Request */
-    private $masterRequest;
+    /** @var \Symfony\Component\HttpFoundation\RequestStack */
+    private $requestStack;
 
-    public function __construct(ExposedRoutesExtractorInterface $innerExtractor, Request $masterRequest)
+    public function __construct(ExposedRoutesExtractorInterface $innerExtractor, RequestStack $requestStack)
     {
         $this->innerExtractor = $innerExtractor;
-        $this->masterRequest = $masterRequest;
+        $this->requestStack = $requestStack;
     }
 
     public function getRoutes()
@@ -43,7 +45,7 @@ class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
     public function getBaseUrl()
     {
         $baseUrl = $this->innerExtractor->getBaseUrl();
-        $siteAccess = $this->masterRequest->attributes->get('siteaccess');
+        $siteAccess = $this->requestStack->getMasterRequest()->attributes->get('siteaccess');
         if ($siteAccess instanceof SiteAccess && $siteAccess->matcher instanceof SiteAccess\URILexer) {
             $baseUrl .= $siteAccess->matcher->analyseLink('');
         }

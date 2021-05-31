@@ -33,6 +33,7 @@
         "liip/imagine-bundle": "^2.1",
         "oneup/flysystem-bundle": "^3.0",
         "friendsofsymfony/http-cache-bundle": "^1.3.13 | ^2.5.1",
+        "friendsofsymfony/jsrouting-bundle": "^1.6.3",
         "sensio/framework-extra-bundle": "^5.2",
         "jms/translation-bundle": "^1.4",
         "twig/twig": "^2.10",
