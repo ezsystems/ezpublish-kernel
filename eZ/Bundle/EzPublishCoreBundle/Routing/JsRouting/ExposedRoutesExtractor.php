@@ -45,7 +45,12 @@ class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
     public function getBaseUrl()
     {
         $baseUrl = $this->innerExtractor->getBaseUrl();
-        $siteAccess = $this->requestStack->getMasterRequest()->attributes->get('siteaccess');
+        $request = $this->requestStack->getMasterRequest();
+        if ($request === null) {
+            return $baseUrl;
+        }
+
+        $siteAccess = $request->attributes->get('siteaccess');
         if ($siteAccess instanceof SiteAccess && $siteAccess->matcher instanceof SiteAccess\URILexer) {
             $baseUrl .= $siteAccess->matcher->analyseLink('');
         }
