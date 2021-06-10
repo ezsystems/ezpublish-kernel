@@ -8,10 +8,11 @@ namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
 use DOMDocument;
+use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use PDO;
 
 /**
@@ -48,8 +49,6 @@ class DoctrineStorage extends Gateway
 
     /**
      * Return the node path string of $versionInfo.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      *
      * @return string
      */
@@ -115,7 +114,6 @@ class DoctrineStorage extends Gateway
      * Return an XML content stored for the given $fieldIds.
      *
      * @param int $versionNo
-     * @param array $fieldIds
      *
      * @return array
      */
@@ -149,6 +147,38 @@ class DoctrineStorage extends Gateway
         $fieldLookup = [];
         foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $fieldLookup[$row['id']] = $row['data_text'];
+        }
+
+        return $fieldLookup;
+    }
+
+    public function getAllVersionsImageXmlForFieldId(int $fieldId): array
+    {
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select(
+                'field.id',
+                'field.version',
+                'field.data_text'
+            )
+            ->from($this->connection->quoteIdentifier('ezcontentobject_attribute'), 'field')
+            ->where(
+                $selectQuery->expr()->eq(
+                    $this->connection->quoteIdentifier('id'),
+                    ':field_id'
+                )
+            )
+            ->setParameter(':field_id', $fieldId, PDO::PARAM_INT)
+        ;
+
+        $statement = $selectQuery->execute();
+
+        $fieldLookup = [];
+        foreach ($statement->fetchAllAssociative() as $row) {
+            $fieldLookup[$row['id']] = [
+                'version' => $row['version'],
+                'data_text' => $row['data_text'],
+            ];
         }
 
         return $fieldLookup;
@@ -215,6 +245,19 @@ class DoctrineStorage extends Gateway
                 )
             )
             ->setParameter(':likePath', $path . '%')
+        ;
+
+        $statement = $selectQuery->execute();
+
+        return (int) $statement->fetchColumn();
+    }
+
+    public function countDistinctImages(): int
+    {
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select($this->connection->getDatabasePlatform()->getCountExpression('DISTINCT(filepath)'))
+            ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
         ;
 
         $statement = $selectQuery->execute();
@@ -312,5 +355,83 @@ class DoctrineStorage extends Gateway
         }
 
         return null;
+    }
+
+    public function getImagesData(int $offset, int $limit): array
+    {
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select(
+                'img.contentobject_attribute_id',
+                'img.filepath'
+            )
+            ->distinct()
+            ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE), 'img')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        return $selectQuery->execute()->fetchAllAssociative();
+    }
+
+    public function updateImageData(int $fieldId, int $versionNo, string $xml): void
+    {
+        $updateQuery = $this->connection->createQueryBuilder();
+        $expressionBuilder = $updateQuery->expr();
+        $updateQuery
+            ->update(
+                $this->connection->quoteIdentifier('ezcontentobject_attribute')
+            )
+            ->set(
+                $this->connection->quoteIdentifier('data_text'),
+                ':xml'
+            )
+            ->where(
+                $expressionBuilder->eq(
+                    $this->connection->quoteIdentifier('id'),
+                    ':field_id'
+                )
+            )
+            ->andWhere(
+                $expressionBuilder->eq(
+                    $this->connection->quoteIdentifier('version'),
+                    ':version_no'
+                )
+            )
+            ->setParameter(':field_id', $fieldId, ParameterType::INTEGER)
+            ->setParameter(':version_no', $versionNo, ParameterType::INTEGER)
+            ->setParameter(':xml', $xml, ParameterType::STRING)
+            ->execute()
+        ;
+    }
+
+    public function updateImagePath(int $fieldId, string $oldPath, string $newPath): void
+    {
+        $updateQuery = $this->connection->createQueryBuilder();
+        $expressionBuilder = $updateQuery->expr();
+        $updateQuery
+            ->update(
+                $this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE)
+            )
+            ->set(
+                $this->connection->quoteIdentifier('filepath'),
+                ':new_path'
+            )
+            ->where(
+                $expressionBuilder->eq(
+                    $this->connection->quoteIdentifier('contentobject_attribute_id'),
+                    ':field_id'
+                )
+            )
+            ->andWhere(
+                $expressionBuilder->eq(
+                    $this->connection->quoteIdentifier('filepath'),
+                    ':old_path'
+                )
+            )
+            ->setParameter(':field_id', $fieldId, ParameterType::INTEGER)
+            ->setParameter(':old_path', $oldPath, ParameterType::STRING)
+            ->setParameter(':new_path', $newPath, ParameterType::STRING)
+            ->execute()
+        ;
     }
 }
