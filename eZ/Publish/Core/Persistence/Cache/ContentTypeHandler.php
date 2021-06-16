@@ -56,6 +56,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
         };
         $this->getTypeKeys = function (Type $type, int $status = Type::STATUS_DEFINED) {
             return [
+                'ez-content-type-' . $type->id,
                 'ez-content-type-' . $type->id . '-' . $status,
                 'ez-content-type-' . $this->escapeForCacheKey($type->identifier) . '-by-identifier',
                 'ez-content-type-' . $this->escapeForCacheKey($type->remoteId) . '-by-remote',
