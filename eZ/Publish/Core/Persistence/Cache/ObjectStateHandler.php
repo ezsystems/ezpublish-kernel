@@ -37,12 +37,12 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         return $this->getCacheValue(
             (int) $groupId,
             'ez-state-group-',
-            function (int $groupId) {
+            function (int $groupId): Group {
                 $this->logger->logCall(__METHOD__, ['groupId' => (int) $groupId]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadGroup($groupId);
             },
-            static function () use ($groupId) {
+            static function () use ($groupId): array {
                 return ['state-group-' . (int) $groupId];
             },
             static function () use ($groupId) {
@@ -61,15 +61,15 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         return $this->getCacheValue(
             $identifier,
             'ez-state-group-',
-            function ($identifier) {
+            function (string $identifier): Group {
                 $this->logger->logCall(__METHOD__, ['groupId' => $identifier]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadGroupByIdentifier($identifier);
             },
-            static function (Group $group) {
+            static function (Group $group): array {
                 return ['state-group-' . $group->id];
             },
-            static function () use ($identifier) {
+            static function () use ($identifier): array {
                 return ['ez-state-group-' . $identifier . '-by-identifier'];
             },
             '-by-identifier'
@@ -84,12 +84,12 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $stateGroups = $this->getCacheValue(
             '',
             'ez-state-group-all',
-            function () use ($offset, $limit) {
+            function () use ($offset, $limit): array {
                 $this->logger->logCall(__METHOD__, ['offset' => (int) $offset, 'limit' => (int) $limit]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadAllGroups(0, -1);
             },
-            static function (array $stateGroups) {
+            static function (array $stateGroups): array {
                 $cacheTags = [];
                 foreach ($stateGroups as $group) {
                     $cacheTags[] = 'state-group-' . $group->id;
@@ -97,7 +97,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
                 return $cacheTags;
             },
-            static function () {
+            static function (): array {
                 return ['ez-state-group-all'];
             }
         );
@@ -113,12 +113,12 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $objectStates = $this->getCacheValue(
             $groupId,
             'ez-state-list-by-group-',
-            function ($groupId) {
+            function (int $groupId): array {
                 $this->logger->logCall(__METHOD__, ['groupId' => (int) $groupId]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadObjectStates($groupId);
             },
-            static function (array $objectStates) use ($groupId) {
+            static function (array $objectStates) use ($groupId): array {
                 $cacheTags = [];
                 $cacheTags[] = 'state-group-' . (int) $groupId;
                 foreach ($objectStates as $state) {
@@ -127,7 +127,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
                 return $cacheTags;
             },
-            static function () use ($groupId) {
+            static function () use ($groupId): array {
                 return ['ez-state-list-by-group-' . (int) $groupId];
             }
         );
@@ -179,23 +179,21 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
      */
     public function load($stateId)
     {
-        $objectState = $this->getCacheValue(
+        return $this->getCacheValue(
             (int) $stateId,
             'ez-state-',
-            function ($stateId) {
-                $this->logger->logCall(__METHOD__, ['stateId' => (int) $stateId]);
+            function (int $stateId): ObjectState {
+                $this->logger->logCall(__METHOD__, ['stateId' => $stateId]);
 
-                return $this->persistenceHandler->objectStateHandler()->load((int) $stateId);
+                return $this->persistenceHandler->objectStateHandler()->load($stateId);
             },
-            static function (ObjectState $objectState) {
+            static function (ObjectState $objectState): array {
                 return ['state-' . $objectState->id, 'state-group-' . $objectState->groupId];
             },
-            static function () use ($stateId) {
+            static function () use ($stateId): array {
                 return ['ez-state-' . (int) $stateId];
             }
         );
-
-        return $objectState;
     }
 
     /**
@@ -208,15 +206,15 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         return $this->getCacheValue(
             $identifier,
             'ez-state-identifier-',
-            function ($identifier) use ($groupId) {
+            function (string $identifier) use ($groupId): ObjectState {
                 $this->logger->logCall(__METHOD__, ['identifier' => $identifier, 'groupId' => (int) $groupId]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadByIdentifier($identifier, (int) $groupId);
             },
-            static function (ObjectState $objectState) {
+            static function (ObjectState $objectState): array {
                 return ['state-' . $objectState->id, 'state-group-' . $objectState->groupId];
             },
-            static function () use ($identifier, $groupId) {
+            static function () use ($identifier, $groupId): array {
                 return ['ez-state-identifier-' . $identifier . '-by-group-' . (int) $groupId];
             },
             '-by-group-' . (int) $groupId
@@ -283,15 +281,15 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         return $this->getCacheValue(
             (int) $stateGroupId,
             'ez-state-by-group-',
-            function ($stateGroupId) use ($contentId) {
-                $this->logger->logCall(__METHOD__, ['contentId' => (int) $contentId, 'stateGroupId' => (int) $stateGroupId]);
+            function (int $stateGroupId) use ($contentId): ObjectState {
+                $this->logger->logCall(__METHOD__, ['contentId' => (int) $contentId, 'stateGroupId' => $stateGroupId]);
 
                 return $this->persistenceHandler->objectStateHandler()->getContentState((int) $contentId, (int) $stateGroupId);
             },
-            static function (ObjectState $contentState) use ($contentId) {
+            static function (ObjectState $contentState) use ($contentId): array {
                 return ['state-' . $contentState->id, 'content-' . (int) $contentId];
             },
-            static function () use ($contentId, $stateGroupId) {
+            static function () use ($contentId, $stateGroupId): array {
                 return ['ez-state-by-group-' . (int) $stateGroupId . '-on-content-' . (int) $contentId];
             },
             '-on-content-' . $contentId
