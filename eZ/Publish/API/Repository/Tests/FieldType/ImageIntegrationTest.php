@@ -114,6 +114,12 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
                     'default' => false,
                 ],
             ],
+            'AlternativeTextValidator' => [
+                'required' => [
+                    'type' => 'bool',
+                    'default' => false,
+                ],
+            ],
         ];
     }
 
@@ -127,6 +133,9 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         return [
             'FileSizeValidator' => [
                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
+            ],
+            'AlternativeTextValidator' => [
+                'required' => true,
             ],
         ];
     }
