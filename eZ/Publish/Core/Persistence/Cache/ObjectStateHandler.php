@@ -6,13 +6,15 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
  */
-class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerInterface
+class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements ObjectStateHandlerInterface
 {
     /**
      * {@inheritdoc}
@@ -32,19 +34,19 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadGroup($groupId)
     {
-        $cacheItem = $this->cache->getItem('ez-state-group-' . $groupId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCall(__METHOD__, ['groupId' => $groupId]);
-        $group = $this->persistenceHandler->objectStateHandler()->loadGroup($groupId);
-
-        $cacheItem->set($group);
-        $cacheItem->tag(['state-group-' . $group->id]);
-        $this->cache->save($cacheItem);
-
-        return $group;
+        return $this->getCacheValue(
+            (int) $groupId,
+            'ez-state-group-',
+            function (int $groupId) {
+                return $this->persistenceHandler->objectStateHandler()->loadGroup($groupId);
+            },
+            static function () use ($groupId) {
+                return ['state-group-' . (int) $groupId];
+            },
+            static function () use ($groupId) {
+                return ['ez-state-group-' . (int) $groupId];
+            }
+        );
     }
 
     /**
@@ -52,19 +54,22 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadGroupByIdentifier($identifier)
     {
-        $cacheItem = $this->cache->getItem('ez-state-group-' . $this->escapeForCacheKey($identifier) . '-by-identifier');
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
+        $identifier = $this->escapeForCacheKey($identifier);
 
-        $this->logger->logCall(__METHOD__, ['groupId' => $identifier]);
-        $group = $this->persistenceHandler->objectStateHandler()->loadGroupByIdentifier($identifier);
-
-        $cacheItem->set($group);
-        $cacheItem->tag(['state-group-' . $group->id]);
-        $this->cache->save($cacheItem);
-
-        return $group;
+        return $this->getCacheValue(
+            $identifier,
+            'ez-state-group-',
+            function ($identifier) {
+                return $this->persistenceHandler->objectStateHandler()->loadGroupByIdentifier($identifier);
+            },
+            static function (Group $group) {
+                return ['state-group-' . $group->id];
+            },
+            static function () use ($identifier) {
+                return ['ez-state-group-' . $identifier . '-by-identifier'];
+            },
+            '-by-identifier'
+        );
     }
 
     /**
@@ -72,23 +77,26 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadAllGroups($offset = 0, $limit = -1)
     {
-        $cacheItem = $this->cache->getItem('ez-state-group-all');
-        if ($cacheItem->isHit()) {
-            return array_slice($cacheItem->get(), $offset, $limit > -1 ? $limit : null);
-        }
+        $stateGroups = $this->getCacheValue(
+            '',
+            'ez-state-group-all',
+            function () {
+                return $this->persistenceHandler->objectStateHandler()->loadAllGroups(0, -1);
+            },
+            static function (array $stateGroups) {
+                $cacheTags = [];
+                foreach ($stateGroups as $group) {
+                    $cacheTags[] = 'state-group-' . $group->id;
+                }
 
-        $this->logger->logCall(__METHOD__, ['offset' => $offset, 'limit' => $limit]);
-        $stateGroups = $this->persistenceHandler->objectStateHandler()->loadAllGroups(0, -1);
+                return $cacheTags;
+            },
+            static function () {
+                return ['ez-state-group-all'];
+            }
+        );
 
-        $cacheItem->set($stateGroups);
-        $cacheTags = [];
-        foreach ($stateGroups as $group) {
-            $cacheTags[] = 'state-group-' . $group->id;
-        }
-        $cacheItem->tag($cacheTags);
-        $this->cache->save($cacheItem);
-
-        return array_slice($stateGroups, $offset, $limit > -1 ? $limit : null);
+        return \array_slice($stateGroups, $offset, $limit > -1 ? $limit : null);
     }
 
     /**
@@ -96,21 +104,25 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadObjectStates($groupId)
     {
-        $cacheItem = $this->cache->getItem('ez-state-list-by-group-' . $groupId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
+        $objectStates = $this->getCacheValue(
+            $groupId,
+            'ez-state-list-by-group-',
+            function ($groupId) {
+                return $this->persistenceHandler->objectStateHandler()->loadObjectStates($groupId);
+            },
+            static function (array $objectStates) use ($groupId) {
+                $cacheTags = [];
+                $cacheTags[] = 'state-group-' . (int) $groupId;
+                foreach ($objectStates as $state) {
+                    $cacheTags[] = 'state-' . $state->id;
+                }
 
-        $this->logger->logCall(__METHOD__, ['groupId' => $groupId]);
-        $objectStates = $this->persistenceHandler->objectStateHandler()->loadObjectStates($groupId);
-
-        $cacheItem->set($objectStates);
-        $cacheTags = ['state-group-' . $groupId];
-        foreach ($objectStates as $state) {
-            $cacheTags[] = 'state-' . $state->id;
-        }
-        $cacheItem->tag($cacheTags);
-        $this->cache->save($cacheItem);
+                return $cacheTags;
+            },
+            static function () use ($groupId) {
+                return ['ez-state-list-by-group-' . (int) $groupId];
+            }
+        );
 
         return $objectStates;
     }
@@ -159,17 +171,19 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function load($stateId)
     {
-        $cacheItem = $this->cache->getItem('ez-state-' . $stateId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCall(__METHOD__, ['stateId' => $stateId]);
-        $objectState = $this->persistenceHandler->objectStateHandler()->load($stateId);
-
-        $cacheItem->set($objectState);
-        $cacheItem->tag(['state-' . $objectState->id, 'state-group-' . $objectState->groupId]);
-        $this->cache->save($cacheItem);
+        $objectState = $this->getCacheValue(
+            (int) $stateId,
+            'ez-state-',
+            function ($stateId) {
+                return $this->persistenceHandler->objectStateHandler()->load((int) $stateId);
+            },
+            static function (ObjectState $objectState) {
+                return ['state-' . $objectState->id, 'state-group-' . $objectState->groupId];
+            },
+            static function () use ($stateId) {
+                return ['ez-state-' . (int) $stateId];
+            }
+        );
 
         return $objectState;
     }
@@ -179,19 +193,22 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadByIdentifier($identifier, $groupId)
     {
-        $cacheItem = $this->cache->getItem('ez-state-identifier-' . $this->escapeForCacheKey($identifier) . '-by-group-' . $groupId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
+        $identifier = $this->escapeForCacheKey($identifier);
 
-        $this->logger->logCall(__METHOD__, ['identifier' => $identifier, 'groupId' => $groupId]);
-        $objectState = $this->persistenceHandler->objectStateHandler()->loadByIdentifier($identifier, $groupId);
-
-        $cacheItem->set($objectState);
-        $cacheItem->tag(['state-' . $objectState->id, 'state-group-' . $objectState->groupId]);
-        $this->cache->save($cacheItem);
-
-        return $objectState;
+        return $this->getCacheValue(
+            $identifier,
+            'ez-state-identifier-',
+            function ($identifier) use ($groupId) {
+                return $this->persistenceHandler->objectStateHandler()->loadByIdentifier($identifier, (int) $groupId);
+            },
+            static function (ObjectState $objectState) {
+                return ['state-' . $objectState->id, 'state-group-' . $objectState->groupId];
+            },
+            static function () use ($identifier, $groupId) {
+                return ['ez-state-identifier-' . $identifier . '-by-group-' . (int) $groupId];
+            },
+            '-by-group-' . (int) $groupId
+        );
     }
 
     /**
@@ -251,19 +268,20 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function getContentState($contentId, $stateGroupId)
     {
-        $cacheItem = $this->cache->getItem('ez-state-by-group-' . $stateGroupId . '-on-content-' . $contentId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCall(__METHOD__, ['contentId' => $contentId, 'stateGroupId' => $stateGroupId]);
-        $contentState = $this->persistenceHandler->objectStateHandler()->getContentState($contentId, $stateGroupId);
-
-        $cacheItem->set($contentState);
-        $cacheItem->tag(['state-' . $contentState->id, 'content-' . $contentId]);
-        $this->cache->save($cacheItem);
-
-        return $contentState;
+        return $this->getCacheValue(
+            (int) $stateGroupId,
+            'ez-state-by-group-',
+            function ($stateGroupId) use ($contentId) {
+                return $this->persistenceHandler->objectStateHandler()->getContentState((int) $contentId, (int) $stateGroupId);
+            },
+            static function (ObjectState $contentState) use ($contentId) {
+                return ['state-' . $contentState->id, 'content-' . (int) $contentId];
+            },
+            static function () use ($contentId, $stateGroupId) {
+                return ['ez-state-by-group-' . (int) $stateGroupId . '-on-content-' . (int) $contentId];
+            },
+            '-on-content-' . $contentId
+        );
     }
 
     /**
