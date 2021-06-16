@@ -102,7 +102,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             }
         );
 
-        return \array_slice($stateGroups, $offset, $limit > -1 ? $limit : null);
+        return \array_slice((array) $stateGroups, $offset, $limit > -1 ? $limit : null);
     }
 
     /**
@@ -110,7 +110,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
      */
     public function loadObjectStates($groupId)
     {
-        $objectStates = $this->getCacheValue(
+        return $this->getCacheValue(
             $groupId,
             'ez-state-list-by-group-',
             function (int $groupId): array {
@@ -131,8 +131,6 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
                 return ['ez-state-list-by-group-' . (int) $groupId];
             }
         );
-
-        return $objectStates;
     }
 
     /**
@@ -284,7 +282,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             function (int $stateGroupId) use ($contentId): ObjectState {
                 $this->logger->logCall(__METHOD__, ['contentId' => (int) $contentId, 'stateGroupId' => $stateGroupId]);
 
-                return $this->persistenceHandler->objectStateHandler()->getContentState((int) $contentId, (int) $stateGroupId);
+                return $this->persistenceHandler->objectStateHandler()->getContentState((int) $contentId, $stateGroupId);
             },
             static function (ObjectState $contentState) use ($contentId): array {
                 return ['state-' . $contentState->id, 'content-' . (int) $contentId];
