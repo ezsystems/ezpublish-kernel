@@ -38,6 +38,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             (int) $groupId,
             'ez-state-group-',
             function (int $groupId) {
+                $this->logger->logCall(__METHOD__, ['groupId' => (int) $groupId]);
+
                 return $this->persistenceHandler->objectStateHandler()->loadGroup($groupId);
             },
             static function () use ($groupId) {
@@ -60,6 +62,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             $identifier,
             'ez-state-group-',
             function ($identifier) {
+                $this->logger->logCall(__METHOD__, ['groupId' => $identifier]);
+
                 return $this->persistenceHandler->objectStateHandler()->loadGroupByIdentifier($identifier);
             },
             static function (Group $group) {
@@ -80,7 +84,9 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $stateGroups = $this->getCacheValue(
             '',
             'ez-state-group-all',
-            function () {
+            function () use ($offset, $limit) {
+                $this->logger->logCall(__METHOD__, ['offset' => (int) $offset, 'limit' => (int) $limit]);
+
                 return $this->persistenceHandler->objectStateHandler()->loadAllGroups(0, -1);
             },
             static function (array $stateGroups) {
@@ -108,6 +114,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             $groupId,
             'ez-state-list-by-group-',
             function ($groupId) {
+                $this->logger->logCall(__METHOD__, ['groupId' => (int) $groupId]);
+
                 return $this->persistenceHandler->objectStateHandler()->loadObjectStates($groupId);
             },
             static function (array $objectStates) use ($groupId) {
@@ -175,6 +183,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             (int) $stateId,
             'ez-state-',
             function ($stateId) {
+                $this->logger->logCall(__METHOD__, ['stateId' => (int) $stateId]);
+
                 return $this->persistenceHandler->objectStateHandler()->load((int) $stateId);
             },
             static function (ObjectState $objectState) {
@@ -199,6 +209,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             $identifier,
             'ez-state-identifier-',
             function ($identifier) use ($groupId) {
+                $this->logger->logCall(__METHOD__, ['identifier' => $identifier, 'groupId' => (int) $groupId]);
+
                 return $this->persistenceHandler->objectStateHandler()->loadByIdentifier($identifier, (int) $groupId);
             },
             static function (ObjectState $objectState) {
@@ -272,6 +284,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             (int) $stateGroupId,
             'ez-state-by-group-',
             function ($stateGroupId) use ($contentId) {
+                $this->logger->logCall(__METHOD__, ['contentId' => (int) $contentId, 'stateGroupId' => (int) $stateGroupId]);
+
                 return $this->persistenceHandler->objectStateHandler()->getContentState((int) $contentId, (int) $stateGroupId);
             },
             static function (ObjectState $contentState) use ($contentId) {
