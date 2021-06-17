@@ -70,7 +70,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
                 return ['state-group-' . $group->id];
             },
             static function () use ($identifier): array {
-                return ['ez-state-group-' . $identifier . '-by-identifier'];
+                return ['' . $identifier . '-by-identifier'];
             },
             '-by-identifier'
         );
@@ -81,24 +81,18 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
      */
     public function loadAllGroups($offset = 0, $limit = -1)
     {
-        $stateGroups = $this->getCacheValue(
-            '',
+        $stateGroups = $this->getListCacheValue(
             'ez-state-group-all',
             function () use ($offset, $limit): array {
                 $this->logger->logCall(__METHOD__, ['offset' => (int) $offset, 'limit' => (int) $limit]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadAllGroups(0, -1);
             },
-            static function (array $stateGroups): array {
-                $cacheTags = [];
-                foreach ($stateGroups as $group) {
-                    $cacheTags[] = 'state-group-' . $group->id;
-                }
-
-                return $cacheTags;
+            static function (Group $group): array {
+                return ['state-group-' . $group->id];
             },
-            static function (): array {
-                return ['ez-state-group-all'];
+            static function (Group $group): array {
+                return ['ez-state-group-' . $group->id, 'ez-state-group-' . $group->id . '-by-identifier'];
             }
         );
 
