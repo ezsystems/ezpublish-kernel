@@ -56,7 +56,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
      */
     public function loadGroupByIdentifier($identifier)
     {
-        $identifier = $this->escapeForCacheKey($identifier);
+        $escapedIdentifier = $this->escapeForCacheKey($identifier);
 
         return $this->getCacheValue(
             $identifier,
@@ -69,8 +69,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             static function (Group $group): array {
                 return ['state-group-' . $group->id];
             },
-            static function () use ($identifier): array {
-                return ['' . $identifier . '-by-identifier'];
+            static function (Group $group) use ($escapedIdentifier): array {
+                return ['ez-state-group-' . $escapedIdentifier . '-by-identifier', 'ez-state-group-' . $group->id];
             },
             '-by-identifier'
         );
@@ -193,7 +193,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
      */
     public function loadByIdentifier($identifier, $groupId)
     {
-        $identifier = $this->escapeForCacheKey($identifier);
+        $escapedIdentifier = $this->escapeForCacheKey($identifier);
 
         return $this->getCacheValue(
             $identifier,
@@ -206,8 +206,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             static function (ObjectState $objectState): array {
                 return ['state-' . $objectState->id, 'state-group-' . $objectState->groupId];
             },
-            static function () use ($identifier, $groupId): array {
-                return ['ez-state-identifier-' . $identifier . '-by-group-' . (int) $groupId];
+            static function () use ($escapedIdentifier, $groupId): array {
+                return ['ez-state-identifier-' . $escapedIdentifier . '-by-group-' . (int) $groupId];
             },
             '-by-group-' . (int) $groupId
         );
