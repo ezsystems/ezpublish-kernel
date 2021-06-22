@@ -96,7 +96,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             }
         );
 
-        return \array_slice((array) $stateGroups, $offset, $limit > -1 ? $limit : null);
+        return \array_slice($stateGroups, $offset, $limit > -1 ? $limit : null);
     }
 
     /**
