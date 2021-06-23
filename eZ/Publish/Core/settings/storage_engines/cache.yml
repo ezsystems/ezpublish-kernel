@@ -114,6 +114,10 @@ services:
         arguments: # Overload argument to use content in-memory service
             index_2: '@ezpublish.spi.persistence.cache.inmemory.content'
 
+    ezpublish.spi.persistence.cache.objectStateHandler:
+        class: "%ezpublish.spi.persistence.cache.objectStateHandler.class%"
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
+
     ezpublish.spi.persistence.cache.contentLanguageHandler:
         class: "%ezpublish.spi.persistence.cache.contentLanguageHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
@@ -139,10 +143,6 @@ services:
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
         arguments: # Overload argument to use content in-memory service
           index_2: '@ezpublish.spi.persistence.cache.inmemory.content'
-
-    ezpublish.spi.persistence.cache.objectStateHandler:
-        class: "%ezpublish.spi.persistence.cache.objectStateHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.urlHandler:
         class: "%ezpublish.spi.persistence.cache.urlHandler.class%"
