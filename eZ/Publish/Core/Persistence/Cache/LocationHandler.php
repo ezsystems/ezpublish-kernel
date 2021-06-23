@@ -6,10 +6,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
-use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
-use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler
@@ -29,7 +29,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
                 'content-' . $location->contentId,
                 'location-' . $location->id,
             ];
-            foreach (\explode('/', \trim($location->pathString, '/')) as $pathId) {
+            foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
                 $tags[] = 'location-path-' . $pathId;
             }
 
@@ -91,26 +91,25 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function loadSubtreeIds($locationId)
     {
-        $cacheItem = $this->cache->getItem("ez-location-subtree-${locationId}");
-        if ($cacheItem->isHit()) {
-            $this->logger->logCacheHit(['location' => $locationId]);
+        return $this->getCacheValue(
+            (int) $locationId,
+            'ez-location-subtree-',
+            function (int $locationId): array {
+                return $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId);
+            },
+            static function (array $locationIds) use ($locationId): array {
+                $cacheTags = ['location-' . $locationId, 'location-path-' . $locationId];
+                foreach ($locationIds as $id) {
+                    $cacheTags[] = 'location-' . $id;
+                    $cacheTags[] = 'location-path-' . $id;
+                }
 
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCacheMiss(['location' => $locationId]);
-        $locationIds = $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId);
-
-        $cacheItem->set($locationIds);
-        $cacheTags = ['location-' . $locationId, 'location-path-' . $locationId];
-        foreach ($locationIds as $id) {
-            $cacheTags[] = 'location-' . $id;
-            $cacheTags[] = 'location-path-' . $id;
-        }
-        $cacheItem->tag($cacheTags);
-        $this->cache->save($cacheItem);
-
-        return $locationIds;
+                return $cacheTags;
+            },
+            static function () use ($locationId): array {
+                return ['ez-location-subtree-' . $locationId];
+            }
+        );
     }
 
     /**
@@ -118,31 +117,32 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function loadLocationsByContent($contentId, $rootLocationId = null)
     {
+        $keySuffix = '';
+        $cacheTags = ['content-' . $contentId];
         if ($rootLocationId) {
-            $cacheItem = $this->cache->getItem("ez-content-locations-${contentId}-root-${rootLocationId}");
-            $cacheTags = ['content-' . $contentId, 'location-' . $rootLocationId, 'location-path-' . $rootLocationId];
-        } else {
-            $cacheItem = $this->cache->getItem("ez-content-locations-${contentId}");
-            $cacheTags = ['content-' . $contentId];
+            $keySuffix = '-root-' . $rootLocationId;
+            $cacheTags[] = 'location-' . $rootLocationId;
+            $cacheTags[] = 'location-path-' . $rootLocationId;
         }
 
-        if ($cacheItem->isHit()) {
-            $this->logger->logCacheHit(['content' => $contentId, 'root' => $rootLocationId]);
+        return $this->getCacheValue(
+            (int) $contentId,
+            'ez-content-locations-',
+            function (int $contentId) use ($rootLocationId): array {
+                return $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
+            },
+            function (array $locations) use ($cacheTags): array {
+                foreach ($locations as $location) {
+                    $cacheTags = $this->getCacheTags($location, $cacheTags);
+                }
 
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCacheMiss(['content' => $contentId, 'root' => $rootLocationId]);
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
-
-        $cacheItem->set($locations);
-        foreach ($locations as $location) {
-            $cacheTags = $this->getCacheTags($location, $cacheTags);
-        }
-        $cacheItem->tag($cacheTags);
-        $this->cache->save($cacheItem);
-
-        return $locations;
+                return $cacheTags;
+            },
+            static function () use ($contentId, $keySuffix): array {
+                return ['ez-content-locations-' . $contentId . $keySuffix];
+            },
+            $keySuffix
+        );
     }
 
     /**
@@ -160,25 +160,25 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function loadParentLocationsForDraftContent($contentId)
     {
-        $cacheItem = $this->cache->getItem("ez-content-locations-${contentId}-parentForDraft");
-        if ($cacheItem->isHit()) {
-            $this->logger->logCacheHit(['content' => $contentId]);
+        return $this->getCacheValue(
+            (int) $contentId,
+            'ez-content-locations-',
+            function (int $contentId): array {
+                return $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
+            },
+            function (array $locations) use ($contentId): array {
+                $cacheTags = ['content-' . $contentId];
+                foreach ($locations as $location) {
+                    $cacheTags = $this->getCacheTags($location, $cacheTags);
+                }
 
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCacheMiss(['content' => $contentId]);
-        $locations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
-
-        $cacheItem->set($locations);
-        $cacheTags = ['content-' . $contentId];
-        foreach ($locations as $location) {
-            $cacheTags = $this->getCacheTags($location, $cacheTags);
-        }
-        $cacheItem->tag($cacheTags);
-        $this->cache->save($cacheItem);
-
-        return $locations;
+                return $cacheTags;
+            },
+            static function () use ($contentId): array {
+                return ['ez-content-locations-' . (int) $contentId . '-parentForDraft'];
+            },
+            '-parentForDraft'
+        );
     }
 
     /**
@@ -403,7 +403,6 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
     /**
      * Return relevant content and location tags so cache can be purged reliably.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      * @param array $tags Optional, can be used to specify additional tags.
      *
      * @return array
