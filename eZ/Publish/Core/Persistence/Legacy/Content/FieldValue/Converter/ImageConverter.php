@@ -8,7 +8,10 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\UrlRedecoratorInterface;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 class ImageConverter extends BinaryFileConverter
@@ -161,6 +164,30 @@ EOT;
             return;
         }
         $fieldValue->data = $this->parseLegacyXml($value->dataText);
+    }
+
+    public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef): void
+    {
+        $validators = $fieldDef->fieldTypeConstraints->validators;
+
+        $storageDef->dataInt1 = $validators['FileSizeValidator']['maxFileSize'] ?? 0;
+        $storageDef->dataInt2 = (int)($validators['AlternativeTextValidator']['required'] ?? 0);
+    }
+
+    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef): void
+    {
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints(
+            [
+                'validators' => [
+                    'FileSizeValidator' => [
+                        'maxFileSize' => $storageDef->dataInt1 !== 0 ? $storageDef->dataInt1 : null,
+                    ],
+                    'AlternativeTextValidator' => [
+                        'required' => (bool)$storageDef->dataInt2,
+                    ],
+                ],
+            ]
+        );
     }
 
     /**
