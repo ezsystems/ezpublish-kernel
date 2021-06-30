@@ -231,6 +231,29 @@ class LegacyStorage extends Gateway
         return (int)$statement->fetchColumn();
     }
 
+    public function isImageReferenced(string $uri): bool
+    {
+        $path = $this->redecorator->redecorateFromSource($uri);
+
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(1)
+        ->from(
+            $connection->quoteTable('ezimagefile')
+        )->where(
+            $selectQuery->expr->eq(
+                $connection->quoteColumn('filepath'),
+                $selectQuery->bindValue($path)
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        return (bool)$statement->fetchColumn();
+    }
+
     /**
      * Checks if image $path can be removed when deleting $versionNo and $fieldId.
      *

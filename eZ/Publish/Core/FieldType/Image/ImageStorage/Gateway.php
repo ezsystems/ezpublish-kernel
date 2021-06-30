@@ -60,6 +60,11 @@ abstract class Gateway extends StorageGateway
     abstract public function countImageReferences($uri);
 
     /**
+     * Returns if there is reference to the given $uri.
+     */
+    abstract public function isImageReferenced(string $uri): bool;
+
+    /**
      * Returns the public uris for the images stored in $xml.
      */
     abstract public function extractFilesFromXml($xml);

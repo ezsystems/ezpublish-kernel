@@ -157,7 +157,7 @@ class ImageStorage extends GatewayBasedStorage
 
             foreach ($storedFiles as $storedFilePath) {
                 $this->gateway->removeImageReferences($storedFilePath, $versionInfo->versionNo, $fieldId);
-                if ($this->gateway->countImageReferences($storedFilePath) === 0) {
+                if (!$this->gateway->isImageReferenced($storedFilePath)) {
                     $binaryFile = $this->ioService->loadBinaryFileByUri($storedFilePath);
                     // remove aliases (real path is prepended with alias prefixes)
                     $this->aliasCleaner->removeAliases($binaryFile->id);
