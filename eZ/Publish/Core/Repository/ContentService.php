@@ -110,6 +110,7 @@ class ContentService implements ContentServiceInterface
         $this->settings = $settings + [
             // Version archive limit (0-50), only enforced on publish, not on un-publish.
             'default_version_archive_limit' => 5,
+            'remove_archived_versions_on_publish' => true,
         ];
     }
 
@@ -1825,6 +1826,10 @@ class ContentService implements ContentServiceInterface
             APIVersionInfo::STATUS_ARCHIVED,
             100 // Limited to avoid publishing taking to long, besides SE limitations this is why limit is max 50
         );
+
+        if (!$this->settings['remove_archived_versions_on_publish']) {
+            return $content;
+        }
 
         $maxVersionArchiveCount = max(0, min(50, $this->settings['default_version_archive_limit']));
         while (!empty($archiveList) && count($archiveList) > $maxVersionArchiveCount) {
