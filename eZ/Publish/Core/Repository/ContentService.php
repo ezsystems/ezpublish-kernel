@@ -1820,16 +1820,21 @@ class ContentService implements ContentServiceInterface
 
         $this->publishUrlAliasesForContent($content);
 
+        if ($this->settings['remove_archived_versions_on_publish']) {
+            $this->deleteOverflownArchivedVersions($contentId);
+        }
+
+        return $content;
+    }
+
+    protected function deleteOverflownArchivedVersions(int $contentId): void
+    {
         // Delete version archive overflow if any, limit is 0-50 (however 0 will mean 1 if content is unpublished)
         $archiveList = $this->persistenceHandler->contentHandler()->listVersions(
             $contentId,
             APIVersionInfo::STATUS_ARCHIVED,
             100 // Limited to avoid publishing taking to long, besides SE limitations this is why limit is max 50
         );
-
-        if (!$this->settings['remove_archived_versions_on_publish']) {
-            return $content;
-        }
 
         $maxVersionArchiveCount = max(0, min(50, $this->settings['default_version_archive_limit']));
         while (!empty($archiveList) && count($archiveList) > $maxVersionArchiveCount) {
@@ -1840,8 +1845,6 @@ class ContentService implements ContentServiceInterface
                 $archiveVersion->versionNo
             );
         }
-
-        return $content;
     }
 
     /**
