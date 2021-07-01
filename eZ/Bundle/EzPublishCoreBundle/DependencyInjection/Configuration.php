@@ -189,7 +189,7 @@ class Configuration extends SiteAccessConfiguration
                                     ->end()
                                     ->booleanNode('remove_archived_versions_on_publish')
                                         ->defaultTrue()
-                                        ->info('Disabling and scheduling ezplatform:content:cleanup-versions command may speed up publishing request time')
+                                        ->info('Enables automatic removal of archived versions when publishing, at the cost of performance. "ezplatform:content:cleanup-versions" command should be used to perform this task instead if this option is set to false.')
                                     ->end()
                                 ->end()
                             ->end()
