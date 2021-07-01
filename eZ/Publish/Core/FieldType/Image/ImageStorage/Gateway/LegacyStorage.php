@@ -212,18 +212,19 @@ class LegacyStorage extends Gateway
         $connection = $this->getConnection();
 
         $selectQuery = $connection->createSelectQuery();
-        $selectQuery->select(
-            $selectQuery->expr->count(
-                $connection->quoteColumn('id')
-            )
-        )->from(
-            $connection->quoteTable('ezimagefile')
-        )->where(
-            $selectQuery->expr->like(
-                $connection->quoteColumn('filepath'),
-                $selectQuery->bindValue($path . '%')
-            )
-        );
+        $selectQuery
+            ->select(
+                $selectQuery->expr->count(
+                    $connection->quoteColumn('id')
+                )
+            )->from(
+                $connection->quoteTable('ezimagefile')
+            )->where(
+                $selectQuery->expr->like(
+                    $connection->quoteColumn('filepath'),
+                    $selectQuery->bindValue($path . '%')
+                )
+            );
 
         $statement = $selectQuery->prepare();
         $statement->execute();
