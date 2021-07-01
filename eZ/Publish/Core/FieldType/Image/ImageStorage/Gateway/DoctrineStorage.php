@@ -239,7 +239,7 @@ class DoctrineStorage extends Gateway
             ->select('COUNT(' . $this->connection->quoteIdentifier('id') . ')')
             ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
             ->where(
-                $selectQuery->expr()->like(
+                $selectQuery->expr()->eq(
                     $this->connection->quoteIdentifier('filepath'),
                     ':likePath'
                 )

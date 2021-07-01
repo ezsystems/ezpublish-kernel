@@ -219,7 +219,7 @@ class LegacyStorage extends Gateway
         )->from(
             $connection->quoteTable('ezimagefile')
         )->where(
-            $selectQuery->expr->like(
+            $selectQuery->expr->eq(
                 $connection->quoteColumn('filepath'),
                 $selectQuery->bindValue($path . '%')
             )
