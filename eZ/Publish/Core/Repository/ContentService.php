@@ -1821,13 +1821,13 @@ class ContentService implements ContentServiceInterface
         $this->publishUrlAliasesForContent($content);
 
         if ($this->settings['remove_archived_versions_on_publish']) {
-            $this->deleteOverflownArchivedVersions($contentId);
+            $this->deleteArchivedVersionsOverLimit($contentId);
         }
 
         return $content;
     }
 
-    protected function deleteOverflownArchivedVersions(int $contentId): void
+    protected function deleteArchivedVersionsOverLimit(int $contentId): void
     {
         // Delete version archive overflow if any, limit is 0-50 (however 0 will mean 1 if content is unpublished)
         $archiveList = $this->persistenceHandler->contentHandler()->listVersions(
