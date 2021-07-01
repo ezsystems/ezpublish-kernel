@@ -221,7 +221,7 @@ class LegacyStorage extends Gateway
         )->where(
             $selectQuery->expr->eq(
                 $connection->quoteColumn('filepath'),
-                $selectQuery->bindValue($path . '%')
+                $selectQuery->bindValue($path)
             )
         );
 

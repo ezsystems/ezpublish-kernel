@@ -241,10 +241,10 @@ class DoctrineStorage extends Gateway
             ->where(
                 $selectQuery->expr()->eq(
                     $this->connection->quoteIdentifier('filepath'),
-                    ':likePath'
+                    ':filepath'
                 )
             )
-            ->setParameter(':likePath', $path . '%')
+            ->setParameter(':filepath', $path)
         ;
 
         $statement = $selectQuery->execute();
