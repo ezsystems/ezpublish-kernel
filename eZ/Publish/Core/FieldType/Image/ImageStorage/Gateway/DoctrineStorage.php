@@ -239,17 +239,39 @@ class DoctrineStorage extends Gateway
             ->select('COUNT(' . $this->connection->quoteIdentifier('id') . ')')
             ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
             ->where(
-                $selectQuery->expr()->like(
+                $selectQuery->expr()->eq(
                     $this->connection->quoteIdentifier('filepath'),
-                    ':likePath'
+                    ':filepath'
                 )
             )
-            ->setParameter(':likePath', $path . '%')
+            ->setParameter(':filepath', $path)
         ;
 
         $statement = $selectQuery->execute();
 
         return (int) $statement->fetchColumn();
+    }
+
+    public function isImageReferenced(string $uri): bool
+    {
+        $path = $this->redecorator->redecorateFromSource($uri);
+
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select(1)
+            ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
+            ->where(
+                $selectQuery->expr()->eq(
+                    $this->connection->quoteIdentifier('filepath'),
+                    ':likePath'
+                )
+            )
+            ->setParameter(':likePath', $path)
+        ;
+
+        $statement = $selectQuery->execute();
+
+        return (bool)$statement->fetchOne();
     }
 
     public function countDistinctImages(): int

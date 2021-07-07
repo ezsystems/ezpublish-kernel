@@ -75,7 +75,10 @@ class ContentTest extends BaseServiceMockTest
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
         $fieldTypeRegistryMock = $this->getFieldTypeRegistryMock();
-        $settings = ['default_version_archive_limit' => 10];
+        $settings = [
+            'default_version_archive_limit' => 10,
+            'remove_archived_versions_on_publish' => true,
+        ];
 
         $service = new ContentService(
             $repositoryMock,

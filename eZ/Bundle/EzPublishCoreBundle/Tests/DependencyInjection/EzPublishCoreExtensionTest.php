@@ -386,6 +386,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 ],
                 'options' => [
                     'default_version_archive_limit' => 5,
+                    'remove_archived_versions_on_publish' => true,
                 ],
             ],
             'foo' => [
@@ -403,6 +404,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 ],
                 'options' => [
                     'default_version_archive_limit' => 5,
+                    'remove_archived_versions_on_publish' => true,
                 ],
             ],
         ];
@@ -577,6 +579,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 ],
                 'options' => [
                     'default_version_archive_limit' => 5,
+                    'remove_archived_versions_on_publish' => true,
                 ],
             ],
         ];
@@ -617,6 +620,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 ],
                 'options' => [
                     'default_version_archive_limit' => 5,
+                    'remove_archived_versions_on_publish' => true,
                 ],
             ],
         ];
@@ -657,6 +661,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 ],
                 'options' => [
                     'default_version_archive_limit' => 5,
+                    'remove_archived_versions_on_publish' => true,
                 ],
             ],
         ];
@@ -707,6 +712,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 ],
                 'options' => [
                     'default_version_archive_limit' => 5,
+                    'remove_archived_versions_on_publish' => true,
                 ],
             ],
             'foo' => [
@@ -726,6 +732,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 ],
                 'options' => [
                     'default_version_archive_limit' => 5,
+                    'remove_archived_versions_on_publish' => true,
                 ],
             ],
         ];
@@ -764,6 +771,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 ],
                 'options' => [
                     'default_version_archive_limit' => 5,
+                    'remove_archived_versions_on_publish' => true,
                 ],
             ],
         ];
