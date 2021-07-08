@@ -279,6 +279,11 @@ class DoctrineDatabase extends Gateway
             } else {
                 $nextWordId = 0;
             }
+
+            if ($wordId === null || $nextWordId === null) {
+                continue;
+            }
+
             $frequency = 0;
             $this->searchIndex->addObjectWordLink(
                 $wordId,
@@ -319,14 +324,14 @@ class DoctrineDatabase extends Gateway
         $wordIDArray = [];
         $wordArray = [];
 
-        // store the words in the index and remember the ID
+        // Store the words in the index and remember the ID
         $this->dbHandler->beginTransaction();
         for ($arrayCount = 0; $arrayCount < $wordCount; $arrayCount += 500) {
             // Fetch already indexed words from database
-            $wordArrayChuck = array_slice($indexArrayOnlyWords, $arrayCount, 500);
-            $wordRes = $this->searchIndex->getWords($wordArrayChuck);
+            $wordArrayChunk = array_slice($indexArrayOnlyWords, $arrayCount, 500);
+            $wordRes = $this->searchIndex->getWords($wordArrayChunk);
 
-            // Build a has of the existing words
+            // Build a hash of the existing words
             $wordResCount = count($wordRes);
             $existingWordArray = [];
             for ($i = 0; $i < $wordResCount; ++$i) {
@@ -340,8 +345,8 @@ class DoctrineDatabase extends Gateway
                 $this->searchIndex->incrementWordObjectCount($wordIDArray);
             }
 
-            // Insert if there is any news words
-            $newWordArray = array_diff($wordArrayChuck, $existingWordArray);
+            // Insert if there are any new words
+            $newWordArray = array_diff($wordArrayChunk, $existingWordArray);
             if (count($newWordArray) > 0) {
                 $this->searchIndex->addWords($newWordArray);
                 $newWordRes = $this->searchIndex->getWords($newWordArray);
@@ -349,6 +354,17 @@ class DoctrineDatabase extends Gateway
                 for ($i = 0; $i < $newWordCount; ++$i) {
                     $wordLowercase = $this->transformationProcessor->transformByGroup($newWordRes[$i]['word'], 'lowercase');
                     $wordArray[$wordLowercase] = $newWordRes[$i]['id'];
+                }
+            }
+
+            // Check if any of the words in $wordArrayChunk are missing in $wordArray, which can happen due to
+            // collation/transformation issues. If so, we must deal with them one by one.
+            $missingWordArray = array_diff($wordArrayChunk, array_keys($wordArray));
+            foreach ($missingWordArray as $missingWord) {
+                $foundWordRes = $this->searchIndex->getWords([$missingWord]);
+                // We may get more than one match. It's hard to deal intelligently with that. Just use the first one.
+                if (count($foundWordRes) > 0) {
+                    $wordArray[$missingWord] = $foundWordRes[0]['id'];
                 }
             }
         }
