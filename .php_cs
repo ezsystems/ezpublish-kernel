@@ -3,7 +3,11 @@
 return EzSystems\EzPlatformCodeStyle\PhpCsFixer\EzPlatformInternalConfigFactory::build()
     ->setFinder(
         PhpCsFixer\Finder::create()
-            ->in([__DIR__ . '/eZ'])
+            ->in([
+                __DIR__ . '/eZ',
+                __DIR__ . '/src',
+                __DIR__ . '/tests',
+            ])
             ->exclude(
                 [
                     'Bundle/EzPublishCoreBundle/Tests/DependencyInjection/Fixtures',
