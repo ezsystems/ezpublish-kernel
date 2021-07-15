@@ -62,10 +62,20 @@
     "autoload": {
         "psr-4": {
             "EzSystems\\PlatformInstallerBundle\\": "eZ/Bundle/PlatformInstallerBundle/src",
-            "EzSystems\\PlatformBehatBundle\\": "eZ/Bundle/PlatformBehatBundle"
+            "EzSystems\\PlatformBehatBundle\\": "eZ/Bundle/PlatformBehatBundle",
+            "Ibexa\\Bundle\\Core\\": "src/bundle",
+            "Ibexa\\Contracts\\Core\\": "src/contracts",
+            "Ibexa\\Core\\": "src/lib"
         },
         "psr-0": {
             "eZ": ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ibexa\\Tests\\Bundle\\Core\\": "tests/bundle",
+            "Ibexa\\Tests\\Integration\\Core\\": "tests/integration",
+            "Ibexa\\Tests\\Core\\": "tests/lib"
         }
     },
     "config": {
