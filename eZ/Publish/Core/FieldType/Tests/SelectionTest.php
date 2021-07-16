@@ -460,17 +460,18 @@ class SelectionTest extends FieldTypeTest
                 new SelectionValue([1]),
             ],
             [
-                'fieldSettings' => [
-                    'isMultiple' => false,
-                    'options' => [0 => 1, 1 => 2],
-                    'multilingualOptions' => [
-                        'en_GB' => [0 => 1, 1 => 2],
-                        'de_DE' => [0 => 1],
+                [
+                    'fieldSettings' => [
+                        'isMultiple' => false,
+                        'options' => [0 => 1, 1 => 2],
+                        'multilingualOptions' => [
+                            'en_GB' => [0 => 1, 1 => 2],
+                            'de_DE' => [0 => 1],
+                        ],
                     ],
                 ],
+                new SelectionValue([1]),
             ],
-            new SelectionValue([1]),
-
         ];
     }
 
