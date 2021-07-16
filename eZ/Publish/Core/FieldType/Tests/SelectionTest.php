@@ -600,7 +600,7 @@ class SelectionTest extends FieldTypeTest
                         'selection'
                     ),
                 ],
-            ]
+            ],
         ];
     }
 }
