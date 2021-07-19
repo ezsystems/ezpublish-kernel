@@ -63,7 +63,11 @@
         "psr-4": {
             "EzSystems\\PlatformInstallerBundle\\": "eZ/Bundle/PlatformInstallerBundle/src",
             "EzSystems\\PlatformBehatBundle\\": "eZ/Bundle/PlatformBehatBundle",
-            "Ibexa\\Bundle\\Core\\": "src/bundle",
+            "Ibexa\\Bundle\\Core\\": "src/bundle/Core",
+            "Ibexa\\Bundle\\Debug\\": "src/bundle/Debug",
+            "Ibexa\\Bundle\\IO\\": "src/bundle/IO",
+            "Ibexa\\Bundle\\Installer\\": "src/bundle/Installer",
+            "Ibexa\\Bundle\\LegacySearchEngine\\": "src/bundle/LegacySearchEngine",
             "Ibexa\\Contracts\\Core\\": "src/contracts",
             "Ibexa\\Core\\": "src/lib"
         },
