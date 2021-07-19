@@ -77,7 +77,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Ibexa\\Tests\\Bundle\\Core\\": "tests/bundle",
+            "Ibexa\\Tests\\Bundle\\Core\\": "tests/bundle/Core",
+            "Ibexa\\Tests\\Bundle\\Debug\\": "tests/bundle/Debug",
+            "Ibexa\\Tests\\Bundle\\IO\\": "tests/bundle/IO",
+            "Ibexa\\Tests\\Bundle\\Installer\\": "tests/bundle/Installer",
+            "Ibexa\\Tests\\Bundle\\LegacySearchEngine\\": "tests/bundle/LegacySearchEngine",
             "Ibexa\\Tests\\Integration\\Core\\": "tests/integration",
             "Ibexa\\Tests\\Core\\": "tests/lib"
         }
