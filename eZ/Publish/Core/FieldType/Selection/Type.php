@@ -234,7 +234,7 @@ class Type extends FieldType
                 return array_keys($languageOptionIndexes);
             }, $fieldSettings['multilingualOptions']);
 
-            $possibleOptionIndexes = call_user_func_array('array_merge', $possibleOptionIndexesByLanguage);
+            $possibleOptionIndexes = array_merge(...array_values($possibleOptionIndexesByLanguage));
 
             foreach ($fieldValue->selection as $optionIndex) {
                 if (!in_array($optionIndex, $possibleOptionIndexes)) {
