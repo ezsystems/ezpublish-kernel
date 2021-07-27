@@ -72,8 +72,8 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function loadByIdentifier($identifier)
     {
         $cacheItem = $this->cache->getItem(
-            TagIdentifiers::PREFIX . 
-            TagIdentifiers::SECTION . '-' . 
+            TagIdentifiers::PREFIX .
+            TagIdentifiers::SECTION . '-' .
             $this->escapeForCacheKey($identifier) .
             TagIdentifiers::BY_IDENTIFIER_SUFFIX
         );

@@ -88,7 +88,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
             TagIdentifiers::PREFIX .
             TagIdentifiers::CONTENT . '-' .
             $contentId . '-' .
-            TagIdentifiers::VERSION_LIST
+            TagIdentifiers::VERSION_LIST,
         ]);
 
         return $draft;
@@ -129,7 +129,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
                     TagIdentifiers::PREFIX .
                     TagIdentifiers::CONTENT . '-' .
                     $content->versionInfo->contentInfo->id .
-                    $keySuffix
+                    $keySuffix,
                 ];
             },
             $keySuffix,
@@ -154,7 +154,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
                     TagIdentifiers::PREFIX .
                     TagIdentifiers::CONTENT . '-' .
                     $content->versionInfo->contentInfo->id .
-                    $keySuffix
+                    $keySuffix,
                 ];
             },
             $keySuffix,
@@ -285,7 +285,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
                 TagIdentifiers::CONTENT . '-' .
                 $contentId . '-' .
                 TagIdentifiers::VERSION . '-' .
-                $versionNo
+                $versionNo,
             ]);
         }
 
@@ -316,7 +316,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
             TagIdentifiers::CONTENT . '-' .
             $contentId . '-' .
             TagIdentifiers::VERSION . '-' .
-            $versionNo
+            $versionNo,
         ]);
 
         return $content;
@@ -366,7 +366,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
             TagIdentifiers::CONTENT . '-' .
             $contentId . '-' .
             TagIdentifiers::VERSION . '-' .
-            $versionNo
+            $versionNo,
         ]);
 
         return $return;
@@ -547,7 +547,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
             TagIdentifiers::CONTENT . '-' .
             $contentId . '-' .
             TagIdentifiers::VERSION . '-' .
-            $versionNo
+            $versionNo,
         ]);
 
         return $content;

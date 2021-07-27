@@ -46,7 +46,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->getUserTags = static function (User $user) {
             return [
                 TagIdentifiers::CONTENT . '-' . $user->id,
-                TagIdentifiers::CONTENT . '-' . $user->id
+                TagIdentifiers::CONTENT . '-' . $user->id,
             ];
         };
         $this->getUserKeys = function (User $user) {
@@ -189,12 +189,12 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         // Clear corresponding content cache as update of the User changes it's external data
         $this->cache->invalidateTags([
             TagIdentifiers::CONTENT . '-' . $user->id,
-            TagIdentifiers::USER . '-' . $user->id
+            TagIdentifiers::USER . '-' . $user->id,
         ]);
 
         // Clear especially by email key as it might already be cached and this might represent change to email
         $this->cache->deleteItems([
-            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->email) . TagIdentifiers::BY_EMAIL_SUFFIX
+            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->email) . TagIdentifiers::BY_EMAIL_SUFFIX,
         ]);
 
         return $return;
@@ -238,7 +238,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         // user id == content id == group id
         $this->cache->invalidateTags([
             TagIdentifiers::CONTENT . '-' . $userId,
-            TagIdentifiers::USER . '-' . $userId
+            TagIdentifiers::USER . '-' . $userId,
         ]);
 
         return $return;
@@ -361,7 +361,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             static function () use ($roleId) {
                 return [
                     TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId,
-                    TagIdentifiers::ROLE . '-' . $roleId
+                    TagIdentifiers::ROLE . '-' . $roleId,
                 ];
             },
             [$roleId]
@@ -426,7 +426,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         if ($status === Role::STATUS_DEFINED) {
             $this->cache->invalidateTags([
                 TagIdentifiers::ROLE . '-' . $roleId,
-                TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId
+                TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId,
             ]);
         }
 
@@ -484,7 +484,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         $this->cache->invalidateTags([
             TagIdentifiers::POLICY . '-' . $policy->id,
-            TagIdentifiers::ROLE . '-' . $policy->roleId
+            TagIdentifiers::ROLE . '-' . $policy->roleId,
         ]);
 
         return $return;
@@ -500,7 +500,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         $this->cache->invalidateTags([
             TagIdentifiers::POLICY . '-' . $policyId,
-            TagIdentifiers::ROLE . '-' . $roleId
+            TagIdentifiers::ROLE . '-' . $roleId,
         ]);
     }
 
@@ -524,7 +524,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         $tags = [
             TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $contentId,
-            TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId
+            TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId,
         ];
 
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId);
@@ -547,7 +547,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         $this->cache->invalidateTags([
             TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $contentId,
-            TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId
+            TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId,
         ]);
 
         return $return;

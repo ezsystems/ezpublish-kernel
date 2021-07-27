@@ -36,7 +36,7 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
         ]);
 
         $this->cache->deleteItems([
-            TagIdentifiers::PREFIX . TagIdentifiers::USER_PREFERENCE . '-' . $setStruct->userId . '-' . $setStruct->name
+            TagIdentifiers::PREFIX . TagIdentifiers::USER_PREFERENCE . '-' . $setStruct->userId . '-' . $setStruct->name,
         ]);
 
         return $this->persistenceHandler->userPreferenceHandler()->setUserPreference($setStruct);

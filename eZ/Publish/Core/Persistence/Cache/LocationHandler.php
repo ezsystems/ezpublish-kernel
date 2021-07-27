@@ -107,7 +107,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
                 return $cacheTags;
             },
             static function () use ($locationId): array {
-                return [TagIdentifiers::PREFIX . TagIdentifiers::LOCATION_SUBTREE. '-' . $locationId];
+                return [TagIdentifiers::PREFIX . TagIdentifiers::LOCATION_SUBTREE . '-' . $locationId];
             }
         );
     }
@@ -176,7 +176,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
             },
             static function () use ($contentId): array {
                 return [
-                    TagIdentifiers::PREFIX . TagIdentifiers::CONTENT_LOCATIONS . '-' . (int) $contentId . TagIdentifiers::PARENT_FOR_DRAFT_SUFFIX
+                    TagIdentifiers::PREFIX . TagIdentifiers::CONTENT_LOCATIONS . '-' . (int) $contentId . TagIdentifiers::PARENT_FOR_DRAFT_SUFFIX,
                 ];
             },
             TagIdentifiers::PARENT_FOR_DRAFT_SUFFIX
@@ -336,8 +336,8 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         // need to clear loadLocationsByContent and similar collections involving locations data
         // also need to clear content info on main location changes
         $this->cache->invalidateTags([
-            TagIdentifiers::CONTENT . '-' . $locationStruct->contentId, 
-            TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $locationStruct->contentId
+            TagIdentifiers::CONTENT . '-' . $locationStruct->contentId,
+            TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $locationStruct->contentId,
         ]);
 
         return $location;

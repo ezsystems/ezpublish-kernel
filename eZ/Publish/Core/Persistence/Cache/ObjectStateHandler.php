@@ -72,7 +72,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             static function (Group $group) use ($escapedIdentifier): array {
                 return [
                     TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-' . $escapedIdentifier . TagIdentifiers::BY_IDENTIFIER_SUFFIX,
-                    TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-' . $group->id
+                    TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-' . $group->id,
                 ];
             },
             TagIdentifiers::BY_IDENTIFIER_SUFFIX
@@ -188,7 +188,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             static function (ObjectState $objectState): array {
                 return [
                     TagIdentifiers::STATE . '-' . $objectState->id,
-                    TagIdentifiers::STATE_GROUP . '-' . $objectState->groupId
+                    TagIdentifiers::STATE_GROUP . '-' . $objectState->groupId,
                 ];
             },
             static function () use ($stateId): array {
@@ -215,16 +215,16 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             static function (ObjectState $objectState): array {
                 return [
                     TagIdentifiers::STATE . '-' . $objectState->id,
-                    TagIdentifiers::STATE_GROUP . '-' . $objectState->groupId
+                    TagIdentifiers::STATE_GROUP . '-' . $objectState->groupId,
                 ];
             },
             static function () use ($escapedIdentifier, $groupId): array {
                 return [
-                    TagIdentifiers::PREFIX . 
-                    TagIdentifiers::STATE_IDENTIFIER . '-' . 
+                    TagIdentifiers::PREFIX .
+                    TagIdentifiers::STATE_IDENTIFIER . '-' .
                     $escapedIdentifier .
                     TagIdentifiers::BY_GROUP_SUFFIX . '-' .
-                    (int) $groupId
+                    (int) $groupId,
                 ];
             },
             TagIdentifiers::BY_GROUP_SUFFIX . '-' . (int) $groupId
@@ -279,8 +279,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $return = $this->persistenceHandler->objectStateHandler()->setContentState($contentId, $groupId, $stateId);
 
         $this->cache->deleteItem(
-            TagIdentifiers::PREFIX . 
-            TagIdentifiers::STATE_BY_GROUP . '-' . 
+            TagIdentifiers::PREFIX .
+            TagIdentifiers::STATE_BY_GROUP . '-' .
             $groupId .
             TagIdentifiers::ON_CONTENT_SUFFIX . '-' .
             $contentId
@@ -305,7 +305,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             static function (ObjectState $contentState) use ($contentId): array {
                 return [
                     TagIdentifiers::STATE . '-' . $contentState->id,
-                    TagIdentifiers::CONTENT . '-' . (int) $contentId
+                    TagIdentifiers::CONTENT . '-' . (int) $contentId,
                 ];
             },
             static function () use ($contentId, $stateGroupId): array {
@@ -314,7 +314,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
                     TagIdentifiers::STATE_BY_GROUP . '-' .
                     (int) $stateGroupId .
                     TagIdentifiers::ON_CONTENT_SUFFIX . '-' .
-                    (int) $contentId
+                    (int) $contentId,
                 ];
             },
             TagIdentifiers::ON_CONTENT_SUFFIX . '-' . $contentId

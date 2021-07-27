@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright Copyright (C) Ibexa AS. All rights reserved.
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 declare(strict_types=1);
@@ -23,8 +23,6 @@ final class TagIdentifiers
     public const BY_GROUP_INHERITED_SUFFIX = '-bgi';
     public const BY_GROUP_SUFFIX = '-bg';
     public const ON_CONTENT_SUFFIX = '-oc';
-
-    public const ALIAS = 'a';
 
     public const BOOKMARK = 'b';
 
@@ -76,7 +74,7 @@ final class TagIdentifiers
     public const STATE_LIST_BY_GROUP = 'slbg';
 
     public const USER = 'u';
-    
+
     public const URL = 'url';
     public const URL_ALIAS = 'urla';
     public const URL_ALIAS_CUSTOM = 'urlac';

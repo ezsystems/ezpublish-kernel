@@ -32,7 +32,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         $this->getKeys = function (Language $language) {
             return [
                 TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE . '-' . $language->id,
-                TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_CODE . $this->escapeForCacheKey($language->languageCode),
+                TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_CODE . '-' . $this->escapeForCacheKey($language->languageCode),
             ];
         };
     }

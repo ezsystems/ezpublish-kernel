@@ -40,8 +40,8 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     protected function init(): void
     {
-        $this->getGroupTags = static function (Type\Group $group) { 
-            return [TagIdentifiers::TYPE_GROUP . '-' . $group->id]; 
+        $this->getGroupTags = static function (Type\Group $group) {
+            return [TagIdentifiers::TYPE_GROUP . '-' . $group->id];
         };
 
         $this->getGroupKeys = function (Type\Group $group) {
@@ -301,7 +301,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             $this->cache->invalidateTags([
                 TagIdentifiers::TYPE . '-' . $typeId,
                 TagIdentifiers::TYPE_MAP,
-                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId
+                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId,
             ]);
         }
 
@@ -320,7 +320,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             $this->cache->invalidateTags([
                 TagIdentifiers::TYPE . '-' . $typeId,
                 TagIdentifiers::TYPE_MAP,
-                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId
+                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId,
             ]);
         }
 
@@ -425,7 +425,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             $this->cache->invalidateTags([
                 TagIdentifiers::TYPE . '-' . $typeId,
                 TagIdentifiers::TYPE_MAP,
-                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId
+                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId,
             ]);
         }
 
@@ -448,7 +448,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             $this->cache->invalidateTags([
                 TagIdentifiers::TYPE . '-' . $typeId,
                 TagIdentifiers::TYPE_MAP,
-                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId
+                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId,
             ]);
         }
     }
@@ -469,7 +469,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             $this->cache->invalidateTags([
                 TagIdentifiers::TYPE . '-' . $typeId,
                 TagIdentifiers::TYPE_MAP,
-                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId
+                TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId,
             ]);
         }
     }
@@ -486,7 +486,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
         $this->cache->invalidateTags([
             TagIdentifiers::TYPE . '-' . $typeId,
             TagIdentifiers::TYPE_MAP,
-            TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId
+            TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $typeId,
         ]);
 
         // Clear Content Type Groups list cache
@@ -536,7 +536,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
         $this->cache->invalidateTags([
             TagIdentifiers::TYPE . '-' . $contentTypeId,
             TagIdentifiers::TYPE_MAP,
-            TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $contentTypeId
+            TagIdentifiers::CONTENT_FIELDS_TYPE . '-' . $contentTypeId,
         ]);
 
         return $return;
