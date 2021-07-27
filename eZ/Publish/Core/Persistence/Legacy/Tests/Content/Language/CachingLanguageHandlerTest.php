@@ -158,7 +158,7 @@ class CachingLanguageHandlerTest extends TestCase
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-language-2'))
+            ->with($this->equalTo('ez-la-2'))
             ->willReturn($this->getLanguageFixture());
 
         $result = $handler->load(2);
@@ -180,7 +180,7 @@ class CachingLanguageHandlerTest extends TestCase
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-language-2'))
+            ->with($this->equalTo('ez-la-2'))
             ->willReturn(null);
 
         $innerHandlerMock->expects($this->once())
@@ -206,7 +206,7 @@ class CachingLanguageHandlerTest extends TestCase
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-language-code-eng-US'))
+            ->with($this->equalTo('ez-lac-eng-US'))
             ->willReturn($this->getLanguageFixture());
 
         $result = $handler->loadByLanguageCode('eng-US');
@@ -228,7 +228,7 @@ class CachingLanguageHandlerTest extends TestCase
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-language-code-eng-US'))
+            ->with($this->equalTo('ez-lac-eng-US'))
             ->willReturn(null);
 
         $innerHandlerMock->expects($this->once())
@@ -254,7 +254,7 @@ class CachingLanguageHandlerTest extends TestCase
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-language-list'))
+            ->with($this->equalTo('ez-lal'))
             ->willReturn([]);
 
         $result = $handler->loadAll();
@@ -280,7 +280,7 @@ class CachingLanguageHandlerTest extends TestCase
 
         $cacheMock->expects($this->once())
             ->method('deleteMulti')
-            ->with($this->equalTo(['ez-language-2', 'ez-language-list']));
+            ->with($this->equalTo(['ez-la-2', 'ez-lal']));
 
         $result = $handler->delete(2);
     }
