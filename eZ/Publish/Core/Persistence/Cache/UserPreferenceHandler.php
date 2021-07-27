@@ -35,7 +35,9 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
             'setStruct' => $setStruct,
         ]);
 
-        $this->cache->deleteItems(['ez-user-preference-' . $setStruct->userId . '-' . $setStruct->name]);
+        $this->cache->deleteItems([
+            TagIdentifiers::PREFIX . TagIdentifiers::USER_PREFERENCE . '-' . $setStruct->userId . '-' . $setStruct->name
+        ]);
 
         return $this->persistenceHandler->userPreferenceHandler()->setUserPreference($setStruct);
     }
@@ -61,7 +63,7 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
     {
         $userPreference = $this->getCacheValue(
             $userId,
-            'ez-user-preference-',
+            TagIdentifiers::PREFIX . TagIdentifiers::USER_PREFERENCE . '-',
             function ($userId) use ($name) {
                 try {
                     return $this->persistenceHandler->userPreferenceHandler()->getUserPreferenceByUserIdAndName(
@@ -76,7 +78,7 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
                 return [];
             },
             static function () use ($userId, $name) {
-                return ['ez-user-preference-' . $userId . '-' . $name];
+                return [TagIdentifiers::PREFIX . TagIdentifiers::USER_PREFERENCE . '-' . $userId . '-' . $name];
             },
             '-' . $name
         );

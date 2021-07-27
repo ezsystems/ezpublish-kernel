@@ -28,18 +28,18 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         // string $method, array $arguments, array? $tags, array? $key, mixed? $returnValue
         return [
-            ['publishUrlAliasForLocation', [44, 2, 'name', 'eng-GB', true, false], ['urlAlias-location-44', 'urlAlias-location-path-44', 'urlAlias-notFound']],
-            ['createCustomUrlAlias', [44, '1/2/44', true, null, false], ['urlAlias-location-44', 'urlAlias-location-path-44', 'urlAlias-notFound', 'urlAlias-5'], null, new UrlAlias(['id' => 5])],
-            ['createGlobalUrlAlias', ['something', '1/2/44', true, null, false], ['urlAlias-notFound']],
-            ['createGlobalUrlAlias', ['something', '1/2/44', true, 'eng-GB', false], ['urlAlias-notFound']],
+            ['publishUrlAliasForLocation', [44, 2, 'name', 'eng-GB', true, false], ['urlal-44', 'urlalp-44', 'urlanf']],
+            ['createCustomUrlAlias', [44, '1/2/44', true, null, false], ['urlal-44', 'urlalp-44', 'urlanf', 'urla-5'], null, new UrlAlias(['id' => 5])],
+            ['createGlobalUrlAlias', ['something', '1/2/44', true, null, false], ['urlanf']],
+            ['createGlobalUrlAlias', ['something', '1/2/44', true, 'eng-GB', false], ['urlanf']],
             ['listGlobalURLAliases', ['eng-GB', 10, 50]],
-            ['removeURLAliases', [[new UrlAlias(['id' => 5, 'type' => UrlAlias::LOCATION, 'isCustom' => true, 'destination' => 21])]], ['urlAlias-5', 'urlAlias-location-21', 'urlAlias-location-path-21', 'urlAlias-custom-21']],
-            ['locationMoved', [21, 45, 12], ['urlAlias-location-21', 'urlAlias-location-path-21']],
-            ['locationCopied', [21, 33, 12], ['urlAlias-location-21', 'urlAlias-location-33']],
-            ['locationDeleted', [21], ['urlAlias-location-21', 'urlAlias-location-path-21'], null, []],
-            ['locationSwapped', [21, 2, 33, 45], ['urlAlias-location-21', 'urlAlias-location-path-21', 'urlAlias-location-33', 'urlAlias-location-path-33']],
-            ['translationRemoved', [[21, 33], 'eng-GB'], ['urlAlias-location-21', 'urlAlias-location-path-21', 'urlAlias-location-33', 'urlAlias-location-path-33']],
-            ['archiveUrlAliasesForDeletedTranslations', [21, 33, ['eng-GB']], ['urlAlias-location-21', 'urlAlias-location-path-21']],
+            ['removeURLAliases', [[new UrlAlias(['id' => 5, 'type' => UrlAlias::LOCATION, 'isCustom' => true, 'destination' => 21])]], ['urla-5', 'urlal-21', 'urlalp-21', 'urlac-21']],
+            ['locationMoved', [21, 45, 12], ['urlal-21', 'urlalp-21']],
+            ['locationCopied', [21, 33, 12], ['urlal-21', 'urlal-33']],
+            ['locationDeleted', [21], ['urlal-21', 'urlalp-21'], null, []],
+            ['locationSwapped', [21, 2, 33, 45], ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33']],
+            ['translationRemoved', [[21, 33], 'eng-GB'], ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33']],
+            ['archiveUrlAliasesForDeletedTranslations', [21, 33, ['eng-GB']], ['urlal-21', 'urlalp-21']],
         ];
     }
 
@@ -49,10 +49,10 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, string $key, mixed? $data
         return [
-            ['listURLAliasesForLocation', [5], 'ez-urlAlias-location-list-5', [$object]],
-            ['listURLAliasesForLocation', [5, true], 'ez-urlAlias-location-list-5-custom', [$object]],
-            ['lookup', ['/Home'], 'ez-urlAlias-url-_SHome', $object],
-            ['loadUrlAlias', [5], 'ez-urlAlias-5', $object],
+            ['listURLAliasesForLocation', [5], 'ez-urlall-5', [$object]],
+            ['listURLAliasesForLocation', [5, true], 'ez-urlall-5-custom', [$object]],
+            ['lookup', ['/Home'], 'ez-urlau-_SHome', $object],
+            ['loadUrlAlias', [5], 'ez-urla-5', $object],
         ];
     }
 }

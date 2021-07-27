@@ -44,34 +44,37 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function init(): void
     {
         $this->getUserTags = static function (User $user) {
-            return ['content-' . $user->id, 'user-' . $user->id];
+            return [
+                TagIdentifiers::CONTENT . '-' . $user->id,
+                TagIdentifiers::CONTENT . '-' . $user->id
+            ];
         };
         $this->getUserKeys = function (User $user) {
             return [
-                'ez-user-' . $user->id,
-                'ez-user-' . $this->escapeForCacheKey($user->login) . '-by-login',
+                TagIdentifiers::PREFIX . TagIdentifiers::CONTENT . '-' . $user->id,
+                TagIdentifiers::PREFIX . TagIdentifiers::CONTENT . '-' . $this->escapeForCacheKey($user->login) . TagIdentifiers::BY_LOGIN_SUFFIX,
                 //'ez-user-' . $hash . '-by-account-key',
             ];
         };
         $this->getRoleTags = static function (Role $role) {
-            return ['role-' . $role->id];
+            return [TagIdentifiers::ROLE . '-' . $role->id];
         };
         $this->getRoleKeys = function (Role $role) {
             return [
-                'ez-role-' . $role->id,
-                'ez-role-' . $this->escapeForCacheKey($role->identifier) . '-by-identifier',
+                TagIdentifiers::PREFIX . TagIdentifiers::CONTENT . '-' . $role->id,
+                TagIdentifiers::PREFIX . TagIdentifiers::CONTENT . '-' . $this->escapeForCacheKey($role->identifier) . TagIdentifiers::BY_IDENTIFIER_SUFFIX,
             ];
         };
         $this->getRoleAssignmentTags = static function (RoleAssignment $roleAssignment) {
             return [
-                'role-assignment-' . $roleAssignment->id,
-                'role-assignment-group-list-' . $roleAssignment->contentId,
-                'role-assignment-role-list-' . $roleAssignment->roleId,
+                TagIdentifiers::ROLE_ASSIGNMENT . '-' . $roleAssignment->id,
+                TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $roleAssignment->contentId,
+                TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleAssignment->roleId,
             ];
         };
         $this->getRoleAssignmentKeys = static function (RoleAssignment $roleAssignment) {
             return [
-                'ez-role-assignment-' . $roleAssignment->id,
+                TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-' . $roleAssignment->id,
             ];
         };
     }
@@ -85,11 +88,11 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->create($user);
 
         // Clear corresponding content cache as creation of the User changes it's external data
-        $this->cache->invalidateTags(['content-' . $user->id]);
+        $this->cache->invalidateTags([TagIdentifiers::CONTENT . '-' . $user->id]);
         $this->cache->deleteItems([
-            'ez-user-' . $user->id,
-            'ez-user-' . $this->escapeForCacheKey($user->login) . '-by-login',
-            'ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email',
+            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $user->id,
+            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->login) . TagIdentifiers::BY_LOGIN_SUFFIX,
+            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->email) . TagIdentifiers::BY_EMAIL_SUFFIX,
         ]);
 
         return $return;
@@ -102,7 +105,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         return $this->getCacheValue(
             $userId,
-            'ez-user-',
+            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-',
             function ($userId) {
                 return $this->persistenceHandler->userHandler()->load($userId);
             },
@@ -118,13 +121,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         return $this->getCacheValue(
             $this->escapeForCacheKey($login),
-            'ez-user-',
+            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-',
             function () use ($login) {
                 return $this->persistenceHandler->userHandler()->loadByLogin($login);
             },
             $this->getUserTags,
             $this->getUserKeys,
-            '-by-login'
+            TagIdentifiers::BY_LOGIN_SUFFIX
         );
     }
 
@@ -135,7 +138,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         // As load by email can return several items we threat it like a list here.
         return $this->getListCacheValue(
-            'ez-user-' . $this->escapeForCacheKey($email) . '-by-email',
+            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($email) . TagIdentifiers::BY_EMAIL_SUFFIX,
             function () use ($email) {
                 return $this->persistenceHandler->userHandler()->loadByEmail($email);
             },
@@ -154,24 +157,24 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         return $this->getCacheValue(
             $hash,
-            'ez-user-',
+            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-',
             function ($hash) {
                 return $this->persistenceHandler->userHandler()->loadUserByToken($hash);
             },
             static function (User $user) use ($getUserTagsFn) {
                 $tags = $getUserTagsFn($user);
                 // See updateUserToken()
-                $tags[] = 'user-' . $user->id . '-account-key';
+                $tags[] = TagIdentifiers::USER . '-' . $user->id . TagIdentifiers::ACCOUNT_KEY_SUFFIX;
 
                 return $tags;
             },
             static function (User $user) use ($hash, $getUserKeysFn) {
                 $keys = $getUserKeysFn($user);
-                $keys[] = 'ez-user-' . $hash . '-by-account-key';
+                $keys[] = TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $hash . TagIdentifiers::BY_ACCOUNT_KEY_SUFFIX;
 
                 return $keys;
             },
-            '-by-account-key'
+            TagIdentifiers::BY_ACCOUNT_KEY_SUFFIX
         );
     }
 
@@ -184,9 +187,15 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->update($user);
 
         // Clear corresponding content cache as update of the User changes it's external data
-        $this->cache->invalidateTags(['content-' . $user->id, 'user-' . $user->id]);
+        $this->cache->invalidateTags([
+            TagIdentifiers::CONTENT . '-' . $user->id,
+            TagIdentifiers::USER . '-' . $user->id
+        ]);
+
         // Clear especially by email key as it might already be cached and this might represent change to email
-        $this->cache->deleteItems(['ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email']);
+        $this->cache->deleteItems([
+            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->email) . TagIdentifiers::BY_EMAIL_SUFFIX
+        ]);
 
         return $return;
     }
@@ -200,8 +209,8 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->updateUserToken($userTokenUpdateStruct);
 
         // As we 1. don't know original hash, and 2. hash is not guaranteed to be unique, we do it like this for now
-        $this->cache->invalidateTags(['user-' . $userTokenUpdateStruct->userId . '-account-key']);
-        $this->cache->deleteItems(['ez-user-' . $userTokenUpdateStruct->hashKey . '-by-account-key']);
+        $this->cache->invalidateTags([TagIdentifiers::USER . '-' . $userTokenUpdateStruct->userId . TagIdentifiers::ACCOUNT_KEY_SUFFIX]);
+        $this->cache->deleteItems([TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $userTokenUpdateStruct->hashKey . TagIdentifiers::BY_ACCOUNT_KEY_SUFFIX]);
 
         return $return;
     }
@@ -213,7 +222,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         $this->logger->logCall(__METHOD__, ['hash' => $hash]);
         $return = $this->persistenceHandler->userHandler()->expireUserToken($hash);
-        $this->cache->deleteItems(['ez-user-' . $hash . '-by-account-key']);
+        $this->cache->deleteItems([TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $hash . TagIdentifiers::BY_ACCOUNT_KEY_SUFFIX]);
 
         return $return;
     }
@@ -227,7 +236,10 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->delete($userId);
 
         // user id == content id == group id
-        $this->cache->invalidateTags(['content-' . $userId, 'user-' . $userId]);
+        $this->cache->invalidateTags([
+            TagIdentifiers::CONTENT . '-' . $userId,
+            TagIdentifiers::USER . '-' . $userId
+        ]);
 
         return $return;
     }
@@ -265,7 +277,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         return $this->getCacheValue(
             $roleId,
-            'ez-role-',
+            TagIdentifiers::PREFIX . TagIdentifiers::ROLE . '-',
             function ($roleId) {
                 return $this->persistenceHandler->userHandler()->loadRole($roleId);
             },
@@ -287,13 +299,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         return $this->getCacheValue(
             $this->escapeForCacheKey($identifier),
-            'ez-role-',
+            TagIdentifiers::PREFIX . TagIdentifiers::ROLE . '-',
             function () use ($identifier) {
                 return $this->persistenceHandler->userHandler()->loadRoleByIdentifier($identifier);
             },
             $this->getRoleTags,
             $this->getRoleKeys,
-            '-by-identifier'
+            TagIdentifiers::BY_IDENTIFIER_SUFFIX
         );
     }
 
@@ -324,7 +336,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         return $this->getCacheValue(
             $roleAssignmentId,
-            'ez-role-assignment-',
+            TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-',
             function ($roleAssignmentId) {
                 return $this->persistenceHandler->userHandler()->loadRoleAssignment($roleAssignmentId);
             },
@@ -339,7 +351,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function loadRoleAssignmentsByRoleId($roleId)
     {
         return $this->getListCacheValue(
-            "ez-role-assignment-${roleId}-by-role",
+            TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-' . $roleId . TagIdentifiers::BY_ROLE_SUFFIX,
             function () use ($roleId) {
                 return $this->persistenceHandler->userHandler()->loadRoleAssignmentsByRoleId($roleId);
             },
@@ -347,7 +359,10 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             $this->getRoleAssignmentKeys,
             /* Role update (policies) changes role assignment id, also need list tag in case of empty result */
             static function () use ($roleId) {
-                return ['role-assignment-role-list-' . $roleId, 'role-' . $roleId];
+                return [
+                    TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId,
+                    TagIdentifiers::ROLE . '-' . $roleId
+                ];
             },
             [$roleId]
         );
@@ -360,9 +375,9 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         $innerHandler = $this->persistenceHandler;
         if ($inherit) {
-            $key = "ez-role-assignment-${groupId}-by-group-inherited";
+            $key = TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-' . $groupId . TagIdentifiers::BY_GROUP_INHERITED_SUFFIX;
         } else {
-            $key = "ez-role-assignment-${groupId}-by-group";
+            $key = TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-' . $groupId . TagIdentifiers::BY_GROUP_SUFFIX;
         }
 
         return $this->getListCacheValue(
@@ -374,12 +389,12 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             $this->getRoleAssignmentKeys,
             static function () use ($groupId, $innerHandler) {
                 // Tag needed for empty results, if not empty will alse be added by getRoleAssignmentTags().
-                $cacheTags = ['role-assignment-group-list-' . $groupId];
+                $cacheTags = [TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $groupId];
                 // To make sure tree operations affecting this can clear the permission cache
                 $locations = $innerHandler->locationHandler()->loadLocationsByContent($groupId);
                 foreach ($locations as $location) {
                     foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-                        $cacheTags[] = 'location-path-' . $pathId;
+                        $cacheTags[] = TagIdentifiers::LOCATION_PATH . '-' . $pathId;
                     }
                 }
 
@@ -397,7 +412,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $this->persistenceHandler->userHandler()->updateRole($struct);
 
-        $this->cache->invalidateTags(['role-' . $struct->id]);
+        $this->cache->invalidateTags([TagIdentifiers::ROLE . '-' . $struct->id]);
     }
 
     /**
@@ -409,7 +424,10 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->deleteRole($roleId, $status);
 
         if ($status === Role::STATUS_DEFINED) {
-            $this->cache->invalidateTags(['role-' . $roleId, 'role-assignment-role-list-' . $roleId]);
+            $this->cache->invalidateTags([
+                TagIdentifiers::ROLE . '-' . $roleId,
+                TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId
+            ]);
         }
 
         return $return;
@@ -427,7 +445,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         // If there was a original role for the draft, then we clean cache for it
         if ($roleDraft->originalId > -1) {
-            $this->cache->invalidateTags(['role-' . $roleDraft->originalId]);
+            $this->cache->invalidateTags([TagIdentifiers::ROLE . '-' . $roleDraft->originalId]);
         }
 
         return $return;
@@ -451,7 +469,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['role' => $roleId, 'struct' => $policy]);
         $return = $this->persistenceHandler->userHandler()->addPolicy($roleId, $policy);
 
-        $this->cache->invalidateTags(['role-' . $roleId]);
+        $this->cache->invalidateTags([TagIdentifiers::ROLE . '-' . $roleId]);
 
         return $return;
     }
@@ -464,7 +482,10 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['struct' => $policy]);
         $return = $this->persistenceHandler->userHandler()->updatePolicy($policy);
 
-        $this->cache->invalidateTags(['policy-' . $policy->id, 'role-' . $policy->roleId]);
+        $this->cache->invalidateTags([
+            TagIdentifiers::POLICY . '-' . $policy->id,
+            TagIdentifiers::ROLE . '-' . $policy->roleId
+        ]);
 
         return $return;
     }
@@ -477,7 +498,10 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['policy' => $policyId]);
         $this->persistenceHandler->userHandler()->deletePolicy($policyId, $roleId);
 
-        $this->cache->invalidateTags(['policy-' . $policyId, 'role-' . $roleId]);
+        $this->cache->invalidateTags([
+            TagIdentifiers::POLICY . '-' . $policyId,
+            TagIdentifiers::ROLE . '-' . $roleId
+        ]);
     }
 
     /**
@@ -498,10 +522,14 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['group' => $contentId, 'role' => $roleId, 'limitation' => $limitation]);
         $return = $this->persistenceHandler->userHandler()->assignRole($contentId, $roleId, $limitation);
 
-        $tags = ['role-assignment-group-list-' . $contentId, 'role-assignment-role-list-' . $roleId];
+        $tags = [
+            TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $contentId,
+            TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId
+        ];
+
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId);
         foreach ($locations as $location) {
-            $tags[] = 'location-path-' . $location->id;
+            $tags[] = TagIdentifiers::LOCATION_PATH . '-' . $location->id;
         }
 
         $this->cache->invalidateTags($tags);
@@ -517,7 +545,10 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['group' => $contentId, 'role' => $roleId]);
         $return = $this->persistenceHandler->userHandler()->unassignRole($contentId, $roleId);
 
-        $this->cache->invalidateTags(['role-assignment-group-list-' . $contentId, 'role-assignment-role-list-' . $roleId]);
+        $this->cache->invalidateTags([
+            TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $contentId,
+            TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId
+        ]);
 
         return $return;
     }
@@ -530,7 +561,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['assignment' => $roleAssignmentId]);
         $return = $this->persistenceHandler->userHandler()->removeRoleAssignment($roleAssignmentId);
 
-        $this->cache->invalidateTags(['role-assignment-' . $roleAssignmentId]);
+        $this->cache->invalidateTags([TagIdentifiers::ROLE_ASSIGNMENT . '-' . $roleAssignmentId]);
 
         return $return;
     }

@@ -39,33 +39,33 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, array? $tags, array? $key
         return [
-            ['create', [$user], ['content-14'], [
-                'ez-user-14',
-                'ez-user-' . str_replace('@', '_A', $user->login) . '-by-login',
-                'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
+            ['create', [$user], ['c-14'], [
+                'ez-u-14',
+                'ez-u-' . str_replace('@', '_A', $user->login) . '-bl',
+                'ez-u-' . str_replace('@', '_A', $user->email) . '-be',
             ]],
-            ['update', [$user], ['content-14', 'user-14'], [
-                'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
+            ['update', [$user], ['c-14', 'u-14'], [
+                'ez-u-' . str_replace('@', '_A', $user->email) . '-be',
             ]],
-            ['updateUserToken', [$userToken], ['user-14-account-key'], ['ez-user-4irj8t43r-by-account-key']],
-            ['expireUserToken', ['4irj8t43r'], null, ['ez-user-4irj8t43r-by-account-key']],
-            ['delete', [14], ['content-14', 'user-14']],
+            ['updateUserToken', [$userToken], ['u-14-ak'], ['ez-u-4irj8t43r-bak']],
+            ['expireUserToken', ['4irj8t43r'], null, ['ez-u-4irj8t43r-bak']],
+            ['delete', [14], ['c-14', 'u-14']],
             ['createRole', [new RoleCreateStruct()]],
             ['createRoleDraft', [new RoleCreateStruct()]],
             ['loadRole', [9, 1]],
             ['loadRoleByIdentifier', ['member', 1]],
             ['loadRoleDraftByRoleId', [9]],
             ['loadRoles', []],
-            ['updateRole', [new RoleUpdateStruct(['id' => 9])], ['role-9']],
-            ['deleteRole', [9], ['role-9', 'role-assignment-role-list-9']],
+            ['updateRole', [new RoleUpdateStruct(['id' => 9])], ['r-9']],
+            ['deleteRole', [9], ['r-9', 'rarl-9']],
             ['deleteRole', [9, 1]],
             ['addPolicyByRoleDraft', [9, $policy]],
-            ['addPolicy', [9, $policy], ['role-9']],
-            ['updatePolicy', [$policy], ['policy-13', 'role-9']],
-            ['deletePolicy', [13, 9], ['policy-13', 'role-9']],
+            ['addPolicy', [9, $policy], ['r-9']],
+            ['updatePolicy', [$policy], ['p-13', 'r-9']],
+            ['deletePolicy', [13, 9], ['p-13', 'r-9']],
             ['loadPoliciesByUserId', [14]],
-            ['unassignRole', [14, 9], ['role-assignment-group-list-14', 'role-assignment-role-list-9']],
-            ['removeRoleAssignment', [11], ['role-assignment-11']],
+            ['unassignRole', [14, 9], ['ragl-14', 'rarl-9']],
+            ['removeRoleAssignment', [11], ['ra-11']],
         ];
     }
 
@@ -78,16 +78,16 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, string $key, mixed? $data
         return [
-            ['load', [14], 'ez-user-14', $user],
-            ['loadByLogin', ['admin'], 'ez-user-admin-by-login', $user],
-            ['loadByEmail', ['nospam@ez.no'], 'ez-user-nospam_Aez.no-by-email', [$user]],
-            ['loadUserByToken', ['hash'], 'ez-user-hash-by-account-key', $user],
-            ['loadRole', [9], 'ez-role-9', $role],
-            ['loadRoleByIdentifier', ['member'], 'ez-role-member-by-identifier', $role],
-            ['loadRoleAssignment', [11], 'ez-role-assignment-11', $roleAssignment],
-            ['loadRoleAssignmentsByRoleId', [9], 'ez-role-assignment-9-by-role', [$roleAssignment]],
-            ['loadRoleAssignmentsByGroupId', [14], 'ez-role-assignment-14-by-group', [$roleAssignment], false, $calls],
-            ['loadRoleAssignmentsByGroupId', [14, true], 'ez-role-assignment-14-by-group-inherited', [$roleAssignment], false, $calls],
+            ['load', [14], 'ez-u-14', $user],
+            ['loadByLogin', ['admin'], 'ez-u-admin-bl', $user],
+            ['loadByEmail', ['nospam@ez.no'], 'ez-u-nospam_Aez.no-be', [$user]],
+            ['loadUserByToken', ['hash'], 'ez-u-hash-bak', $user],
+            ['loadRole', [9], 'ez-r-9', $role],
+            ['loadRoleByIdentifier', ['member'], 'ez-r-member-bi', $role],
+            ['loadRoleAssignment', [11], 'ez-ra-11', $roleAssignment],
+            ['loadRoleAssignmentsByRoleId', [9], 'ez-ra-9-bro', [$roleAssignment]],
+            ['loadRoleAssignmentsByGroupId', [14], 'ez-ra-14-bg', [$roleAssignment], false, $calls],
+            ['loadRoleAssignmentsByGroupId', [14, true], 'ez-ra-14-bgi', [$roleAssignment], false, $calls],
         ];
     }
 
@@ -113,7 +113,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $this->cacheMock
             ->expects($this->once())
             ->method('invalidateTags')
-            ->with(['role-' . $originalRoleId]);
+            ->with(['r-' . $originalRoleId]);
         $this->cacheMock
             ->expects($this->never())
             ->method('deleteItem');
@@ -181,7 +181,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $this->cacheMock
             ->expects($this->once())
             ->method('invalidateTags')
-            ->with(['role-assignment-group-list-14', 'role-assignment-role-list-9', 'location-path-43']);
+            ->with(['ragl-14', 'rarl-9', 'lp-43']);
 
         $this->cacheMock
             ->expects($this->never())

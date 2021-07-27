@@ -27,8 +27,8 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments, array? $tags, array|string? $key, mixed? $return
         return [
-            ['create', ['/home/about', '/web3/some/page/link', true], ['urlWildcard-notFound'], null, $wildcard],
-            ['remove', [1], ['urlWildcard-1']],
+            ['create', ['/home/about', '/web3/some/page/link', true], ['urlwnf'], null, $wildcard],
+            ['remove', [1], ['urlw-1']],
             ['loadAll', [], null, null, [$wildcard]],
             ['exactSourceUrlExists', ['/home/about'], null, null, true],
         ];
@@ -40,8 +40,8 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments, string $key, mixed? $data
         return [
-            ['load', [1], 'ez-urlWildcard-1', $wildcard],
-            ['translate', ['/home/about'], 'ez-urlWildcard-source-_Shome_Sabout', $wildcard],
+            ['load', [1], 'ez-urlw-1', $wildcard],
+            ['translate', ['/home/about'], 'ez-urlws-_Shome_Sabout', $wildcard],
         ];
     }
 }

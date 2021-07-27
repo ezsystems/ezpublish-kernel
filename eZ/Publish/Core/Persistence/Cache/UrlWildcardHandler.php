@@ -34,7 +34,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
 
         $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->create($sourceUrl, $destinationUrl, $forward);
 
-        $this->cache->invalidateTags(['urlWildcard-notFound']);
+        $this->cache->invalidateTags([TagIdentifiers::URL_WILDCARD_NOT_FOUND]);
 
         return $urlWildcard;
     }
@@ -48,7 +48,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
 
         $this->persistenceHandler->urlWildcardHandler()->remove($id);
 
-        $this->cache->invalidateTags(['urlWildcard-' . $id]);
+        $this->cache->invalidateTags([TagIdentifiers::URL_WILDCARD . '-' . $id]);
     }
 
     /**
@@ -56,7 +56,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
      */
     public function load($id)
     {
-        $cacheItem = $this->cache->getItem('ez-urlWildcard-' . $id);
+        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::URL_WILDCARD . '-' . $id);
 
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
@@ -67,7 +67,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->load($id);
 
         $cacheItem->set($urlWildcard);
-        $cacheItem->tag(['urlWildcard-' . $urlWildcard->id]);
+        $cacheItem->tag([TagIdentifiers::URL_WILDCARD . '-' . $urlWildcard->id]);
         $this->cache->save($cacheItem);
 
         return $urlWildcard;
@@ -88,7 +88,11 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
      */
     public function translate(string $sourceUrl): UrlWildcard
     {
-        $cacheItem = $this->cache->getItem('ez-urlWildcard-source-' . $this->escapeForCacheKey($sourceUrl));
+        $cacheItem = $this->cache->getItem(
+            TagIdentifiers::PREFIX .
+            TagIdentifiers::URL_WILDCARD_SOURCE . '-' .
+            $this->escapeForCacheKey($sourceUrl)
+        );
 
         if ($cacheItem->isHit()) {
             if (($return = $cacheItem->get()) === self::NOT_FOUND) {
@@ -105,13 +109,13 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         } catch (APINotFoundException $e) {
             $cacheItem->set(self::NOT_FOUND)
                 ->expiresAfter(30)
-                ->tag(['urlWildcard-notFound']);
+                ->tag([TagIdentifiers::URL_WILDCARD_NOT_FOUND]);
             $this->cache->save($cacheItem);
             throw new NotFoundException('UrlWildcard', $sourceUrl, $e);
         }
 
         $cacheItem->set($urlWildcard);
-        $cacheItem->tag(['urlWildcard-' . $urlWildcard->id]);
+        $cacheItem->tag([TagIdentifiers::URL_WILDCARD . '-' . $urlWildcard->id]);
         $this->cache->save($cacheItem);
 
         return $urlWildcard;

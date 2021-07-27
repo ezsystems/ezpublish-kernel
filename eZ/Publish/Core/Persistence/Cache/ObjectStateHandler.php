@@ -24,7 +24,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $this->logger->logCall(__METHOD__, ['struct' => $input]);
         $group = $this->persistenceHandler->objectStateHandler()->createGroup($input);
 
-        $this->cache->deleteItem('ez-state-group-all');
+        $this->cache->deleteItem(TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP_ALL);
 
         return $group;
     }
@@ -36,17 +36,17 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
     {
         return $this->getCacheValue(
             (int) $groupId,
-            'ez-state-group-',
+            TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-',
             function (int $groupId): Group {
                 $this->logger->logCall(__METHOD__, ['groupId' => (int) $groupId]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadGroup($groupId);
             },
             static function () use ($groupId): array {
-                return ['state-group-' . (int) $groupId];
+                return [TagIdentifiers::STATE_GROUP . '-' . (int) $groupId];
             },
             static function () use ($groupId) {
-                return ['ez-state-group-' . (int) $groupId];
+                return [TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-' . (int) $groupId];
             }
         );
     }
@@ -60,19 +60,22 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
         return $this->getCacheValue(
             $identifier,
-            'ez-state-group-',
+            TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-',
             function (string $identifier): Group {
                 $this->logger->logCall(__METHOD__, ['groupId' => $identifier]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadGroupByIdentifier($identifier);
             },
             static function (Group $group): array {
-                return ['state-group-' . $group->id];
+                return [TagIdentifiers::STATE_GROUP . '-' . $group->id];
             },
             static function (Group $group) use ($escapedIdentifier): array {
-                return ['ez-state-group-' . $escapedIdentifier . '-by-identifier', 'ez-state-group-' . $group->id];
+                return [
+                    TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-' . $escapedIdentifier . TagIdentifiers::BY_IDENTIFIER_SUFFIX,
+                    TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-' . $group->id
+                ];
             },
-            '-by-identifier'
+            TagIdentifiers::BY_IDENTIFIER_SUFFIX
         );
     }
 
@@ -82,17 +85,20 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
     public function loadAllGroups($offset = 0, $limit = -1)
     {
         $stateGroups = $this->getListCacheValue(
-            'ez-state-group-all',
+            TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP_ALL,
             function () use ($offset, $limit): array {
                 $this->logger->logCall(__METHOD__, ['offset' => (int) $offset, 'limit' => (int) $limit]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadAllGroups(0, -1);
             },
             static function (Group $group): array {
-                return ['state-group-' . $group->id];
+                return [TagIdentifiers::STATE_GROUP . '-' . $group->id];
             },
             static function (Group $group): array {
-                return ['ez-state-group-' . $group->id, 'ez-state-group-' . $group->id . '-by-identifier'];
+                return [
+                    TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-' . $group->id,
+                    TagIdentifiers::PREFIX . TagIdentifiers::STATE_GROUP . '-' . $group->id . TagIdentifiers::BY_IDENTIFIER_SUFFIX,
+                ];
             }
         );
 
@@ -106,7 +112,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
     {
         return $this->getCacheValue(
             $groupId,
-            'ez-state-list-by-group-',
+            TagIdentifiers::PREFIX . TagIdentifiers::STATE_LIST_BY_GROUP . '-',
             function (int $groupId): array {
                 $this->logger->logCall(__METHOD__, ['groupId' => (int) $groupId]);
 
@@ -114,15 +120,15 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             },
             static function (array $objectStates) use ($groupId): array {
                 $cacheTags = [];
-                $cacheTags[] = 'state-group-' . (int) $groupId;
+                $cacheTags[] = TagIdentifiers::STATE_GROUP . '-' . (int) $groupId;
                 foreach ($objectStates as $state) {
-                    $cacheTags[] = 'state-' . $state->id;
+                    $cacheTags[] = TagIdentifiers::STATE . '-' . $state->id;
                 }
 
                 return $cacheTags;
             },
             static function () use ($groupId): array {
-                return ['ez-state-list-by-group-' . (int) $groupId];
+                return [TagIdentifiers::PREFIX . TagIdentifiers::STATE_LIST_BY_GROUP . '-' . (int) $groupId];
             }
         );
     }
@@ -135,7 +141,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $this->logger->logCall(__METHOD__, ['groupId' => $groupId, 'struct' => $input]);
         $return = $this->persistenceHandler->objectStateHandler()->updateGroup($groupId, $input);
 
-        $this->cache->invalidateTags(['state-group-' . $groupId]);
+        $this->cache->invalidateTags([TagIdentifiers::STATE_GROUP . '-' . $groupId]);
 
         return $return;
     }
@@ -148,7 +154,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $this->logger->logCall(__METHOD__, ['groupId' => $groupId]);
         $return = $this->persistenceHandler->objectStateHandler()->deleteGroup($groupId);
 
-        $this->cache->invalidateTags(['state-group-' . $groupId]);
+        $this->cache->invalidateTags([TagIdentifiers::STATE_GROUP . '-' . $groupId]);
 
         return $return;
     }
@@ -161,7 +167,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $this->logger->logCall(__METHOD__, ['groupId' => $groupId, 'struct' => $input]);
         $return = $this->persistenceHandler->objectStateHandler()->create($groupId, $input);
 
-        $this->cache->deleteItem('ez-state-list-by-group-' . $groupId);
+        $this->cache->deleteItem(TagIdentifiers::PREFIX . TagIdentifiers::STATE_LIST_BY_GROUP . '-' . $groupId);
 
         return $return;
     }
@@ -173,17 +179,20 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
     {
         return $this->getCacheValue(
             (int) $stateId,
-            'ez-state-',
+            TagIdentifiers::PREFIX . TagIdentifiers::STATE . '-',
             function (int $stateId): ObjectState {
                 $this->logger->logCall(__METHOD__, ['stateId' => $stateId]);
 
                 return $this->persistenceHandler->objectStateHandler()->load($stateId);
             },
             static function (ObjectState $objectState): array {
-                return ['state-' . $objectState->id, 'state-group-' . $objectState->groupId];
+                return [
+                    TagIdentifiers::STATE . '-' . $objectState->id,
+                    TagIdentifiers::STATE_GROUP . '-' . $objectState->groupId
+                ];
             },
             static function () use ($stateId): array {
-                return ['ez-state-' . (int) $stateId];
+                return [TagIdentifiers::PREFIX . TagIdentifiers::STATE . '-' . (int) $stateId];
             }
         );
     }
@@ -197,19 +206,28 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
         return $this->getCacheValue(
             $identifier,
-            'ez-state-identifier-',
+            TagIdentifiers::PREFIX . TagIdentifiers::STATE_IDENTIFIER . '-',
             function (string $identifier) use ($groupId): ObjectState {
                 $this->logger->logCall(__METHOD__, ['identifier' => $identifier, 'groupId' => (int) $groupId]);
 
                 return $this->persistenceHandler->objectStateHandler()->loadByIdentifier($identifier, (int) $groupId);
             },
             static function (ObjectState $objectState): array {
-                return ['state-' . $objectState->id, 'state-group-' . $objectState->groupId];
+                return [
+                    TagIdentifiers::STATE . '-' . $objectState->id,
+                    TagIdentifiers::STATE_GROUP . '-' . $objectState->groupId
+                ];
             },
             static function () use ($escapedIdentifier, $groupId): array {
-                return ['ez-state-identifier-' . $escapedIdentifier . '-by-group-' . (int) $groupId];
+                return [
+                    TagIdentifiers::PREFIX . 
+                    TagIdentifiers::STATE_IDENTIFIER . '-' . 
+                    $escapedIdentifier .
+                    TagIdentifiers::BY_GROUP_SUFFIX . '-' .
+                    (int) $groupId
+                ];
             },
-            '-by-group-' . (int) $groupId
+            TagIdentifiers::BY_GROUP_SUFFIX . '-' . (int) $groupId
         );
     }
 
@@ -221,7 +239,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $this->logger->logCall(__METHOD__, ['stateId' => $stateId, 'struct' => $input]);
         $return = $this->persistenceHandler->objectStateHandler()->update($stateId, $input);
 
-        $this->cache->invalidateTags(['state-' . $stateId]);
+        $this->cache->invalidateTags([TagIdentifiers::STATE . '-' . $stateId]);
 
         return $return;
     }
@@ -234,7 +252,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $this->logger->logCall(__METHOD__, ['stateId' => $stateId, 'priority' => $priority]);
         $return = $this->persistenceHandler->objectStateHandler()->setPriority($stateId, $priority);
 
-        $this->cache->invalidateTags(['state-' . $stateId]);
+        $this->cache->invalidateTags([TagIdentifiers::STATE . '-' . $stateId]);
 
         return $return;
     }
@@ -247,7 +265,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $this->logger->logCall(__METHOD__, ['stateId' => $stateId]);
         $return = $this->persistenceHandler->objectStateHandler()->delete($stateId);
 
-        $this->cache->invalidateTags(['state-' . $stateId]);
+        $this->cache->invalidateTags([TagIdentifiers::STATE . '-' . $stateId]);
 
         return $return;
     }
@@ -260,7 +278,13 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $this->logger->logCall(__METHOD__, ['contentId' => $contentId, 'groupId' => $groupId, 'stateId' => $stateId]);
         $return = $this->persistenceHandler->objectStateHandler()->setContentState($contentId, $groupId, $stateId);
 
-        $this->cache->deleteItem('ez-state-by-group-' . $groupId . '-on-content-' . $contentId);
+        $this->cache->deleteItem(
+            TagIdentifiers::PREFIX . 
+            TagIdentifiers::STATE_BY_GROUP . '-' . 
+            $groupId .
+            TagIdentifiers::ON_CONTENT_SUFFIX . '-' .
+            $contentId
+        );
 
         return $return;
     }
@@ -272,19 +296,28 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
     {
         return $this->getCacheValue(
             (int) $stateGroupId,
-            'ez-state-by-group-',
+            TagIdentifiers::PREFIX . TagIdentifiers::STATE_BY_GROUP . '-',
             function (int $stateGroupId) use ($contentId): ObjectState {
                 $this->logger->logCall(__METHOD__, ['contentId' => (int) $contentId, 'stateGroupId' => $stateGroupId]);
 
                 return $this->persistenceHandler->objectStateHandler()->getContentState((int) $contentId, $stateGroupId);
             },
             static function (ObjectState $contentState) use ($contentId): array {
-                return ['state-' . $contentState->id, 'content-' . (int) $contentId];
+                return [
+                    TagIdentifiers::STATE . '-' . $contentState->id,
+                    TagIdentifiers::CONTENT . '-' . (int) $contentId
+                ];
             },
             static function () use ($contentId, $stateGroupId): array {
-                return ['ez-state-by-group-' . (int) $stateGroupId . '-on-content-' . (int) $contentId];
+                return [
+                    TagIdentifiers::PREFIX .
+                    TagIdentifiers::STATE_BY_GROUP . '-' .
+                    (int) $stateGroupId .
+                    TagIdentifiers::ON_CONTENT_SUFFIX . '-' .
+                    (int) $contentId
+                ];
             },
-            '-on-content-' . $contentId
+            TagIdentifiers::ON_CONTENT_SUFFIX . '-' . $contentId
         );
     }
 

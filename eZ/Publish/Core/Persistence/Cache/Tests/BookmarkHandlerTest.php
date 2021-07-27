@@ -34,7 +34,7 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
         // string $method, array $arguments, array? $tags, string? $key, mixed? $returnValue
         return [
             ['create', [new CreateStruct()], null, null, new Bookmark()],
-            ['delete', [1], ['bookmark-1']],
+            ['delete', [1], ['b-1']],
             ['loadUserBookmarks', [3, 2, 1], null, null, []],
             ['countUserBookmarks', [3], null, null, 1],
             ['locationSwapped', [1, 2], null, null],
@@ -53,7 +53,7 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments, string $key, mixed? $data
         return [
-            ['loadByUserIdAndLocationId', [3, [43]], 'ez-bookmark-3-43', [43 => $bookmark], true, $calls],
+            ['loadByUserIdAndLocationId', [3, [43]], 'ez-b-3-43', [43 => $bookmark], true, $calls],
         ];
     }
 }

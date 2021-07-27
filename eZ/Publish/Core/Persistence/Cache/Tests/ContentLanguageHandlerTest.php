@@ -31,9 +31,9 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, array? $tags, array? $key
         return [
-            ['create', [new SPILanguageCreateStruct()], null, ['ez-language-list']],
-            ['update', [$language], null, ['ez-language-list', 'ez-language-5', 'ez-language-code-eng-GB']],
-            ['delete', [5], ['language-5']],
+            ['create', [new SPILanguageCreateStruct()], null, ['ez-lal']],
+            ['update', [$language], null, ['ez-lal', 'ez-la-5', 'ez-lac-eng-GB']],
+            ['delete', [5], ['la-5']],
         ];
     }
 
@@ -43,11 +43,11 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, string $key, mixed? $data, bool $multi
         return [
-            ['load', [5], 'ez-language-5', $object],
-            ['loadList', [[5]], 'ez-language-5', [5 => $object], true],
-            ['loadAll', [], 'ez-language-list', [5 => $object], false],
-            ['loadByLanguageCode', ['eng-GB'], 'ez-language-code-eng-GB', $object],
-            ['loadListByLanguageCodes', [['eng-GB']], 'ez-language-code-eng-GB', ['eng-GB' => $object], true],
+            ['load', [5], 'ez-la-5', $object],
+            ['loadList', [[5]], 'ez-la-5', [5 => $object], true],
+            ['loadAll', [], 'ez-lal', [5 => $object], false],
+            ['loadByLanguageCode', ['eng-GB'], 'ez-lac-eng-GB', $object],
+            ['loadListByLanguageCodes', [['eng-GB']], 'ez-lac-eng-GB', ['eng-GB' => $object], true],
         ];
     }
 }

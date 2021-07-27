@@ -31,8 +31,8 @@ class NotificationHandler extends AbstractHandler implements Handler
         ]);
 
         $this->cache->deleteItems([
-            'ez-notification-count-' . $createStruct->ownerId,
-            'ez-notification-pending-count-' . $createStruct->ownerId,
+            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_COUNT . '-' . $createStruct->ownerId,
+            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_PENDING_COUNT . '-' . $createStruct->ownerId,
         ]);
 
         return $this->persistenceHandler->notificationHandler()->createNotification($createStruct);
@@ -48,8 +48,8 @@ class NotificationHandler extends AbstractHandler implements Handler
         ]);
 
         $this->cache->deleteItems([
-            'ez-notification-' . $notification->id,
-            'ez-notification-pending-count-' . $notification->ownerId,
+            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION . '-' . $notification->id,
+            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_PENDING_COUNT . '-' . $notification->ownerId,
         ]);
 
         return $this->persistenceHandler->notificationHandler()->updateNotification($notification, $updateStruct);
@@ -65,9 +65,9 @@ class NotificationHandler extends AbstractHandler implements Handler
         ]);
 
         $this->cache->deleteItems([
-            'ez-notification-' . $notification->id,
-            'ez-notification-count-' . $notification->ownerId,
-            'ez-notification-pending-count-' . $notification->ownerId,
+            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION . '-' . $notification->id,
+            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_COUNT . '-' . $notification->ownerId,
+            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_PENDING_COUNT . '-' . $notification->ownerId,
         ]);
 
         $this->persistenceHandler->notificationHandler()->delete($notification);
@@ -78,7 +78,7 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function countPendingNotifications(int $ownerId): int
     {
-        $cacheItem = $this->cache->getItem('ez-notification-pending-count-' . $ownerId);
+        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_PENDING_COUNT . '-' . $ownerId);
 
         $count = $cacheItem->get();
         if ($cacheItem->isHit()) {
@@ -102,7 +102,7 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function countNotifications(int $ownerId): int
     {
-        $cacheItem = $this->cache->getItem('ez-notification-count-' . $ownerId);
+        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_COUNT . '-' . $ownerId);
 
         $count = $cacheItem->get();
         if ($cacheItem->isHit()) {
@@ -126,7 +126,7 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function getNotificationById(int $notificationId): Notification
     {
-        $cacheItem = $this->cache->getItem('ez-notification-' . $notificationId);
+        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION . '-' . $notificationId);
 
         $notification = $cacheItem->get();
         if ($cacheItem->isHit()) {

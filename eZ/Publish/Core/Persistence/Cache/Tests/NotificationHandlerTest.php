@@ -56,8 +56,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-notification-count-' . $ownerId,
-                    'ez-notification-pending-count-' . $ownerId,
+                    'ez-nc-' . $ownerId,
+                    'ez-npc-' . $ownerId,
                 ],
                 new SPINotification(),
             ],
@@ -69,8 +69,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-notification-' . $notificationId,
-                    'ez-notification-pending-count-' . $ownerId,
+                    'ez-n-' . $notificationId,
+                    'ez-npc-' . $ownerId,
                 ],
                 new SPINotification(),
             ],
@@ -81,9 +81,9 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-notification-' . $notificationId,
-                    'ez-notification-count-' . $ownerId,
-                    'ez-notification-pending-count-' . $ownerId,
+                    'ez-n-' . $notificationId,
+                    'ez-nc-' . $ownerId,
+                    'ez-npc-' . $ownerId,
                 ],
             ],
             [
@@ -109,7 +109,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $ownerId,
                 ],
-                'ez-notification-pending-count-' . $ownerId,
+                'ez-npc-' . $ownerId,
                 $notificationCount,
             ],
             [
@@ -117,7 +117,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $ownerId,
                 ],
-                'ez-notification-count-' . $ownerId,
+                'ez-nc-' . $ownerId,
                 $notificationCountPending,
             ],
             [
@@ -125,7 +125,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $notificationId,
                 ],
-                'ez-notification-' . $notificationId,
+                'ez-n-' . $notificationId,
                 new SPINotification(['id' => $notificationId]),
             ],
         ];

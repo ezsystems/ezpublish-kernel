@@ -29,11 +29,11 @@ class URLHandler extends AbstractHandler implements URLHandlerInterface
 
         $url = $this->persistenceHandler->urlHandler()->updateUrl($id, $struct);
 
-        $this->cache->invalidateTags(['url-' . $id]);
+        $this->cache->invalidateTags([TagIdentifiers::URL . '-' . $id]);
 
         if ($struct->url !== null) {
             $this->cache->invalidateTags(array_map(function ($id) {
-                return 'content-' . $id;
+                return TagIdentifiers::CONTENT . '-' . $id;
             }, $this->persistenceHandler->urlHandler()->findUsages($id)));
         }
 
@@ -57,7 +57,7 @@ class URLHandler extends AbstractHandler implements URLHandlerInterface
      */
     public function loadById($id)
     {
-        $cacheItem = $this->cache->getItem('ez-url-' . $id);
+        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::URL . '-' . $id);
 
         $url = $cacheItem->get();
         if ($cacheItem->isHit()) {
@@ -68,7 +68,7 @@ class URLHandler extends AbstractHandler implements URLHandlerInterface
         $url = $this->persistenceHandler->urlHandler()->loadById($id);
 
         $cacheItem->set($url);
-        $cacheItem->tag(['url-' . $id]);
+        $cacheItem->tag([TagIdentifiers::URL . '-' . $id]);
         $this->cache->save($cacheItem);
 
         return $url;

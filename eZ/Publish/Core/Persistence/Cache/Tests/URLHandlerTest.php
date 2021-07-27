@@ -77,7 +77,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
         $this->cacheMock
             ->expects($this->at(1))
             ->method('invalidateTags')
-            ->with(['content-2', 'content-3', 'content-5']);
+            ->with(['c-2', 'c-3', 'c-5']);
 
         $handler = $this->persistenceCacheHandler->urlHandler();
         $handler->updateUrl($urlId, $updateStruct);

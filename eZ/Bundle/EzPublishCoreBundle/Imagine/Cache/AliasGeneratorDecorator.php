@@ -10,6 +10,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use eZ\Publish\Core\Persistence\Cache\TagIdentifiers;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Routing\RequestContext;
@@ -85,8 +86,8 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
     private function getCacheKey(Field $field, VersionInfo $versionInfo, $variationName)
     {
         return sprintf(
-            'ez-image-variation-%s-%s-%s-%d-%d-%d-%s-%s',
-            $this->siteAccess ? $this->siteAccess->name : 'default',
+            TagIdentifiers::PREFIX . TagIdentifiers::IMAGE_VARIATION . '-%s-%s-%s-%d-%d-%d-%s-%s',
+            $this->siteAccess->name ?? 'default',
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
             $this->requestContext->getScheme() === 'https' ? $this->requestContext->getHttpsPort() : $this->requestContext->getHttpPort(),
@@ -102,13 +103,13 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
         $contentId = $versionInfo->getContentInfo()->id;
 
         return [
-            'image-variation',
-            'image-variation-name-' . $variationName,
-            'image-variation-siteaccess-' . ($this->siteAccess ? $this->siteAccess->name : 'default'),
-            'image-variation-content-' . $contentId,
-            'image-variation-field-' . $field->id,
-            'content-' . $contentId,
-            'content-' . $contentId . '-version-' . $versionInfo->versionNo,
+            TagIdentifiers::IMAGE_VARIATION,
+            TagIdentifiers::IMAGE_VARIATION_NAME . '-' . $variationName,
+            TagIdentifiers::IMAGE_VARIATION_SITEACCESSS . '-' . ($this->siteAccess->name ?? 'default'),
+            TagIdentifiers::IMAGE_VARIATION_CONTENT . '-' . $contentId,
+            TagIdentifiers::IMAGE_VARIATION_FIELD . '-' . $field->id,
+            TagIdentifiers::CONTENT . '-' . $contentId,
+            TagIdentifiers::CONTENT . '-' . $contentId . '-' . TagIdentifiers::VERSION . '-' . $versionInfo->versionNo,
         ];
     }
 }

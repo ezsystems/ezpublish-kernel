@@ -29,10 +29,10 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
         // string $method, array $arguments, array? $tags, string? $key
         return [
             ['create', ['Standard', 'standard']],
-            ['update', [5, 'Standard', 'standard'], ['section-5']],
+            ['update', [5, 'Standard', 'standard'], ['se-5']],
             ['loadAll', []],
-            ['delete', [5], ['section-5']],
-            ['assign', [5, 42], ['content-42']],
+            ['delete', [5], ['se-5']],
+            ['assign', [5, 42], ['c-42']],
             ['assignmentsCount', [5]],
             ['policiesCount', [5]],
             ['countRoleAssignmentsUsingSection', [5]],
@@ -45,8 +45,8 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments, string $key, mixed? $data
         return [
-            ['load', [5], 'ez-section-5', $object],
-            ['loadByIdentifier', ['standard'], 'ez-section-standard-by-identifier', $object],
+            ['load', [5], 'ez-se-5', $object],
+            ['loadByIdentifier', ['standard'], 'ez-se-standard-bi', $object],
         ];
     }
 }

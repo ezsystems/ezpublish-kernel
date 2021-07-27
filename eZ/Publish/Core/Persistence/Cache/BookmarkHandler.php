@@ -40,7 +40,7 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
 
         $this->persistenceHandler->bookmarkHandler()->delete($bookmarkId);
 
-        $this->cache->invalidateTags(['bookmark-' . $bookmarkId]);
+        $this->cache->invalidateTags([TagIdentifiers::BOOKMARK . '-' . $bookmarkId]);
     }
 
     /**
@@ -50,7 +50,7 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
     {
         return $this->getMultipleCacheItems(
             $locationIds,
-            'ez-bookmark-' . $userId . '-',
+            TagIdentifiers::PREFIX . TagIdentifiers::BOOKMARK . '-' . $userId . '-',
             function (array $missingIds) use ($userId) {
                 $this->logger->logCall(__CLASS__ . '::loadByUserIdAndLocationId', [
                     'userId' => $userId,
@@ -61,14 +61,14 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
             },
             function (Bookmark $bookmark) {
                 $tags = [
-                    'bookmark-' . $bookmark->id,
-                    'location-' . $bookmark->locationId,
-                    'user-' . $bookmark->userId,
+                    TagIdentifiers::BOOKMARK . '-' . $bookmark->id,
+                    TagIdentifiers::LOCATION . '-' . $bookmark->locationId,
+                    TagIdentifiers::USER . '-' . $bookmark->userId,
                 ];
 
                 $location = $this->persistenceHandler->locationHandler()->load($bookmark->locationId);
                 foreach (explode('/', trim($location->pathString, '/')) as $locationId) {
-                    $tags[] = 'location-path-' . $locationId;
+                    $tags[] = TagIdentifiers::LOCATION_PATH . '-' . $locationId;
                 }
 
                 return $tags;

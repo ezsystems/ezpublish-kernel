@@ -54,7 +54,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-user-preference-' . $userId . '-' . $name,
+                    'ez-up-' . $userId . '-' . $name,
                 ],
                 new SPIUserPreference(),
             ],
@@ -89,7 +89,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                     $userId,
                     $name,
                 ],
-                'ez-user-preference-' . $userId . '-' . $name,
+                'ez-up-' . $userId . '-' . $name,
                 new SPIUserPreference(['userId' => $userId, 'name' => $name]),
             ],
         ];
