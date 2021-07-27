@@ -98,7 +98,11 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
                 return $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId);
             },
             static function (array $locationIds) use ($locationId): array {
-                $cacheTags = [TagIdentifiers::LOCATION . '-' . $locationId, TagIdentifiers::LOCATION_PATH . '-' . $locationId];
+                $cacheTags = [
+                    TagIdentifiers::LOCATION . '-' . $locationId,
+                    TagIdentifiers::LOCATION_PATH . '-' . $locationId,
+                ];
+
                 foreach ($locationIds as $id) {
                     $cacheTags[] = TagIdentifiers::LOCATION . '-' . $id;
                     $cacheTags[] = TagIdentifiers::LOCATION_PATH . '-' . $id;

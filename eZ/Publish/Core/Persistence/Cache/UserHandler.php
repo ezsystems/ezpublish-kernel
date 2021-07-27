@@ -46,13 +46,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->getUserTags = static function (User $user) {
             return [
                 TagIdentifiers::CONTENT . '-' . $user->id,
-                TagIdentifiers::CONTENT . '-' . $user->id,
+                TagIdentifiers::USER . '-' . $user->id,
             ];
         };
         $this->getUserKeys = function (User $user) {
             return [
-                TagIdentifiers::PREFIX . TagIdentifiers::CONTENT . '-' . $user->id,
-                TagIdentifiers::PREFIX . TagIdentifiers::CONTENT . '-' . $this->escapeForCacheKey($user->login) . TagIdentifiers::BY_LOGIN_SUFFIX,
+                TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $user->id,
+                TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->login) . TagIdentifiers::BY_LOGIN_SUFFIX,
                 //'ez-user-' . $hash . '-by-account-key',
             ];
         };
@@ -61,8 +61,8 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         };
         $this->getRoleKeys = function (Role $role) {
             return [
-                TagIdentifiers::PREFIX . TagIdentifiers::CONTENT . '-' . $role->id,
-                TagIdentifiers::PREFIX . TagIdentifiers::CONTENT . '-' . $this->escapeForCacheKey($role->identifier) . TagIdentifiers::BY_IDENTIFIER_SUFFIX,
+                TagIdentifiers::PREFIX . TagIdentifiers::ROLE . '-' . $role->id,
+                TagIdentifiers::PREFIX . TagIdentifiers::ROLE . '-' . $this->escapeForCacheKey($role->identifier) . TagIdentifiers::BY_IDENTIFIER_SUFFIX,
             ];
         };
         $this->getRoleAssignmentTags = static function (RoleAssignment $roleAssignment) {
