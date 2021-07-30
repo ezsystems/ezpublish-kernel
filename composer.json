@@ -40,7 +40,6 @@
         "composer/package-versions-deprecated": "^1.11"
     },
     "require-dev": {
-        "brianium/paratest": "^2.2",
         "jenner/simple_fork": "^1.2",
         "friendsofphp/php-cs-fixer": "^2.16.2",
         "ezsystems/ezplatform-code-style": "^0.1",
@@ -97,15 +96,20 @@
         }
     },
     "scripts": {
+        "check-cs": "@fix-cs --dry-run",
         "fix-cs": "php-cs-fixer fix -v --show-progress=estimating",
-        "unit": "paratest -p half -c phpunit.xml --runner=WrapperRunner",
-        "integration": "paratest -p half -c phpunit-integration-legacy.xml --runner=WrapperRunner",
+        "unit": "phpunit -c phpunit.xml",
+        "integration": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit -c phpunit-integration-legacy.xml"
+        ],
         "test": [
             "@unit",
             "@integration"
         ]
     },
     "scripts-descriptions": {
+        "check-cs": "Run code style checker for all files",
         "fix-cs": "Fix Coding standard issues in current checkout.",
         "test": "Run all tests (unit & integration, not functional), might not work on Windows."
     },

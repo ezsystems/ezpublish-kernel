@@ -6,7 +6,6 @@ language: php
 
 services:
   - mysql
-  - postgresql
   - redis-server
 
 cache:
@@ -25,39 +24,22 @@ matrix:
   include:
 # 7.1
     - php: 7.1
-      env: TEST_CONFIG="phpunit.xml"
-    - php: 7.1
       env: PHP_IMAGE=ezsystems/php:7.1-v1 PHP_IMAGE_DEV=ezsystems/php:7.1-v1-dev REST_TEST_CONFIG="phpunit-functional-rest.xml" SYMFONY_ENV=behat SYMFONY_DEBUG=1 SF_CMD="ez:behat:create-language 'pol-PL' 'Polish (polski)'"
     - php: 7.1
       env: PHP_IMAGE=ezsystems/php:7.1-v1 PHP_IMAGE_DEV=ezsystems/php:7.1-v1-dev BEHAT_OPTS="--profile=rest --tags=~@broken --suite=fullJson" SYMFONY_ENV=behat SYMFONY_DEBUG=1
     - php: 7.1
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml" JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre/"
     - php: 7.1
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
-    - php: 7.1
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
 # Disabled as it currently fails, integration tests are not written for language config awareness in Repo, should probably be opt in by test
 #    - php: 7.1
 #      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb" REPOSITORY_SERVICE_ID="ezpublish.siteaccessaware.repository"
-# 7.2
-    - php: 7.2
-      env: TEST_CONFIG="phpunit.xml"
 # 7.3
-    - php: 7.3
-      env: TEST_CONFIG="phpunit.xml"
     - name: Legacy Storage engine tests with MariaDB 10.3
       php: 7.3
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mariadb" DATABASE="mysql://root@localhost/testdb"
       addons:
         mariadb: 10.3
-    - name: 'Code Style Check'
-      php: 7.3
-      env: CHECK_CS=1
-# 7.4
-    - php: 7.4
-      env: TEST_CONFIG="phpunit.xml"
-    - php: 7.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
 
 
 # test only master, stable branches and pull requests
@@ -96,7 +78,6 @@ script:
   - if [ "$TEST_CONFIG" != "" ] ; then php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 vendor/bin/phpunit -c $TEST_CONFIG ; fi
   - if [ "$BEHAT_OPTS" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "bin/behat $BEHAT_OPTS" ; fi
   - if [ "$REST_TEST_CONFIG" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional"  ; fi
-  - if [ "$CHECK_CS" = "1" ] ; then ./bin/.travis/check_code_style.sh; fi
 
 notifications:
   slack:

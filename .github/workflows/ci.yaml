@@ -1,0 +1,113 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - '[0-9]+.[0-9]+'
+    pull_request: ~
+
+jobs:
+    tests:
+        name: Unit tests & SQLite integration tests
+        runs-on: "ubuntu-20.04"
+        timeout-minutes: 15
+
+        strategy:
+            fail-fast: false
+            matrix:
+                experimental: [ false ]
+                php:
+                    - '7.1'
+                    - '7.2'
+                    - '7.3'
+                    - '7.4'
+                composer_options: [ "" ]
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup PHP Action
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: none
+                  extensions: pdo_sqlite, gd
+                  tools: cs2pr
+
+            - uses: "ramsey/composer-install@v1"
+              with:
+                  dependency-versions: "highest"
+                  composer-options: "${{ matrix.composer_options }}"
+
+            - name: Setup problem matchers for PHPUnit
+              run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            # - name: Run PHPStan analysis
+            #   run: composer run-script phpstan
+
+            - name: Run code style check
+              run: composer run-script check-cs -- --format=checkstyle | cs2pr
+
+            - name: Run unit test suite
+              run: composer run-script unit
+
+            - name: Run integration test suite
+              run: composer run-script integration
+
+    integration-tests-postgres:
+        name: PostgreSQL integration tests
+        needs: tests
+        services:
+            postgres:
+                image: postgres:10
+                ports:
+                    - 5432
+                env:
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: testdb
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                    --tmpfs /var/lib/postgres
+        runs-on: "ubuntu-20.04"
+        timeout-minutes: 60
+        continue-on-error: ${{ matrix.experimental }}
+
+        strategy:
+            fail-fast: false
+            matrix:
+                experimental: [ false ]
+                php:
+                    - '7.1'
+                    - '7.2'
+                    - '7.3'
+                    - '7.4'
+                composer_options: [ "" ]
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP Action
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    coverage: none
+                    extensions: pdo_pgsql, gd
+                    tools: cs2pr
+
+            -   uses: "ramsey/composer-install@v1"
+                with:
+                    dependency-versions: "highest"
+                    composer-options: "${{ matrix.composer_options }}"
+
+            -   name: Setup problem matchers for PHPUnit
+                run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            -   name: Run integration test suite vs Postgresql
+                run: composer run-script integration
+                env:
+                    DATABASE_URL: "pgsql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/testdb?server_version=10"
+                    # Required by old repository tests
+                    DATABASE: "pgsql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/testdb"
