@@ -100,9 +100,9 @@ class FileSizeExtension extends Twig_Extension
         }
         $formatter = new NumberFormatter($this->getLocale(), NumberFormatter::PATTERN_DECIMAL);
         $formatter->setPattern($formatter->getPattern() . ' ' . $this->translator->trans($this->suffixes[$i]));
-        $return = $formatter->format(round($number, $precision));
+        $formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $precision);
 
-        return $return;
+        return $formatter->format($number);
     }
 
     /**
