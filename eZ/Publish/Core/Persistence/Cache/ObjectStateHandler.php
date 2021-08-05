@@ -331,7 +331,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             $this->tagGenerator->generate(
                 self::PREFIXED_STATE_BY_GROUP_ON_CONTENT_TAG,
                 [$groupId, $contentId]
-            ),
+            )
         );
 
         return $return;

@@ -347,7 +347,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             },
             $this->getRoleTags,
             $this->getRoleKeys,
-            $this->tagGenerator->generate(self::BY_IDENTIFIER_SUFFIX),
+            $this->tagGenerator->generate(self::BY_IDENTIFIER_SUFFIX)
         );
     }
 

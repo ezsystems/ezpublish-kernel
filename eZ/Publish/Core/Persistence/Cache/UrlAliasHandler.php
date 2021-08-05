@@ -216,7 +216,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     public function lookup($url)
     {
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(self::PREFIXED_URL_ALIAS_URL_TAG, [$this->escapeForCacheKey($url)]),
+            $this->tagGenerator->generate(self::PREFIXED_URL_ALIAS_URL_TAG, [$this->escapeForCacheKey($url)])
         );
         if ($cacheItem->isHit()) {
             $this->logger->logCacheHit(['url' => $url]);
