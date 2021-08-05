@@ -8,6 +8,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
+use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 
 /**
@@ -19,6 +20,9 @@ abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandle
 {
     /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
+
+    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface */
+    protected $tagGenerator;
 
     /**
      * Setups current handler with everything needed.
@@ -32,10 +36,13 @@ abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandle
         TransactionAwareAdapterInterface $cache,
         PersistenceLogger $logger,
         InMemoryCache $inMemory,
-        PersistenceHandler $persistenceHandler
+        PersistenceHandler $persistenceHandler,
+        TagGeneratorInterface $tagGenerator
     ) {
         parent::__construct($cache, $logger, $inMemory);
+
         $this->persistenceHandler = $persistenceHandler;
+        $this->tagGenerator = $tagGenerator;
 
         $this->init();
     }

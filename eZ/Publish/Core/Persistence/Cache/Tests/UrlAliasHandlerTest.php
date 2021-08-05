@@ -50,7 +50,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
         // string $method, array $arguments, string $key, mixed? $data
         return [
             ['listURLAliasesForLocation', [5], 'ez-urlall-5', [$object]],
-            ['listURLAliasesForLocation', [5, true], 'ez-urlall-5-custom', [$object]],
+            ['listURLAliasesForLocation', [5, true], 'ez-urlall-5-c', [$object]],
             ['lookup', ['/Home'], 'ez-urlau-_SHome', $object],
             ['loadUrlAlias', [5], 'ez-urla-5', $object],
         ];

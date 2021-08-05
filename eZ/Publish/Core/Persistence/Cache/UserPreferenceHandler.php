@@ -21,6 +21,9 @@ use eZ\Publish\SPI\Persistence\UserPreference\UserPreference;
  */
 class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implements Handler
 {
+    private const PREFIXED_USER_PREFERENCE_TAG = 'prefixed_user_preference';
+    private const PREFIXED_USER_PREFERENCE_WITH_SUFFIX_TAG = 'prefixed_user_preference_with_suffix';
+
     /**
      * Constant used for storing not found results for getUserPreferenceByUserIdAndName().
      */
@@ -36,7 +39,10 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
         ]);
 
         $this->cache->deleteItems([
-            TagIdentifiers::PREFIX . TagIdentifiers::USER_PREFERENCE . '-' . $setStruct->userId . '-' . $setStruct->name,
+            $this->tagGenerator->generate(
+                self::PREFIXED_USER_PREFERENCE_WITH_SUFFIX_TAG,
+                [$setStruct->userId, $setStruct->name]
+            ),
         ]);
 
         return $this->persistenceHandler->userPreferenceHandler()->setUserPreference($setStruct);
@@ -61,9 +67,11 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
      */
     public function getUserPreferenceByUserIdAndName(int $userId, string $name): UserPreference
     {
+        $tagGenerator = $this->tagGenerator;
+
         $userPreference = $this->getCacheValue(
             $userId,
-            TagIdentifiers::PREFIX . TagIdentifiers::USER_PREFERENCE . '-',
+            $tagGenerator->generate(self::PREFIXED_USER_PREFERENCE_TAG, [], true),
             function ($userId) use ($name) {
                 try {
                     return $this->persistenceHandler->userPreferenceHandler()->getUserPreferenceByUserIdAndName(
@@ -77,8 +85,13 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
             static function () {
                 return [];
             },
-            static function () use ($userId, $name) {
-                return [TagIdentifiers::PREFIX . TagIdentifiers::USER_PREFERENCE . '-' . $userId . '-' . $name];
+            static function () use ($userId, $name, $tagGenerator) {
+                return [
+                    $tagGenerator->generate(
+                        self::PREFIXED_USER_PREFERENCE_WITH_SUFFIX_TAG,
+                        [$userId, $name]
+                    ),
+                ];
             },
             '-' . $name
         );

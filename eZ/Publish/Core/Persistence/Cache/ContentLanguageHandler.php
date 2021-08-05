@@ -15,6 +15,11 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
  */
 class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implements ContentLanguageHandlerInterface
 {
+    private const LANGUAGE_TAG = 'language';
+    private const PREFIXED_LANGUAGE_TAG = 'prefixed_language';
+    private const PREFIXED_LANGUAGE_CODE_TAG = 'prefixed_language_code';
+    private const PREFIXED_LANGUAGE_LIST_TAG = 'prefixed_language_list';
+
     /** @var callable */
     private $getTags;
 
@@ -26,13 +31,20 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
      */
     protected function init(): void
     {
-        $this->getTags = static function (Language $language) {
-            return [TagIdentifiers::LANGUAGE . '-' . $language->id];
-        };
-        $this->getKeys = function (Language $language) {
+        $tagGenerator = $this->tagGenerator;
+
+        $this->getTags = static function (Language $language) use ($tagGenerator) {
             return [
-                TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE . '-' . $language->id,
-                TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_CODE . '-' . $this->escapeForCacheKey($language->languageCode),
+                $tagGenerator->generate(self::LANGUAGE_TAG, [$language->id]),
+            ];
+        };
+        $this->getKeys = function (Language $language) use ($tagGenerator) {
+            return [
+                $tagGenerator->generate(self::PREFIXED_LANGUAGE_TAG, [$language->id]),
+                $tagGenerator->generate(
+                    self::PREFIXED_LANGUAGE_CODE_TAG,
+                    [$this->escapeForCacheKey($language->languageCode)]
+                ),
             ];
         };
     }
@@ -43,7 +55,9 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function create(CreateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, ['struct' => $struct]);
-        $this->cache->deleteItems([TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_LIST]);
+        $this->cache->deleteItems([
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_LIST_TAG),
+        ]);
 
         return $this->persistenceHandler->contentLanguageHandler()->create($struct);
     }
@@ -57,9 +71,12 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         $return = $this->persistenceHandler->contentLanguageHandler()->update($struct);
 
         $this->cache->deleteItems([
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_LIST,
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE . '-' . $struct->id,
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_CODE . '-' . $this->escapeForCacheKey($struct->languageCode),
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_LIST_TAG),
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_TAG, [$struct->id]),
+            $this->tagGenerator->generate(
+                self::PREFIXED_LANGUAGE_CODE_TAG,
+                [$this->escapeForCacheKey($struct->languageCode)]
+            ),
         ]);
 
         return $return;
@@ -72,7 +89,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getCacheValue(
             $id,
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE . '-',
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_TAG, [], true),
             function ($id) {
                 return $this->persistenceHandler->contentLanguageHandler()->load($id);
             },
@@ -88,7 +105,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getMultipleCacheValues(
             $ids,
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE . '-',
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_TAG, [], true),
             function (array $ids) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadList($ids);
             },
@@ -104,7 +121,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getCacheValue(
             $this->escapeForCacheKey($languageCode),
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_CODE . '-',
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_CODE_TAG, [], true),
             function () use ($languageCode) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
             },
@@ -120,7 +137,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getMultipleCacheValues(
             array_map([$this, 'escapeForCacheKey'], $languageCodes),
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_CODE . '-',
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_CODE_TAG, [], true),
             function () use ($languageCodes) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($languageCodes);
             },
@@ -135,7 +152,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function loadAll()
     {
         return $this->getListCacheValue(
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_LIST,
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_LIST_TAG),
             function () {
                 return $this->persistenceHandler->contentLanguageHandler()->loadAll();
             },
@@ -153,7 +170,9 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         $return = $this->persistenceHandler->contentLanguageHandler()->delete($id);
 
         // As we don't have locale we clear cache by tag invalidation
-        $this->cache->invalidateTags([TagIdentifiers::LANGUAGE . '-' . $id]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::LANGUAGE_TAG, [$id]),
+        ]);
 
         return $return;
     }

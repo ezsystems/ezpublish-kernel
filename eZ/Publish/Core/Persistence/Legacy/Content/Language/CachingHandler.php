@@ -7,7 +7,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use eZ\Publish\Core\Persistence\Cache\TagIdentifiers;
+use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
@@ -17,6 +17,10 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
  */
 class CachingHandler implements BaseLanguageHandler
 {
+    private const PREFIXED_LANGUAGE_TAG = 'prefixed_language';
+    private const PREFIXED_LANGUAGE_CODE_TAG = 'prefixed_language_code';
+    private const PREFIXED_LANGUAGE_LIST_TAG = 'prefixed_language_list';
+
     /**
      * Inner Language handler.
      *
@@ -31,16 +35,24 @@ class CachingHandler implements BaseLanguageHandler
      */
     protected $cache;
 
+    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface */
+    protected $tagGenerator;
+
     /**
      * Creates a caching handler around $innerHandler.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $innerHandler
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $cache
+     * @param \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface $tagGenerator
      */
-    public function __construct(BaseLanguageHandler $innerHandler, InMemoryCache $cache)
-    {
+    public function __construct(
+        BaseLanguageHandler $innerHandler,
+        InMemoryCache $cache,
+        TagGeneratorInterface $tagGenerator
+    ) {
         $this->innerHandler = $innerHandler;
         $this->cache = $cache;
+        $this->tagGenerator = $tagGenerator;
     }
 
     /**
@@ -80,7 +92,10 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function load($id)
     {
-        $language = $this->cache->get(TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE . '-' . $id);
+        $language = $this->cache->get(
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_TAG, [$id])
+        );
+
         if ($language === null) {
             $language = $this->innerHandler->load($id);
             $this->storeCache([$language]);
@@ -97,7 +112,7 @@ class CachingHandler implements BaseLanguageHandler
         $missing = [];
         $languages = [];
         foreach ($ids as $id) {
-            if ($language = $this->cache->get(TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE . '-' . $id)) {
+            if ($language = $this->cache->get($this->tagGenerator->generate(self::PREFIXED_LANGUAGE_TAG, [$id]))) {
                 $languages[$id] = $language;
             } else {
                 $missing[] = $id;
@@ -125,7 +140,10 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function loadByLanguageCode($languageCode)
     {
-        $language = $this->cache->get(TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_CODE . '-' . $languageCode);
+        $language = $this->cache->get(
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_CODE_TAG, [$languageCode])
+        );
+
         if ($language === null) {
             $language = $this->innerHandler->loadByLanguageCode($languageCode);
             $this->storeCache([$language]);
@@ -142,7 +160,7 @@ class CachingHandler implements BaseLanguageHandler
         $missing = [];
         $languages = [];
         foreach ($languageCodes as $languageCode) {
-            if ($language = $this->cache->get(TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_CODE . '-' . $languageCode)) {
+            if ($language = $this->cache->get($this->tagGenerator->generate(self::PREFIXED_LANGUAGE_CODE_TAG, [$languageCode]))) {
                 $languages[$languageCode] = $language;
             } else {
                 $missing[] = $languageCode;
@@ -166,10 +184,12 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function loadAll()
     {
-        $languages = $this->cache->get(TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_LIST);
+        $prefixedLanguageListTag = $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_LIST_TAG);
+        $languages = $this->cache->get($prefixedLanguageListTag);
+
         if ($languages === null) {
             $languages = $this->innerHandler->loadAll();
-            $this->storeCache($languages, TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_LIST);
+            $this->storeCache($languages, $prefixedLanguageListTag);
         }
 
         return $languages;
@@ -185,8 +205,8 @@ class CachingHandler implements BaseLanguageHandler
         $this->innerHandler->delete($id);
         // Delete by primary key will remove the object, so we don't need to clear `ez-language-code-` here.
         $this->cache->deleteMulti([
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE . '-' . $id,
-            TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_LIST,
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_TAG, [$id]),
+            $this->tagGenerator->generate(self::PREFIXED_LANGUAGE_LIST_TAG),
         ]);
     }
 
@@ -206,13 +226,15 @@ class CachingHandler implements BaseLanguageHandler
      */
     protected function storeCache(array $languages, string $listIndex = null): void
     {
+        $generator = $this->tagGenerator;
+
         $this->cache->setMulti(
             $languages,
-            static function (Language $language) {
+            static function (Language $language) use ($generator) {
                 return [
-                        TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE . '-' . $language->id,
-                        TagIdentifiers::PREFIX . TagIdentifiers::LANGUAGE_CODE . '-' . $language->languageCode,
-                    ];
+                    $generator->generate(self::PREFIXED_LANGUAGE_TAG, [$language->id]),
+                    $generator->generate(self::PREFIXED_LANGUAGE_CODE_TAG, [$language->languageCode]),
+                ];
             },
             $listIndex
         );

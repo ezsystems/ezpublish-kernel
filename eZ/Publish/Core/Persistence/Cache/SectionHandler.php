@@ -13,6 +13,11 @@ use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterfac
  */
 class SectionHandler extends AbstractHandler implements SectionHandlerInterface
 {
+    private const SECTION_TAG = 'section';
+    private const PREFIXED_SECTION_TAG = 'prefixed_section';
+    private const PREFIXED_SECTION_WITH_BY_ID_TAG = 'prefixed_section_with_by_id';
+    private const CONTENT_TAG = 'content';
+
     /**
      * {@inheritdoc}
      */
@@ -31,7 +36,9 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $this->logger->logCall(__METHOD__, ['section' => $id, 'name' => $name, 'identifier' => $identifier]);
         $section = $this->persistenceHandler->sectionHandler()->update($id, $name, $identifier);
 
-        $this->cache->invalidateTags([TagIdentifiers::SECTION . '-' . $id]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::SECTION_TAG, [$id]),
+        ]);
 
         return $section;
     }
@@ -41,7 +48,10 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function load($id)
     {
-        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::SECTION . '-' . $id);
+        $cacheItem = $this->cache->getItem(
+            $this->tagGenerator->generate(self::PREFIXED_SECTION_TAG, [$id])
+        );
+
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
@@ -50,7 +60,10 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $section = $this->persistenceHandler->sectionHandler()->load($id);
 
         $cacheItem->set($section);
-        $cacheItem->tag([TagIdentifiers::SECTION . '-' . $section->id]);
+        $cacheItem->tag([
+            $this->tagGenerator->generate(self::SECTION_TAG, [$section->id]),
+        ]);
+
         $this->cache->save($cacheItem);
 
         return $section;
@@ -72,10 +85,10 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function loadByIdentifier($identifier)
     {
         $cacheItem = $this->cache->getItem(
-            TagIdentifiers::PREFIX .
-            TagIdentifiers::SECTION . '-' .
-            $this->escapeForCacheKey($identifier) .
-            TagIdentifiers::BY_IDENTIFIER_SUFFIX
+            $this->tagGenerator->generate(
+                self::PREFIXED_SECTION_WITH_BY_ID_TAG,
+                [$this->escapeForCacheKey($identifier)]
+            )
         );
 
         if ($cacheItem->isHit()) {
@@ -86,7 +99,10 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $section = $this->persistenceHandler->sectionHandler()->loadByIdentifier($identifier);
 
         $cacheItem->set($section);
-        $cacheItem->tag([TagIdentifiers::SECTION . '-' . $section->id]);
+        $cacheItem->tag([
+            $this->tagGenerator->generate(self::SECTION_TAG, [$section->id]),
+        ]);
+
         $this->cache->save($cacheItem);
 
         return $section;
@@ -100,7 +116,9 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $this->logger->logCall(__METHOD__, ['section' => $id]);
         $return = $this->persistenceHandler->sectionHandler()->delete($id);
 
-        $this->cache->invalidateTags([TagIdentifiers::SECTION . '-' . $id]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::SECTION_TAG, [$id]),
+        ]);
 
         return $return;
     }
@@ -113,7 +131,9 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $this->logger->logCall(__METHOD__, ['section' => $sectionId, 'content' => $contentId]);
         $return = $this->persistenceHandler->sectionHandler()->assign($sectionId, $contentId);
 
-        $this->cache->invalidateTags([TagIdentifiers::CONTENT . '-' . $contentId]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
+        ]);
 
         return $return;
     }

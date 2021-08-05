@@ -75,6 +75,9 @@ services:
             - "%ezpublish.spi.persistence.cache.inmemory.content.enable%"
         tags: ['ez.spi.persistence.cache.inmemory']
 
+    ezpublish.spi.persistence.cache.tagGenerator:
+        class: eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator
+
     # SPI Persistence Cache Handlers, incl abstracts
     ezpublish.spi.persistence.cache.abstractHandler:
         class: "%ezpublish.spi.persistence.cache.abstractHandler.class%"
@@ -83,6 +86,7 @@ services:
             - "@ezpublish.cache_pool"
             - "@ezpublish.api.storage_engine"
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
+            - "@ezpublish.spi.persistence.cache.tagGenerator"
 
     ezpublish.spi.persistence.cache.abstractInMemoryHandler:
         class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler
@@ -96,7 +100,9 @@ services:
         parent: ezpublish.spi.persistence.cache.abstractInMemoryHandler
         class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryPersistenceHandler
         abstract:  true
-        arguments: ["@ezpublish.api.storage_engine"]
+        arguments:
+            - "@ezpublish.api.storage_engine"
+            - "@ezpublish.spi.persistence.cache.tagGenerator"
 
     ezpublish.spi.persistence.cache.sectionHandler:
         class: "%ezpublish.spi.persistence.cache.sectionHandler.class%"

@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct as SPILanguageCreateStruct;
@@ -40,6 +41,9 @@ class CachingLanguageHandlerTest extends TestCase
      * @var \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache
      */
     protected $languageCacheMock;
+
+    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator */
+    protected $tagGenerator;
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
@@ -295,7 +299,8 @@ class CachingLanguageHandlerTest extends TestCase
         if (!isset($this->languageHandler)) {
             $this->languageHandler = new CachingHandler(
                 $this->getInnerLanguageHandlerMock(),
-                $this->getLanguageCacheMock()
+                $this->getLanguageCacheMock(),
+                $this->getTagGenerator()
             );
         }
 
@@ -328,6 +333,15 @@ class CachingLanguageHandlerTest extends TestCase
         }
 
         return $this->languageCacheMock;
+    }
+
+    protected function getTagGenerator()
+    {
+        if (!isset($this->tagGenerator)) {
+            $this->tagGenerator = new TagGenerator();
+        }
+
+        return $this->tagGenerator;
     }
 
     /**

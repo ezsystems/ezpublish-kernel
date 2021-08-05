@@ -40,13 +40,13 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method($handlerMethodName)
-            ->will($this->returnValue($innerHandler));
+            ->willReturn($innerHandler);
 
         $innerHandler
             ->expects($this->once())
             ->method($method)
             ->with(...$arguments)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         if ($tags || $key) {
             $this->cacheMock

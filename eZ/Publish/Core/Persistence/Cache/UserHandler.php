@@ -20,6 +20,29 @@ use eZ\Publish\SPI\Persistence\User\Policy;
  */
 class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHandlerInterface
 {
+    private const CONTENT_TAG = 'content';
+    private const USER_TAG = 'user';
+    private const PREFIXED_USER_TAG = 'prefixed_user';
+    private const PREFIXED_USER_WITH_BY_LOGIN_SUFFIX_TAG = 'prefixed_user_with_by_login_suffix';
+    private const ROLE_TAG = 'role';
+    private const POLICY_TAG = 'policy';
+    private const PREFIXED_ROLE_WITH_BY_ID_SUFFIX_TAG = 'prefixed_role_with_by_id_suffix';
+    private const ROLE_ASSIGNMENT_TAG = 'role_assignment';
+    private const ROLE_ASSIGNMENT_GROUP_LIST_TAG = 'role_assignment_group_list';
+    private const ROLE_ASSIGNMENT_ROLE_LIST_TAG = 'role_assignment_role_list';
+    private const PREFIXED_ROLE_ASSIGNMENT_TAG = 'prefixed_role_assignment';
+    private const PREFIXED_USER_WITH_BY_EMAIL_SUFFIX_TAG = 'prefixed_user_with_by_email_suffix';
+    private const BY_LOGIN_SUFFIX = 'by_login_suffix';
+    private const PREFIXED_ROLE_TAG = 'prefixed_role';
+    private const BY_IDENTIFIER_SUFFIX = 'by_identifier_suffix';
+    private const LOCATION_PATH_TAG = 'location_path';
+    private const PREFIXED_ROLE_ASSIGNMENT_WITH_BY_ROLE_SUFFIX_TAG = 'prefixed_role_assignment_with_by_role_suffix';
+    private const PREFIXED_ROLE_ASSIGNMENT_WITH_BY_GROUP_INHERITED_SUFFIX_TAG = 'prefixed_role_assignment_with_by_group_inherited_suffix';
+    private const PREFIXED_ROLE_ASSIGNMENT_WITH_BY_GROUP_SUFFIX_TAG = 'prefixed_role_assignment_with_by_group_suffix';
+    private const USER_WITH_ACCOUNT_KEY_SUFFIX_TAG = 'user_with_account_key_suffix';
+    private const PREFIXED_USER_WITH_BY_ACCOUNT_KEY_SUFFIX_TAG = 'prefixed_user_with_by_account_key_suffix';
+    private const BY_ACCOUNT_KEY_SUFFIX = 'by_account_key_suffix';
+
     /** @var callable */
     private $getUserTags;
 
@@ -43,38 +66,45 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
      */
     public function init(): void
     {
-        $this->getUserTags = static function (User $user) {
+        $tagGenerator = $this->tagGenerator;
+
+        $this->getUserTags = static function (User $user) use ($tagGenerator) {
             return [
-                TagIdentifiers::CONTENT . '-' . $user->id,
-                TagIdentifiers::USER . '-' . $user->id,
+                $tagGenerator->generate(self::CONTENT_TAG, [$user->id]),
+                $tagGenerator->generate(self::USER_TAG, [$user->id]),
             ];
         };
-        $this->getUserKeys = function (User $user) {
+        $this->getUserKeys = function (User $user) use ($tagGenerator) {
             return [
-                TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $user->id,
-                TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->login) . TagIdentifiers::BY_LOGIN_SUFFIX,
+                $tagGenerator->generate(self::PREFIXED_USER_TAG, [$user->id]),
+                $tagGenerator->generate(self::PREFIXED_USER_WITH_BY_LOGIN_SUFFIX_TAG, [$this->escapeForCacheKey($user->login)]),
                 //'ez-user-' . $hash . '-by-account-key',
             ];
         };
-        $this->getRoleTags = static function (Role $role) {
-            return [TagIdentifiers::ROLE . '-' . $role->id];
-        };
-        $this->getRoleKeys = function (Role $role) {
+        $this->getRoleTags = static function (Role $role) use ($tagGenerator) {
             return [
-                TagIdentifiers::PREFIX . TagIdentifiers::ROLE . '-' . $role->id,
-                TagIdentifiers::PREFIX . TagIdentifiers::ROLE . '-' . $this->escapeForCacheKey($role->identifier) . TagIdentifiers::BY_IDENTIFIER_SUFFIX,
+                $tagGenerator->generate(self::ROLE_TAG, [$role->id]),
             ];
         };
-        $this->getRoleAssignmentTags = static function (RoleAssignment $roleAssignment) {
+        $this->getRoleKeys = function (Role $role) use ($tagGenerator) {
             return [
-                TagIdentifiers::ROLE_ASSIGNMENT . '-' . $roleAssignment->id,
-                TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $roleAssignment->contentId,
-                TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleAssignment->roleId,
+                $tagGenerator->generate(self::ROLE_TAG, [$role->id]),
+                $tagGenerator->generate(
+                    self::PREFIXED_ROLE_WITH_BY_ID_SUFFIX_TAG,
+                    [$this->escapeForCacheKey($role->identifier)]
+                ),
             ];
         };
-        $this->getRoleAssignmentKeys = static function (RoleAssignment $roleAssignment) {
+        $this->getRoleAssignmentTags = static function (RoleAssignment $roleAssignment) use ($tagGenerator) {
             return [
-                TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-' . $roleAssignment->id,
+                $tagGenerator->generate(self::ROLE_ASSIGNMENT_TAG, [$roleAssignment->id]),
+                $tagGenerator->generate(self::ROLE_ASSIGNMENT_GROUP_LIST_TAG, [$roleAssignment->contentId]),
+                $tagGenerator->generate(self::ROLE_ASSIGNMENT_ROLE_LIST_TAG, [$roleAssignment->roleId]),
+            ];
+        };
+        $this->getRoleAssignmentKeys = static function (RoleAssignment $roleAssignment) use ($tagGenerator) {
+            return [
+                $tagGenerator->generate(self::PREFIXED_ROLE_ASSIGNMENT_TAG, [$roleAssignment->id]),
             ];
         };
     }
@@ -88,11 +118,14 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->create($user);
 
         // Clear corresponding content cache as creation of the User changes it's external data
-        $this->cache->invalidateTags([TagIdentifiers::CONTENT . '-' . $user->id]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::CONTENT_TAG, [$user->id]),
+        ]);
+
         $this->cache->deleteItems([
-            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $user->id,
-            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->login) . TagIdentifiers::BY_LOGIN_SUFFIX,
-            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->email) . TagIdentifiers::BY_EMAIL_SUFFIX,
+            $this->tagGenerator->generate(self::PREFIXED_USER_TAG, [$user->id]),
+            $this->tagGenerator->generate(self::PREFIXED_USER_WITH_BY_LOGIN_SUFFIX_TAG, [$this->escapeForCacheKey($user->login)]),
+            $this->tagGenerator->generate(self::PREFIXED_USER_WITH_BY_EMAIL_SUFFIX_TAG, [$this->escapeForCacheKey($user->email)]),
         ]);
 
         return $return;
@@ -105,7 +138,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         return $this->getCacheValue(
             $userId,
-            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-',
+            $this->tagGenerator->generate(self::PREFIXED_USER_TAG, [], true),
             function ($userId) {
                 return $this->persistenceHandler->userHandler()->load($userId);
             },
@@ -121,13 +154,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         return $this->getCacheValue(
             $this->escapeForCacheKey($login),
-            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-',
+            $this->tagGenerator->generate(self::PREFIXED_USER_TAG, [], true),
             function () use ($login) {
                 return $this->persistenceHandler->userHandler()->loadByLogin($login);
             },
             $this->getUserTags,
             $this->getUserKeys,
-            TagIdentifiers::BY_LOGIN_SUFFIX
+            $this->tagGenerator->generate(self::BY_LOGIN_SUFFIX)
         );
     }
 
@@ -138,7 +171,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         // As load by email can return several items we threat it like a list here.
         return $this->getListCacheValue(
-            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($email) . TagIdentifiers::BY_EMAIL_SUFFIX,
+            $this->tagGenerator->generate(self::PREFIXED_USER_WITH_BY_EMAIL_SUFFIX_TAG, [$this->escapeForCacheKey($email)]),
             function () use ($email) {
                 return $this->persistenceHandler->userHandler()->loadByEmail($email);
             },
@@ -152,29 +185,30 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
      */
     public function loadUserByToken($hash)
     {
+        $tagGenerator = $this->tagGenerator;
         $getUserKeysFn = $this->getUserKeys;
         $getUserTagsFn = $this->getUserTags;
 
         return $this->getCacheValue(
             $hash,
-            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-',
+            $tagGenerator->generate(self::PREFIXED_USER_TAG, [], true),
             function ($hash) {
                 return $this->persistenceHandler->userHandler()->loadUserByToken($hash);
             },
-            static function (User $user) use ($getUserTagsFn) {
+            static function (User $user) use ($getUserTagsFn, $tagGenerator) {
                 $tags = $getUserTagsFn($user);
                 // See updateUserToken()
-                $tags[] = TagIdentifiers::USER . '-' . $user->id . TagIdentifiers::ACCOUNT_KEY_SUFFIX;
+                $tags[] = $tagGenerator->generate(self::USER_WITH_ACCOUNT_KEY_SUFFIX_TAG, [$user->id]);
 
                 return $tags;
             },
-            static function (User $user) use ($hash, $getUserKeysFn) {
+            static function (User $user) use ($hash, $getUserKeysFn, $tagGenerator) {
                 $keys = $getUserKeysFn($user);
-                $keys[] = TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $hash . TagIdentifiers::BY_ACCOUNT_KEY_SUFFIX;
+                $tags[] = $tagGenerator->generate(self::PREFIXED_USER_WITH_BY_ACCOUNT_KEY_SUFFIX_TAG, [$hash]);
 
                 return $keys;
             },
-            TagIdentifiers::BY_ACCOUNT_KEY_SUFFIX
+            $tagGenerator->generate(self::BY_ACCOUNT_KEY_SUFFIX)
         );
     }
 
@@ -188,13 +222,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         // Clear corresponding content cache as update of the User changes it's external data
         $this->cache->invalidateTags([
-            TagIdentifiers::CONTENT . '-' . $user->id,
-            TagIdentifiers::USER . '-' . $user->id,
+            $this->tagGenerator->generate(self::CONTENT_TAG, [$user->id]),
+            $this->tagGenerator->generate(self::USER_TAG, [$user->id]),
         ]);
 
         // Clear especially by email key as it might already be cached and this might represent change to email
         $this->cache->deleteItems([
-            TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $this->escapeForCacheKey($user->email) . TagIdentifiers::BY_EMAIL_SUFFIX,
+            $this->tagGenerator->generate(self::PREFIXED_USER_WITH_BY_EMAIL_SUFFIX_TAG, [$this->escapeForCacheKey($user->email)]),
         ]);
 
         return $return;
@@ -209,8 +243,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->updateUserToken($userTokenUpdateStruct);
 
         // As we 1. don't know original hash, and 2. hash is not guaranteed to be unique, we do it like this for now
-        $this->cache->invalidateTags([TagIdentifiers::USER . '-' . $userTokenUpdateStruct->userId . TagIdentifiers::ACCOUNT_KEY_SUFFIX]);
-        $this->cache->deleteItems([TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $userTokenUpdateStruct->hashKey . TagIdentifiers::BY_ACCOUNT_KEY_SUFFIX]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::USER_WITH_ACCOUNT_KEY_SUFFIX_TAG, [$userTokenUpdateStruct->userId]),
+        ]);
+
+        $this->cache->deleteItems([
+            $this->tagGenerator->generate(self::PREFIXED_USER_WITH_BY_ACCOUNT_KEY_SUFFIX_TAG, [$userTokenUpdateStruct->hashKey]),
+        ]);
 
         return $return;
     }
@@ -222,7 +261,10 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         $this->logger->logCall(__METHOD__, ['hash' => $hash]);
         $return = $this->persistenceHandler->userHandler()->expireUserToken($hash);
-        $this->cache->deleteItems([TagIdentifiers::PREFIX . TagIdentifiers::USER . '-' . $hash . TagIdentifiers::BY_ACCOUNT_KEY_SUFFIX]);
+
+        $this->cache->deleteItems([
+            $this->tagGenerator->generate(self::PREFIXED_USER_WITH_BY_ACCOUNT_KEY_SUFFIX_TAG, [$hash]),
+        ]);
 
         return $return;
     }
@@ -237,8 +279,8 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         // user id == content id == group id
         $this->cache->invalidateTags([
-            TagIdentifiers::CONTENT . '-' . $userId,
-            TagIdentifiers::USER . '-' . $userId,
+            $this->tagGenerator->generate(self::CONTENT_TAG, [$userId]),
+            $this->tagGenerator->generate(self::USER_TAG, [$userId]),
         ]);
 
         return $return;
@@ -277,7 +319,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         return $this->getCacheValue(
             $roleId,
-            TagIdentifiers::PREFIX . TagIdentifiers::ROLE . '-',
+            $this->tagGenerator->generate(self::PREFIXED_ROLE_TAG, [], true),
             function ($roleId) {
                 return $this->persistenceHandler->userHandler()->loadRole($roleId);
             },
@@ -299,13 +341,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         return $this->getCacheValue(
             $this->escapeForCacheKey($identifier),
-            TagIdentifiers::PREFIX . TagIdentifiers::ROLE . '-',
+            $this->tagGenerator->generate(self::PREFIXED_ROLE_TAG, [], true),
             function () use ($identifier) {
                 return $this->persistenceHandler->userHandler()->loadRoleByIdentifier($identifier);
             },
             $this->getRoleTags,
             $this->getRoleKeys,
-            TagIdentifiers::BY_IDENTIFIER_SUFFIX
+            $this->tagGenerator->generate(self::BY_IDENTIFIER_SUFFIX),
         );
     }
 
@@ -336,7 +378,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         return $this->getCacheValue(
             $roleAssignmentId,
-            TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-',
+            $this->tagGenerator->generate(self::PREFIXED_ROLE_ASSIGNMENT_TAG, [], true),
             function ($roleAssignmentId) {
                 return $this->persistenceHandler->userHandler()->loadRoleAssignment($roleAssignmentId);
             },
@@ -350,18 +392,20 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
      */
     public function loadRoleAssignmentsByRoleId($roleId)
     {
+        $tagGenerator = $this->tagGenerator;
+
         return $this->getListCacheValue(
-            TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-' . $roleId . TagIdentifiers::BY_ROLE_SUFFIX,
+            $tagGenerator->generate(self::PREFIXED_ROLE_ASSIGNMENT_WITH_BY_ROLE_SUFFIX_TAG, [$roleId]),
             function () use ($roleId) {
                 return $this->persistenceHandler->userHandler()->loadRoleAssignmentsByRoleId($roleId);
             },
             $this->getRoleAssignmentTags,
             $this->getRoleAssignmentKeys,
             /* Role update (policies) changes role assignment id, also need list tag in case of empty result */
-            static function () use ($roleId) {
+            static function () use ($roleId, $tagGenerator) {
                 return [
-                    TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId,
-                    TagIdentifiers::ROLE . '-' . $roleId,
+                    $tagGenerator->generate(self::ROLE_ASSIGNMENT_ROLE_LIST_TAG, [$roleId]),
+                    $tagGenerator->generate(self::ROLE_TAG, [$roleId]),
                 ];
             },
             [$roleId]
@@ -374,10 +418,18 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function loadRoleAssignmentsByGroupId($groupId, $inherit = false)
     {
         $innerHandler = $this->persistenceHandler;
+        $tagGenerator = $this->tagGenerator;
+
         if ($inherit) {
-            $key = TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-' . $groupId . TagIdentifiers::BY_GROUP_INHERITED_SUFFIX;
+            $key = $tagGenerator->generate(
+                self::PREFIXED_ROLE_ASSIGNMENT_WITH_BY_GROUP_INHERITED_SUFFIX_TAG,
+                [$groupId]
+            );
         } else {
-            $key = TagIdentifiers::PREFIX . TagIdentifiers::ROLE_ASSIGNMENT . '-' . $groupId . TagIdentifiers::BY_GROUP_SUFFIX;
+            $key = $tagGenerator->generate(
+                self::PREFIXED_ROLE_ASSIGNMENT_WITH_BY_GROUP_SUFFIX_TAG,
+                [$groupId]
+            );
         }
 
         return $this->getListCacheValue(
@@ -387,14 +439,16 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             },
             $this->getRoleAssignmentTags,
             $this->getRoleAssignmentKeys,
-            static function () use ($groupId, $innerHandler) {
+            static function () use ($groupId, $innerHandler, $tagGenerator) {
                 // Tag needed for empty results, if not empty will alse be added by getRoleAssignmentTags().
-                $cacheTags = [TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $groupId];
+                $cacheTags = [
+                    $tagGenerator->generate(self::ROLE_ASSIGNMENT_GROUP_LIST_TAG, [$groupId]),
+                ];
                 // To make sure tree operations affecting this can clear the permission cache
                 $locations = $innerHandler->locationHandler()->loadLocationsByContent($groupId);
                 foreach ($locations as $location) {
                     foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-                        $cacheTags[] = TagIdentifiers::LOCATION_PATH . '-' . $pathId;
+                        $cacheTags[] = $tagGenerator->generate(self::LOCATION_PATH_TAG, [$pathId]);
                     }
                 }
 
@@ -412,7 +466,9 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $this->persistenceHandler->userHandler()->updateRole($struct);
 
-        $this->cache->invalidateTags([TagIdentifiers::ROLE . '-' . $struct->id]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::ROLE_TAG, [$struct->id]),
+        ]);
     }
 
     /**
@@ -425,8 +481,8 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         if ($status === Role::STATUS_DEFINED) {
             $this->cache->invalidateTags([
-                TagIdentifiers::ROLE . '-' . $roleId,
-                TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId,
+                $this->tagGenerator->generate(self::ROLE_TAG, [$roleId]),
+                $this->tagGenerator->generate(self::ROLE_ASSIGNMENT_ROLE_LIST_TAG, [$roleId]),
             ]);
         }
 
@@ -445,7 +501,9 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         // If there was a original role for the draft, then we clean cache for it
         if ($roleDraft->originalId > -1) {
-            $this->cache->invalidateTags([TagIdentifiers::ROLE . '-' . $roleDraft->originalId]);
+            $this->cache->invalidateTags([
+                $this->tagGenerator->generate(self::ROLE_TAG, [$roleDraft->originalId]),
+            ]);
         }
 
         return $return;
@@ -469,7 +527,9 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['role' => $roleId, 'struct' => $policy]);
         $return = $this->persistenceHandler->userHandler()->addPolicy($roleId, $policy);
 
-        $this->cache->invalidateTags([TagIdentifiers::ROLE . '-' . $roleId]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::ROLE_TAG, [$roleId]),
+        ]);
 
         return $return;
     }
@@ -483,8 +543,8 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->updatePolicy($policy);
 
         $this->cache->invalidateTags([
-            TagIdentifiers::POLICY . '-' . $policy->id,
-            TagIdentifiers::ROLE . '-' . $policy->roleId,
+            $this->tagGenerator->generate(self::POLICY_TAG, [$policy->id]),
+            $this->tagGenerator->generate(self::ROLE_TAG, [$policy->roleId]),
         ]);
 
         return $return;
@@ -499,8 +559,8 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->persistenceHandler->userHandler()->deletePolicy($policyId, $roleId);
 
         $this->cache->invalidateTags([
-            TagIdentifiers::POLICY . '-' . $policyId,
-            TagIdentifiers::ROLE . '-' . $roleId,
+            $this->tagGenerator->generate(self::POLICY_TAG, [$policyId]),
+            $this->tagGenerator->generate(self::ROLE_TAG, [$roleId]),
         ]);
     }
 
@@ -523,13 +583,13 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->assignRole($contentId, $roleId, $limitation);
 
         $tags = [
-            TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $contentId,
-            TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId,
+            $this->tagGenerator->generate(self::ROLE_ASSIGNMENT_GROUP_LIST_TAG, [$contentId]),
+            $this->tagGenerator->generate(self::ROLE_ASSIGNMENT_ROLE_LIST_TAG, [$roleId]),
         ];
 
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId);
         foreach ($locations as $location) {
-            $tags[] = TagIdentifiers::LOCATION_PATH . '-' . $location->id;
+            $tags[] = $this->tagGenerator->generate(self::LOCATION_PATH_TAG, [$location->id]);
         }
 
         $this->cache->invalidateTags($tags);
@@ -546,8 +606,8 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $return = $this->persistenceHandler->userHandler()->unassignRole($contentId, $roleId);
 
         $this->cache->invalidateTags([
-            TagIdentifiers::ROLE_ASSIGNMENT_GROUP_LIST . '-' . $contentId,
-            TagIdentifiers::ROLE_ASSIGNMENT_ROLE_LIST . '-' . $roleId,
+            $this->tagGenerator->generate(self::ROLE_ASSIGNMENT_GROUP_LIST_TAG, [$contentId]),
+            $this->tagGenerator->generate(self::ROLE_ASSIGNMENT_ROLE_LIST_TAG, [$roleId]),
         ]);
 
         return $return;
@@ -561,7 +621,9 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->logger->logCall(__METHOD__, ['assignment' => $roleAssignmentId]);
         $return = $this->persistenceHandler->userHandler()->removeRoleAssignment($roleAssignmentId);
 
-        $this->cache->invalidateTags([TagIdentifiers::ROLE_ASSIGNMENT . '-' . $roleAssignmentId]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::ROLE_ASSIGNMENT_TAG, [$roleAssignmentId]),
+        ]);
 
         return $return;
     }

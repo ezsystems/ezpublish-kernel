@@ -17,6 +17,10 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
      * Constant used for storing not found results for lookup().
      */
     private const NOT_FOUND = 0;
+    private const URL_WILDCARD_TAG = 'url_wildcard';
+    private const URL_WILDCARD_NOT_FOUND_TAG = 'url_wildcard_not_found';
+    private const PREFIXED_URL_WILDCARD = 'prefixed_url_wildcard';
+    private const PREFIXED_URL_WILDCARD_SOURCE_TAG = 'prefixed_url_wildcard_source';
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler::create
@@ -34,7 +38,9 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
 
         $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->create($sourceUrl, $destinationUrl, $forward);
 
-        $this->cache->invalidateTags([TagIdentifiers::URL_WILDCARD_NOT_FOUND]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::URL_WILDCARD_NOT_FOUND_TAG),
+        ]);
 
         return $urlWildcard;
     }
@@ -48,7 +54,9 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
 
         $this->persistenceHandler->urlWildcardHandler()->remove($id);
 
-        $this->cache->invalidateTags([TagIdentifiers::URL_WILDCARD . '-' . $id]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::URL_WILDCARD_TAG, [$id]),
+        ]);
     }
 
     /**
@@ -56,7 +64,9 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
      */
     public function load($id)
     {
-        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::URL_WILDCARD . '-' . $id);
+        $cacheItem = $this->cache->getItem(
+            $this->tagGenerator->generate(self::PREFIXED_URL_WILDCARD, [$id])
+        );
 
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
@@ -67,7 +77,9 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->load($id);
 
         $cacheItem->set($urlWildcard);
-        $cacheItem->tag([TagIdentifiers::URL_WILDCARD . '-' . $urlWildcard->id]);
+        $cacheItem->tag([
+            $this->tagGenerator->generate(self::URL_WILDCARD_TAG, [$urlWildcard->id]),
+        ]);
         $this->cache->save($cacheItem);
 
         return $urlWildcard;
@@ -89,9 +101,10 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
     public function translate(string $sourceUrl): UrlWildcard
     {
         $cacheItem = $this->cache->getItem(
-            TagIdentifiers::PREFIX .
-            TagIdentifiers::URL_WILDCARD_SOURCE . '-' .
-            $this->escapeForCacheKey($sourceUrl)
+            $this->tagGenerator->generate(
+                self::PREFIXED_URL_WILDCARD_SOURCE_TAG,
+                [$this->escapeForCacheKey($sourceUrl)]
+            )
         );
 
         if ($cacheItem->isHit()) {
@@ -109,13 +122,17 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         } catch (APINotFoundException $e) {
             $cacheItem->set(self::NOT_FOUND)
                 ->expiresAfter(30)
-                ->tag([TagIdentifiers::URL_WILDCARD_NOT_FOUND]);
+                ->tag([
+                    $this->tagGenerator->generate(self::URL_WILDCARD_NOT_FOUND_TAG),
+                ]);
             $this->cache->save($cacheItem);
             throw new NotFoundException('UrlWildcard', $sourceUrl, $e);
         }
 
         $cacheItem->set($urlWildcard);
-        $cacheItem->tag([TagIdentifiers::URL_WILDCARD . '-' . $urlWildcard->id]);
+        $cacheItem->tag([
+            $this->tagGenerator->generate(self::URL_WILDCARD_TAG, [$urlWildcard->id]),
+        ]);
         $this->cache->save($cacheItem);
 
         return $urlWildcard;

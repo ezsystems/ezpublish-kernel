@@ -10,7 +10,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
-use eZ\Publish\Core\Persistence\Cache\TagIdentifiers;
+use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Routing\RequestContext;
@@ -20,6 +20,15 @@ use Symfony\Component\Routing\RequestContext;
  */
 class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
 {
+    private const PREFIXED_IMAGE_VARIATION_TAG = 'prefixed_image_variation';
+    private const IMAGE_VARIATION_TAG = 'image_variation';
+    private const IMAGE_VARIATION_SITEACCESS_TAG = 'image_variation_siteaccess';
+    private const IMAGE_VARIATION_CONTENT_TAG = 'image_variation_content';
+    private const IMAGE_VARIATION_FIELD_TAG = 'image_variation_field';
+    private const IMAGE_VARIATION_NAME_TAG = 'image_variation_name';
+    private const CONTENT_TAG = 'content';
+    private const CONTENT_VERSION_TAG = 'content_version';
+
     /** @var \eZ\Publish\SPI\Variation\VariationHandler */
     private $aliasGenerator;
 
@@ -32,16 +41,24 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
     /** @var \Symfony\Component\Routing\RequestContext */
     private $requestContext;
 
+    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface */
+    private $tagGenerator;
+
     /**
      * @param \eZ\Publish\SPI\Variation\VariationHandler $aliasGenerator
      * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \Symfony\Component\Routing\RequestContext $requestContext
      */
-    public function __construct(VariationHandler $aliasGenerator, TagAwareAdapterInterface $cache, RequestContext $requestContext)
-    {
+    public function __construct(
+        VariationHandler $aliasGenerator,
+        TagAwareAdapterInterface $cache,
+        RequestContext $requestContext,
+        TagGeneratorInterface $tagGenerator
+    ) {
         $this->aliasGenerator = $aliasGenerator;
         $this->cache = $cache;
         $this->requestContext = $requestContext;
+        $this->tagGenerator = $tagGenerator;
     }
 
     /**
@@ -86,7 +103,7 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
     private function getCacheKey(Field $field, VersionInfo $versionInfo, $variationName)
     {
         return sprintf(
-            TagIdentifiers::PREFIX . TagIdentifiers::IMAGE_VARIATION . '-%s-%s-%s-%d-%d-%d-%s-%s',
+            $this->tagGenerator->generate(self::PREFIXED_IMAGE_VARIATION_TAG) . '-%s-%s-%s-%d-%d-%d-%s-%s',
             $this->siteAccess->name ?? 'default',
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
@@ -103,13 +120,14 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
         $contentId = $versionInfo->getContentInfo()->id;
 
         return [
-            TagIdentifiers::IMAGE_VARIATION,
-            TagIdentifiers::IMAGE_VARIATION_NAME . '-' . $variationName,
-            TagIdentifiers::IMAGE_VARIATION_SITEACCESSS . '-' . ($this->siteAccess->name ?? 'default'),
-            TagIdentifiers::IMAGE_VARIATION_CONTENT . '-' . $contentId,
-            TagIdentifiers::IMAGE_VARIATION_FIELD . '-' . $field->id,
-            TagIdentifiers::CONTENT . '-' . $contentId,
-            TagIdentifiers::CONTENT . '-' . $contentId . '-' . TagIdentifiers::VERSION . '-' . $versionInfo->versionNo,
+            $this->tagGenerator->generate(self::IMAGE_VARIATION_TAG),
+            $this->tagGenerator->generate(self::IMAGE_VARIATION_NAME_TAG, [$variationName]),
+            $this->tagGenerator->generate(self::IMAGE_VARIATION_SITEACCESS_TAG, [$this->siteAccess->name ?? 'default']),
+            $this->tagGenerator->generate(self::IMAGE_VARIATION_CONTENT_TAG, [$contentId]),
+            $this->tagGenerator->generate(self::IMAGE_VARIATION_FIELD_TAG, [$field->id]),
+            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
+            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
+            $this->tagGenerator->generate(self::CONTENT_VERSION_TAG, [$contentId, $versionInfo->versionNo]),
         ];
     }
 }

@@ -17,6 +17,10 @@ use eZ\Publish\SPI\Persistence\URL\URLUpdateStruct;
  */
 class URLHandler extends AbstractHandler implements URLHandlerInterface
 {
+    private const URL_TAG = 'url';
+    private const CONTENT_TAG = 'content';
+    private const PREFIXED_URL_TAG = 'prefixed_url';
+
     /**
      * {@inheritdoc}
      */
@@ -29,11 +33,13 @@ class URLHandler extends AbstractHandler implements URLHandlerInterface
 
         $url = $this->persistenceHandler->urlHandler()->updateUrl($id, $struct);
 
-        $this->cache->invalidateTags([TagIdentifiers::URL . '-' . $id]);
+        $this->cache->invalidateTags([
+            $this->tagGenerator->generate(self::URL_TAG, [$id]),
+        ]);
 
         if ($struct->url !== null) {
             $this->cache->invalidateTags(array_map(function ($id) {
-                return TagIdentifiers::CONTENT . '-' . $id;
+                return $this->tagGenerator->generate(self::CONTENT_TAG, [$id]);
             }, $this->persistenceHandler->urlHandler()->findUsages($id)));
         }
 
@@ -57,7 +63,9 @@ class URLHandler extends AbstractHandler implements URLHandlerInterface
      */
     public function loadById($id)
     {
-        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::URL . '-' . $id);
+        $cacheItem = $this->cache->getItem(
+            $this->tagGenerator->generate(self::PREFIXED_URL_TAG, [$id])
+        );
 
         $url = $cacheItem->get();
         if ($cacheItem->isHit()) {
@@ -68,7 +76,9 @@ class URLHandler extends AbstractHandler implements URLHandlerInterface
         $url = $this->persistenceHandler->urlHandler()->loadById($id);
 
         $cacheItem->set($url);
-        $cacheItem->tag([TagIdentifiers::URL . '-' . $id]);
+        $cacheItem->tag([
+            $this->tagGenerator->generate(self::URL_TAG, [$id]),
+        ]);
         $this->cache->save($cacheItem);
 
         return $url;

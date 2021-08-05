@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
@@ -25,21 +26,27 @@ abstract class AbstractHandler
     /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */
     protected $logger;
 
+    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface */
+    protected $tagGenerator;
+
     /**
      * Setups current handler with everything needed.
      *
      * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
+     * @param TagGeneratorInterface $tagGenerator
      */
     public function __construct(
         TagAwareAdapterInterface $cache,
         PersistenceHandler $persistenceHandler,
-        PersistenceLogger $logger
+        PersistenceLogger $logger,
+        TagGeneratorInterface $tagGenerator
     ) {
         $this->cache = $cache;
         $this->persistenceHandler = $persistenceHandler;
         $this->logger = $logger;
+        $this->tagGenerator = $tagGenerator;
     }
 
     /**

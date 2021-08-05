@@ -21,6 +21,10 @@ use eZ\Publish\API\Repository\Values\Notification\Notification as APINotificatio
  */
 class NotificationHandler extends AbstractHandler implements Handler
 {
+    private const PREFIXED_NOTIFICATION_TAG = 'prefixed_notification';
+    private const PREFIXED_NOTIFICATION_COUNT_TAG = 'prefixed_notification_count';
+    private const PREFIXED_NOTIFICATION_PENDING_COUNT_TAG = 'prefixed_notification_pending_count';
+
     /**
      * {@inheritdoc}
      */
@@ -31,8 +35,8 @@ class NotificationHandler extends AbstractHandler implements Handler
         ]);
 
         $this->cache->deleteItems([
-            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_COUNT . '-' . $createStruct->ownerId,
-            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_PENDING_COUNT . '-' . $createStruct->ownerId,
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_COUNT_TAG, [$createStruct->ownerId]),
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_PENDING_COUNT_TAG, [$createStruct->ownerId]),
         ]);
 
         return $this->persistenceHandler->notificationHandler()->createNotification($createStruct);
@@ -48,8 +52,8 @@ class NotificationHandler extends AbstractHandler implements Handler
         ]);
 
         $this->cache->deleteItems([
-            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION . '-' . $notification->id,
-            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_PENDING_COUNT . '-' . $notification->ownerId,
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_TAG, [$notification->id]),
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_PENDING_COUNT_TAG, [$notification->ownerId]),
         ]);
 
         return $this->persistenceHandler->notificationHandler()->updateNotification($notification, $updateStruct);
@@ -65,9 +69,9 @@ class NotificationHandler extends AbstractHandler implements Handler
         ]);
 
         $this->cache->deleteItems([
-            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION . '-' . $notification->id,
-            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_COUNT . '-' . $notification->ownerId,
-            TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_PENDING_COUNT . '-' . $notification->ownerId,
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_TAG, [$notification->id]),
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_COUNT_TAG, [$notification->ownerId]),
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_PENDING_COUNT_TAG, [$notification->ownerId]),
         ]);
 
         $this->persistenceHandler->notificationHandler()->delete($notification);
@@ -78,7 +82,9 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function countPendingNotifications(int $ownerId): int
     {
-        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_PENDING_COUNT . '-' . $ownerId);
+        $cacheItem = $this->cache->getItem(
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_PENDING_COUNT_TAG, [$ownerId])
+        );
 
         $count = $cacheItem->get();
         if ($cacheItem->isHit()) {
@@ -102,7 +108,9 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function countNotifications(int $ownerId): int
     {
-        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION_COUNT . '-' . $ownerId);
+        $cacheItem = $this->cache->getItem(
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_COUNT_TAG, [$ownerId])
+        );
 
         $count = $cacheItem->get();
         if ($cacheItem->isHit()) {
@@ -126,7 +134,9 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function getNotificationById(int $notificationId): Notification
     {
-        $cacheItem = $this->cache->getItem(TagIdentifiers::PREFIX . TagIdentifiers::NOTIFICATION . '-' . $notificationId);
+        $cacheItem = $this->cache->getItem(
+            $this->tagGenerator->generate(self::PREFIXED_NOTIFICATION_TAG, [$notificationId])
+        );
 
         $notification = $cacheItem->get();
         if ($cacheItem->isHit()) {
