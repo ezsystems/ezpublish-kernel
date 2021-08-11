@@ -88,7 +88,7 @@ services:
             - "@ezpublish.cache_pool"
             - "@ezpublish.api.storage_engine"
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
-            - "@eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface"
+            - '@eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface'
 
     ezpublish.spi.persistence.cache.abstractInMemoryHandler:
         class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler
@@ -104,7 +104,7 @@ services:
         abstract:  true
         arguments:
             - "@ezpublish.api.storage_engine"
-            - "@eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface"
+            - '@eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface'
 
     ezpublish.spi.persistence.cache.sectionHandler:
         class: "%ezpublish.spi.persistence.cache.sectionHandler.class%"
