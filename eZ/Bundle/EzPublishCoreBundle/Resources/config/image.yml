@@ -106,7 +106,7 @@ services:
             - '@ezpublish.image_alias.imagine.variation.imagine_alias_generator'
             - '@ezpublish.cache_pool'
             - '@router.request_context'
-            - "@ezpublish.spi.persistence.cache.tagGenerator"
+            - '@eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface'
         calls:
             - [setSiteAccess, ['@ezpublish.siteaccess']]
 

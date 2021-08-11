@@ -8,7 +8,10 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Cache\Tags;
 
-class TagGenerator implements TagGeneratorInterface
+/**
+ * @internal
+ */
+final class TagGenerator implements TagGeneratorInterface
 {
     private const PLACEHOLDER = '-%s';
     private const SUFFIX_SEPARATOR = '-';

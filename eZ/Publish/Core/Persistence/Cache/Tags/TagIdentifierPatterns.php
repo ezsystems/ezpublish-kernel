@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Cache\Tags;
 
+/**
+ * @internal
+ */
 final class TagIdentifierPatterns
 {
     public const PREFIX = 'ez-';

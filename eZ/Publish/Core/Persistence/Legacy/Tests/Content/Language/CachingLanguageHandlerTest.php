@@ -335,7 +335,7 @@ class CachingLanguageHandlerTest extends TestCase
         return $this->languageCacheMock;
     }
 
-    protected function getTagGenerator()
+    protected function getTagGenerator(): TagGenerator
     {
         if (!isset($this->tagGenerator)) {
             $this->tagGenerator = new TagGenerator();

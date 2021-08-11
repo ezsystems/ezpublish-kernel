@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Cache\Tags;
 
+/**
+ * @internal
+ */
 interface TagGeneratorInterface
 {
     public function generate(string $patternName, array $values = [], bool $isPrefix = false): string;
