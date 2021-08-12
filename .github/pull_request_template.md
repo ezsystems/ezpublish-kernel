@@ -1,18 +1,16 @@
-| Question           | Answer
-| ------------------ | ------------------
-| **JIRA issue**     | [EZP-XXXXX](https://jira.ez.no/browse/EZP-XXXXX)
-| **Bug/Improvement**| yes/no
-| **New feature**    | yes/no
-| **Target version** | `6.x`/`7.x` for bug fixes or improvements _(on existing features)_, `master` for features
-| **BC breaks**      | yes/no
-| **Tests pass**     | yes/no
-| **Doc needed**     | yes/no
+| Question                                  | Answer
+| ---------------------------------------- | ------------------
+| **JIRA issue**                          | [IBX-XXXX](https://issues.ibexa.co/browse/IBX-XXXX)
+| **Type**                                   | feature/bug/improvement
+| **Target eZ Platform version** | `v2.5`
+| **BC breaks**                          | yes/no
 
 <!-- Replace this comment with Pull Request description -->
 
-
-**TODO**:
-- [ ] Implement feature / fix a bug.
-- [ ] Implement tests.
-- [ ] Fix new code according to Coding Standards (`$ composer fix-cs`).
-- [ ] Ask for Code Review.
+#### Checklist:
+- [ ] Provided PR description.
+- [ ] Tested the solution manually.
+- [ ] Provided automated test coverage.
+- [ ] Checked that target branch is set correctly (master for features, the oldest supported for bugs).
+- [ ] Ran PHP CS Fixer for new PHP code (use `$ composer fix-cs`).
+- [ ] Asked for a review (ping `@ezsystems/engineering-team`).
