@@ -19,7 +19,6 @@ class URLHandler extends AbstractHandler implements URLHandlerInterface
 {
     private const URL_TAG = 'url';
     private const CONTENT_TAG = 'content';
-    private const PREFIXED_URL_TAG = 'prefixed_url';
 
     /**
      * {@inheritdoc}
@@ -64,7 +63,7 @@ class URLHandler extends AbstractHandler implements URLHandlerInterface
     public function loadById($id)
     {
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(self::PREFIXED_URL_TAG, [$id])
+            $this->tagGenerator->generate(self::URL_TAG, [$id], true)
         );
 
         $url = $cacheItem->get();

@@ -31,7 +31,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     private const CONTENT_VERSION_INFO_TAG = 'content_version_info';
     private const CONTENT_VERSION_TAG = 'content_version';
 
-    const ALL_TRANSLATIONS_KEY = '0';
+    public const ALL_TRANSLATIONS_KEY = '0';
 
     /** @var callable */
     private $getContentInfoTags;

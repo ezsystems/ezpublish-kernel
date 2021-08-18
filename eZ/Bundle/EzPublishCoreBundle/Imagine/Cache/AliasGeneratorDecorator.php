@@ -20,7 +20,6 @@ use Symfony\Component\Routing\RequestContext;
  */
 class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
 {
-    private const PREFIXED_IMAGE_VARIATION_TAG = 'prefixed_image_variation';
     private const IMAGE_VARIATION_TAG = 'image_variation';
     private const IMAGE_VARIATION_SITEACCESS_TAG = 'image_variation_siteaccess';
     private const IMAGE_VARIATION_CONTENT_TAG = 'image_variation_content';
@@ -103,7 +102,7 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
     private function getCacheKey(Field $field, VersionInfo $versionInfo, $variationName)
     {
         return sprintf(
-            $this->tagGenerator->generate(self::PREFIXED_IMAGE_VARIATION_TAG) . '-%s-%s-%s-%d-%d-%d-%s-%s',
+            $this->tagGenerator->generate(self::IMAGE_VARIATION_TAG, [], true) . '-%s-%s-%s-%d-%d-%d-%s-%s',
             $this->siteAccess->name ?? 'default',
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
