@@ -25,7 +25,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key
         return [
             ['find', [new URLQuery()]],
             ['findUsages', [1]],
@@ -43,7 +43,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
         ];
     }
 
-    public function testUpdateUrlWhenAddressIsUpdated()
+    public function testUpdateUrlWhenAddressIsUpdated(): void
     {
         $urlId = 1;
         $updateStruct = new URLUpdateStruct();
@@ -53,18 +53,17 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
         $innerHandlerMock = $this->createMock(SpiURLHandler::class);
         $this->persistenceHandlerMock
-            ->expects($this->any())
             ->method('urlHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->willReturn($innerHandlerMock);
 
         $innerHandlerMock
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('findUsages')
             ->with($urlId)
             ->willReturn([2, 3, 5]);
 
         $innerHandlerMock
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('updateUrl')
             ->with($urlId, $updateStruct)
             ->willReturn(true);
@@ -94,10 +93,10 @@ class URLHandlerTest extends AbstractCacheHandlerTest
         $this->persistenceHandlerMock
             ->expects($this->any())
             ->method('urlHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->willReturn($innerHandlerMock);
 
         $innerHandlerMock
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('updateUrl')
             ->with($urlId, $updateStruct)
             ->willReturn(true);

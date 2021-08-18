@@ -18,7 +18,6 @@ use eZ\Publish\SPI\Persistence\Bookmark\Handler as BookmarkHandlerInterface;
 class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterface
 {
     private const BOOKMARK_TAG = 'bookmark';
-    private const PREFIXED_BOOKMARK_TAG = 'prefixed_bookmark';
     private const LOCATION_TAG = 'location';
     private const USER_TAG = 'user';
     private const LOCATION_PATH_TAG = 'location_path';
@@ -60,7 +59,7 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
 
         return $this->getMultipleCacheItems(
             $locationIds,
-            $tagGenerator->generate(self::PREFIXED_BOOKMARK_TAG, [$userId], true),
+            $tagGenerator->generate(self::BOOKMARK_TAG, [$userId], true) . '-',
             function (array $missingIds) use ($userId) {
                 $this->logger->logCall(__CLASS__ . '::loadByUserIdAndLocationId', [
                     'userId' => $userId,

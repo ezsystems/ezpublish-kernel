@@ -20,11 +20,10 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     private const URL_ALIAS_LOCATION_PATH_TAG = 'url_alias_location_path';
     private const URL_ALIAS_NOT_FOUND_TAG = 'url_alias_not_found';
     private const URL_ALIAS_TAG = 'url_alias';
-    private const PREFIXED_URL_ALIAS_LOCATION_LIST_TAG = 'prefixed_url_alias_location_list';
-    private const PREFIXED_URL_ALIAS_LOCATION_LIST_CUSTOM_TAG = 'prefixed_url_alias_location_list_custom';
+    private const URL_ALIAS_LOCATION_LIST_TAG = '_url_alias_location_list';
+    private const URL_ALIAS_LOCATION_LIST_CUSTOM_TAG = '_url_alias_location_list_custom';
     private const URL_ALIAS_CUSTOM_TAG = 'url_alias_custom';
-    private const PREFIXED_URL_ALIAS_URL_TAG = 'prefixed_url_alias_url';
-    private const PREFIXED_URL_ALIAS_TAG = 'prefixed_url_alias';
+    private const URL_ALIAS_URL_TAG = '_url_alias_url';
     private const URL_ALIAS_WITH_HASH_TAG = 'url_alias_with_hash';
 
     /**
@@ -155,8 +154,8 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
 
         return $this->getListCacheValue(
             ($custom) ?
-                $tagGenerator->generate(self::PREFIXED_URL_ALIAS_LOCATION_LIST_CUSTOM_TAG, [$locationId]) :
-                $tagGenerator->generate(self::PREFIXED_URL_ALIAS_LOCATION_LIST_TAG, [$locationId]),
+                $tagGenerator->generate(self::URL_ALIAS_LOCATION_LIST_CUSTOM_TAG, [$locationId]) :
+                $tagGenerator->generate(self::URL_ALIAS_LOCATION_LIST_TAG, [$locationId]),
             static function () use ($locationId, $custom, $persistenceHandler) {
                 return $persistenceHandler->urlAliasHandler()->listURLAliasesForLocation($locationId, $custom);
             },
@@ -216,7 +215,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     public function lookup($url)
     {
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(self::PREFIXED_URL_ALIAS_URL_TAG, [$this->escapeForCacheKey($url)])
+            $this->tagGenerator->generate(self::URL_ALIAS_URL_TAG, [$this->escapeForCacheKey($url)])
         );
         if ($cacheItem->isHit()) {
             $this->logger->logCacheHit(['url' => $url]);
@@ -254,7 +253,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     public function loadUrlAlias($id)
     {
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(self::PREFIXED_URL_ALIAS_TAG, [$id])
+            $this->tagGenerator->generate(self::URL_ALIAS_TAG, [$id])
         );
 
         if ($cacheItem->isHit()) {

@@ -16,19 +16,17 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
  */
 class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements ObjectStateHandlerInterface
 {
-    private const PREFIXED_STATE_GROUP_ALL_TAG = 'prefixed_state_group_all';
-    private const PREFIXED_STATE_GROUP_TAG = 'prefixed_state_group';
-    private const PREFIXED_STATE_GROUP_WITH_ID_SUFFIX_TAG = 'prefixed_state_group_with_id_suffix';
+    private const STATE_GROUP_ALL_TAG = 'state_group_all';
     private const STATE_GROUP_TAG = 'state_group';
+    private const STATE_GROUP_WITH_ID_SUFFIX_TAG = 'state_group_with_id_suffix';
     private const BY_IDENTIFIER_SUFFIX = 'by_identifier_suffix';
     private const STATE_TAG = 'state';
-    private const PREFIXED_STATE_LIST_BY_GROUP_TAG = 'prefixed_state_list_by_group';
-    private const PREFIXED_STATE_TAG = 'prefixed_state';
-    private const PREFIXED_STATE_IDENTIFIER = 'prefixed_state_identifier';
-    private const PREFIXED_STATE_IDENTIFIER_WITH_BY_GROUP_SUFFIX_TAG = 'prefixed_state_identifier_with_by_group_suffix';
+    private const STATE_LIST_BY_GROUP_TAG = 'state_list_by_group';
+    private const STATE_IDENTIFIER = 'state_identifier';
+    private const STATE_IDENTIFIER_WITH_BY_GROUP_SUFFIX_TAG = 'state_identifier_with_by_group_suffix';
     private const BY_GROUP_TAG = 'by_group';
-    private const PREFIXED_STATE_BY_GROUP_ON_CONTENT_TAG = 'prefixed_state_by_group_on_content';
-    private const PREFIXED_STATE_BY_GROUP_TAG = 'prefixed_state_by_group';
+    private const STATE_BY_GROUP_ON_CONTENT_TAG = 'state_by_group_on_content';
+    private const STATE_BY_GROUP_TAG = 'state_by_group';
     private const CONTENT_TAG = 'content';
     private const ON_CONTENT_TAG = 'on_content';
 
@@ -40,7 +38,9 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $this->logger->logCall(__METHOD__, ['struct' => $input]);
         $group = $this->persistenceHandler->objectStateHandler()->createGroup($input);
 
-        $this->cache->deleteItem($this->tagGenerator->generate(self::PREFIXED_STATE_GROUP_ALL_TAG));
+        $this->cache->deleteItem(
+            $this->tagGenerator->generate(self::STATE_GROUP_ALL_TAG, [], true)
+        );
 
         return $group;
     }
@@ -54,7 +54,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
         return $this->getCacheValue(
             (int) $groupId,
-            $tagGenerator->generate(self::PREFIXED_STATE_GROUP_TAG, [], true),
+            $tagGenerator->generate(self::STATE_GROUP_TAG, [], true) . '-',
             function (int $groupId): Group {
                 $this->logger->logCall(__METHOD__, ['groupId' => (int) $groupId]);
 
@@ -67,7 +67,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             },
             static function () use ($groupId, $tagGenerator) {
                 return [
-                    $tagGenerator->generate(self::PREFIXED_STATE_GROUP_TAG, [(int) $groupId]),
+                    $tagGenerator->generate(self::STATE_GROUP_TAG, [(int) $groupId], true),
                 ];
             }
         );
@@ -83,7 +83,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
         return $this->getCacheValue(
             $identifier,
-            $tagGenerator->generate(self::PREFIXED_STATE_GROUP_TAG, [], true),
+            $tagGenerator->generate(self::STATE_GROUP_TAG, [], true) . '-',
             function (string $identifier): Group {
                 $this->logger->logCall(__METHOD__, ['groupId' => $identifier]);
 
@@ -96,8 +96,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             },
             static function (Group $group) use ($escapedIdentifier, $tagGenerator): array {
                 return [
-                    $tagGenerator->generate(self::PREFIXED_STATE_GROUP_WITH_ID_SUFFIX_TAG, [$escapedIdentifier]),
-                    $tagGenerator->generate(self::PREFIXED_STATE_GROUP_TAG, [$group->id]),
+                    $tagGenerator->generate(self::STATE_GROUP_WITH_ID_SUFFIX_TAG, [$escapedIdentifier], true),
+                    $tagGenerator->generate(self::STATE_GROUP_TAG, [$group->id], true),
                 ];
             },
             $tagGenerator->generate(self::BY_IDENTIFIER_SUFFIX)
@@ -112,7 +112,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $tagGenerator = $this->tagGenerator;
 
         $stateGroups = $this->getListCacheValue(
-            $tagGenerator->generate(self::PREFIXED_STATE_GROUP_ALL_TAG),
+            $tagGenerator->generate(self::STATE_GROUP_ALL_TAG, [], true),
             function () use ($offset, $limit): array {
                 $this->logger->logCall(__METHOD__, ['offset' => (int) $offset, 'limit' => (int) $limit]);
 
@@ -125,8 +125,8 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             },
             static function (Group $group) use ($tagGenerator): array {
                 return [
-                    $tagGenerator->generate(self::PREFIXED_STATE_GROUP_TAG, [$group->id]),
-                    $tagGenerator->generate(self::PREFIXED_STATE_GROUP_WITH_ID_SUFFIX_TAG, [$group->id]),
+                    $tagGenerator->generate(self::STATE_GROUP_TAG, [$group->id], true),
+                    $tagGenerator->generate(self::STATE_GROUP_WITH_ID_SUFFIX_TAG, [$group->id], true),
                 ];
             }
         );
@@ -143,7 +143,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
         return $this->getCacheValue(
             $groupId,
-            $tagGenerator->generate(self::PREFIXED_STATE_LIST_BY_GROUP_TAG, [], true),
+            $tagGenerator->generate(self::STATE_LIST_BY_GROUP_TAG, [], true) . '-',
             function (int $groupId): array {
                 $this->logger->logCall(__METHOD__, ['groupId' => (int) $groupId]);
 
@@ -160,7 +160,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             },
             static function () use ($groupId, $tagGenerator): array {
                 return [
-                    $tagGenerator->generate(self::PREFIXED_STATE_LIST_BY_GROUP_TAG, [$groupId]),
+                    $tagGenerator->generate(self::STATE_LIST_BY_GROUP_TAG, [$groupId], true),
                 ];
             }
         );
@@ -205,7 +205,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
         $return = $this->persistenceHandler->objectStateHandler()->create($groupId, $input);
 
         $this->cache->deleteItem(
-            $this->tagGenerator->generate(self::PREFIXED_STATE_LIST_BY_GROUP_TAG, [$groupId])
+            $this->tagGenerator->generate(self::STATE_LIST_BY_GROUP_TAG, [$groupId], true)
         );
 
         return $return;
@@ -220,7 +220,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
         return $this->getCacheValue(
             (int) $stateId,
-            $tagGenerator->generate(self::PREFIXED_STATE_TAG, [], true),
+            $tagGenerator->generate(self::STATE_TAG, [], true) . '-',
             function (int $stateId): ObjectState {
                 $this->logger->logCall(__METHOD__, ['stateId' => $stateId]);
 
@@ -234,7 +234,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             },
             static function () use ($stateId, $tagGenerator): array {
                 return [
-                    $tagGenerator->generate(self::PREFIXED_STATE_TAG, [$stateId]),
+                    $tagGenerator->generate(self::STATE_TAG, [$stateId], true),
                 ];
             }
         );
@@ -250,7 +250,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
         return $this->getCacheValue(
             $identifier,
-            $tagGenerator->generate(self::PREFIXED_STATE_IDENTIFIER, [], true),
+            $tagGenerator->generate(self::STATE_IDENTIFIER, [], true) . '-',
             function (string $identifier) use ($groupId): ObjectState {
                 $this->logger->logCall(__METHOD__, ['identifier' => $identifier, 'groupId' => (int) $groupId]);
 
@@ -265,8 +265,9 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             static function () use ($escapedIdentifier, $groupId, $tagGenerator): array {
                 return [
                     $tagGenerator->generate(
-                        self::PREFIXED_STATE_IDENTIFIER_WITH_BY_GROUP_SUFFIX_TAG,
-                        [$escapedIdentifier, $groupId]
+                        self::STATE_IDENTIFIER_WITH_BY_GROUP_SUFFIX_TAG,
+                        [$escapedIdentifier, $groupId],
+                        true
                     ),
                 ];
             },
@@ -329,8 +330,9 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
         $this->cache->deleteItem(
             $this->tagGenerator->generate(
-                self::PREFIXED_STATE_BY_GROUP_ON_CONTENT_TAG,
-                [$groupId, $contentId]
+                self::STATE_BY_GROUP_ON_CONTENT_TAG,
+                [$groupId, $contentId],
+                true
             )
         );
 
@@ -346,7 +348,7 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
 
         return $this->getCacheValue(
             (int) $stateGroupId,
-            $tagGenerator->generate(self::PREFIXED_STATE_BY_GROUP_TAG, [], true),
+            $tagGenerator->generate(self::STATE_BY_GROUP_TAG, [], true) . '-',
             function (int $stateGroupId) use ($contentId): ObjectState {
                 $this->logger->logCall(__METHOD__, ['contentId' => (int) $contentId, 'stateGroupId' => $stateGroupId]);
 
@@ -361,8 +363,9 @@ class ObjectStateHandler extends AbstractInMemoryPersistenceHandler implements O
             static function () use ($contentId, $stateGroupId, $tagGenerator): array {
                 return [
                     $tagGenerator->generate(
-                        self::PREFIXED_STATE_BY_GROUP_ON_CONTENT_TAG,
-                        [$stateGroupId, $contentId]
+                        self::STATE_BY_GROUP_ON_CONTENT_TAG,
+                        [$stateGroupId, $contentId],
+                        true
                     ),
                 ];
             },

@@ -28,16 +28,16 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key
         return [
-            ['createGroup', [new SPIInputStruct()], [], 'ez-sga'],
-            ['updateGroup', [5, new SPIInputStruct()], ['sg-5']],
-            ['deleteGroup', [5], ['sg-5']],
-            ['create', [5, new SPIInputStruct()], [], 'ez-slbg-5'],
-            ['update', [7, new SPIInputStruct()], ['s-7']],
-            ['setPriority', [7, 99], ['s-7']],
-            ['delete', [7], ['s-7']],
-            ['setContentState', [4, 5, 7], [], 'ez-sbg-5-oc-4'],
+            ['createGroup', [new SPIInputStruct()], [['state_group_all', [], true]], [], 'ez-sga'],
+            ['updateGroup', [5, new SPIInputStruct()], [['state_group', [5], false]], ['sg-5']],
+            ['deleteGroup', [5], [['state_group', [5], false]], ['sg-5']],
+            ['create', [5, new SPIInputStruct()], [['state_list_by_group', [5], true]], [], 'ez-slbg-5'],
+            ['update', [7, new SPIInputStruct()], [['state', [7], false]], ['s-7']],
+            ['setPriority', [7, 99], [['state', [7], false]], ['s-7']],
+            ['delete', [7], [['state', [7], false]], ['s-7']],
+            ['setContentState', [4, 5, 7], [['state_by_group_on_content', [5, 4], true]], [], 'ez-sbg-5-oc-4'],
         ];
     }
 

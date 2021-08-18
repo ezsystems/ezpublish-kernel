@@ -38,24 +38,24 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
      */
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, array? $key, ?mixed $returnValue
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['create', [new CreateStruct()]],
-            ['createDraftFromVersion', [2, 1, 14], [], ['ez-c-2-vl']],
+            ['createDraftFromVersion', [2, 1, 14], [['content_version_list', [2], true]], [], ['ez-c-2-vl']],
             ['copy', [2, 1]],
             ['loadDraftsForUser', [14]],
-            ['setStatus', [2, 0, 1], ['c-2-v-1']],
-            ['setStatus', [2, 1, 1], ['c-2']],
-            ['updateMetadata', [2, new MetadataUpdateStruct()], ['c-2']],
-            ['updateContent', [2, 1, new UpdateStruct()], ['c-2-v-1']],
+            ['setStatus', [2, 0, 1], [['content_version', [2,1], false]], ['c-2-v-1']],
+            ['setStatus', [2, 1, 1], [['content', [2], false]], ['c-2']],
+            ['updateMetadata', [2, new MetadataUpdateStruct()], [['content', [2], false]], ['c-2']],
+            ['updateContent', [2, 1, new UpdateStruct()], [['content_version', [2,1], false]], ['c-2-v-1']],
             //['deleteContent', [2]], own tests for relations complexity
-            ['deleteVersion', [2, 1], ['c-2-v-1']],
+            ['deleteVersion', [2, 1], [['content_version', [2,1], false]], ['c-2-v-1']],
             ['addRelation', [new RelationCreateStruct()]],
             ['removeRelation', [66, APIRelation::COMMON]],
             ['loadRelations', [2, 1, 3]],
             ['loadReverseRelations', [2, 3]],
-            ['publish', [2, 3, new MetadataUpdateStruct()], ['c-2']],
-            ['listVersions', [2, 1], [], [], [new VersionInfo(['versionNo' => 1, 'contentInfo' => new ContentInfo(['id' => 2])])]],
+            ['publish', [2, 3, new MetadataUpdateStruct()], [['content', [2], false]], ['c-2']],
+            ['listVersions', [2, 1], [['content', [2], false]], [], [], [new VersionInfo(['versionNo' => 1, 'contentInfo' => new ContentInfo(['id' => 2])])]],
         ];
     }
 
@@ -68,7 +68,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
         $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
         $content = new Content(['fields' => [], 'versionInfo' => $version]);
 
-        // string $method, array $arguments, string $key, mixed? $data, bool $multi = false
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, mixed? $data, bool $multi = false, array $additionalCalls
         return [
             ['load', [2, 1], 'ez-c-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY, $content],
             ['load', [2, 1, ['eng-GB', 'eng-US']], 'ez-c-2-1-eng-GB|eng-US', $content],
@@ -96,25 +96,23 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
         $this->persistenceHandlerMock
             ->expects($this->exactly(2))
             ->method('contentHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->willReturn($innerHandlerMock);
 
         $innerHandlerMock
             ->expects($this->once())
             ->method('loadReverseRelations')
             ->with(2, APIRelation::FIELD | APIRelation::ASSET)
-            ->will(
-                $this->returnValue(
-                    [
-                        new SPIRelation(['sourceContentId' => 42]),
-                    ]
-                )
+            ->willReturn(
+                [
+                    new SPIRelation(['sourceContentId' => 42]),
+                ]
             );
 
         $innerHandlerMock
             ->expects($this->once())
             ->method('deleteContent')
             ->with(2)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->cacheMock
             ->expects($this->never())

@@ -29,11 +29,36 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $language = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, array? $tags, array? $key
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key
         return [
-            ['create', [new SPILanguageCreateStruct()], null, ['ez-lal']],
-            ['update', [$language], null, ['ez-lal', 'ez-la-5', 'ez-lac-eng-GB']],
-            ['delete', [5], ['la-5']],
+            [
+                'create',
+                [new SPILanguageCreateStruct()],
+                [
+                    ['language_list', [], true],
+                ],
+                null,
+                ['ez-lal'],
+            ],
+            [
+                'update',
+                [$language],
+                [
+                    ['language_list', [], true],
+                    ['language', [5], true],
+                    ['language_code', ['eng-GB'], true],
+                ],
+                null,
+                ['ez-lal', 'ez-la-5', 'ez-lac-eng-GB']
+            ],
+            [
+                'delete',
+                [5],
+                [
+                    ['language', [5], false]
+                ],
+                ['la-5'],
+            ],
         ];
     }
 

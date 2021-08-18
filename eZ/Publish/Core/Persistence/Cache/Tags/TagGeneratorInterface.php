@@ -13,5 +13,8 @@ namespace eZ\Publish\Core\Persistence\Cache\Tags;
  */
 interface TagGeneratorInterface
 {
-    public function generate(string $patternName, array $values = [], bool $isPrefix = false): string;
+    /**
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
+    public function generate(string $patternName, array $values = [], bool $withPrefix = false): string;
 }

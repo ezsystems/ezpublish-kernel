@@ -25,12 +25,12 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
     {
         $wildcard = new UrlWildcard(['id' => 1]);
 
-        // string $method, array $arguments, array? $tags, array|string? $key, mixed? $return
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array|string? $key, mixed? $return
         return [
-            ['create', ['/home/about', '/web3/some/page/link', true], ['urlwnf'], null, $wildcard],
-            ['remove', [1], ['urlw-1']],
-            ['loadAll', [], null, null, [$wildcard]],
-            ['exactSourceUrlExists', ['/home/about'], null, null, true],
+            ['create', ['/home/about', '/web3/some/page/link', true], [['url_wildcard_not_found', [], false]], ['urlwnf'], null, $wildcard],
+            ['remove', [1], [['url_wildcard', [1], false]], ['urlw-1']],
+            ['loadAll', [], null, null, null, [$wildcard]],
+            ['exactSourceUrlExists', ['/home/about'], null, null, null, true],
         ];
     }
 

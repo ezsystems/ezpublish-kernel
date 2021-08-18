@@ -26,20 +26,105 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
         return [
-            ['publishUrlAliasForLocation', [44, 2, 'name', 'eng-GB', true, false], ['urlal-44', 'urlalp-44', 'urlanf']],
-            ['createCustomUrlAlias', [44, '1/2/44', true, null, false], ['urlal-44', 'urlalp-44', 'urlanf', 'urla-5'], null, new UrlAlias(['id' => 5])],
-            ['createGlobalUrlAlias', ['something', '1/2/44', true, null, false], ['urlanf']],
-            ['createGlobalUrlAlias', ['something', '1/2/44', true, 'eng-GB', false], ['urlanf']],
+            [
+                'publishUrlAliasForLocation',
+                [44, 2, 'name', 'eng-GB', true, false],
+                [
+                    ['url_alias_location', [44], false],
+                    ['url_alias_location_path', [44], false],
+                    ['url_alias_not_found', [], false],
+                ],
+                ['urlal-44', 'urlalp-44', 'urlanf']
+            ],
+            [
+                'createCustomUrlAlias',
+                [44, '1/2/44', true, null, false],
+                [
+                    ['url_alias_location', [44], false],
+                    ['url_alias_location_path', [44], false],
+                    ['url_alias_not_found', [], false],
+                    ['url_alias', [5], false],
+                ],
+                ['urlal-44', 'urlalp-44', 'urlanf', 'urla-5'],
+                null,
+                new UrlAlias(['id' => 5])
+            ],
+            ['createGlobalUrlAlias', ['something', '1/2/44', true, null, false], [['url_alias_not_found', [], false]], ['urlanf']],
+            ['createGlobalUrlAlias', ['something', '1/2/44', true, 'eng-GB', false], [['url_alias_not_found', [], false]], ['urlanf']],
             ['listGlobalURLAliases', ['eng-GB', 10, 50]],
-            ['removeURLAliases', [[new UrlAlias(['id' => 5, 'type' => UrlAlias::LOCATION, 'isCustom' => true, 'destination' => 21])]], ['urla-5', 'urlal-21', 'urlalp-21', 'urlac-21']],
-            ['locationMoved', [21, 45, 12], ['urlal-21', 'urlalp-21']],
-            ['locationCopied', [21, 33, 12], ['urlal-21', 'urlal-33']],
-            ['locationDeleted', [21], ['urlal-21', 'urlalp-21'], null, []],
-            ['locationSwapped', [21, 2, 33, 45], ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33']],
-            ['translationRemoved', [[21, 33], 'eng-GB'], ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33']],
-            ['archiveUrlAliasesForDeletedTranslations', [21, 33, ['eng-GB']], ['urlal-21', 'urlalp-21']],
+            [
+                'removeURLAliases',
+                [[new UrlAlias(['id' => 5, 'type' => UrlAlias::LOCATION, 'isCustom' => true, 'destination' => 21])]],
+                [
+                    ['url_alias', [5], false],
+                    ['url_alias_location', [21], false],
+                    ['url_alias_location_path', [21], false],
+                    ['url_alias_custom', [21], false],
+                ],
+                ['urla-5', 'urlal-21', 'urlalp-21', 'urlac-21']
+            ],
+            [
+                'locationMoved',
+                [21, 45, 12],
+                [
+                    ['url_alias_location', [21], false],
+                    ['url_alias_location_path', [21], false],
+                ],
+                ['urlal-21', 'urlalp-21']
+            ],
+            [
+                'locationCopied',
+                [21, 33, 12],
+                [
+                    ['url_alias_location', [21], false],
+                    ['url_alias_location', [33], false],
+                ],
+                ['urlal-21', 'urlal-33']
+            ],
+            [
+                'locationDeleted',
+                [21],
+                [
+                    ['url_alias_location', [21], false],
+                    ['url_alias_location_path', [21], false],
+                ],
+                ['urlal-21', 'urlalp-21'],
+                null,
+                []
+            ],
+            [
+                'locationSwapped',
+                [21, 2, 33, 45],
+                [
+                    ['url_alias_location', [21], false],
+                    ['url_alias_location_path', [21], false],
+                    ['url_alias_location', [33], false],
+                    ['url_alias_location_path', [33], false],
+                ],
+                ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33']
+            ],
+            [
+                'translationRemoved',
+                [[21, 33], 'eng-GB'],
+                [
+                    ['url_alias_location', [21], false],
+                    ['url_alias_location_path', [21], false],
+                    ['url_alias_location', [33], false],
+                    ['url_alias_location_path', [33], false],
+                ],
+                ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33']
+            ],
+            [
+                'archiveUrlAliasesForDeletedTranslations',
+                [21, 33, ['eng-GB']],
+                [
+                    ['url_alias_location', [21], false],
+                    ['url_alias_location_path', [21], false],
+                ],
+                ['urlal-21', 'urlalp-21']
+            ],
         ];
     }
 

@@ -22,14 +22,13 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 class ContentHandler extends AbstractInMemoryPersistenceHandler implements ContentHandlerInterface
 {
     private const CONTENT_TAG = 'content';
-    private const PREFIXED_CONTENT_TAG = 'prefixed_content';
     private const LOCATION_TAG = 'location';
     private const LOCATION_PATH_TAG = 'location_path';
-    private const PREFIXED_CONTENT_INFO_TAG = 'prefixed_content_info';
-    private const PREFIXED_CONTENT_INFO_BY_REMOTE_ID_TAG = 'prefixed_content_info_by_remote_id';
+    private const CONTENT_INFO_TAG = 'content_info';
+    private const CONTENT_INFO_BY_REMOTE_ID_TAG = 'content_info_by_remote_id';
     private const CONTENT_FIELDS_TYPE_TAG = 'content_fields_type';
-    private const PREFIXED_CONTENT_VERSION_LIST_TAG = 'prefixed_content_version_list';
-    private const PREFIXED_CONTENT_VERSION_INFO_TAG = 'prefixed_content_version_info';
+    private const CONTENT_VERSION_LIST_TAG = 'content_version_list';
+    private const CONTENT_VERSION_INFO_TAG = 'content_version_info';
     private const CONTENT_VERSION_TAG = 'content_version';
 
     const ALL_TRANSLATIONS_KEY = '0';
@@ -64,10 +63,11 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         };
         $this->getContentInfoKeys = function (ContentInfo $info) use ($tagGenerator) {
             return [
-                $tagGenerator->generate(self::PREFIXED_CONTENT_INFO_TAG, [$info->id]),
+                $tagGenerator->generate(self::CONTENT_INFO_TAG, [$info->id], true),
                 $tagGenerator->generate(
-                    self::PREFIXED_CONTENT_INFO_BY_REMOTE_ID_TAG,
-                    [$this->escapeForCacheKey($info->remoteId)]
+                    self::CONTENT_INFO_BY_REMOTE_ID_TAG,
+                    [$this->escapeForCacheKey($info->remoteId)],
+                    true
                 ),
             ];
         };
@@ -104,7 +104,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $this->logger->logCall(__METHOD__, ['content' => $contentId, 'version' => $srcVersion, 'user' => $userId]);
         $draft = $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId, $languageCode);
         $this->cache->deleteItems([
-            $this->tagGenerator->generate(self::PREFIXED_CONTENT_VERSION_LIST_TAG, [$contentId]),
+            $this->tagGenerator->generate(self::CONTENT_VERSION_LIST_TAG, [$contentId], true),
         ]);
 
         return $draft;
@@ -135,7 +135,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
         return $this->getCacheValue(
             (int) $contentId,
-            $tagGenerator->generate(self::PREFIXED_CONTENT_TAG, [], true),
+            $tagGenerator->generate(self::CONTENT_TAG, [], true) . '-',
             function ($id) use ($versionNo, $translations) {
                 return $this->persistenceHandler->contentHandler()->load($id, $versionNo, $translations);
             },
@@ -144,8 +144,9 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
                 // Version number & translations is part of keySuffix here and depends on what user asked for
                 return [
                     $tagGenerator->generate(
-                        self::PREFIXED_CONTENT_TAG,
-                        [$content->versionInfo->contentInfo->id]
+                        self::CONTENT_TAG,
+                        [$content->versionInfo->contentInfo->id],
+                        true
                     ) . $keySuffix,
                 ];
             },
@@ -161,7 +162,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
         return $this->getMultipleCacheValues(
             $contentIds,
-            $tagGenerator->generate(self::PREFIXED_CONTENT_TAG, [], true),
+            $tagGenerator->generate(self::CONTENT_TAG, [], true),
             function (array $cacheMissIds) use ($translations) {
                 return $this->persistenceHandler->contentHandler()->loadContentList($cacheMissIds, $translations);
             },
@@ -170,8 +171,9 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
                 // Translations is part of keySuffix here and depends on what user asked for
                 return [
                     $tagGenerator->generate(
-                        self::PREFIXED_CONTENT_TAG,
-                        [$content->versionInfo->contentInfo->id]
+                        self::CONTENT_TAG,
+                        [$content->versionInfo->contentInfo->id],
+                        true
                     ) . $keySuffix,
                 ];
             },
@@ -187,7 +189,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         return $this->getCacheValue(
             $contentId,
-            $this->tagGenerator->generate(self::PREFIXED_CONTENT_INFO_TAG, [], true),
+            $this->tagGenerator->generate(self::CONTENT_INFO_TAG, [], true) . '-',
             function ($contentId) {
                 return $this->persistenceHandler->contentHandler()->loadContentInfo($contentId);
             },
@@ -202,7 +204,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         return $this->getMultipleCacheValues(
             $contentIds,
-            $this->tagGenerator->generate(self::PREFIXED_CONTENT_INFO_TAG, [], true),
+            $this->tagGenerator->generate(self::CONTENT_INFO_TAG, [], true) . '-',
             function (array $cacheMissIds) {
                 return $this->persistenceHandler->contentHandler()->loadContentInfoList($cacheMissIds);
             },
@@ -220,7 +222,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         return $this->getCacheValue(
             $this->escapeForCacheKey($remoteId),
-            $this->tagGenerator->generate(self::PREFIXED_CONTENT_INFO_BY_REMOTE_ID_TAG, [], true),
+            $this->tagGenerator->generate(self::CONTENT_INFO_BY_REMOTE_ID_TAG, [], true) . '-',
             function () use ($remoteId) {
                 return $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($remoteId);
             },
@@ -239,8 +241,9 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $keySuffix = $versionNo ? "-${versionNo}" : '';
         $cacheItem = $this->cache->getItem(
             $this->tagGenerator->generate(
-                self::PREFIXED_CONTENT_VERSION_INFO_TAG,
-                [$contentId]
+                self::CONTENT_VERSION_INFO_TAG,
+                [$contentId],
+                true
             ) . $keySuffix
         );
 
@@ -410,7 +413,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
         // Cache default lookups
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(self::PREFIXED_CONTENT_VERSION_LIST_TAG, [$contentId])
+            $this->tagGenerator->generate(self::CONTENT_VERSION_LIST_TAG, [$contentId], true)
         );
 
         if ($cacheItem->isHit()) {

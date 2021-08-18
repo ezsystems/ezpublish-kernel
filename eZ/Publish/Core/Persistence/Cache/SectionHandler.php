@@ -14,8 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterfac
 class SectionHandler extends AbstractHandler implements SectionHandlerInterface
 {
     private const SECTION_TAG = 'section';
-    private const PREFIXED_SECTION_TAG = 'prefixed_section';
-    private const PREFIXED_SECTION_WITH_BY_ID_TAG = 'prefixed_section_with_by_id';
+    private const SECTION_WITH_BY_ID_TAG = 'section_with_by_id';
     private const CONTENT_TAG = 'content';
 
     /**
@@ -49,7 +48,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function load($id)
     {
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(self::PREFIXED_SECTION_TAG, [$id])
+            $this->tagGenerator->generate(self::SECTION_TAG, [$id], true)
         );
 
         if ($cacheItem->isHit()) {
@@ -86,8 +85,9 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     {
         $cacheItem = $this->cache->getItem(
             $this->tagGenerator->generate(
-                self::PREFIXED_SECTION_WITH_BY_ID_TAG,
-                [$this->escapeForCacheKey($identifier)]
+                self::SECTION_WITH_BY_ID_TAG,
+                [$this->escapeForCacheKey($identifier)],
+                true
             )
         );
 

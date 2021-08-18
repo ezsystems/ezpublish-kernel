@@ -19,8 +19,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
     private const NOT_FOUND = 0;
     private const URL_WILDCARD_TAG = 'url_wildcard';
     private const URL_WILDCARD_NOT_FOUND_TAG = 'url_wildcard_not_found';
-    private const PREFIXED_URL_WILDCARD = 'prefixed_url_wildcard';
-    private const PREFIXED_URL_WILDCARD_SOURCE_TAG = 'prefixed_url_wildcard_source';
+    private const URL_WILDCARD_SOURCE_TAG = 'url_wildcard_source';
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler::create
@@ -65,7 +64,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
     public function load($id)
     {
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(self::PREFIXED_URL_WILDCARD, [$id])
+            $this->tagGenerator->generate(self::URL_WILDCARD_TAG, [$id], true)
         );
 
         if ($cacheItem->isHit()) {
@@ -102,8 +101,9 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
     {
         $cacheItem = $this->cache->getItem(
             $this->tagGenerator->generate(
-                self::PREFIXED_URL_WILDCARD_SOURCE_TAG,
-                [$this->escapeForCacheKey($sourceUrl)]
+                self::URL_WILDCARD_SOURCE_TAG,
+                [$this->escapeForCacheKey($sourceUrl)],
+                true
             )
         );
 

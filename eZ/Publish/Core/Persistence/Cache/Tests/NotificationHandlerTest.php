@@ -47,12 +47,16 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
             'ownerId' => $ownerId,
         ]);
 
-        // string $method, array $arguments, array? $tags, string? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key, mixed? $returnValue
         return [
             [
                 'createNotification',
                 [
                     new CreateStruct(['ownerId' => $ownerId]),
+                ],
+                [
+                    ['notification_count', [$ownerId], true],
+                    ['notification_pending_count', [$ownerId], true],
                 ],
                 null,
                 [
@@ -67,6 +71,10 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $notification,
                     new UpdateStruct(['isPending' => false]),
                 ],
+                [
+                    ['notification', [$notificationId], true],
+                    ['notification_pending_count', [$ownerId], true],
+                ],
                 null,
                 [
                     'ez-n-' . $notificationId,
@@ -79,6 +87,11 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $notification,
                 ],
+                [
+                    ['notification', [$notificationId], true],
+                    ['notification_count', [$ownerId], true],
+                    ['notification_pending_count', [$ownerId], true],
+                ],
                 null,
                 [
                     'ez-n-' . $notificationId,
@@ -87,7 +100,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
             ],
             [
-                'loadUserNotifications', [$ownerId, 0, 25], null, null, [],
+                'loadUserNotifications', [$ownerId, 0, 25], null, null, null, [],
             ],
         ];
     }

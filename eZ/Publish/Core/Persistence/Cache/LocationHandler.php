@@ -18,12 +18,11 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 {
     private const CONTENT_TAG = 'content';
     private const LOCATION_TAG = 'location';
-    private const PREFIXED_LOCATION_TAG = 'prefixed_location';
     private const LOCATION_PATH_TAG = 'location_path';
-    private const PREFIXED_LOCATION_REMOTE_ID_TAG = 'prefixed_location_remote_id';
-    private const PREFIXED_LOCATION_SUBTREE_TAG = 'prefixed_location_subtree';
-    private const PREFIXED_CONTENT_LOCATIONS_TAG = 'prefixed_content_locations';
-    private const PREFIXED_CONTENT_LOCATIONS_WITH_PARENT_FOR_DRAFT_SUFFIX_TAG = 'prefixed_content_locations_with_parent_for_draft_suffix';
+    private const LOCATION_REMOTE_ID_TAG = 'location_remote_id';
+    private const LOCATION_SUBTREE_TAG = 'location_subtree';
+    private const CONTENT_LOCATIONS_TAG = 'content_locations';
+    private const CONTENT_LOCATIONS_WITH_PARENT_FOR_DRAFT_SUFFIX_TAG = 'content_locations_with_parent_for_draft_suffix';
     private const PARENT_FOR_DRAFT_SUFFIX = 'parent_for_draft_suffix';
     private const ROLE_ASSIGNMENT_GROUP_LIST_TAG = 'role_assignment_group_list';
 
@@ -51,10 +50,11 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         $this->getLocationKeys = function (Location $location, $keySuffix = '-1') use ($tagGenerator) {
             return [
-                $tagGenerator->generate(self::PREFIXED_LOCATION_TAG, [$location->id]) . $keySuffix,
+                $tagGenerator->generate(self::LOCATION_TAG, [$location->id], true) . $keySuffix,
                 $tagGenerator->generate(
-                    self::PREFIXED_LOCATION_REMOTE_ID_TAG,
-                    [$this->escapeForCacheKey($location->remoteId)]
+                    self::LOCATION_REMOTE_ID_TAG,
+                    [$this->escapeForCacheKey($location->remoteId)],
+                    true
                 ) . $keySuffix,
             ];
         };
@@ -70,7 +70,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         return $this->getCacheValue(
             (int) $locationId,
-            $this->tagGenerator->generate(self::PREFIXED_LOCATION_TAG, [], true),
+            $this->tagGenerator->generate(self::LOCATION_TAG, [], true) . '-',
             function ($id) use ($translations, $useAlwaysAvailable) {
                 return $this->persistenceHandler->locationHandler()->load($id, $translations, $useAlwaysAvailable);
             },
@@ -90,7 +90,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         return $this->getMultipleCacheValues(
             $locationIds,
-            $this->tagGenerator->generate(self::PREFIXED_LOCATION_TAG, [], true),
+            $this->tagGenerator->generate(self::LOCATION_TAG, [], true) . '-',
             function (array $ids) use ($translations, $useAlwaysAvailable) {
                 return $this->persistenceHandler->locationHandler()->loadList($ids, $translations, $useAlwaysAvailable);
             },
@@ -112,7 +112,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         return $this->getCacheValue(
             (int) $locationId,
-            $tagGenerator->generate(self::PREFIXED_LOCATION_SUBTREE_TAG, [], true),
+            $tagGenerator->generate(self::LOCATION_SUBTREE_TAG, [], true) . '-',
             function (int $locationId): array {
                 return $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId);
             },
@@ -131,7 +131,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
             },
             static function () use ($locationId, $tagGenerator): array {
                 return [
-                    $tagGenerator->generate(self::PREFIXED_LOCATION_SUBTREE_TAG, [$locationId]),
+                    $tagGenerator->generate(self::LOCATION_SUBTREE_TAG, [$locationId], true),
                 ];
             }
         );
@@ -156,7 +156,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         return $this->getCacheValue(
             (int) $contentId,
-            $tagGenerator->generate(self::PREFIXED_CONTENT_LOCATIONS_TAG, [], true),
+            $tagGenerator->generate(self::CONTENT_LOCATIONS_TAG, [], true) . '-',
             function (int $contentId) use ($rootLocationId): array {
                 return $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
             },
@@ -169,7 +169,11 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
             },
             static function () use ($contentId, $keySuffix, $tagGenerator): array {
                 return [
-                    $tagGenerator->generate(self::PREFIXED_CONTENT_LOCATIONS_TAG, [$contentId]) . $keySuffix,
+                    $tagGenerator->generate(
+                        self::CONTENT_LOCATIONS_TAG,
+                        [$contentId],
+                        true
+                    ) . $keySuffix,
                 ];
             },
             $keySuffix
@@ -195,7 +199,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         return $this->getCacheValue(
             (int) $contentId,
-            $tagGenerator->generate(self::PREFIXED_CONTENT_LOCATIONS_TAG, [], true),
+            $tagGenerator->generate(self::CONTENT_LOCATIONS_TAG, [], true) . '-',
             function (int $contentId): array {
                 return $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
             },
@@ -213,8 +217,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
             static function () use ($contentId, $tagGenerator): array {
                 return [
                     $tagGenerator->generate(
-                        self::PREFIXED_CONTENT_LOCATIONS_WITH_PARENT_FOR_DRAFT_SUFFIX_TAG,
-                        [$contentId]
+                        self::CONTENT_LOCATIONS_WITH_PARENT_FOR_DRAFT_SUFFIX_TAG,
+                        [$contentId],
+                        true
                     ),
                 ];
             },
@@ -232,7 +237,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         return $this->getCacheValue(
             $this->escapeForCacheKey($remoteId),
-            $this->tagGenerator->generate(self::PREFIXED_LOCATION_REMOTE_ID_TAG, [], true),
+            $this->tagGenerator->generate(self::LOCATION_REMOTE_ID_TAG, [], true) . '-',
             function () use ($remoteId, $translations, $useAlwaysAvailable) {
                 return $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $translations, $useAlwaysAvailable);
             },

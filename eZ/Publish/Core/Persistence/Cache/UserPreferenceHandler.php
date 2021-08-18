@@ -21,8 +21,8 @@ use eZ\Publish\SPI\Persistence\UserPreference\UserPreference;
  */
 class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implements Handler
 {
-    private const PREFIXED_USER_PREFERENCE_TAG = 'prefixed_user_preference';
-    private const PREFIXED_USER_PREFERENCE_WITH_SUFFIX_TAG = 'prefixed_user_preference_with_suffix';
+    private const USER_PREFERENCE_TAG = 'user_preference';
+    private const USER_PREFERENCE_WITH_SUFFIX_TAG = 'user_preference_with_suffix';
 
     /**
      * Constant used for storing not found results for getUserPreferenceByUserIdAndName().
@@ -40,8 +40,9 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
 
         $this->cache->deleteItems([
             $this->tagGenerator->generate(
-                self::PREFIXED_USER_PREFERENCE_WITH_SUFFIX_TAG,
-                [$setStruct->userId, $setStruct->name]
+                self::USER_PREFERENCE_WITH_SUFFIX_TAG,
+                [$setStruct->userId, $setStruct->name],
+                true
             ),
         ]);
 
@@ -71,7 +72,7 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
 
         $userPreference = $this->getCacheValue(
             $userId,
-            $tagGenerator->generate(self::PREFIXED_USER_PREFERENCE_TAG, [], true),
+            $tagGenerator->generate(self::USER_PREFERENCE_TAG, [], true) . '-',
             function ($userId) use ($name) {
                 try {
                     return $this->persistenceHandler->userPreferenceHandler()->getUserPreferenceByUserIdAndName(
@@ -88,8 +89,9 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
             static function () use ($userId, $name, $tagGenerator) {
                 return [
                     $tagGenerator->generate(
-                        self::PREFIXED_USER_PREFERENCE_WITH_SUFFIX_TAG,
-                        [$userId, $name]
+                        self::USER_PREFERENCE_WITH_SUFFIX_TAG,
+                        [$userId, $name],
+                        true
                     ),
                 ];
             },

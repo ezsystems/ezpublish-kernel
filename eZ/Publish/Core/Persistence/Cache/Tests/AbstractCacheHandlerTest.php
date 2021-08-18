@@ -24,12 +24,19 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
      *
      * @param string $method
      * @param array $arguments
+     * @param array|null $tagGeneratorArguments
      * @param array|null $tags
      * @param string|array|null $key
      * @param mixed $returnValue
      */
-    final public function testUnCachedMethods(string $method, array $arguments, array $tags = null, $key = null, $returnValue = null)
-    {
+    final public function testUnCachedMethods(
+        string $method,
+        array $arguments,
+        array $tagGeneratorArguments = null,
+        array $tags = null,
+        $key = null,
+        $returnValue = null
+    ) {
         $handlerMethodName = $this->getHandlerMethodName();
 
         $this->loggerMock->expects($this->once())->method('logCall');
@@ -49,6 +56,17 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
             ->willReturn($returnValue);
 
         if ($tags || $key) {
+            if ($tagGeneratorArguments) {
+                $callsCount = count($tagGeneratorArguments);
+                $resultKeys = array_merge((array) $tags, (array) $key);
+
+                $this->tagGeneratorMock
+                    ->expects(!empty($tagGeneratorArguments) ? $this->exactly($callsCount) : $this->never())
+                    ->method('generate')
+                    ->withConsecutive(...$tagGeneratorArguments)
+                    ->willReturnOnConsecutiveCalls(...$resultKeys);
+            }
+
             $this->cacheMock
                 ->expects(!empty($tags) ? $this->once() : $this->never())
                 ->method('invalidateTags')

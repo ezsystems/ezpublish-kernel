@@ -36,36 +36,108 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $user = new User(['id' => 14, 'login' => 'otto', 'email' => 'otto@ez.no']);
         $policy = new Policy(['id' => 13, 'roleId' => 9]);
         $userToken = new User\UserTokenUpdateStruct(['userId' => 14, 'hashKey' => '4irj8t43r']);
+        $escapedLogin = str_replace('@', '_A', $user->login);
+        $escapedEmail = str_replace('@', '_A', $user->email);
 
-        // string $method, array $arguments, array? $tags, array? $key
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key
         return [
-            ['create', [$user], ['c-14'], [
-                'ez-u-14',
-                'ez-u-' . str_replace('@', '_A', $user->login) . '-bl',
-                'ez-u-' . str_replace('@', '_A', $user->email) . '-be',
-            ]],
-            ['update', [$user], ['c-14', 'u-14'], [
-                'ez-u-' . str_replace('@', '_A', $user->email) . '-be',
-            ]],
-            ['updateUserToken', [$userToken], ['u-14-ak'], ['ez-u-4irj8t43r-bak']],
-            ['expireUserToken', ['4irj8t43r'], null, ['ez-u-4irj8t43r-bak']],
-            ['delete', [14], ['c-14', 'u-14']],
+            [
+                'create',
+                [$user],
+                [
+                    ['content', [14], false],
+                    ['user', [14], true],
+                    ['user_with_by_login_suffix', [$escapedLogin], true],
+                    ['user_with_by_email_suffix', [$escapedEmail], true],
+                ],
+                ['c-14'],
+                [
+                    'ez-u-14',
+                    'ez-u-' . $escapedLogin. '-bl',
+                    'ez-u-' . $escapedEmail . '-be',
+                ]
+            ],
+            [
+                'update',
+                [$user],
+                [
+                    ['content', [14], false],
+                    ['user', [14], false],
+                    ['user_with_by_email_suffix', [$escapedEmail], true],
+                ],
+                ['c-14', 'u-14'],
+                [
+                    'ez-u-' . $escapedEmail . '-be',
+                ]
+            ],
+            [
+                'updateUserToken',
+                [$userToken],
+                [
+                    ['user_with_account_key_suffix', [14], false],
+                    ['user_with_by_account_key_suffix', ['4irj8t43r'], true],
+                ],
+                ['u-14-ak'],
+                ['ez-u-4irj8t43r-bak']
+            ],
+            ['expireUserToken', ['4irj8t43r'], [['user_with_by_account_key_suffix', ['4irj8t43r'], true]], null, ['ez-u-4irj8t43r-bak']],
+            [
+                'delete',
+                [14],
+                [
+                    ['content', [14], false],
+                    ['user', [14], false],
+                ],
+                ['c-14', 'u-14']
+            ],
             ['createRole', [new RoleCreateStruct()]],
             ['createRoleDraft', [new RoleCreateStruct()]],
             ['loadRole', [9, 1]],
             ['loadRoleByIdentifier', ['member', 1]],
             ['loadRoleDraftByRoleId', [9]],
             ['loadRoles', []],
-            ['updateRole', [new RoleUpdateStruct(['id' => 9])], ['r-9']],
-            ['deleteRole', [9], ['r-9', 'rarl-9']],
+            ['updateRole', [new RoleUpdateStruct(['id' => 9])], [['role', [9], false]], ['r-9']],
+            [
+                'deleteRole',
+                [9],
+                [
+                    ['role', [9], false],
+                    ['role_assignment_role_list', [9], false],
+                ],
+                ['r-9', 'rarl-9']
+            ],
             ['deleteRole', [9, 1]],
             ['addPolicyByRoleDraft', [9, $policy]],
-            ['addPolicy', [9, $policy], ['r-9']],
-            ['updatePolicy', [$policy], ['p-13', 'r-9']],
-            ['deletePolicy', [13, 9], ['p-13', 'r-9']],
+            ['addPolicy', [9, $policy], [['role', [9], false]], ['r-9']],
+            [
+                'updatePolicy',
+                [$policy],
+                [
+                    ['policy', [13], false],
+                    ['role', [9], false],
+                ],
+                ['p-13', 'r-9']
+            ],
+            [
+                'deletePolicy',
+                [13, 9],
+                [
+                    ['policy', [13], false],
+                    ['role', [9], false],
+                ],
+                ['p-13', 'r-9']
+            ],
             ['loadPoliciesByUserId', [14]],
-            ['unassignRole', [14, 9], ['ragl-14', 'rarl-9']],
-            ['removeRoleAssignment', [11], ['ra-11']],
+            [
+                'unassignRole',
+                [14, 9],
+                [
+                    ['role_assignment_group_list', [14], false],
+                    ['role_assignment_role_list', [9], false],
+                ],
+                ['ragl-14', 'rarl-9']
+            ],
+            ['removeRoleAssignment', [11], [['role_assignment', [11], false]], ['ra-11']],
         ];
     }
 

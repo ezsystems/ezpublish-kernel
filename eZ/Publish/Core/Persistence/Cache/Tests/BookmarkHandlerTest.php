@@ -31,13 +31,13 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key, mixed? $returnValue
         return [
-            ['create', [new CreateStruct()], null, null, new Bookmark()],
-            ['delete', [1], ['b-1']],
-            ['loadUserBookmarks', [3, 2, 1], null, null, []],
-            ['countUserBookmarks', [3], null, null, 1],
-            ['locationSwapped', [1, 2], null, null],
+            ['create', [new CreateStruct()], null, null, null, new Bookmark()],
+            ['delete', [1], [['bookmark', [1], false]], ['b-1']],
+            ['loadUserBookmarks', [3, 2, 1], null, null, null, []],
+            ['countUserBookmarks', [3], null, null, null, 1],
+            ['locationSwapped', [1, 2], null, null, null],
         ];
     }
 

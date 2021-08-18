@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentHandler as CacheContentHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLanguageHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
-use eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator;
+use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHandler;
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
@@ -55,8 +55,8 @@ abstract class AbstractBaseHandlerTest extends TestCase
     /** @var \Closure */
     protected $cacheItemsClosure;
 
-    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator */
-    protected $tagGenerator;
+    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator|\PHPUnit\Framework\MockObject\MockObject */
+    protected $tagGeneratorMock;
 
     /**
      * Setup the HandlerTest.
@@ -69,25 +69,25 @@ abstract class AbstractBaseHandlerTest extends TestCase
         $this->cacheMock = $this->createMock(TransactionalInMemoryCacheAdapter::class);
         $this->loggerMock = $this->createMock(PersistenceLogger::class);
         $this->inMemoryMock = $this->createMock(InMemoryCache::class);
-        $this->tagGenerator = new TagGenerator();
+        $this->tagGeneratorMock = $this->createMock(TagGeneratorInterface::class);
 
         $this->persistenceCacheHandler = new CacheHandler(
             $this->persistenceHandlerMock,
-            new CacheSectionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGenerator),
-            new CacheLocationHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGenerator),
-            new CacheContentHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGenerator),
-            new CacheContentLanguageHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGenerator),
-            new CacheContentTypeHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGenerator),
-            new CacheUserHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGenerator),
-            new CacheTransactionHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGenerator),
-            new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGenerator),
-            new CacheUrlAliasHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGenerator),
-            new CacheObjectStateHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGenerator),
-            new CacheUrlHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGenerator),
-            new CacheBookmarkHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGenerator),
-            new CacheNotificationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGenerator),
-            new CacheUserPreferenceHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGenerator),
-            new CacheUrlWildcardHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGenerator),
+            new CacheSectionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGeneratorMock),
+            new CacheLocationHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGeneratorMock),
+            new CacheContentHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGeneratorMock),
+            new CacheContentLanguageHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGeneratorMock),
+            new CacheContentTypeHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGeneratorMock),
+            new CacheUserHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGeneratorMock),
+            new CacheTransactionHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGeneratorMock),
+            new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGeneratorMock),
+            new CacheUrlAliasHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGeneratorMock),
+            new CacheObjectStateHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGeneratorMock),
+            new CacheUrlHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGeneratorMock),
+            new CacheBookmarkHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGeneratorMock),
+            new CacheNotificationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGeneratorMock),
+            new CacheUserPreferenceHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->tagGeneratorMock),
+            new CacheUrlWildcardHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->tagGeneratorMock),
             $this->loggerMock
         );
 
@@ -118,7 +118,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
             $this->loggerMock,
             $this->cacheItemsClosure,
             $this->inMemoryMock,
-            $this->tagGenerator
+            $this->tagGeneratorMock
         );
 
         parent::tearDown();

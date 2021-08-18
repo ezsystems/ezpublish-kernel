@@ -28,20 +28,44 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
         return [
             ['copySubtree', [12, 45]],
-            ['move', [12, 45], ['lp-12']],
+            ['move', [12, 45], [['location_path', [12], false]], ['lp-12']],
             ['markSubtreeModified', [12]],
-            ['hide', [12], ['lp-12']],
-            ['unHide', [12], ['lp-12']],
-            ['swap', [12, 45], ['l-12', 'l-45']],
-            ['update', [new UpdateStruct(), 12], ['l-12']],
-            ['create', [new CreateStruct(['contentId' => 4, 'mainLocationId' => true])], ['c-4', 'ragl-4']],
-            ['create', [new CreateStruct(['contentId' => 4, 'mainLocationId' => false])], ['c-4', 'ragl-4']],
-            ['removeSubtree', [12], ['lp-12']],
-            ['setSectionForSubtree', [12, 2], ['lp-12']],
-            ['changeMainLocation', [4, 12], ['c-4']],
+            ['hide', [12], [['location_path', [12], false]], ['lp-12']],
+            ['unHide', [12], [['location_path', [12], false]], ['lp-12']],
+            [
+                'swap',
+                [12, 45],
+                [
+                    ['location', [12], false],
+                    ['location', [45], false],
+                ],
+                ['l-12', 'l-45']
+            ],
+            ['update', [new UpdateStruct(), 12], [['location', [12], false]], ['l-12']],
+            [
+                'create',
+                [new CreateStruct(['contentId' => 4, 'mainLocationId' => true])],
+                [
+                    ['content', [4], false],
+                    ['role_assignment_group_list', [4], false],
+                ],
+                ['c-4', 'ragl-4']
+            ],
+            [
+                'create',
+                [new CreateStruct(['contentId' => 4, 'mainLocationId' => false])],
+                [
+                    ['content', [4], false],
+                    ['role_assignment_group_list', [4], false],
+                ],
+                ['c-4', 'ragl-4']
+            ],
+            ['removeSubtree', [12], [['location_path', [12], false]], ['lp-12']],
+            ['setSectionForSubtree', [12, 2], [['location_path', [12], false]], ['lp-12']],
+            ['changeMainLocation', [4, 12], [['content', [4], false]], ['c-4']],
         ];
     }
 

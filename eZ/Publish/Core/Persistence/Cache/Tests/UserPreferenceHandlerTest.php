@@ -42,7 +42,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
         $name = 'setting';
         $userPreferenceCount = 10;
 
-        // string $method, array $arguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
         return [
             [
                 'setUserPreference',
@@ -52,6 +52,9 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                         'name' => $name,
                     ]),
                 ],
+                [
+                    ['user_preference_with_suffix', [$userId, $name], true]
+                ],
                 null,
                 [
                     'ez-up-' . $userId . '-' . $name,
@@ -59,13 +62,14 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                 new SPIUserPreference(),
             ],
             [
-                'loadUserPreferences', [$userId, 0, 25], null, null, [],
+                'loadUserPreferences', [$userId, 0, 25], null, null, null, [],
             ],
             [
                 'countUserPreferences',
                 [
                     $userId,
                 ],
+                null,
                 null,
                 null,
                 $userPreferenceCount,

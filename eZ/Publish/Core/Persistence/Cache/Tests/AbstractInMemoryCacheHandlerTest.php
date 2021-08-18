@@ -24,12 +24,19 @@ abstract class AbstractInMemoryCacheHandlerTest extends AbstractBaseHandlerTest
      *
      * @param string $method
      * @param array $arguments
+     * @param array|null $tagGeneratorArguments
      * @param array|null $tags
      * @param array|null $key
      * @param mixed $returnValue
      */
-    final public function testUnCachedMethods(string $method, array $arguments, array $tags = null, array $key = null, $returnValue = null)
-    {
+    final public function testUnCachedMethods(
+        string $method,
+        array $arguments,
+        array $tagGeneratorArguments = null,
+        array $tags = null,
+        array $key = null,
+        $returnValue = null
+    ) {
         $handlerMethodName = $this->getHandlerMethodName();
 
         $this->loggerMock->expects($this->once())->method('logCall');
@@ -40,15 +47,26 @@ abstract class AbstractInMemoryCacheHandlerTest extends AbstractBaseHandlerTest
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method($handlerMethodName)
-            ->will($this->returnValue($innerHandler));
+            ->willReturn($innerHandler);
 
         $innerHandler
             ->expects($this->once())
             ->method($method)
             ->with(...$arguments)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         if ($tags || $key) {
+            if ($tagGeneratorArguments) {
+                $callsCount = count($tagGeneratorArguments);
+                $resultKeys = array_merge((array) $tags, (array) $key);
+
+                $this->tagGeneratorMock
+                    ->expects(!empty($tagGeneratorArguments) ? $this->exactly($callsCount) : $this->never())
+                    ->method('generate')
+                    ->withConsecutive(...$tagGeneratorArguments)
+                    ->willReturnOnConsecutiveCalls(...$resultKeys);
+            }
+
             $this->cacheMock
                 ->expects(!empty($tags) ? $this->once() : $this->never())
                 ->method('invalidateTags')
@@ -78,18 +96,35 @@ abstract class AbstractInMemoryCacheHandlerTest extends AbstractBaseHandlerTest
      * @param string $method
      * @param array $arguments
      * @param string $key
+     * @param array|null $tagGeneratorArguments
      * @param mixed $data
      * @param bool $multi Default false, set to true if method will lookup several cache items.
      * @param array $additionalCalls Sets of additional calls being made to handlers, with 4 values (0: handler name, 1: handler class, 2: method, 3: return data)
      */
-    final public function testLoadMethodsCacheHit(string $method, array $arguments, string $key, $data = null, bool $multi = false, array $additionalCalls = [])
-    {
+    final public function testLoadMethodsCacheHit(
+        string $method,
+        array $arguments,
+        string $key,
+        array $tagGeneratorArguments = null,
+        $data = null,
+        bool $multi = false,
+        array $additionalCalls = []
+    ) {
         $cacheItem = $this->getCacheItem($key, $multi ? reset($data) : $data);
         $handlerMethodName = $this->getHandlerMethodName();
 
         $this->loggerMock->expects($this->once())->method('logCacheHit');
         $this->loggerMock->expects($this->never())->method('logCall');
         $this->loggerMock->expects($this->never())->method('logCacheMiss');
+
+        if ($tagGeneratorArguments) {
+            $callsCount = count($tagGeneratorArguments);
+            $this->tagGeneratorMock
+                ->expects(!empty($tagGeneratorArguments) ? $this->exactly($callsCount) : $this->never())
+                ->method('generate')
+                ->with(...$tagGeneratorArguments)
+                ->willReturnOnConsecutiveCalls($key);
+        }
 
         if ($multi) {
             $this->cacheMock

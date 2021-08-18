@@ -38,36 +38,130 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
         $groupUpdate = new SPITypeGroupUpdateStruct(['id' => 3, 'identifier' => 'media']);
         $typeUpdate = new SPITypeUpdateStruct(['identifier' => 'article', 'remoteId' => '34o9tj8394t']);
 
-        // string $method, array $arguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
         return [
-            ['createGroup', [new SPITypeGroupCreateStruct()], null, ['ez-ctgl']],
-            ['updateGroup', [$groupUpdate], null, ['ez-ctgl', 'ez-ctg-3', 'ez-ctg-media-bi']],
-            ['deleteGroup', [3], ['tg-3']],
+            ['createGroup', [new SPITypeGroupCreateStruct()], [['content_type_group_list', [], true]], null, ['ez-ctgl']],
+            [
+                'updateGroup',
+                [$groupUpdate],
+                [
+                    ['content_type_group_list', [], true],
+                    ['content_type_group', [3], true],
+                    ['content_type_group_with_id_suffix', ['media'], true],
+                ],
+                null,
+                ['ez-ctgl', 'ez-ctg-3', 'ez-ctg-media-bi']
+            ],
+            ['deleteGroup', [3], [['type_group', [3], false]], ['tg-3']],
             ['loadContentTypes', [3, 1]], // also listed for cached cases in providerForCachedLoadMethods
             ['load', [5, 1]], // also listed for cached case in providerForCachedLoadMethods
-            ['create', [new SPITypeCreateStruct(['groupIds' => [2, 3]])], null, ['ez-ctlbg-2', 'ez-ctlbg-3']],
-            ['update', [5, 0, $typeUpdate], ['t-5', 'tm', 'cft-5']],
+            [
+                'create',
+                [new SPITypeCreateStruct(['groupIds' => [2, 3]])],
+                [
+                    ['content_type_list_by_group', [2], true],
+                    ['content_type_list_by_group', [3], true],
+                ],
+                null,
+                ['ez-ctlbg-2', 'ez-ctlbg-3']
+             ],
+            [
+                'update',
+                [5, 0, $typeUpdate],
+                [
+                    ['type', [5], false],
+                    ['type_map', [], false],
+                    ['content_fields_type', [5], false],
+                ],
+                ['t-5', 'tm', 'cft-5']
+            ],
             ['update', [5, 1, $typeUpdate]],
-            ['delete', [5, 0], ['t-5', 'tm', 'cft-5']],
+            [
+                'delete',
+                [5, 0],
+                [
+                    ['type', [5], false],
+                    ['type_map', [], false],
+                    ['content_fields_type', [5], false],
+                ],
+                ['t-5', 'tm', 'cft-5']
+            ],
             ['delete', [5, 1]],
             ['createDraft', [10, 5]],
-            ['copy', [10, 5, 0], null, ['ez-ctlbg-1', 'ez-ctlbg-2'], new SPIType(['groupIds' => [1, 2]])],
-            ['copy', [10, 5, 1], null, ['ez-ctlbg-3'], new SPIType(['groupIds' => [3]])],
-            ['unlink', [3, 5, 0], ['t-5']],
+            [
+                'copy',
+                [10, 5, 0],
+                [
+                    ['content_type_list_by_group', [1], true],
+                    ['content_type_list_by_group', [2], true],
+                ],
+                null,
+                ['ez-ctlbg-1', 'ez-ctlbg-2'],
+                new SPIType(['groupIds' => [1, 2]])
+            ],
+            ['copy', [10, 5, 1], [['content_type_list_by_group', [3], true]], null, ['ez-ctlbg-3'], new SPIType(['groupIds' => [3]])],
+            ['unlink', [3, 5, 0], [['type', [5], false]], ['t-5']],
             ['unlink', [3, 5, 1]],
-            ['link', [3, 5, 0], ['t-5'], ['ez-ctlbg-3']],
+            [
+                'link',
+                [3, 5, 0],
+                [
+                    ['type', [5], false],
+                    ['content_type_list_by_group', [3], true],
+                ],
+                ['t-5'],
+                ['ez-ctlbg-3']
+            ],
             ['link', [3, 5, 1]],
             ['getFieldDefinition', [7, 1]],
             ['getFieldDefinition', [7, 0]],
             ['getContentCount', [5]],
-            ['addFieldDefinition', [5, 0, new SPITypeFieldDefinition()], ['t-5', 'tm', 'cft-5']],
+            [
+                'addFieldDefinition',
+                [5, 0, new SPITypeFieldDefinition()],
+                [
+                    ['type', [5], false],
+                    ['type_map', [], false],
+                    ['content_fields_type', [5], false],
+                ],
+                ['t-5', 'tm', 'cft-5'],
+            ],
             ['addFieldDefinition', [5, 1, new SPITypeFieldDefinition()]],
-            ['removeFieldDefinition', [5, 0, 7], ['t-5', 'tm', 'cft-5']],
+            [
+                'removeFieldDefinition',
+                [5, 0, 7],
+                [
+                    ['type', [5], false],
+                    ['type_map', [], false],
+                    ['content_fields_type', [5], false],
+                ],
+                ['t-5', 'tm', 'cft-5']
+            ],
             ['removeFieldDefinition', [5, 1, 7]],
-            ['updateFieldDefinition', [5, 0, new SPITypeFieldDefinition()], ['t-5', 'tm', 'cft-5']],
+            [
+                'updateFieldDefinition',
+                [5, 0, new SPITypeFieldDefinition()],
+                [
+                    ['type', [5], false],
+                    ['type_map', [], false],
+                    ['content_fields_type', [5], false],
+                ],
+                ['t-5', 'tm', 'cft-5']
+            ],
             ['updateFieldDefinition', [5, 1, new SPITypeFieldDefinition()]],
-            ['removeContentTypeTranslation', [5, 'eng-GB'], ['t-5', 'tm', 'cft-5'], null, new SPIType()],
-            ['deleteByUserAndStatus', [12, 0], ['t']],
+            [
+                'removeContentTypeTranslation',
+                [5, 'eng-GB'],
+                [
+                    ['type', [5], false],
+                    ['type_map', [], false],
+                    ['content_fields_type', [5], false],
+                ],
+                ['t-5', 'tm', 'cft-5'],
+                null,
+                new SPIType()
+            ],
+            ['deleteByUserAndStatus', [12, 0], [['type_without_value', [], false]], ['t']],
             ['deleteByUserAndStatus', [12, 1]],
         ];
     }
