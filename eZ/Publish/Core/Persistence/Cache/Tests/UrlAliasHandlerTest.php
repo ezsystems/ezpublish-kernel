@@ -128,16 +128,71 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $object = new UrlAlias(['id' => 5]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
-            ['listURLAliasesForLocation', [5], 'ez-urlall-5', [$object]],
-            ['listURLAliasesForLocation', [5, true], 'ez-urlall-5-c', [$object]],
-            ['lookup', ['/Home'], 'ez-urlau-_SHome', $object],
-            ['loadUrlAlias', [5], 'ez-urla-5', $object],
+            ['listURLAliasesForLocation', [5], 'ez-urlall-5', [['url_alias_location_list', [5], true]], ['ez-urlall-5'], [$object]],
+            ['listURLAliasesForLocation', [5, true], 'ez-urlall-5-c', [['url_alias_location_list_custom', [5], true]], ['ez-urlall-5-c'], [$object]],
+            ['lookup', ['/Home'], 'ez-urlau-_SHome', [['url_alias_url', ['_SHome'], true]], ['ez-urlau-_SHome'], $object],
+            ['loadUrlAlias', [5], 'ez-urla-5', [['url_alias', [5], true]], ['ez-urla-5'], $object],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $object = new UrlAlias(['id' => 5]);
+
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        return [
+            [
+                'listURLAliasesForLocation',
+                [5],
+                'ez-urlall-5',
+                [
+                    ['url_alias_location_list', [5], true],
+                    ['url_alias_location', [5], false],
+                    ['url_alias', [5], false],
+                ],
+                ['ez-urlall-5', 'urlal-5', 'urla-5'],
+                [$object]
+            ],
+            [
+                'listURLAliasesForLocation',
+                [5, true],
+                'ez-urlall-5-c',
+                [
+                    ['url_alias_location_list_custom', [5], true],
+                    ['url_alias_location', [5], false],
+                    ['url_alias', [5], false],
+                ],
+                ['ez-urlall-5-c', 'urlal-5', 'urla-5'],
+                [$object]
+            ],
+            [
+                'lookup',
+                ['/Home'],
+                'ez-urlau-_SHome',
+                [
+                    ['url_alias_url', ['_SHome'], true],
+                    ['url_alias', [5], false],
+                ],
+                ['ez-urlau-_SHome', 'urla-5'],
+                $object
+            ],
+            [
+                'loadUrlAlias',
+                [5],
+                'ez-urla-5',
+                [
+                    ['url_alias', [5], true],
+                    ['url_alias', [5], false],
+                ],
+                ['ez-urla-5', 'urla-5'],
+                $object
+            ],
         ];
     }
 }

@@ -108,14 +108,14 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
     /**
      * {@inheritdoc}
      */
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $notificationId = 5;
         $ownerId = 7;
         $notificationCount = 10;
         $notificationCountPending = 5;
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
             [
                 'countPendingNotifications',
@@ -123,6 +123,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $ownerId,
                 ],
                 'ez-npc-' . $ownerId,
+                [['notification_pending_count', [$ownerId], true]],
+                ['ez-npc-' . $ownerId],
                 $notificationCount,
             ],
             [
@@ -131,6 +133,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $ownerId,
                 ],
                 'ez-nc-' . $ownerId,
+                [['notification_count', [$ownerId], true]],
+                ['ez-nc-' . $ownerId],
                 $notificationCountPending,
             ],
             [
@@ -139,6 +143,50 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $notificationId,
                 ],
                 'ez-n-' . $notificationId,
+                [['notification', [$notificationId], true]],
+                ['ez-n-' . $notificationId],
+                new SPINotification(['id' => $notificationId]),
+            ],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $notificationId = 5;
+        $ownerId = 7;
+        $notificationCount = 10;
+        $notificationCountPending = 5;
+
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        return [
+            [
+                'countPendingNotifications',
+                [
+                    $ownerId,
+                ],
+                'ez-npc-' . $ownerId,
+                [['notification_pending_count', [$ownerId], true]],
+                ['ez-npc-' . $ownerId],
+                $notificationCount,
+            ],
+            [
+                'countNotifications',
+                [
+                    $ownerId,
+                ],
+                'ez-nc-' . $ownerId,
+                [['notification_count', [$ownerId], true]],
+                ['ez-nc-' . $ownerId],
+                $notificationCountPending,
+            ],
+            [
+                'getNotificationById',
+                [
+                    $notificationId,
+                ],
+                'ez-n-' . $notificationId,
+                [['notification', [$notificationId], true]],
+                ['ez-n-' . $notificationId],
                 new SPINotification(['id' => $notificationId]),
             ],
         ];

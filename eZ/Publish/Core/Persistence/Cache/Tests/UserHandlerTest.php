@@ -141,7 +141,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $user = new User(['id' => 14]);
         $role = new Role(['id' => 9]);
@@ -161,6 +161,11 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['loadRoleAssignmentsByGroupId', [14], 'ez-ra-14-bg', [$roleAssignment], false, $calls],
             ['loadRoleAssignmentsByGroupId', [14, true], 'ez-ra-14-bgi', [$roleAssignment], false, $calls],
         ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+
     }
 
     public function testPublishRoleDraftFromExistingRole()

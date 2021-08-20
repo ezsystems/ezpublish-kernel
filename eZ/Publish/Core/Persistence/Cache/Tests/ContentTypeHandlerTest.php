@@ -169,23 +169,184 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
     /**
      * @return array
      */
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $group = new SPITypeGroup(['id' => 3, 'identifier' => 'media']);
         $type = new SPIType(['id' => 5, 'identifier' => 'article', 'remoteId' => '34o9tj8394t']);
 
         // string $method, array $arguments, string $key, mixed? $data, bool? $multi, array? $additionalCalls
         return [
-            ['loadGroup', [3], 'ez-ctg-3', $group],
-            ['loadGroups', [[3]], 'ez-ctg-3', [3 => $group], true],
-            ['loadGroupByIdentifier', ['content'], 'ez-ctg-content-bi', $group],
-            ['loadAllGroups', [], 'ez-ctgl', [3 => $group]],
-            ['loadContentTypes', [3, 0], 'ez-ctlbg-3', [$type]],
-            ['loadContentTypeList', [[5]], 'ez-ct-5', [5 => $type], true],
-            ['load', [5, 0], 'ez-ct-5', $type],
-            ['loadByIdentifier', ['article'], 'ez-ct-article-bi', $type],
-            ['loadByRemoteId', ['f34tg45gf'], 'ez-ct-f34tg45gf-br', $type],
-            ['getSearchableFieldMap', [], 'ez-ctfm', [$type]],
+            ['loadGroup', [3], 'ez-ctg-3', [['content_type_group', [], true]], ['ez-ctg'], $group],
+            ['loadGroups', [[3]], 'ez-ctg-3', [['content_type_group', [], true]], ['ez-ctg'], [3 => $group], true],
+            [
+                'loadGroupByIdentifier',
+                ['content'],
+                'ez-ctg-content-bi',
+                [
+                    ['content_type_group', [], true],
+                    ['by_identifier_suffix', [], false],
+                ],
+                ['ez-ctg', 'bi'],
+                $group
+            ],
+            ['loadAllGroups', [], 'ez-ctgl', [['content_type_group_list', [], true]], ['ez-ctgl'], [3 => $group]],
+            ['loadContentTypes', [3, 0], 'ez-ctlbg-3', [['content_type_list_by_group', [3], true]], ['ez-ctlbg-3'], [$type]],
+            ['loadContentTypeList', [[5]], 'ez-ct-5', [['content_type', [], true]], ['ez-ct'], [5 => $type], true],
+            ['load', [5, 0], 'ez-ct-5',[['content_type', [], true]], ['ez-ct'], $type],
+            [
+                'loadByIdentifier',
+                ['article'],
+                'ez-ct-article-bi',
+                [
+                    ['content_type', [], true],
+                    ['by_identifier_suffix', [], false],
+                ],
+                ['ez-ct', 'bi'],
+                $type
+            ],
+            [
+                'loadByRemoteId',
+                ['f34tg45gf'],
+                'ez-ct-f34tg45gf-br',
+                [
+                    ['content_type', [], true],
+                    ['by_remote_suffix', [], false],
+                ],
+                ['ez-ct', 'br'],
+                $type
+            ],
+            ['getSearchableFieldMap', [], 'ez-ctfm', [['content_type_field_map', [], true]], ['ez-ctfm'], [$type]],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $group = new SPITypeGroup(['id' => 3, 'identifier' => 'media']);
+        $type = new SPIType(['id' => 5, 'identifier' => 'article', 'remoteId' => '34o9tj8394t']);
+
+        // string $method, array $arguments, string $key, mixed? $data, bool? $multi, array? $additionalCalls
+        return [
+            [
+                'loadGroup',
+                [3],
+                'ez-ctg-3',
+                [
+                    ['content_type_group', [], true],
+                    ['type_group', [3], false],
+                ],
+                ['ez-ctg', 'tg-3'],
+                $group
+            ],
+            [
+                'loadGroups',
+                [[3]],
+                'ez-ctg-3',
+                [
+                    ['content_type_group', [], true],
+                    ['type_group', [3], false],
+                ],
+                ['ez-ctg', 'tg-3'],
+                [3 => $group],
+                true
+            ],
+            [
+                'loadGroupByIdentifier',
+                ['content'],
+                'ez-ctg-content-bi',
+                [
+                    ['content_type_group', [], true],
+                    ['by_identifier_suffix', [], false],
+                    ['type_group', [3], false],
+                ],
+                ['ez-ctg', 'bi', 'tg-3'],
+                $group
+            ],
+            [
+                'loadAllGroups',
+                [],
+                'ez-ctgl',
+                [
+                    ['content_type_group_list', [], true],
+                    ['type_group', [3], false],
+                ],
+                ['ez-ctgl', 'tg-3'],
+                [3 => $group]
+            ],
+            [
+                'loadContentTypes',
+                [3, 0],
+                'ez-ctlbg-3',
+                [
+                    ['content_type_list_by_group', [3], true],
+                    ['type_group', [3], false],
+                    ['type', [], false],
+                    ['type', [5], false],
+                ],
+                ['ez-ctlbg-3', 'tg-3', 't', 't-5'],
+                [$type]
+            ],
+            [
+                'loadContentTypeList',
+                [[5]],
+                'ez-ct-5',
+                [
+                    ['content_type', [], true],
+                    ['type', [], false],
+                    ['type', [5], false],
+                ],
+                ['ez-ct', 't-3', 't-5'],
+                [5 => $type],
+                true
+            ],
+            [
+                'load',
+                [5, 0],
+                'ez-ct-5',
+                [
+                    ['content_type', [], true],
+                    ['type', [], false],
+                    ['type', [5], false],
+                ],
+                ['ez-ct', 't', 't-5'],
+                $type
+            ],
+            [
+                'loadByIdentifier',
+                ['article'],
+                'ez-ct-article-bi',
+                [
+                    ['content_type', [], true],
+                    ['by_identifier_suffix', [], false],
+                    ['type', [], false],
+                    ['type', [5], false],
+                ],
+                ['ez-ct', 'bi', 't','t-5'],
+                $type
+            ],
+            [
+                'loadByRemoteId',
+                ['f34tg45gf'],
+                'ez-ct-f34tg45gf-br',
+                [
+                    ['content_type', [], true],
+                    ['by_remote_suffix', [], false],
+                    ['type', [], false],
+                    ['type', [5], false],
+                ],
+                ['ez-ct', 'br', 't','t-5'],
+                $type
+            ],
+            [
+                'getSearchableFieldMap',
+                [],
+                'ez-ctfm',
+                [
+                    ['content_type_field_map', [], true],
+                    ['type_map', [], false],
+                ],
+                ['ez-ctfm', 'tm'],
+                [$type]
+            ],
         ];
     }
 
@@ -210,13 +371,33 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method($handlerMethodName)
-            ->will($this->returnValue($innerHandler));
+            ->willReturn($innerHandler);
 
         $innerHandler
             ->expects($this->once())
             ->method($method)
             ->with(...$arguments)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
+
+        $this->tagGeneratorMock
+            ->expects($this->exactly(6))
+            ->method('generate')
+            ->withConsecutive(
+                ['type', [5], false],
+                ['type_map', [], false],
+                ['content_fields_type', [5], false],
+                ['content_type', [], true],
+                ['content_type_list_by_group', [3], true],
+                ['content_type_list_by_group', [4], true]
+            )
+            ->willReturnOnConsecutiveCalls(
+                't-5',
+                'tm',
+                'cft-5',
+                'ez-ct',
+                'ez-ctlbg-3',
+                'ez-ctlbg-4'
+            );
 
         $this->cacheMock
             ->expects(!empty($tags) ? $this->once() : $this->never())

@@ -34,14 +34,45 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $wildcard = new UrlWildcard(['id' => 1]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
-            ['load', [1], 'ez-urlw-1', $wildcard],
-            ['translate', ['/home/about'], 'ez-urlws-_Shome_Sabout', $wildcard],
+            ['load', [1], 'ez-urlw-1', [['url_wildcard', [1], true]], ['ez-urlw-1'], $wildcard],
+            ['translate', ['/home/about'], 'ez-urlws-_Shome_Sabout', [['url_wildcard_source', ['_Shome_Sabout'], true]], ['ez-urlws-_Shome_Sabout'], $wildcard],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $wildcard = new UrlWildcard(['id' => 1]);
+
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        return [
+            [
+                'load',
+                [1],
+                'ez-urlw-1',
+                [
+                    ['url_wildcard', [1], true],
+                    ['url_wildcard', [1], false],
+                ],
+                ['ez-urlw-1', 'urlw-1'],
+                $wildcard
+            ],
+            [
+                'translate',
+                ['/home/about'],
+                'ez-urlws-_Shome_Sabout',
+                [
+                    ['url_wildcard_source', ['_Shome_Sabout'], true],
+                    ['url_wildcard', [1], false],
+                ],
+                ['ez-urlws-_Shome_Sabout', 'urlw-1'],
+                $wildcard
+            ],
         ];
     }
 }

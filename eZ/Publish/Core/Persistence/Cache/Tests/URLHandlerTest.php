@@ -33,13 +33,33 @@ class URLHandlerTest extends AbstractCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $url = new URL(['id' => 1]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
-            ['loadById', [1], 'ez-url-1', [$url]],
+            ['loadById', [1], 'ez-url-1', [['url', [1], true]], ['ez-url-1'], [$url]],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $url = new URL(['id' => 1]);
+
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        return [
+            [
+                'loadById',
+                [1],
+                'ez-url-1',
+                [
+                    ['url', [1], true],
+                    ['url', [1], false],
+                ],
+                ['ez-url-1', 'url-1'],
+                [$url]
+            ],
         ];
     }
 
@@ -68,6 +88,22 @@ class URLHandlerTest extends AbstractCacheHandlerTest
             ->with($urlId, $updateStruct)
             ->willReturn(true);
 
+        $this->tagGeneratorMock
+            ->expects($this->exactly(4))
+            ->method('generate')
+            ->withConsecutive(
+                ['url', [1], false],
+                ['content', [2], false],
+                ['content', [3], false],
+                ['content', [5], false]
+            )
+            ->willReturnOnConsecutiveCalls(
+                'url-1',
+                'c-2',
+                'c-3',
+                'c-5'
+            );
+
         $this->cacheMock
             ->expects($this->at(0))
             ->method('invalidateTags')
@@ -91,7 +127,6 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
         $innerHandlerMock = $this->createMock(SpiURLHandler::class);
         $this->persistenceHandlerMock
-            ->expects($this->any())
             ->method('urlHandler')
             ->willReturn($innerHandlerMock);
 
@@ -100,6 +135,12 @@ class URLHandlerTest extends AbstractCacheHandlerTest
             ->method('updateUrl')
             ->with($urlId, $updateStruct)
             ->willReturn(true);
+
+        $this->tagGeneratorMock
+            ->expects($this->once())
+            ->method('generate')
+            ->with('url', [1], false)
+            ->willReturn('url-1');
 
         $this->cacheMock
             ->expects($this->at(0))

@@ -153,7 +153,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function loadAll()
     {
         return $this->getListCacheValue(
-            $this->tagGenerator->generate(self::LANGUAGE_LIST_TAG),
+            $this->tagGenerator->generate(self::LANGUAGE_LIST_TAG, [], true),
             function () {
                 return $this->persistenceHandler->contentLanguageHandler()->loadAll();
             },

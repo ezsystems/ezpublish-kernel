@@ -80,12 +80,12 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
     /**
      * {@inheritdoc}
      */
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $userId = 7;
         $name = 'setting';
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
             [
                 'getUserPreferenceByUserIdAndName',
@@ -94,6 +94,29 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                     $name,
                 ],
                 'ez-up-' . $userId . '-' . $name,
+                [['user_preference', [], true]],
+                ['ez-up'],
+                new SPIUserPreference(['userId' => $userId, 'name' => $name]),
+            ],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $userId = 7;
+        $name = 'setting';
+
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        return [
+            [
+                'getUserPreferenceByUserIdAndName',
+                [
+                    $userId,
+                    $name,
+                ],
+                'ez-up-' . $userId . '-' . $name,
+                [['user_preference', [], true]],
+                ['ez-up'],
                 new SPIUserPreference(['userId' => $userId, 'name' => $name]),
             ],
         ];

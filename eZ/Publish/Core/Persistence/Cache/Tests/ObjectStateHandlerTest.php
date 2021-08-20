@@ -41,7 +41,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $group = new SPIObjectStateGroup(['id' => 5]);
         $state = new SPIObjectState(['id' => 7]);
@@ -56,5 +56,10 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
             ['loadByIdentifier', ['lock', 5], 'ez-si-lock-bg-5', $state],
             ['getContentState', [4, 5], 'ez-sbg-5-oc-4', $state],
         ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+
     }
 }

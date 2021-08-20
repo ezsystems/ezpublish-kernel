@@ -32,9 +32,16 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
+        return [
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
         return [
         ];
     }
@@ -60,7 +67,7 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('transactionHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->willReturn($innerHandlerMock);
 
         $innerHandlerMock
             ->expects($this->once())
@@ -87,7 +94,7 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('transactionHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->willReturn($innerHandlerMock);
 
         $innerHandlerMock
             ->expects($this->once())
@@ -114,7 +121,7 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('transactionHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->willReturn($innerHandlerMock);
 
         $innerHandlerMock
             ->expects($this->once())

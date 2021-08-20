@@ -41,7 +41,7 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $bookmark = new Bookmark([
             'id' => 1,
@@ -51,9 +51,42 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
         $calls = [['locationHandler', SPILocationHandler::class, 'load', new Location(['pathString' => '/1/2/43/'])]];
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
-            ['loadByUserIdAndLocationId', [3, [43]], 'ez-b-3-43', [43 => $bookmark], true, $calls],
+            ['loadByUserIdAndLocationId', [3, [43]], 'ez-b-3-43', ['bookmark', [3], true], ['ez-b-3'], [43 => $bookmark], true, $calls],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $bookmark = new Bookmark([
+            'id' => 1,
+            'locationId' => 43,
+            'userId' => 3,
+        ]);
+
+        $calls = [['locationHandler', SPILocationHandler::class, 'load', new Location(['pathString' => '/1/2/43/'])]];
+
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        return [
+            [
+                'loadByUserIdAndLocationId',
+                [3, [43]],
+                'ez-b-3-43',
+                [
+                    ['bookmark', [3], true],
+                    ['bookmark', [1], false],
+                    ['location', [43], false],
+                    ['user', [3], false],
+                    ['location_path', [1], false],
+                    ['location_path', [2], false],
+                    ['location_path', [43], false],
+                ],
+                ['ez-b-3', 'b-1', 'l-43', 'u-3', 'lp-1', 'lp-2', 'lp-43'],
+                [43 => $bookmark],
+                true,
+                $calls
+            ],
         ];
     }
 }

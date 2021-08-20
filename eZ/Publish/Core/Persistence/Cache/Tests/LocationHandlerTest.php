@@ -69,7 +69,7 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $location = new Location(['id' => 12]);
 
@@ -86,5 +86,10 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['loadByRemoteId', ['34fe5y4'], 'ez-lri-34fe5y4-1', $location],
             ['loadByRemoteId', ['34fe5y4', ['eng-GB', 'arg-ES']], 'ez-lri-34fe5y4-arg-ES|eng-GB|1', $location],
         ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+
     }
 }

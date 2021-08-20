@@ -192,7 +192,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             },
             $this->getGroupTags,
             $this->getGroupKeys,
-            $this->tagGenerator->generate(self::BY_IDENTIFIER_SUFFIX)
+            '-' . $this->tagGenerator->generate(self::BY_IDENTIFIER_SUFFIX)
         );
     }
 
@@ -293,7 +293,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             },
             $this->getTypeTags,
             $this->getTypeKeys,
-            $this->tagGenerator->generate(self::BY_IDENTIFIER_SUFFIX)
+            '-' . $this->tagGenerator->generate(self::BY_IDENTIFIER_SUFFIX)
         );
     }
 
@@ -310,7 +310,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             },
             $this->getTypeTags,
             $this->getTypeKeys,
-            $this->tagGenerator->generate(self::BY_REMOTE_SUFFIX)
+            '-' . $this->tagGenerator->generate(self::BY_REMOTE_SUFFIX)
         );
     }
 

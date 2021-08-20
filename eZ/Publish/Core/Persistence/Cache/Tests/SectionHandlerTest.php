@@ -39,14 +39,45 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $object = new SPISection(['id' => 5]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
-            ['load', [5], 'ez-se-5', $object],
-            ['loadByIdentifier', ['standard'], 'ez-se-standard-bi', $object],
+            ['load', [5], 'ez-se-5', [['section', [5], true]], ['ez-se-5'], $object],
+            ['loadByIdentifier', ['standard'], 'ez-se-standard-bi', [['section_with_by_id', ['standard'], true]], ['ez-se-standard-bi'], $object],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $object = new SPISection(['id' => 5]);
+
+        // string $method, array $arguments string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        return [
+            [
+                'load',
+                [5],
+                'ez-se-5',
+                [
+                    ['section', [5], true],
+                    ['section', [5], false],
+                ],
+                ['ez-se-5', 'se-5'],
+                $object
+            ],
+            [
+                'loadByIdentifier',
+                ['standard'],
+                'ez-se-standard-bi',
+                [
+                    ['section_with_by_id', ['standard'], true],
+                    ['section', [5], false],
+                ],
+                ['ez-se-standard-bi', 'se-5'],
+                $object
+            ],
         ];
     }
 }

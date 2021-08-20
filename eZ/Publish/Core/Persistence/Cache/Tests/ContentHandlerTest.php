@@ -62,26 +62,190 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
     /**
      * @return array
      */
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $info = new ContentInfo(['id' => 2]);
         $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
         $content = new Content(['fields' => [], 'versionInfo' => $version]);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, mixed? $data, bool $multi = false, array $additionalCalls
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool $multi = false, array $additionalCalls
         return [
-            ['load', [2, 1], 'ez-c-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY, $content],
-            ['load', [2, 1, ['eng-GB', 'eng-US']], 'ez-c-2-1-eng-GB|eng-US', $content],
-            ['load', [2], 'ez-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY, $content],
-            ['load', [2, null, ['eng-GB', 'eng-US']], 'ez-c-2-eng-GB|eng-US', $content],
-            ['loadContentList', [[2]], 'ez-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY, [2 => $content], true],
-            ['loadContentList', [[5], ['eng-GB', 'eng-US']], 'ez-c-5-eng-GB|eng-US', [5 => $content], true],
-            ['loadContentInfo', [2], 'ez-ci-2', $info],
-            ['loadContentInfoList', [[2]], 'ez-ci-2', [2 => $info], true],
-            ['loadContentInfoByRemoteId', ['3d8jrj'], 'ez-cibri-3d8jrj', $info],
-            ['loadVersionInfo', [2, 1], 'ez-cvi-2-1', $version],
-            ['loadVersionInfo', [2], 'ez-cvi-2', $version],
-            ['listVersions', [2], 'ez-c-2-vl', [$version]],
+            ['load', [2, 1], 'ez-c-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY, [['content', [], true]], ['ez-c'], $content],
+            ['load', [2, 1, ['eng-GB', 'eng-US']], 'ez-c-2-1-eng-GB|eng-US', [['content', [], true]], ['ez-c'], $content],
+            ['load', [2], 'ez-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY, [['content', [], true]], ['ez-c'], $content],
+            ['load', [2, null, ['eng-GB', 'eng-US']], 'ez-c-2-eng-GB|eng-US', [['content', [], true]], ['ez-c'], $content],
+            ['loadContentList', [[2]], 'ez-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY, [['content', [], true]], ['ez-c'], [2 => $content], true],
+            ['loadContentList', [[5], ['eng-GB', 'eng-US']], 'ez-c-5-eng-GB|eng-US', [['content', [], true]], ['ez-c'], [5 => $content], true],
+            ['loadContentInfo', [2], 'ez-ci-2', [['content_info', [], true]], ['ez-ci'], $info],
+            ['loadContentInfoList', [[2]], 'ez-ci-2', [['content_info', [], true]], ['ez-ci'], [2 => $info], true],
+            ['loadContentInfoByRemoteId', ['3d8jrj'], 'ez-cibri-3d8jrj', [['content_info_by_remote_id', [], true]], ['ez-cibri'], $info],
+            ['loadVersionInfo', [2, 1], 'ez-cvi-2-1', [['content_version_info', [2], true]], ['ez-cvi-2'], $version],
+            ['loadVersionInfo', [2], 'ez-cvi-2', [['content_version_info', [2], true]], ['ez-cvi-2'], $version],
+            ['listVersions', [2], 'ez-c-2-vl', [['content_version_list', [2], true]], ['ez-c-2-vl'], [$version]],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $info = new ContentInfo(['id' => 2]);
+        $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
+        $content = new Content(['fields' => [], 'versionInfo' => $version]);
+
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool $multi = false, array $additionalCalls
+        return [
+            [
+                'load',
+                [2, 1],
+                'ez-c-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY,
+                [
+                    ['content', [], true],
+                    ['content_fields_type', [null], false],
+                    ['content_version', [2, 1], false],
+                    ['content', [2], false],
+                ],
+                ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                $content
+            ],
+            [
+                'load',
+                [2, 1, ['eng-GB', 'eng-US']],
+                'ez-c-2-1-eng-GB|eng-US',
+                [
+                    ['content', [], true],
+                    ['content_fields_type', [null], false],
+                    ['content_version', [2, 1], false],
+                    ['content', [2], false],
+                ],
+                ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                $content
+            ],
+            [
+                'load',
+                [2],
+                'ez-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY,
+                [
+                    ['content', [], true],
+                    ['content_fields_type', [null], false],
+                    ['content_version', [2, 1], false],
+                    ['content', [2], false],
+                ],
+                ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                $content
+            ],
+            [
+                'load',
+                [2, null, ['eng-GB', 'eng-US']],
+                'ez-c-2-eng-GB|eng-US',
+                [
+                    ['content', [], true],
+                    ['content_fields_type', [null], false],
+                    ['content_version', [2, 1], false],
+                    ['content', [2], false],
+                ],
+                ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                $content
+            ],
+            [
+                'loadContentList',
+                [[2]],
+                'ez-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY,
+                [
+                    ['content', [], true],
+                    ['content_fields_type', [null], false],
+                    ['content_version', [2, 1], false],
+                    ['content', [2], false],
+                ],
+                ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                [2 => $content],
+                true
+            ],
+            [
+                'loadContentList',
+                [[5], ['eng-GB', 'eng-US']],
+                'ez-c-5-eng-GB|eng-US',
+                [
+                    ['content', [], true],
+                    ['content_fields_type', [null], false],
+                    ['content_version', [2, 1], false],
+                    ['content', [2], false],
+                ],
+                ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                [5 => $content],
+                true
+            ],
+            [
+                'loadContentInfo',
+                [2],
+                'ez-ci-2',
+                [
+                    ['content_info', [], true],
+                    ['content', [2], false],
+                ],
+                ['ez-ci', 'c-2'],
+                $info
+            ],
+            [
+                'loadContentInfoList',
+                [[2]],
+                'ez-ci-2',
+                [
+                    ['content_info', [], true],
+                    ['content', [2], false],
+                ],
+                ['ez-ci', 'c-2'],
+                [2 => $info],
+                true
+            ],
+            [
+                'loadContentInfoByRemoteId',
+                ['3d8jrj'], 'ez-cibri-3d8jrj',
+                [
+                    ['content_info_by_remote_id', [], true],
+                    ['content', [2], false],
+                ],
+                ['ez-cibri', 'c-2'],
+                $info
+            ],
+            [
+                'loadVersionInfo',
+                [2, 1],
+                'ez-cvi-2-1',
+                [
+                    ['content_version_info', [2], true],
+                    ['content_version', [2, 1], false],
+                    ['content', [2], false],
+                ],
+                ['ez-cvi-2', 'c-2-v-1', 'c-2'],
+                $version
+            ],
+            [
+                'loadVersionInfo',
+                [2],
+                'ez-cvi-2',
+                [
+                    ['content_version_info', [2], true],
+                    ['content_version', [2, 1], false],
+                    ['content', [2], false],
+                ],
+                ['ez-cvi-2', 'c-2-v-1', 'c-2'],
+                $version
+            ],
+            [
+                'listVersions',
+                [2],
+                'ez-c-2-vl',
+                [
+                    ['content_version_list', [2], true],
+                    ['content', [2], false],
+                    ['content_version', [2, 1], false],
+                    ['content', [2], false],
+                ],
+                ['ez-c-2-vl', 'c-2', 'c-2-v-1', 'c-2'],
+                [$version]
+            ],
         ];
     }
 
@@ -117,6 +281,15 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
         $this->cacheMock
             ->expects($this->never())
             ->method('deleteItem');
+
+        $this->tagGeneratorMock
+            ->expects($this->exactly(2))
+            ->method('generate')
+            ->withConsecutive(
+                ['content', [42], false],
+                ['content', [2], false]
+            )
+            ->willReturnOnConsecutiveCalls('c-42', 'c-2');
 
         $this->cacheMock
             ->expects($this->once())

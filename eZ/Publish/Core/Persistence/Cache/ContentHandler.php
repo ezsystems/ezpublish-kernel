@@ -162,7 +162,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
         return $this->getMultipleCacheValues(
             $contentIds,
-            $tagGenerator->generate(self::CONTENT_TAG, [], true),
+            $tagGenerator->generate(self::CONTENT_TAG, [], true) . '-',
             function (array $cacheMissIds) use ($translations) {
                 return $this->persistenceHandler->contentHandler()->loadContentList($cacheMissIds, $translations);
             },

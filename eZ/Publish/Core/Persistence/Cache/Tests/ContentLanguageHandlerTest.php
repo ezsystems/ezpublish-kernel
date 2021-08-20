@@ -62,17 +62,84 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $object = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, string $key, mixed? $data, bool $multi
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool $multi
         return [
-            ['load', [5], 'ez-la-5', $object],
-            ['loadList', [[5]], 'ez-la-5', [5 => $object], true],
-            ['loadAll', [], 'ez-lal', [5 => $object], false],
-            ['loadByLanguageCode', ['eng-GB'], 'ez-lac-eng-GB', $object],
-            ['loadListByLanguageCodes', [['eng-GB']], 'ez-lac-eng-GB', ['eng-GB' => $object], true],
+            ['load', [5], 'ez-la-5', [['language', [], true]], ['ez-la'], $object],
+            ['loadList', [[5]], 'ez-la-5', [['language', [], true]], ['ez-la'], [5 => $object], true],
+            ['loadAll', [], 'ez-lal', [['language_list', [], true]], ['ez-lal'], [5 => $object], false],
+            ['loadByLanguageCode', ['eng-GB'], 'ez-lac-eng-GB', [['language_code', [], true]], ['ez-lac'], $object],
+            ['loadListByLanguageCodes', [['eng-GB']], 'ez-lac-eng-GB', [['language_code', [], true]], ['ez-lac'], ['eng-GB' => $object], true],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $object = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
+
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool $multi
+        return [
+            [
+                'load',
+                [5],
+                'ez-la-5',
+                [
+                    ['language', [], true],
+                    ['language', [5], false],
+                ],
+                ['ez-la', 'ez-la-5'],
+                $object
+            ],
+            [
+                'loadList',
+                [[5]],
+                'ez-la-5',
+                [
+                    ['language', [], true],
+                    ['language', [5], false],
+                ],
+                ['ez-la', 'la-5'],
+                [5 => $object],
+                true
+            ],
+            [
+                'loadAll',
+                [],
+                'ez-lal',
+                [
+                    ['language_list', [], true],
+                    ['language', [5], false],
+                ],
+                ['ez-lal', 'la-5'],
+                [5 => $object],
+                false
+            ],
+            [
+                'loadByLanguageCode',
+                ['eng-GB'],
+                'ez-lac-eng-GB',
+                [
+                    ['language_code', [], true],
+                    ['language', [5], false],
+                ],
+                ['ez-lac', 'la-5'],
+                $object
+            ],
+            [
+                'loadListByLanguageCodes',
+                [['eng-GB']],
+                'ez-lac-eng-GB',
+                [
+                    ['language_code', [], true],
+                    ['language', [5], false],
+                ],
+                ['ez-lac', 'la-5'],
+                ['eng-GB' => $object],
+                true
+            ],
         ];
     }
 }

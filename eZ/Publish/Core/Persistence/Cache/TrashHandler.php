@@ -128,7 +128,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
                 $tags[$this->tagGenerator->generate(self::LOCATION_PATH_TAG, [$trashedItem->id])] = true;
             }
             $offset += self::EMPTY_TRASH_BULK_SIZE;
-            // Once offset is larger then total count we can exit
+            // Once offset is larger than total count we can exit
         } while ($trashedItems->totalCount > $offset);
 
         $return = $this->persistenceHandler->trashHandler()->emptyTrash();
