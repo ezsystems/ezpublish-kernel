@@ -46,20 +46,139 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
         $group = new SPIObjectStateGroup(['id' => 5]);
         $state = new SPIObjectState(['id' => 7]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
         return [
-            ['loadGroup', [5], 'ez-sg-5', $group],
-            ['loadGroupByIdentifier', ['lock'], 'ez-sg-lock-bi', $group],
-            ['loadAllGroups', [], 'ez-sga', [$group]],
-            ['loadObjectStates', [5], 'ez-slbg-5', [$state]],
-            ['load', [7], 'ez-s-7', $state],
-            ['loadByIdentifier', ['lock', 5], 'ez-si-lock-bg-5', $state],
-            ['getContentState', [4, 5], 'ez-sbg-5-oc-4', $state],
+            ['loadGroup', [5], 'ez-sg-5', [['state_group', [], true]], ['ez-sg'], $group],
+            [
+                'loadGroupByIdentifier',
+                ['lock'],
+                'ez-sg-lock-bi',
+                [
+                    ['state_group', [], true],
+                    ['by_identifier_suffix', [], false],
+                ],
+                ['ez-sg', '-bi'],
+                $group
+            ],
+            ['loadAllGroups', [], 'ez-sga', [['state_group_all', [], true]], ['ez-sga'], [$group]],
+            ['loadObjectStates', [5], 'ez-slbg-5', [['state_list_by_group', [], true]], ['ez-slbg'], [$state]],
+            ['load', [7], 'ez-s-7', [['state', [], true]], ['ez-s'], $state],
+            [
+                'loadByIdentifier',
+                ['lock', 5],
+                'ez-si-lock-bg-5',
+                [
+                    ['state_identifier', [], true],
+                    ['by_group', [5], false],
+                ],
+                ['ez-si', 'bg-5'],
+                $state
+            ],
+            [
+                'getContentState',
+                [4, 5],
+                'ez-sbg-5-oc-4',
+                [
+                    ['state_by_group', [], true],
+                    ['on_content', [4], false],
+                ],
+                ['ez-sbg', 'oc-4'],
+                $state
+            ],
         ];
     }
 
     public function providerForCachedLoadMethodsMiss(): array
     {
+        $group = new SPIObjectStateGroup(['id' => 5]);
+        $state = new SPIObjectState(['id' => 7]);
 
+        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
+        return [
+            [
+                'loadGroup',
+                [5],
+                'ez-sg-5',
+                [
+                    ['state_group', [], true],
+                    ['state_group', [5], false],
+                ],
+                ['ez-sg', 'sg-5'],
+                $group
+            ],
+            [
+                'loadGroupByIdentifier',
+                ['lock'],
+                'ez-sg-lock-bi',
+                [
+                    ['state_group', [], true],
+                    ['by_identifier_suffix', [], false],
+                    ['state_group', [5], false],
+                ],
+                ['ez-sg', '-bi', 'sg-5'],
+                $group
+            ],
+            [
+                'loadAllGroups',
+                [],
+                'ez-sga',
+                [
+                    ['state_group_all', [], true],
+                    ['state_group', [5], false],
+                ],
+                ['ez-sga', 'sg-5'],
+                [$group]
+            ],
+            [
+                'loadObjectStates',
+                [5],
+                'ez-slbg-5',
+                [
+                    ['state_list_by_group', [], true],
+                    ['state_group', [5], false],
+                    ['state', [7], false],
+                ],
+                ['ez-slbg', 'sg-5', 's-7'],
+                [$state]
+            ],
+            [
+                'load',
+                [7],
+                'ez-s-7',
+                [
+                    ['state', [], true],
+                    ['state', [7], false],
+                    ['state_group', [null], false],
+                ],
+                ['ez-s', 's-7', 'sg-null'],
+                $state
+            ],
+            [
+                'loadByIdentifier',
+                ['lock', 5],
+                'ez-si-lock-bg-5',
+                [
+                    ['state_identifier', [], true],
+                    ['by_group', [5], false],
+                    ['state', [7], false],
+                    ['state_group', [null], false],
+                ],
+                ['ez-si', 'bg-5', 's-7', 'sg-null'],
+                $state
+            ],
+            [
+                'getContentState',
+                [4, 5],
+                'ez-sbg-5-oc-4',
+                [
+                    ['state_by_group', [], true],
+                    ['on_content', [4], false],
+                    ['state', [7], false],
+                    ['content', [4], false],
+                ],
+                ['ez-sbg', 'oc-4', 's-7', 'c-4'],
+                $state
+            ],
+        ];
     }
 }

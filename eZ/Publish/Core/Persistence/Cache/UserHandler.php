@@ -162,7 +162,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             },
             $this->getUserTags,
             $this->getUserKeys,
-            $this->tagGenerator->generate(self::BY_LOGIN_SUFFIX)
+            '-' . $this->tagGenerator->generate(self::BY_LOGIN_SUFFIX)
         );
     }
 
@@ -173,7 +173,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         // As load by email can return several items we threat it like a list here.
         return $this->getListCacheValue(
-            $this->tagGenerator->generate(self::USER_WITH_BY_EMAIL_SUFFIX_TAG, [$this->escapeForCacheKey($email)], true) . '-',
+            $this->tagGenerator->generate(self::USER_WITH_BY_EMAIL_SUFFIX_TAG, [$this->escapeForCacheKey($email)], true),
             function () use ($email) {
                 return $this->persistenceHandler->userHandler()->loadByEmail($email);
             },
@@ -206,7 +206,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             },
             static function (User $user) use ($hash, $getUserKeysFn, $tagGenerator) {
                 $keys = $getUserKeysFn($user);
-                $tags[] = $tagGenerator->generate(self::USER_WITH_BY_ACCOUNT_KEY_SUFFIX_TAG, [$hash], true);
+                $keys[] = $tagGenerator->generate(self::USER_WITH_BY_ACCOUNT_KEY_SUFFIX_TAG, [$hash], true);
 
                 return $keys;
             },
@@ -405,7 +405,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $tagGenerator = $this->tagGenerator;
 
         return $this->getListCacheValue(
-            $tagGenerator->generate(self::ROLE_ASSIGNMENT_WITH_BY_ROLE_SUFFIX_TAG, [$roleId]) . '-',
+            $tagGenerator->generate(self::ROLE_ASSIGNMENT_WITH_BY_ROLE_SUFFIX_TAG, [$roleId], true),
             function () use ($roleId) {
                 return $this->persistenceHandler->userHandler()->loadRoleAssignmentsByRoleId($roleId);
             },

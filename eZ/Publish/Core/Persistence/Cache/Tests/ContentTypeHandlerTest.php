@@ -174,7 +174,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
         $group = new SPITypeGroup(['id' => 3, 'identifier' => 'media']);
         $type = new SPIType(['id' => 5, 'identifier' => 'article', 'remoteId' => '34o9tj8394t']);
 
-        // string $method, array $arguments, string $key, mixed? $data, bool? $multi, array? $additionalCalls
+        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool? $multi, array? $additionalCalls
         return [
             ['loadGroup', [3], 'ez-ctg-3', [['content_type_group', [], true]], ['ez-ctg'], $group],
             ['loadGroups', [[3]], 'ez-ctg-3', [['content_type_group', [], true]], ['ez-ctg'], [3 => $group], true],
