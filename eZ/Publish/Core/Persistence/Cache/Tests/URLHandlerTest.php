@@ -58,7 +58,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
                     ['url', [1], false],
                 ],
                 ['ez-url-1', 'url-1'],
-                [$url]
+                [$url],
             ],
         ];
     }

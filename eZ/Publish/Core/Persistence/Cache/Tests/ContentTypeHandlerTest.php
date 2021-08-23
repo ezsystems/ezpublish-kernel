@@ -50,7 +50,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content_type_group_with_id_suffix', ['media'], true],
                 ],
                 null,
-                ['ez-ctgl', 'ez-ctg-3', 'ez-ctg-media-bi']
+                ['ez-ctgl', 'ez-ctg-3', 'ez-ctg-media-bi'],
             ],
             ['deleteGroup', [3], [['type_group', [3], false]], ['tg-3']],
             ['loadContentTypes', [3, 1]], // also listed for cached cases in providerForCachedLoadMethods
@@ -63,7 +63,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content_type_list_by_group', [3], true],
                 ],
                 null,
-                ['ez-ctlbg-2', 'ez-ctlbg-3']
+                ['ez-ctlbg-2', 'ez-ctlbg-3'],
              ],
             [
                 'update',
@@ -73,7 +73,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type_map', [], false],
                     ['content_fields_type', [5], false],
                 ],
-                ['t-5', 'tm', 'cft-5']
+                ['t-5', 'tm', 'cft-5'],
             ],
             ['update', [5, 1, $typeUpdate]],
             [
@@ -84,7 +84,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type_map', [], false],
                     ['content_fields_type', [5], false],
                 ],
-                ['t-5', 'tm', 'cft-5']
+                ['t-5', 'tm', 'cft-5'],
             ],
             ['delete', [5, 1]],
             ['createDraft', [10, 5]],
@@ -97,7 +97,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 null,
                 ['ez-ctlbg-1', 'ez-ctlbg-2'],
-                new SPIType(['groupIds' => [1, 2]])
+                new SPIType(['groupIds' => [1, 2]]),
             ],
             ['copy', [10, 5, 1], [['content_type_list_by_group', [3], true]], null, ['ez-ctlbg-3'], new SPIType(['groupIds' => [3]])],
             ['unlink', [3, 5, 0], [['type', [5], false]], ['t-5']],
@@ -110,7 +110,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content_type_list_by_group', [3], true],
                 ],
                 ['t-5'],
-                ['ez-ctlbg-3']
+                ['ez-ctlbg-3'],
             ],
             ['link', [3, 5, 1]],
             ['getFieldDefinition', [7, 1]],
@@ -135,7 +135,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type_map', [], false],
                     ['content_fields_type', [5], false],
                 ],
-                ['t-5', 'tm', 'cft-5']
+                ['t-5', 'tm', 'cft-5'],
             ],
             ['removeFieldDefinition', [5, 1, 7]],
             [
@@ -146,7 +146,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type_map', [], false],
                     ['content_fields_type', [5], false],
                 ],
-                ['t-5', 'tm', 'cft-5']
+                ['t-5', 'tm', 'cft-5'],
             ],
             ['updateFieldDefinition', [5, 1, new SPITypeFieldDefinition()]],
             [
@@ -159,7 +159,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 ['t-5', 'tm', 'cft-5'],
                 null,
-                new SPIType()
+                new SPIType(),
             ],
             ['deleteByUserAndStatus', [12, 0], [['type_without_value', [], false]], ['t']],
             ['deleteByUserAndStatus', [12, 1]],
@@ -187,12 +187,12 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['by_identifier_suffix', [], false],
                 ],
                 ['ez-ctg', 'bi'],
-                $group
+                $group,
             ],
             ['loadAllGroups', [], 'ez-ctgl', [['content_type_group_list', [], true]], ['ez-ctgl'], [3 => $group]],
             ['loadContentTypes', [3, 0], 'ez-ctlbg-3', [['content_type_list_by_group', [3], true]], ['ez-ctlbg-3'], [$type]],
             ['loadContentTypeList', [[5]], 'ez-ct-5', [['content_type', [], true]], ['ez-ct'], [5 => $type], true],
-            ['load', [5, 0], 'ez-ct-5',[['content_type', [], true]], ['ez-ct'], $type],
+            ['load', [5, 0], 'ez-ct-5', [['content_type', [], true]], ['ez-ct'], $type],
             [
                 'loadByIdentifier',
                 ['article'],
@@ -202,7 +202,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['by_identifier_suffix', [], false],
                 ],
                 ['ez-ct', 'bi'],
-                $type
+                $type,
             ],
             [
                 'loadByRemoteId',
@@ -213,7 +213,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['by_remote_suffix', [], false],
                 ],
                 ['ez-ct', 'br'],
-                $type
+                $type,
             ],
             ['getSearchableFieldMap', [], 'ez-ctfm', [['content_type_field_map', [], true]], ['ez-ctfm'], [$type]],
         ];
@@ -235,7 +235,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type_group', [3], false],
                 ],
                 ['ez-ctg', 'tg-3'],
-                $group
+                $group,
             ],
             [
                 'loadGroups',
@@ -247,7 +247,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 ['ez-ctg', 'tg-3'],
                 [3 => $group],
-                true
+                true,
             ],
             [
                 'loadGroupByIdentifier',
@@ -259,7 +259,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type_group', [3], false],
                 ],
                 ['ez-ctg', 'bi', 'tg-3'],
-                $group
+                $group,
             ],
             [
                 'loadAllGroups',
@@ -270,7 +270,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type_group', [3], false],
                 ],
                 ['ez-ctgl', 'tg-3'],
-                [3 => $group]
+                [3 => $group],
             ],
             [
                 'loadContentTypes',
@@ -283,7 +283,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type', [5], false],
                 ],
                 ['ez-ctlbg-3', 'tg-3', 't', 't-5'],
-                [$type]
+                [$type],
             ],
             [
                 'loadContentTypeList',
@@ -296,7 +296,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 ['ez-ct', 't-3', 't-5'],
                 [5 => $type],
-                true
+                true,
             ],
             [
                 'load',
@@ -308,7 +308,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type', [5], false],
                 ],
                 ['ez-ct', 't', 't-5'],
-                $type
+                $type,
             ],
             [
                 'loadByIdentifier',
@@ -320,8 +320,8 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type', [], false],
                     ['type', [5], false],
                 ],
-                ['ez-ct', 'bi', 't','t-5'],
-                $type
+                ['ez-ct', 'bi', 't', 't-5'],
+                $type,
             ],
             [
                 'loadByRemoteId',
@@ -333,8 +333,8 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type', [], false],
                     ['type', [5], false],
                 ],
-                ['ez-ct', 'br', 't','t-5'],
-                $type
+                ['ez-ct', 'br', 't', 't-5'],
+                $type,
             ],
             [
                 'getSearchableFieldMap',
@@ -345,7 +345,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['type_map', [], false],
                 ],
                 ['ez-ctfm', 'tm'],
-                [$type]
+                [$type],
             ],
         ];
     }

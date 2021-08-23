@@ -53,9 +53,9 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['c-14'],
                 [
                     'ez-u-14',
-                    'ez-u-' . $escapedLogin. '-bl',
+                    'ez-u-' . $escapedLogin . '-bl',
                     'ez-u-' . $escapedEmail . '-be',
-                ]
+                ],
             ],
             [
                 'update',
@@ -68,7 +68,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['c-14', 'u-14'],
                 [
                     'ez-u-' . $escapedEmail . '-be',
-                ]
+                ],
             ],
             [
                 'updateUserToken',
@@ -78,7 +78,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['user_with_by_account_key_suffix', ['4irj8t43r'], true],
                 ],
                 ['u-14-ak'],
-                ['ez-u-4irj8t43r-bak']
+                ['ez-u-4irj8t43r-bak'],
             ],
             ['expireUserToken', ['4irj8t43r'], [['user_with_by_account_key_suffix', ['4irj8t43r'], true]], null, ['ez-u-4irj8t43r-bak']],
             [
@@ -88,7 +88,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [14], false],
                     ['user', [14], false],
                 ],
-                ['c-14', 'u-14']
+                ['c-14', 'u-14'],
             ],
             ['createRole', [new RoleCreateStruct()]],
             ['createRoleDraft', [new RoleCreateStruct()]],
@@ -104,7 +104,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role', [9], false],
                     ['role_assignment_role_list', [9], false],
                 ],
-                ['r-9', 'rarl-9']
+                ['r-9', 'rarl-9'],
             ],
             ['deleteRole', [9, 1]],
             ['addPolicyByRoleDraft', [9, $policy]],
@@ -116,7 +116,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['policy', [13], false],
                     ['role', [9], false],
                 ],
-                ['p-13', 'r-9']
+                ['p-13', 'r-9'],
             ],
             [
                 'deletePolicy',
@@ -125,7 +125,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['policy', [13], false],
                     ['role', [9], false],
                 ],
-                ['p-13', 'r-9']
+                ['p-13', 'r-9'],
             ],
             ['loadPoliciesByUserId', [14]],
             [
@@ -135,7 +135,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role_assignment_group_list', [14], false],
                     ['role_assignment_role_list', [9], false],
                 ],
-                ['ragl-14', 'rarl-9']
+                ['ragl-14', 'rarl-9'],
             ],
             ['removeRoleAssignment', [11], [['role_assignment', [11], false]], ['ra-11']],
         ];
@@ -160,7 +160,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['by_login_suffix', [], false],
                 ],
                 ['ez-u', 'bl'],
-                $user
+                $user,
             ],
             ['loadByEmail', ['nospam@ez.no'], 'ez-u-nospam_Aez.no-be', [['user_with_by_email_suffix', ['nospam_Aez.no'], true]], ['ez-u-nospam_Aez.no-be'], [$user]],
             [
@@ -172,7 +172,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['by_account_key_suffix', [], false],
                 ],
                 ['ez-u', '-bak'],
-                $user
+                $user,
             ],
             ['loadRole', [9], 'ez-r-9', [['role', [], true]], ['ez-r'], $role],
             [
@@ -184,7 +184,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['by_identifier_suffix', [], false],
                 ],
                 ['ez-r', '-bi'],
-                $role
+                $role,
             ],
             ['loadRoleAssignment', [11], 'ez-ra-11', [['role_assignment', [], true]], ['ez-ra'], $roleAssignment],
             ['loadRoleAssignmentsByRoleId', [9], 'ez-ra-9-bro', [['role_assignment_with_by_role_suffix', [9], true]], ['ez-ra-9-bro'], [$roleAssignment]],
@@ -193,12 +193,12 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [14],
                 'ez-ra-14-bg',
                 [
-                    ['role_assignment_with_by_group_suffix', [14], true]
+                    ['role_assignment_with_by_group_suffix', [14], true],
                 ],
                 ['ez-ra-14-bg'],
                 [$roleAssignment],
                 false,
-                $calls
+                $calls,
             ],
             [
                 'loadRoleAssignmentsByGroupId',
@@ -208,7 +208,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['ez-ra-14-bgi'],
                 [$roleAssignment],
                 false,
-                $calls
+                $calls,
             ],
         ];
     }
@@ -232,7 +232,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['user', [14], false],
                 ],
                 ['ez-u', 'c-14', 'u-14'],
-                $user
+                $user,
             ],
             [
                 'loadByLogin',
@@ -245,7 +245,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['user', [14], false],
                 ],
                 ['ez-u', 'bl', 'c-14', 'u-14'],
-                $user
+                $user,
             ],
             [
                 'loadByEmail',
@@ -257,7 +257,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['user', [14], false],
                 ],
                 ['ez-u-nospam_Aez.no-be', 'c-14', 'u-14'],
-                [$user]
+                [$user],
             ],
             [
                 'loadUserByToken',
@@ -271,7 +271,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['user_with_account_key_suffix', [14], false],
                 ],
                 ['ez-u', '-bak', 'c-14', 'u-14', 'u-14-bak'],
-                $user
+                $user,
             ],
             [
                 'loadRole',
@@ -282,7 +282,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role', [9], false],
                 ],
                 ['ez-r', 'r-9'],
-                $role
+                $role,
             ],
             [
                 'loadRoleByIdentifier',
@@ -294,7 +294,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role', [9], false],
                 ],
                 ['ez-r', '-bi', 'r-9'],
-                $role
+                $role,
             ],
             [
                 'loadRoleAssignment',
@@ -307,7 +307,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role_assignment_role_list', [9], false],
                 ],
                 ['ez-ra', 'ra-11', 'ragl-14', 'rarl-9'],
-                $roleAssignment
+                $roleAssignment,
             ],
             [
                 'loadRoleAssignmentsByRoleId',
@@ -322,7 +322,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role_assignment_role_list', [9], false],
                 ],
                 ['ez-ra-9-bro', 'rarl-9', 'r-9', 'ra-11', 'ragl-14', 'rarl-9'],
-                [$roleAssignment]
+                [$roleAssignment],
             ],
             [
                 'loadRoleAssignmentsByGroupId',
@@ -341,7 +341,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['ez-ra-14-bg', 'ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
                 [$roleAssignment],
                 false,
-                $calls
+                $calls,
             ],
             [
                 'loadRoleAssignmentsByGroupId',
@@ -360,7 +360,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['ez-ra-14-bgi', 'ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
                 [$roleAssignment],
                 false,
-                $calls
+                $calls,
             ],
         ];
     }

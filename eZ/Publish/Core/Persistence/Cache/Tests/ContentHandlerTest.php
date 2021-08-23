@@ -44,12 +44,12 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['createDraftFromVersion', [2, 1, 14], [['content_version_list', [2], true]], [], ['ez-c-2-vl']],
             ['copy', [2, 1]],
             ['loadDraftsForUser', [14]],
-            ['setStatus', [2, 0, 1], [['content_version', [2,1], false]], ['c-2-v-1']],
+            ['setStatus', [2, 0, 1], [['content_version', [2, 1], false]], ['c-2-v-1']],
             ['setStatus', [2, 1, 1], [['content', [2], false]], ['c-2']],
             ['updateMetadata', [2, new MetadataUpdateStruct()], [['content', [2], false]], ['c-2']],
-            ['updateContent', [2, 1, new UpdateStruct()], [['content_version', [2,1], false]], ['c-2-v-1']],
+            ['updateContent', [2, 1, new UpdateStruct()], [['content_version', [2, 1], false]], ['c-2-v-1']],
             //['deleteContent', [2]], own tests for relations complexity
-            ['deleteVersion', [2, 1], [['content_version', [2,1], false]], ['c-2-v-1']],
+            ['deleteVersion', [2, 1], [['content_version', [2, 1], false]], ['c-2-v-1']],
             ['addRelation', [new RelationCreateStruct()]],
             ['removeRelation', [66, APIRelation::COMMON]],
             ['loadRelations', [2, 1, 3]],
@@ -90,7 +90,10 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
      */
     public function providerForCachedLoadMethodsMiss(): array
     {
-        $info = new ContentInfo(['id' => 2]);
+        $info = new ContentInfo([
+            'id' => 2,
+            'contentTypeId' => 3,
+        ]);
         $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
         $content = new Content(['fields' => [], 'versionInfo' => $version]);
 
@@ -102,12 +105,12 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ez-c-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY,
                 [
                     ['content', [], true],
-                    ['content_fields_type', [null], false],
+                    ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
                 ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
-                $content
+                $content,
             ],
             [
                 'load',
@@ -115,12 +118,12 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ez-c-2-1-eng-GB|eng-US',
                 [
                     ['content', [], true],
-                    ['content_fields_type', [null], false],
+                    ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
                 ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
-                $content
+                $content,
             ],
             [
                 'load',
@@ -128,12 +131,12 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ez-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY,
                 [
                     ['content', [], true],
-                    ['content_fields_type', [null], false],
+                    ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
                 ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
-                $content
+                $content,
             ],
             [
                 'load',
@@ -141,12 +144,12 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ez-c-2-eng-GB|eng-US',
                 [
                     ['content', [], true],
-                    ['content_fields_type', [null], false],
+                    ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
                 ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
-                $content
+                $content,
             ],
             [
                 'loadContentList',
@@ -154,13 +157,13 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ez-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY,
                 [
                     ['content', [], true],
-                    ['content_fields_type', [null], false],
+                    ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
                 ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
                 [2 => $content],
-                true
+                true,
             ],
             [
                 'loadContentList',
@@ -168,13 +171,13 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ez-c-5-eng-GB|eng-US',
                 [
                     ['content', [], true],
-                    ['content_fields_type', [null], false],
+                    ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
                 ['ez-c', 'cft-2', 'c-2-v-1', 'c-2'],
                 [5 => $content],
-                true
+                true,
             ],
             [
                 'loadContentInfo',
@@ -185,7 +188,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [2], false],
                 ],
                 ['ez-ci', 'c-2'],
-                $info
+                $info,
             ],
             [
                 'loadContentInfoList',
@@ -197,7 +200,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 ['ez-ci', 'c-2'],
                 [2 => $info],
-                true
+                true,
             ],
             [
                 'loadContentInfoByRemoteId',
@@ -207,7 +210,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [2], false],
                 ],
                 ['ez-cibri', 'c-2'],
-                $info
+                $info,
             ],
             [
                 'loadVersionInfo',
@@ -219,7 +222,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [2], false],
                 ],
                 ['ez-cvi-2', 'c-2-v-1', 'c-2'],
-                $version
+                $version,
             ],
             [
                 'loadVersionInfo',
@@ -231,7 +234,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [2], false],
                 ],
                 ['ez-cvi-2', 'c-2-v-1', 'c-2'],
-                $version
+                $version,
             ],
             [
                 'listVersions',
@@ -244,7 +247,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [2], false],
                 ],
                 ['ez-c-2-vl', 'c-2', 'c-2-v-1', 'c-2'],
-                [$version]
+                [$version],
             ],
         ];
     }

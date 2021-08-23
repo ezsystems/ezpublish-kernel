@@ -36,7 +36,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias_location_path', [44], false],
                     ['url_alias_not_found', [], false],
                 ],
-                ['urlal-44', 'urlalp-44', 'urlanf']
+                ['urlal-44', 'urlalp-44', 'urlanf'],
             ],
             [
                 'createCustomUrlAlias',
@@ -49,7 +49,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 ['urlal-44', 'urlalp-44', 'urlanf', 'urla-5'],
                 null,
-                new UrlAlias(['id' => 5])
+                new UrlAlias(['id' => 5]),
             ],
             ['createGlobalUrlAlias', ['something', '1/2/44', true, null, false], [['url_alias_not_found', [], false]], ['urlanf']],
             ['createGlobalUrlAlias', ['something', '1/2/44', true, 'eng-GB', false], [['url_alias_not_found', [], false]], ['urlanf']],
@@ -63,7 +63,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias_location_path', [21], false],
                     ['url_alias_custom', [21], false],
                 ],
-                ['urla-5', 'urlal-21', 'urlalp-21', 'urlac-21']
+                ['urla-5', 'urlal-21', 'urlalp-21', 'urlac-21'],
             ],
             [
                 'locationMoved',
@@ -72,7 +72,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias_location', [21], false],
                     ['url_alias_location_path', [21], false],
                 ],
-                ['urlal-21', 'urlalp-21']
+                ['urlal-21', 'urlalp-21'],
             ],
             [
                 'locationCopied',
@@ -81,7 +81,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias_location', [21], false],
                     ['url_alias_location', [33], false],
                 ],
-                ['urlal-21', 'urlal-33']
+                ['urlal-21', 'urlal-33'],
             ],
             [
                 'locationDeleted',
@@ -92,7 +92,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 ['urlal-21', 'urlalp-21'],
                 null,
-                []
+                [],
             ],
             [
                 'locationSwapped',
@@ -103,7 +103,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias_location', [33], false],
                     ['url_alias_location_path', [33], false],
                 ],
-                ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33']
+                ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33'],
             ],
             [
                 'translationRemoved',
@@ -114,7 +114,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias_location', [33], false],
                     ['url_alias_location_path', [33], false],
                 ],
-                ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33']
+                ['urlal-21', 'urlalp-21', 'urlal-33', 'urlalp-33'],
             ],
             [
                 'archiveUrlAliasesForDeletedTranslations',
@@ -123,7 +123,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias_location', [21], false],
                     ['url_alias_location_path', [21], false],
                 ],
-                ['urlal-21', 'urlalp-21']
+                ['urlal-21', 'urlalp-21'],
             ],
         ];
     }
@@ -157,7 +157,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias', [5], false],
                 ],
                 ['ez-urlall-5', 'urlal-5', 'urla-5'],
-                [$object]
+                [$object],
             ],
             [
                 'listURLAliasesForLocation',
@@ -169,7 +169,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias', [5], false],
                 ],
                 ['ez-urlall-5-c', 'urlal-5', 'urla-5'],
-                [$object]
+                [$object],
             ],
             [
                 'lookup',
@@ -180,7 +180,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias', [5], false],
                 ],
                 ['ez-urlau-_SHome', 'urla-5'],
-                $object
+                $object,
             ],
             [
                 'loadUrlAlias',
@@ -191,7 +191,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['url_alias', [5], false],
                 ],
                 ['ez-urla-5', 'urla-5'],
-                $object
+                $object,
             ],
         ];
     }

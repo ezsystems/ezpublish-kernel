@@ -53,7 +53,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ]),
                 ],
                 [
-                    ['user_preference_with_suffix', [$userId, $name], true]
+                    ['user_preference_with_suffix', [$userId, $name], true],
                 ],
                 null,
                 [

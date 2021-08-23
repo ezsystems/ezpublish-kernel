@@ -58,7 +58,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                     ['by_identifier_suffix', [], false],
                 ],
                 ['ez-sg', '-bi'],
-                $group
+                $group,
             ],
             ['loadAllGroups', [], 'ez-sga', [['state_group_all', [], true]], ['ez-sga'], [$group]],
             ['loadObjectStates', [5], 'ez-slbg-5', [['state_list_by_group', [], true]], ['ez-slbg'], [$state]],
@@ -72,7 +72,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                     ['by_group', [5], false],
                 ],
                 ['ez-si', 'bg-5'],
-                $state
+                $state,
             ],
             [
                 'getContentState',
@@ -83,7 +83,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                     ['on_content', [4], false],
                 ],
                 ['ez-sbg', 'oc-4'],
-                $state
+                $state,
             ],
         ];
     }
@@ -91,7 +91,10 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
     public function providerForCachedLoadMethodsMiss(): array
     {
         $group = new SPIObjectStateGroup(['id' => 5]);
-        $state = new SPIObjectState(['id' => 7]);
+        $state = new SPIObjectState([
+            'id' => 7,
+            'groupId' => 5,
+        ]);
 
         // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
         return [
@@ -104,7 +107,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                     ['state_group', [5], false],
                 ],
                 ['ez-sg', 'sg-5'],
-                $group
+                $group,
             ],
             [
                 'loadGroupByIdentifier',
@@ -116,7 +119,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                     ['state_group', [5], false],
                 ],
                 ['ez-sg', '-bi', 'sg-5'],
-                $group
+                $group,
             ],
             [
                 'loadAllGroups',
@@ -127,7 +130,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                     ['state_group', [5], false],
                 ],
                 ['ez-sga', 'sg-5'],
-                [$group]
+                [$group],
             ],
             [
                 'loadObjectStates',
@@ -139,7 +142,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                     ['state', [7], false],
                 ],
                 ['ez-slbg', 'sg-5', 's-7'],
-                [$state]
+                [$state],
             ],
             [
                 'load',
@@ -148,10 +151,10 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                 [
                     ['state', [], true],
                     ['state', [7], false],
-                    ['state_group', [null], false],
+                    ['state_group', [5], false],
                 ],
-                ['ez-s', 's-7', 'sg-null'],
-                $state
+                ['ez-s', 's-7', 'sg-5'],
+                $state,
             ],
             [
                 'loadByIdentifier',
@@ -161,10 +164,10 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                     ['state_identifier', [], true],
                     ['by_group', [5], false],
                     ['state', [7], false],
-                    ['state_group', [null], false],
+                    ['state_group', [5], false],
                 ],
-                ['ez-si', 'bg-5', 's-7', 'sg-null'],
-                $state
+                ['ez-si', 'bg-5', 's-7', 'sg-5'],
+                $state,
             ],
             [
                 'getContentState',
@@ -177,7 +180,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                     ['content', [4], false],
                 ],
                 ['ez-sbg', 'oc-4', 's-7', 'c-4'],
-                $state
+                $state,
             ],
         ];
     }

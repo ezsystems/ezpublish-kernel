@@ -65,7 +65,7 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
                     ['section', [5], false],
                 ],
                 ['ez-se-5', 'se-5'],
-                $object
+                $object,
             ],
             [
                 'loadByIdentifier',
@@ -76,7 +76,7 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
                     ['section', [5], false],
                 ],
                 ['ez-se-standard-bi', 'se-5'],
-                $object
+                $object,
             ],
         ];
     }

@@ -24,7 +24,7 @@ final class TagGeneratorTest extends TestCase
             [
                 'content' => 'c-%s',
                 'content_version' => 'c-%s-v-%s',
-                'content_locations_with_parent_for_draft_suffix' => 'cl-%s-pfd'
+                'content_locations_with_parent_for_draft_suffix' => 'cl-%s-pfd',
             ]
         );
     }

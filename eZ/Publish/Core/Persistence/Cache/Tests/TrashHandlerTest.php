@@ -277,21 +277,24 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
             ->method('contentHandler')
             ->willReturn($contentHandlerMock);
 
+        $tagGeneratorArguments = [
+            ['content', [$relationSourceContentId], false],
+            ['content', [$contentId], false],
+            ['location_path', [$trashedId], false],
+        ];
+
         $tags = [
             'c-' . $relationSourceContentId,
             'c-' . $contentId,
             'lp-' . $trashedId,
         ];
 
+        //one set of arguments and tags for each relation
         $this->tagGeneratorMock
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(6))
             ->method('generate')
-            ->withConsecutive(
-                ['content', [$relationSourceContentId], false],
-                ['content', [$contentId], false],
-                ['location_path', [$trashedId], false]
-            )
-            ->willReturnOnConsecutiveCalls(...$tags);
+            ->withConsecutive(...array_merge($tagGeneratorArguments, $tagGeneratorArguments))
+            ->willReturnOnConsecutiveCalls(...array_merge($tags, $tags));
 
         $this->cacheMock
             ->expects($this->once())

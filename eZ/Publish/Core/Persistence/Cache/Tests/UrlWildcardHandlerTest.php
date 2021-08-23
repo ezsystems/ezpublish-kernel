@@ -60,7 +60,7 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
                     ['url_wildcard', [1], false],
                 ],
                 ['ez-urlw-1', 'urlw-1'],
-                $wildcard
+                $wildcard,
             ],
             [
                 'translate',
@@ -71,7 +71,7 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
                     ['url_wildcard', [1], false],
                 ],
                 ['ez-urlws-_Shome_Sabout', 'urlw-1'],
-                $wildcard
+                $wildcard,
             ],
         ];
     }

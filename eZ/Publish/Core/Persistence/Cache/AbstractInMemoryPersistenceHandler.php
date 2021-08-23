@@ -31,6 +31,7 @@ abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandle
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $inMemory
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface $tagGenerator
      */
     public function __construct(
         TransactionAwareAdapterInterface $cache,

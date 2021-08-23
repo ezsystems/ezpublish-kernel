@@ -49,13 +49,13 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['language_code', ['eng-GB'], true],
                 ],
                 null,
-                ['ez-lal', 'ez-la-5', 'ez-lac-eng-GB']
+                ['ez-lal', 'ez-la-5', 'ez-lac-eng-GB'],
             ],
             [
                 'delete',
                 [5],
                 [
-                    ['language', [5], false]
+                    ['language', [5], false],
                 ],
                 ['la-5'],
             ],
@@ -91,7 +91,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['language', [5], false],
                 ],
                 ['ez-la', 'ez-la-5'],
-                $object
+                $object,
             ],
             [
                 'loadList',
@@ -103,7 +103,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 ['ez-la', 'la-5'],
                 [5 => $object],
-                true
+                true,
             ],
             [
                 'loadAll',
@@ -115,7 +115,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 ['ez-lal', 'la-5'],
                 [5 => $object],
-                false
+                false,
             ],
             [
                 'loadByLanguageCode',
@@ -126,7 +126,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['language', [5], false],
                 ],
                 ['ez-lac', 'la-5'],
-                $object
+                $object,
             ],
             [
                 'loadListByLanguageCodes',
@@ -138,7 +138,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 ['ez-lac', 'la-5'],
                 ['eng-GB' => $object],
-                true
+                true,
             ],
         ];
     }
