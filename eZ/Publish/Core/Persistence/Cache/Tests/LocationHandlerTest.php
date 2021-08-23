@@ -75,48 +75,48 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool? $multi = false
         return [
-            ['load', [12], 'ez-l-12-1', [['location', [], true]], ['ez-l'], $location],
-            ['load', [12, ['eng-GB', 'bra-PG'], false], 'ez-l-12-bra-PG|eng-GB|0', [['location', [], true]], ['ez-l'], $location],
-            ['loadList', [[12]], 'ez-l-12-1', [['location', [], true]], ['ez-l'], [12 => $location], true],
-            ['loadList', [[12], ['eng-GB', 'bra-PG'], false], 'ez-l-12-bra-PG|eng-GB|0', [['location', [], true]], ['ez-l'], [12 => $location], true],
-            ['loadSubtreeIds', [12], 'ez-ls-12', [['location_subtree', [], true]], ['ez-ls'], [33, 44]],
+            ['load', [12], 'ibx-l-12-1', [['location', [], true]], ['ibx-l'], $location],
+            ['load', [12, ['eng-GB', 'bra-PG'], false], 'ibx-l-12-bra-PG|eng-GB|0', [['location', [], true]], ['ibx-l'], $location],
+            ['loadList', [[12]], 'ibx-l-12-1', [['location', [], true]], ['ibx-l'], [12 => $location], true],
+            ['loadList', [[12], ['eng-GB', 'bra-PG'], false], 'ibx-l-12-bra-PG|eng-GB|0', [['location', [], true]], ['ibx-l'], [12 => $location], true],
+            ['loadSubtreeIds', [12], 'ibx-ls-12', [['location_subtree', [], true]], ['ibx-ls'], [33, 44]],
             [
                 'loadLocationsByContent',
                 [4, 12],
-                'ez-cl-4-root-12',
+                'ibx-cl-4-root-12',
                 [
                     ['content', [4], false],
                     ['location', [12], false],
                     ['location_path', [12], false],
                     ['content_locations', [], true],
                 ],
-                ['c-4', 'l-12', 'lp-12', 'ez-cl'],
+                ['c-4', 'l-12', 'lp-12', 'ibx-cl'],
                 [$location],
             ],
             [
                 'loadLocationsByContent',
                 [4],
-                'ez-cl-4',
+                'ibx-cl-4',
                 [
                     ['content', [4], false],
                     ['content_locations', [], true],
                 ],
-                ['c-4', 'ez-cl'],
+                ['c-4', 'ibx-cl'],
                 [$location],
             ],
             [
                 'loadParentLocationsForDraftContent',
                 [4],
-                'ez-cl-4-pfd',
+                'ibx-cl-4-pfd',
                 [
                     ['content_locations', [], true],
                     ['parent_for_draft_suffix', [], false],
                 ],
-                ['ez-cl', '-pfd'],
+                ['ibx-cl', '-pfd'],
                 [$location],
             ],
-            ['loadByRemoteId', ['34fe5y4'], 'ez-lri-34fe5y4-1', [['location_remote_id', [], true]], ['ez-lri'], $location],
-            ['loadByRemoteId', ['34fe5y4', ['eng-GB', 'arg-ES']], 'ez-lri-34fe5y4-arg-ES|eng-GB|1', [['location_remote_id', [], true]], ['ez-lri'], $location],
+            ['loadByRemoteId', ['34fe5y4'], 'ibx-lri-34fe5y4-1', [['location_remote_id', [], true]], ['ibx-lri'], $location],
+            ['loadByRemoteId', ['34fe5y4', ['eng-GB', 'arg-ES']], 'ibx-lri-34fe5y4-arg-ES|eng-GB|1', [['location_remote_id', [], true]], ['ibx-lri'], $location],
         ];
     }
 
@@ -135,7 +135,7 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
             [
                 'load',
                 [12],
-                'ez-l-12-1',
+                'ibx-l-12-1',
                 [
                     ['location', [], true],
                     ['content', [15], false],
@@ -143,13 +143,13 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ez-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['ibx-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
                 $location,
             ],
             [
                 'load',
                 [12, ['eng-GB', 'bra-PG'], false],
-                'ez-l-12-bra-PG|eng-GB|0',
+                'ibx-l-12-bra-PG|eng-GB|0',
                 [
                     ['location', [], true],
                     ['content', [15], false],
@@ -157,13 +157,13 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ez-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['ibx-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
                 $location,
             ],
             [
                 'loadList',
                 [[12]],
-                'ez-l-12-1',
+                'ibx-l-12-1',
                 [
                     ['location', [], true],
                     ['content', [15], false],
@@ -171,7 +171,7 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ez-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['ibx-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
                 [12 => $location],
                 true,
             ],
@@ -179,7 +179,7 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'loadList',
                 [[12],
                 ['eng-GB', 'bra-PG'], false, ],
-                'ez-l-12-bra-PG|eng-GB|0',
+                'ibx-l-12-bra-PG|eng-GB|0',
                 [
                     ['location', [], true],
                     ['content', [15], false],
@@ -187,14 +187,14 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ez-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['ibx-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
                 [12 => $location],
                 true,
             ],
             [
                 'loadSubtreeIds',
                 [12],
-                'ez-ls-12',
+                'ibx-ls-12',
                 [
                     ['location_subtree', [], true],
                     ['location', [12], false],
@@ -204,13 +204,13 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location', [44], false],
                     ['location_path', [44], false],
                 ],
-                ['ez-ls', 'l-12', 'lp-12', 'l-33', 'lp-33', 'l-44', 'lp-44'],
+                ['ibx-ls', 'l-12', 'lp-12', 'l-33', 'lp-33', 'l-44', 'lp-44'],
                 [33, 44],
             ],
             [
                 'loadLocationsByContent',
                 [4, 12],
-                'ez-cl-4-root-12',
+                'ibx-cl-4-root-12',
                 [
                     ['content', [4], false],
                     ['location', [12], false],
@@ -221,13 +221,13 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-4', 'l-12', 'lp-12', 'ez-cl', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-4', 'l-12', 'lp-12', 'ibx-cl', 'c-15', 'l-12', 'lp-1', 'lp-2'],
                 [$location],
             ],
             [
                 'loadLocationsByContent',
                 [4],
-                'ez-cl-4',
+                'ibx-cl-4',
                 [
                     ['content', [4], false],
                     ['content_locations', [], true],
@@ -236,13 +236,13 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-4', 'ez-cl', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-4', 'ibx-cl', 'c-15', 'l-12', 'lp-1', 'lp-2'],
                 [$location],
             ],
             [
                 'loadParentLocationsForDraftContent',
                 [4],
-                'ez-cl-4-pfd',
+                'ibx-cl-4-pfd',
                 [
                     ['content_locations', [], true],
                     ['parent_for_draft_suffix', [], false],
@@ -252,13 +252,13 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ez-cl', '-pfd', 'c-4', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['ibx-cl', '-pfd', 'c-4', 'c-15', 'l-12', 'lp-1', 'lp-2'],
                 [$location],
             ],
             [
                 'loadByRemoteId',
                 ['34fe5y4'],
-                'ez-lri-34fe5y4-1',
+                'ibx-lri-34fe5y4-1',
                 [
                     ['location_remote_id', [], true],
                     ['content', [15], false],
@@ -266,13 +266,13 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ez-lri', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['ibx-lri', 'c-15', 'l-12', 'lp-1', 'lp-2'],
                 $location,
             ],
             [
                 'loadByRemoteId',
                 ['34fe5y4', ['eng-GB', 'arg-ES']],
-                'ez-lri-34fe5y4-arg-ES|eng-GB|1',
+                'ibx-lri-34fe5y4-arg-ES|eng-GB|1',
                 [
                     ['location_remote_id', [], true],
                     ['content', [15], false],
@@ -280,7 +280,7 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ez-lri', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['ibx-lri', 'c-15', 'l-12', 'lp-1', 'lp-2'],
                 $location,
             ],
         ];

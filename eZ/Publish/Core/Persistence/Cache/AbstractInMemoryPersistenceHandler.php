@@ -8,7 +8,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 
 /**
@@ -21,7 +21,7 @@ abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandle
     /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
-    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface */
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface */
     protected $tagGenerator;
 
     /**
@@ -31,7 +31,7 @@ abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandle
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $inMemory
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface $tagGenerator
+     * @param \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface $tagGenerator
      */
     public function __construct(
         TransactionAwareAdapterInterface $cache,

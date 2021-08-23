@@ -38,7 +38,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['language_list', [], true],
                 ],
                 null,
-                ['ez-lal'],
+                ['ibx-lal'],
             ],
             [
                 'update',
@@ -49,7 +49,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['language_code', ['eng-GB'], true],
                 ],
                 null,
-                ['ez-lal', 'ez-la-5', 'ez-lac-eng-GB'],
+                ['ibx-lal', 'ibx-la-5', 'ibx-lac-eng-GB'],
             ],
             [
                 'delete',
@@ -68,11 +68,11 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool $multi
         return [
-            ['load', [5], 'ez-la-5', [['language', [], true]], ['ez-la'], $object],
-            ['loadList', [[5]], 'ez-la-5', [['language', [], true]], ['ez-la'], [5 => $object], true],
-            ['loadAll', [], 'ez-lal', [['language_list', [], true]], ['ez-lal'], [5 => $object], false],
-            ['loadByLanguageCode', ['eng-GB'], 'ez-lac-eng-GB', [['language_code', [], true]], ['ez-lac'], $object],
-            ['loadListByLanguageCodes', [['eng-GB']], 'ez-lac-eng-GB', [['language_code', [], true]], ['ez-lac'], ['eng-GB' => $object], true],
+            ['load', [5], 'ibx-la-5', [['language', [], true]], ['ibx-la'], $object],
+            ['loadList', [[5]], 'ibx-la-5', [['language', [], true]], ['ibx-la'], [5 => $object], true],
+            ['loadAll', [], 'ibx-lal', [['language_list', [], true]], ['ibx-lal'], [5 => $object], false],
+            ['loadByLanguageCode', ['eng-GB'], 'ibx-lac-eng-GB', [['language_code', [], true]], ['ibx-lac'], $object],
+            ['loadListByLanguageCodes', [['eng-GB']], 'ibx-lac-eng-GB', [['language_code', [], true]], ['ibx-lac'], ['eng-GB' => $object], true],
         ];
     }
 
@@ -85,58 +85,58 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
             [
                 'load',
                 [5],
-                'ez-la-5',
+                'ibx-la-5',
                 [
                     ['language', [], true],
                     ['language', [5], false],
                 ],
-                ['ez-la', 'ez-la-5'],
+                ['ibx-la', 'ibx-la-5'],
                 $object,
             ],
             [
                 'loadList',
                 [[5]],
-                'ez-la-5',
+                'ibx-la-5',
                 [
                     ['language', [], true],
                     ['language', [5], false],
                 ],
-                ['ez-la', 'la-5'],
+                ['ibx-la', 'la-5'],
                 [5 => $object],
                 true,
             ],
             [
                 'loadAll',
                 [],
-                'ez-lal',
+                'ibx-lal',
                 [
                     ['language_list', [], true],
                     ['language', [5], false],
                 ],
-                ['ez-lal', 'la-5'],
+                ['ibx-lal', 'la-5'],
                 [5 => $object],
                 false,
             ],
             [
                 'loadByLanguageCode',
                 ['eng-GB'],
-                'ez-lac-eng-GB',
+                'ibx-lac-eng-GB',
                 [
                     ['language_code', [], true],
                     ['language', [5], false],
                 ],
-                ['ez-lac', 'la-5'],
+                ['ibx-lac', 'la-5'],
                 $object,
             ],
             [
                 'loadListByLanguageCodes',
                 [['eng-GB']],
-                'ez-lac-eng-GB',
+                'ibx-lac-eng-GB',
                 [
                     ['language_code', [], true],
                     ['language', [5], false],
                 ],
-                ['ez-lac', 'la-5'],
+                ['ibx-lac', 'la-5'],
                 ['eng-GB' => $object],
                 true,
             ],

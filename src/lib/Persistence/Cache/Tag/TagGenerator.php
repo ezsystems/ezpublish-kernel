@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Persistence\Cache\Tags;
+namespace Ibexa\Core\Persistence\Cache\Tag;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 

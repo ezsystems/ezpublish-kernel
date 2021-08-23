@@ -60,8 +60,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-nc-' . $ownerId,
-                    'ez-npc-' . $ownerId,
+                    'ibx-nc-' . $ownerId,
+                    'ibx-npc-' . $ownerId,
                 ],
                 new SPINotification(),
             ],
@@ -77,8 +77,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-n-' . $notificationId,
-                    'ez-npc-' . $ownerId,
+                    'ibx-n-' . $notificationId,
+                    'ibx-npc-' . $ownerId,
                 ],
                 new SPINotification(),
             ],
@@ -94,9 +94,9 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-n-' . $notificationId,
-                    'ez-nc-' . $ownerId,
-                    'ez-npc-' . $ownerId,
+                    'ibx-n-' . $notificationId,
+                    'ibx-nc-' . $ownerId,
+                    'ibx-npc-' . $ownerId,
                 ],
             ],
             [
@@ -122,9 +122,9 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $ownerId,
                 ],
-                'ez-npc-' . $ownerId,
+                'ibx-npc-' . $ownerId,
                 [['notification_pending_count', [$ownerId], true]],
-                ['ez-npc-' . $ownerId],
+                ['ibx-npc-' . $ownerId],
                 $notificationCount,
             ],
             [
@@ -132,9 +132,9 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $ownerId,
                 ],
-                'ez-nc-' . $ownerId,
+                'ibx-nc-' . $ownerId,
                 [['notification_count', [$ownerId], true]],
-                ['ez-nc-' . $ownerId],
+                ['ibx-nc-' . $ownerId],
                 $notificationCountPending,
             ],
             [
@@ -142,9 +142,9 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $notificationId,
                 ],
-                'ez-n-' . $notificationId,
+                'ibx-n-' . $notificationId,
                 [['notification', [$notificationId], true]],
-                ['ez-n-' . $notificationId],
+                ['ibx-n-' . $notificationId],
                 new SPINotification(['id' => $notificationId]),
             ],
         ];
@@ -164,9 +164,9 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $ownerId,
                 ],
-                'ez-npc-' . $ownerId,
+                'ibx-npc-' . $ownerId,
                 [['notification_pending_count', [$ownerId], true]],
-                ['ez-npc-' . $ownerId],
+                ['ibx-npc-' . $ownerId],
                 $notificationCount,
             ],
             [
@@ -174,9 +174,9 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $ownerId,
                 ],
-                'ez-nc-' . $ownerId,
+                'ibx-nc-' . $ownerId,
                 [['notification_count', [$ownerId], true]],
-                ['ez-nc-' . $ownerId],
+                ['ibx-nc-' . $ownerId],
                 $notificationCountPending,
             ],
             [
@@ -184,9 +184,9 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $notificationId,
                 ],
-                'ez-n-' . $notificationId,
+                'ibx-n-' . $notificationId,
                 [['notification', [$notificationId], true]],
-                ['ez-n-' . $notificationId],
+                ['ibx-n-' . $notificationId],
                 new SPINotification(['id' => $notificationId]),
             ],
         ];

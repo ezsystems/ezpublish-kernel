@@ -6,7 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
@@ -26,7 +26,7 @@ abstract class AbstractHandler
     /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */
     protected $logger;
 
-    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface */
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface */
     protected $tagGenerator;
 
     /**
@@ -35,7 +35,7 @@ abstract class AbstractHandler
      * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
-     * @param \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface $tagGenerator
+     * @param \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface $tagGenerator
      */
     public function __construct(
         TagAwareAdapterInterface $cache,

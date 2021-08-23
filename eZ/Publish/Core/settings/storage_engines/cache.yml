@@ -28,8 +28,8 @@ parameters:
     ezpublish.spi.persistence.cache.inmemory.content.ttl: 300
     ezpublish.spi.persistence.cache.inmemory.content.limit: 100
     ezpublish.spi.persistence.cache.inmemory.content.enable: true
-    ibexa.persistence.cache.tag_prefix: 'ez-'
-    ibexa.persistence.cache.tag_patterns:
+    ibexa.core.persistence.cache.tag_prefix: 'ibx-'
+    ibexa.core.persistence.cache.tag_patterns:
         by_identifier_suffix: '-bi'
         by_remote_suffix: '-br'
         parent_for_draft_suffix: '-pfd'
@@ -168,13 +168,13 @@ services:
             - "%ezpublish.spi.persistence.cache.inmemory.content.enable%"
         tags: ['ez.spi.persistence.cache.inmemory']
 
-    eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface:
-        alias: eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator
+    Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface:
+        alias: Ibexa\Core\Persistence\Cache\Tag\TagGenerator
 
-    eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator:
+    Ibexa\Core\Persistence\Cache\Tag\TagGenerator:
         arguments:
-            $prefix: '%ibexa.persistence.cache.tag_prefix%'
-            $patterns: '%ibexa.persistence.cache.tag_patterns%'
+            $prefix: '%ibexa.core.persistence.cache.tag_prefix%'
+            $patterns: '%ibexa.core.persistence.cache.tag_patterns%'
 
     # SPI Persistence Cache Handlers, incl abstracts
     ezpublish.spi.persistence.cache.abstractHandler:
@@ -184,7 +184,7 @@ services:
             - "@ezpublish.cache_pool"
             - "@ezpublish.api.storage_engine"
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
-            - '@eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface'
+            - '@Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface'
 
     ezpublish.spi.persistence.cache.abstractInMemoryHandler:
         class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler
@@ -200,7 +200,7 @@ services:
         abstract:  true
         arguments:
             - "@ezpublish.api.storage_engine"
-            - '@eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface'
+            - '@Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface'
 
     ezpublish.spi.persistence.cache.sectionHandler:
         class: "%ezpublish.spi.persistence.cache.sectionHandler.class%"

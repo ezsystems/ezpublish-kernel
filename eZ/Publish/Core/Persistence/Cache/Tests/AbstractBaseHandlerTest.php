@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentHandler as CacheContentHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLanguageHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
-use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHandler;
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
@@ -55,7 +55,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
     /** @var \Closure */
     protected $cacheItemsClosure;
 
-    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\TagGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $tagGeneratorMock;
 
     /**

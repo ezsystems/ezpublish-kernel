@@ -39,7 +39,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
-            ['loadById', [1], 'ez-url-1', [['url', [1], true]], ['ez-url-1'], [$url]],
+            ['loadById', [1], 'ibx-url-1', [['url', [1], true]], ['ibx-url-1'], [$url]],
         ];
     }
 
@@ -52,12 +52,12 @@ class URLHandlerTest extends AbstractCacheHandlerTest
             [
                 'loadById',
                 [1],
-                'ez-url-1',
+                'ibx-url-1',
                 [
                     ['url', [1], true],
                     ['url', [1], false],
                 ],
-                ['ez-url-1', 'url-1'],
+                ['ibx-url-1', 'url-1'],
                 [$url],
             ],
         ];

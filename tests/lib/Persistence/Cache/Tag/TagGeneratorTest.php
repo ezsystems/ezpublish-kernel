@@ -4,10 +4,10 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Persistence\Cache\Tests\Tags;
+namespace Ibexa\Tests\Core\Persistence\Cache\Tag;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator;
+use Ibexa\Core\Persistence\Cache\Tag\TagGenerator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class TagGeneratorTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface */
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface */
     private $tagGenerator;
 
     public function setUp(): void

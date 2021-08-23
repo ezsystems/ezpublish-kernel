@@ -53,7 +53,7 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
-            ['loadByUserIdAndLocationId', [3, [43]], 'ez-b-3-43', [['bookmark', [3], true]], ['ez-b-3'], [43 => $bookmark], true, $calls],
+            ['loadByUserIdAndLocationId', [3, [43]], 'ibx-b-3-43', [['bookmark', [3], true]], ['ibx-b-3'], [43 => $bookmark], true, $calls],
         ];
     }
 
@@ -72,7 +72,7 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
             [
                 'loadByUserIdAndLocationId',
                 [3, [43]],
-                'ez-b-3-43',
+                'ibx-b-3-43',
                 [
                     ['bookmark', [3], true],
                     ['bookmark', [1], false],
@@ -82,7 +82,7 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
                     ['location_path', [2], false],
                     ['location_path', [43], false],
                 ],
-                ['ez-b-3', 'b-1', 'l-43', 'u-3', 'lp-1', 'lp-2', 'lp-43'],
+                ['ibx-b-3', 'b-1', 'l-43', 'u-3', 'lp-1', 'lp-2', 'lp-43'],
                 [43 => $bookmark],
                 true,
                 $calls,

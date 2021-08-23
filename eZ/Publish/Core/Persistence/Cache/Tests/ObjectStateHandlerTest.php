@@ -30,14 +30,14 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
     {
         // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key
         return [
-            ['createGroup', [new SPIInputStruct()], [['state_group_all', [], true]], [], 'ez-sga'],
+            ['createGroup', [new SPIInputStruct()], [['state_group_all', [], true]], [], 'ibx-sga'],
             ['updateGroup', [5, new SPIInputStruct()], [['state_group', [5], false]], ['sg-5']],
             ['deleteGroup', [5], [['state_group', [5], false]], ['sg-5']],
-            ['create', [5, new SPIInputStruct()], [['state_list_by_group', [5], true]], [], 'ez-slbg-5'],
+            ['create', [5, new SPIInputStruct()], [['state_list_by_group', [5], true]], [], 'ibx-slbg-5'],
             ['update', [7, new SPIInputStruct()], [['state', [7], false]], ['s-7']],
             ['setPriority', [7, 99], [['state', [7], false]], ['s-7']],
             ['delete', [7], [['state', [7], false]], ['s-7']],
-            ['setContentState', [4, 5, 7], [['state_by_group_on_content', [5, 4], true]], [], 'ez-sbg-5-oc-4'],
+            ['setContentState', [4, 5, 7], [['state_by_group_on_content', [5, 4], true]], [], 'ibx-sbg-5-oc-4'],
         ];
     }
 
@@ -48,41 +48,41 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
         return [
-            ['loadGroup', [5], 'ez-sg-5', [['state_group', [], true]], ['ez-sg'], $group],
+            ['loadGroup', [5], 'ibx-sg-5', [['state_group', [], true]], ['ibx-sg'], $group],
             [
                 'loadGroupByIdentifier',
                 ['lock'],
-                'ez-sg-lock-bi',
+                'ibx-sg-lock-bi',
                 [
                     ['state_group', [], true],
                     ['by_identifier_suffix', [], false],
                 ],
-                ['ez-sg', '-bi'],
+                ['ibx-sg', '-bi'],
                 $group,
             ],
-            ['loadAllGroups', [], 'ez-sga', [['state_group_all', [], true]], ['ez-sga'], [$group]],
-            ['loadObjectStates', [5], 'ez-slbg-5', [['state_list_by_group', [], true]], ['ez-slbg'], [$state]],
-            ['load', [7], 'ez-s-7', [['state', [], true]], ['ez-s'], $state],
+            ['loadAllGroups', [], 'ibx-sga', [['state_group_all', [], true]], ['ibx-sga'], [$group]],
+            ['loadObjectStates', [5], 'ibx-slbg-5', [['state_list_by_group', [], true]], ['ibx-slbg'], [$state]],
+            ['load', [7], 'ibx-s-7', [['state', [], true]], ['ibx-s'], $state],
             [
                 'loadByIdentifier',
                 ['lock', 5],
-                'ez-si-lock-bg-5',
+                'ibx-si-lock-bg-5',
                 [
                     ['state_identifier', [], true],
                     ['by_group', [5], false],
                 ],
-                ['ez-si', 'bg-5'],
+                ['ibx-si', 'bg-5'],
                 $state,
             ],
             [
                 'getContentState',
                 [4, 5],
-                'ez-sbg-5-oc-4',
+                'ibx-sbg-5-oc-4',
                 [
                     ['state_by_group', [], true],
                     ['on_content', [4], false],
                 ],
-                ['ez-sbg', 'oc-4'],
+                ['ibx-sbg', 'oc-4'],
                 $state,
             ],
         ];
@@ -101,85 +101,85 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
             [
                 'loadGroup',
                 [5],
-                'ez-sg-5',
+                'ibx-sg-5',
                 [
                     ['state_group', [], true],
                     ['state_group', [5], false],
                 ],
-                ['ez-sg', 'sg-5'],
+                ['ibx-sg', 'sg-5'],
                 $group,
             ],
             [
                 'loadGroupByIdentifier',
                 ['lock'],
-                'ez-sg-lock-bi',
+                'ibx-sg-lock-bi',
                 [
                     ['state_group', [], true],
                     ['by_identifier_suffix', [], false],
                     ['state_group', [5], false],
                 ],
-                ['ez-sg', '-bi', 'sg-5'],
+                ['ibx-sg', '-bi', 'sg-5'],
                 $group,
             ],
             [
                 'loadAllGroups',
                 [],
-                'ez-sga',
+                'ibx-sga',
                 [
                     ['state_group_all', [], true],
                     ['state_group', [5], false],
                 ],
-                ['ez-sga', 'sg-5'],
+                ['ibx-sga', 'sg-5'],
                 [$group],
             ],
             [
                 'loadObjectStates',
                 [5],
-                'ez-slbg-5',
+                'ibx-slbg-5',
                 [
                     ['state_list_by_group', [], true],
                     ['state_group', [5], false],
                     ['state', [7], false],
                 ],
-                ['ez-slbg', 'sg-5', 's-7'],
+                ['ibx-slbg', 'sg-5', 's-7'],
                 [$state],
             ],
             [
                 'load',
                 [7],
-                'ez-s-7',
+                'ibx-s-7',
                 [
                     ['state', [], true],
                     ['state', [7], false],
                     ['state_group', [5], false],
                 ],
-                ['ez-s', 's-7', 'sg-5'],
+                ['ibx-s', 's-7', 'sg-5'],
                 $state,
             ],
             [
                 'loadByIdentifier',
                 ['lock', 5],
-                'ez-si-lock-bg-5',
+                'ibx-si-lock-bg-5',
                 [
                     ['state_identifier', [], true],
                     ['by_group', [5], false],
                     ['state', [7], false],
                     ['state_group', [5], false],
                 ],
-                ['ez-si', 'bg-5', 's-7', 'sg-5'],
+                ['ibx-si', 'bg-5', 's-7', 'sg-5'],
                 $state,
             ],
             [
                 'getContentState',
                 [4, 5],
-                'ez-sbg-5-oc-4',
+                'ibx-sbg-5-oc-4',
                 [
                     ['state_by_group', [], true],
                     ['on_content', [4], false],
                     ['state', [7], false],
                     ['content', [4], false],
                 ],
-                ['ez-sbg', 'oc-4', 's-7', 'c-4'],
+                ['ibx-sbg', 'oc-4', 's-7', 'c-4'],
                 $state,
             ],
         ];

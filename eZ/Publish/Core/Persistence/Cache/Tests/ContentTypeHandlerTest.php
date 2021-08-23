@@ -40,7 +40,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
         return [
-            ['createGroup', [new SPITypeGroupCreateStruct()], [['content_type_group_list', [], true]], null, ['ez-ctgl']],
+            ['createGroup', [new SPITypeGroupCreateStruct()], [['content_type_group_list', [], true]], null, ['ibx-ctgl']],
             [
                 'updateGroup',
                 [$groupUpdate],
@@ -50,7 +50,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content_type_group_with_id_suffix', ['media'], true],
                 ],
                 null,
-                ['ez-ctgl', 'ez-ctg-3', 'ez-ctg-media-bi'],
+                ['ibx-ctgl', 'ibx-ctg-3', 'ibx-ctg-media-bi'],
             ],
             ['deleteGroup', [3], [['type_group', [3], false]], ['tg-3']],
             ['loadContentTypes', [3, 1]], // also listed for cached cases in providerForCachedLoadMethods
@@ -63,7 +63,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content_type_list_by_group', [3], true],
                 ],
                 null,
-                ['ez-ctlbg-2', 'ez-ctlbg-3'],
+                ['ibx-ctlbg-2', 'ibx-ctlbg-3'],
              ],
             [
                 'update',
@@ -96,10 +96,10 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content_type_list_by_group', [2], true],
                 ],
                 null,
-                ['ez-ctlbg-1', 'ez-ctlbg-2'],
+                ['ibx-ctlbg-1', 'ibx-ctlbg-2'],
                 new SPIType(['groupIds' => [1, 2]]),
             ],
-            ['copy', [10, 5, 1], [['content_type_list_by_group', [3], true]], null, ['ez-ctlbg-3'], new SPIType(['groupIds' => [3]])],
+            ['copy', [10, 5, 1], [['content_type_list_by_group', [3], true]], null, ['ibx-ctlbg-3'], new SPIType(['groupIds' => [3]])],
             ['unlink', [3, 5, 0], [['type', [5], false]], ['t-5']],
             ['unlink', [3, 5, 1]],
             [
@@ -110,7 +110,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content_type_list_by_group', [3], true],
                 ],
                 ['t-5'],
-                ['ez-ctlbg-3'],
+                ['ibx-ctlbg-3'],
             ],
             ['link', [3, 5, 1]],
             ['getFieldDefinition', [7, 1]],
@@ -176,46 +176,46 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool? $multi, array? $additionalCalls
         return [
-            ['loadGroup', [3], 'ez-ctg-3', [['content_type_group', [], true]], ['ez-ctg'], $group],
-            ['loadGroups', [[3]], 'ez-ctg-3', [['content_type_group', [], true]], ['ez-ctg'], [3 => $group], true],
+            ['loadGroup', [3], 'ibx-ctg-3', [['content_type_group', [], true]], ['ibx-ctg'], $group],
+            ['loadGroups', [[3]], 'ibx-ctg-3', [['content_type_group', [], true]], ['ibx-ctg'], [3 => $group], true],
             [
                 'loadGroupByIdentifier',
                 ['content'],
-                'ez-ctg-content-bi',
+                'ibx-ctg-content-bi',
                 [
                     ['content_type_group', [], true],
                     ['by_identifier_suffix', [], false],
                 ],
-                ['ez-ctg', 'bi'],
+                ['ibx-ctg', 'bi'],
                 $group,
             ],
-            ['loadAllGroups', [], 'ez-ctgl', [['content_type_group_list', [], true]], ['ez-ctgl'], [3 => $group]],
-            ['loadContentTypes', [3, 0], 'ez-ctlbg-3', [['content_type_list_by_group', [3], true]], ['ez-ctlbg-3'], [$type]],
-            ['loadContentTypeList', [[5]], 'ez-ct-5', [['content_type', [], true]], ['ez-ct'], [5 => $type], true],
-            ['load', [5, 0], 'ez-ct-5', [['content_type', [], true]], ['ez-ct'], $type],
+            ['loadAllGroups', [], 'ibx-ctgl', [['content_type_group_list', [], true]], ['ibx-ctgl'], [3 => $group]],
+            ['loadContentTypes', [3, 0], 'ibx-ctlbg-3', [['content_type_list_by_group', [3], true]], ['ibx-ctlbg-3'], [$type]],
+            ['loadContentTypeList', [[5]], 'ibx-ct-5', [['content_type', [], true]], ['ibx-ct'], [5 => $type], true],
+            ['load', [5, 0], 'ibx-ct-5', [['content_type', [], true]], ['ibx-ct'], $type],
             [
                 'loadByIdentifier',
                 ['article'],
-                'ez-ct-article-bi',
+                'ibx-ct-article-bi',
                 [
                     ['content_type', [], true],
                     ['by_identifier_suffix', [], false],
                 ],
-                ['ez-ct', 'bi'],
+                ['ibx-ct', 'bi'],
                 $type,
             ],
             [
                 'loadByRemoteId',
                 ['f34tg45gf'],
-                'ez-ct-f34tg45gf-br',
+                'ibx-ct-f34tg45gf-br',
                 [
                     ['content_type', [], true],
                     ['by_remote_suffix', [], false],
                 ],
-                ['ez-ct', 'br'],
+                ['ibx-ct', 'br'],
                 $type,
             ],
-            ['getSearchableFieldMap', [], 'ez-ctfm', [['content_type_field_map', [], true]], ['ez-ctfm'], [$type]],
+            ['getSearchableFieldMap', [], 'ibx-ctfm', [['content_type_field_map', [], true]], ['ibx-ctfm'], [$type]],
         ];
     }
 
@@ -229,122 +229,122 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
             [
                 'loadGroup',
                 [3],
-                'ez-ctg-3',
+                'ibx-ctg-3',
                 [
                     ['content_type_group', [], true],
                     ['type_group', [3], false],
                 ],
-                ['ez-ctg', 'tg-3'],
+                ['ibx-ctg', 'tg-3'],
                 $group,
             ],
             [
                 'loadGroups',
                 [[3]],
-                'ez-ctg-3',
+                'ibx-ctg-3',
                 [
                     ['content_type_group', [], true],
                     ['type_group', [3], false],
                 ],
-                ['ez-ctg', 'tg-3'],
+                ['ibx-ctg', 'tg-3'],
                 [3 => $group],
                 true,
             ],
             [
                 'loadGroupByIdentifier',
                 ['content'],
-                'ez-ctg-content-bi',
+                'ibx-ctg-content-bi',
                 [
                     ['content_type_group', [], true],
                     ['by_identifier_suffix', [], false],
                     ['type_group', [3], false],
                 ],
-                ['ez-ctg', 'bi', 'tg-3'],
+                ['ibx-ctg', 'bi', 'tg-3'],
                 $group,
             ],
             [
                 'loadAllGroups',
                 [],
-                'ez-ctgl',
+                'ibx-ctgl',
                 [
                     ['content_type_group_list', [], true],
                     ['type_group', [3], false],
                 ],
-                ['ez-ctgl', 'tg-3'],
+                ['ibx-ctgl', 'tg-3'],
                 [3 => $group],
             ],
             [
                 'loadContentTypes',
                 [3, 0],
-                'ez-ctlbg-3',
+                'ibx-ctlbg-3',
                 [
                     ['content_type_list_by_group', [3], true],
                     ['type_group', [3], false],
                     ['type', [], false],
                     ['type', [5], false],
                 ],
-                ['ez-ctlbg-3', 'tg-3', 't', 't-5'],
+                ['ibx-ctlbg-3', 'tg-3', 't', 't-5'],
                 [$type],
             ],
             [
                 'loadContentTypeList',
                 [[5]],
-                'ez-ct-5',
+                'ibx-ct-5',
                 [
                     ['content_type', [], true],
                     ['type', [], false],
                     ['type', [5], false],
                 ],
-                ['ez-ct', 't-3', 't-5'],
+                ['ibx-ct', 't-3', 't-5'],
                 [5 => $type],
                 true,
             ],
             [
                 'load',
                 [5, 0],
-                'ez-ct-5',
+                'ibx-ct-5',
                 [
                     ['content_type', [], true],
                     ['type', [], false],
                     ['type', [5], false],
                 ],
-                ['ez-ct', 't', 't-5'],
+                ['ibx-ct', 't', 't-5'],
                 $type,
             ],
             [
                 'loadByIdentifier',
                 ['article'],
-                'ez-ct-article-bi',
+                'ibx-ct-article-bi',
                 [
                     ['content_type', [], true],
                     ['by_identifier_suffix', [], false],
                     ['type', [], false],
                     ['type', [5], false],
                 ],
-                ['ez-ct', 'bi', 't', 't-5'],
+                ['ibx-ct', 'bi', 't', 't-5'],
                 $type,
             ],
             [
                 'loadByRemoteId',
                 ['f34tg45gf'],
-                'ez-ct-f34tg45gf-br',
+                'ibx-ct-f34tg45gf-br',
                 [
                     ['content_type', [], true],
                     ['by_remote_suffix', [], false],
                     ['type', [], false],
                     ['type', [5], false],
                 ],
-                ['ez-ct', 'br', 't', 't-5'],
+                ['ibx-ct', 'br', 't', 't-5'],
                 $type,
             ],
             [
                 'getSearchableFieldMap',
                 [],
-                'ez-ctfm',
+                'ibx-ctfm',
                 [
                     ['content_type_field_map', [], true],
                     ['type_map', [], false],
                 ],
-                ['ez-ctfm', 'tm'],
+                ['ibx-ctfm', 'tm'],
                 [$type],
             ],
         ];
@@ -361,7 +361,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
         $method = 'publish';
         $arguments = [5];
         $type = new SPIType(['id' => 5, 'groupIds' => [3, 4]]);
-        $cacheItem = $this->getCacheItem('ez-ct-5', $type);
+        $cacheItem = $this->getCacheItem('ibx-ct-5', $type);
 
         $handlerMethodName = $this->getHandlerMethodName();
 
@@ -394,9 +394,9 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
                 't-5',
                 'tm',
                 'cft-5',
-                'ez-ct',
-                'ez-ctlbg-3',
-                'ez-ctlbg-4'
+                'ibx-ct',
+                'ibx-ctlbg-3',
+                'ibx-ctlbg-4'
             );
 
         $this->cacheMock
@@ -413,7 +413,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
         $this->cacheMock
             ->expects($this->once())
             ->method('deleteItems')
-            ->with(['ez-ctlbg-3', 'ez-ctlbg-4'])
+            ->with(['ibx-ctlbg-3', 'ibx-ctlbg-4'])
             ->willReturn(true);
 
         $handler = $this->persistenceCacheHandler->$handlerMethodName();

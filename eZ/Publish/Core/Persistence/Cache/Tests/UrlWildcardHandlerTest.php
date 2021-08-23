@@ -40,8 +40,8 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
-            ['load', [1], 'ez-urlw-1', [['url_wildcard', [1], true]], ['ez-urlw-1'], $wildcard],
-            ['translate', ['/home/about'], 'ez-urlws-_Shome_Sabout', [['url_wildcard_source', ['_Shome_Sabout'], true]], ['ez-urlws-_Shome_Sabout'], $wildcard],
+            ['load', [1], 'ibx-urlw-1', [['url_wildcard', [1], true]], ['ibx-urlw-1'], $wildcard],
+            ['translate', ['/home/about'], 'ibx-urlws-_Shome_Sabout', [['url_wildcard_source', ['_Shome_Sabout'], true]], ['ibx-urlws-_Shome_Sabout'], $wildcard],
         ];
     }
 
@@ -54,23 +54,23 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
             [
                 'load',
                 [1],
-                'ez-urlw-1',
+                'ibx-urlw-1',
                 [
                     ['url_wildcard', [1], true],
                     ['url_wildcard', [1], false],
                 ],
-                ['ez-urlw-1', 'urlw-1'],
+                ['ibx-urlw-1', 'urlw-1'],
                 $wildcard,
             ],
             [
                 'translate',
                 ['/home/about'],
-                'ez-urlws-_Shome_Sabout',
+                'ibx-urlws-_Shome_Sabout',
                 [
                     ['url_wildcard_source', ['_Shome_Sabout'], true],
                     ['url_wildcard', [1], false],
                 ],
-                ['ez-urlws-_Shome_Sabout', 'urlw-1'],
+                ['ibx-urlws-_Shome_Sabout', 'urlw-1'],
                 $wildcard,
             ],
         ];

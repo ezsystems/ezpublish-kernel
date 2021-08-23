@@ -7,7 +7,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
@@ -35,7 +35,7 @@ class CachingHandler implements BaseLanguageHandler
      */
     protected $cache;
 
-    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface */
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface */
     protected $tagGenerator;
 
     /**
@@ -43,7 +43,7 @@ class CachingHandler implements BaseLanguageHandler
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $innerHandler
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $cache
-     * @param \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface $tagGenerator
+     * @param \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface $tagGenerator
      */
     public function __construct(
         BaseLanguageHandler $innerHandler,

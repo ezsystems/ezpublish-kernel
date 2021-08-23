@@ -7,7 +7,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
-use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct as SPILanguageCreateStruct;
@@ -42,7 +42,7 @@ class CachingLanguageHandlerTest extends TestCase
      */
     protected $languageCacheMock;
 
-    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGenerator */
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface */
     protected $tagGeneratorMock;
 
     /**
@@ -164,11 +164,11 @@ class CachingLanguageHandlerTest extends TestCase
         $tagGeneratorMock->expects($this->once())
             ->method('generate')
             ->with('language', [2], true)
-            ->willReturn('ez-la-2');
+            ->willReturn('ibx-la-2');
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-la-2'))
+            ->with($this->equalTo('ibx-la-2'))
             ->willReturn($this->getLanguageFixture());
 
         $result = $handler->load(2);
@@ -192,11 +192,11 @@ class CachingLanguageHandlerTest extends TestCase
         $tagGeneratorMock->expects($this->once())
             ->method('generate')
             ->with('language', [2], true)
-            ->willReturn('ez-la-2');
+            ->willReturn('ibx-la-2');
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-la-2'))
+            ->with($this->equalTo('ibx-la-2'))
             ->willReturn(null);
 
         $innerHandlerMock->expects($this->once())
@@ -224,11 +224,11 @@ class CachingLanguageHandlerTest extends TestCase
         $tagGeneratorMock->expects($this->once())
             ->method('generate')
             ->with('language_code', ['eng-US'], true)
-            ->willReturn('ez-lac-eng-US');
+            ->willReturn('ibx-lac-eng-US');
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-lac-eng-US'))
+            ->with($this->equalTo('ibx-lac-eng-US'))
             ->willReturn($this->getLanguageFixture());
 
         $result = $handler->loadByLanguageCode('eng-US');
@@ -252,11 +252,11 @@ class CachingLanguageHandlerTest extends TestCase
         $tagGeneratorMock->expects($this->once())
             ->method('generate')
             ->with('language_code', ['eng-US'], true)
-            ->willReturn('ez-lac-eng-US');
+            ->willReturn('ibx-lac-eng-US');
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-lac-eng-US'))
+            ->with($this->equalTo('ibx-lac-eng-US'))
             ->willReturn(null);
 
         $innerHandlerMock->expects($this->once())
@@ -284,11 +284,11 @@ class CachingLanguageHandlerTest extends TestCase
         $tagGeneratorMock->expects($this->once())
             ->method('generate')
             ->with('language_list', [], true)
-            ->willReturn('ez-lal');
+            ->willReturn('ibx-lal');
 
         $cacheMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('ez-lal'))
+            ->with($this->equalTo('ibx-lal'))
             ->willReturn([]);
 
         $result = $handler->loadAll();
@@ -316,8 +316,8 @@ class CachingLanguageHandlerTest extends TestCase
                 ['language_list', [], true]
             )
             ->willReturnOnConsecutiveCalls(
-                'ez-la-2',
-                'ez-lal'
+                'ibx-la-2',
+                'ibx-lal'
             );
 
         $innerHandlerMock->expects($this->once())
@@ -326,7 +326,7 @@ class CachingLanguageHandlerTest extends TestCase
 
         $cacheMock->expects($this->once())
             ->method('deleteMulti')
-            ->with($this->equalTo(['ez-la-2', 'ez-lal']));
+            ->with($this->equalTo(['ibx-la-2', 'ibx-lal']));
 
         $result = $handler->delete(2);
     }

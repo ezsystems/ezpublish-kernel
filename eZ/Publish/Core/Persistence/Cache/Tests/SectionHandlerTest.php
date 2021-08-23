@@ -45,8 +45,8 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
 
         // string $method, array $arguments string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
         return [
-            ['load', [5], 'ez-se-5', [['section', [5], true]], ['ez-se-5'], $object],
-            ['loadByIdentifier', ['standard'], 'ez-se-standard-bi', [['section_with_by_id', ['standard'], true]], ['ez-se-standard-bi'], $object],
+            ['load', [5], 'ibx-se-5', [['section', [5], true]], ['ibx-se-5'], $object],
+            ['loadByIdentifier', ['standard'], 'ibx-se-standard-bi', [['section_with_by_id', ['standard'], true]], ['ibx-se-standard-bi'], $object],
         ];
     }
 
@@ -59,23 +59,23 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
             [
                 'load',
                 [5],
-                'ez-se-5',
+                'ibx-se-5',
                 [
                     ['section', [5], true],
                     ['section', [5], false],
                 ],
-                ['ez-se-5', 'se-5'],
+                ['ibx-se-5', 'se-5'],
                 $object,
             ],
             [
                 'loadByIdentifier',
                 ['standard'],
-                'ez-se-standard-bi',
+                'ibx-se-standard-bi',
                 [
                     ['section_with_by_id', ['standard'], true],
                     ['section', [5], false],
                 ],
-                ['ez-se-standard-bi', 'se-5'],
+                ['ibx-se-standard-bi', 'se-5'],
                 $object,
             ],
         ];
