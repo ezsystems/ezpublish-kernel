@@ -20,7 +20,7 @@ final class TagGeneratorTest extends TestCase
 
     public function setUp(): void
     {
-        $this->tagGenerator = new TagGenerator('ez-',
+        $this->tagGenerator = new TagGenerator('ibx-',
             [
                 'content' => 'c-%s',
                 'content_version' => 'c-%s-v-%s',
@@ -33,8 +33,8 @@ final class TagGeneratorTest extends TestCase
     {
         return [
             [['content', [], false], 'c'],
-            [['content_version', [1, 2], true], 'ez-c-1-v-2'],
-            [['content_locations_with_parent_for_draft_suffix', [3], true], 'ez-cl-3-pfd'],
+            [['content_version', [1, 2], true], 'ibx-c-1-v-2'],
+            [['content_locations_with_parent_for_draft_suffix', [3], true], 'ibx-cl-3-pfd'],
         ];
     }
 
@@ -42,7 +42,7 @@ final class TagGeneratorTest extends TestCase
     {
         return [
             [['test', [], false], 'c'],
-            [['some_invalid_pattern', [1, 2], true], 'ez-c-1-v-2'],
+            [['some_invalid_pattern', [1, 2], true], 'ibx-c-1-v-2'],
         ];
     }
 
