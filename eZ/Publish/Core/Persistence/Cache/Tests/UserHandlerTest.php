@@ -39,7 +39,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $escapedLogin = str_replace('@', '_A', $user->login);
         $escapedEmail = str_replace('@', '_A', $user->email);
 
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key
+        // string $method, array $arguments, array?, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, array? $key
         return [
             [
                 'create',
@@ -148,7 +148,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $roleAssignment = new RoleAssignment(['id' => 11, 'roleId' => 9, 'contentId' => 14]);
         $calls = [['locationHandler', Location\Handler::class, 'loadLocationsByContent', [new Location(['pathString' => '/1/2/43/'])]]];
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             ['load', [14], 'ibx-u-14', [['user', [], true]], ['ibx-u'], $user],
             [
@@ -220,7 +220,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $roleAssignment = new RoleAssignment(['id' => 11, 'roleId' => 9, 'contentId' => 14]);
         $calls = [['locationHandler', Location\Handler::class, 'loadLocationsByContent', [new Location(['pathString' => '/1/2/43/'])]]];
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             [
                 'load',
@@ -391,7 +391,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         $roleTag = 'r-' . $originalRoleId;
 
-        $this->tagGeneratorMock
+        $this->cacheIdentifierGeneratorMock
             ->expects($this->once())
             ->method('generate')
             ->with('role', [$originalRoleId], false)
@@ -469,7 +469,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         $tags = ['ragl-14', 'rarl-9', 'lp-43'];
 
-        $this->tagGeneratorMock
+        $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(3))
             ->method('generate')
             ->withConsecutive(

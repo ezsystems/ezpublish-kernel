@@ -29,7 +29,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $language = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, array? $key
         return [
             [
                 'create',
@@ -66,7 +66,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $object = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool $multi
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool $multi
         return [
             ['load', [5], 'ibx-la-5', [['language', [], true]], ['ibx-la'], $object],
             ['loadList', [[5]], 'ibx-la-5', [['language', [], true]], ['ibx-la'], [5 => $object], true],
@@ -80,7 +80,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $object = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool $multi
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool $multi
         return [
             [
                 'load',

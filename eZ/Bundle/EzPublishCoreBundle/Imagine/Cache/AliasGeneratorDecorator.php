@@ -10,7 +10,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
-use eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Routing\RequestContext;
@@ -40,24 +40,25 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
     /** @var \Symfony\Component\Routing\RequestContext */
     private $requestContext;
 
-    /** @var \eZ\Publish\Core\Persistence\Cache\Tags\TagGeneratorInterface */
-    private $tagGenerator;
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface */
+    private $cacheIdentifierGenerator;
 
     /**
      * @param \eZ\Publish\SPI\Variation\VariationHandler $aliasGenerator
      * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \Symfony\Component\Routing\RequestContext $requestContext
+     * @param \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
      */
     public function __construct(
         VariationHandler $aliasGenerator,
         TagAwareAdapterInterface $cache,
         RequestContext $requestContext,
-        TagGeneratorInterface $tagGenerator
+        CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
     ) {
         $this->aliasGenerator = $aliasGenerator;
         $this->cache = $cache;
         $this->requestContext = $requestContext;
-        $this->tagGenerator = $tagGenerator;
+        $this->cacheIdentifierGenerator = $cacheIdentifierGenerator;
     }
 
     /**
@@ -102,7 +103,7 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
     private function getCacheKey(Field $field, VersionInfo $versionInfo, $variationName)
     {
         return sprintf(
-            $this->tagGenerator->generate(self::IMAGE_VARIATION_TAG, [], true) . '-%s-%s-%s-%d-%d-%d-%s-%s',
+            $this->cacheIdentifierGenerator->generateKey(self::IMAGE_VARIATION_TAG, [], true) . '-%s-%s-%s-%d-%d-%d-%s-%s',
             $this->siteAccess->name ?? 'default',
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
@@ -119,14 +120,14 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
         $contentId = $versionInfo->getContentInfo()->id;
 
         return [
-            $this->tagGenerator->generate(self::IMAGE_VARIATION_TAG),
-            $this->tagGenerator->generate(self::IMAGE_VARIATION_NAME_TAG, [$variationName]),
-            $this->tagGenerator->generate(self::IMAGE_VARIATION_SITEACCESS_TAG, [$this->siteAccess->name ?? 'default']),
-            $this->tagGenerator->generate(self::IMAGE_VARIATION_CONTENT_TAG, [$contentId]),
-            $this->tagGenerator->generate(self::IMAGE_VARIATION_FIELD_TAG, [$field->id]),
-            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
-            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
-            $this->tagGenerator->generate(self::CONTENT_VERSION_TAG, [$contentId, $versionInfo->versionNo]),
+            $this->cacheIdentifierGenerator->generateTag(self::IMAGE_VARIATION_TAG),
+            $this->cacheIdentifierGenerator->generateTag(self::IMAGE_VARIATION_NAME_TAG, [$variationName]),
+            $this->cacheIdentifierGenerator->generateTag(self::IMAGE_VARIATION_SITEACCESS_TAG, [$this->siteAccess->name ?? 'default']),
+            $this->cacheIdentifierGenerator->generateTag(self::IMAGE_VARIATION_CONTENT_TAG, [$contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::IMAGE_VARIATION_FIELD_TAG, [$field->id]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_TAG, [$contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_TAG, [$contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_VERSION_TAG, [$contentId, $versionInfo->versionNo]),
         ];
     }
 }

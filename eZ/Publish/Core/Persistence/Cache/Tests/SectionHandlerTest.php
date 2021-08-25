@@ -26,13 +26,13 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, string? $key
         return [
             ['create', ['Standard', 'standard']],
-            ['update', [5, 'Standard', 'standard'], [['section', [5], false]], ['se-5']],
+            ['update', [5, 'Standard', 'standard'], [['section', [5], false]], null, ['se-5']],
             ['loadAll', []],
-            ['delete', [5], [['section', [5], false]], ['se-5']],
-            ['assign', [5, 42], [['content', [42], false]], ['c-42']],
+            ['delete', [5], [['section', [5], false]], null, ['se-5']],
+            ['assign', [5, 42], [['content', [42], false]], null, ['c-42']],
             ['assignmentsCount', [5]],
             ['policiesCount', [5]],
             ['countRoleAssignmentsUsingSection', [5]],
@@ -43,7 +43,7 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
     {
         $object = new SPISection(['id' => 5]);
 
-        // string $method, array $arguments string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             ['load', [5], 'ibx-se-5', [['section', [5], true]], ['ibx-se-5'], $object],
             ['loadByIdentifier', ['standard'], 'ibx-se-standard-bi', [['section_with_by_id', ['standard'], true]], ['ibx-se-standard-bi'], $object],
@@ -54,7 +54,7 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
     {
         $object = new SPISection(['id' => 5]);
 
-        // string $method, array $arguments string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             [
                 'load',

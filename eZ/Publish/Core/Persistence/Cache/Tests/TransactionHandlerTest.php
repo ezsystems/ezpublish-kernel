@@ -25,7 +25,7 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, string? $key
         return [
             ['beginTransaction', []],
             ['commit', []],
@@ -34,14 +34,14 @@ class TransactionHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForCachedLoadMethodsHit(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, string $key, mixed? $data
         return [
         ];
     }
 
     public function providerForCachedLoadMethodsMiss(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, string $key, mixed? $data
         return [
         ];
     }

@@ -24,7 +24,8 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
      *
      * @param string $method
      * @param array $arguments
-     * @param array|null $tagGeneratorArguments
+     * @param array|null $cacheTagGeneratingArguments
+     * @param array|null $cacheKeyGeneratingArguments
      * @param array|null $tags
      * @param string|array|null $key
      * @param mixed $returnValue
@@ -32,7 +33,8 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
     final public function testUnCachedMethods(
         string $method,
         array $arguments,
-        array $tagGeneratorArguments = null,
+        array $cacheTagGeneratingArguments = null,
+        array $cacheKeyGeneratingArguments = null,
         array $tags = null,
         $key = null,
         $returnValue = null
@@ -56,15 +58,32 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
             ->willReturn($returnValue);
 
         if ($tags || $key) {
-            if ($tagGeneratorArguments) {
-                $callsCount = count($tagGeneratorArguments);
-                $resultKeys = array_merge((array) $tags, (array) $key);
+            if ($cacheTagGeneratingArguments) {
+                $callsCount = count($cacheTagGeneratingArguments);
 
-                $this->tagGeneratorMock
-                    ->expects(!empty($tagGeneratorArguments) ? $this->exactly($callsCount) : $this->never())
-                    ->method('generate')
-                    ->withConsecutive(...$tagGeneratorArguments)
-                    ->willReturnOnConsecutiveCalls(...$resultKeys);
+                $this->cacheIdentifierGeneratorMock
+                    ->expects(!empty($cacheTagGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                    ->method('generateTag')
+                    ->withConsecutive(...$cacheTagGeneratingArguments)
+                    ->willReturnOnConsecutiveCalls(...$tags);
+            }
+
+            if ($cacheKeyGeneratingArguments) {
+                $callsCount = count($cacheKeyGeneratingArguments);
+
+                if (is_array($key)) {
+                    $this->cacheIdentifierGeneratorMock
+                        ->expects(!empty($cacheKeyGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                        ->method('generateKey')
+                        ->withConsecutive(...$cacheKeyGeneratingArguments)
+                        ->willReturnOnConsecutiveCalls(...$key);
+                } else {
+                    $this->cacheIdentifierGeneratorMock
+                        ->expects(!empty($cacheKeyGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                        ->method('generateKey')
+                        ->with($cacheKeyGeneratingArguments[0][0])
+                        ->willReturn($key);
+                }
             }
 
             $this->cacheMock
@@ -97,8 +116,8 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
      * @param string $method
      * @param array $arguments
      * @param string $key
-     * @param array|null $tagGeneratorArguments
-     * @param array|null $tagGeneratorResults
+     * @param array|null $cacheIdentifierGeneratorArguments
+     * @param array|null $cacheIdentifierGeneratorResults
      * @param mixed $data
      * @param bool $multi Default false, set to true if method will lookup several cache items.
      * @param array $additionalCalls Sets of additional calls being made to handlers, with 4 values (0: handler name, 1: handler class, 2: method, 3: return data)
@@ -107,8 +126,8 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
         string $method,
         array $arguments,
         string $key,
-        array $tagGeneratorArguments = null,
-        array $tagGeneratorResults = null,
+        array $cacheIdentifierGeneratorArguments = null,
+        array $cacheIdentifierGeneratorResults = null,
         $data = null,
         bool $multi = false,
         array $additionalCalls = []
@@ -118,14 +137,14 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
 
         $this->loggerMock->expects($this->never())->method('logCall');
 
-        if ($tagGeneratorArguments) {
-            $callsCount = count($tagGeneratorArguments);
+        if ($cacheIdentifierGeneratorArguments) {
+            $callsCount = count($cacheIdentifierGeneratorArguments);
 
-            $this->tagGeneratorMock
-                ->expects(!empty($tagGeneratorArguments) ? $this->exactly($callsCount) : $this->never())
+            $this->cacheIdentifierGeneratorMock
+                ->expects(!empty($cacheIdentifierGeneratorArguments) ? $this->exactly($callsCount) : $this->never())
                 ->method('generate')
-                ->withConsecutive(...$tagGeneratorArguments)
-                ->willReturnOnConsecutiveCalls(...$tagGeneratorResults);
+                ->withConsecutive(...$cacheIdentifierGeneratorArguments)
+                ->willReturnOnConsecutiveCalls(...$cacheIdentifierGeneratorResults);
         }
 
         if ($multi) {
@@ -166,8 +185,8 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
      * @param string $method
      * @param array $arguments
      * @param string $key
-     * @param array|null $tagGeneratorArguments
-     * @param array|null $tagGeneratorResults
+     * @param array|null $cacheIdentifierGeneratorArguments
+     * @param array|null $cacheIdentifierGeneratorResults
      * @param object $data
      * @param bool $multi Default false, set to true if method will lookup several cache items.
      * @param array $additionalCalls Sets of additional calls being made to handlers, with 4 values (0: handler name, 1: handler class, 2: method, 3: return data)
@@ -176,8 +195,8 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
         string $method,
         array $arguments,
         string $key,
-        array $tagGeneratorArguments = null,
-        array $tagGeneratorResults = null,
+        array $cacheIdentifierGeneratorArguments = null,
+        array $cacheIdentifierGeneratorResults = null,
         $data = null,
         bool $multi = false,
         array $additionalCalls = []
@@ -187,14 +206,14 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
 
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        if ($tagGeneratorArguments) {
-            $callsCount = count($tagGeneratorArguments);
+        if ($cacheIdentifierGeneratorArguments) {
+            $callsCount = count($cacheIdentifierGeneratorArguments);
 
-            $this->tagGeneratorMock
-                ->expects(!empty($tagGeneratorArguments) ? $this->exactly($callsCount) : $this->never())
+            $this->cacheIdentifierGeneratorMock
+                ->expects(!empty($cacheIdentifierGeneratorArguments) ? $this->exactly($callsCount) : $this->never())
                 ->method('generate')
-                ->withConsecutive(...$tagGeneratorArguments)
-                ->willReturnOnConsecutiveCalls(...$tagGeneratorResults);
+                ->withConsecutive(...$cacheIdentifierGeneratorArguments)
+                ->willReturnOnConsecutiveCalls(...$cacheIdentifierGeneratorResults);
         }
 
         if ($multi) {

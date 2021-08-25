@@ -28,16 +28,16 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, array? $keys
         return [
-            ['createGroup', [new SPIInputStruct()], [['state_group_all', [], true]], [], 'ibx-sga'],
-            ['updateGroup', [5, new SPIInputStruct()], [['state_group', [5], false]], ['sg-5']],
-            ['deleteGroup', [5], [['state_group', [5], false]], ['sg-5']],
-            ['create', [5, new SPIInputStruct()], [['state_list_by_group', [5], true]], [], 'ibx-slbg-5'],
-            ['update', [7, new SPIInputStruct()], [['state', [7], false]], ['s-7']],
-            ['setPriority', [7, 99], [['state', [7], false]], ['s-7']],
-            ['delete', [7], [['state', [7], false]], ['s-7']],
-            ['setContentState', [4, 5, 7], [['state_by_group_on_content', [5, 4], true]], [], 'ibx-sbg-5-oc-4'],
+            ['createGroup', [new SPIInputStruct()], null, [['state_group_all', [], true]], null, 'ibx-sga'],
+            ['updateGroup', [5, new SPIInputStruct()], [['state_group', [5], false]], null, ['sg-5']],
+            ['deleteGroup', [5], [['state_group', [5], false]], null, ['sg-5']],
+            ['create', [5, new SPIInputStruct()], null, [['state_list_by_group', [5], true]], [], 'ibx-slbg-5'],
+            ['update', [7, new SPIInputStruct()], [['state', [7], false]], null, ['s-7']],
+            ['setPriority', [7, 99], [['state', [7], false]], null, ['s-7']],
+            ['delete', [7], [['state', [7], false]], null, ['s-7']],
+            ['setContentState', [4, 5, 7], null, [['state_by_group_on_content', [5, 4], true]], [], 'ibx-sbg-5-oc-4'],
         ];
     }
 
@@ -46,7 +46,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
         $group = new SPIObjectStateGroup(['id' => 5]);
         $state = new SPIObjectState(['id' => 7]);
 
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, string $key, mixed? $data
         return [
             ['loadGroup', [5], 'ibx-sg-5', [['state_group', [], true]], ['ibx-sg'], $group],
             [
@@ -96,7 +96,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
             'groupId' => 5,
         ]);
 
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, string $key, mixed? $data
         return [
             [
                 'loadGroup',

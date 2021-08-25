@@ -15,9 +15,9 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
  */
 class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implements ContentLanguageHandlerInterface
 {
-    private const LANGUAGE_TAG = 'language';
-    private const LANGUAGE_CODE_TAG = 'language_code';
-    private const LANGUAGE_LIST_TAG = 'language_list';
+    private const LANGUAGE_IDENTIFIER = 'language';
+    private const LANGUAGE_CODE_IDENTIFIER = 'language_code';
+    private const LANGUAGE_LIST_IDENTIFIER = 'language_list';
 
     /** @var callable */
     private $getTags;
@@ -30,18 +30,18 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
      */
     protected function init(): void
     {
-        $tagGenerator = $this->tagGenerator;
+        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
 
-        $this->getTags = static function (Language $language) use ($tagGenerator) {
+        $this->getTags = static function (Language $language) use ($cacheIdentifierGenerator) {
             return [
-                $tagGenerator->generate(self::LANGUAGE_TAG, [$language->id]),
+                $cacheIdentifierGenerator->generateTag(self::LANGUAGE_IDENTIFIER, [$language->id]),
             ];
         };
-        $this->getKeys = function (Language $language) use ($tagGenerator) {
+        $this->getKeys = function (Language $language) use ($cacheIdentifierGenerator) {
             return [
-                $tagGenerator->generate(self::LANGUAGE_TAG, [$language->id], true),
-                $tagGenerator->generate(
-                    self::LANGUAGE_CODE_TAG,
+                $cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [$language->id], true),
+                $cacheIdentifierGenerator->generateKey(
+                    self::LANGUAGE_CODE_IDENTIFIER,
                     [$this->escapeForCacheKey($language->languageCode)],
                     true
                 ),
@@ -56,7 +56,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $this->cache->deleteItems([
-            $this->tagGenerator->generate(self::LANGUAGE_LIST_TAG, [], true),
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_LIST_IDENTIFIER, [], true),
         ]);
 
         return $this->persistenceHandler->contentLanguageHandler()->create($struct);
@@ -71,10 +71,10 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         $return = $this->persistenceHandler->contentLanguageHandler()->update($struct);
 
         $this->cache->deleteItems([
-            $this->tagGenerator->generate(self::LANGUAGE_LIST_TAG, [], true),
-            $this->tagGenerator->generate(self::LANGUAGE_TAG, [$struct->id], true),
-            $this->tagGenerator->generate(
-                self::LANGUAGE_CODE_TAG,
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_LIST_IDENTIFIER, [], true),
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [$struct->id], true),
+            $this->cacheIdentifierGenerator->generateKey(
+                self::LANGUAGE_CODE_IDENTIFIER,
                 [$this->escapeForCacheKey($struct->languageCode)],
                 true
             ),
@@ -90,7 +90,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getCacheValue(
             $id,
-            $this->tagGenerator->generate(self::LANGUAGE_TAG, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [], true) . '-',
             function ($id) {
                 return $this->persistenceHandler->contentLanguageHandler()->load($id);
             },
@@ -106,7 +106,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getMultipleCacheValues(
             $ids,
-            $this->tagGenerator->generate(self::LANGUAGE_TAG, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [], true) . '-',
             function (array $ids) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadList($ids);
             },
@@ -122,7 +122,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getCacheValue(
             $this->escapeForCacheKey($languageCode),
-            $this->tagGenerator->generate(self::LANGUAGE_CODE_TAG, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_CODE_IDENTIFIER, [], true) . '-',
             function () use ($languageCode) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
             },
@@ -138,7 +138,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getMultipleCacheValues(
             array_map([$this, 'escapeForCacheKey'], $languageCodes),
-            $this->tagGenerator->generate(self::LANGUAGE_CODE_TAG, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_CODE_IDENTIFIER, [], true) . '-',
             function () use ($languageCodes) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($languageCodes);
             },
@@ -153,7 +153,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function loadAll()
     {
         return $this->getListCacheValue(
-            $this->tagGenerator->generate(self::LANGUAGE_LIST_TAG, [], true),
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_LIST_IDENTIFIER, [], true),
             function () {
                 return $this->persistenceHandler->contentLanguageHandler()->loadAll();
             },
@@ -172,7 +172,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
 
         // As we don't have locale we clear cache by tag invalidation
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(self::LANGUAGE_TAG, [$id]),
+            $this->cacheIdentifierGenerator->generateTag(self::LANGUAGE_IDENTIFIER, [$id]),
         ]);
 
         return $return;

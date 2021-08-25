@@ -25,7 +25,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, string? $key
         return [
             ['find', [new URLQuery()]],
             ['findUsages', [1]],
@@ -37,7 +37,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
     {
         $url = new URL(['id' => 1]);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             ['loadById', [1], 'ibx-url-1', [['url', [1], true]], ['ibx-url-1'], [$url]],
         ];
@@ -47,7 +47,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
     {
         $url = new URL(['id' => 1]);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             [
                 'loadById',
@@ -88,7 +88,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
             ->with($urlId, $updateStruct)
             ->willReturn(true);
 
-        $this->tagGeneratorMock
+        $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(4))
             ->method('generate')
             ->withConsecutive(
@@ -136,7 +136,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
             ->with($urlId, $updateStruct)
             ->willReturn(true);
 
-        $this->tagGeneratorMock
+        $this->cacheIdentifierGeneratorMock
             ->expects($this->once())
             ->method('generate')
             ->with('url', [1], false)

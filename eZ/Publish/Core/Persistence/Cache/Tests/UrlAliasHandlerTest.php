@@ -26,7 +26,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
         return [
             [
                 'publishUrlAliasForLocation',
@@ -132,7 +132,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $object = new UrlAlias(['id' => 5]);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             ['listURLAliasesForLocation', [5], 'ibx-urlall-5', [['url_alias_location_list', [5], true]], ['ibx-urlall-5'], [$object]],
             ['listURLAliasesForLocation', [5, true], 'ibx-urlall-5-c', [['url_alias_location_list_custom', [5], true]], ['ibx-urlall-5-c'], [$object]],
@@ -145,7 +145,7 @@ class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $object = new UrlAlias(['id' => 5]);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             [
                 'listURLAliasesForLocation',

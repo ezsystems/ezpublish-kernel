@@ -38,7 +38,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
         $groupUpdate = new SPITypeGroupUpdateStruct(['id' => 3, 'identifier' => 'media']);
         $typeUpdate = new SPITypeUpdateStruct(['identifier' => 'article', 'remoteId' => '34o9tj8394t']);
 
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
         return [
             ['createGroup', [new SPITypeGroupCreateStruct()], [['content_type_group_list', [], true]], null, ['ibx-ctgl']],
             [
@@ -174,7 +174,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
         $group = new SPITypeGroup(['id' => 3, 'identifier' => 'media']);
         $type = new SPIType(['id' => 5, 'identifier' => 'article', 'remoteId' => '34o9tj8394t']);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool? $multi, array? $additionalCalls
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool? $multi, array? $additionalCalls
         return [
             ['loadGroup', [3], 'ibx-ctg-3', [['content_type_group', [], true]], ['ibx-ctg'], $group],
             ['loadGroups', [[3]], 'ibx-ctg-3', [['content_type_group', [], true]], ['ibx-ctg'], [3 => $group], true],
@@ -379,21 +379,29 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
             ->with(...$arguments)
             ->willReturn(null);
 
-        $this->tagGeneratorMock
-            ->expects($this->exactly(6))
-            ->method('generate')
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->exactly(3))
+            ->method('generateTag')
             ->withConsecutive(
                 ['type', [5], false],
                 ['type_map', [], false],
-                ['content_fields_type', [5], false],
+                ['content_fields_type', [5], false]
+            )
+            ->willReturnOnConsecutiveCalls(
+                't-5',
+                'tm',
+                'cft-5'
+            );
+
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->exactly(3))
+            ->method('generateKey')
+            ->withConsecutive(
                 ['content_type', [], true],
                 ['content_type_list_by_group', [3], true],
                 ['content_type_list_by_group', [4], true]
             )
             ->willReturnOnConsecutiveCalls(
-                't-5',
-                'tm',
-                'cft-5',
                 'ibx-ct',
                 'ibx-ctlbg-3',
                 'ibx-ctlbg-4'

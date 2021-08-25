@@ -28,7 +28,7 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
         return [
             ['copySubtree', [12, 45]],
             ['move', [12, 45], [['location_path', [12], false]], ['lp-12']],
@@ -73,7 +73,7 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $location = new Location(['id' => 12]);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool? $multi = false
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool? $multi = false
         return [
             ['load', [12], 'ibx-l-12-1', [['location', [], true]], ['ibx-l'], $location],
             ['load', [12, ['eng-GB', 'bra-PG'], false], 'ibx-l-12-bra-PG|eng-GB|0', [['location', [], true]], ['ibx-l'], $location],
@@ -130,7 +130,7 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
             ]
         );
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool? $multi = false
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool? $multi = false
         return [
             [
                 'load',

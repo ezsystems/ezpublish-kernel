@@ -8,7 +8,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 
 /**
@@ -21,8 +21,8 @@ abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandle
     /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
-    /** @var \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface */
-    protected $tagGenerator;
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface */
+    protected $cacheIdentifierGenerator;
 
     /**
      * Setups current handler with everything needed.
@@ -31,19 +31,19 @@ abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandle
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $inMemory
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface $tagGenerator
+     * @param \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
      */
     public function __construct(
         TransactionAwareAdapterInterface $cache,
         PersistenceLogger $logger,
         InMemoryCache $inMemory,
         PersistenceHandler $persistenceHandler,
-        TagGeneratorInterface $tagGenerator
+        CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
     ) {
         parent::__construct($cache, $logger, $inMemory);
 
         $this->persistenceHandler = $persistenceHandler;
-        $this->tagGenerator = $tagGenerator;
+        $this->cacheIdentifierGenerator = $cacheIdentifierGenerator;
 
         $this->init();
     }

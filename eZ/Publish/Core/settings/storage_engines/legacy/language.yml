@@ -36,7 +36,7 @@ services:
         arguments:
             - "@ezpublish.spi.persistence.legacy.language.handler.inner"
             - "@ezpublish.spi.persistence.cache.inmemory"
-            - '@Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface'
+            - '@Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGenerator'
 
     ezpublish.spi.persistence.legacy.language.handler:
         alias: ezpublish.spi.persistence.legacy.language.handler.caching

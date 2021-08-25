@@ -21,15 +21,15 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
  */
 class ContentHandler extends AbstractInMemoryPersistenceHandler implements ContentHandlerInterface
 {
-    private const CONTENT_TAG = 'content';
-    private const LOCATION_TAG = 'location';
-    private const LOCATION_PATH_TAG = 'location_path';
-    private const CONTENT_INFO_TAG = 'content_info';
-    private const CONTENT_INFO_BY_REMOTE_ID_TAG = 'content_info_by_remote_id';
-    private const CONTENT_FIELDS_TYPE_TAG = 'content_fields_type';
-    private const CONTENT_VERSION_LIST_TAG = 'content_version_list';
-    private const CONTENT_VERSION_INFO_TAG = 'content_version_info';
-    private const CONTENT_VERSION_TAG = 'content_version';
+    private const CONTENT_IDENTIFIER = 'content';
+    private const LOCATION_IDENTIFIER = 'location';
+    private const LOCATION_PATH_IDENTIFIER = 'location_path';
+    private const CONTENT_INFO_IDENTIFIER = 'content_info';
+    private const CONTENT_INFO_BY_REMOTE_ID_IDENTIFIER = 'content_info_by_remote_id';
+    private const CONTENT_FIELDS_TYPE_IDENTIFIER = 'content_fields_type';
+    private const CONTENT_VERSION_LIST_IDENTIFIER = 'content_version_list';
+    private const CONTENT_VERSION_INFO_IDENTIFIER = 'content_version_info';
+    private const CONTENT_VERSION_IDENTIFIER = 'content_version';
 
     public const ALL_TRANSLATIONS_KEY = '0';
 
@@ -44,39 +44,39 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
     protected function init(): void
     {
-        $tagGenerator = $this->tagGenerator;
+        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
 
-        $this->getContentInfoTags = function (ContentInfo $info, array $tags = []) use ($tagGenerator) {
-            $tags[] = $tagGenerator->generate(self::CONTENT_TAG, [$info->id]);
+        $this->getContentInfoTags = function (ContentInfo $info, array $tags = []) use ($cacheIdentifierGenerator) {
+            $tags[] = $cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$info->id]);
 
             if ($info->mainLocationId) {
                 $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($info->id);
                 foreach ($locations as $location) {
-                    $tags[] = $tagGenerator->generate(self::LOCATION_TAG, [$location->id]);
+                    $tags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]);
                     foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-                        $tags[] = $tagGenerator->generate(self::LOCATION_PATH_TAG, [$pathId]);
+                        $tags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
                     }
                 }
             }
 
             return $tags;
         };
-        $this->getContentInfoKeys = function (ContentInfo $info) use ($tagGenerator) {
+        $this->getContentInfoKeys = function (ContentInfo $info) use ($cacheIdentifierGenerator) {
             return [
-                $tagGenerator->generate(self::CONTENT_INFO_TAG, [$info->id], true),
-                $tagGenerator->generate(
-                    self::CONTENT_INFO_BY_REMOTE_ID_TAG,
+                $cacheIdentifierGenerator->generateKey(self::CONTENT_INFO_IDENTIFIER, [$info->id], true),
+                $cacheIdentifierGenerator->generateKey(
+                    self::CONTENT_INFO_BY_REMOTE_ID_IDENTIFIER,
                     [$this->escapeForCacheKey($info->remoteId)],
                     true
                 ),
             ];
         };
 
-        $this->getContentTags = function (Content $content) use ($tagGenerator) {
+        $this->getContentTags = function (Content $content) use ($cacheIdentifierGenerator) {
             $versionInfo = $content->versionInfo;
             $tags = [
-                $tagGenerator->generate(
-                    self::CONTENT_FIELDS_TYPE_TAG,
+                $cacheIdentifierGenerator->generateTag(
+                    self::CONTENT_FIELDS_TYPE_IDENTIFIER,
                     [$versionInfo->contentInfo->contentTypeId]
                 ),
             ];
@@ -104,7 +104,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $this->logger->logCall(__METHOD__, ['content' => $contentId, 'version' => $srcVersion, 'user' => $userId]);
         $draft = $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId, $languageCode);
         $this->cache->deleteItems([
-            $this->tagGenerator->generate(self::CONTENT_VERSION_LIST_TAG, [$contentId], true),
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_VERSION_LIST_IDENTIFIER, [$contentId], true),
         ]);
 
         return $draft;
@@ -131,20 +131,20 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         $keySuffix = $versionNo ? "-${versionNo}-" : '-';
         $keySuffix .= empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations);
-        $tagGenerator = $this->tagGenerator;
+        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
 
         return $this->getCacheValue(
             (int) $contentId,
-            $tagGenerator->generate(self::CONTENT_TAG, [], true) . '-',
+            $cacheIdentifierGenerator->generateKey(self::CONTENT_IDENTIFIER, [], true) . '-',
             function ($id) use ($versionNo, $translations) {
                 return $this->persistenceHandler->contentHandler()->load($id, $versionNo, $translations);
             },
             $this->getContentTags,
-            static function (Content $content) use ($keySuffix, $tagGenerator) {
+            static function (Content $content) use ($keySuffix, $cacheIdentifierGenerator) {
                 // Version number & translations is part of keySuffix here and depends on what user asked for
                 return [
-                    $tagGenerator->generate(
-                        self::CONTENT_TAG,
+                    $cacheIdentifierGenerator->generateKey(
+                        self::CONTENT_IDENTIFIER,
                         [$content->versionInfo->contentInfo->id],
                         true
                     ) . $keySuffix,
@@ -158,20 +158,20 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     public function loadContentList(array $contentIds, array $translations = null): array
     {
         $keySuffix = '-' . (empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations));
-        $tagGenerator = $this->tagGenerator;
+        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
 
         return $this->getMultipleCacheValues(
             $contentIds,
-            $tagGenerator->generate(self::CONTENT_TAG, [], true) . '-',
+            $cacheIdentifierGenerator->generateKey(self::CONTENT_IDENTIFIER, [], true) . '-',
             function (array $cacheMissIds) use ($translations) {
                 return $this->persistenceHandler->contentHandler()->loadContentList($cacheMissIds, $translations);
             },
             $this->getContentTags,
-            static function (Content $content) use ($keySuffix, $tagGenerator) {
+            static function (Content $content) use ($keySuffix, $cacheIdentifierGenerator) {
                 // Translations is part of keySuffix here and depends on what user asked for
                 return [
-                    $tagGenerator->generate(
-                        self::CONTENT_TAG,
+                    $cacheIdentifierGenerator->generateKey(
+                        self::CONTENT_IDENTIFIER,
                         [$content->versionInfo->contentInfo->id],
                         true
                     ) . $keySuffix,
@@ -189,7 +189,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         return $this->getCacheValue(
             $contentId,
-            $this->tagGenerator->generate(self::CONTENT_INFO_TAG, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_INFO_IDENTIFIER, [], true) . '-',
             function ($contentId) {
                 return $this->persistenceHandler->contentHandler()->loadContentInfo($contentId);
             },
@@ -204,7 +204,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         return $this->getMultipleCacheValues(
             $contentIds,
-            $this->tagGenerator->generate(self::CONTENT_INFO_TAG, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_INFO_IDENTIFIER, [], true) . '-',
             function (array $cacheMissIds) {
                 return $this->persistenceHandler->contentHandler()->loadContentInfoList($cacheMissIds);
             },
@@ -222,7 +222,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         return $this->getCacheValue(
             $this->escapeForCacheKey($remoteId),
-            $this->tagGenerator->generate(self::CONTENT_INFO_BY_REMOTE_ID_TAG, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_INFO_BY_REMOTE_ID_IDENTIFIER, [], true) . '-',
             function () use ($remoteId) {
                 return $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($remoteId);
             },
@@ -240,8 +240,8 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         $keySuffix = $versionNo ? "-${versionNo}" : '';
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(
-                self::CONTENT_VERSION_INFO_TAG,
+            $this->cacheIdentifierGenerator->generateKey(
+                self::CONTENT_VERSION_INFO_IDENTIFIER,
                 [$contentId],
                 true
             ) . $keySuffix
@@ -302,12 +302,12 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
         if ($status === VersionInfo::STATUS_PUBLISHED) {
             $this->cache->invalidateTags([
-                $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
+                $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
             ]);
         } else {
             $this->cache->invalidateTags([
-                $this->tagGenerator->generate(
-                    self::CONTENT_VERSION_TAG,
+                $this->cacheIdentifierGenerator->generateTag(
+                    self::CONTENT_VERSION_IDENTIFIER,
                     [$contentId, $versionNo]
                 ),
             ]);
@@ -324,7 +324,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $this->logger->logCall(__METHOD__, ['content' => $contentId, 'struct' => $struct]);
         $contentInfo = $this->persistenceHandler->contentHandler()->updateMetadata($contentId, $struct);
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
         ]);
 
         return $contentInfo;
@@ -339,8 +339,8 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $content = $this->persistenceHandler->contentHandler()->updateContent($contentId, $versionNo, $struct);
 
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(
-                self::CONTENT_VERSION_TAG,
+            $this->cacheIdentifierGenerator->generateTag(
+                self::CONTENT_VERSION_IDENTIFIER,
                 [$contentId, $versionNo]
             ),
         ]);
@@ -353,7 +353,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
      */
     public function deleteContent($contentId)
     {
-        $tagGenerator = $this->tagGenerator;
+        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
         $this->logger->logCall(__METHOD__, ['content' => $contentId]);
 
         // Load reverse field relations first
@@ -366,16 +366,16 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
         if (!empty($reverseRelations)) {
             $tags = \array_map(
-                static function ($relation) use ($tagGenerator) {
+                static function ($relation) use ($cacheIdentifierGenerator) {
                     // only the full content object *with* fields is affected by this
-                    return $tagGenerator->generate(self::CONTENT_TAG, [$relation->sourceContentId]);
+                    return $cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$relation->sourceContentId]);
                 },
                 $reverseRelations
             );
         } else {
             $tags = [];
         }
-        $tags[] = $tagGenerator->generate(self::CONTENT_TAG, [$contentId]);
+        $tags[] = $cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]);
         $this->cache->invalidateTags($tags);
 
         return $return;
@@ -390,8 +390,8 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $return = $this->persistenceHandler->contentHandler()->deleteVersion($contentId, $versionNo);
 
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(
-                self::CONTENT_VERSION_TAG,
+            $this->cacheIdentifierGenerator->generateTag(
+                self::CONTENT_VERSION_IDENTIFIER,
                 [$contentId, $versionNo]
             ),
         ]);
@@ -413,7 +413,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
         // Cache default lookups
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(self::CONTENT_VERSION_LIST_TAG, [$contentId], true)
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_VERSION_LIST_IDENTIFIER, [$contentId], true)
         );
 
         if ($cacheItem->isHit()) {
@@ -426,7 +426,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $versions = $this->persistenceHandler->contentHandler()->listVersions($contentId, $status, $limit);
         $cacheItem->set($versions);
         $tags = [
-            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
         ];
 
         foreach ($versions as $version) {
@@ -526,7 +526,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         $this->logger->logCall(__METHOD__, ['content' => $contentId, 'version' => $versionNo, 'struct' => $struct]);
         $content = $this->persistenceHandler->contentHandler()->publish($contentId, $versionNo, $struct);
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
         ]);
 
         return $content;
@@ -555,7 +555,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
         $this->persistenceHandler->contentHandler()->deleteTranslationFromContent($contentId, $languageCode);
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
         ]);
     }
 
@@ -575,7 +575,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         );
 
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(self::CONTENT_VERSION_TAG, [$contentId, $versionNo]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_VERSION_IDENTIFIER, [$contentId, $versionNo]),
         ]);
 
         return $content;
@@ -591,8 +591,8 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     private function getCacheTagsForVersion(VersionInfo $versionInfo, array $tags = []): array
     {
         $contentInfo = $versionInfo->contentInfo;
-        $tags[] = $this->tagGenerator->generate(
-            self::CONTENT_VERSION_TAG,
+        $tags[] = $this->cacheIdentifierGenerator->generateTag(
+            self::CONTENT_VERSION_IDENTIFIER,
             [$contentInfo->id, $versionInfo->versionNo]
         );
 

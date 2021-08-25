@@ -6,7 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
@@ -26,8 +26,8 @@ abstract class AbstractHandler
     /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */
     protected $logger;
 
-    /** @var \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface */
-    protected $tagGenerator;
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface */
+    protected $cacheIdentifierGenerator;
 
     /**
      * Setups current handler with everything needed.
@@ -35,18 +35,18 @@ abstract class AbstractHandler
      * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
-     * @param \Ibexa\Core\Persistence\Cache\Tag\TagGeneratorInterface $tagGenerator
+     * @param \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
      */
     public function __construct(
         TagAwareAdapterInterface $cache,
         PersistenceHandler $persistenceHandler,
         PersistenceLogger $logger,
-        TagGeneratorInterface $tagGenerator
+        CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
     ) {
         $this->cache = $cache;
         $this->persistenceHandler = $persistenceHandler;
         $this->logger = $logger;
-        $this->tagGenerator = $tagGenerator;
+        $this->cacheIdentifierGenerator = $cacheIdentifierGenerator;
     }
 
     /**

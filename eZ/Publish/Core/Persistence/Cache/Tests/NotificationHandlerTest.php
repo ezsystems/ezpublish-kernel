@@ -47,13 +47,14 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
             'ownerId' => $ownerId,
         ]);
 
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, string? $key, mixed? $returnValue
         return [
             [
                 'createNotification',
                 [
                     new CreateStruct(['ownerId' => $ownerId]),
                 ],
+                null,
                 [
                     ['notification_count', [$ownerId], true],
                     ['notification_pending_count', [$ownerId], true],
@@ -71,6 +72,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $notification,
                     new UpdateStruct(['isPending' => false]),
                 ],
+                null,
                 [
                     ['notification', [$notificationId], true],
                     ['notification_pending_count', [$ownerId], true],
@@ -87,6 +89,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $notification,
                 ],
+                null,
                 [
                     ['notification', [$notificationId], true],
                     ['notification_count', [$ownerId], true],
@@ -100,7 +103,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
             ],
             [
-                'loadUserNotifications', [$ownerId, 0, 25], null, null, null, [],
+                'loadUserNotifications', [$ownerId, 0, 25], null, null, null, null, [],
             ],
         ];
     }
@@ -115,7 +118,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
         $notificationCount = 10;
         $notificationCountPending = 5;
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             [
                 'countPendingNotifications',
@@ -157,7 +160,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
         $notificationCount = 10;
         $notificationCountPending = 5;
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             [
                 'countPendingNotifications',

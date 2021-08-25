@@ -31,13 +31,13 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, string? $key, mixed? $returnValue
         return [
-            ['create', [new CreateStruct()], null, null, null, new Bookmark()],
+            ['create', [new CreateStruct()], null, null, null, null, new Bookmark()],
             ['delete', [1], [['bookmark', [1], false]], ['b-1']],
-            ['loadUserBookmarks', [3, 2, 1], null, null, null, []],
-            ['countUserBookmarks', [3], null, null, null, 1],
-            ['locationSwapped', [1, 2], null, null, null],
+            ['loadUserBookmarks', [3, 2, 1], null, null, null, null, []],
+            ['countUserBookmarks', [3], null, null, null, null, 1],
+            ['locationSwapped', [1, 2], null, null, null, null],
         ];
     }
 
@@ -51,7 +51,7 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
         $calls = [['locationHandler', SPILocationHandler::class, 'load', new Location(['pathString' => '/1/2/43/'])]];
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             ['loadByUserIdAndLocationId', [3, [43]], 'ibx-b-3-43', [['bookmark', [3], true]], ['ibx-b-3'], [43 => $bookmark], true, $calls],
         ];
@@ -67,7 +67,7 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
         $calls = [['locationHandler', SPILocationHandler::class, 'load', new Location(['pathString' => '/1/2/43/'])]];
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             [
                 'loadByUserIdAndLocationId',

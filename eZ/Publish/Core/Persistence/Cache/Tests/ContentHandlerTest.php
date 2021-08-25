@@ -38,24 +38,39 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
      */
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, ?mixed $returnValue
+        // string $method, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['create', [new CreateStruct()]],
-            ['createDraftFromVersion', [2, 1, 14], [['content_version_list', [2], true]], [], ['ibx-c-2-vl']],
+            ['createDraftFromVersion', [2, 1, 14], null, [['content_version_list', [2], true]], [], ['ibx-c-2-vl']],
             ['copy', [2, 1]],
             ['loadDraftsForUser', [14]],
-            ['setStatus', [2, 0, 1], [['content_version', [2, 1], false]], ['c-2-v-1']],
-            ['setStatus', [2, 1, 1], [['content', [2], false]], ['c-2']],
-            ['updateMetadata', [2, new MetadataUpdateStruct()], [['content', [2], false]], ['c-2']],
-            ['updateContent', [2, 1, new UpdateStruct()], [['content_version', [2, 1], false]], ['c-2-v-1']],
+            ['setStatus', [2, 0, 1], [['content_version', [2, 1], false]], null, ['c-2-v-1']],
+            ['setStatus', [2, 1, 1], [['content', [2], false]], null, ['c-2']],
+            ['updateMetadata', [2, new MetadataUpdateStruct()], [['content', [2], false]], null, ['c-2']],
+            ['updateContent', [2, 1, new UpdateStruct()], [['content_version', [2, 1], false]], null, ['c-2-v-1']],
             //['deleteContent', [2]], own tests for relations complexity
-            ['deleteVersion', [2, 1], [['content_version', [2, 1], false]], ['c-2-v-1']],
+            ['deleteVersion', [2, 1], [['content_version', [2, 1], false]], null, ['c-2-v-1']],
             ['addRelation', [new RelationCreateStruct()]],
             ['removeRelation', [66, APIRelation::COMMON]],
             ['loadRelations', [2, 1, 3]],
             ['loadReverseRelations', [2, 3]],
-            ['publish', [2, 3, new MetadataUpdateStruct()], [['content', [2], false]], ['c-2']],
-            ['listVersions', [2, 1], [['content', [2], false]], [], [], [new VersionInfo(['versionNo' => 1, 'contentInfo' => new ContentInfo(['id' => 2])])]],
+            ['publish', [2, 3, new MetadataUpdateStruct()], [['content', [2], false]], null, ['c-2']],
+            [
+                'listVersions',
+                [2, 1],
+                [['content', [2], false]],
+                [['content_version_list', [2], true]],
+                [],
+                [],
+                [
+                    new VersionInfo([
+                        'versionNo' => 1,
+                        'contentInfo' => new ContentInfo([
+                            'id' => 2,
+                        ]),
+                    ]),
+                ],
+            ],
         ];
     }
 
@@ -68,7 +83,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
         $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
         $content = new Content(['fields' => [], 'versionInfo' => $version]);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool $multi = false, array $additionalCalls
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool $multi = false, array $additionalCalls
         return [
             ['load', [2, 1], 'ibx-c-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY, [['content', [], true]], ['ibx-c'], $content],
             ['load', [2, 1, ['eng-GB', 'eng-US']], 'ibx-c-2-1-eng-GB|eng-US', [['content', [], true]], ['ibx-c'], $content],
@@ -97,7 +112,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
         $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
         $content = new Content(['fields' => [], 'versionInfo' => $version]);
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data, bool $multi = false, array $additionalCalls
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool $multi = false, array $additionalCalls
         return [
             [
                 'load',
@@ -285,7 +300,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
             ->expects($this->never())
             ->method('deleteItem');
 
-        $this->tagGeneratorMock
+        $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(2))
             ->method('generate')
             ->withConsecutive(

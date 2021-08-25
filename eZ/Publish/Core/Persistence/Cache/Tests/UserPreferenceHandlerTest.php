@@ -42,7 +42,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
         $name = 'setting';
         $userPreferenceCount = 10;
 
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
         return [
             [
                 'setUserPreference',
@@ -85,7 +85,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
         $userId = 7;
         $name = 'setting';
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             [
                 'getUserPreferenceByUserIdAndName',
@@ -106,7 +106,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
         $userId = 7;
         $name = 'setting';
 
-        // string $method, array $arguments, string $key, array? $tagGeneratorArguments, array? $tagGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
         return [
             [
                 'getUserPreferenceByUserIdAndName',

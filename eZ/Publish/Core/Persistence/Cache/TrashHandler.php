@@ -16,8 +16,8 @@ use eZ\Publish\SPI\Persistence\Content\Relation;
 class TrashHandler extends AbstractHandler implements TrashHandlerInterface
 {
     private const EMPTY_TRASH_BULK_SIZE = 100;
-    private const CONTENT_TAG = 'content';
-    private const LOCATION_PATH_TAG = 'location_path';
+    private const CONTENT_IDENTIFIER = 'content';
+    private const LOCATION_PATH_IDENTIFIER = 'location_path';
 
     /**
      * {@inheritdoc}
@@ -44,8 +44,8 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
         $relationTags = [];
         if (!empty($reverseRelations)) {
             $relationTags = array_map(function (Relation $relation) {
-                return $this->tagGenerator->generate(
-                    self::CONTENT_TAG,
+                return $this->cacheIdentifierGenerator->generateTag(
+                    self::CONTENT_IDENTIFIER,
                     [$relation->destinationContentId]
                 );
             }, $reverseRelations);
@@ -53,8 +53,8 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
 
         $tags = array_merge(
             [
-                $this->tagGenerator->generate(self::CONTENT_TAG, [$location->contentId]),
-                $this->tagGenerator->generate(self::LOCATION_PATH_TAG, [$locationId]),
+                $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$location->contentId]),
+                $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]),
             ],
             $relationTags
         );
@@ -78,14 +78,14 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
         $relationTags = [];
         if (!empty($reverseRelations)) {
             $relationTags = array_map(function (Relation $relation) {
-                return $this->tagGenerator->generate(self::CONTENT_TAG, [$relation->destinationContentId]);
+                return $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$relation->destinationContentId]);
             }, $reverseRelations);
         }
 
         $tags = array_merge(
             [
-                $this->tagGenerator->generate(self::CONTENT_TAG, [$location->contentId]),
-                $this->tagGenerator->generate(self::LOCATION_PATH_TAG, [$trashedId]),
+                $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$location->contentId]),
+                $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$trashedId]),
             ],
             $relationTags
         );
@@ -121,11 +121,11 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
                 $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashedItem->contentId);
 
                 foreach ($reverseRelations as $relation) {
-                    $tags[$this->tagGenerator->generate(self::CONTENT_TAG, [$relation->sourceContentId])] = true;
+                    $tags[$this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$relation->sourceContentId])] = true;
                 }
 
-                $tags[$this->tagGenerator->generate(self::CONTENT_TAG, [$trashedItem->contentId])] = true;
-                $tags[$this->tagGenerator->generate(self::LOCATION_PATH_TAG, [$trashedItem->id])] = true;
+                $tags[$this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$trashedItem->contentId])] = true;
+                $tags[$this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$trashedItem->id])] = true;
             }
             $offset += self::EMPTY_TRASH_BULK_SIZE;
             // Once offset is larger than total count we can exit
@@ -154,15 +154,15 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashed->contentId);
 
         $relationTags = array_map(function (Relation $relation) {
-            return $this->tagGenerator->generate(self::CONTENT_TAG, [$relation->sourceContentId]);
+            return $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$relation->sourceContentId]);
         }, $reverseRelations);
 
         $return = $this->persistenceHandler->trashHandler()->deleteTrashItem($trashedId);
 
         $tags = array_merge(
             [
-                $this->tagGenerator->generate(self::CONTENT_TAG, [$return->contentId]),
-                $this->tagGenerator->generate(self::LOCATION_PATH_TAG, [$trashedId]),
+                $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$return->contentId]),
+                $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$trashedId]),
             ],
             $relationTags
         );

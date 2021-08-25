@@ -31,7 +31,7 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, string? $key
         return [
             ['loadTrashItem', [6]],
         ];
@@ -39,14 +39,14 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForCachedLoadMethodsHit(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, string $key, mixed? $data
         return [
         ];
     }
 
     public function providerForCachedLoadMethodsMiss(): array
     {
-        // string $method, array $arguments, array? $tagGeneratorArguments, array? $tagGeneratorResults, string $key, mixed? $data
+        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, string $key, mixed? $data
         return [
         ];
     }
@@ -93,7 +93,7 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
             ->with($originalLocationId, $targetLocationId)
             ->willReturn(null);
 
-        $this->tagGeneratorMock
+        $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(2))
             ->method('generate')
             ->withConsecutive(
@@ -155,7 +155,7 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
             ->with($locationId)
             ->willReturn(null);
 
-        $this->tagGeneratorMock
+        $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(2))
             ->method('generate')
             ->withConsecutive(
@@ -218,7 +218,7 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
             'c-' . $relationSourceContentId,
         ];
 
-        $this->tagGeneratorMock
+        $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(3))
             ->method('generate')
             ->withConsecutive(
@@ -277,7 +277,7 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
             ->method('contentHandler')
             ->willReturn($contentHandlerMock);
 
-        $tagGeneratorArguments = [
+        $cacheIdentifierGeneratorArguments = [
             ['content', [$relationSourceContentId], false],
             ['content', [$contentId], false],
             ['location_path', [$trashedId], false],
@@ -290,10 +290,10 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
         ];
 
         //one set of arguments and tags for each relation
-        $this->tagGeneratorMock
+        $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(6))
             ->method('generate')
-            ->withConsecutive(...array_merge($tagGeneratorArguments, $tagGeneratorArguments))
+            ->withConsecutive(...array_merge($cacheIdentifierGeneratorArguments, $cacheIdentifierGeneratorArguments))
             ->willReturnOnConsecutiveCalls(...array_merge($tags, $tags));
 
         $this->cacheMock

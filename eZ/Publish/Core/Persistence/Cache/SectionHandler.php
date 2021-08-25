@@ -13,9 +13,9 @@ use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterfac
  */
 class SectionHandler extends AbstractHandler implements SectionHandlerInterface
 {
-    private const SECTION_TAG = 'section';
-    private const SECTION_WITH_BY_ID_TAG = 'section_with_by_id';
-    private const CONTENT_TAG = 'content';
+    private const SECTION_IDENTIFIER = 'section';
+    private const SECTION_WITH_BY_ID_IDENTIFIER = 'section_with_by_id';
+    private const CONTENT_IDENTIFIER = 'content';
 
     /**
      * {@inheritdoc}
@@ -36,7 +36,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $section = $this->persistenceHandler->sectionHandler()->update($id, $name, $identifier);
 
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(self::SECTION_TAG, [$id]),
+            $this->cacheIdentifierGenerator->generateTag(self::SECTION_IDENTIFIER, [$id]),
         ]);
 
         return $section;
@@ -48,7 +48,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function load($id)
     {
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(self::SECTION_TAG, [$id], true)
+            $this->cacheIdentifierGenerator->generateKey(self::SECTION_IDENTIFIER, [$id], true)
         );
 
         if ($cacheItem->isHit()) {
@@ -60,7 +60,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
 
         $cacheItem->set($section);
         $cacheItem->tag([
-            $this->tagGenerator->generate(self::SECTION_TAG, [$section->id]),
+            $this->cacheIdentifierGenerator->generateTag(self::SECTION_IDENTIFIER, [$section->id]),
         ]);
 
         $this->cache->save($cacheItem);
@@ -84,8 +84,8 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function loadByIdentifier($identifier)
     {
         $cacheItem = $this->cache->getItem(
-            $this->tagGenerator->generate(
-                self::SECTION_WITH_BY_ID_TAG,
+            $this->cacheIdentifierGenerator->generateKey(
+                self::SECTION_WITH_BY_ID_IDENTIFIER,
                 [$this->escapeForCacheKey($identifier)],
                 true
             )
@@ -100,7 +100,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
 
         $cacheItem->set($section);
         $cacheItem->tag([
-            $this->tagGenerator->generate(self::SECTION_TAG, [$section->id]),
+            $this->cacheIdentifierGenerator->generateTag(self::SECTION_IDENTIFIER, [$section->id]),
         ]);
 
         $this->cache->save($cacheItem);
@@ -117,7 +117,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $return = $this->persistenceHandler->sectionHandler()->delete($id);
 
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(self::SECTION_TAG, [$id]),
+            $this->cacheIdentifierGenerator->generateTag(self::SECTION_IDENTIFIER, [$id]),
         ]);
 
         return $return;
@@ -132,7 +132,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $return = $this->persistenceHandler->sectionHandler()->assign($sectionId, $contentId);
 
         $this->cache->invalidateTags([
-            $this->tagGenerator->generate(self::CONTENT_TAG, [$contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
         ]);
 
         return $return;
