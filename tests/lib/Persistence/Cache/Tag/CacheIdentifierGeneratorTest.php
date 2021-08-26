@@ -27,9 +27,9 @@ final class CacheIdentifierGeneratorTest extends TestCase
                 'content_locations_with_parent_for_draft_suffix' => 'cl-%s-pfd',
             ],
             [
-                'content' => 'c-%s',
-                'content_version' => 'c-%s-v-%s',
-                'content_locations_with_parent_for_draft_suffix' => 'cl-%s-pfd',
+                'content_type' => 'ct-%s',
+                'by_remote_suffix' => '-br',
+                'image_variation_field' => 'igf-%s',
             ]
         );
     }
@@ -54,9 +54,9 @@ final class CacheIdentifierGeneratorTest extends TestCase
     public function providerForTestGenerateKey(): array
     {
         return [
-            [['content', [], false], 'c'],
-            [['content_version', [1, 2], true], 'ibx-c-1-v-2'],
-            [['content_locations_with_parent_for_draft_suffix', [3], true], 'ibx-cl-3-pfd'],
+            [['content_type', [], true], 'ibx-ct'],
+            [['by_remote_suffix', [], false], '-br'],
+            [['image_variation_field', [3], true], 'ibx-igf-3'],
         ];
     }
 

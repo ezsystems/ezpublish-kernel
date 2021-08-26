@@ -162,7 +162,7 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheIdentifierGeneratorMock = $this->getCacheIdentifierGeneratorMock();
 
         $cacheIdentifierGeneratorMock->expects($this->once())
-            ->method('generate')
+            ->method('generateKey')
             ->with('language', [2], true)
             ->willReturn('ibx-la-2');
 
@@ -190,7 +190,7 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheIdentifierGeneratorMock = $this->getCacheIdentifierGeneratorMock();
 
         $cacheIdentifierGeneratorMock->expects($this->once())
-            ->method('generate')
+            ->method('generateKey')
             ->with('language', [2], true)
             ->willReturn('ibx-la-2');
 
@@ -222,7 +222,7 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheIdentifierGeneratorMock = $this->getCacheIdentifierGeneratorMock();
 
         $cacheIdentifierGeneratorMock->expects($this->once())
-            ->method('generate')
+            ->method('generateKey')
             ->with('language_code', ['eng-US'], true)
             ->willReturn('ibx-lac-eng-US');
 
@@ -250,7 +250,7 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheIdentifierGeneratorMock = $this->getCacheIdentifierGeneratorMock();
 
         $cacheIdentifierGeneratorMock->expects($this->once())
-            ->method('generate')
+            ->method('generateKey')
             ->with('language_code', ['eng-US'], true)
             ->willReturn('ibx-lac-eng-US');
 
@@ -282,7 +282,7 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheIdentifierGeneratorMock = $this->getCacheIdentifierGeneratorMock();
 
         $cacheIdentifierGeneratorMock->expects($this->once())
-            ->method('generate')
+            ->method('generateKey')
             ->with('language_list', [], true)
             ->willReturn('ibx-lal');
 
@@ -310,7 +310,7 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheIdentifierGeneratorMock = $this->getCacheIdentifierGeneratorMock();
 
         $cacheIdentifierGeneratorMock->expects($this->exactly(2))
-            ->method('generate')
+            ->method('generateKey')
             ->withConsecutive(
                 ['language', [2], true],
                 ['language_list', [], true]

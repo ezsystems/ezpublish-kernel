@@ -31,10 +31,10 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, string? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? tags, array? $tags, string? $key, mixed? $returnValue
         return [
             ['create', [new CreateStruct()], null, null, null, null, new Bookmark()],
-            ['delete', [1], [['bookmark', [1], false]], ['b-1']],
+            ['delete', [1], [['bookmark', [1], false]], null, ['b-1']],
             ['loadUserBookmarks', [3, 2, 1], null, null, null, null, []],
             ['countUserBookmarks', [3], null, null, null, null, 1],
             ['locationSwapped', [1, 2], null, null, null, null],
@@ -51,9 +51,20 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
         $calls = [['locationHandler', SPILocationHandler::class, 'load', new Location(['pathString' => '/1/2/43/'])]];
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data
         return [
-            ['loadByUserIdAndLocationId', [3, [43]], 'ibx-b-3-43', [['bookmark', [3], true]], ['ibx-b-3'], [43 => $bookmark], true, $calls],
+            [
+                'loadByUserIdAndLocationId',
+                [3, [43]],
+                'ibx-b-3-43',
+                null,
+                null,
+                [['bookmark', [3], true]],
+                ['ibx-b-3'],
+                [43 => $bookmark],
+                true,
+                $calls,
+            ],
         ];
     }
 
@@ -67,14 +78,13 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
 
         $calls = [['locationHandler', SPILocationHandler::class, 'load', new Location(['pathString' => '/1/2/43/'])]];
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data
         return [
             [
                 'loadByUserIdAndLocationId',
                 [3, [43]],
                 'ibx-b-3-43',
                 [
-                    ['bookmark', [3], true],
                     ['bookmark', [1], false],
                     ['location', [43], false],
                     ['user', [3], false],
@@ -82,7 +92,11 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
                     ['location_path', [2], false],
                     ['location_path', [43], false],
                 ],
-                ['ibx-b-3', 'b-1', 'l-43', 'u-3', 'lp-1', 'lp-2', 'lp-43'],
+                ['b-1', 'l-43', 'u-3', 'lp-1', 'lp-2', 'lp-43'],
+                [
+                    ['bookmark', [3], true],
+                ],
+                ['ibx-b-3'],
                 [43 => $bookmark],
                 true,
                 $calls,

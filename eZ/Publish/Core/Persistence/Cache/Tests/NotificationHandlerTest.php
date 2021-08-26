@@ -47,7 +47,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
             'ownerId' => $ownerId,
         ]);
 
-        // string $method, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, string? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             [
                 'createNotification',
@@ -118,7 +118,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
         $notificationCount = 10;
         $notificationCountPending = 5;
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'countPendingNotifications',
@@ -126,6 +126,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $ownerId,
                 ],
                 'ibx-npc-' . $ownerId,
+                null,
+                null,
                 [['notification_pending_count', [$ownerId], true]],
                 ['ibx-npc-' . $ownerId],
                 $notificationCount,
@@ -136,6 +138,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $ownerId,
                 ],
                 'ibx-nc-' . $ownerId,
+                null,
+                null,
                 [['notification_count', [$ownerId], true]],
                 ['ibx-nc-' . $ownerId],
                 $notificationCountPending,
@@ -146,6 +150,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $notificationId,
                 ],
                 'ibx-n-' . $notificationId,
+                null,
+                null,
                 [['notification', [$notificationId], true]],
                 ['ibx-n-' . $notificationId],
                 new SPINotification(['id' => $notificationId]),
@@ -160,7 +166,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
         $notificationCount = 10;
         $notificationCountPending = 5;
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'countPendingNotifications',
@@ -168,6 +174,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $ownerId,
                 ],
                 'ibx-npc-' . $ownerId,
+                null,
+                null,
                 [['notification_pending_count', [$ownerId], true]],
                 ['ibx-npc-' . $ownerId],
                 $notificationCount,
@@ -178,6 +186,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $ownerId,
                 ],
                 'ibx-nc-' . $ownerId,
+                null,
+                null,
                 [['notification_count', [$ownerId], true]],
                 ['ibx-nc-' . $ownerId],
                 $notificationCountPending,
@@ -188,6 +198,8 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                     $notificationId,
                 ],
                 'ibx-n-' . $notificationId,
+                null,
+                null,
                 [['notification', [$notificationId], true]],
                 ['ibx-n-' . $notificationId],
                 new SPINotification(['id' => $notificationId]),

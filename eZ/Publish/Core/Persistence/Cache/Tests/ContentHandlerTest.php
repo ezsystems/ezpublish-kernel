@@ -38,7 +38,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
      */
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['create', [new CreateStruct()]],
             ['createDraftFromVersion', [2, 1, 14], null, [['content_version_list', [2], true]], [], ['ibx-c-2-vl']],
@@ -83,20 +83,20 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
         $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
         $content = new Content(['fields' => [], 'versionInfo' => $version]);
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool $multi = false, array $additionalCalls
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi = false, array $additionalCalls
         return [
-            ['load', [2, 1], 'ibx-c-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY, [['content', [], true]], ['ibx-c'], $content],
-            ['load', [2, 1, ['eng-GB', 'eng-US']], 'ibx-c-2-1-eng-GB|eng-US', [['content', [], true]], ['ibx-c'], $content],
-            ['load', [2], 'ibx-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY, [['content', [], true]], ['ibx-c'], $content],
-            ['load', [2, null, ['eng-GB', 'eng-US']], 'ibx-c-2-eng-GB|eng-US', [['content', [], true]], ['ibx-c'], $content],
-            ['loadContentList', [[2]], 'ibx-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY, [['content', [], true]], ['ibx-c'], [2 => $content], true],
-            ['loadContentList', [[5], ['eng-GB', 'eng-US']], 'ibx-c-5-eng-GB|eng-US', [['content', [], true]], ['ibx-c'], [5 => $content], true],
-            ['loadContentInfo', [2], 'ibx-ci-2', [['content_info', [], true]], ['ibx-ci'], $info],
-            ['loadContentInfoList', [[2]], 'ibx-ci-2', [['content_info', [], true]], ['ibx-ci'], [2 => $info], true],
-            ['loadContentInfoByRemoteId', ['3d8jrj'], 'ibx-cibri-3d8jrj', [['content_info_by_remote_id', [], true]], ['ibx-cibri'], $info],
-            ['loadVersionInfo', [2, 1], 'ibx-cvi-2-1', [['content_version_info', [2], true]], ['ibx-cvi-2'], $version],
-            ['loadVersionInfo', [2], 'ibx-cvi-2', [['content_version_info', [2], true]], ['ibx-cvi-2'], $version],
-            ['listVersions', [2], 'ibx-c-2-vl', [['content_version_list', [2], true]], ['ibx-c-2-vl'], [$version]],
+            ['load', [2, 1], 'ibx-c-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY, null, null, [['content', [], true]], ['ibx-c'], $content],
+            ['load', [2, 1, ['eng-GB', 'eng-US']], 'ibx-c-2-1-eng-GB|eng-US', null, null, [['content', [], true]], ['ibx-c'], $content],
+            ['load', [2], 'ibx-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY, null, null, [['content', [], true]], ['ibx-c'], $content],
+            ['load', [2, null, ['eng-GB', 'eng-US']], 'ibx-c-2-eng-GB|eng-US', null, null, [['content', [], true]], ['ibx-c'], $content],
+            ['loadContentList', [[2]], 'ibx-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY, null, null, [['content', [], true]], ['ibx-c'], [2 => $content], true],
+            ['loadContentList', [[5], ['eng-GB', 'eng-US']], 'ibx-c-5-eng-GB|eng-US', null, null, [['content', [], true]], ['ibx-c'], [5 => $content], true],
+            ['loadContentInfo', [2], 'ibx-ci-2', null, null, [['content_info', [], true]], ['ibx-ci'], $info],
+            ['loadContentInfoList', [[2]], 'ibx-ci-2', null, null, [['content_info', [], true]], ['ibx-ci'], [2 => $info], true],
+            ['loadContentInfoByRemoteId', ['3d8jrj'], 'ibx-cibri-3d8jrj', null, null, [['content_info_by_remote_id', [], true]], ['ibx-cibri'], $info],
+            ['loadVersionInfo', [2, 1], 'ibx-cvi-2-1', null, null, [['content_version_info', [2], true]], ['ibx-cvi-2'], $version],
+            ['loadVersionInfo', [2], 'ibx-cvi-2', null, null, [['content_version_info', [2], true]], ['ibx-cvi-2'], $version],
+            ['listVersions', [2], 'ibx-c-2-vl', null, null, [['content_version_list', [2], true]], ['ibx-c-2-vl'], [$version]],
         ];
     }
 
@@ -112,19 +112,22 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
         $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
         $content = new Content(['fields' => [], 'versionInfo' => $version]);
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool $multi = false, array $additionalCalls
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi = false, array $additionalCalls
         return [
             [
                 'load',
                 [2, 1],
                 'ibx-c-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY,
                 [
-                    ['content', [], true],
                     ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
-                ['ibx-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                ['cft-3', 'c-2-v-1', 'c-2'],
+                [
+                    ['content', [], true],
+                ],
+                ['ibx-c'],
                 $content,
             ],
             [
@@ -132,12 +135,15 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [2, 1, ['eng-GB', 'eng-US']],
                 'ibx-c-2-1-eng-GB|eng-US',
                 [
-                    ['content', [], true],
                     ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
-                ['ibx-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                ['cft-2', 'c-2-v-1', 'c-2'],
+                [
+                    ['content', [], true],
+                ],
+                ['ibx-c'],
                 $content,
             ],
             [
@@ -145,12 +151,15 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [2],
                 'ibx-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY,
                 [
-                    ['content', [], true],
                     ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
-                ['ibx-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                ['cft-2', 'c-2-v-1', 'c-2'],
+                [
+                    ['content', [], true],
+                ],
+                ['ibx-c'],
                 $content,
             ],
             [
@@ -158,12 +167,15 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [2, null, ['eng-GB', 'eng-US']],
                 'ibx-c-2-eng-GB|eng-US',
                 [
-                    ['content', [], true],
                     ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
-                ['ibx-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                ['cft-2', 'c-2-v-1', 'c-2'],
+                [
+                    ['content', [], true],
+                ],
+                ['ibx-c'],
                 $content,
             ],
             [
@@ -171,12 +183,15 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [[2]],
                 'ibx-c-2-' . ContentHandler::ALL_TRANSLATIONS_KEY,
                 [
-                    ['content', [], true],
                     ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
-                ['ibx-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                ['cft-2', 'c-2-v-1', 'c-2'],
+                [
+                    ['content', [], true],
+                ],
+                ['ibx-c'],
                 [2 => $content],
                 true,
             ],
@@ -185,12 +200,15 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [[5], ['eng-GB', 'eng-US']],
                 'ibx-c-5-eng-GB|eng-US',
                 [
-                    ['content', [], true],
                     ['content_fields_type', [3], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
-                ['ibx-c', 'cft-2', 'c-2-v-1', 'c-2'],
+                ['cft-2', 'c-2-v-1', 'c-2'],
+                [
+                    ['content', [], true],
+                ],
+                ['ibx-c'],
                 [5 => $content],
                 true,
             ],
@@ -199,10 +217,13 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [2],
                 'ibx-ci-2',
                 [
-                    ['content_info', [], true],
                     ['content', [2], false],
                 ],
-                ['ibx-ci', 'c-2'],
+                ['c-2'],
+                [
+                    ['content_info', [], true],
+                ],
+                ['ibx-ci'],
                 $info,
             ],
             [
@@ -210,10 +231,13 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [[2]],
                 'ibx-ci-2',
                 [
-                    ['content_info', [], true],
                     ['content', [2], false],
                 ],
-                ['ibx-ci', 'c-2'],
+                ['c-2'],
+                [
+                    ['content_info', [], true],
+                ],
+                ['ibx-ci'],
                 [2 => $info],
                 true,
             ],
@@ -221,10 +245,13 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'loadContentInfoByRemoteId',
                 ['3d8jrj'], 'ibx-cibri-3d8jrj',
                 [
-                    ['content_info_by_remote_id', [], true],
                     ['content', [2], false],
                 ],
-                ['ibx-cibri', 'c-2'],
+                ['c-2'],
+                [
+                    ['content_info_by_remote_id', [], true],
+                ],
+                ['ibx-cibri'],
                 $info,
             ],
             [
@@ -232,11 +259,14 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [2, 1],
                 'ibx-cvi-2-1',
                 [
-                    ['content_version_info', [2], true],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
-                ['ibx-cvi-2', 'c-2-v-1', 'c-2'],
+                ['c-2-v-1', 'c-2'],
+                [
+                    ['content_version_info', [2], true],
+                ],
+                ['ibx-cvi-2'],
                 $version,
             ],
             [
@@ -244,11 +274,14 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [2],
                 'ibx-cvi-2',
                 [
-                    ['content_version_info', [2], true],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
-                ['ibx-cvi-2', 'c-2-v-1', 'c-2'],
+                ['c-2-v-1', 'c-2'],
+                [
+                    ['content_version_info', [2], true],
+                ],
+                ['ibx-cvi-2'],
                 $version,
             ],
             [
@@ -256,12 +289,15 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [2],
                 'ibx-c-2-vl',
                 [
-                    ['content_version_list', [2], true],
                     ['content', [2], false],
                     ['content_version', [2, 1], false],
                     ['content', [2], false],
                 ],
-                ['ibx-c-2-vl', 'c-2', 'c-2-v-1', 'c-2'],
+                ['c-2', 'c-2-v-1', 'c-2'],
+                [
+                    ['content_version_list', [2], true],
+                ],
+                ['ibx-c-2-vl'],
                 [$version],
             ],
         ];
@@ -302,7 +338,7 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(2))
-            ->method('generate')
+            ->method('generateTag')
             ->withConsecutive(
                 ['content', [42], false],
                 ['content', [2], false]

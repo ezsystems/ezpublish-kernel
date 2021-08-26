@@ -25,7 +25,7 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
     {
         $wildcard = new UrlWildcard(['id' => 1]);
 
-        // string $method, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, array|string? $key, mixed? $return
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['create', ['/home/about', '/web3/some/page/link', true], [['url_wildcard_not_found', [], false]], null, ['urlwnf'], null, $wildcard],
             ['remove', [1], [['url_wildcard', [1], false]], null, ['urlw-1']],
@@ -38,10 +38,10 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
     {
         $wildcard = new UrlWildcard(['id' => 1]);
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['load', [1], 'ibx-urlw-1', [['url_wildcard', [1], true]], ['ibx-urlw-1'], $wildcard],
-            ['translate', ['/home/about'], 'ibx-urlws-_Shome_Sabout', [['url_wildcard_source', ['_Shome_Sabout'], true]], ['ibx-urlws-_Shome_Sabout'], $wildcard],
+            ['load', [1], 'ibx-urlw-1', null, null, [['url_wildcard', [1], true]], ['ibx-urlw-1'], $wildcard],
+            ['translate', ['/home/about'], 'ibx-urlws-_Shome_Sabout', null, null,  [['url_wildcard_source', ['_Shome_Sabout'], true]], ['ibx-urlws-_Shome_Sabout'], $wildcard],
         ];
     }
 
@@ -49,17 +49,20 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
     {
         $wildcard = new UrlWildcard(['id' => 1]);
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'load',
                 [1],
                 'ibx-urlw-1',
                 [
-                    ['url_wildcard', [1], true],
                     ['url_wildcard', [1], false],
                 ],
-                ['ibx-urlw-1', 'urlw-1'],
+                ['urlw-1'],
+                [
+                    ['url_wildcard', [1], true],
+                ],
+                ['ibx-urlw-1'],
                 $wildcard,
             ],
             [
@@ -67,10 +70,13 @@ class UrlWildcardHandlerTest extends AbstractCacheHandlerTest
                 ['/home/about'],
                 'ibx-urlws-_Shome_Sabout',
                 [
-                    ['url_wildcard_source', ['_Shome_Sabout'], true],
                     ['url_wildcard', [1], false],
                 ],
-                ['ibx-urlws-_Shome_Sabout', 'urlw-1'],
+                ['urlw-1'],
+                [
+                    ['url_wildcard_source', ['_Shome_Sabout'], true],
+                ],
+                ['ibx-urlws-_Shome_Sabout'],
                 $wildcard,
             ],
         ];

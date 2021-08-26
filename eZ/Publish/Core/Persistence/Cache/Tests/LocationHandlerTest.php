@@ -28,13 +28,13 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['copySubtree', [12, 45]],
-            ['move', [12, 45], [['location_path', [12], false]], ['lp-12']],
+            ['move', [12, 45], [['location_path', [12], false]], null, ['lp-12']],
             ['markSubtreeModified', [12]],
-            ['hide', [12], [['location_path', [12], false]], ['lp-12']],
-            ['unHide', [12], [['location_path', [12], false]], ['lp-12']],
+            ['hide', [12], [['location_path', [12], false]], null, ['lp-12']],
+            ['unHide', [12], [['location_path', [12], false]], null, ['lp-12']],
             [
                 'swap',
                 [12, 45],
@@ -42,9 +42,10 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location', [12], false],
                     ['location', [45], false],
                 ],
+                null,
                 ['l-12', 'l-45'],
             ],
-            ['update', [new UpdateStruct(), 12], [['location', [12], false]], ['l-12']],
+            ['update', [new UpdateStruct(), 12], [['location', [12], false]], null, ['l-12']],
             [
                 'create',
                 [new CreateStruct(['contentId' => 4, 'mainLocationId' => true])],
@@ -52,6 +53,7 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [4], false],
                     ['role_assignment_group_list', [4], false],
                 ],
+                null,
                 ['c-4', 'ragl-4'],
             ],
             [
@@ -61,11 +63,12 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [4], false],
                     ['role_assignment_group_list', [4], false],
                 ],
+                null,
                 ['c-4', 'ragl-4'],
             ],
-            ['removeSubtree', [12], [['location_path', [12], false]], ['lp-12']],
-            ['setSectionForSubtree', [12, 2], [['location_path', [12], false]], ['lp-12']],
-            ['changeMainLocation', [4, 12], [['content', [4], false]], ['c-4']],
+            ['removeSubtree', [12], [['location_path', [12], false]], null, ['lp-12']],
+            ['setSectionForSubtree', [12, 2], [['location_path', [12], false]], null, ['lp-12']],
+            ['changeMainLocation', [4, 12], [['content', [4], false]], null, ['c-4']],
         ];
     }
 
@@ -73,13 +76,13 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $location = new Location(['id' => 12]);
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool? $multi = false
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['load', [12], 'ibx-l-12-1', [['location', [], true]], ['ibx-l'], $location],
-            ['load', [12, ['eng-GB', 'bra-PG'], false], 'ibx-l-12-bra-PG|eng-GB|0', [['location', [], true]], ['ibx-l'], $location],
-            ['loadList', [[12]], 'ibx-l-12-1', [['location', [], true]], ['ibx-l'], [12 => $location], true],
-            ['loadList', [[12], ['eng-GB', 'bra-PG'], false], 'ibx-l-12-bra-PG|eng-GB|0', [['location', [], true]], ['ibx-l'], [12 => $location], true],
-            ['loadSubtreeIds', [12], 'ibx-ls-12', [['location_subtree', [], true]], ['ibx-ls'], [33, 44]],
+            ['load', [12], 'ibx-l-12-1', null, null, [['location', [], true]], ['ibx-l'], $location],
+            ['load', [12, ['eng-GB', 'bra-PG'], false], 'ibx-l-12-bra-PG|eng-GB|0', null, null, [['location', [], true]], ['ibx-l'], $location],
+            ['loadList', [[12]], 'ibx-l-12-1', null, null, [['location', [], true]], ['ibx-l'], [12 => $location], true],
+            ['loadList', [[12], ['eng-GB', 'bra-PG'], false], 'ibx-l-12-bra-PG|eng-GB|0', null, null, [['location', [], true]], ['ibx-l'], [12 => $location], true],
+            ['loadSubtreeIds', [12], 'ibx-ls-12', null, null, [['location_subtree', [], true]], ['ibx-ls'], [33, 44]],
             [
                 'loadLocationsByContent',
                 [4, 12],
@@ -88,9 +91,12 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [4], false],
                     ['location', [12], false],
                     ['location_path', [12], false],
+                ],
+                ['c-4', 'l-12', 'lp-12'],
+                [
                     ['content_locations', [], true],
                 ],
-                ['c-4', 'l-12', 'lp-12', 'ibx-cl'],
+                ['ibx-cl'],
                 [$location],
             ],
             [
@@ -99,15 +105,20 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ibx-cl-4',
                 [
                     ['content', [4], false],
+                ],
+                ['c-4'],
+                [
                     ['content_locations', [], true],
                 ],
-                ['c-4', 'ibx-cl'],
+                ['ibx-cl'],
                 [$location],
             ],
             [
                 'loadParentLocationsForDraftContent',
                 [4],
                 'ibx-cl-4-pfd',
+                null,
+                null,
                 [
                     ['content_locations', [], true],
                     ['parent_for_draft_suffix', [], false],
@@ -115,8 +126,8 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['ibx-cl', '-pfd'],
                 [$location],
             ],
-            ['loadByRemoteId', ['34fe5y4'], 'ibx-lri-34fe5y4-1', [['location_remote_id', [], true]], ['ibx-lri'], $location],
-            ['loadByRemoteId', ['34fe5y4', ['eng-GB', 'arg-ES']], 'ibx-lri-34fe5y4-arg-ES|eng-GB|1', [['location_remote_id', [], true]], ['ibx-lri'], $location],
+            ['loadByRemoteId', ['34fe5y4'], 'ibx-lri-34fe5y4-1', null, null, [['location_remote_id', [], true]], ['ibx-lri'], $location],
+            ['loadByRemoteId', ['34fe5y4', ['eng-GB', 'arg-ES']], 'ibx-lri-34fe5y4-arg-ES|eng-GB|1', null, null, [['location_remote_id', [], true]], ['ibx-lri'], $location],
         ];
     }
 
@@ -130,20 +141,23 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
             ]
         );
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool? $multi = false
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'load',
                 [12],
                 'ibx-l-12-1',
                 [
-                    ['location', [], true],
                     ['content', [15], false],
                     ['location', [12], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ibx-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                [
+                    ['location', [], true],
+                ],
+                ['ibx-l'],
                 $location,
             ],
             [
@@ -151,13 +165,16 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [12, ['eng-GB', 'bra-PG'], false],
                 'ibx-l-12-bra-PG|eng-GB|0',
                 [
-                    ['location', [], true],
                     ['content', [15], false],
                     ['location', [12], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ibx-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                [
+                    ['location', [], true],
+                ],
+                ['ibx-l'],
                 $location,
             ],
             [
@@ -165,13 +182,16 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [[12]],
                 'ibx-l-12-1',
                 [
-                    ['location', [], true],
                     ['content', [15], false],
                     ['location', [12], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ibx-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                [
+                    ['location', [], true],
+                ],
+                ['ibx-l'],
                 [12 => $location],
                 true,
             ],
@@ -181,13 +201,16 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['eng-GB', 'bra-PG'], false, ],
                 'ibx-l-12-bra-PG|eng-GB|0',
                 [
-                    ['location', [], true],
                     ['content', [15], false],
                     ['location', [12], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ibx-l', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                [
+                    ['location', [], true],
+                ],
+                ['ibx-l'],
                 [12 => $location],
                 true,
             ],
@@ -196,7 +219,6 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [12],
                 'ibx-ls-12',
                 [
-                    ['location_subtree', [], true],
                     ['location', [12], false],
                     ['location_path', [12], false],
                     ['location', [33], false],
@@ -204,7 +226,11 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location', [44], false],
                     ['location_path', [44], false],
                 ],
-                ['ibx-ls', 'l-12', 'lp-12', 'l-33', 'lp-33', 'l-44', 'lp-44'],
+                ['l-12', 'lp-12', 'l-33', 'lp-33', 'l-44', 'lp-44'],
+                [
+                    ['location_subtree', [], true],
+                ],
+                ['ibx-ls'],
                 [33, 44],
             ],
             [
@@ -215,13 +241,16 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [4], false],
                     ['location', [12], false],
                     ['location_path', [12], false],
-                    ['content_locations', [], true],
                     ['content', [15], false],
                     ['location', [12], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-4', 'l-12', 'lp-12', 'ibx-cl', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-4', 'l-12', 'lp-12', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                [
+                    ['content_locations', [], true],
+                ],
+                ['ibx-cl'],
                 [$location],
             ],
             [
@@ -230,13 +259,16 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ibx-cl-4',
                 [
                     ['content', [4], false],
-                    ['content_locations', [], true],
                     ['content', [15], false],
                     ['location', [12], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-4', 'ibx-cl', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-4', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                [
+                    ['content_locations', [], true],
+                ],
+                ['ibx-cl'],
                 [$location],
             ],
             [
@@ -244,15 +276,18 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [4],
                 'ibx-cl-4-pfd',
                 [
-                    ['content_locations', [], true],
-                    ['parent_for_draft_suffix', [], false],
                     ['content', [4], false],
                     ['content', [15], false],
                     ['location', [12], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ibx-cl', '-pfd', 'c-4', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-4', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                [
+                    ['content_locations', [], true],
+                    ['parent_for_draft_suffix', [], false],
+                ],
+                ['ibx-cl', '-pfd'],
                 [$location],
             ],
             [
@@ -260,13 +295,16 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['34fe5y4'],
                 'ibx-lri-34fe5y4-1',
                 [
-                    ['location_remote_id', [], true],
                     ['content', [15], false],
                     ['location', [12], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ibx-lri', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                [
+                    ['location_remote_id', [], true],
+                ],
+                ['ibx-lri'],
                 $location,
             ],
             [
@@ -274,13 +312,16 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['34fe5y4', ['eng-GB', 'arg-ES']],
                 'ibx-lri-34fe5y4-arg-ES|eng-GB|1',
                 [
-                    ['location_remote_id', [], true],
                     ['content', [15], false],
                     ['location', [12], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['ibx-lri', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                [
+                    ['location_remote_id', [], true],
+                ],
+                ['ibx-lri'],
                 $location,
             ],
         ];

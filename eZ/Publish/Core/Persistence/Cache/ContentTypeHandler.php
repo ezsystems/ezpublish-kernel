@@ -234,7 +234,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             // Add tag in case of empty list
             static function () use ($groupId, $cacheIdentifierGenerator) {
                 return [
-                    $cacheIdentifierGenerator->generateKey(self::TYPE_GROUP_IDENTIFIER, [$groupId]),
+                    $cacheIdentifierGenerator->generateTag(self::TYPE_GROUP_IDENTIFIER, [$groupId]),
                 ];
             },
             [$groupId]

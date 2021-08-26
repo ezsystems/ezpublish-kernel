@@ -39,13 +39,15 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $escapedLogin = str_replace('@', '_A', $user->login);
         $escapedEmail = str_replace('@', '_A', $user->email);
 
-        // string $method, array $arguments, array?, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, array? $key
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             [
                 'create',
                 [$user],
                 [
                     ['content', [14], false],
+                ],
+                [
                     ['user', [14], true],
                     ['user_with_by_login_suffix', [$escapedLogin], true],
                     ['user_with_by_email_suffix', [$escapedEmail], true],
@@ -63,6 +65,8 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [
                     ['content', [14], false],
                     ['user', [14], false],
+                ],
+                [
                     ['user_with_by_email_suffix', [$escapedEmail], true],
                 ],
                 ['c-14', 'u-14'],
@@ -75,12 +79,14 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [$userToken],
                 [
                     ['user_with_account_key_suffix', [14], false],
+                ],
+                [
                     ['user_with_by_account_key_suffix', ['4irj8t43r'], true],
                 ],
                 ['u-14-ak'],
                 ['ibx-u-4irj8t43r-bak'],
             ],
-            ['expireUserToken', ['4irj8t43r'], [['user_with_by_account_key_suffix', ['4irj8t43r'], true]], null, ['ibx-u-4irj8t43r-bak']],
+            ['expireUserToken', ['4irj8t43r'], null, [['user_with_by_account_key_suffix', ['4irj8t43r'], true]], null, ['ibx-u-4irj8t43r-bak']],
             [
                 'delete',
                 [14],
@@ -88,6 +94,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [14], false],
                     ['user', [14], false],
                 ],
+                null,
                 ['c-14', 'u-14'],
             ],
             ['createRole', [new RoleCreateStruct()]],
@@ -96,7 +103,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['loadRoleByIdentifier', ['member', 1]],
             ['loadRoleDraftByRoleId', [9]],
             ['loadRoles', []],
-            ['updateRole', [new RoleUpdateStruct(['id' => 9])], [['role', [9], false]], ['r-9']],
+            ['updateRole', [new RoleUpdateStruct(['id' => 9])], [['role', [9], false]], null, ['r-9']],
             [
                 'deleteRole',
                 [9],
@@ -104,11 +111,12 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role', [9], false],
                     ['role_assignment_role_list', [9], false],
                 ],
+                null,
                 ['r-9', 'rarl-9'],
             ],
             ['deleteRole', [9, 1]],
             ['addPolicyByRoleDraft', [9, $policy]],
-            ['addPolicy', [9, $policy], [['role', [9], false]], ['r-9']],
+            ['addPolicy', [9, $policy], [['role', [9], false]], null, ['r-9']],
             [
                 'updatePolicy',
                 [$policy],
@@ -116,6 +124,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['policy', [13], false],
                     ['role', [9], false],
                 ],
+                null,
                 ['p-13', 'r-9'],
             ],
             [
@@ -125,6 +134,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['policy', [13], false],
                     ['role', [9], false],
                 ],
+                null,
                 ['p-13', 'r-9'],
             ],
             ['loadPoliciesByUserId', [14]],
@@ -135,9 +145,10 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role_assignment_group_list', [14], false],
                     ['role_assignment_role_list', [9], false],
                 ],
+                null,
                 ['ragl-14', 'rarl-9'],
             ],
-            ['removeRoleAssignment', [11], [['role_assignment', [11], false]], ['ra-11']],
+            ['removeRoleAssignment', [11], [['role_assignment', [11], false]], null, ['ra-11']],
         ];
     }
 
@@ -148,13 +159,15 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $roleAssignment = new RoleAssignment(['id' => 11, 'roleId' => 9, 'contentId' => 14]);
         $calls = [['locationHandler', Location\Handler::class, 'loadLocationsByContent', [new Location(['pathString' => '/1/2/43/'])]]];
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['load', [14], 'ibx-u-14', [['user', [], true]], ['ibx-u'], $user],
+            ['load', [14], 'ibx-u-14', null, null, [['user', [], true]], ['ibx-u'], $user],
             [
                 'loadByLogin',
                 ['admin'],
                 'ibx-u-admin-bl',
+                null,
+                null,
                 [
                     ['user', [], true],
                     ['by_login_suffix', [], false],
@@ -162,11 +175,13 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['ibx-u', 'bl'],
                 $user,
             ],
-            ['loadByEmail', ['nospam@ez.no'], 'ibx-u-nospam_Aez.no-be', [['user_with_by_email_suffix', ['nospam_Aez.no'], true]], ['ibx-u-nospam_Aez.no-be'], [$user]],
+            ['loadByEmail', ['nospam@ez.no'], 'ibx-u-nospam_Aez.no-be', null, null, [['user_with_by_email_suffix', ['nospam_Aez.no'], true]], ['ibx-u-nospam_Aez.no-be'], [$user]],
             [
                 'loadUserByToken',
                 ['hash'],
                 'ibx-u-hash-bak',
+                null,
+                null,
                 [
                     ['user', [], true],
                     ['by_account_key_suffix', [], false],
@@ -174,11 +189,13 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['ibx-u', '-bak'],
                 $user,
             ],
-            ['loadRole', [9], 'ibx-r-9', [['role', [], true]], ['ibx-r'], $role],
+            ['loadRole', [9], 'ibx-r-9', null, null, [['role', [], true]], ['ibx-r'], $role],
             [
                 'loadRoleByIdentifier',
                 ['member'],
                 'ibx-r-member-bi',
+                null,
+                null,
                 [
                     ['role', [], true],
                     ['by_identifier_suffix', [], false],
@@ -186,12 +203,14 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['ibx-r', '-bi'],
                 $role,
             ],
-            ['loadRoleAssignment', [11], 'ibx-ra-11', [['role_assignment', [], true]], ['ibx-ra'], $roleAssignment],
-            ['loadRoleAssignmentsByRoleId', [9], 'ibx-ra-9-bro', [['role_assignment_with_by_role_suffix', [9], true]], ['ibx-ra-9-bro'], [$roleAssignment]],
+            ['loadRoleAssignment', [11], 'ibx-ra-11', null, null, [['role_assignment', [], true]], ['ibx-ra'], $roleAssignment],
+            ['loadRoleAssignmentsByRoleId', [9], 'ibx-ra-9-bro', null, null, [['role_assignment_with_by_role_suffix', [9], true]], ['ibx-ra-9-bro'], [$roleAssignment]],
             [
                 'loadRoleAssignmentsByGroupId',
                 [14],
                 'ibx-ra-14-bg',
+                null,
+                null,
                 [
                     ['role_assignment_with_by_group_suffix', [14], true],
                 ],
@@ -204,6 +223,8 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'loadRoleAssignmentsByGroupId',
                 [14, true],
                 'ibx-ra-14-bgi',
+                null,
+                null,
                 [['role_assignment_with_by_group_inherited_suffix', [14], true]],
                 ['ibx-ra-14-bgi'],
                 [$roleAssignment],
@@ -220,18 +241,21 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $roleAssignment = new RoleAssignment(['id' => 11, 'roleId' => 9, 'contentId' => 14]);
         $calls = [['locationHandler', Location\Handler::class, 'loadLocationsByContent', [new Location(['pathString' => '/1/2/43/'])]]];
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'load',
                 [14],
                 'ibx-u-14',
                 [
-                    ['user', [], true],
                     ['content', [14], false],
                     ['user', [14], false],
                 ],
-                ['ibx-u', 'c-14', 'u-14'],
+                ['c-14', 'u-14'],
+                [
+                    ['user', [], true],
+                ],
+                ['ibx-u'],
                 $user,
             ],
             [
@@ -239,12 +263,15 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['admin'],
                 'ibx-u-admin-bl',
                 [
-                    ['user', [], true],
-                    ['by_login_suffix', [], false],
                     ['content', [14], false],
                     ['user', [14], false],
                 ],
-                ['ibx-u', 'bl', 'c-14', 'u-14'],
+                ['c-14', 'u-14'],
+                [
+                    ['user', [], true],
+                    ['by_login_suffix', [], false],
+                ],
+                ['ibx-u', 'bl'],
                 $user,
             ],
             [
@@ -252,11 +279,14 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['nospam@ez.no'],
                 'ibx-u-nospam_Aez.no-be',
                 [
-                    ['user_with_by_email_suffix', ['nospam_Aez.no'], true],
                     ['content', [14], false],
                     ['user', [14], false],
                 ],
-                ['ibx-u-nospam_Aez.no-be', 'c-14', 'u-14'],
+                ['c-14', 'u-14'],
+                [
+                    ['user_with_by_email_suffix', ['nospam_Aez.no'], true],
+                ],
+                ['ibx-u-nospam_Aez.no-be'],
                 [$user],
             ],
             [
@@ -264,13 +294,16 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['hash'],
                 'ibx-u-hash-bak',
                 [
-                    ['user', [], true],
-                    ['by_account_key_suffix', [], false],
                     ['content', [14], false],
                     ['user', [14], false],
                     ['user_with_account_key_suffix', [14], false],
                 ],
-                ['ibx-u', '-bak', 'c-14', 'u-14', 'u-14-bak'],
+                ['c-14', 'u-14', 'u-14-bak'],
+                [
+                    ['user', [], true],
+                    ['by_account_key_suffix', [], false],
+                ],
+                ['ibx-u', '-bak'],
                 $user,
             ],
             [
@@ -278,10 +311,13 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [9],
                 'ibx-r-9',
                 [
-                    ['role', [], true],
                     ['role', [9], false],
                 ],
-                ['ibx-r', 'r-9'],
+                ['r-9'],
+                [
+                    ['role', [], true],
+                ],
+                ['ibx-r'],
                 $role,
             ],
             [
@@ -289,11 +325,14 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['member'],
                 'ibx-r-member-bi',
                 [
-                    ['role', [], true],
-                    ['by_identifier_suffix', [], false],
                     ['role', [9], false],
                 ],
-                ['ibx-r', '-bi', 'r-9'],
+                ['r-9'],
+                [
+                    ['role', [], true],
+                    ['by_identifier_suffix', [], false],
+                ],
+                ['ibx-r', '-bi'],
                 $role,
             ],
             [
@@ -301,12 +340,15 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [11],
                 'ibx-ra-11',
                 [
-                    ['role_assignment', [], true],
                     ['role_assignment', [11], false],
                     ['role_assignment_group_list', [14], false],
                     ['role_assignment_role_list', [9], false],
                 ],
-                ['ibx-ra', 'ra-11', 'ragl-14', 'rarl-9'],
+                ['ra-11', 'ragl-14', 'rarl-9'],
+                [
+                    ['role_assignment', [], true],
+                ],
+                ['ibx-ra'],
                 $roleAssignment,
             ],
             [
@@ -314,14 +356,17 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [9],
                 'ibx-ra-9-bro',
                 [
-                    ['role_assignment_with_by_role_suffix', [9], true],
                     ['role_assignment_role_list', [9], false],
                     ['role', [9], false],
                     ['role_assignment', [11], false],
                     ['role_assignment_group_list', [14], false],
                     ['role_assignment_role_list', [9], false],
                 ],
-                ['ibx-ra-9-bro', 'rarl-9', 'r-9', 'ra-11', 'ragl-14', 'rarl-9'],
+                ['rarl-9', 'r-9', 'ra-11', 'ragl-14', 'rarl-9'],
+                [
+                    ['role_assignment_with_by_role_suffix', [9], true],
+                ],
+                ['ibx-ra-9-bro'],
                 [$roleAssignment],
             ],
             [
@@ -329,7 +374,6 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [14],
                 'ibx-ra-14-bg',
                 [
-                    ['role_assignment_with_by_group_suffix', [14], true],
                     ['role_assignment_group_list', [14], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
@@ -338,7 +382,11 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role_assignment_group_list', [14], false],
                     ['role_assignment_role_list', [9], false],
                 ],
-                ['ibx-ra-14-bg', 'ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
+                ['ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
+                [
+                    ['role_assignment_with_by_group_suffix', [14], true],
+                ],
+                ['ibx-ra-14-bg'],
                 [$roleAssignment],
                 false,
                 $calls,
@@ -348,7 +396,6 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [14, true],
                 'ibx-ra-14-bgi',
                 [
-                    ['role_assignment_with_by_group_inherited_suffix', [14], true],
                     ['role_assignment_group_list', [14], false],
                     ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
@@ -357,7 +404,11 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['role_assignment_group_list', [14], false],
                     ['role_assignment_role_list', [9], false],
                 ],
-                ['ibx-ra-14-bgi', 'ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
+                ['ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
+                [
+                    ['role_assignment_with_by_group_inherited_suffix', [14], true],
+                ],
+                ['ibx-ra-14-bgi'],
                 [$roleAssignment],
                 false,
                 $calls,
@@ -393,7 +444,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         $this->cacheIdentifierGeneratorMock
             ->expects($this->once())
-            ->method('generate')
+            ->method('generateTag')
             ->with('role', [$originalRoleId], false)
             ->willReturn($roleTag);
 
@@ -471,7 +522,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
 
         $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(3))
-            ->method('generate')
+            ->method('generateTag')
             ->withConsecutive(
                 ['role_assignment_group_list', [14], false],
                 ['role_assignment_role_list', [9], false],

@@ -15,6 +15,8 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  */
 final class CacheIdentifierGenerator implements CacheIdentifierGeneratorInterface
 {
+    private const PLACEHOLDER = '-%s';
+
     /** @var string */
     private $prefix;
 
@@ -57,7 +59,11 @@ final class CacheIdentifierGenerator implements CacheIdentifierGeneratorInterfac
 
     private function generate(string $pattern, array $values, bool $withPrefix = false): string
     {
-        $cacheIdentifier = vsprintf($pattern, $values);
+        if (empty($values)) {
+            $cacheIdentifier = str_replace(self::PLACEHOLDER, '', $pattern);
+        } else {
+            $cacheIdentifier = vsprintf($pattern, $values);
+        }
 
         if ($withPrefix) {
             $cacheIdentifier = $this->prefix . $cacheIdentifier;

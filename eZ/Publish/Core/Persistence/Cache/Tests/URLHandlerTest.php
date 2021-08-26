@@ -25,7 +25,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['find', [new URLQuery()]],
             ['findUsages', [1]],
@@ -37,9 +37,9 @@ class URLHandlerTest extends AbstractCacheHandlerTest
     {
         $url = new URL(['id' => 1]);
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['loadById', [1], 'ibx-url-1', [['url', [1], true]], ['ibx-url-1'], [$url]],
+            ['loadById', [1], 'ibx-url-1', null, null, [['url', [1], true]], ['ibx-url-1'], [$url]],
         ];
     }
 
@@ -47,17 +47,20 @@ class URLHandlerTest extends AbstractCacheHandlerTest
     {
         $url = new URL(['id' => 1]);
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'loadById',
                 [1],
                 'ibx-url-1',
                 [
-                    ['url', [1], true],
                     ['url', [1], false],
                 ],
-                ['ibx-url-1', 'url-1'],
+                ['url-1'],
+                [
+                    ['url', [1], true],
+                ],
+                ['ibx-url-1'],
                 [$url],
             ],
         ];
@@ -90,7 +93,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
         $this->cacheIdentifierGeneratorMock
             ->expects($this->exactly(4))
-            ->method('generate')
+            ->method('generateTag')
             ->withConsecutive(
                 ['url', [1], false],
                 ['content', [2], false],
@@ -138,7 +141,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
         $this->cacheIdentifierGeneratorMock
             ->expects($this->once())
-            ->method('generate')
+            ->method('generateTag')
             ->with('url', [1], false)
             ->willReturn('url-1');
 

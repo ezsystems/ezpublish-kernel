@@ -29,11 +29,12 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $language = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, array? $key
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key
         return [
             [
                 'create',
                 [new SPILanguageCreateStruct()],
+                null,
                 [
                     ['language_list', [], true],
                 ],
@@ -43,6 +44,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
             [
                 'update',
                 [$language],
+                null,
                 [
                     ['language_list', [], true],
                     ['language', [5], true],
@@ -57,6 +59,7 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [
                     ['language', [5], false],
                 ],
+                null,
                 ['la-5'],
             ],
         ];
@@ -66,13 +69,13 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $object = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool $multi
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['load', [5], 'ibx-la-5', [['language', [], true]], ['ibx-la'], $object],
-            ['loadList', [[5]], 'ibx-la-5', [['language', [], true]], ['ibx-la'], [5 => $object], true],
-            ['loadAll', [], 'ibx-lal', [['language_list', [], true]], ['ibx-lal'], [5 => $object], false],
-            ['loadByLanguageCode', ['eng-GB'], 'ibx-lac-eng-GB', [['language_code', [], true]], ['ibx-lac'], $object],
-            ['loadListByLanguageCodes', [['eng-GB']], 'ibx-lac-eng-GB', [['language_code', [], true]], ['ibx-lac'], ['eng-GB' => $object], true],
+            ['load', [5], 'ibx-la-5', null, null, [['language', [], true]], ['ibx-la'], $object],
+            ['loadList', [[5]], 'ibx-la-5', null, null, [['language', [], true]], ['ibx-la'], [5 => $object], true],
+            ['loadAll', [], 'ibx-lal', null, null, [['language_list', [], true]], ['ibx-lal'], [5 => $object], false],
+            ['loadByLanguageCode', ['eng-GB'], 'ibx-lac-eng-GB', null, null, [['language_code', [], true]], ['ibx-lac'], $object],
+            ['loadListByLanguageCodes', [['eng-GB']], 'ibx-lac-eng-GB', null, null, [['language_code', [], true]], ['ibx-lac'], ['eng-GB' => $object], true],
         ];
     }
 
@@ -80,17 +83,20 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $object = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data, bool $multi
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'load',
                 [5],
                 'ibx-la-5',
                 [
-                    ['language', [], true],
                     ['language', [5], false],
                 ],
-                ['ibx-la', 'ibx-la-5'],
+                ['la-5'],
+                [
+                    ['language', [], true],
+                ],
+                ['ibx-la'],
                 $object,
             ],
             [
@@ -98,10 +104,13 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [[5]],
                 'ibx-la-5',
                 [
-                    ['language', [], true],
                     ['language', [5], false],
                 ],
-                ['ibx-la', 'la-5'],
+                ['la-5'],
+                [
+                    ['language', [], true],
+                ],
+                ['ibx-la'],
                 [5 => $object],
                 true,
             ],
@@ -110,10 +119,13 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [],
                 'ibx-lal',
                 [
-                    ['language_list', [], true],
                     ['language', [5], false],
                 ],
-                ['ibx-lal', 'la-5'],
+                ['la-5'],
+                [
+                    ['language_list', [], true],
+                ],
+                ['ibx-lal'],
                 [5 => $object],
                 false,
             ],
@@ -122,10 +134,13 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ['eng-GB'],
                 'ibx-lac-eng-GB',
                 [
-                    ['language_code', [], true],
                     ['language', [5], false],
                 ],
-                ['ibx-lac', 'la-5'],
+                ['la-5'],
+                [
+                    ['language_code', [], true],
+                ],
+                ['ibx-lac'],
                 $object,
             ],
             [
@@ -133,10 +148,13 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [['eng-GB']],
                 'ibx-lac-eng-GB',
                 [
-                    ['language_code', [], true],
                     ['language', [5], false],
                 ],
-                ['ibx-lac', 'la-5'],
+                ['la-5'],
+                [
+                    ['language_code', [], true],
+                ],
+                ['ibx-lac'],
                 ['eng-GB' => $object],
                 true,
             ],

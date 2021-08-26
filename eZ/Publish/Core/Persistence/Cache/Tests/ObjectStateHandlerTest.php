@@ -28,7 +28,7 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, array? $keys
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['createGroup', [new SPIInputStruct()], null, [['state_group_all', [], true]], null, 'ibx-sga'],
             ['updateGroup', [5, new SPIInputStruct()], [['state_group', [5], false]], null, ['sg-5']],
@@ -46,13 +46,15 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
         $group = new SPIObjectStateGroup(['id' => 5]);
         $state = new SPIObjectState(['id' => 7]);
 
-        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['loadGroup', [5], 'ibx-sg-5', [['state_group', [], true]], ['ibx-sg'], $group],
+            ['loadGroup', [5], 'ibx-sg-5', null, null, [['state_group', [], true]], ['ibx-sg'], $group],
             [
                 'loadGroupByIdentifier',
                 ['lock'],
                 'ibx-sg-lock-bi',
+                null,
+                null,
                 [
                     ['state_group', [], true],
                     ['by_identifier_suffix', [], false],
@@ -60,13 +62,15 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                 ['ibx-sg', '-bi'],
                 $group,
             ],
-            ['loadAllGroups', [], 'ibx-sga', [['state_group_all', [], true]], ['ibx-sga'], [$group]],
-            ['loadObjectStates', [5], 'ibx-slbg-5', [['state_list_by_group', [], true]], ['ibx-slbg'], [$state]],
-            ['load', [7], 'ibx-s-7', [['state', [], true]], ['ibx-s'], $state],
+            ['loadAllGroups', [], 'ibx-sga', null, null, [['state_group_all', [], true]], ['ibx-sga'], [$group]],
+            ['loadObjectStates', [5], 'ibx-slbg-5', null, null, [['state_list_by_group', [], true]], ['ibx-slbg'], [$state]],
+            ['load', [7], 'ibx-s-7', null, null, [['state', [], true]], ['ibx-s'], $state],
             [
                 'loadByIdentifier',
                 ['lock', 5],
                 'ibx-si-lock-bg-5',
+                null,
+                null,
                 [
                     ['state_identifier', [], true],
                     ['by_group', [5], false],
@@ -78,6 +82,8 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                 'getContentState',
                 [4, 5],
                 'ibx-sbg-5-oc-4',
+                null,
+                null,
                 [
                     ['state_by_group', [], true],
                     ['on_content', [4], false],
@@ -96,17 +102,20 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
             'groupId' => 5,
         ]);
 
-        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'loadGroup',
                 [5],
                 'ibx-sg-5',
                 [
-                    ['state_group', [], true],
                     ['state_group', [5], false],
                 ],
-                ['ibx-sg', 'sg-5'],
+                ['sg-5'],
+                [
+                    ['state_group', [], true],
+                ],
+                ['ibx-sg'],
                 $group,
             ],
             [
@@ -114,11 +123,14 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                 ['lock'],
                 'ibx-sg-lock-bi',
                 [
-                    ['state_group', [], true],
-                    ['by_identifier_suffix', [], false],
                     ['state_group', [5], false],
                 ],
-                ['ibx-sg', '-bi', 'sg-5'],
+                ['sg-5'],
+                [
+                    ['state_group', [], true],
+                    ['by_identifier_suffix', [], false],
+                ],
+                ['ibx-sg', '-bi'],
                 $group,
             ],
             [
@@ -126,10 +138,13 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                 [],
                 'ibx-sga',
                 [
-                    ['state_group_all', [], true],
                     ['state_group', [5], false],
                 ],
-                ['ibx-sga', 'sg-5'],
+                ['sg-5'],
+                [
+                    ['state_group_all', [], true],
+                ],
+                ['ibx-sga'],
                 [$group],
             ],
             [
@@ -137,11 +152,14 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                 [5],
                 'ibx-slbg-5',
                 [
-                    ['state_list_by_group', [], true],
                     ['state_group', [5], false],
                     ['state', [7], false],
                 ],
-                ['ibx-slbg', 'sg-5', 's-7'],
+                ['sg-5', 's-7'],
+                [
+                    ['state_list_by_group', [], true],
+                ],
+                ['ibx-slbg'],
                 [$state],
             ],
             [
@@ -149,11 +167,14 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                 [7],
                 'ibx-s-7',
                 [
-                    ['state', [], true],
                     ['state', [7], false],
                     ['state_group', [5], false],
                 ],
-                ['ibx-s', 's-7', 'sg-5'],
+                ['s-7', 'sg-5'],
+                [
+                    ['state', [], true],
+                ],
+                ['ibx-s'],
                 $state,
             ],
             [
@@ -161,12 +182,15 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                 ['lock', 5],
                 'ibx-si-lock-bg-5',
                 [
-                    ['state_identifier', [], true],
-                    ['by_group', [5], false],
                     ['state', [7], false],
                     ['state_group', [5], false],
                 ],
-                ['ibx-si', 'bg-5', 's-7', 'sg-5'],
+                ['s-7', 'sg-5'],
+                [
+                    ['state_identifier', [], true],
+                    ['by_group', [5], false],
+                ],
+                ['ibx-si', 'bg-5'],
                 $state,
             ],
             [
@@ -174,12 +198,15 @@ class ObjectStateHandlerTest extends AbstractCacheHandlerTest
                 [4, 5],
                 'ibx-sbg-5-oc-4',
                 [
-                    ['state_by_group', [], true],
-                    ['on_content', [4], false],
                     ['state', [7], false],
                     ['content', [4], false],
                 ],
-                ['ibx-sbg', 'oc-4', 's-7', 'c-4'],
+                ['s-7', 'c-4'],
+                [
+                    ['state_by_group', [], true],
+                    ['on_content', [4], false],
+                ],
+                ['ibx-sbg', 'oc-4'],
                 $state,
             ],
         ];

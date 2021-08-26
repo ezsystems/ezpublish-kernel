@@ -42,7 +42,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
         $name = 'setting';
         $userPreferenceCount = 10;
 
-        // string $method, array $arguments, array? $cacheIdentifierGeneratorArguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             [
                 'setUserPreference',
@@ -52,6 +52,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                         'name' => $name,
                     ]),
                 ],
+                null,
                 [
                     ['user_preference_with_suffix', [$userId, $name], true],
                 ],
@@ -62,13 +63,14 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                 new SPIUserPreference(),
             ],
             [
-                'loadUserPreferences', [$userId, 0, 25], null, null, null, [],
+                'loadUserPreferences', [$userId, 0, 25], null, null, null, null, [],
             ],
             [
                 'countUserPreferences',
                 [
                     $userId,
                 ],
+                null,
                 null,
                 null,
                 null,
@@ -85,7 +87,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
         $userId = 7;
         $name = 'setting';
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'getUserPreferenceByUserIdAndName',
@@ -94,6 +96,8 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                     $name,
                 ],
                 'ibx-up-' . $userId . '-' . $name,
+                null,
+                null,
                 [['user_preference', [], true]],
                 ['ibx-up'],
                 new SPIUserPreference(['userId' => $userId, 'name' => $name]),
@@ -106,7 +110,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
         $userId = 7;
         $name = 'setting';
 
-        // string $method, array $arguments, string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'getUserPreferenceByUserIdAndName',
@@ -115,6 +119,8 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                     $name,
                 ],
                 'ibx-up-' . $userId . '-' . $name,
+                null,
+                null,
                 [['user_preference', [], true]],
                 ['ibx-up'],
                 new SPIUserPreference(['userId' => $userId, 'name' => $name]),

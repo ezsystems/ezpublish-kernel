@@ -26,7 +26,7 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $cacheTagGeneratingArguments, array? $cacheKeyGeneratingArguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['create', ['Standard', 'standard']],
             ['update', [5, 'Standard', 'standard'], [['section', [5], false]], null, ['se-5']],
@@ -43,10 +43,10 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
     {
         $object = new SPISection(['id' => 5]);
 
-        // string $method, array $arguments string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['load', [5], 'ibx-se-5', [['section', [5], true]], ['ibx-se-5'], $object],
-            ['loadByIdentifier', ['standard'], 'ibx-se-standard-bi', [['section_with_by_id', ['standard'], true]], ['ibx-se-standard-bi'], $object],
+            ['load', [5], 'ibx-se-5', null, null, [['section', [5], true]], ['ibx-se-5'], $object],
+            ['loadByIdentifier', ['standard'], 'ibx-se-standard-bi', null, null, [['section_with_by_id', ['standard'], true]], ['ibx-se-standard-bi'], $object],
         ];
     }
 
@@ -54,17 +54,20 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
     {
         $object = new SPISection(['id' => 5]);
 
-        // string $method, array $arguments string $key, array? $cacheIdentifierGeneratorArguments, array? $cacheIdentifierGeneratorResults, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'load',
                 [5],
                 'ibx-se-5',
                 [
-                    ['section', [5], true],
                     ['section', [5], false],
                 ],
-                ['ibx-se-5', 'se-5'],
+                ['se-5'],
+                [
+                    ['section', [5], true],
+                ],
+                ['ibx-se-5'],
                 $object,
             ],
             [
@@ -72,10 +75,13 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
                 ['standard'],
                 'ibx-se-standard-bi',
                 [
-                    ['section_with_by_id', ['standard'], true],
                     ['section', [5], false],
                 ],
-                ['ibx-se-standard-bi', 'se-5'],
+                ['se-5'],
+                [
+                    ['section_with_by_id', ['standard'], true],
+                ],
+                ['ibx-se-standard-bi'],
                 $object,
             ],
         ];
