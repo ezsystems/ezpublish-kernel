@@ -26,21 +26,19 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     private $getKeys;
 
     /**
-     * Set callback functions for use in cache retrival.
+     * Set callback functions for use in cache retrieval.
      */
     protected function init(): void
     {
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
-
-        $this->getTags = static function (Language $language) use ($cacheIdentifierGenerator) {
+        $this->getTags = function (Language $language) {
             return [
-                $cacheIdentifierGenerator->generateTag(self::LANGUAGE_IDENTIFIER, [$language->id]),
+                $this->cacheIdentifierGenerator->generateTag(self::LANGUAGE_IDENTIFIER, [$language->id]),
             ];
         };
-        $this->getKeys = function (Language $language) use ($cacheIdentifierGenerator) {
+        $this->getKeys = function (Language $language) {
             return [
-                $cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [$language->id], true),
-                $cacheIdentifierGenerator->generateKey(
+                $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [$language->id], true),
+                $this->cacheIdentifierGenerator->generateKey(
                     self::LANGUAGE_CODE_IDENTIFIER,
                     [$this->escapeForCacheKey($language->languageCode)],
                     true

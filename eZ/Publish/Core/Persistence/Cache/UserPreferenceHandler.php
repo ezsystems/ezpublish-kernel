@@ -68,11 +68,9 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
      */
     public function getUserPreferenceByUserIdAndName(int $userId, string $name): UserPreference
     {
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
-
         $userPreference = $this->getCacheValue(
             $userId,
-            $cacheIdentifierGenerator->generateKey(self::USER_PREFERENCE_IDENTIFIER, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::USER_PREFERENCE_IDENTIFIER, [], true) . '-',
             function ($userId) use ($name) {
                 try {
                     return $this->persistenceHandler->userPreferenceHandler()->getUserPreferenceByUserIdAndName(
@@ -86,9 +84,9 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
             static function () {
                 return [];
             },
-            static function () use ($userId, $name, $cacheIdentifierGenerator) {
+            function () use ($userId, $name) {
                 return [
-                    $cacheIdentifierGenerator->generateKey(
+                    $this->cacheIdentifierGenerator->generateKey(
                         self::USER_PREFERENCE_WITH_SUFFIX_IDENTIFIER,
                         [$userId, $name],
                         true

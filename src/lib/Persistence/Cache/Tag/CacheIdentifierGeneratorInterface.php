@@ -14,11 +14,19 @@ namespace Ibexa\Core\Persistence\Cache\Tag;
 interface CacheIdentifierGeneratorInterface
 {
     /**
+     * @param string $patternName patterns determining how the tag will look like, defined in ibexa.core.persistence.cache.tag_patterns
+     * @param array $values containing scalars, mostly integers and strings
+     * @param bool $withPrefix used mainly by keys, if set to true, tags will be prefixed with ibx-
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function generateTag(string $patternName, array $values = [], bool $withPrefix = false): string;
 
     /**
+     * @param string $patternName patterns determining how the tag will look like, defined in ibexa.core.persistence.cache.key_patterns
+     * @param array $values containing scalars, mostly integers and strings
+     * @param bool $withPrefix used mainly by keys, if set to true, tags will be prefixed with ibx-
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function generateKey(string $patternName, array $values = [], bool $withPrefix = false): string;

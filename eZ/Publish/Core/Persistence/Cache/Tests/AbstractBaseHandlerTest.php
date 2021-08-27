@@ -55,7 +55,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
     /** @var \Closure */
     protected $cacheItemsClosure;
 
-    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGenerator|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheIdentifierGeneratorMock;
 
     /**

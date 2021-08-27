@@ -62,7 +62,7 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
                 $callsCount = count($tagGeneratingArguments);
 
                 $this->cacheIdentifierGeneratorMock
-                    ->expects(!empty($tagGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                    ->expects($this->exactly($callsCount))
                     ->method('generateTag')
                     ->withConsecutive(...$tagGeneratingArguments)
                     ->willReturnOnConsecutiveCalls(...$tags);
@@ -73,7 +73,7 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
 
                 if (is_array($key)) {
                     $this->cacheIdentifierGeneratorMock
-                        ->expects(!empty($keyGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                        ->expects($this->exactly($callsCount))
                         ->method('generateKey')
                         ->withConsecutive(...$keyGeneratingArguments)
                         ->willReturnOnConsecutiveCalls(...$key);

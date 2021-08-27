@@ -55,11 +55,9 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
      */
     public function loadByUserIdAndLocationId(int $userId, array $locationIds): array
     {
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
-
         return $this->getMultipleCacheItems(
             $locationIds,
-            $cacheIdentifierGenerator->generateKey(self::BOOKMARK_IDENTIFIER, [$userId], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::BOOKMARK_IDENTIFIER, [$userId], true) . '-',
             function (array $missingIds) use ($userId) {
                 $this->logger->logCall(__CLASS__ . '::loadByUserIdAndLocationId', [
                     'userId' => $userId,
@@ -68,16 +66,16 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
 
                 return $this->persistenceHandler->bookmarkHandler()->loadByUserIdAndLocationId($userId, $missingIds);
             },
-            function (Bookmark $bookmark) use ($cacheIdentifierGenerator) {
+            function (Bookmark $bookmark) {
                 $tags = [
-                    $cacheIdentifierGenerator->generateTag(self::BOOKMARK_IDENTIFIER, [$bookmark->id]),
-                    $cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$bookmark->locationId]),
-                    $cacheIdentifierGenerator->generateTag(self::USER_IDENTIFIER, [$bookmark->userId]),
+                    $this->cacheIdentifierGenerator->generateTag(self::BOOKMARK_IDENTIFIER, [$bookmark->id]),
+                    $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$bookmark->locationId]),
+                    $this->cacheIdentifierGenerator->generateTag(self::USER_IDENTIFIER, [$bookmark->userId]),
                 ];
 
                 $location = $this->persistenceHandler->locationHandler()->load($bookmark->locationId);
                 foreach (explode('/', trim($location->pathString, '/')) as $locationId) {
-                    $tags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]);
+                    $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]);
                 }
 
                 return $tags;

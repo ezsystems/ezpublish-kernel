@@ -44,27 +44,25 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
     protected function init(): void
     {
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
-
-        $this->getContentInfoTags = function (ContentInfo $info, array $tags = []) use ($cacheIdentifierGenerator) {
-            $tags[] = $cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$info->id]);
+        $this->getContentInfoTags = function (ContentInfo $info, array $tags = []) {
+            $tags[] = $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$info->id]);
 
             if ($info->mainLocationId) {
                 $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($info->id);
                 foreach ($locations as $location) {
-                    $tags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]);
+                    $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]);
                     foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-                        $tags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
+                        $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
                     }
                 }
             }
 
             return $tags;
         };
-        $this->getContentInfoKeys = function (ContentInfo $info) use ($cacheIdentifierGenerator) {
+        $this->getContentInfoKeys = function (ContentInfo $info) {
             return [
-                $cacheIdentifierGenerator->generateKey(self::CONTENT_INFO_IDENTIFIER, [$info->id], true),
-                $cacheIdentifierGenerator->generateKey(
+                $this->cacheIdentifierGenerator->generateKey(self::CONTENT_INFO_IDENTIFIER, [$info->id], true),
+                $this->cacheIdentifierGenerator->generateKey(
                     self::CONTENT_INFO_BY_REMOTE_ID_IDENTIFIER,
                     [$this->escapeForCacheKey($info->remoteId)],
                     true
@@ -72,10 +70,10 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
             ];
         };
 
-        $this->getContentTags = function (Content $content) use ($cacheIdentifierGenerator) {
+        $this->getContentTags = function (Content $content) {
             $versionInfo = $content->versionInfo;
             $tags = [
-                $cacheIdentifierGenerator->generateTag(
+                $this->cacheIdentifierGenerator->generateTag(
                     self::CONTENT_FIELDS_TYPE_IDENTIFIER,
                     [$versionInfo->contentInfo->contentTypeId]
                 ),
@@ -131,19 +129,18 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     {
         $keySuffix = $versionNo ? "-${versionNo}-" : '-';
         $keySuffix .= empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations);
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
 
         return $this->getCacheValue(
             (int) $contentId,
-            $cacheIdentifierGenerator->generateKey(self::CONTENT_IDENTIFIER, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_IDENTIFIER, [], true) . '-',
             function ($id) use ($versionNo, $translations) {
                 return $this->persistenceHandler->contentHandler()->load($id, $versionNo, $translations);
             },
             $this->getContentTags,
-            static function (Content $content) use ($keySuffix, $cacheIdentifierGenerator) {
+            function (Content $content) use ($keySuffix) {
                 // Version number & translations is part of keySuffix here and depends on what user asked for
                 return [
-                    $cacheIdentifierGenerator->generateKey(
+                    $this->cacheIdentifierGenerator->generateKey(
                         self::CONTENT_IDENTIFIER,
                         [$content->versionInfo->contentInfo->id],
                         true
@@ -158,19 +155,18 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     public function loadContentList(array $contentIds, array $translations = null): array
     {
         $keySuffix = '-' . (empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations));
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
 
         return $this->getMultipleCacheValues(
             $contentIds,
-            $cacheIdentifierGenerator->generateKey(self::CONTENT_IDENTIFIER, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_IDENTIFIER, [], true) . '-',
             function (array $cacheMissIds) use ($translations) {
                 return $this->persistenceHandler->contentHandler()->loadContentList($cacheMissIds, $translations);
             },
             $this->getContentTags,
-            static function (Content $content) use ($keySuffix, $cacheIdentifierGenerator) {
+            function (Content $content) use ($keySuffix) {
                 // Translations is part of keySuffix here and depends on what user asked for
                 return [
-                    $cacheIdentifierGenerator->generateKey(
+                    $this->cacheIdentifierGenerator->generateKey(
                         self::CONTENT_IDENTIFIER,
                         [$content->versionInfo->contentInfo->id],
                         true

@@ -34,24 +34,22 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
     protected function init(): void
     {
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
-
-        $this->getLocationTags = static function (Location $location) use ($cacheIdentifierGenerator) {
+        $this->getLocationTags = function (Location $location) {
             $tags = [
-                $cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$location->contentId]),
-                $cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]),
+                $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$location->contentId]),
+                $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]),
             ];
             foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-                $tags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
+                $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
             }
 
             return $tags;
         };
 
-        $this->getLocationKeys = function (Location $location, $keySuffix = '-1') use ($cacheIdentifierGenerator) {
+        $this->getLocationKeys = function (Location $location, $keySuffix = '-1') {
             return [
-                $cacheIdentifierGenerator->generateKey(self::LOCATION_IDENTIFIER, [$location->id], true) . $keySuffix,
-                $cacheIdentifierGenerator->generateKey(
+                $this->cacheIdentifierGenerator->generateKey(self::LOCATION_IDENTIFIER, [$location->id], true) . $keySuffix,
+                $this->cacheIdentifierGenerator->generateKey(
                     self::LOCATION_REMOTE_ID_IDENTIFIER,
                     [$this->escapeForCacheKey($location->remoteId)],
                     true
@@ -108,30 +106,28 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function loadSubtreeIds($locationId)
     {
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
-
         return $this->getCacheValue(
             (int) $locationId,
-            $cacheIdentifierGenerator->generateKey(self::LOCATION_SUBTREE_IDENTIFIER, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::LOCATION_SUBTREE_IDENTIFIER, [], true) . '-',
             function (int $locationId): array {
                 return $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId);
             },
-            static function (array $locationIds) use ($locationId, $cacheIdentifierGenerator): array {
+            function (array $locationIds) use ($locationId): array {
                 $cacheTags = [
-                    $cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$locationId]),
-                    $cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]),
+                    $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$locationId]),
+                    $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]),
                 ];
 
                 foreach ($locationIds as $id) {
-                    $cacheTags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$id]);
-                    $cacheTags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$id]);
+                    $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$id]);
+                    $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$id]);
                 }
 
                 return $cacheTags;
             },
-            static function () use ($locationId, $cacheIdentifierGenerator): array {
+            function () use ($locationId): array {
                 return [
-                    $cacheIdentifierGenerator->generateKey(self::LOCATION_SUBTREE_IDENTIFIER, [$locationId], true),
+                    $this->cacheIdentifierGenerator->generateKey(self::LOCATION_SUBTREE_IDENTIFIER, [$locationId], true),
                 ];
             }
         );
@@ -142,21 +138,20 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function loadLocationsByContent($contentId, $rootLocationId = null)
     {
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
         $keySuffix = '';
         $cacheTags = [
-            $cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
         ];
 
         if ($rootLocationId) {
             $keySuffix = '-root-' . $rootLocationId;
-            $cacheTags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$rootLocationId]);
-            $cacheTags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$rootLocationId]);
+            $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$rootLocationId]);
+            $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$rootLocationId]);
         }
 
         return $this->getCacheValue(
             (int) $contentId,
-            $cacheIdentifierGenerator->generateKey(self::CONTENT_LOCATIONS_IDENTIFIER, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_LOCATIONS_IDENTIFIER, [], true) . '-',
             function (int $contentId) use ($rootLocationId): array {
                 return $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
             },
@@ -167,9 +162,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
                 return $cacheTags;
             },
-            static function () use ($contentId, $keySuffix, $cacheIdentifierGenerator): array {
+            function () use ($contentId, $keySuffix): array {
                 return [
-                    $cacheIdentifierGenerator->generateTag(
+                    $this->cacheIdentifierGenerator->generateTag(
                         self::CONTENT_LOCATIONS_IDENTIFIER,
                         [$contentId],
                         true
@@ -195,17 +190,15 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function loadParentLocationsForDraftContent($contentId)
     {
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
-
         return $this->getCacheValue(
             (int) $contentId,
-            $cacheIdentifierGenerator->generateKey(self::CONTENT_LOCATIONS_IDENTIFIER, [], true) . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_LOCATIONS_IDENTIFIER, [], true) . '-',
             function (int $contentId): array {
                 return $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
             },
-            function (array $locations) use ($contentId, $cacheIdentifierGenerator): array {
+            function (array $locations) use ($contentId): array {
                 $cacheTags = [
-                    $cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
+                    $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
                 ];
 
                 foreach ($locations as $location) {
@@ -214,16 +207,16 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
                 return $cacheTags;
             },
-            static function () use ($contentId, $cacheIdentifierGenerator): array {
+            function () use ($contentId): array {
                 return [
-                    $cacheIdentifierGenerator->generateKey(
+                    $this->cacheIdentifierGenerator->generateKey(
                         self::CONTENT_LOCATIONS_WITH_PARENT_FOR_DRAFT_SUFFIX_IDENTIFIER,
                         [$contentId],
                         true
                     ),
                 ];
             },
-            $cacheIdentifierGenerator->generateKey(self::PARENT_FOR_DRAFT_SUFFIX)
+            $this->cacheIdentifierGenerator->generateKey(self::PARENT_FOR_DRAFT_SUFFIX)
         );
     }
 

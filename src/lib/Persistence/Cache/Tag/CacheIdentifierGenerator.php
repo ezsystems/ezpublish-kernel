@@ -39,7 +39,11 @@ final class CacheIdentifierGenerator implements CacheIdentifierGeneratorInterfac
     public function generateTag(string $patternName, array $values = [], bool $withPrefix = false): string
     {
         if (!isset($this->tagPatterns[$patternName])) {
-            throw new InvalidArgumentException($patternName, 'Undefined tag pattern');
+            throw new InvalidArgumentException($patternName, sprintf(
+                'Undefined tag pattern "%s". Known pattern names are: "%s"',
+                $patternName,
+                implode('", "', array_keys($this->tagPatterns))
+            ));
         }
 
         return $this->generate($this->tagPatterns[$patternName], $values, $withPrefix);
@@ -51,7 +55,11 @@ final class CacheIdentifierGenerator implements CacheIdentifierGeneratorInterfac
     public function generateKey(string $patternName, array $values = [], bool $withPrefix = false): string
     {
         if (!isset($this->keyPatterns[$patternName])) {
-            throw new InvalidArgumentException($patternName, 'Undefined key pattern');
+            throw new InvalidArgumentException($patternName, sprintf(
+                'Undefined key pattern "%s". Known pattern names are: "%s"',
+                $patternName,
+                implode('", "', array_keys($this->keyPatterns))
+            ));
         }
 
         return $this->generate($this->keyPatterns[$patternName], $values, $withPrefix);
