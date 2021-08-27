@@ -10,8 +10,8 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
-use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
 use eZ\Publish\SPI\Variation\VariationHandler;
+use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Routing\RequestContext;
 

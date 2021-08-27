@@ -349,7 +349,6 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
      */
     public function deleteContent($contentId)
     {
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
         $this->logger->logCall(__METHOD__, ['content' => $contentId]);
 
         // Load reverse field relations first
@@ -362,16 +361,16 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 
         if (!empty($reverseRelations)) {
             $tags = \array_map(
-                static function ($relation) use ($cacheIdentifierGenerator) {
+                function ($relation) {
                     // only the full content object *with* fields is affected by this
-                    return $cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$relation->sourceContentId]);
+                    return $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$relation->sourceContentId]);
                 },
                 $reverseRelations
             );
         } else {
             $tags = [];
         }
-        $tags[] = $cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]);
+        $tags[] = $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]);
         $this->cache->invalidateTags($tags);
 
         return $return;

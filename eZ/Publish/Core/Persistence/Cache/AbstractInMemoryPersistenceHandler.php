@@ -8,8 +8,8 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
 
 /**
  * Internal abstract handler for use in other SPI Persistence Cache Handlers.

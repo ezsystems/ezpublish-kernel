@@ -59,10 +59,8 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
 
         if ($tags || $key) {
             if ($tagGeneratingArguments) {
-                $callsCount = count($tagGeneratingArguments);
-
                 $this->cacheIdentifierGeneratorMock
-                    ->expects($this->exactly($callsCount))
+                    ->expects($this->exactly(count($tagGeneratingArguments)))
                     ->method('generateTag')
                     ->withConsecutive(...$tagGeneratingArguments)
                     ->willReturnOnConsecutiveCalls(...$tags);
@@ -79,7 +77,7 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
                         ->willReturnOnConsecutiveCalls(...$key);
                 } else {
                     $this->cacheIdentifierGeneratorMock
-                        ->expects(!empty($keyGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                        ->expects($this->exactly($callsCount))
                         ->method('generateKey')
                         ->with($keyGeneratingArguments[0][0])
                         ->willReturn($key);
@@ -142,20 +140,16 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
         $this->loggerMock->expects($this->never())->method('logCall');
 
         if ($tagGeneratingArguments) {
-            $callsCount = count($tagGeneratingArguments);
-
             $this->cacheIdentifierGeneratorMock
-                ->expects(!empty($tagGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                ->expects($this->exactly(count($tagGeneratingArguments)))
                 ->method('generateTag')
                 ->withConsecutive(...$tagGeneratingArguments)
                 ->willReturnOnConsecutiveCalls(...$tagGeneratingResults);
         }
 
         if ($keyGeneratingArguments) {
-            $callsCount = count($keyGeneratingArguments);
-
             $this->cacheIdentifierGeneratorMock
-                ->expects(!empty($keyGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                ->expects($this->exactly(count($keyGeneratingArguments)))
                 ->method('generateKey')
                 ->withConsecutive(...$keyGeneratingArguments)
                 ->willReturnOnConsecutiveCalls(...$keyGeneratingResults);
@@ -225,20 +219,16 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
         $this->loggerMock->expects($this->once())->method('logCall');
 
         if ($tagGeneratingArguments) {
-            $callsCount = count($tagGeneratingArguments);
-
             $this->cacheIdentifierGeneratorMock
-                ->expects(!empty($tagGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                ->expects($this->exactly(count($tagGeneratingArguments)))
                 ->method('generateTag')
                 ->withConsecutive(...$tagGeneratingArguments)
                 ->willReturnOnConsecutiveCalls(...$tagGeneratingResults);
         }
 
         if ($keyGeneratingArguments) {
-            $callsCount = count($keyGeneratingArguments);
-
             $this->cacheIdentifierGeneratorMock
-                ->expects(!empty($keyGeneratingArguments) ? $this->exactly($callsCount) : $this->never())
+                ->expects($this->exactly(count($keyGeneratingArguments)))
                 ->method('generateKey')
                 ->withConsecutive(...$keyGeneratingArguments)
                 ->willReturnOnConsecutiveCalls(...$keyGeneratingResults);
