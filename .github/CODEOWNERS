@@ -1,0 +1,31 @@
+# Ibexa CODEOWNERS for GitHub
+# Note: the order of patterns is important; the last matching pattern takes the most
+# precedence.
+
+# Package Maintainers, always required
+*            @alongosz @adamwojs @mikadamczyk @Steveb-p
+
+# Back-end code
+*.php        @ezsystems/php-dev-team
+*.yml        @ezsystems/php-dev-team
+*.yaml       @ezsystems/php-dev-team
+
+# Front-end code
+*.js         @ezsystems/javascript-dev-team
+*.twig       @ezsystems/javascript-dev-team
+
+# Documentation
+*.md         @ezsystems/documentation-team
+*.rst        @ezsystems/documentation-team
+*.txt        @ezsystems/documentation-team
+
+# Behat features specification & other QA-owned code
+*.feature    @ezsystems/qa-team
+travis.yml   @ezsystems/qa-team
+
+# Package custom patters
+/doc/        @ezsystems/documentation-team
+*.sql        @ezsystems/php-dev-team
+*.xml        @ezsystems/php-dev-team
+*.xsl        @ezsystems/php-dev-team
+*.xsd        @ezsystems/php-dev-team
