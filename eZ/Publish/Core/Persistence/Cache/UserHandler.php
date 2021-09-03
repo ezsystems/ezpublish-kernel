@@ -87,7 +87,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         };
         $this->getRoleKeys = function (Role $role) {
             return [
-                $this->cacheIdentifierGenerator->generateKey(self::ROLE_IDENTIFIER, [$role->id]),
+                $this->cacheIdentifierGenerator->generateKey(self::ROLE_IDENTIFIER, [$role->id], true),
                 $this->cacheIdentifierGenerator->generateKey(
                     self::ROLE_WITH_BY_ID_SUFFIX_IDENTIFIER,
                     [$this->escapeForCacheKey($role->identifier)],
