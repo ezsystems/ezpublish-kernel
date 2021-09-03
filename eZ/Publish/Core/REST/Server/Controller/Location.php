@@ -217,7 +217,7 @@ class Location extends RestController
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated | \eZ\Publish\Core\REST\Server\Values\NoContent
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated|\eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function moveSubtree($locationPath, Request $request)
     {
