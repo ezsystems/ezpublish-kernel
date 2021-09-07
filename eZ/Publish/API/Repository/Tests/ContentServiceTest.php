@@ -3045,7 +3045,7 @@ XML
 
         // This call will fail with a "NotFound", because we allow to delete content if remaining version is draft.
         // Can normally only happen if there where always only a draft to begin with, simplifies UI edit API usage.
-        $this->contentService->loadContent($draft->id);
+        $this->contentService->loadContentInfo($draft->id);
     }
 
     /**
