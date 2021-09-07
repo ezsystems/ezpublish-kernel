@@ -31,15 +31,22 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['loadTrashItem', [6]],
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
+        return [
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
         ];
     }
@@ -51,8 +58,8 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
         $contentId = 42;
 
         $tags = [
-            'content-' . $contentId,
-            'location-path-' . $originalLocationId,
+            'c-' . $contentId,
+            'lp-' . $originalLocationId,
         ];
 
         $handlerMethodName = $this->getHandlerMethodName();
@@ -65,26 +72,38 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
         $locationHandlerMock
             ->method('load')
-            ->will($this->returnValue(new Location(['id' => $originalLocationId, 'contentId' => $contentId])));
+            ->willReturn(new Location(['id' => $originalLocationId, 'contentId' => $contentId]));
 
         $this->persistenceHandlerMock
             ->method('contentHandler')
-            ->will($this->returnValue($contentHandlerMock));
+            ->willReturn($contentHandlerMock);
 
         $this->persistenceHandlerMock
             ->method('locationHandler')
-            ->will($this->returnValue($locationHandlerMock));
+            ->willReturn($locationHandlerMock);
 
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method($handlerMethodName)
-            ->will($this->returnValue($innerHandler));
+            ->willReturn($innerHandler);
 
         $innerHandler
             ->expects($this->once())
             ->method('recover')
             ->with($originalLocationId, $targetLocationId)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
+
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->exactly(2))
+            ->method('generateTag')
+            ->withConsecutive(
+                ['content', [$contentId], false],
+                ['location_path', [$originalLocationId], false]
+            )
+            ->willReturnOnConsecutiveCalls(
+                'c-' . $contentId,
+                'lp-' . $originalLocationId
+            );
 
         $this->cacheMock
             ->expects($this->once())
@@ -101,8 +120,8 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
         $contentId = 42;
 
         $tags = [
-            'content-' . $contentId,
-            'location-path-' . $locationId,
+            'c-' . $contentId,
+            'lp-' . $locationId,
         ];
 
         $handlerMethodName = $this->getHandlerMethodName();
@@ -115,26 +134,35 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
         $locationHandlerMock
             ->method('load')
-            ->will($this->returnValue(new Location(['id' => $locationId, 'contentId' => $contentId])));
+            ->willReturn(new Location(['id' => $locationId, 'contentId' => $contentId]));
 
         $this->persistenceHandlerMock
             ->method('contentHandler')
-            ->will($this->returnValue($contentHandlerMock));
+            ->willReturn($contentHandlerMock);
 
         $this->persistenceHandlerMock
             ->method('locationHandler')
-            ->will($this->returnValue($locationHandlerMock));
+            ->willReturn($locationHandlerMock);
 
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method($handlerMethodName)
-            ->will($this->returnValue($innerHandler));
+            ->willReturn($innerHandler);
 
         $innerHandler
             ->expects($this->once())
             ->method('trashSubtree')
             ->with($locationId)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
+
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->exactly(2))
+            ->method('generateTag')
+            ->withConsecutive(
+                ['content', [$contentId], false],
+                ['location_path', [$locationId], false]
+            )
+            ->willReturnOnConsecutiveCalls(...$tags);
 
         $this->cacheMock
             ->expects($this->once())
@@ -160,17 +188,17 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
             ->expects($this->once())
             ->method('deleteTrashItem')
             ->with($trashedId)
-            ->will($this->returnValue(new TrashItemDeleteResult(['trashItemId' => $trashedId, 'contentId' => $contentId])));
+            ->willReturn(new TrashItemDeleteResult(['trashItemId' => $trashedId, 'contentId' => $contentId]));
 
         $innerHandler
             ->expects($this->once())
             ->method('loadTrashItem')
             ->with($trashedId)
-            ->will($this->returnValue($trashed));
+            ->willReturn($trashed);
 
         $this->persistenceHandlerMock
             ->method($handlerMethodName)
-            ->will($this->returnValue($innerHandler));
+            ->willReturn($innerHandler);
 
         $contentHandlerMock = $this->createMock(ContentHandler::class);
 
@@ -178,17 +206,31 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
             ->expects($this->once())
             ->method('loadReverseRelations')
             ->with($contentId)
-            ->will($this->returnValue([new Relation(['sourceContentId' => $relationSourceContentId])]));
+            ->willReturn([new Relation(['sourceContentId' => $relationSourceContentId])]);
 
         $this->persistenceHandlerMock
             ->method('contentHandler')
-            ->will($this->returnValue($contentHandlerMock));
+            ->willReturn($contentHandlerMock);
 
         $tags = [
-            'content-' . $contentId,
-            'location-path-' . $trashedId,
-            'content-' . $relationSourceContentId,
+            'c-' . $contentId,
+            'lp-' . $trashedId,
+            'c-' . $relationSourceContentId,
         ];
+
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->exactly(3))
+            ->method('generateTag')
+            ->withConsecutive(
+                ['content', [$relationSourceContentId], false],
+                ['content', [$contentId], false],
+                ['location_path', [$trashedId], false]
+            )
+            ->willReturnOnConsecutiveCalls(
+                'c-' . $relationSourceContentId,
+                'c-' . $contentId,
+                'lp-' . $trashedId
+            );
 
         $this->cacheMock
             ->expects($this->once())
@@ -221,7 +263,7 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
         $this->persistenceHandlerMock
             ->method($handlerMethodName)
-            ->will($this->returnValue($innerHandler));
+            ->willReturn($innerHandler);
 
         $contentHandlerMock = $this->createMock(ContentHandler::class);
 
@@ -229,17 +271,30 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
             ->expects($this->exactly(2))
             ->method('loadReverseRelations')
             ->with($contentId)
-            ->will($this->returnValue([new Relation(['sourceContentId' => $relationSourceContentId])]));
+            ->willReturn([new Relation(['sourceContentId' => $relationSourceContentId])]);
 
         $this->persistenceHandlerMock
             ->method('contentHandler')
-            ->will($this->returnValue($contentHandlerMock));
+            ->willReturn($contentHandlerMock);
+
+        $cacheIdentifierGeneratorArguments = [
+            ['content', [$relationSourceContentId], false],
+            ['content', [$contentId], false],
+            ['location_path', [$trashedId], false],
+        ];
 
         $tags = [
-            'content-' . $relationSourceContentId,
-            'content-' . $contentId,
-            'location-path-' . $trashedId,
+            'c-' . $relationSourceContentId,
+            'c-' . $contentId,
+            'lp-' . $trashedId,
         ];
+
+        //one set of arguments and tags for each relation
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->exactly(6))
+            ->method('generateTag')
+            ->withConsecutive(...array_merge($cacheIdentifierGeneratorArguments, $cacheIdentifierGeneratorArguments))
+            ->willReturnOnConsecutiveCalls(...array_merge($tags, $tags));
 
         $this->cacheMock
             ->expects($this->once())

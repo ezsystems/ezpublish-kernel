@@ -14,70 +14,61 @@ the cache in a ways so exact items are invalidated on specific bulk operations a
 ### Tag usage in Persistence Cache
 
 List of tags and their meaning:
-- `content-<content-id>` :
+- `c-<content-id>` :
   _Meta tag used on anything that are affected on changes to content, on content itself as well as location and so on._
 
-- `content-<content-id>-version-<version-number>`
+- `c-<content-id>-v-<version-number>`
    _Used for specific versions, usuefull for clearing cache of a specific draft on changes for instance._
 
-- `content-fields-<content-id>` :
-  _Used on content/user object itself (with fields), for use when operations affects field values but not content meta info._
+- `cft-<content-type-id>` :
+  _Used on content/user object itself (with fields), for use when operations affect content type or its content fields._
 
-- `content-fields-type-<content-type-id>` :
-  _Same as above, but specifically for use when content type changes affecting content fields of it's type._
-
-- `location-<location-id>` :
+- `l-<location-id>` :
   _Meta tag used on anything that are affected on changes to location, needs to be invalidated if location changes._
 
-- `location-path-<location-id>` :
+- `lp-<location-id>` :
   _Same as above, additional tags for all parents, for operations that changes the tree itself, like move/remove/(..)._
 
-- `location-data-<location-id>` :
-  _Used on location, and invalidated when operations affect the properties on location only, e.g. update._
-
-- `location-path-data-<location-id>` :
-  _Same as above, but for operations affecting data in the tree, e.g. hide/unhide._
-
-- `language-<language-id>` :
+- `la-<language-id>` :
   _Used on languages, and invalidated when operations affect a language._
 
-- `type-<type-id>` :
+- `t-<type-id>` :
   _Used on types, and invalidated when operations affect a type._
 
-- `type-group-<type-group-id>` :
+- `tg-<type-group-id>` :
   _Used on type groups, and invalidated when operations affect a type groups._
 
-- `type-map` :
+- `tm` :
   _Used on type map info, like calculated info on searchable fields, invalidated on type changes._
 
-- `state-<type-id>` :
+- `s-<type-id>` :
   _Used on states, and invalidated when operations affect a state._
 
-- `state-group-<state-group-id>` :
+- `sg-<state-group-id>` :
   _Used on state groups, and invalidated when operations affect a state groups._
 
-- `section-<section-id>` :
+- `se-<section-id>` :
   _Used on sections, and invalidated when operations affect a section._
 
-- `urlAlias-location-<location-id>` :
+- `urlal-<location-id>` :
   _Used on url alias, invalidated on location operations affecting url alias._
 
-- `urlAlias-notFound` :
+- `urlanf` :
   _Used for not found lookups for url alias by url as this is hot spot, invalidated on urlAlias creation._
 
-- `role-<role-id>` :
+- `r-<role-id>` :
   _Used on roles, and invalidated when operations affect a role (role and policy operations)._
 
-- `policy-<policy-id>` :
+- `p-<policy-id>` :
   _Used on policies, and invalidated when operations affect a policy._
 
-- `role-assignment-<role-assignment-id>` :
+- `ra-<role-assignment-id>` :
   _Used on role assignment, and invalidated when operations affect a role assignment._
 
-- `role-assignment-group-list-<content-id>` :
+- `ragl-<content-id>` :
   _Used for list of role assignment, and invalidated when operations affect it from content side._
 
-- `role-assignment-role-list-<content-id>` :
+- `rarl-<content-id>` :
   _Used for list of role assignment, and invalidated when operations affect it from role side._
 
 
@@ -87,7 +78,7 @@ List of tags and their meaning:
 On `LocationHandler->create()` the following invalidation is done:
 
 ```php
-    $this->cache->invalidateTags(['content-' . $locationStruct->contentId, 'role-assignment-group-list-' . $locationStruct->contentId]);
+    $this->cache->invalidateTags(['c-' . $locationStruct->contentId, 'ragl-' . $locationStruct->contentId]);
 ```
 
 This is done since the operation might affect content if main location changes, and as it might affect roles assignments

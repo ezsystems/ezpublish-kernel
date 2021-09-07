@@ -21,6 +21,10 @@ use eZ\Publish\API\Repository\Values\Notification\Notification as APINotificatio
  */
 class NotificationHandler extends AbstractHandler implements Handler
 {
+    private const NOTIFICATION_IDENTIFIER = 'notification';
+    private const NOTIFICATION_COUNT_IDENTIFIER = 'notification_count';
+    private const NOTIFICATION_PENDING_COUNT_IDENTIFIER = 'notification_pending_count';
+
     /**
      * {@inheritdoc}
      */
@@ -31,8 +35,8 @@ class NotificationHandler extends AbstractHandler implements Handler
         ]);
 
         $this->cache->deleteItems([
-            'ez-notification-count-' . $createStruct->ownerId,
-            'ez-notification-pending-count-' . $createStruct->ownerId,
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_COUNT_IDENTIFIER, [$createStruct->ownerId], true),
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_PENDING_COUNT_IDENTIFIER, [$createStruct->ownerId], true),
         ]);
 
         return $this->persistenceHandler->notificationHandler()->createNotification($createStruct);
@@ -48,8 +52,8 @@ class NotificationHandler extends AbstractHandler implements Handler
         ]);
 
         $this->cache->deleteItems([
-            'ez-notification-' . $notification->id,
-            'ez-notification-pending-count-' . $notification->ownerId,
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_IDENTIFIER, [$notification->id], true),
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_PENDING_COUNT_IDENTIFIER, [$notification->ownerId], true),
         ]);
 
         return $this->persistenceHandler->notificationHandler()->updateNotification($notification, $updateStruct);
@@ -65,9 +69,9 @@ class NotificationHandler extends AbstractHandler implements Handler
         ]);
 
         $this->cache->deleteItems([
-            'ez-notification-' . $notification->id,
-            'ez-notification-count-' . $notification->ownerId,
-            'ez-notification-pending-count-' . $notification->ownerId,
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_IDENTIFIER, [$notification->id], true),
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_COUNT_IDENTIFIER, [$notification->ownerId], true),
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_PENDING_COUNT_IDENTIFIER, [$notification->ownerId], true),
         ]);
 
         $this->persistenceHandler->notificationHandler()->delete($notification);
@@ -78,7 +82,9 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function countPendingNotifications(int $ownerId): int
     {
-        $cacheItem = $this->cache->getItem('ez-notification-pending-count-' . $ownerId);
+        $cacheItem = $this->cache->getItem(
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_PENDING_COUNT_IDENTIFIER, [$ownerId], true)
+        );
 
         $count = $cacheItem->get();
         if ($cacheItem->isHit()) {
@@ -102,7 +108,9 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function countNotifications(int $ownerId): int
     {
-        $cacheItem = $this->cache->getItem('ez-notification-count-' . $ownerId);
+        $cacheItem = $this->cache->getItem(
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_COUNT_IDENTIFIER, [$ownerId], true)
+        );
 
         $count = $cacheItem->get();
         if ($cacheItem->isHit()) {
@@ -126,7 +134,9 @@ class NotificationHandler extends AbstractHandler implements Handler
      */
     public function getNotificationById(int $notificationId): Notification
     {
-        $cacheItem = $this->cache->getItem('ez-notification-' . $notificationId);
+        $cacheItem = $this->cache->getItem(
+            $this->cacheIdentifierGenerator->generateKey(self::NOTIFICATION_IDENTIFIER, [$notificationId], true)
+        );
 
         $notification = $cacheItem->get();
         if ($cacheItem->isHit()) {

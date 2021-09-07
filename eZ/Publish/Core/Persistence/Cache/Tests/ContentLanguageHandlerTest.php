@@ -29,25 +29,135 @@ class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $language = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, array? $tags, array? $key
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key
         return [
-            ['create', [new SPILanguageCreateStruct()], null, ['ez-language-list']],
-            ['update', [$language], null, ['ez-language-list', 'ez-language-5', 'ez-language-code-eng-GB']],
-            ['delete', [5], ['language-5']],
+            [
+                'create',
+                [new SPILanguageCreateStruct()],
+                null,
+                [
+                    ['language_list', [], true],
+                ],
+                null,
+                ['ibx-lal'],
+            ],
+            [
+                'update',
+                [$language],
+                null,
+                [
+                    ['language_list', [], true],
+                    ['language', [5], true],
+                    ['language_code', ['eng-GB'], true],
+                ],
+                null,
+                ['ibx-lal', 'ibx-la-5', 'ibx-lac-eng-GB'],
+            ],
+            [
+                'delete',
+                [5],
+                [
+                    ['language', [5], false],
+                ],
+                null,
+                ['la-5'],
+            ],
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $object = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, string $key, mixed? $data, bool $multi
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['load', [5], 'ez-language-5', $object],
-            ['loadList', [[5]], 'ez-language-5', [5 => $object], true],
-            ['loadAll', [], 'ez-language-list', [5 => $object], false],
-            ['loadByLanguageCode', ['eng-GB'], 'ez-language-code-eng-GB', $object],
-            ['loadListByLanguageCodes', [['eng-GB']], 'ez-language-code-eng-GB', ['eng-GB' => $object], true],
+            ['load', [5], 'ibx-la-5', null, null, [['language', [], true]], ['ibx-la'], $object],
+            ['loadList', [[5]], 'ibx-la-5', null, null, [['language', [], true]], ['ibx-la'], [5 => $object], true],
+            ['loadAll', [], 'ibx-lal', null, null, [['language_list', [], true]], ['ibx-lal'], [5 => $object], false],
+            ['loadByLanguageCode', ['eng-GB'], 'ibx-lac-eng-GB', null, null, [['language_code', [], true]], ['ibx-lac'], $object],
+            ['loadListByLanguageCodes', [['eng-GB']], 'ibx-lac-eng-GB', null, null, [['language_code', [], true]], ['ibx-lac'], ['eng-GB' => $object], true],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $object = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
+
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
+        return [
+            [
+                'load',
+                [5],
+                'ibx-la-5',
+                [
+                    ['language', [5], false],
+                ],
+                ['la-5'],
+                [
+                    ['language', [], true],
+                ],
+                ['ibx-la'],
+                $object,
+            ],
+            [
+                'loadList',
+                [[5]],
+                'ibx-la-5',
+                [
+                    ['language', [5], false],
+                ],
+                ['la-5'],
+                [
+                    ['language', [], true],
+                ],
+                ['ibx-la'],
+                [5 => $object],
+                true,
+            ],
+            [
+                'loadAll',
+                [],
+                'ibx-lal',
+                [
+                    ['language', [5], false],
+                ],
+                ['la-5'],
+                [
+                    ['language_list', [], true],
+                ],
+                ['ibx-lal'],
+                [5 => $object],
+                false,
+            ],
+            [
+                'loadByLanguageCode',
+                ['eng-GB'],
+                'ibx-lac-eng-GB',
+                [
+                    ['language', [5], false],
+                ],
+                ['la-5'],
+                [
+                    ['language_code', [], true],
+                ],
+                ['ibx-lac'],
+                $object,
+            ],
+            [
+                'loadListByLanguageCodes',
+                [['eng-GB']],
+                'ibx-lac-eng-GB',
+                [
+                    ['language', [5], false],
+                ],
+                ['la-5'],
+                [
+                    ['language_code', [], true],
+                ],
+                ['ibx-lac'],
+                ['eng-GB' => $object],
+                true,
+            ],
         ];
     }
 }

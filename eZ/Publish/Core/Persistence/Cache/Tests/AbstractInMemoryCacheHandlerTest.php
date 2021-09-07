@@ -24,12 +24,21 @@ abstract class AbstractInMemoryCacheHandlerTest extends AbstractBaseHandlerTest
      *
      * @param string $method
      * @param array $arguments
+     * @param array|null $tagGeneratingArguments
+     * @param array|null $keyGeneratingArguments
      * @param array|null $tags
      * @param array|null $key
      * @param mixed $returnValue
      */
-    final public function testUnCachedMethods(string $method, array $arguments, array $tags = null, array $key = null, $returnValue = null)
-    {
+    final public function testUnCachedMethods(
+        string $method,
+        array $arguments,
+        array $tagGeneratingArguments = null,
+        array $keyGeneratingArguments = null,
+        array $tags = null,
+        array $key = null,
+        $returnValue = null
+    ) {
         $handlerMethodName = $this->getHandlerMethodName();
 
         $this->loggerMock->expects($this->once())->method('logCall');
@@ -40,15 +49,41 @@ abstract class AbstractInMemoryCacheHandlerTest extends AbstractBaseHandlerTest
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method($handlerMethodName)
-            ->will($this->returnValue($innerHandler));
+            ->willReturn($innerHandler);
 
         $innerHandler
             ->expects($this->once())
             ->method($method)
             ->with(...$arguments)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         if ($tags || $key) {
+            if ($tagGeneratingArguments) {
+                $this->cacheIdentifierGeneratorMock
+                    ->expects($this->exactly(count($tagGeneratingArguments)))
+                    ->method('generateTag')
+                    ->withConsecutive(...$tagGeneratingArguments)
+                    ->willReturnOnConsecutiveCalls(...$tags);
+            }
+
+            if ($keyGeneratingArguments) {
+                $callsCount = count($keyGeneratingArguments);
+
+                if (is_array($key)) {
+                    $this->cacheIdentifierGeneratorMock
+                        ->expects($this->exactly($callsCount))
+                        ->method('generateKey')
+                        ->withConsecutive(...$keyGeneratingArguments)
+                        ->willReturnOnConsecutiveCalls(...$key);
+                } else {
+                    $this->cacheIdentifierGeneratorMock
+                        ->expects($this->exactly($callsCount))
+                        ->method('generateKey')
+                        ->with($keyGeneratingArguments[0][0])
+                        ->willReturn($key);
+                }
+            }
+
             $this->cacheMock
                 ->expects(!empty($tags) ? $this->once() : $this->never())
                 ->method('invalidateTags')
@@ -70,26 +105,56 @@ abstract class AbstractInMemoryCacheHandlerTest extends AbstractBaseHandlerTest
         $this->assertEquals($returnValue, $actualReturnValue);
     }
 
-    abstract public function providerForCachedLoadMethods(): array;
+    abstract public function providerForCachedLoadMethodsHit(): array;
 
     /**
-     * @dataProvider providerForCachedLoadMethods
+     * @dataProvider providerForCachedLoadMethodsHit
      *
      * @param string $method
      * @param array $arguments
      * @param string $key
+     * @param array|null $tagGeneratingArguments
+     * @param array|null $tagGeneratingResults
+     * @param array|null $keyGeneratingArguments
+     * @param array|null $keyGeneratingResults
      * @param mixed $data
      * @param bool $multi Default false, set to true if method will lookup several cache items.
      * @param array $additionalCalls Sets of additional calls being made to handlers, with 4 values (0: handler name, 1: handler class, 2: method, 3: return data)
      */
-    final public function testLoadMethodsCacheHit(string $method, array $arguments, string $key, $data = null, bool $multi = false, array $additionalCalls = [])
-    {
+    final public function testLoadMethodsCacheHit(
+        string $method,
+        array $arguments,
+        string $key,
+        array $tagGeneratingArguments = null,
+        array $tagGeneratingResults = null,
+        array $keyGeneratingArguments = null,
+        array $keyGeneratingResults = null,
+        $data = null,
+        bool $multi = false,
+        array $additionalCalls = []
+    ) {
         $cacheItem = $this->getCacheItem($key, $multi ? reset($data) : $data);
         $handlerMethodName = $this->getHandlerMethodName();
 
         $this->loggerMock->expects($this->once())->method('logCacheHit');
         $this->loggerMock->expects($this->never())->method('logCall');
         $this->loggerMock->expects($this->never())->method('logCacheMiss');
+
+        if ($tagGeneratingArguments) {
+            $this->cacheIdentifierGeneratorMock
+                ->expects($this->exactly(count($tagGeneratingArguments)))
+                ->method('generateTag')
+                ->withConsecutive(...$tagGeneratingArguments)
+                ->willReturnOnConsecutiveCalls(...$tagGeneratingResults);
+        }
+
+        if ($keyGeneratingArguments) {
+            $this->cacheIdentifierGeneratorMock
+                ->expects($this->exactly(count($keyGeneratingArguments)))
+                ->method('generateKey')
+                ->withConsecutive(...$keyGeneratingArguments)
+                ->willReturnOnConsecutiveCalls(...$keyGeneratingResults);
+        }
 
         if ($multi) {
             $this->cacheMock
@@ -121,24 +186,56 @@ abstract class AbstractInMemoryCacheHandlerTest extends AbstractBaseHandlerTest
         $this->assertEquals($data, $return);
     }
 
+    abstract public function providerForCachedLoadMethodsMiss(): array;
+
     /**
-     * @dataProvider providerForCachedLoadMethods
+     * @dataProvider providerForCachedLoadMethodsMiss
      *
      * @param string $method
      * @param array $arguments
      * @param string $key
-     * @param object $data
+     * @param array|null $tagGeneratingArguments
+     * @param array|null $tagGeneratingResults
+     * @param array|null $keyGeneratingArguments
+     * @param array|null $keyGeneratingResults
+     * @param null $data
      * @param bool $multi Default false, set to true if method will lookup several cache items.
      * @param array $additionalCalls Sets of additional calls being made to handlers, with 4 values (0: handler name, 1: handler class, 2: method, 3: return data)
      */
-    final public function testLoadMethodsCacheMiss(string $method, array $arguments, string $key, $data = null, bool $multi = false, array $additionalCalls = [])
-    {
+    final public function testLoadMethodsCacheMiss(
+        string $method,
+        array $arguments,
+        string $key,
+        array $tagGeneratingArguments = null,
+        array $tagGeneratingResults = null,
+        array $keyGeneratingArguments = null,
+        array $keyGeneratingResults = null,
+        $data = null,
+        bool $multi = false,
+        array $additionalCalls = []
+    ) {
         $cacheItem = $this->getCacheItem($key, null);
         $handlerMethodName = $this->getHandlerMethodName();
 
         $this->loggerMock->expects($this->once())->method('logCacheMiss');
         $this->loggerMock->expects($this->never())->method('logCall');
         $this->loggerMock->expects($this->never())->method('logCacheHit');
+
+        if ($tagGeneratingArguments) {
+            $this->cacheIdentifierGeneratorMock
+                ->expects($this->exactly(count($tagGeneratingArguments)))
+                ->method('generateTag')
+                ->withConsecutive(...$tagGeneratingArguments)
+                ->willReturnOnConsecutiveCalls(...$tagGeneratingResults);
+        }
+
+        if ($keyGeneratingArguments) {
+            $this->cacheIdentifierGeneratorMock
+                ->expects($this->exactly(count($keyGeneratingArguments)))
+                ->method('generateKey')
+                ->withConsecutive(...$keyGeneratingArguments)
+                ->willReturnOnConsecutiveCalls(...$keyGeneratingResults);
+        }
 
         if ($multi) {
             $this->cacheMock
@@ -189,7 +286,7 @@ abstract class AbstractInMemoryCacheHandlerTest extends AbstractBaseHandlerTest
 
         $this->assertEquals($data, $return);
 
-        // Assert use of tags would probably need custom logic as internal property is [$tag => $tag] value and we don't want to know that.
+        // Assert use of tags would probably need custom logic as internal property is [$tag => $tag] value, and we don't want to know that.
         //$this->assertAttributeEquals([], 'tags', $cacheItem);
     }
 }

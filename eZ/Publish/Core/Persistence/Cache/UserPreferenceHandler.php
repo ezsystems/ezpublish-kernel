@@ -21,6 +21,9 @@ use eZ\Publish\SPI\Persistence\UserPreference\UserPreference;
  */
 class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implements Handler
 {
+    private const USER_PREFERENCE_IDENTIFIER = 'user_preference';
+    private const USER_PREFERENCE_WITH_SUFFIX_IDENTIFIER = 'user_preference_with_suffix';
+
     /**
      * Constant used for storing not found results for getUserPreferenceByUserIdAndName().
      */
@@ -35,7 +38,13 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
             'setStruct' => $setStruct,
         ]);
 
-        $this->cache->deleteItems(['ez-user-preference-' . $setStruct->userId . '-' . $setStruct->name]);
+        $this->cache->deleteItems([
+            $this->cacheIdentifierGenerator->generateKey(
+                self::USER_PREFERENCE_WITH_SUFFIX_IDENTIFIER,
+                [$setStruct->userId, $setStruct->name],
+                true
+            ),
+        ]);
 
         return $this->persistenceHandler->userPreferenceHandler()->setUserPreference($setStruct);
     }
@@ -61,7 +70,7 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
     {
         $userPreference = $this->getCacheValue(
             $userId,
-            'ez-user-preference-',
+            $this->cacheIdentifierGenerator->generateKey(self::USER_PREFERENCE_IDENTIFIER, [], true) . '-',
             function ($userId) use ($name) {
                 try {
                     return $this->persistenceHandler->userPreferenceHandler()->getUserPreferenceByUserIdAndName(
@@ -75,8 +84,14 @@ class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implement
             static function () {
                 return [];
             },
-            static function () use ($userId, $name) {
-                return ['ez-user-preference-' . $userId . '-' . $name];
+            function () use ($userId, $name) {
+                return [
+                    $this->cacheIdentifierGenerator->generateKey(
+                        self::USER_PREFERENCE_WITH_SUFFIX_IDENTIFIER,
+                        [$userId, $name],
+                        true
+                    ),
+                ];
             },
             '-' . $name
         );

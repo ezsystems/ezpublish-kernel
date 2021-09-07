@@ -16,6 +16,16 @@ use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
  */
 class LocationHandler extends AbstractInMemoryPersistenceHandler implements LocationHandlerInterface
 {
+    private const CONTENT_IDENTIFIER = 'content';
+    private const LOCATION_IDENTIFIER = 'location';
+    private const LOCATION_PATH_IDENTIFIER = 'location_path';
+    private const LOCATION_REMOTE_ID_IDENTIFIER = 'location_remote_id';
+    private const LOCATION_SUBTREE_IDENTIFIER = 'location_subtree';
+    private const CONTENT_LOCATIONS_IDENTIFIER = 'content_locations';
+    private const CONTENT_LOCATIONS_WITH_PARENT_FOR_DRAFT_SUFFIX_IDENTIFIER = 'content_locations_with_parent_for_draft_suffix';
+    private const PARENT_FOR_DRAFT_SUFFIX = 'parent_for_draft_suffix';
+    private const ROLE_ASSIGNMENT_GROUP_LIST_IDENTIFIER = 'role_assignment_group_list';
+
     /** @var callable */
     private $getLocationTags;
 
@@ -24,21 +34,26 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
     protected function init(): void
     {
-        $this->getLocationTags = static function (Location $location) {
+        $this->getLocationTags = function (Location $location) {
             $tags = [
-                'content-' . $location->contentId,
-                'location-' . $location->id,
+                $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$location->contentId]),
+                $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]),
             ];
             foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-                $tags[] = 'location-path-' . $pathId;
+                $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
             }
 
             return $tags;
         };
+
         $this->getLocationKeys = function (Location $location, $keySuffix = '-1') {
             return [
-                'ez-location-' . $location->id . $keySuffix,
-                'ez-location-remoteid-' . $this->escapeForCacheKey($location->remoteId) . $keySuffix,
+                $this->cacheIdentifierGenerator->generateKey(self::LOCATION_IDENTIFIER, [$location->id], true) . $keySuffix,
+                $this->cacheIdentifierGenerator->generateKey(
+                    self::LOCATION_REMOTE_ID_IDENTIFIER,
+                    [$this->escapeForCacheKey($location->remoteId)],
+                    true
+                ) . $keySuffix,
             ];
         };
     }
@@ -53,7 +68,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         return $this->getCacheValue(
             (int) $locationId,
-            'ez-location-',
+            $this->cacheIdentifierGenerator->generateKey(self::LOCATION_IDENTIFIER, [], true) . '-',
             function ($id) use ($translations, $useAlwaysAvailable) {
                 return $this->persistenceHandler->locationHandler()->load($id, $translations, $useAlwaysAvailable);
             },
@@ -73,7 +88,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         return $this->getMultipleCacheValues(
             $locationIds,
-            'ez-location-',
+            $this->cacheIdentifierGenerator->generateKey(self::LOCATION_IDENTIFIER, [], true) . '-',
             function (array $ids) use ($translations, $useAlwaysAvailable) {
                 return $this->persistenceHandler->locationHandler()->loadList($ids, $translations, $useAlwaysAvailable);
             },
@@ -93,21 +108,27 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
     {
         return $this->getCacheValue(
             (int) $locationId,
-            'ez-location-subtree-',
+            $this->cacheIdentifierGenerator->generateKey(self::LOCATION_SUBTREE_IDENTIFIER, [], true) . '-',
             function (int $locationId): array {
                 return $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId);
             },
-            static function (array $locationIds) use ($locationId): array {
-                $cacheTags = ['location-' . $locationId, 'location-path-' . $locationId];
+            function (array $locationIds) use ($locationId): array {
+                $cacheTags = [
+                    $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$locationId]),
+                    $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]),
+                ];
+
                 foreach ($locationIds as $id) {
-                    $cacheTags[] = 'location-' . $id;
-                    $cacheTags[] = 'location-path-' . $id;
+                    $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$id]);
+                    $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$id]);
                 }
 
                 return $cacheTags;
             },
-            static function () use ($locationId): array {
-                return ['ez-location-subtree-' . $locationId];
+            function () use ($locationId): array {
+                return [
+                    $this->cacheIdentifierGenerator->generateKey(self::LOCATION_SUBTREE_IDENTIFIER, [$locationId], true),
+                ];
             }
         );
     }
@@ -118,16 +139,19 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
     public function loadLocationsByContent($contentId, $rootLocationId = null)
     {
         $keySuffix = '';
-        $cacheTags = ['content-' . $contentId];
+        $cacheTags = [
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
+        ];
+
         if ($rootLocationId) {
             $keySuffix = '-root-' . $rootLocationId;
-            $cacheTags[] = 'location-' . $rootLocationId;
-            $cacheTags[] = 'location-path-' . $rootLocationId;
+            $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$rootLocationId]);
+            $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$rootLocationId]);
         }
 
         return $this->getCacheValue(
             (int) $contentId,
-            'ez-content-locations-',
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_LOCATIONS_IDENTIFIER, [], true) . '-',
             function (int $contentId) use ($rootLocationId): array {
                 return $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
             },
@@ -138,8 +162,14 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
                 return $cacheTags;
             },
-            static function () use ($contentId, $keySuffix): array {
-                return ['ez-content-locations-' . $contentId . $keySuffix];
+            function () use ($contentId, $keySuffix): array {
+                return [
+                    $this->cacheIdentifierGenerator->generateTag(
+                        self::CONTENT_LOCATIONS_IDENTIFIER,
+                        [$contentId],
+                        true
+                    ) . $keySuffix,
+                ];
             },
             $keySuffix
         );
@@ -162,22 +192,31 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
     {
         return $this->getCacheValue(
             (int) $contentId,
-            'ez-content-locations-',
+            $this->cacheIdentifierGenerator->generateKey(self::CONTENT_LOCATIONS_IDENTIFIER, [], true) . '-',
             function (int $contentId): array {
                 return $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
             },
             function (array $locations) use ($contentId): array {
-                $cacheTags = ['content-' . $contentId];
+                $cacheTags = [
+                    $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
+                ];
+
                 foreach ($locations as $location) {
                     $cacheTags = $this->getCacheTags($location, $cacheTags);
                 }
 
                 return $cacheTags;
             },
-            static function () use ($contentId): array {
-                return ['ez-content-locations-' . (int) $contentId . '-parentForDraft'];
+            function () use ($contentId): array {
+                return [
+                    $this->cacheIdentifierGenerator->generateKey(
+                        self::CONTENT_LOCATIONS_WITH_PARENT_FOR_DRAFT_SUFFIX_IDENTIFIER,
+                        [$contentId],
+                        true
+                    ),
+                ];
             },
-            '-parentForDraft'
+            $this->cacheIdentifierGenerator->generateKey(self::PARENT_FOR_DRAFT_SUFFIX)
         );
     }
 
@@ -191,7 +230,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         return $this->getCacheValue(
             $this->escapeForCacheKey($remoteId),
-            'ez-location-remoteid-',
+            $this->cacheIdentifierGenerator->generateKey(self::LOCATION_REMOTE_ID_IDENTIFIER, [], true) . '-',
             function () use ($remoteId, $translations, $useAlwaysAvailable) {
                 return $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $translations, $useAlwaysAvailable);
             },
@@ -226,7 +265,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['source' => $sourceId, 'destination' => $destinationParentId]);
         $return = $this->persistenceHandler->locationHandler()->move($sourceId, $destinationParentId);
 
-        $this->cache->invalidateTags(['location-path-' . $sourceId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$sourceId]),
+        ]);
 
         return $return;
     }
@@ -248,7 +289,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->hide($locationId);
 
-        $this->cache->invalidateTags(['location-path-' . $locationId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]),
+        ]);
 
         return $return;
     }
@@ -261,7 +304,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->unHide($locationId);
 
-        $this->cache->invalidateTags(['location-path-' . $locationId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]),
+        ]);
 
         return $return;
     }
@@ -276,7 +321,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $id]);
         $this->persistenceHandler->locationHandler()->setInvisible($id);
 
-        $this->cache->invalidateTags(['location-path-' . $id]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$id]),
+        ]);
     }
 
     /**
@@ -289,7 +336,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $id]);
         $this->persistenceHandler->locationHandler()->setVisible($id);
 
-        $this->cache->invalidateTags(['location-path-' . $id]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$id]),
+        ]);
     }
 
     /**
@@ -304,8 +353,8 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         $this->cache->invalidateTags(
             [
-                'location-' . $locationId1,
-                'location-' . $locationId2,
+                $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$locationId1]),
+                $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$locationId2]),
             ]
         );
 
@@ -320,7 +369,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $locationId, 'struct' => $struct]);
         $this->persistenceHandler->locationHandler()->update($struct, $locationId);
 
-        $this->cache->invalidateTags(['location-' . $locationId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$locationId]),
+        ]);
     }
 
     /**
@@ -333,7 +384,10 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
 
         // need to clear loadLocationsByContent and similar collections involving locations data
         // also need to clear content info on main location changes
-        $this->cache->invalidateTags(['content-' . $locationStruct->contentId, 'role-assignment-group-list-' . $locationStruct->contentId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$locationStruct->contentId]),
+            $this->cacheIdentifierGenerator->generateTag(self::ROLE_ASSIGNMENT_GROUP_LIST_IDENTIFIER, [$locationStruct->contentId]),
+        ]);
 
         return $location;
     }
@@ -346,7 +400,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->removeSubtree($locationId);
 
-        $this->cache->invalidateTags(['location-path-' . $locationId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]),
+        ]);
 
         return $return;
     }
@@ -359,7 +415,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $locationId, 'section' => $sectionId]);
         $this->persistenceHandler->locationHandler()->setSectionForSubtree($locationId, $sectionId);
 
-        $this->cache->invalidateTags(['location-path-' . $locationId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]),
+        ]);
     }
 
     /**
@@ -370,7 +428,9 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $this->logger->logCall(__METHOD__, ['location' => $locationId, 'content' => $contentId]);
         $this->persistenceHandler->locationHandler()->changeMainLocation($contentId, $locationId);
 
-        $this->cache->invalidateTags(['content-' . $contentId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$contentId]),
+        ]);
     }
 
     /**
@@ -409,10 +469,11 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     private function getCacheTags(Location $location, $tags = [])
     {
-        $tags[] = 'content-' . $location->contentId;
-        $tags[] = 'location-' . $location->id;
+        $tags[] = $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$location->contentId]);
+        $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]);
+
         foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-            $tags[] = 'location-path-' . $pathId;
+            $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
         }
 
         return $tags;

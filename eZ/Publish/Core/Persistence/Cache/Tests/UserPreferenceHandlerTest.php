@@ -42,7 +42,7 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
         $name = 'setting';
         $userPreferenceCount = 10;
 
-        // string $method, array $arguments, array? $tags, array? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             [
                 'setUserPreference',
@@ -54,18 +54,24 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-user-preference-' . $userId . '-' . $name,
+                    ['user_preference_with_suffix', [$userId, $name], true],
+                ],
+                null,
+                [
+                    'ibx-up-' . $userId . '-' . $name,
                 ],
                 new SPIUserPreference(),
             ],
             [
-                'loadUserPreferences', [$userId, 0, 25], null, null, [],
+                'loadUserPreferences', [$userId, 0, 25], null, null, null, null, [],
             ],
             [
                 'countUserPreferences',
                 [
                     $userId,
                 ],
+                null,
+                null,
                 null,
                 null,
                 $userPreferenceCount,
@@ -76,12 +82,12 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
     /**
      * {@inheritdoc}
      */
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $userId = 7;
         $name = 'setting';
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'getUserPreferenceByUserIdAndName',
@@ -89,7 +95,34 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                     $userId,
                     $name,
                 ],
-                'ez-user-preference-' . $userId . '-' . $name,
+                'ibx-up-' . $userId . '-' . $name,
+                null,
+                null,
+                [['user_preference', [], true]],
+                ['ibx-up'],
+                new SPIUserPreference(['userId' => $userId, 'name' => $name]),
+            ],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $userId = 7;
+        $name = 'setting';
+
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
+        return [
+            [
+                'getUserPreferenceByUserIdAndName',
+                [
+                    $userId,
+                    $name,
+                ],
+                'ibx-up-' . $userId . '-' . $name,
+                null,
+                null,
+                [['user_preference', [], true]],
+                ['ibx-up'],
                 new SPIUserPreference(['userId' => $userId, 'name' => $name]),
             ],
         ];

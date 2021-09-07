@@ -36,58 +36,383 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         $user = new User(['id' => 14, 'login' => 'otto', 'email' => 'otto@ez.no']);
         $policy = new Policy(['id' => 13, 'roleId' => 9]);
         $userToken = new User\UserTokenUpdateStruct(['userId' => 14, 'hashKey' => '4irj8t43r']);
+        $escapedLogin = str_replace('@', '_A', $user->login);
+        $escapedEmail = str_replace('@', '_A', $user->email);
 
-        // string $method, array $arguments, array? $tags, array? $key
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
-            ['create', [$user], ['content-14'], [
-                'ez-user-14',
-                'ez-user-' . str_replace('@', '_A', $user->login) . '-by-login',
-                'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
-            ]],
-            ['update', [$user], ['content-14', 'user-14'], [
-                'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
-            ]],
-            ['updateUserToken', [$userToken], ['user-14-account-key'], ['ez-user-4irj8t43r-by-account-key']],
-            ['expireUserToken', ['4irj8t43r'], null, ['ez-user-4irj8t43r-by-account-key']],
-            ['delete', [14], ['content-14', 'user-14']],
+            [
+                'create',
+                [$user],
+                [
+                    ['content', [14], false],
+                ],
+                [
+                    ['user', [14], true],
+                    ['user_with_by_login_suffix', [$escapedLogin], true],
+                    ['user_with_by_email_suffix', [$escapedEmail], true],
+                ],
+                ['c-14'],
+                [
+                    'ibx-u-14',
+                    'ibx-u-' . $escapedLogin . '-bl',
+                    'ibx-u-' . $escapedEmail . '-be',
+                ],
+            ],
+            [
+                'update',
+                [$user],
+                [
+                    ['content', [14], false],
+                    ['user', [14], false],
+                ],
+                [
+                    ['user_with_by_email_suffix', [$escapedEmail], true],
+                ],
+                ['c-14', 'u-14'],
+                [
+                    'ibx-u-' . $escapedEmail . '-be',
+                ],
+            ],
+            [
+                'updateUserToken',
+                [$userToken],
+                [
+                    ['user_with_account_key_suffix', [14], false],
+                ],
+                [
+                    ['user_with_by_account_key_suffix', ['4irj8t43r'], true],
+                ],
+                ['u-14-ak'],
+                ['ibx-u-4irj8t43r-bak'],
+            ],
+            ['expireUserToken', ['4irj8t43r'], null, [['user_with_by_account_key_suffix', ['4irj8t43r'], true]], null, ['ibx-u-4irj8t43r-bak']],
+            [
+                'delete',
+                [14],
+                [
+                    ['content', [14], false],
+                    ['user', [14], false],
+                ],
+                null,
+                ['c-14', 'u-14'],
+            ],
             ['createRole', [new RoleCreateStruct()]],
             ['createRoleDraft', [new RoleCreateStruct()]],
             ['loadRole', [9, 1]],
             ['loadRoleByIdentifier', ['member', 1]],
             ['loadRoleDraftByRoleId', [9]],
             ['loadRoles', []],
-            ['updateRole', [new RoleUpdateStruct(['id' => 9])], ['role-9']],
-            ['deleteRole', [9], ['role-9', 'role-assignment-role-list-9']],
+            ['updateRole', [new RoleUpdateStruct(['id' => 9])], [['role', [9], false]], null, ['r-9']],
+            [
+                'deleteRole',
+                [9],
+                [
+                    ['role', [9], false],
+                    ['role_assignment_role_list', [9], false],
+                ],
+                null,
+                ['r-9', 'rarl-9'],
+            ],
             ['deleteRole', [9, 1]],
             ['addPolicyByRoleDraft', [9, $policy]],
-            ['addPolicy', [9, $policy], ['role-9']],
-            ['updatePolicy', [$policy], ['policy-13', 'role-9']],
-            ['deletePolicy', [13, 9], ['policy-13', 'role-9']],
+            ['addPolicy', [9, $policy], [['role', [9], false]], null, ['r-9']],
+            [
+                'updatePolicy',
+                [$policy],
+                [
+                    ['policy', [13], false],
+                    ['role', [9], false],
+                ],
+                null,
+                ['p-13', 'r-9'],
+            ],
+            [
+                'deletePolicy',
+                [13, 9],
+                [
+                    ['policy', [13], false],
+                    ['role', [9], false],
+                ],
+                null,
+                ['p-13', 'r-9'],
+            ],
             ['loadPoliciesByUserId', [14]],
-            ['unassignRole', [14, 9], ['role-assignment-group-list-14', 'role-assignment-role-list-9']],
-            ['removeRoleAssignment', [11], ['role-assignment-11']],
+            [
+                'unassignRole',
+                [14, 9],
+                [
+                    ['role_assignment_group_list', [14], false],
+                    ['role_assignment_role_list', [9], false],
+                ],
+                null,
+                ['ragl-14', 'rarl-9'],
+            ],
+            ['removeRoleAssignment', [11], [['role_assignment', [11], false]], null, ['ra-11']],
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $user = new User(['id' => 14]);
         $role = new Role(['id' => 9]);
         $roleAssignment = new RoleAssignment(['id' => 11, 'roleId' => 9, 'contentId' => 14]);
         $calls = [['locationHandler', Location\Handler::class, 'loadLocationsByContent', [new Location(['pathString' => '/1/2/43/'])]]];
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['load', [14], 'ez-user-14', $user],
-            ['loadByLogin', ['admin'], 'ez-user-admin-by-login', $user],
-            ['loadByEmail', ['nospam@ez.no'], 'ez-user-nospam_Aez.no-by-email', [$user]],
-            ['loadUserByToken', ['hash'], 'ez-user-hash-by-account-key', $user],
-            ['loadRole', [9], 'ez-role-9', $role],
-            ['loadRoleByIdentifier', ['member'], 'ez-role-member-by-identifier', $role],
-            ['loadRoleAssignment', [11], 'ez-role-assignment-11', $roleAssignment],
-            ['loadRoleAssignmentsByRoleId', [9], 'ez-role-assignment-9-by-role', [$roleAssignment]],
-            ['loadRoleAssignmentsByGroupId', [14], 'ez-role-assignment-14-by-group', [$roleAssignment], false, $calls],
-            ['loadRoleAssignmentsByGroupId', [14, true], 'ez-role-assignment-14-by-group-inherited', [$roleAssignment], false, $calls],
+            ['load', [14], 'ibx-u-14', null, null, [['user', [], true]], ['ibx-u'], $user],
+            [
+                'loadByLogin',
+                ['admin'],
+                'ibx-u-admin-bl',
+                null,
+                null,
+                [
+                    ['user', [], true],
+                    ['by_login_suffix', [], false],
+                ],
+                ['ibx-u', 'bl'],
+                $user,
+            ],
+            ['loadByEmail', ['nospam@ez.no'], 'ibx-u-nospam_Aez.no-be', null, null, [['user_with_by_email_suffix', ['nospam_Aez.no'], true]], ['ibx-u-nospam_Aez.no-be'], [$user]],
+            [
+                'loadUserByToken',
+                ['hash'],
+                'ibx-u-hash-bak',
+                null,
+                null,
+                [
+                    ['user', [], true],
+                    ['by_account_key_suffix', [], false],
+                ],
+                ['ibx-u', '-bak'],
+                $user,
+            ],
+            ['loadRole', [9], 'ibx-r-9', null, null, [['role', [], true]], ['ibx-r'], $role],
+            [
+                'loadRoleByIdentifier',
+                ['member'],
+                'ibx-r-member-bi',
+                null,
+                null,
+                [
+                    ['role', [], true],
+                    ['by_identifier_suffix', [], false],
+                ],
+                ['ibx-r', '-bi'],
+                $role,
+            ],
+            ['loadRoleAssignment', [11], 'ibx-ra-11', null, null, [['role_assignment', [], true]], ['ibx-ra'], $roleAssignment],
+            ['loadRoleAssignmentsByRoleId', [9], 'ibx-ra-9-bro', null, null, [['role_assignment_with_by_role_suffix', [9], true]], ['ibx-ra-9-bro'], [$roleAssignment]],
+            [
+                'loadRoleAssignmentsByGroupId',
+                [14],
+                'ibx-ra-14-bg',
+                null,
+                null,
+                [
+                    ['role_assignment_with_by_group_suffix', [14], true],
+                ],
+                ['ibx-ra-14-bg'],
+                [$roleAssignment],
+                false,
+                $calls,
+            ],
+            [
+                'loadRoleAssignmentsByGroupId',
+                [14, true],
+                'ibx-ra-14-bgi',
+                null,
+                null,
+                [['role_assignment_with_by_group_inherited_suffix', [14], true]],
+                ['ibx-ra-14-bgi'],
+                [$roleAssignment],
+                false,
+                $calls,
+            ],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $user = new User(['id' => 14]);
+        $role = new Role(['id' => 9]);
+        $roleAssignment = new RoleAssignment(['id' => 11, 'roleId' => 9, 'contentId' => 14]);
+        $calls = [['locationHandler', Location\Handler::class, 'loadLocationsByContent', [new Location(['pathString' => '/1/2/43/'])]]];
+
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
+        return [
+            [
+                'load',
+                [14],
+                'ibx-u-14',
+                [
+                    ['content', [14], false],
+                    ['user', [14], false],
+                ],
+                ['c-14', 'u-14'],
+                [
+                    ['user', [], true],
+                ],
+                ['ibx-u'],
+                $user,
+            ],
+            [
+                'loadByLogin',
+                ['admin'],
+                'ibx-u-admin-bl',
+                [
+                    ['content', [14], false],
+                    ['user', [14], false],
+                ],
+                ['c-14', 'u-14'],
+                [
+                    ['user', [], true],
+                    ['by_login_suffix', [], false],
+                ],
+                ['ibx-u', 'bl'],
+                $user,
+            ],
+            [
+                'loadByEmail',
+                ['nospam@ez.no'],
+                'ibx-u-nospam_Aez.no-be',
+                [
+                    ['content', [14], false],
+                    ['user', [14], false],
+                ],
+                ['c-14', 'u-14'],
+                [
+                    ['user_with_by_email_suffix', ['nospam_Aez.no'], true],
+                ],
+                ['ibx-u-nospam_Aez.no-be'],
+                [$user],
+            ],
+            [
+                'loadUserByToken',
+                ['hash'],
+                'ibx-u-hash-bak',
+                [
+                    ['content', [14], false],
+                    ['user', [14], false],
+                    ['user_with_account_key_suffix', [14], false],
+                ],
+                ['c-14', 'u-14', 'u-14-bak'],
+                [
+                    ['user', [], true],
+                    ['by_account_key_suffix', [], false],
+                ],
+                ['ibx-u', '-bak'],
+                $user,
+            ],
+            [
+                'loadRole',
+                [9],
+                'ibx-r-9',
+                [
+                    ['role', [9], false],
+                ],
+                ['r-9'],
+                [
+                    ['role', [], true],
+                ],
+                ['ibx-r'],
+                $role,
+            ],
+            [
+                'loadRoleByIdentifier',
+                ['member'],
+                'ibx-r-member-bi',
+                [
+                    ['role', [9], false],
+                ],
+                ['r-9'],
+                [
+                    ['role', [], true],
+                    ['by_identifier_suffix', [], false],
+                ],
+                ['ibx-r', '-bi'],
+                $role,
+            ],
+            [
+                'loadRoleAssignment',
+                [11],
+                'ibx-ra-11',
+                [
+                    ['role_assignment', [11], false],
+                    ['role_assignment_group_list', [14], false],
+                    ['role_assignment_role_list', [9], false],
+                ],
+                ['ra-11', 'ragl-14', 'rarl-9'],
+                [
+                    ['role_assignment', [], true],
+                ],
+                ['ibx-ra'],
+                $roleAssignment,
+            ],
+            [
+                'loadRoleAssignmentsByRoleId',
+                [9],
+                'ibx-ra-9-bro',
+                [
+                    ['role_assignment_role_list', [9], false],
+                    ['role', [9], false],
+                    ['role_assignment', [11], false],
+                    ['role_assignment_group_list', [14], false],
+                    ['role_assignment_role_list', [9], false],
+                ],
+                ['rarl-9', 'r-9', 'ra-11', 'ragl-14', 'rarl-9'],
+                [
+                    ['role_assignment_with_by_role_suffix', [9], true],
+                ],
+                ['ibx-ra-9-bro'],
+                [$roleAssignment],
+            ],
+            [
+                'loadRoleAssignmentsByGroupId',
+                [14],
+                'ibx-ra-14-bg',
+                [
+                    ['role_assignment_group_list', [14], false],
+                    ['location_path', ['1'], false],
+                    ['location_path', ['2'], false],
+                    ['location_path', ['43'], false],
+                    ['role_assignment', [11], false],
+                    ['role_assignment_group_list', [14], false],
+                    ['role_assignment_role_list', [9], false],
+                ],
+                ['ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
+                [
+                    ['role_assignment_with_by_group_suffix', [14], true],
+                ],
+                ['ibx-ra-14-bg'],
+                [$roleAssignment],
+                false,
+                $calls,
+            ],
+            [
+                'loadRoleAssignmentsByGroupId',
+                [14, true],
+                'ibx-ra-14-bgi',
+                [
+                    ['role_assignment_group_list', [14], false],
+                    ['location_path', ['1'], false],
+                    ['location_path', ['2'], false],
+                    ['location_path', ['43'], false],
+                    ['role_assignment', [11], false],
+                    ['role_assignment_group_list', [14], false],
+                    ['role_assignment_role_list', [9], false],
+                ],
+                ['ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
+                [
+                    ['role_assignment_with_by_group_inherited_suffix', [14], true],
+                ],
+                ['ibx-ra-14-bgi'],
+                [$roleAssignment],
+                false,
+                $calls,
+            ],
         ];
     }
 
@@ -95,28 +420,43 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
         $innerHandlerMock = $this->createMock(SPIUserHandler::class);
+
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('userHandler')
             ->willReturn($innerHandlerMock);
+
         $roleDraftId = 33;
         $originalRoleId = 30;
+
         $innerHandlerMock
             ->expects($this->once())
             ->method('loadRole')
             ->with($roleDraftId, Role::STATUS_DRAFT)
             ->willReturn(new Role(['originalId' => $originalRoleId]));
+
         $innerHandlerMock
             ->expects($this->once())
             ->method('publishRoleDraft')
             ->with($roleDraftId);
+
+        $roleTag = 'r-' . $originalRoleId;
+
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->once())
+            ->method('generateTag')
+            ->with('role', [$originalRoleId], false)
+            ->willReturn($roleTag);
+
         $this->cacheMock
             ->expects($this->once())
             ->method('invalidateTags')
-            ->with(['role-' . $originalRoleId]);
+            ->with([$roleTag]);
+
         $this->cacheMock
             ->expects($this->never())
             ->method('deleteItem');
+
         $handler = $this->persistenceCacheHandler->userHandler();
         $handler->publishRoleDraft($roleDraftId);
     }
@@ -165,7 +505,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
             ->expects($this->once())
             ->method('assignRole')
             ->with($contentId, $roleId)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->persistenceHandlerMock
             ->expects($this->once())
@@ -178,10 +518,22 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
             ->with($contentId)
             ->willReturn([new Location(['id' => '43'])]);
 
+        $tags = ['ragl-14', 'rarl-9', 'lp-43'];
+
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->exactly(3))
+            ->method('generateTag')
+            ->withConsecutive(
+                ['role_assignment_group_list', [14], false],
+                ['role_assignment_role_list', [9], false],
+                ['location_path', [43], false]
+            )
+            ->willReturnOnConsecutiveCalls(...$tags);
+
         $this->cacheMock
             ->expects($this->once())
             ->method('invalidateTags')
-            ->with(['role-assignment-group-list-14', 'role-assignment-role-list-9', 'location-path-43']);
+            ->with($tags);
 
         $this->cacheMock
             ->expects($this->never())

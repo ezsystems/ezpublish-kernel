@@ -15,6 +15,10 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
  */
 class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implements ContentLanguageHandlerInterface
 {
+    private const LANGUAGE_IDENTIFIER = 'language';
+    private const LANGUAGE_CODE_IDENTIFIER = 'language_code';
+    private const LANGUAGE_LIST_IDENTIFIER = 'language_list';
+
     /** @var callable */
     private $getTags;
 
@@ -22,15 +26,23 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     private $getKeys;
 
     /**
-     * Set callback functions for use in cache retrival.
+     * Set callback functions for use in cache retrieval.
      */
     protected function init(): void
     {
-        $this->getTags = static function (Language $language) { return ['language-' . $language->id]; };
+        $this->getTags = function (Language $language) {
+            return [
+                $this->cacheIdentifierGenerator->generateTag(self::LANGUAGE_IDENTIFIER, [$language->id]),
+            ];
+        };
         $this->getKeys = function (Language $language) {
             return [
-                'ez-language-' . $language->id,
-                'ez-language-code-' . $this->escapeForCacheKey($language->languageCode),
+                $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [$language->id], true),
+                $this->cacheIdentifierGenerator->generateKey(
+                    self::LANGUAGE_CODE_IDENTIFIER,
+                    [$this->escapeForCacheKey($language->languageCode)],
+                    true
+                ),
             ];
         };
     }
@@ -41,7 +53,9 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function create(CreateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, ['struct' => $struct]);
-        $this->cache->deleteItems(['ez-language-list']);
+        $this->cache->deleteItems([
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_LIST_IDENTIFIER, [], true),
+        ]);
 
         return $this->persistenceHandler->contentLanguageHandler()->create($struct);
     }
@@ -55,9 +69,13 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         $return = $this->persistenceHandler->contentLanguageHandler()->update($struct);
 
         $this->cache->deleteItems([
-            'ez-language-list',
-            'ez-language-' . $struct->id,
-            'ez-language-code-' . $this->escapeForCacheKey($struct->languageCode),
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_LIST_IDENTIFIER, [], true),
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [$struct->id], true),
+            $this->cacheIdentifierGenerator->generateKey(
+                self::LANGUAGE_CODE_IDENTIFIER,
+                [$this->escapeForCacheKey($struct->languageCode)],
+                true
+            ),
         ]);
 
         return $return;
@@ -70,7 +88,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getCacheValue(
             $id,
-            'ez-language-',
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [], true) . '-',
             function ($id) {
                 return $this->persistenceHandler->contentLanguageHandler()->load($id);
             },
@@ -86,7 +104,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getMultipleCacheValues(
             $ids,
-            'ez-language-',
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [], true) . '-',
             function (array $ids) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadList($ids);
             },
@@ -102,7 +120,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getCacheValue(
             $this->escapeForCacheKey($languageCode),
-            'ez-language-code-',
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_CODE_IDENTIFIER, [], true) . '-',
             function () use ($languageCode) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
             },
@@ -118,7 +136,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     {
         return $this->getMultipleCacheValues(
             array_map([$this, 'escapeForCacheKey'], $languageCodes),
-            'ez-language-code-',
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_CODE_IDENTIFIER, [], true) . '-',
             function () use ($languageCodes) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($languageCodes);
             },
@@ -133,7 +151,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function loadAll()
     {
         return $this->getListCacheValue(
-            'ez-language-list',
+            $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_LIST_IDENTIFIER, [], true),
             function () {
                 return $this->persistenceHandler->contentLanguageHandler()->loadAll();
             },
@@ -151,7 +169,9 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
         $return = $this->persistenceHandler->contentLanguageHandler()->delete($id);
 
         // As we don't have locale we clear cache by tag invalidation
-        $this->cache->invalidateTags(['language-' . $id]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::LANGUAGE_IDENTIFIER, [$id]),
+        ]);
 
         return $return;
     }

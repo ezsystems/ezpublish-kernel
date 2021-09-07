@@ -25,7 +25,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['find', [new URLQuery()]],
             ['findUsages', [1]],
@@ -33,17 +33,40 @@ class URLHandlerTest extends AbstractCacheHandlerTest
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $url = new URL(['id' => 1]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['loadById', [1], 'ez-url-1', [$url]],
+            ['loadById', [1], 'ibx-url-1', null, null, [['url', [1], true]], ['ibx-url-1'], [$url]],
         ];
     }
 
-    public function testUpdateUrlWhenAddressIsUpdated()
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $url = new URL(['id' => 1]);
+
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
+        return [
+            [
+                'loadById',
+                [1],
+                'ibx-url-1',
+                [
+                    ['url', [1], false],
+                ],
+                ['url-1'],
+                [
+                    ['url', [1], true],
+                ],
+                ['ibx-url-1'],
+                [$url],
+            ],
+        ];
+    }
+
+    public function testUpdateUrlWhenAddressIsUpdated(): void
     {
         $urlId = 1;
         $updateStruct = new URLUpdateStruct();
@@ -53,21 +76,36 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
         $innerHandlerMock = $this->createMock(SpiURLHandler::class);
         $this->persistenceHandlerMock
-            ->expects($this->any())
             ->method('urlHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->willReturn($innerHandlerMock);
 
         $innerHandlerMock
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('findUsages')
             ->with($urlId)
             ->willReturn([2, 3, 5]);
 
         $innerHandlerMock
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('updateUrl')
             ->with($urlId, $updateStruct)
             ->willReturn(true);
+
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->exactly(4))
+            ->method('generateTag')
+            ->withConsecutive(
+                ['url', [1], false],
+                ['content', [2], false],
+                ['content', [3], false],
+                ['content', [5], false]
+            )
+            ->willReturnOnConsecutiveCalls(
+                'url-1',
+                'c-2',
+                'c-3',
+                'c-5'
+            );
 
         $this->cacheMock
             ->expects($this->at(0))
@@ -77,7 +115,7 @@ class URLHandlerTest extends AbstractCacheHandlerTest
         $this->cacheMock
             ->expects($this->at(1))
             ->method('invalidateTags')
-            ->with(['content-2', 'content-3', 'content-5']);
+            ->with(['c-2', 'c-3', 'c-5']);
 
         $handler = $this->persistenceCacheHandler->urlHandler();
         $handler->updateUrl($urlId, $updateStruct);
@@ -92,15 +130,20 @@ class URLHandlerTest extends AbstractCacheHandlerTest
 
         $innerHandlerMock = $this->createMock(SpiURLHandler::class);
         $this->persistenceHandlerMock
-            ->expects($this->any())
             ->method('urlHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->willReturn($innerHandlerMock);
 
         $innerHandlerMock
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('updateUrl')
             ->with($urlId, $updateStruct)
             ->willReturn(true);
+
+        $this->cacheIdentifierGeneratorMock
+            ->expects($this->once())
+            ->method('generateTag')
+            ->with('url', [1], false)
+            ->willReturn('url-1');
 
         $this->cacheMock
             ->expects($this->at(0))

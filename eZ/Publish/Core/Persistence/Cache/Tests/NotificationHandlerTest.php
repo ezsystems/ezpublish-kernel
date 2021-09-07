@@ -47,7 +47,7 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
             'ownerId' => $ownerId,
         ]);
 
-        // string $method, array $arguments, array? $tags, string? $key, mixed? $returnValue
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             [
                 'createNotification',
@@ -56,8 +56,13 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-notification-count-' . $ownerId,
-                    'ez-notification-pending-count-' . $ownerId,
+                    ['notification_count', [$ownerId], true],
+                    ['notification_pending_count', [$ownerId], true],
+                ],
+                null,
+                [
+                    'ibx-nc-' . $ownerId,
+                    'ibx-npc-' . $ownerId,
                 ],
                 new SPINotification(),
             ],
@@ -69,8 +74,13 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-notification-' . $notificationId,
-                    'ez-notification-pending-count-' . $ownerId,
+                    ['notification', [$notificationId], true],
+                    ['notification_pending_count', [$ownerId], true],
+                ],
+                null,
+                [
+                    'ibx-n-' . $notificationId,
+                    'ibx-npc-' . $ownerId,
                 ],
                 new SPINotification(),
             ],
@@ -81,13 +91,19 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-notification-' . $notificationId,
-                    'ez-notification-count-' . $ownerId,
-                    'ez-notification-pending-count-' . $ownerId,
+                    ['notification', [$notificationId], true],
+                    ['notification_count', [$ownerId], true],
+                    ['notification_pending_count', [$ownerId], true],
+                ],
+                null,
+                [
+                    'ibx-n-' . $notificationId,
+                    'ibx-nc-' . $ownerId,
+                    'ibx-npc-' . $ownerId,
                 ],
             ],
             [
-                'loadUserNotifications', [$ownerId, 0, 25], null, null, [],
+                'loadUserNotifications', [$ownerId, 0, 25], null, null, null, null, [],
             ],
         ];
     }
@@ -95,21 +111,25 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
     /**
      * {@inheritdoc}
      */
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $notificationId = 5;
         $ownerId = 7;
         $notificationCount = 10;
         $notificationCountPending = 5;
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
             [
                 'countPendingNotifications',
                 [
                     $ownerId,
                 ],
-                'ez-notification-pending-count-' . $ownerId,
+                'ibx-npc-' . $ownerId,
+                null,
+                null,
+                [['notification_pending_count', [$ownerId], true]],
+                ['ibx-npc-' . $ownerId],
                 $notificationCount,
             ],
             [
@@ -117,7 +137,11 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $ownerId,
                 ],
-                'ez-notification-count-' . $ownerId,
+                'ibx-nc-' . $ownerId,
+                null,
+                null,
+                [['notification_count', [$ownerId], true]],
+                ['ibx-nc-' . $ownerId],
                 $notificationCountPending,
             ],
             [
@@ -125,7 +149,59 @@ class NotificationHandlerTest extends AbstractCacheHandlerTest
                 [
                     $notificationId,
                 ],
-                'ez-notification-' . $notificationId,
+                'ibx-n-' . $notificationId,
+                null,
+                null,
+                [['notification', [$notificationId], true]],
+                ['ibx-n-' . $notificationId],
+                new SPINotification(['id' => $notificationId]),
+            ],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $notificationId = 5;
+        $ownerId = 7;
+        $notificationCount = 10;
+        $notificationCountPending = 5;
+
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
+        return [
+            [
+                'countPendingNotifications',
+                [
+                    $ownerId,
+                ],
+                'ibx-npc-' . $ownerId,
+                null,
+                null,
+                [['notification_pending_count', [$ownerId], true]],
+                ['ibx-npc-' . $ownerId],
+                $notificationCount,
+            ],
+            [
+                'countNotifications',
+                [
+                    $ownerId,
+                ],
+                'ibx-nc-' . $ownerId,
+                null,
+                null,
+                [['notification_count', [$ownerId], true]],
+                ['ibx-nc-' . $ownerId],
+                $notificationCountPending,
+            ],
+            [
+                'getNotificationById',
+                [
+                    $notificationId,
+                ],
+                'ibx-n-' . $notificationId,
+                null,
+                null,
+                [['notification', [$notificationId], true]],
+                ['ibx-n-' . $notificationId],
                 new SPINotification(['id' => $notificationId]),
             ],
         ];

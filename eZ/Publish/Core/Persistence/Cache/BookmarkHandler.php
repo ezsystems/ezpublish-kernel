@@ -17,6 +17,11 @@ use eZ\Publish\SPI\Persistence\Bookmark\Handler as BookmarkHandlerInterface;
  */
 class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterface
 {
+    private const BOOKMARK_IDENTIFIER = 'bookmark';
+    private const LOCATION_IDENTIFIER = 'location';
+    private const USER_IDENTIFIER = 'user';
+    private const LOCATION_PATH_IDENTIFIER = 'location_path';
+
     /**
      * {@inheritdoc}
      */
@@ -40,7 +45,9 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
 
         $this->persistenceHandler->bookmarkHandler()->delete($bookmarkId);
 
-        $this->cache->invalidateTags(['bookmark-' . $bookmarkId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::BOOKMARK_IDENTIFIER, [$bookmarkId]),
+        ]);
     }
 
     /**
@@ -50,7 +57,7 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
     {
         return $this->getMultipleCacheItems(
             $locationIds,
-            'ez-bookmark-' . $userId . '-',
+            $this->cacheIdentifierGenerator->generateKey(self::BOOKMARK_IDENTIFIER, [$userId], true) . '-',
             function (array $missingIds) use ($userId) {
                 $this->logger->logCall(__CLASS__ . '::loadByUserIdAndLocationId', [
                     'userId' => $userId,
@@ -61,14 +68,14 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
             },
             function (Bookmark $bookmark) {
                 $tags = [
-                    'bookmark-' . $bookmark->id,
-                    'location-' . $bookmark->locationId,
-                    'user-' . $bookmark->userId,
+                    $this->cacheIdentifierGenerator->generateTag(self::BOOKMARK_IDENTIFIER, [$bookmark->id]),
+                    $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$bookmark->locationId]),
+                    $this->cacheIdentifierGenerator->generateTag(self::USER_IDENTIFIER, [$bookmark->userId]),
                 ];
 
                 $location = $this->persistenceHandler->locationHandler()->load($bookmark->locationId);
                 foreach (explode('/', trim($location->pathString, '/')) as $locationId) {
-                    $tags[] = 'location-path-' . $locationId;
+                    $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]);
                 }
 
                 return $tags;

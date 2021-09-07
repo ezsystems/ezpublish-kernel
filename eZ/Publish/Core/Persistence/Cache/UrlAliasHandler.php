@@ -16,6 +16,16 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias;
  */
 class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlAliasHandlerInterface
 {
+    private const URL_ALIAS_LOCATION_IDENTIFIER = 'url_alias_location';
+    private const URL_ALIAS_LOCATION_PATH_IDENTIFIER = 'url_alias_location_path';
+    private const URL_ALIAS_NOT_FOUND_IDENTIFIER = 'url_alias_not_found';
+    private const URL_ALIAS_IDENTIFIER = 'url_alias';
+    private const URL_ALIAS_LOCATION_LIST_IDENTIFIER = 'url_alias_location_list';
+    private const URL_ALIAS_LOCATION_LIST_CUSTOM_IDENTIFIER = 'url_alias_location_list_custom';
+    private const URL_ALIAS_CUSTOM_IDENTIFIER = 'url_alias_custom';
+    private const URL_ALIAS_URL_IDENTIFIER = 'url_alias_url';
+    private const URL_ALIAS_WITH_HASH_IDENTIFIER = 'url_alias_with_hash';
+
     /**
      * Constant used for storing not found results for lookup().
      */
@@ -52,7 +62,11 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             $updatePathIdentificationString
         );
 
-        $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId, 'urlAlias-notFound']);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$locationId]),
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$locationId]),
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_NOT_FOUND_IDENTIFIER),
+        ]);
     }
 
     /**
@@ -80,10 +94,10 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
         );
 
         $this->cache->invalidateTags([
-            'urlAlias-location-' . $locationId,
-            'urlAlias-location-path-' . $locationId,
-            'urlAlias-notFound',
-            'urlAlias-' . $urlAlias->id,
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$locationId]),
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$locationId]),
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_NOT_FOUND_IDENTIFIER),
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_IDENTIFIER, [$urlAlias->id]),
         ]);
 
         return $urlAlias;
@@ -113,7 +127,9 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             $alwaysAvailable
         );
 
-        $this->cache->invalidateTags(['urlAlias-notFound']);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_NOT_FOUND_IDENTIFIER),
+        ]);
 
         return $urlAlias;
     }
@@ -133,29 +149,35 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
      */
     public function listURLAliasesForLocation($locationId, $custom = false)
     {
-        $persistenceHandler = $this->persistenceHandler;
-
         return $this->getListCacheValue(
-            'ez-urlAlias-location-list-' . $locationId . ($custom ? '-custom' : ''),
-            static function () use ($locationId, $custom, $persistenceHandler) {
-                return $persistenceHandler->urlAliasHandler()->listURLAliasesForLocation($locationId, $custom);
+            ($custom) ?
+                $this->cacheIdentifierGenerator->generateKey(self::URL_ALIAS_LOCATION_LIST_CUSTOM_IDENTIFIER, [$locationId], true) :
+                $this->cacheIdentifierGenerator->generateKey(self::URL_ALIAS_LOCATION_LIST_IDENTIFIER, [$locationId], true),
+            function () use ($locationId, $custom) {
+                return $this->persistenceHandler->urlAliasHandler()->listURLAliasesForLocation($locationId, $custom);
             },
-            static function (UrlAlias $alias) use ($persistenceHandler) {
-                $tags = ['urlAlias-' . $alias->id];
+            function (UrlAlias $alias) {
+                $tags = [
+                    $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_IDENTIFIER, [$alias->id]),
+                ];
 
                 if ($alias->type === UrlAlias::LOCATION) {
-                    $tags[] = 'urlAlias-location-' . $alias->destination;
+                    $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$alias->destination]);
 
-                    $location = $persistenceHandler->locationHandler()->load($alias->destination);
+                    $location = $this->persistenceHandler->locationHandler()->load($alias->destination);
                     foreach (\explode('/', trim($location->pathString, '/')) as $pathId) {
-                        $tags[] = 'urlAlias-location-path-' . $pathId;
+                        $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$pathId]);
                     }
                 }
 
                 return $tags;
             },
             static function () { return []; },
-            static function () use ($locationId) { return ['urlAlias-location-' . $locationId]; },
+            function () use ($locationId) {
+                return [
+                    $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$locationId]),
+                ];
+            },
             ['location' => $locationId, 'custom' => $custom]
         );
     }
@@ -170,13 +192,13 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
 
         $cacheTags = [];
         foreach ($urlAliases as $urlAlias) {
-            $cacheTags[] = 'urlAlias-' . $urlAlias->id;
+            $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_IDENTIFIER, [$urlAlias->id]);
             if ($urlAlias->type === UrlAlias::LOCATION) {
-                $cacheTags[] = 'urlAlias-location-' . $urlAlias->destination;
-                $cacheTags[] = 'urlAlias-location-path-' . $urlAlias->destination;
+                $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$urlAlias->destination]);
+                $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$urlAlias->destination]);
             }
             if ($urlAlias->isCustom) {
-                $cacheTags[] = 'urlAlias-custom-' . $urlAlias->destination;
+                $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_CUSTOM_IDENTIFIER, [$urlAlias->destination]);
             }
         }
         $this->cache->invalidateTags($cacheTags);
@@ -190,8 +212,13 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     public function lookup($url)
     {
         $cacheItem = $this->cache->getItem(
-            'ez-urlAlias-url-' . $this->escapeForCacheKey($url)
+            $this->cacheIdentifierGenerator->generateKey(
+                self::URL_ALIAS_URL_IDENTIFIER,
+                [$this->escapeForCacheKey($url)],
+                true
+            )
         );
+
         if ($cacheItem->isHit()) {
             $this->logger->logCacheHit(['url' => $url]);
 
@@ -208,7 +235,9 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
         } catch (APINotFoundException $e) {
             $cacheItem->set(self::NOT_FOUND)
                 ->expiresAfter(30)
-                ->tag(['urlAlias-notFound']);
+                ->tag([
+                    $this->cacheIdentifierGenerator->generateKey(self::URL_ALIAS_NOT_FOUND_IDENTIFIER),
+                ]);
             $this->cache->save($cacheItem);
             throw $e;
         }
@@ -225,7 +254,10 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
      */
     public function loadUrlAlias($id)
     {
-        $cacheItem = $this->cache->getItem('ez-urlAlias-' . $id);
+        $cacheItem = $this->cache->getItem(
+            $this->cacheIdentifierGenerator->generateKey(self::URL_ALIAS_IDENTIFIER, [$id], true)
+        );
+
         if ($cacheItem->isHit()) {
             $this->logger->logCacheHit(['alias' => $id]);
 
@@ -259,7 +291,10 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
         $return = $this->persistenceHandler->urlAliasHandler()->locationMoved($locationId, $oldParentId, $newParentId);
 
         if ($oldParentId !== $newParentId) {
-            $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId]);
+            $this->cache->invalidateTags([
+                $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$locationId]),
+                $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$locationId]),
+            ]);
         }
 
         return $return;
@@ -284,7 +319,10 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             $newLocationId,
             $newParentId
         );
-        $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-' . $newLocationId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$locationId]),
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$newLocationId]),
+        ]);
 
         return $return;
     }
@@ -299,12 +337,15 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             ->locationDeleted($locationId);
 
         $tags = [
-            'urlAlias-location-' . $locationId,
-            'urlAlias-location-path-' . $locationId,
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$locationId]),
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$locationId]),
         ];
 
         foreach ($childrenAliases as $childAlias) {
-            $tags[] = "urlAlias-{$childAlias['parent']}-{$childAlias['text_md5']}";
+            $tags[] = $this->cacheIdentifierGenerator->generateTag(
+                self::URL_ALIAS_WITH_HASH_IDENTIFIER,
+                [$locationId, $childAlias['text_md5']]
+            );
         }
 
         $this->cache->invalidateTags($tags);
@@ -336,10 +377,10 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
 
         $this->cache->invalidateTags(
             [
-                'urlAlias-location-' . $location1Id,
-                'urlAlias-location-path-' . $location1Id,
-                'urlAlias-location-' . $location2Id,
-                'urlAlias-location-path-' . $location2Id,
+                $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$location1Id]),
+                $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$location1Id]),
+                $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$location2Id]),
+                $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$location2Id]),
             ]
         );
 
@@ -360,8 +401,8 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
 
         $locationTags = [];
         foreach ($locationIds as $locationId) {
-            $locationTags[] = 'urlAlias-location-' . $locationId;
-            $locationTags[] = 'urlAlias-location-path-' . $locationId;
+            $locationTags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$locationId]);
+            $locationTags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$locationId]);
         }
 
         $this->cache->invalidateTags($locationTags);
@@ -387,7 +428,10 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             $languageCodes
         );
 
-        $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId]);
+        $this->cache->invalidateTags([
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$locationId]),
+            $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$locationId]),
+        ]);
     }
 
     /**
@@ -402,13 +446,14 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
      */
     private function getCacheTags(UrlAlias $urlAlias, array $tags = [])
     {
-        $tags[] = 'urlAlias-' . $urlAlias->id;
+        $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_IDENTIFIER, [$urlAlias->id]);
 
         if ($urlAlias->type === UrlAlias::LOCATION) {
-            $tags[] = 'urlAlias-location-' . $urlAlias->destination;
+            $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$urlAlias->destination]);
             $location = $this->persistenceHandler->locationHandler()->load($urlAlias->destination);
+
             foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-                $tags[] = 'urlAlias-location-path-' . $pathId;
+                $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$pathId]);
             }
         }
 
@@ -451,8 +496,8 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
 
         $this->cache->invalidateTags(
             [
-                'urlAlias-location-' . $locationId,
-                'urlAlias-location-path-' . $locationId,
+                $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$locationId]),
+                $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$locationId]),
             ]
         );
     }

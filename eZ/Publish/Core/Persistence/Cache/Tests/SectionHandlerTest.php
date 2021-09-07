@@ -26,27 +26,64 @@ class SectionHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tagGeneratingArguments, array? $keyGeneratingArguments, array? $tags, array? $key, ?mixed $returnValue
         return [
             ['create', ['Standard', 'standard']],
-            ['update', [5, 'Standard', 'standard'], ['section-5']],
+            ['update', [5, 'Standard', 'standard'], [['section', [5], false]], null, ['se-5']],
             ['loadAll', []],
-            ['delete', [5], ['section-5']],
-            ['assign', [5, 42], ['content-42']],
+            ['delete', [5], [['section', [5], false]], null, ['se-5']],
+            ['assign', [5, 42], [['content', [42], false]], null, ['c-42']],
             ['assignmentsCount', [5]],
             ['policiesCount', [5]],
             ['countRoleAssignmentsUsingSection', [5]],
         ];
     }
 
-    public function providerForCachedLoadMethods(): array
+    public function providerForCachedLoadMethodsHit(): array
     {
         $object = new SPISection(['id' => 5]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
         return [
-            ['load', [5], 'ez-section-5', $object],
-            ['loadByIdentifier', ['standard'], 'ez-section-standard-by-identifier', $object],
+            ['load', [5], 'ibx-se-5', null, null, [['section', [5], true]], ['ibx-se-5'], $object],
+            ['loadByIdentifier', ['standard'], 'ibx-se-standard-bi', null, null, [['section_with_by_id', ['standard'], true]], ['ibx-se-standard-bi'], $object],
+        ];
+    }
+
+    public function providerForCachedLoadMethodsMiss(): array
+    {
+        $object = new SPISection(['id' => 5]);
+
+        // string $method, array $arguments, string $key, array? $tagGeneratingArguments, array? $tagGeneratingResults, array? $keyGeneratingArguments, array? $keyGeneratingResults, mixed? $data, bool $multi
+        return [
+            [
+                'load',
+                [5],
+                'ibx-se-5',
+                [
+                    ['section', [5], false],
+                ],
+                ['se-5'],
+                [
+                    ['section', [5], true],
+                ],
+                ['ibx-se-5'],
+                $object,
+            ],
+            [
+                'loadByIdentifier',
+                ['standard'],
+                'ibx-se-standard-bi',
+                [
+                    ['section', [5], false],
+                ],
+                ['se-5'],
+                [
+                    ['section_with_by_id', ['standard'], true],
+                ],
+                ['ibx-se-standard-bi'],
+                $object,
+            ],
         ];
     }
 }
