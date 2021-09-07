@@ -1902,7 +1902,7 @@ class ContentService implements ContentServiceInterface
             : $this->persistenceHandler->contentHandler()->deleteVersion(
                 $versionInfo->getContentInfo()->id,
                 $versionInfo->versionNo
-            );
+              );
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
