@@ -1,0 +1,12 @@
+name: PR check
+on:
+  pull_request:
+    types: 
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+jobs:
+  test-base-branch:
+    uses: ibexa/gh-workflows/.github/workflows/pr-check.yml@main
