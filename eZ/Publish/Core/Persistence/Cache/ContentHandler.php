@@ -51,7 +51,9 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
                 $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($info->id);
                 foreach ($locations as $location) {
                     $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]);
-                    foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
+                    $pathIds = \explode('/', trim($location->pathString, '/'));
+                    $pathIds = $this->removeRootLocationPathId($pathIds);
+                    foreach ($pathIds as $pathId) {
                         $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
                     }
                 }

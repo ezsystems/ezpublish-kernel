@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use Ibexa\Core\Persistence\Cache\CacheIdentifierTrait;
 use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -17,6 +18,8 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  */
 abstract class AbstractHandler
 {
+    use CacheIdentifierTrait;
+
     /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface */
     protected $cache;
 
@@ -121,14 +124,5 @@ abstract class AbstractHandler
         }
 
         return $list;
-    }
-
-    final protected function escapeForCacheKey(string $identifier)
-    {
-        return \str_replace(
-            ['_', '/', ':', '(', ')', '@', '\\', '{', '}'],
-            ['__', '_S', '_C', '_BO', '_BC', '_A', '_BS', '_CBO', '_CBC'],
-            $identifier
-        );
     }
 }

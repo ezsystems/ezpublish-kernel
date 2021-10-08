@@ -8,6 +8,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
+use Ibexa\Core\Persistence\Cache\CacheIdentifierTrait;
 
 /**
  * Abstract handler for use in other SPI Handlers.
@@ -17,6 +18,8 @@ use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
  */
 abstract class AbstractInMemoryHandler
 {
+    use CacheIdentifierTrait;
+
     /**
      * NOTE: Instance of this must be TransactionalInMemoryCacheAdapter in order for cache clearing to affect in-memory cache.
      *
@@ -271,23 +274,5 @@ abstract class AbstractInMemoryHandler
         $this->logger->logCacheMiss($arguments ?: $cacheMisses, 3);
 
         return $list;
-    }
-
-    /**
-     * Escape an argument for use in cache keys when needed.
-     *
-     * WARNING: Only use the result of this in cache keys, it won't work to use loading the item from backend on miss.
-     *
-     * @param string $identifier
-     *
-     * @return string
-     */
-    final protected function escapeForCacheKey(string $identifier)
-    {
-        return \str_replace(
-            ['_', '/', ':', '(', ')', '@', '\\', '{', '}'],
-            ['__', '_S', '_C', '_BO', '_BC', '_A', '_BS', '_CBO', '_CBC'],
-            $identifier
-        );
     }
 }

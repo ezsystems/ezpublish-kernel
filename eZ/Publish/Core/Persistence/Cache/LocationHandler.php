@@ -39,7 +39,10 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
                 $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$location->contentId]),
                 $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]),
             ];
-            foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
+
+            $pathIds = \explode('/', trim($location->pathString, '/'));
+            $pathIds = $this->removeRootLocationPathId($pathIds);
+            foreach ($pathIds as $pathId) {
                 $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
             }
 
@@ -472,7 +475,10 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
         $tags[] = $this->cacheIdentifierGenerator->generateTag(self::CONTENT_IDENTIFIER, [$location->contentId]);
         $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]);
 
-        foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
+        $pathIds = \explode('/', trim($location->pathString, '/'));
+        $pathIds = $this->removeRootLocationPathId($pathIds);
+
+        foreach ($pathIds as $pathId) {
             $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
         }
 

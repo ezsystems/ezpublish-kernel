@@ -423,16 +423,14 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function loadRoleAssignmentsByGroupId($groupId, $inherit = false)
     {
         $innerHandler = $this->persistenceHandler;
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
-
         if ($inherit) {
-            $key = $cacheIdentifierGenerator->generateKey(
+            $key = $this->cacheIdentifierGenerator->generateKey(
                 self::ROLE_ASSIGNMENT_WITH_BY_GROUP_INHERITED_SUFFIX_IDENTIFIER,
                 [$groupId],
                 true
             );
         } else {
-            $key = $cacheIdentifierGenerator->generateKey(
+            $key = $this->cacheIdentifierGenerator->generateKey(
                 self::ROLE_ASSIGNMENT_WITH_BY_GROUP_SUFFIX_IDENTIFIER,
                 [$groupId],
                 true
@@ -446,16 +444,19 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             },
             $this->getRoleAssignmentTags,
             $this->getRoleAssignmentKeys,
-            static function () use ($groupId, $innerHandler, $cacheIdentifierGenerator) {
+            function () use ($groupId, $innerHandler) {
                 // Tag needed for empty results, if not empty will alse be added by getRoleAssignmentTags().
                 $cacheTags = [
-                    $cacheIdentifierGenerator->generateTag(self::ROLE_ASSIGNMENT_GROUP_LIST_IDENTIFIER, [$groupId]),
+                    $this->cacheIdentifierGenerator->generateTag(self::ROLE_ASSIGNMENT_GROUP_LIST_IDENTIFIER, [$groupId]),
                 ];
                 // To make sure tree operations affecting this can clear the permission cache
                 $locations = $innerHandler->locationHandler()->loadLocationsByContent($groupId);
+
                 foreach ($locations as $location) {
-                    foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-                        $cacheTags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
+                    $pathIds = \explode('/', trim($location->pathString, '/'));
+                    $pathIds = $this->removeRootLocationPathId($pathIds);
+                    foreach ($pathIds as $pathId) {
+                        $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
                     }
                 }
 

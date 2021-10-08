@@ -74,8 +74,10 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
                 ];
 
                 $location = $this->persistenceHandler->locationHandler()->load($bookmark->locationId);
-                foreach (explode('/', trim($location->pathString, '/')) as $locationId) {
-                    $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$locationId]);
+                $pathIds = \explode('/', trim($location->pathString, '/'));
+                $pathIds = $this->removeRootLocationPathId($pathIds);
+                foreach ($pathIds as $pathId) {
+                    $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
                 }
 
                 return $tags;

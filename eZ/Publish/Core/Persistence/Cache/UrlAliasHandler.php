@@ -165,7 +165,9 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
                     $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$alias->destination]);
 
                     $location = $this->persistenceHandler->locationHandler()->load($alias->destination);
-                    foreach (\explode('/', trim($location->pathString, '/')) as $pathId) {
+                    $pathIds = \explode('/', trim($location->pathString, '/'));
+                    $pathIds = $this->removeRootLocationPathId($pathIds);
+                    foreach ($pathIds as $pathId) {
                         $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$pathId]);
                     }
                 }
@@ -452,7 +454,9 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
             $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$urlAlias->destination]);
             $location = $this->persistenceHandler->locationHandler()->load($urlAlias->destination);
 
-            foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
+            $pathIds = \explode('/', trim($location->pathString, '/'));
+            $pathIds = $this->removeRootLocationPathId($pathIds);
+            foreach ($pathIds as $pathId) {
                 $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$pathId]);
             }
         }

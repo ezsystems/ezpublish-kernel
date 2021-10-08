@@ -150,10 +150,9 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [
                     ['content', [15], false],
                     ['location', [12], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-2'],
                 [
                     ['location', [], true],
                 ],
@@ -167,10 +166,9 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [
                     ['content', [15], false],
                     ['location', [12], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-2'],
                 [
                     ['location', [], true],
                 ],
@@ -184,10 +182,9 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [
                     ['content', [15], false],
                     ['location', [12], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-2'],
                 [
                     ['location', [], true],
                 ],
@@ -203,10 +200,9 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [
                     ['content', [15], false],
                     ['location', [12], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-2'],
                 [
                     ['location', [], true],
                 ],
@@ -243,10 +239,9 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['location_path', [12], false],
                     ['content', [15], false],
                     ['location', [12], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-4', 'l-12', 'lp-12', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-4', 'l-12', 'lp-12', 'c-15', 'l-12', 'lp-2'],
                 [
                     ['content_locations', [], true],
                 ],
@@ -261,10 +256,9 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [4], false],
                     ['content', [15], false],
                     ['location', [12], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-4', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-4', 'c-15', 'l-12', 'lp-2'],
                 [
                     ['content_locations', [], true],
                 ],
@@ -279,10 +273,9 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                     ['content', [4], false],
                     ['content', [15], false],
                     ['location', [12], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-4', 'c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-4', 'c-15', 'l-12', 'lp-2'],
                 [
                     ['content_locations', [], true],
                     ['parent_for_draft_suffix', [], false],
@@ -297,10 +290,9 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [
                     ['content', [15], false],
                     ['location', [12], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-2'],
                 [
                     ['location_remote_id', [], true],
                 ],
@@ -314,10 +306,9 @@ class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
                 [
                     ['content', [15], false],
                     ['location', [12], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                 ],
-                ['c-15', 'l-12', 'lp-1', 'lp-2'],
+                ['c-15', 'l-12', 'lp-2'],
                 [
                     ['location_remote_id', [], true],
                 ],
