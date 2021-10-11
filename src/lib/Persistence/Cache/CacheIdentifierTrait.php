@@ -39,7 +39,11 @@ trait CacheIdentifierTrait
      */
     public function removeRootLocationPathId(array $pathIds): array
     {
-        if ($pathIds[0] === '1') {
+        if (empty($pathIds)) {
+            return $pathIds;
+        }
+
+        if ((int) $pathIds[0] === 1) {
             array_shift($pathIds);
         }
 

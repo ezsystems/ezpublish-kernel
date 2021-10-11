@@ -36,6 +36,7 @@ final class CacheIdentifierTraitTest extends TestCase
     public function providerForTestRemoveRootLocationPathId(): array
     {
         return [
+            [[[]], []],
             [[[1, 2, 3]], [2, 3]],
             [[[34, 45]], [34, 45]],
             [[[1]], []],
