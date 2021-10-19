@@ -137,18 +137,19 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
         $objectStateHandler = $this->persistence->objectStateHandler();
         $stateGroups = $objectStateHandler->loadAllGroups();
 
-        // First deal with unpublished content
-        if ($object instanceof ContentCreateStruct || !$object->published) {
+        // First deal with new content
+        if ($object instanceof ContentCreateStruct) {
             foreach ($stateGroups as $stateGroup) {
                 $states = $objectStateHandler->loadObjectStates($stateGroup->id);
                 if (empty($states)) {
                     continue;
                 }
 
-                $defaultStateId = null;
-                $defaultStatePriority = -1;
+                // default: use object state with lowest priority
+                $defaultStateId = $states[0]->id;
+                $defaultStatePriority =  $states[0]->priority;
                 foreach ($states as $state) {
-                    if ($state->priority > $defaultStatePriority) {
+                    if ($state->priority < $defaultStatePriority) {
                         $defaultStateId = $state->id;
                         $defaultStatePriority = $state->priority;
                     }
