@@ -39,7 +39,7 @@ final class LocationPathConverterTest extends TestCase
      */
     public function testConvertToPathIds(array $arguments, array $resultArray): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             $resultArray,
             $this->locationPathConverter->convertToPathIds(...$arguments)
         );

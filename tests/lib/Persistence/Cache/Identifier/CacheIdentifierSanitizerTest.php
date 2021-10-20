@@ -38,7 +38,7 @@ final class CacheIdentifierSanitizerTest extends TestCase
      */
     public function testEscapeCacheKey(array $arguments, string $resultKey): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             $resultKey,
             $this->cacheIdentifierSanitizer->escapeForCacheKey(...$arguments)
         );
