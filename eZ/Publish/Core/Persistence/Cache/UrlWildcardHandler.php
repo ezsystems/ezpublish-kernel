@@ -102,7 +102,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         $cacheItem = $this->cache->getItem(
             $this->cacheIdentifierGenerator->generateKey(
                 self::URL_WILDCARD_SOURCE_IDENTIFIER,
-                [$this->escapeForCacheKey($sourceUrl)],
+                [$this->cacheIdentifierSanitizer->escapeForCacheKey($sourceUrl)],
                 true
             )
         );

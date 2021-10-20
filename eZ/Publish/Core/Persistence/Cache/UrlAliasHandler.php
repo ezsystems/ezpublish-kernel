@@ -165,8 +165,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
                     $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$alias->destination]);
 
                     $location = $this->persistenceHandler->locationHandler()->load($alias->destination);
-                    $pathIds = \explode('/', trim($location->pathString, '/'));
-                    $pathIds = $this->removeRootLocationPathId($pathIds);
+                    $pathIds = $this->locationPathConverter->convertToPathIds($location->pathString);
                     foreach ($pathIds as $pathId) {
                         $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$pathId]);
                     }
@@ -216,7 +215,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
         $cacheItem = $this->cache->getItem(
             $this->cacheIdentifierGenerator->generateKey(
                 self::URL_ALIAS_URL_IDENTIFIER,
-                [$this->escapeForCacheKey($url)],
+                [$this->cacheIdentifierSanitizer->escapeForCacheKey($url)],
                 true
             )
         );
@@ -453,9 +452,8 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
         if ($urlAlias->type === UrlAlias::LOCATION) {
             $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_IDENTIFIER, [$urlAlias->destination]);
             $location = $this->persistenceHandler->locationHandler()->load($urlAlias->destination);
+            $pathIds = $this->locationPathConverter->convertToPathIds($location->pathString);
 
-            $pathIds = \explode('/', trim($location->pathString, '/'));
-            $pathIds = $this->removeRootLocationPathId($pathIds);
             foreach ($pathIds as $pathId) {
                 $tags[] = $this->cacheIdentifierGenerator->generateTag(self::URL_ALIAS_LOCATION_PATH_IDENTIFIER, [$pathId]);
             }

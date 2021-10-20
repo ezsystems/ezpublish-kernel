@@ -6,9 +6,12 @@
  */
 declare(strict_types=1);
 
-namespace Ibexa\Core\Persistence\Cache;
+namespace Ibexa\Core\Persistence\Cache\Identifier;
 
-trait CacheIdentifierTrait
+/**
+ * @internal
+ */
+final class CacheIdentifierSanitizer
 {
     /**
      * Escape an argument for use in cache keys when needed.
@@ -26,27 +29,5 @@ trait CacheIdentifierTrait
             ['__', '_S', '_C', '_BO', '_BC', '_A', '_BS', '_CBO', '_CBC'],
             $identifier
         );
-    }
-
-    /**
-     * Returns shifted array without location 1, as there is no scenario where this locationId is used to invalidate cache items.
-     * It results in memory savings as set "lp-1" is not created and thus doesn't include huge amount of items coming
-     * from the fact that all the location paths contain /1/ part.
-     *
-     * @param array<string> $pathIds
-     *
-     * @return array<string>
-     */
-    public function removeRootLocationPathId(array $pathIds): array
-    {
-        if (empty($pathIds)) {
-            return $pathIds;
-        }
-
-        if ((int) $pathIds[0] === 1) {
-            array_shift($pathIds);
-        }
-
-        return $pathIds;
     }
 }

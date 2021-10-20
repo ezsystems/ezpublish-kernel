@@ -66,7 +66,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
                 $this->cacheIdentifierGenerator->generateKey(self::CONTENT_TYPE_GROUP_IDENTIFIER, [$group->id]),
                 $this->cacheIdentifierGenerator->generateKey(
                     self::CONTENT_TYPE_GROUP_WITH_ID_SUFFIX_IDENTIFIER,
-                    [$this->escapeForCacheKey($group->identifier)],
+                    [$this->cacheIdentifierSanitizer->escapeForCacheKey($group->identifier)],
                     true
                 ),
             ];
@@ -84,12 +84,12 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
                 $this->cacheIdentifierGenerator->generateKey(self::CONTENT_TYPE_IDENTIFIER, [$type->id], true) . '-' . $status,
                 $this->cacheIdentifierGenerator->generateKey(
                     self::CONTENT_TYPE_GROUP_WITH_ID_SUFFIX_IDENTIFIER,
-                    [$this->escapeForCacheKey($type->identifier)],
+                    [$this->cacheIdentifierSanitizer->escapeForCacheKey($type->identifier)],
                     true
                 ),
                 $this->cacheIdentifierGenerator->generateKey(
                     self::CONTENT_TYPE_GROUP_WITH_BY_REMOTE_SUFFIX_IDENTIFIER,
-                    [$this->escapeForCacheKey($type->remoteId)],
+                    [$this->cacheIdentifierSanitizer->escapeForCacheKey($type->remoteId)],
                     true
                 ),
             ];
@@ -122,7 +122,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
             $this->cacheIdentifierGenerator->generateKey(self::CONTENT_TYPE_GROUP_IDENTIFIER, [$struct->id], true),
             $this->cacheIdentifierGenerator->generateKey(
                 self::CONTENT_TYPE_GROUP_WITH_ID_SUFFIX_IDENTIFIER,
-                [$this->escapeForCacheKey($struct->identifier)],
+                [$this->cacheIdentifierSanitizer->escapeForCacheKey($struct->identifier)],
                 true
             ),
         ]);
@@ -183,7 +183,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     public function loadGroupByIdentifier($identifier)
     {
         return $this->getCacheValue(
-            $this->escapeForCacheKey($identifier),
+            $this->cacheIdentifierSanitizer->escapeForCacheKey($identifier),
             $this->cacheIdentifierGenerator->generateKey(self::CONTENT_TYPE_GROUP_IDENTIFIER, [], true) . '-',
             function () use ($identifier) {
                 return $this->persistenceHandler->contentTypeHandler()->loadGroupByIdentifier($identifier);
@@ -282,7 +282,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     public function loadByIdentifier($identifier)
     {
         return $this->getCacheValue(
-            $this->escapeForCacheKey($identifier),
+            $this->cacheIdentifierSanitizer->escapeForCacheKey($identifier),
             $this->cacheIdentifierGenerator->generateKey(self::CONTENT_TYPE_IDENTIFIER, [], true) . '-',
             function () use ($identifier) {
                 return $this->persistenceHandler->contentTypeHandler()->loadByIdentifier($identifier);
@@ -299,7 +299,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     public function loadByRemoteId($remoteId)
     {
         return $this->getCacheValue(
-            $this->escapeForCacheKey($remoteId),
+            $this->cacheIdentifierSanitizer->escapeForCacheKey($remoteId),
             $this->cacheIdentifierGenerator->generateKey(self::CONTENT_TYPE_IDENTIFIER, [], true) . '-',
             function () use ($remoteId) {
                 return $this->persistenceHandler->contentTypeHandler()->loadByRemoteId($remoteId);

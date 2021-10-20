@@ -8,7 +8,6 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use Ibexa\Core\Persistence\Cache\CacheIdentifierTrait;
 
 /**
  * Abstract handler for use in other SPI Handlers.
@@ -18,8 +17,6 @@ use Ibexa\Core\Persistence\Cache\CacheIdentifierTrait;
  */
 abstract class AbstractInMemoryHandler
 {
-    use CacheIdentifierTrait;
-
     /**
      * NOTE: Instance of this must be TransactionalInMemoryCacheAdapter in order for cache clearing to affect in-memory cache.
      *

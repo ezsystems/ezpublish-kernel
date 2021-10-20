@@ -248,10 +248,13 @@ services:
             - "%ezpublish.spi.persistence.cache.inmemory.content.enable%"
         tags: ['ez.spi.persistence.cache.inmemory']
 
-    Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface:
-        alias: Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGenerator
+    Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface:
+        alias: Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGenerator
 
-    Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGenerator:
+    Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer: ~
+    Ibexa\Core\Persistence\Cache\LocationPathConverter: ~
+
+    Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGenerator:
         arguments:
             $prefix: '%ibexa.core.persistence.cache.tag_prefix%'
             $tagPatterns: '%ibexa.core.persistence.cache.tag_patterns%'
@@ -265,7 +268,9 @@ services:
             - "@ezpublish.cache_pool"
             - "@ezpublish.api.storage_engine"
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
-            - '@Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface'
+            - '@Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface'
+            - '@Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer'
+            - '@Ibexa\Core\Persistence\Cache\LocationPathConverter'
 
     ezpublish.spi.persistence.cache.abstractInMemoryHandler:
         class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler
@@ -281,7 +286,9 @@ services:
         abstract:  true
         arguments:
             - "@ezpublish.api.storage_engine"
-            - '@Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface'
+            - '@Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface'
+            - '@Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer'
+            - '@Ibexa\Core\Persistence\Cache\LocationPathConverter'
 
     ezpublish.spi.persistence.cache.sectionHandler:
         class: "%ezpublish.spi.persistence.cache.sectionHandler.class%"

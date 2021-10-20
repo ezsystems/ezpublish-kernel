@@ -40,7 +40,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
                 $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [$language->id], true),
                 $this->cacheIdentifierGenerator->generateKey(
                     self::LANGUAGE_CODE_IDENTIFIER,
-                    [$this->escapeForCacheKey($language->languageCode)],
+                    [$this->cacheIdentifierSanitizer->escapeForCacheKey($language->languageCode)],
                     true
                 ),
             ];
@@ -73,7 +73,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
             $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_IDENTIFIER, [$struct->id], true),
             $this->cacheIdentifierGenerator->generateKey(
                 self::LANGUAGE_CODE_IDENTIFIER,
-                [$this->escapeForCacheKey($struct->languageCode)],
+                [$this->cacheIdentifierSanitizer->escapeForCacheKey($struct->languageCode)],
                 true
             ),
         ]);
@@ -119,7 +119,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function loadByLanguageCode($languageCode)
     {
         return $this->getCacheValue(
-            $this->escapeForCacheKey($languageCode),
+            $this->cacheIdentifierSanitizer->escapeForCacheKey($languageCode),
             $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_CODE_IDENTIFIER, [], true) . '-',
             function () use ($languageCode) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
@@ -135,7 +135,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
     public function loadListByLanguageCodes(array $languageCodes): iterable
     {
         return $this->getMultipleCacheValues(
-            array_map([$this, 'escapeForCacheKey'], $languageCodes),
+            array_map([$this->cacheIdentifierSanitizer, 'escapeForCacheKey'], $languageCodes),
             $this->cacheIdentifierGenerator->generateKey(self::LANGUAGE_CODE_IDENTIFIER, [], true) . '-',
             function () use ($languageCodes) {
                 return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($languageCodes);
