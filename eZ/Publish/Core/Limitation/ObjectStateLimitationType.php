@@ -138,6 +138,9 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
         $stateGroups = $objectStateHandler->loadAllGroups();
 
         // First deal with new content
+        // ATM, it seems unclear if $object can ever be a ContentCreateStruct, there are no object state limitation
+        // for content/create, only for content/edit.
+        // Keeping the block here as there are still Unit tests that inject ContentCreateStruct values to this function
         if ($object instanceof ContentCreateStruct) {
             foreach ($stateGroups as $stateGroup) {
                 $states = $objectStateHandler->loadObjectStates($stateGroup->id);
