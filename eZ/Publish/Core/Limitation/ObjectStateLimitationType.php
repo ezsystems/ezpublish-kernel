@@ -148,10 +148,10 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
                     continue;
                 }
 
-                $defaultStateId = null;
-                $defaultStatePriority = -1;
+                $defaultStateId = $states[0]->id;
+                $defaultStatePriority = $states[0]->priority ?? 0;
                 foreach ($states as $state) {
-                    if ($state->priority > $defaultStatePriority) {
+                    if ($state->priority && $state->priority < $defaultStatePriority) {
                         $defaultStateId = $state->id;
                         $defaultStatePriority = $state->priority;
                     }
