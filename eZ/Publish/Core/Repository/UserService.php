@@ -1001,7 +1001,7 @@ class UserService implements UserServiceInterface
 
         $this->repository->beginTransaction();
         try {
-           $location = $locationService->createLocation(
+            $location = $locationService->createLocation(
                 $loadedUser->getVersionInfo()->getContentInfo(),
                 $locationCreateStruct
             );

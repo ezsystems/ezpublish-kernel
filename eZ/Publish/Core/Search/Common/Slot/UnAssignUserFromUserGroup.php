@@ -14,7 +14,7 @@ use eZ\Publish\Core\Search\Common\Slot;
  */
 class UnAssignUserFromUserGroup extends Slot
 {
-    public function receive(Signal $signal):  void
+    public function receive(Signal $signal): void
     {
         if (!$signal instanceof Signal\UserService\UnAssignUserFromUserGroupSignal) {
             return;
