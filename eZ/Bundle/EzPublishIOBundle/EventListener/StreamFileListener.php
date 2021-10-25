@@ -54,7 +54,7 @@ class StreamFileListener implements EventSubscriberInterface
         if (strpos($urlPrefix, '://') !== false) {
             $uri = $request->getSchemeAndHttpHost() . $request->getPathInfo();
         } else {
-            $uri = $request->attributes->get('semanticPathinfo');
+            $uri = $request->getPathInfo();
         }
 
         if (!$this->isIoUri($uri, $urlPrefix)) {
