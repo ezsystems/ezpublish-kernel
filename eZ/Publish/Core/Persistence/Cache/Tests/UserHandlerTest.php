@@ -375,14 +375,13 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ibx-ra-14-bg',
                 [
                     ['role_assignment_group_list', [14], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                     ['location_path', ['43'], false],
                     ['role_assignment', [11], false],
                     ['role_assignment_group_list', [14], false],
                     ['role_assignment_role_list', [9], false],
                 ],
-                ['ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
+                ['ragl-14', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
                 [
                     ['role_assignment_with_by_group_suffix', [14], true],
                 ],
@@ -397,14 +396,13 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ibx-ra-14-bgi',
                 [
                     ['role_assignment_group_list', [14], false],
-                    ['location_path', ['1'], false],
                     ['location_path', ['2'], false],
                     ['location_path', ['43'], false],
                     ['role_assignment', [11], false],
                     ['role_assignment_group_list', [14], false],
                     ['role_assignment_role_list', [9], false],
                 ],
-                ['ragl-14', 'lp-1', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
+                ['ragl-14', 'lp-2', 'lp-43', 'ra-11', 'ragl-14', 'rarl-9'],
                 [
                     ['role_assignment_with_by_group_inherited_suffix', [14], true],
                 ],

@@ -4,10 +4,12 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace Ibexa\Tests\Core\Persistence\Cache\Tag;
+declare(strict_types=1);
+
+namespace Ibexa\Tests\Core\Persistence\Cache\Identifier;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGenerator;
+use Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGenerator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class CacheIdentifierGeneratorTest extends TestCase
 {
-    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface */
+    /** @var \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface */
     private $cacheIdentifierGenerator;
 
     public function setUp(): void

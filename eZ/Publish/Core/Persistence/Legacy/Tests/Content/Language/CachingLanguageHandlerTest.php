@@ -7,7 +7,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
-use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct as SPILanguageCreateStruct;
@@ -42,7 +42,7 @@ class CachingLanguageHandlerTest extends TestCase
      */
     protected $languageCacheMock;
 
-    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface */
+    /** @var \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface */
     protected $cacheIdentifierGeneratorMock;
 
     /**
@@ -378,7 +378,7 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCacheIdentifierGeneratorMock()
     {

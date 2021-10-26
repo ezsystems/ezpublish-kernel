@@ -6,8 +6,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer;
+use Ibexa\Core\Persistence\Cache\LocationPathConverter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
@@ -26,8 +28,14 @@ abstract class AbstractHandler
     /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */
     protected $logger;
 
-    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface */
+    /** @var \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface */
     protected $cacheIdentifierGenerator;
+
+    /** @var \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer */
+    protected $cacheIdentifierSanitizer;
+
+    /** @var \Ibexa\Core\Persistence\Cache\LocationPathConverter */
+    protected $locationPathConverter;
 
     /**
      * Setups current handler with everything needed.
@@ -35,18 +43,24 @@ abstract class AbstractHandler
      * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
-     * @param \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
+     * @param \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
+     * @param \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer $cacheIdentifierSanitizer
+     * @param \Ibexa\Core\Persistence\Cache\LocationPathConverter $locationPathConverter
      */
     public function __construct(
         TagAwareAdapterInterface $cache,
         PersistenceHandler $persistenceHandler,
         PersistenceLogger $logger,
-        CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
+        CacheIdentifierGeneratorInterface $cacheIdentifierGenerator,
+        CacheIdentifierSanitizer $cacheIdentifierSanitizer,
+        LocationPathConverter $locationPathConverter
     ) {
         $this->cache = $cache;
         $this->persistenceHandler = $persistenceHandler;
         $this->logger = $logger;
         $this->cacheIdentifierGenerator = $cacheIdentifierGenerator;
+        $this->cacheIdentifierSanitizer = $cacheIdentifierSanitizer;
+        $this->locationPathConverter = $locationPathConverter;
     }
 
     /**
@@ -121,14 +135,5 @@ abstract class AbstractHandler
         }
 
         return $list;
-    }
-
-    final protected function escapeForCacheKey(string $identifier)
-    {
-        return \str_replace(
-            ['_', '/', ':', '(', ')', '@', '\\', '{', '}'],
-            ['__', '_S', '_C', '_BO', '_BC', '_A', '_BS', '_CBO', '_CBC'],
-            $identifier
-        );
     }
 }

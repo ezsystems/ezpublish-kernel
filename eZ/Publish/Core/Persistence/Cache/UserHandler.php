@@ -74,7 +74,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
                 $this->cacheIdentifierGenerator->generateKey(self::USER_IDENTIFIER, [$user->id], true),
                 $this->cacheIdentifierGenerator->generateKey(
                     self::USER_WITH_BY_LOGIN_SUFFIX_IDENTIFIER,
-                    [$this->escapeForCacheKey($user->login)],
+                    [$this->cacheIdentifierSanitizer->escapeForCacheKey($user->login)],
                     true
                 ),
                 //'ez-user-' . $hash . '-by-account-key',
@@ -90,7 +90,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
                 $this->cacheIdentifierGenerator->generateKey(self::ROLE_IDENTIFIER, [$role->id], true),
                 $this->cacheIdentifierGenerator->generateKey(
                     self::ROLE_WITH_BY_ID_SUFFIX_IDENTIFIER,
-                    [$this->escapeForCacheKey($role->identifier)],
+                    [$this->cacheIdentifierSanitizer->escapeForCacheKey($role->identifier)],
                     true
                 ),
             ];
@@ -124,8 +124,16 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
 
         $this->cache->deleteItems([
             $this->cacheIdentifierGenerator->generateKey(self::USER_IDENTIFIER, [$user->id], true),
-            $this->cacheIdentifierGenerator->generateKey(self::USER_WITH_BY_LOGIN_SUFFIX_IDENTIFIER, [$this->escapeForCacheKey($user->login)], true),
-            $this->cacheIdentifierGenerator->generateKey(self::USER_WITH_BY_EMAIL_SUFFIX_IDENTIFIER, [$this->escapeForCacheKey($user->email)], true),
+            $this->cacheIdentifierGenerator->generateKey(
+                self::USER_WITH_BY_LOGIN_SUFFIX_IDENTIFIER,
+                [$this->cacheIdentifierSanitizer->escapeForCacheKey($user->login)],
+                true
+            ),
+            $this->cacheIdentifierGenerator->generateKey(
+                self::USER_WITH_BY_EMAIL_SUFFIX_IDENTIFIER,
+                [$this->cacheIdentifierSanitizer->escapeForCacheKey($user->email)],
+                true
+            ),
         ]);
 
         return $return;
@@ -153,7 +161,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function loadByLogin($login)
     {
         return $this->getCacheValue(
-            $this->escapeForCacheKey($login),
+            $this->cacheIdentifierSanitizer->escapeForCacheKey($login),
             $this->cacheIdentifierGenerator->generateKey(self::USER_IDENTIFIER, [], true) . '-',
             function () use ($login) {
                 return $this->persistenceHandler->userHandler()->loadByLogin($login);
@@ -171,7 +179,11 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         // As load by email can return several items we threat it like a list here.
         return $this->getListCacheValue(
-            $this->cacheIdentifierGenerator->generateKey(self::USER_WITH_BY_EMAIL_SUFFIX_IDENTIFIER, [$this->escapeForCacheKey($email)], true),
+            $this->cacheIdentifierGenerator->generateKey(
+                self::USER_WITH_BY_EMAIL_SUFFIX_IDENTIFIER,
+                [$this->cacheIdentifierSanitizer->escapeForCacheKey($email)],
+                true
+            ),
             function () use ($email) {
                 return $this->persistenceHandler->userHandler()->loadByEmail($email);
             },
@@ -229,7 +241,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->cache->deleteItems([
             $this->cacheIdentifierGenerator->generateKey(
                 self::USER_WITH_BY_EMAIL_SUFFIX_IDENTIFIER,
-                [$this->escapeForCacheKey($user->email)],
+                [$this->cacheIdentifierSanitizer->escapeForCacheKey($user->email)],
                 true
             ),
         ]);
@@ -347,7 +359,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         }
 
         return $this->getCacheValue(
-            $this->escapeForCacheKey($identifier),
+            $this->cacheIdentifierSanitizer->escapeForCacheKey($identifier),
             $this->cacheIdentifierGenerator->generateKey(self::ROLE_IDENTIFIER, [], true) . '-',
             function () use ($identifier) {
                 return $this->persistenceHandler->userHandler()->loadRoleByIdentifier($identifier);
@@ -423,16 +435,14 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function loadRoleAssignmentsByGroupId($groupId, $inherit = false)
     {
         $innerHandler = $this->persistenceHandler;
-        $cacheIdentifierGenerator = $this->cacheIdentifierGenerator;
-
         if ($inherit) {
-            $key = $cacheIdentifierGenerator->generateKey(
+            $key = $this->cacheIdentifierGenerator->generateKey(
                 self::ROLE_ASSIGNMENT_WITH_BY_GROUP_INHERITED_SUFFIX_IDENTIFIER,
                 [$groupId],
                 true
             );
         } else {
-            $key = $cacheIdentifierGenerator->generateKey(
+            $key = $this->cacheIdentifierGenerator->generateKey(
                 self::ROLE_ASSIGNMENT_WITH_BY_GROUP_SUFFIX_IDENTIFIER,
                 [$groupId],
                 true
@@ -446,16 +456,18 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
             },
             $this->getRoleAssignmentTags,
             $this->getRoleAssignmentKeys,
-            static function () use ($groupId, $innerHandler, $cacheIdentifierGenerator) {
+            function () use ($groupId, $innerHandler) {
                 // Tag needed for empty results, if not empty will alse be added by getRoleAssignmentTags().
                 $cacheTags = [
-                    $cacheIdentifierGenerator->generateTag(self::ROLE_ASSIGNMENT_GROUP_LIST_IDENTIFIER, [$groupId]),
+                    $this->cacheIdentifierGenerator->generateTag(self::ROLE_ASSIGNMENT_GROUP_LIST_IDENTIFIER, [$groupId]),
                 ];
                 // To make sure tree operations affecting this can clear the permission cache
                 $locations = $innerHandler->locationHandler()->loadLocationsByContent($groupId);
+
                 foreach ($locations as $location) {
-                    foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-                        $cacheTags[] = $cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
+                    $pathIds = $this->locationPathConverter->convertToPathIds($location->pathString);
+                    foreach ($pathIds as $pathId) {
+                        $cacheTags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
                     }
                 }
 

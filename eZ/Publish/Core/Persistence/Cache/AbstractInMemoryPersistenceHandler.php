@@ -9,7 +9,9 @@ namespace eZ\Publish\Core\Persistence\Cache;
 use eZ\Publish\Core\Persistence\Cache\Adapter\TransactionAwareAdapterInterface;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
-use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer;
+use Ibexa\Core\Persistence\Cache\LocationPathConverter;
 
 /**
  * Internal abstract handler for use in other SPI Persistence Cache Handlers.
@@ -21,8 +23,14 @@ abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandle
     /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
-    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface */
+    /** @var \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface */
     protected $cacheIdentifierGenerator;
+
+    /** @var \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer */
+    protected $cacheIdentifierSanitizer;
+
+    /** @var \Ibexa\Core\Persistence\Cache\LocationPathConverter */
+    protected $locationPathConverter;
 
     /**
      * Setups current handler with everything needed.
@@ -31,19 +39,25 @@ abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandle
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $inMemory
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
+     * @param \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
+     * @param \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer $cacheIdentifierSanitizer
+     * @param \Ibexa\Core\Persistence\Cache\LocationPathConverter $locationPathConverter
      */
     public function __construct(
         TransactionAwareAdapterInterface $cache,
         PersistenceLogger $logger,
         InMemoryCache $inMemory,
         PersistenceHandler $persistenceHandler,
-        CacheIdentifierGeneratorInterface $cacheIdentifierGenerator
+        CacheIdentifierGeneratorInterface $cacheIdentifierGenerator,
+        CacheIdentifierSanitizer $cacheIdentifierSanitizer,
+        LocationPathConverter $locationPathConverter
     ) {
         parent::__construct($cache, $logger, $inMemory);
 
         $this->persistenceHandler = $persistenceHandler;
         $this->cacheIdentifierGenerator = $cacheIdentifierGenerator;
+        $this->cacheIdentifierSanitizer = $cacheIdentifierSanitizer;
+        $this->locationPathConverter = $locationPathConverter;
 
         $this->init();
     }

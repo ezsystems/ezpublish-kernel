@@ -51,7 +51,8 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
                 $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($info->id);
                 foreach ($locations as $location) {
                     $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_IDENTIFIER, [$location->id]);
-                    foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
+                    $pathIds = $this->locationPathConverter->convertToPathIds($location->pathString);
+                    foreach ($pathIds as $pathId) {
                         $tags[] = $this->cacheIdentifierGenerator->generateTag(self::LOCATION_PATH_IDENTIFIER, [$pathId]);
                     }
                 }
@@ -64,7 +65,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
                 $this->cacheIdentifierGenerator->generateKey(self::CONTENT_INFO_IDENTIFIER, [$info->id], true),
                 $this->cacheIdentifierGenerator->generateKey(
                     self::CONTENT_INFO_BY_REMOTE_ID_IDENTIFIER,
-                    [$this->escapeForCacheKey($info->remoteId)],
+                    [$this->cacheIdentifierSanitizer->escapeForCacheKey($info->remoteId)],
                     true
                 ),
             ];
@@ -217,7 +218,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
     public function loadContentInfoByRemoteId($remoteId)
     {
         return $this->getCacheValue(
-            $this->escapeForCacheKey($remoteId),
+            $this->cacheIdentifierSanitizer->escapeForCacheKey($remoteId),
             $this->cacheIdentifierGenerator->generateKey(self::CONTENT_INFO_BY_REMOTE_ID_IDENTIFIER, [], true) . '-',
             function () use ($remoteId) {
                 return $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($remoteId);

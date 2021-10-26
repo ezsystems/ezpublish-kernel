@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Ibexa\Core\Persistence\Cache\Tag;
+namespace Ibexa\Core\Persistence\Cache\Identifier;
 
 /**
  * @internal

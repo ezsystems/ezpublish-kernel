@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentHandler as CacheContentHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLanguageHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
-use Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface;
+use Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHandler;
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
@@ -29,6 +29,8 @@ use eZ\Publish\Core\Persistence\Cache\UrlWildcardHandler as CacheUrlWildcardHand
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 use eZ\Publish\SPI\Persistence\Handler;
+use Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer;
+use Ibexa\Core\Persistence\Cache\LocationPathConverter;
 use Symfony\Component\Cache\CacheItem;
 use PHPUnit\Framework\TestCase;
 
@@ -55,8 +57,14 @@ abstract class AbstractBaseHandlerTest extends TestCase
     /** @var \Closure */
     protected $cacheItemsClosure;
 
-    /** @var \Ibexa\Core\Persistence\Cache\Tag\CacheIdentifierGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheIdentifierGeneratorMock;
+
+    /** @var \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierSanitizer */
+    protected $cacheIdentifierSanitizer;
+
+    /** @var \Ibexa\Core\Persistence\Cache\LocationPathConverter */
+    protected $locationPathConverter;
 
     /**
      * Setup the HandlerTest.
@@ -70,24 +78,29 @@ abstract class AbstractBaseHandlerTest extends TestCase
         $this->loggerMock = $this->createMock(PersistenceLogger::class);
         $this->inMemoryMock = $this->createMock(InMemoryCache::class);
         $this->cacheIdentifierGeneratorMock = $this->createMock(CacheIdentifierGeneratorInterface::class);
+        $this->cacheIdentifierSanitizer = new CacheIdentifierSanitizer();
+        $this->locationPathConverter = new LocationPathConverter();
+
+        $cacheAbstractHandlerArguments = $this->provideAbstractCacheHandlerArguments();
+        $cacheInMemoryHandlerArguments = $this->provideInMemoryCacheHandlerArguments();
 
         $this->persistenceCacheHandler = new CacheHandler(
             $this->persistenceHandlerMock,
-            new CacheSectionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheLocationHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheContentHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheContentLanguageHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheContentTypeHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheUserHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheTransactionHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheUrlAliasHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheObjectStateHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheUrlHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheBookmarkHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheNotificationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheUserPreferenceHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock, $this->cacheIdentifierGeneratorMock),
-            new CacheUrlWildcardHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->cacheIdentifierGeneratorMock),
+            new CacheSectionHandler(...$cacheAbstractHandlerArguments),
+            new CacheLocationHandler(...$cacheInMemoryHandlerArguments),
+            new CacheContentHandler(...$cacheInMemoryHandlerArguments),
+            new CacheContentLanguageHandler(...$cacheInMemoryHandlerArguments),
+            new CacheContentTypeHandler(...$cacheInMemoryHandlerArguments),
+            new CacheUserHandler(...$cacheInMemoryHandlerArguments),
+            new CacheTransactionHandler(...$cacheInMemoryHandlerArguments),
+            new CacheTrashHandler(...$cacheAbstractHandlerArguments),
+            new CacheUrlAliasHandler(...$cacheInMemoryHandlerArguments),
+            new CacheObjectStateHandler(...$cacheInMemoryHandlerArguments),
+            new CacheUrlHandler(...$cacheAbstractHandlerArguments),
+            new CacheBookmarkHandler(...$cacheAbstractHandlerArguments),
+            new CacheNotificationHandler(...$cacheAbstractHandlerArguments),
+            new CacheUserPreferenceHandler(...$cacheInMemoryHandlerArguments),
+            new CacheUrlWildcardHandler(...$cacheAbstractHandlerArguments),
             $this->loggerMock
         );
 
@@ -118,7 +131,9 @@ abstract class AbstractBaseHandlerTest extends TestCase
             $this->loggerMock,
             $this->cacheItemsClosure,
             $this->inMemoryMock,
-            $this->cacheIdentifierGeneratorMock
+            $this->cacheIdentifierGeneratorMock,
+            $this->cacheIdentifierSanitizer,
+            $this->locationPathConverter
         );
 
         parent::tearDown();
@@ -136,5 +151,30 @@ abstract class AbstractBaseHandlerTest extends TestCase
         $cacheItemsClosure = $this->cacheItemsClosure;
 
         return $cacheItemsClosure($key, $value, (bool)$value, $defaultLifetime);
+    }
+
+    private function provideAbstractCacheHandlerArguments(): array
+    {
+        return [
+            $this->cacheMock,
+            $this->persistenceHandlerMock,
+            $this->loggerMock,
+            $this->cacheIdentifierGeneratorMock,
+            $this->cacheIdentifierSanitizer,
+            $this->locationPathConverter,
+        ];
+    }
+
+    private function provideInMemoryCacheHandlerArguments(): array
+    {
+        return [
+            $this->cacheMock,
+            $this->loggerMock,
+            $this->inMemoryMock,
+            $this->persistenceHandlerMock,
+            $this->cacheIdentifierGeneratorMock,
+            $this->cacheIdentifierSanitizer,
+            $this->locationPathConverter,
+        ];
     }
 }

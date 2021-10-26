@@ -88,11 +88,10 @@ class BookmarkHandlerTest extends AbstractCacheHandlerTest
                     ['bookmark', [1], false],
                     ['location', [43], false],
                     ['user', [3], false],
-                    ['location_path', [1], false],
                     ['location_path', [2], false],
                     ['location_path', [43], false],
                 ],
-                ['b-1', 'l-43', 'u-3', 'lp-1', 'lp-2', 'lp-43'],
+                ['b-1', 'l-43', 'u-3', 'lp-2', 'lp-43'],
                 [
                     ['bookmark', [3], true],
                 ],
