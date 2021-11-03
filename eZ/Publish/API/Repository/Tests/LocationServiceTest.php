@@ -2386,13 +2386,13 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
-     * @depends testLoadLocation
+     * @covers \eZ\Publish\API\Repository\LocationService::copySubtree
      */
     public function testCopySubtreeWithTranslatedContent(): void
     {
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
         $urlAliasService = $repository->getURLAliasService();
 
@@ -2415,14 +2415,14 @@ class LocationServiceTest extends BaseTest
         $contentService->publishVersion($translatedContent->versionInfo);
 
         // creating additional content under translated folder
-        $contentType = $repository->getContentTypeService()->loadContentTypeByIdentifier('folder');
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
         $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-GB');
         $contentCreate->setField('name', 'My folder');
         $content = $contentService->createContent(
             $contentCreate,
             [new LocationCreateStruct(['parentLocationId' => $filesLocationId])]
         );
-        $repository->getContentService()->publishVersion($content->versionInfo);
+        $contentService->publishVersion($content->versionInfo);
 
         $expectedSubItemAliases = [
             '/Design/Plain-site/Media/Multimedia',
