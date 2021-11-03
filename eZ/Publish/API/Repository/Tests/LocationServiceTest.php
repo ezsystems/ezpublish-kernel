@@ -2420,7 +2420,7 @@ class LocationServiceTest extends BaseTest
         $contentCreate->setField('name', 'My folder');
         $content = $contentService->createContent(
             $contentCreate,
-            [new LocationCreateStruct(['parentLocationId' => $filesLocationId])],
+            [new LocationCreateStruct(['parentLocationId' => $filesLocationId])]
         );
         $repository->getContentService()->publishVersion($content->versionInfo);
 
