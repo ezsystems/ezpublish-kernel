@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
+use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -2376,6 +2377,62 @@ class LocationServiceTest extends BaseTest
         $this->assertAliasesBeforeCopy($urlAliasService, $expectedSubItemAliases);
 
         // Copy location "Media" to "Design"
+        $locationService->copySubtree(
+            $locationToCopy,
+            $newParentLocation
+        );
+
+        $this->assertGeneratedAliases($urlAliasService, $expectedSubItemAliases);
+    }
+
+    /**
+     * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
+     * @depends testLoadLocation
+     */
+    public function testCopySubtreeWithTranslatedContent(): void
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $mediaLocationId = $this->generateId('location', 43);
+        $filesLocationId = $this->generateId('location', 52);
+        $demoDesignLocationId = $this->generateId('location', 56);
+
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
+        $filesLocation = $locationService->loadLocation($filesLocationId);
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        // translating the 'middle' folder
+        $translatedDraft = $contentService->createContentDraft($filesLocation->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'ger-DE',
+            'fields' => $translatedDraft->getFields(),
+        ]);
+        $contentUpdateStruct->setField('short_name', 'FilesGER', 'ger-DE');
+        $translatedContent = $contentService->updateContent($translatedDraft->versionInfo, $contentUpdateStruct);
+        $contentService->publishVersion($translatedContent->versionInfo);
+
+        // creating additional content under translated folder
+        $contentType = $repository->getContentTypeService()->loadContentTypeByIdentifier('folder');
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $contentCreate->setField('name', 'My folder');
+        $content = $contentService->createContent(
+            $contentCreate,
+            [new LocationCreateStruct(['parentLocationId' => $filesLocationId])],
+        );
+        $repository->getContentService()->publishVersion($content->versionInfo);
+
+        $expectedSubItemAliases = [
+            '/Design/Plain-site/Media/Multimedia',
+            '/Design/Plain-site/Media/Images',
+            '/Design/Plain-site/Media/Files',
+            '/Design/Plain-site/Media/Files/my-folder',
+        ];
+
+        $this->assertAliasesBeforeCopy($urlAliasService, $expectedSubItemAliases);
+
         $locationService->copySubtree(
             $locationToCopy,
             $newParentLocation
