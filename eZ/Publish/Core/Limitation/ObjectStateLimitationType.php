@@ -138,7 +138,7 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
         $stateGroups = $objectStateHandler->loadAllGroups();
 
         // First deal with unpublished content
-        if ($object instanceof ContentCreateStruct || !$object->published) {
+        if ($object instanceof ContentCreateStruct) {
             foreach ($stateGroups as $stateGroup) {
                 $states = $objectStateHandler->loadObjectStates($stateGroup->id);
                 if (empty($states)) {
