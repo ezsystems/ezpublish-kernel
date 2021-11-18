@@ -35,7 +35,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
     public function testObjectStateLimitationAllow()
     {
         $repository = $this->getRepository();
-        $notLockedState = $this->generateId('objectstate', 2);
+        $notLockedState = $this->generateId('objectstate', 1);
 
         $contentService = $repository->getContentService();
         /* BEGIN: Use Case */
@@ -98,7 +98,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
     public function testObjectStateLimitationForbid()
     {
         $repository = $this->getRepository();
-        $lockedState = $this->generateId('objectstate', 1);
+        $lockedState = $this->generateId('objectstate', 2);
 
         $contentService = $repository->getContentService();
         /* BEGIN: Use Case */
@@ -166,7 +166,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $objectStateGroup = $this->createObjectStateGroup();
         $objectState = $this->createObjectState($objectStateGroup);
 
-        $lockedState = $this->generateId('objectstate', 1);
+        $lockedState = $this->generateId('objectstate', 2);
         $defaultStateFromAnotherGroup = $this->generateId('objectstate', $objectState->id);
 
         $contentService = $repository->getContentService();
@@ -264,7 +264,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $objectStateGroup = $this->createObjectStateGroup();
         $objectState = $this->createObjectState($objectStateGroup);
 
-        $lockedState = $this->generateId('objectstate', 1);
+        $notLockedState = $this->generateId('objectstate', 1);
         $defaultStateFromAnotherGroup = $this->generateId('objectstate', $objectState->id);
 
         $roleService = $repository->getRoleService();
@@ -272,7 +272,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $roleCreateStruct = $roleService->newRoleCreateStruct($roleName);
         $this->addPolicyToNewRole($roleCreateStruct, 'content', 'read', [
             new ObjectStateLimitation([
-                'limitationValues' => [$lockedState, $defaultStateFromAnotherGroup],
+                'limitationValues' => [$notLockedState, $defaultStateFromAnotherGroup],
             ]),
         ]);
         $roleService->publishRoleDraft(
