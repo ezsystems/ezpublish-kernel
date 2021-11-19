@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Limitation\ObjectStateLimitationType;
-use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as SPIHandler;
