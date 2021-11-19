@@ -137,42 +137,9 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
         $objectStateHandler = $this->persistence->objectStateHandler();
         $stateGroups = $objectStateHandler->loadAllGroups();
 
-        // First deal with unpublished content
-        if ($object instanceof ContentCreateStruct) {
-            foreach ($stateGroups as $stateGroup) {
-                $states = $objectStateHandler->loadObjectStates($stateGroup->id);
-                if (empty($states)) {
-                    continue;
-                }
-
-                $defaultStateId = null;
-                $defaultStatePriority = -1;
-                foreach ($states as $state) {
-                    if ($state->priority > $defaultStatePriority) {
-                        $defaultStateId = $state->id;
-                        $defaultStatePriority = $state->priority;
-                    }
-                }
-
-                if ($defaultStateId === null) {
-                    throw new BadStateException(
-                        '$defaultStateId',
-                        "Could not find a default state for object state group {$stateGroup->id}"
-                    );
-                }
-
-                foreach ($states as $state) {
-                    // check using loose types as limitation values are strings and id's can be int
-                    if (in_array($state->id, $limitationValues)) {
-                        $objectStateIdsToVerify[] = $defaultStateId;
-                    }
-                }
-            }
-        } else {
-            foreach ($stateGroups as $stateGroup) {
-                if ($this->isStateGroupUsedForLimitation($stateGroup->id, $limitationValues)) {
-                    $objectStateIdsToVerify[] = $objectStateHandler->getContentState($object->id, $stateGroup->id)->id;
-                }
+        foreach ($stateGroups as $stateGroup) {
+            if ($this->isStateGroupUsedForLimitation($stateGroup->id, $limitationValues)) {
+                $objectStateIdsToVerify[] = $objectStateHandler->getContentState($object->id, $stateGroup->id)->id;
             }
         }
 
