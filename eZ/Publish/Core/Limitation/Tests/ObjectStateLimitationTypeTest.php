@@ -142,12 +142,6 @@ class ObjectStateLimitationTypeTest extends Base
                 'object' => new ContentInfo(['id' => 0, 'mainLocationId' => 1, 'published' => true]),
                 'expected' => true,
             ],
-            // ContentCreateStruct, with access
-            [
-                'limitation' => new ObjectStateLimitation(['limitationValues' => [1, 3]]),
-                'object' => new ContentCreateStruct(),
-                'expected' => true,
-            ],
         ];
     }
 
