@@ -983,16 +983,11 @@ class Handler implements UrlAliasHandlerInterface
 
             $alreadyGeneratedAliases[] = $identifier;
 
-            $alreadyGeneratedAliases = array_unique(
-                array_merge(
-                    $alreadyGeneratedAliases,
-                    $this->copySubtree(
-                        $actionMap,
-                        $oldParentAliasId,
-                        $row['id'],
-                        $alreadyGeneratedAliases
-                    )
-                )
+            $alreadyGeneratedAliases = $this->copySubtree(
+                $actionMap,
+                $oldParentAliasId,
+                $row['id'],
+                $alreadyGeneratedAliases
             );
         }
 
