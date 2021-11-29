@@ -26,11 +26,4 @@ class UnAssignUserFromUserGroupSignal extends Signal
      * @var mixed
      */
     public $userGroupId;
-
-    /**
-     * AffectedLocationId.
-     *
-     * @var mixed
-     */
-    public $affectedLocationId;
 }

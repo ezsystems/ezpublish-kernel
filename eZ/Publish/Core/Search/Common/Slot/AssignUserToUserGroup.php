@@ -19,6 +19,7 @@ class AssignUserToUserGroup extends AbstractSubtree
             return;
         }
 
-        $this->indexSubtree($signal->affectedLocationId);
+        $content = $this->persistenceHandler->contentHandler()->load($signal->userId);
+        $this->searchHandler->indexContent($content);
     }
 }

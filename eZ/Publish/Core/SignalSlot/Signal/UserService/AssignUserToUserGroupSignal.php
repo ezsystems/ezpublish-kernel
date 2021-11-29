@@ -26,11 +26,4 @@ class AssignUserToUserGroupSignal extends Signal
      * @var mixed
      */
     public $userGroupId;
-
-    /**
-     * AffectedLocationId.
-     *
-     * @var mixed
-     */
-    public $affectedLocationId;
 }

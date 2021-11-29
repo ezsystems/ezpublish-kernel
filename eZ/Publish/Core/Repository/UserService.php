@@ -971,6 +971,9 @@ class UserService implements UserServiceInterface
     /**
      * Assigns a new user group to the user.
      *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is already in the given user group
      */
@@ -1001,13 +1004,11 @@ class UserService implements UserServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $location = $locationService->createLocation(
+            $locationService->createLocation(
                 $loadedUser->getVersionInfo()->getContentInfo(),
                 $locationCreateStruct
             );
             $this->repository->commit();
-
-            return $location->id;
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
@@ -1016,6 +1017,9 @@ class UserService implements UserServiceInterface
 
     /**
      * Removes a user group from the user.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
@@ -1048,7 +1052,7 @@ class UserService implements UserServiceInterface
                     $locationService->deleteLocation($userLocation);
                     $this->repository->commit();
 
-                    return $userLocation->id;
+                    return;
                 } catch (Exception $e) {
                     $this->repository->rollback();
                     throw $e;

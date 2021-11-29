@@ -20,6 +20,7 @@ class UnAssignUserFromUserGroup extends Slot
             return;
         }
 
-        $this->searchHandler->deleteLocation($signal->affectedLocationId, $signal->userId);
+        $content = $this->persistenceHandler->contentHandler()->load($signal->userId);
+        $this->searchHandler->indexContent($content);
     }
 }

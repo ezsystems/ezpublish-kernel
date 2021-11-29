@@ -426,6 +426,9 @@ class UserService implements UserServiceInterface
     /**
      * Assigns a new user group to the user.
      *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is already in the given user group
      */
@@ -437,7 +440,6 @@ class UserService implements UserServiceInterface
                 [
                     'userId' => $user->id,
                     'userGroupId' => $userGroup->id,
-                    'affectedLocationId' => $returnValue,
                 ]
             )
         );
