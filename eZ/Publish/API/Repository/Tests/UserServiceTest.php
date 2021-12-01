@@ -2119,6 +2119,7 @@ class UserServiceTest extends BaseTest
 
         // Count number of child locations before assigning user to group
         $count = $locationService->getLocationChildCount($groupLocation);
+        $expectedCount = $count + 1;
 
         $userService->assignUserToUserGroup(
             $user,
@@ -2128,9 +2129,9 @@ class UserServiceTest extends BaseTest
         $this->refreshSearch($repository);
 
         // Count number of child locations after assigning user to group
-        $count2 = $locationService->getLocationChildCount($groupLocation);
+        $actualCount = $locationService->getLocationChildCount($groupLocation);
 
-        self::assertEquals($count + 1, $count2);
+        self::assertEquals($expectedCount, $actualCount);
     }
 
     /**
@@ -2277,6 +2278,7 @@ class UserServiceTest extends BaseTest
 
         // Count number of child locations before unassigning user from group
         $count = $locationService->getLocationChildCount($groupLocation);
+        $expectedCount = $count - 1;
 
         // Assigning user to different group to avoid removing all groups from user
         $userService->assignUserToUserGroup(
@@ -2292,9 +2294,9 @@ class UserServiceTest extends BaseTest
         $this->refreshSearch($repository);
 
         // Count number of child locations after unassigning user from group
-        $count2 = $locationService->getLocationChildCount($groupLocation);
+        $actualCount = $locationService->getLocationChildCount($groupLocation);
 
-        self::assertEquals($count - 1, $count2);
+        self::assertEquals($expectedCount, $actualCount);
     }
 
     /**
