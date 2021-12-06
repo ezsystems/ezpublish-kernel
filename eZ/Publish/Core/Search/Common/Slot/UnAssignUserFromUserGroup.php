@@ -12,7 +12,7 @@ use eZ\Publish\Core\Search\Common\Slot;
 /**
  * A Search Engine slot handling UnAssignUserFromUserGroup.
  */
-class UnAssignUserFromUserGroup extends Slot
+final class UnAssignUserFromUserGroup extends Slot
 {
     public function receive(Signal $signal): void
     {

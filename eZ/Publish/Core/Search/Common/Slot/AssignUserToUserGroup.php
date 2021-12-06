@@ -11,7 +11,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A Search Engine slot handling AssignUserToUserGroupSignal.
  */
-class AssignUserToUserGroup extends AbstractSubtree
+final class AssignUserToUserGroup extends AbstractSubtree
 {
     public function receive(Signal $signal): void
     {

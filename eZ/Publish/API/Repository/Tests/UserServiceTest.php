@@ -2104,7 +2104,7 @@ class UserServiceTest extends BaseTest
     /**
      * @covers \eZ\Publish\API\Repository\UserService::assignUserToUserGroup
      */
-    public function testAssignUserToGroupWithLocationsValidation()
+    public function testAssignUserToGroupWithLocationsValidation(): void
     {
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
@@ -2259,7 +2259,7 @@ class UserServiceTest extends BaseTest
     /**
      * @covers \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup
      */
-    public function testUnAssignUserToGroupWithLocationValidation()
+    public function testUnAssignUserToGroupWithLocationValidation(): void
     {
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
