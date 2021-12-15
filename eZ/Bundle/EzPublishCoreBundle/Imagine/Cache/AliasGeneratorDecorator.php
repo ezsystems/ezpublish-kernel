@@ -129,4 +129,9 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
             $this->cacheIdentifierGenerator->generateTag(self::CONTENT_VERSION_TAG, [$contentId, $versionInfo->versionNo]),
         ];
     }
+
+    public function getVariationNameTag(): string
+    {
+        return self::IMAGE_VARIATION_NAME_TAG;
+    }
 }
