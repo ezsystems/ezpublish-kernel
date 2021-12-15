@@ -56,13 +56,13 @@ class IOVariationPurger implements VariationPurger
 
     public function purge(array $aliasNames)
     {
+        $variationNameTag = $this->aliasGeneratorDecorator->getVariationNameTag();
+
         foreach ($aliasNames as $aliasName) {
             $directory = "_aliases/$aliasName";
             $this->io->deleteDirectory($directory);
-            $variationTag = $this->cacheIdentifierGenerator->generateTag(
-                $this->aliasGeneratorDecorator->getVariationNameTag(),
-                [$aliasName]
-            );
+
+            $variationTag = $this->cacheIdentifierGenerator->generateTag($variationNameTag, [$aliasName]);
             $this->cache->invalidateTags([$variationTag]);
 
             if (isset($this->logger)) {
