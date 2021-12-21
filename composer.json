@@ -18,7 +18,7 @@
         "ext-SPL": "*",
         "ext-xsl": "*",
         "ext-curl": "*",
-        "ezsystems/doctrine-dbal-schema": "^0.1@dev",
+        "ezsystems/doctrine-dbal-schema": "^0.1",
         "symfony/symfony": "^3.4.17",
         "symfony-cmf/routing": "^2.1",
         "kriswallsmith/buzz": "^0.17.2",
@@ -119,7 +119,7 @@
         "_ezplatform_branch_for_behat_tests": "2.5",
         "branch-alias": {
             "dev-master": "7.5.x-dev",
-            "dev-tmp_ci_branch": "7.5.x-dev"
+            "dev-tmp_ci_branch": "7.5"
         },
         "thanks": {
             "name": "ezsystems/ezplatform",
