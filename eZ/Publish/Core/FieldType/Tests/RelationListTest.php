@@ -742,7 +742,7 @@ class RelationListTest extends FieldTypeTest
 
         $this->contentServiceMock
             ->expects(self::exactly(2))
-            ->method('loadContent')
+            ->method('loadContentInfo')
             ->withConsecutive([$destinationContentId], [$destinationContentId2])
             ->willReturnOnConsecutiveCalls(
                 self::throwException(new NotFoundException('content', $destinationContentId)),
@@ -751,8 +751,8 @@ class RelationListTest extends FieldTypeTest
 
         $validationErrors = $this->doValidate([], new Value([$destinationContentId, $destinationContentId2]));
 
-        $this->assertIsArray($validationErrors);
-        $this->assertCount(2, $validationErrors);
+        self::assertIsArray($validationErrors);
+        self::assertCount(2, $validationErrors);
     }
 
     /**

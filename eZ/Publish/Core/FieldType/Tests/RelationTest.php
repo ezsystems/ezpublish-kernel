@@ -384,14 +384,14 @@ class RelationTest extends FieldTypeTest
 
         $this->contentServiceMock
             ->expects(self::once())
-            ->method('loadContent')
+            ->method('loadContentInfo')
             ->with($destinationContentId)
             ->willThrowException(new NotFoundException('content', $destinationContentId));
 
         $validationErrors = $this->doValidate([], new Value($destinationContentId));
 
-        $this->assertIsArray($validationErrors);
-        $this->assertEquals([
+        self::assertIsArray($validationErrors);
+        self::assertEquals([
             new ValidationError(
                 'Content with identifier %contentId% is not a valid relation target',
                 null,

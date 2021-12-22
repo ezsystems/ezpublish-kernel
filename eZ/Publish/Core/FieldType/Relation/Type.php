@@ -164,7 +164,7 @@ class Type extends FieldType
         }
 
         try {
-            $this->contentService->loadContent($fieldValue->destinationContentId);
+            $this->contentService->loadContentInfo($fieldValue->destinationContentId);
         } catch (NotFoundException | UnauthorizedException $e) {
             $validationErrors[] = new ValidationError(
                 'Content with identifier %contentId% is not a valid relation target',

@@ -263,7 +263,7 @@ class Type extends FieldType
 
         foreach ($fieldValue->destinationContentIds as $destinationContentId) {
             try {
-                $this->contentService->loadContent($destinationContentId);
+                $this->contentService->loadContentInfo($destinationContentId);
             } catch (NotFoundException | UnauthorizedException $e) {
                 $validationErrors[] = new ValidationError(
                     'Content with identifier %contentId% is not a valid relation target',
