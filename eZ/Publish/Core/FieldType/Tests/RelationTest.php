@@ -6,20 +6,19 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\Relation\Type as RelationType;
 use eZ\Publish\Core\FieldType\Relation\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\Validator\DestinationContentValidator;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 class RelationTest extends FieldTypeTest
 {
-    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
-    private $contentServiceMock;
+    /** @var \eZ\Publish\Core\FieldType\Validator\DestinationContentValidator|\PHPUnit\Framework\MockObject\MockObject */
+    private $destinationContentValidator;
 
     /**
      * {@inheritdoc}
@@ -28,7 +27,7 @@ class RelationTest extends FieldTypeTest
     {
         parent::setUp();
 
-        $this->contentServiceMock = $this->createMock(ContentService::class);
+        $this->destinationContentValidator = $this->createMock(DestinationContentValidator::class);
     }
 
     /**
@@ -45,7 +44,7 @@ class RelationTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new RelationType(
-            $this->contentServiceMock
+            $this->destinationContentValidator
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
@@ -382,25 +381,28 @@ class RelationTest extends FieldTypeTest
     {
         $destinationContentId = 'invalid';
 
-        $this->contentServiceMock
+        $this->destinationContentValidator
             ->expects(self::once())
-            ->method('loadContentInfo')
+            ->method('validate')
             ->with($destinationContentId)
-            ->willThrowException(new NotFoundException('content', $destinationContentId));
+            ->willReturn($this->generateValidationError($destinationContentId));
 
         $validationErrors = $this->doValidate([], new Value($destinationContentId));
 
         self::assertIsArray($validationErrors);
-        self::assertEquals([
-            new ValidationError(
-                'Content with identifier %contentId% is not a valid relation target',
-                null,
-                [
-                    '%contentId%' => $destinationContentId,
-                ],
-                'destinationContentId'
-            ),
-        ], $validationErrors);
+        self::assertEquals([$this->generateValidationError($destinationContentId)], $validationErrors);
+    }
+
+    private function generateValidationError(string $contentId): ValidationError
+    {
+        return new ValidationError(
+            'Content with identifier %contentId% is not a valid relation target',
+            null,
+            [
+                '%contentId%' => $contentId,
+            ],
+            'destinationContentId'
+        );
     }
 
     protected function provideFieldTypeIdentifier()

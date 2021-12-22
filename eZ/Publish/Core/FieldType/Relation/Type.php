@@ -6,15 +6,13 @@
  */
 namespace eZ\Publish\Core\FieldType\Relation;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\FieldType\Validator\DestinationContentValidator;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
@@ -48,12 +46,12 @@ class Type extends FieldType
         ],
     ];
 
-    /** @var \eZ\Publish\API\Repository\ContentService */
-    private $contentService;
+    /** @var \eZ\Publish\Core\FieldType\Validator\DestinationContentValidator */
+    private $destinationContentValidator;
 
-    public function __construct(ContentService $contentService)
+    public function __construct(DestinationContentValidator $destinationContentValidator)
     {
-        $this->contentService = $contentService;
+        $this->destinationContentValidator = $destinationContentValidator;
     }
 
     /**
@@ -163,20 +161,12 @@ class Type extends FieldType
             return $validationErrors;
         }
 
-        try {
-            $this->contentService->loadContentInfo($fieldValue->destinationContentId);
-        } catch (NotFoundException | UnauthorizedException $e) {
-            $validationErrors[] = new ValidationError(
-                'Content with identifier %contentId% is not a valid relation target',
-                null,
-                [
-                    '%contentId%' => $fieldValue->destinationContentId,
-                ],
-                'destinationContentId'
-            );
+        $validation = $this->destinationContentValidator->validate($fieldValue->destinationContentId);
+        if ($validation === null) {
+            return $validationErrors;
         }
 
-        return $validationErrors;
+        return array_merge($validationErrors, [$validation]);
     }
 
     /**

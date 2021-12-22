@@ -6,20 +6,19 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationList;
 use eZ\Publish\Core\FieldType\RelationList\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\FieldType\Validator\DestinationContentValidator;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class RelationListTest extends FieldTypeTest
 {
-    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
-    private $contentServiceMock;
+    /** @var \eZ\Publish\Core\FieldType\Validator\DestinationContentValidator|\PHPUnit\Framework\MockObject\MockObject */
+    private $destinationContentValidator;
 
     /**
      * {@inheritdoc}
@@ -28,7 +27,7 @@ class RelationListTest extends FieldTypeTest
     {
         parent::setUp();
 
-        $this->contentServiceMock = $this->createMock(ContentService::class);
+        $this->destinationContentValidator = $this->createMock(DestinationContentValidator::class);
     }
 
     /**
@@ -45,7 +44,7 @@ class RelationListTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new RelationList(
-            $this->contentServiceMock
+            $this->destinationContentValidator
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
@@ -740,19 +739,31 @@ class RelationListTest extends FieldTypeTest
         $destinationContentId = 'invalid';
         $destinationContentId2 = 'invalid-second';
 
-        $this->contentServiceMock
+        $this->destinationContentValidator
             ->expects(self::exactly(2))
-            ->method('loadContentInfo')
+            ->method('validate')
             ->withConsecutive([$destinationContentId], [$destinationContentId2])
             ->willReturnOnConsecutiveCalls(
-                self::throwException(new NotFoundException('content', $destinationContentId)),
-                self::throwException(new NotFoundException('content', $destinationContentId))
+                $this->generateValidationError($destinationContentId),
+                $this->generateValidationError($destinationContentId2)
             );
 
         $validationErrors = $this->doValidate([], new Value([$destinationContentId, $destinationContentId2]));
 
         self::assertIsArray($validationErrors);
         self::assertCount(2, $validationErrors);
+    }
+
+    private function generateValidationError(string $contentId): ValidationError
+    {
+        return new ValidationError(
+                'Content with identifier %contentId% is not a valid relation target',
+                null,
+                [
+                    '%contentId%' => $contentId,
+                ],
+                'destinationContentId'
+            );
     }
 
     /**

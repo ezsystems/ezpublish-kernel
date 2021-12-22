@@ -106,3 +106,9 @@ services:
             $locationService: '@ezpublish.api.service.location'
             $contentTypeService: '@ezpublish.api.service.content_type'
             $mappings: '$fieldtypes.ezimageasset.mappings$'
+
+    # Relation and RelationList
+    ezpublish.fieldType.validator.destination_content:
+        class: eZ\Publish\Core\FieldType\Validator\DestinationContentValidator
+        arguments:
+            - '@ezpublish.api.service.content'
