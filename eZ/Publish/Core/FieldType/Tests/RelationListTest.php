@@ -6,6 +6,8 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationList;
 use eZ\Publish\Core\FieldType\RelationList\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
@@ -16,6 +18,19 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class RelationListTest extends FieldTypeTest
 {
+    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
+    private $contentServiceMock;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->contentServiceMock = $this->createMock(ContentService::class);
+    }
+
     /**
      * Returns the field type under test.
      *
@@ -29,7 +44,9 @@ class RelationListTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new RelationList();
+        $fieldType = new RelationList(
+            $this->contentServiceMock
+        );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -716,6 +733,26 @@ class RelationListTest extends FieldTypeTest
                 ],
             ],
         ];
+    }
+
+    public function testValidateNotExistingContentRelations(): void
+    {
+        $destinationContentId = 'invalid';
+        $destinationContentId2 = 'invalid-second';
+
+        $this->contentServiceMock
+            ->expects(self::exactly(2))
+            ->method('loadContent')
+            ->withConsecutive([$destinationContentId], [$destinationContentId2])
+            ->willReturnOnConsecutiveCalls(
+                self::throwException(new NotFoundException('content', $destinationContentId)),
+                self::throwException(new NotFoundException('content', $destinationContentId))
+            );
+
+        $validationErrors = $this->doValidate([], new Value([$destinationContentId, $destinationContentId2]));
+
+        $this->assertIsArray($validationErrors);
+        $this->assertCount(2, $validationErrors);
     }
 
     /**

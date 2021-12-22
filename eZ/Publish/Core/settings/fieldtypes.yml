@@ -379,6 +379,8 @@ services:
 
     ezpublish.fieldType.ezobjectrelation:
         class: "%ezpublish.fieldType.ezobjectrelation.class%"
+        arguments:
+            - '@ezpublish.api.service.content'
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelation}
@@ -428,6 +430,8 @@ services:
 
     ezpublish.fieldType.ezobjectrelationlist:
         class: "%ezpublish.fieldType.ezobjectrelationlist.class%"
+        arguments:
+            - '@ezpublish.api.service.content'
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelationlist}

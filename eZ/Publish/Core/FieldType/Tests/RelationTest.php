@@ -6,15 +6,31 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\Relation\Type as RelationType;
 use eZ\Publish\Core\FieldType\Relation\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 class RelationTest extends FieldTypeTest
 {
+    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
+    private $contentServiceMock;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->contentServiceMock = $this->createMock(ContentService::class);
+    }
+
     /**
      * Returns the field type under test.
      *
@@ -28,7 +44,9 @@ class RelationTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new RelationType();
+        $fieldType = new RelationType(
+            $this->contentServiceMock
+        );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -360,6 +378,31 @@ class RelationTest extends FieldTypeTest
         );
     }
 
+    public function testValidateNotExistingContentRelation(): void
+    {
+        $destinationContentId = 'invalid';
+
+        $this->contentServiceMock
+            ->expects(self::once())
+            ->method('loadContent')
+            ->with($destinationContentId)
+            ->willThrowException(new NotFoundException('content', $destinationContentId));
+
+        $validationErrors = $this->doValidate([], new Value($destinationContentId));
+
+        $this->assertIsArray($validationErrors);
+        $this->assertEquals([
+            new ValidationError(
+                'Content with identifier %contentId% is not a valid relation target',
+                null,
+                [
+                    '%contentId%' => $destinationContentId,
+                ],
+                'destinationContentId'
+            ),
+        ], $validationErrors);
+    }
+
     protected function provideFieldTypeIdentifier()
     {
         return 'ezobjectrelation';
@@ -378,6 +421,20 @@ class RelationTest extends FieldTypeTest
     {
         return [
             [$this->getEmptyValueExpectation(), ''],
+        ];
+    }
+
+    public function provideValidDataForValidate(): array
+    {
+        return [
+            [[], new Value(5)],
+        ];
+    }
+
+    public function provideInvalidDataForValidate(): array
+    {
+        return [
+            [[], new Value('invalid'), []],
         ];
     }
 }

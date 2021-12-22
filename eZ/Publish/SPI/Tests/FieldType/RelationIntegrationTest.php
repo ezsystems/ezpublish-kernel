@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -50,7 +51,11 @@ class RelationIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $fieldType = new FieldType\Relation\Type();
+        $contentService = $this->createMock(ContentService::class);
+
+        $fieldType = new FieldType\Relation\Type(
+            $contentService
+        );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(

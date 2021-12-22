@@ -6,6 +6,9 @@
  */
 namespace eZ\Publish\Core\FieldType\RelationList;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
@@ -60,6 +63,14 @@ class Type extends FieldType
             ],
         ],
     ];
+
+    /** @var \eZ\Publish\API\Repository\ContentService */
+    private $contentService;
+
+    public function __construct(ContentService $contentService)
+    {
+        $this->contentService = $contentService;
+    }
 
     /**
      * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
@@ -223,11 +234,6 @@ class Type extends FieldType
     /**
      * Validates a field based on the validators in the field definition.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\RelationList\Value $fieldValue The field value for which an action is performed
-     *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
@@ -239,9 +245,7 @@ class Type extends FieldType
         }
 
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = isset($validatorConfiguration['RelationListValueValidator']) ?
-            $validatorConfiguration['RelationListValueValidator'] :
-            [];
+        $constraints = $validatorConfiguration['RelationListValueValidator'] ?? [];
 
         $validationErrors = [];
 
@@ -255,6 +259,21 @@ class Type extends FieldType
                 ],
                 'destinationContentIds'
             );
+        }
+
+        foreach ($fieldValue->destinationContentIds as $destinationContentId) {
+            try {
+                $this->contentService->loadContent($destinationContentId);
+            } catch (NotFoundException | UnauthorizedException $e) {
+                $validationErrors[] = new ValidationError(
+                    'Content with identifier %contentId% is not a valid relation target',
+                    null,
+                    [
+                        '%contentId%' => $destinationContentId,
+                    ],
+                    'destinationContentId'
+                );
+            }
         }
 
         return $validationErrors;

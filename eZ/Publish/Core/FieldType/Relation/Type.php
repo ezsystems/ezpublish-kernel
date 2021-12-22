@@ -6,6 +6,10 @@
  */
 namespace eZ\Publish\Core\FieldType\Relation;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -43,6 +47,14 @@ class Type extends FieldType
             'default' => [],
         ],
     ];
+
+    /** @var \eZ\Publish\API\Repository\ContentService */
+    private $contentService;
+
+    public function __construct(ContentService $contentService)
+    {
+        $this->contentService = $contentService;
+    }
 
     /**
      * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
@@ -136,6 +148,35 @@ class Type extends FieldType
     public function getName(SPIValue $value)
     {
         throw new \RuntimeException('Name generation provided via NameableField set via "ezpublish.fieldType.nameable" service tag');
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition.
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
+    {
+        $validationErrors = [];
+
+        if ($this->isEmptyValue($fieldValue)) {
+            return $validationErrors;
+        }
+
+        try {
+            $this->contentService->loadContent($fieldValue->destinationContentId);
+        } catch (NotFoundException | UnauthorizedException $e) {
+            $validationErrors[] = new ValidationError(
+                'Content with identifier %contentId% is not a valid relation target',
+                null,
+                [
+                    '%contentId%' => $fieldValue->destinationContentId,
+                ],
+                'destinationContentId'
+            );
+        }
+
+        return $validationErrors;
     }
 
     /**
