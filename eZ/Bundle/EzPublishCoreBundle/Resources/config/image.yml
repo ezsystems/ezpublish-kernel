@@ -283,8 +283,11 @@ services:
     ezpublish.image_alias.variation_purger.io:
         class: "%ezpublish.image_alias.variation_purger.io.class%"
         arguments:
-            - "@ezpublish.fieldType.ezimage.io_service"
-            - "@ezpublish.image_alias.variation_path_generator.alias_directory"
+            - '@ezpublish.fieldType.ezimage.io_service'
+            - '@ezpublish.cache_pool'
+            - '@Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface'
+            - '@ezpublish.image_alias.imagine.cache.alias_generator_decorator'
+            - '@ezpublish.image_alias.variation_path_generator.alias_directory'
         calls:
             - [setLogger, ["@?logger"]]
 

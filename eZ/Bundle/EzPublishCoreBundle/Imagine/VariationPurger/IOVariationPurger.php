@@ -6,8 +6,11 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\AliasGeneratorDecorator;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\SPI\Variation\VariationPurger;
+use Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Purges image variations using the IOService.
@@ -19,12 +22,28 @@ class IOVariationPurger implements VariationPurger
     /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $io;
 
+    /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface */
+    private $cache;
+
+    /** @var \Ibexa\Core\Persistence\Cache\Identifier\CacheIdentifierGeneratorInterface */
+    private $cacheIdentifierGenerator;
+
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\AliasGeneratorDecorator */
+    private $aliasGeneratorDecorator;
+
     /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
-    public function __construct(IOServiceInterface $io)
-    {
+    public function __construct(
+        IOServiceInterface $io,
+        TagAwareAdapterInterface $cache,
+        CacheIdentifierGeneratorInterface $cacheIdentifierGenerator,
+        AliasGeneratorDecorator $aliasGeneratorDecorator
+    ) {
         $this->io = $io;
+        $this->cache = $cache;
+        $this->cacheIdentifierGenerator = $cacheIdentifierGenerator;
+        $this->aliasGeneratorDecorator = $aliasGeneratorDecorator;
     }
 
     /**
@@ -37,9 +56,14 @@ class IOVariationPurger implements VariationPurger
 
     public function purge(array $aliasNames)
     {
+        $variationNameTag = $this->aliasGeneratorDecorator->getVariationNameTag();
+
         foreach ($aliasNames as $aliasName) {
             $directory = "_aliases/$aliasName";
             $this->io->deleteDirectory($directory);
+
+            $variationTag = $this->cacheIdentifierGenerator->generateTag($variationNameTag, [$aliasName]);
+            $this->cache->invalidateTags([$variationTag]);
 
             if (isset($this->logger)) {
                 $this->logger->info("Purging alias directory $directory");
