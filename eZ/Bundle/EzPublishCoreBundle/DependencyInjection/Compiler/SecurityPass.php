@@ -21,6 +21,10 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class SecurityPass implements CompilerPassInterface
 {
+    public const CONSTANT_AUTH_TIME_SETTING = 'ibexa.security.authentication.constant_auth_time';
+
+    public const CONSTANT_AUTH_TIME_DEFAULT = 1.0;
+
     public function process(ContainerBuilder $container)
     {
         if (!($container->hasDefinition('security.authentication.provider.dao') &&
@@ -31,6 +35,7 @@ class SecurityPass implements CompilerPassInterface
 
         $configResolverRef = new Reference('ezpublish.config.resolver');
         $repositoryReference = new Reference('ezpublish.api.repository');
+        $loggerReference = new Reference('logger');
 
         // Override and inject the Repository in the authentication provider.
         // We need it for checking user credentials
@@ -39,6 +44,18 @@ class SecurityPass implements CompilerPassInterface
         $daoAuthenticationProviderDef->addMethodCall(
             'setRepository',
             [$repositoryReference]
+        );
+        $daoAuthenticationProviderDef->addMethodCall(
+            'setConstantAuthTime',
+            [
+                $container->hasParameter(self::CONSTANT_AUTH_TIME_SETTING) ?
+                (float)$container->getParameter(self::CONSTANT_AUTH_TIME_SETTING) :
+                self::CONSTANT_AUTH_TIME_DEFAULT,
+            ]
+        );
+        $daoAuthenticationProviderDef->addMethodCall(
+            'setLogger',
+            [$loggerReference]
         );
 
         $rememberMeAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.rememberme');

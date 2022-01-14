@@ -1507,9 +1507,6 @@ class UserService implements UserServiceInterface
             return password_verify($plainPassword, $passwordHash);
         }
 
-        // Randomize login time to protect against timing attacks
-        usleep(random_int(0, 30000));
-
         return $passwordHash === $this->createPasswordHash(
             $login,
             $plainPassword,

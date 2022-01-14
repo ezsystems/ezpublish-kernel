@@ -84,7 +84,3 @@ parameters:
         refreshSession:
             mediaType: 'UserSession'
             href: 'templateRouter.generate("ezpublish_rest_refreshSession", {sessionId: "{sessionId}"})'
-
-    # Boundary times in microseconds which the authentication check will be delayed by.
-    ezpublish_rest.authentication_min_delay_time: 30000
-    ezpublish_rest.authentication_max_delay_time: 500000

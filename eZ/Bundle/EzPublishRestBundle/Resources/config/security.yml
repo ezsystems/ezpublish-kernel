@@ -15,8 +15,6 @@ services:
             - "@ezpublish.config.resolver"
             - "@session.storage"
             - "@?logger"
-            - "%ezpublish_rest.authentication_min_delay_time%"
-            - "%ezpublish_rest.authentication_max_delay_time%"
         abstract: true
 
     ezpublish_rest.security.authentication.logout_handler:

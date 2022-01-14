@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
@@ -13,10 +14,13 @@ use eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthentication
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
+use Psr\Log\LoggerInterface;
 
 class RepositoryAuthenticationProviderTest extends TestCase
 {
@@ -28,6 +32,9 @@ class RepositoryAuthenticationProviderTest extends TestCase
 
     /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
     private $repository;
+
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $logger;
 
     protected function setUp()
     {
@@ -41,6 +48,9 @@ class RepositoryAuthenticationProviderTest extends TestCase
             $this->encoderFactory
         );
         $this->authProvider->setRepository($repository);
+
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->authProvider->setLogger($this->logger);
     }
 
     public function testAuthenticationNotEzUser()
@@ -180,5 +190,53 @@ class RepositoryAuthenticationProviderTest extends TestCase
         $method = new \ReflectionMethod($this->authProvider, 'checkAuthentication');
         $method->setAccessible(true);
         $method->invoke($this->authProvider, $user, $token);
+    }
+
+    public function testAuthenticateInConstantTime(): void
+    {
+        $this->authProvider->setConstantAuthTime(SecurityPass::CONSTANT_AUTH_TIME_DEFAULT); // a reasonable value
+
+        $token = new UsernamePasswordToken('my_username', 'my_password', 'bar');
+
+        $stopwatch = new Stopwatch();
+        $stopwatch->start('authenticate_constant_time_test');
+
+        try {
+            $this->authProvider->authenticate($token);
+        } catch (\Exception $e) {
+            // We don't care, we just need test execution to continue
+        }
+
+        $duration = $stopwatch->stop('authenticate_constant_time_test')->getDuration();
+        $this->assertGreaterThanOrEqual(SecurityPass::CONSTANT_AUTH_TIME_DEFAULT * 1000, $duration);
+    }
+
+    public function testAuthenticateWarningOnConstantTimeExceeded(): void
+    {
+        $this->authProvider->setConstantAuthTime(0.0000001); // much too short, but not zero, which would disable the check
+
+        $token = new UsernamePasswordToken('my_username', 'my_password', 'bar');
+
+        $this->logger
+            ->expects($this->atLeastOnce())
+            ->method('warning')
+            ->with('Authentication took longer than the configured constant time. Consider increasing the value of ' . SecurityPass::CONSTANT_AUTH_TIME_SETTING);
+
+        $this->expectException(AuthenticationException::class);
+        $this->authProvider->authenticate($token);
+    }
+
+    public function testAuthenticateConstantTimeDisabled(): void
+    {
+        $this->authProvider->setConstantAuthTime(0.0); // zero disables the check
+
+        $token = new UsernamePasswordToken('my_username', 'my_password', 'bar');
+
+        $this->logger
+            ->expects($this->never())
+            ->method('warning');
+
+        $this->expectException(AuthenticationException::class);
+        $this->authProvider->authenticate($token);
     }
 }
