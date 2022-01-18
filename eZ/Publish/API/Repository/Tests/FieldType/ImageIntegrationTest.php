@@ -614,8 +614,8 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
     {
         return new ImageValue(
             [
-                'fileName' => 'cafe-terrace-at-night.jpg',
-                'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
+                'fileName' => '1234eeee1234-cafe-terrace-at-night.jpg',
+                'inputUri' => ($path = __DIR__ . '/_fixtures/1234eeee1234-image.jpg'),
                 'alternativeText' => 'café terrace at night, also known as the cafe terrace on the place du forum',
                 'fileSize' => filesize($path),
             ]
@@ -626,8 +626,8 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
     {
         return new ImageValue(
             [
-                'fileName' => 'thatched-cottages-at-cordeville.png',
-                'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
+                'fileName' => '2222eeee1111-thatched-cottages-at-cordeville.png',
+                'inputUri' => ($path = __DIR__ . '/_fixtures/2222eeee1111-image.png'),
                 'alternativeText' => 'chaumes de cordeville à auvers-sur-oise',
                 'fileSize' => filesize($path),
             ]
