@@ -181,12 +181,10 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      *
      * Asserts that the data provided by {@link getValidCreationFieldData()}
      * was stored and loaded correctly.
-     *
-     * @param Field $field
      */
-    public function assertFieldDataLoadedCorrect(Field $field)
+    public function assertFieldDataLoadedCorrect(Field $field): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Image\\Value',
             $field->value
         );
@@ -197,12 +195,15 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         // Will be nullified by external storage
         $expectedData['inputUri'] = null;
 
+        // Will be changed by external storage as fileName will be decorated with a hash
+        $expectedData['fileName'] = $field->value->fileName;
+
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
         );
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->uriExistsOnIO($field->value->uri),
             "Asserting that {$field->value->uri} exists."
         );
@@ -262,12 +263,10 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
-     *
-     * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Image\\Value',
             $field->value
         );
@@ -278,6 +277,9 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         // Will change during storage
         $expectedData['inputUri'] = null;
 
+        // Will change during storage as fileName will be decorated with a hash
+        $expectedData['fileName'] = $field->value->fileName;
+
         $expectedData['uri'] = $field->value->uri;
 
         $this->assertPropertiesCorrect(
@@ -285,7 +287,7 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
             $field->value
         );
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->uriExistsOnIO($field->value->uri),
             "Asserting that file {$field->value->uri} exists"
         );

@@ -27,3 +27,4 @@ services:
         autoconfigure: true
         arguments:
             $connection: '@ezpublish.persistence.connection'
+            $ioService: '@ezpublish.fieldType.ezimage.io_service'
