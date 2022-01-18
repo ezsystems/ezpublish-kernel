@@ -571,8 +571,8 @@ class BinaryFileTest extends BinaryBaseTest
                 ),
                 [
                     new ValidationError(
-                        'The file size cannot exceed %size% byte.',
-                        'The file size cannot exceed %size% bytes.',
+                        'The file size cannot exceed %size% megabyte.',
+                        'The file size cannot exceed %size% megabytes.',
                         [
                             '%size%' => 0.01,
                         ],
