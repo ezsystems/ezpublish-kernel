@@ -3,16 +3,16 @@
 --TEMPLATE--
 {{ 10|ez_file_size( 2 ) }}
 {{ 1024|ez_file_size( 0 ) }}
-{{ 5000|ez_file_size( 3 ) }}
-{{ 12000|ez_file_size( 1 ) }}
-{{ 151515|ez_file_size( 0 ) }}
-{{ 26151256|ez_file_size( 5 ) }}
-{{ 123123123|ez_file_size( 4 ) }}
-{{ 456456456456|ez_file_size( 1 ) }}
-{{ 789789789789789|ez_file_size( 6 ) }}
-{{ 789789789789789789|ez_file_size( 10 ) }}
-{{ 789789789789789789789|ez_file_size( 2 ) }}
-{{ 789789789789789789789789789|ez_file_size( 4 ) }}
+{{ 5120|ez_file_size( 3 ) }}
+{{ 12288|ez_file_size( 1 ) }}
+{{ 155648|ez_file_size( 0 ) }}
+{{ 27421583|ez_file_size( 5 ) }}
+{{ 129103927|ez_file_size( 4 ) }}
+{{ 490163142656|ez_file_size( 1 ) }}
+{{ 868383057603765|ez_file_size( 6 ) }}
+{{ 889224250749591400|ez_file_size( 10 ) }}
+{{ 910565875123441600000|ez_file_size( 2 ) }}
+{{ 910565632767581700000000000|ez_file_size( 4 ) }}
 --DATA--
 $this->setConfigurationLocale( array( 'wrong local' ), 'eng-GB' );
 return array()
