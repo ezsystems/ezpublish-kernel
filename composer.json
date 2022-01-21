@@ -93,6 +93,9 @@
         "process-timeout": 3000,
         "platform": {
             "php": "7.1"
+        },
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
         }
     },
     "scripts": {
