@@ -14,6 +14,7 @@ use eZ\Publish\Core\IO\FilePathNormalizerInterface;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -178,6 +179,10 @@ EOT
     private function moveFile(string $oldFileName, string $newFileName, string $oldPath): void
     {
         $oldBinaryFile = $this->ioService->loadBinaryFileByUri(\DIRECTORY_SEPARATOR . $oldPath);
+        if ($oldBinaryFile instanceof MissingBinaryFile) {
+            return;
+        }
+
         $newId = str_replace($oldFileName, $newFileName, $oldBinaryFile->id);
         $inputStream = $this->ioService->getFileInputStream($oldBinaryFile);
 
@@ -191,7 +196,6 @@ EOT
         );
 
         $newBinaryFile = $this->ioService->createBinaryFile($binaryCreateStruct);
-
         if ($newBinaryFile instanceof BinaryFile) {
             $this->ioService->deleteBinaryFile($oldBinaryFile);
         }
