@@ -1,0 +1,10 @@
+name: Assign Pull Request to maintainers
+
+on:
+    pull_request_target:
+
+jobs:
+    assign:
+        uses: ibexa/gh-workflows/.github/workflows/pr-assign.yml@main
+        secrets:
+            robot-token: ${{ secrets.EZROBOT_PAT }}
