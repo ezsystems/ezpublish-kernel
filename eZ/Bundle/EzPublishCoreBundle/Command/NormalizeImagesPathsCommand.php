@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Doctrine\DBAL\Driver\Connection;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway as ImageStorageGateway;
+use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\FilePathNormalizerInterface;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
@@ -130,7 +131,8 @@ EOT
                 $this->updateImagePath(
                     $imagePathToNormalize['fieldId'],
                     $imagePathToNormalize['oldPath'],
-                    $imagePathToNormalize['newPath']
+                    $imagePathToNormalize['newPath'],
+                    $io,
                 );
                 $io->progressAdvance();
             }
@@ -145,7 +147,7 @@ EOT
         return 0;
     }
 
-    private function updateImagePath(int $fieldId, string $oldPath, string $newPath): void
+    private function updateImagePath(int $fieldId, string $oldPath, string $newPath, SymfonyStyle $io): void
     {
         $oldPathInfo = pathinfo($oldPath);
         $newPathInfo = pathinfo($newPath);
@@ -153,6 +155,22 @@ EOT
         $oldFileName = $oldPathInfo['basename'];
         $newFilename = $newPathInfo['basename'];
         $newBaseName = $newPathInfo['filename'];
+
+        // Checking if a file exists physically
+        $oldBinaryFile = $this->ioService->loadBinaryFileByUri(\DIRECTORY_SEPARATOR . $oldPath);
+        if ($oldBinaryFile instanceof MissingBinaryFile) {
+            $io->warning(sprintf('Skipping file %s as it doesn\'t exists physically.', $oldPath));
+
+            return;
+        }
+
+        try {
+            $inputStream = $this->ioService->getFileInputStream($oldBinaryFile);
+        } catch (BinaryFileNotFoundException $e) {
+            $io->warning(sprintf('Skipping file %s as it doesn\'t exists physically.', $oldPath));
+
+            return;
+        }
 
         $xmlsData = $this->imageGateway->getAllVersionsImageXmlForFieldId($fieldId);
         foreach ($xmlsData as $xmlData) {
@@ -173,18 +191,16 @@ EOT
             }
         }
 
-        $this->moveFile($oldFileName, $newFilename, $oldPath);
+        $this->moveFile($oldFileName, $newFilename, $oldBinaryFile, $inputStream);
     }
 
-    private function moveFile(string $oldFileName, string $newFileName, string $oldPath): void
-    {
-        $oldBinaryFile = $this->ioService->loadBinaryFileByUri(\DIRECTORY_SEPARATOR . $oldPath);
-        if ($oldBinaryFile instanceof MissingBinaryFile) {
-            return;
-        }
-
+    private function moveFile(
+        string $oldFileName,
+        string $newFileName,
+        BinaryFile $oldBinaryFile,
+        $inputStream
+    ): void {
         $newId = str_replace($oldFileName, $newFileName, $oldBinaryFile->id);
-        $inputStream = $this->ioService->getFileInputStream($oldBinaryFile);
 
         $binaryCreateStruct = new BinaryFileCreateStruct(
             [
