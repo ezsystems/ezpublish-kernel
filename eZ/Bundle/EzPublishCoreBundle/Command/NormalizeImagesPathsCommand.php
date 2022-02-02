@@ -132,7 +132,7 @@ EOT
                     $imagePathToNormalize['fieldId'],
                     $imagePathToNormalize['oldPath'],
                     $imagePathToNormalize['newPath'],
-                    $io,
+                    $io
                 );
                 $io->progressAdvance();
             }
