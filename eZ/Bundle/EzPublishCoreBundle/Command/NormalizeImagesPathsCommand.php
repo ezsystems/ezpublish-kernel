@@ -191,7 +191,6 @@ EOT
      * @param resource $inputStream
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
     private function moveFile(
         string $oldFileName,
