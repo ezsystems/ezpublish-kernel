@@ -158,12 +158,6 @@ EOT
 
         // Checking if a file exists physically
         $oldBinaryFile = $this->ioService->loadBinaryFileByUri(\DIRECTORY_SEPARATOR . $oldPath);
-        if ($oldBinaryFile instanceof MissingBinaryFile) {
-            $io->warning(sprintf('Skipping file %s as it doesn\'t exists physically.', $oldPath));
-
-            return;
-        }
-
         try {
             $inputStream = $this->ioService->getFileInputStream($oldBinaryFile);
         } catch (BinaryFileNotFoundException $e) {
@@ -194,6 +188,12 @@ EOT
         $this->moveFile($oldFileName, $newFilename, $oldBinaryFile, $inputStream);
     }
 
+    /**
+     * @param resource $inputStream
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     */
     private function moveFile(
         string $oldFileName,
         string $newFileName,
