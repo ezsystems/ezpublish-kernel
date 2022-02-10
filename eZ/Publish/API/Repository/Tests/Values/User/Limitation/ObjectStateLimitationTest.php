@@ -6,222 +6,113 @@
  */
 namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\ObjectStateService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
-use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Test case for the {@link \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation}
  * class.
  *
- * @see eZ\Publish\API\Repository\Values\User\Limitation
- * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
+ * @see \eZ\Publish\API\Repository\Values\User\Limitation
+ * @see \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
  * @group integration
  * @group limitation
  */
 class ObjectStateLimitationTest extends BaseLimitationTest
 {
+    public const OBJECT_STATE_LOCK_GROUP_ID = 2;
+    public const OBJECT_STATE_NOT_LOCKED_STATE_ID = 1;
+    public const OBJECT_STATE_LOCKED_STATE_ID = 2;
+    public const EDITOR_ROLE_IDENTIFIER = 'Editor';
+
     /**
-     * Tests a ObjectStateLimitation.
-     *
-     * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
-     *
-     * @throws \ErrorException
-     *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testObjectStateLimitationAllow()
+    public function testObjectStateLimitationAllow(): void
     {
         $repository = $this->getRepository();
-        $notLockedState = $this->generateId('objectstate', 2);
-
         $contentService = $repository->getContentService();
-        /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
 
-        $roleService = $repository->getRoleService();
-
-        $role = $roleService->loadRoleByIdentifier('Editor');
-
-        $removePolicy = null;
-        foreach ($role->getPolicies() as $policy) {
-            if ('content' != $policy->module || 'remove' != $policy->function) {
-                continue;
-            }
-            $removePolicy = $policy;
-            break;
-        }
-
-        if (null === $removePolicy) {
-            throw new \ErrorException('No content:remove policy found.');
-        }
-
-        // Only allow deletion of content with default state
-        $policyUpdate = $roleService->newPolicyUpdateStruct();
-        $policyUpdate->addLimitation(
-            new ObjectStateLimitation(
-                [
-                    'limitationValues' => [
-                        $notLockedState,
-                    ],
-                ]
-            )
+        $this->loginAsUser(
+            $this->createUserWithObjectStateLimitation([self::OBJECT_STATE_NOT_LOCKED_STATE_ID])
         );
-        $roleService->updatePolicy($removePolicy, $policyUpdate);
-
-        // Allow user to create everything
-        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $roleService->addPolicy($role, $policyCreate);
-
-        $roleService->assignRoleToUser($role, $user);
-
-        $repository->setCurrentUser($user);
 
         $draft = $this->createWikiPageDraft();
 
         $contentService->deleteContent($draft->contentInfo);
-        /* END: Use Case */
 
+        $this->expectException(NotFoundException::class);
         $contentService->loadContent($draft->id);
     }
 
     /**
-     * Tests a ObjectStateLimitation.
-     *
-     * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
-     *
-     * @throws \ErrorException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testObjectStateLimitationForbid()
+    public function testObjectStateLimitationForbid(): void
     {
         $repository = $this->getRepository();
-        $lockedState = $this->generateId('objectstate', 1);
-
         $contentService = $repository->getContentService();
-        /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
 
-        $roleService = $repository->getRoleService();
-
-        $role = $roleService->loadRoleByIdentifier('Editor');
-
-        $removePolicy = null;
-        foreach ($role->getPolicies() as $policy) {
-            if ('content' != $policy->module || 'remove' != $policy->function) {
-                continue;
-            }
-            $removePolicy = $policy;
-            break;
-        }
-
-        if (null === $removePolicy) {
-            throw new \ErrorException('No content:remove policy found.');
-        }
-
-        // Only allow deletion of content with default state
-        $policyUpdate = $roleService->newPolicyUpdateStruct();
-        $policyUpdate->addLimitation(
-            new ObjectStateLimitation(
-                [
-                    'limitationValues' => [
-                        $lockedState,
-                    ],
-                ]
-            )
+        $this->loginAsUser(
+            $this->createUserWithObjectStateLimitation([self::OBJECT_STATE_LOCKED_STATE_ID])
         );
-        $roleService->updatePolicy($removePolicy, $policyUpdate);
-
-        // Allow user to create everything
-        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $roleService->addPolicy($role, $policyCreate);
-
-        $roleService->assignRoleToUser($role, $user);
-
-        $repository->setCurrentUser($user);
 
         $draft = $this->createWikiPageDraft();
 
+        $this->expectException(UnauthorizedException::class);
         $contentService->deleteContent($draft->contentInfo);
-        /* END: Use Case */
     }
 
     /**
-     * Tests an ObjectStateLimitation.
-     *
      * Checks if the action is correctly forbidden when using ObjectStateLimitation
      * with limitation values from two different StateGroups.
      *
-     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
-     *
-     * @throws \ErrorException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @expectedExceptionMessage 'remove' 'content'
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testObjectStateLimitationForbidVariant()
+    public function testObjectStateLimitationForbidVariant(): void
     {
         $repository = $this->getRepository();
         $objectStateGroup = $this->createObjectStateGroup();
         $objectState = $this->createObjectState($objectStateGroup);
 
-        $lockedState = $this->generateId('objectstate', 1);
-        $defaultStateFromAnotherGroup = $this->generateId('objectstate', $objectState->id);
-
         $contentService = $repository->getContentService();
-        /* BEGIN: Use Case */
-        $user = $this->createUserVersion1();
 
-        $roleService = $repository->getRoleService();
-
-        $role = $roleService->loadRoleByIdentifier('Editor');
-
-        $removePolicy = null;
-        foreach ($role->getPolicies() as $policy) {
-            if ('content' !== $policy->module || 'remove' !== $policy->function) {
-                continue;
-            }
-            $removePolicy = $policy;
-            break;
-        }
-
-        $this->assertNotNull($removePolicy);
-
-        // Only allow deletion of content with locked state and the default state from another State Group
-        $policyUpdate = $roleService->newPolicyUpdateStruct();
-        $policyUpdate->addLimitation(
-            new ObjectStateLimitation(
+        $this->loginAsUser(
+            $this->createUserWithObjectStateLimitation(
                 [
-                    'limitationValues' => [
-                        $lockedState,
-                        $defaultStateFromAnotherGroup,
-                    ],
+                    self::OBJECT_STATE_LOCKED_STATE_ID,
+                    $objectState->id,
                 ]
             )
         );
-        $roleService->updatePolicy($removePolicy, $policyUpdate);
-
-        // Allow user to create everything
-        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $roleService->addPolicy($role, $policyCreate);
-
-        $roleService->assignRoleToUser($role, $user);
-
-        $repository->getPermissionResolver()->setCurrentUserReference($user);
 
         $draft = $this->createWikiPageDraft();
 
+        $this->expectException(UnauthorizedException::class);
+        $this->expectExceptionMessage("'remove' 'content'");
+
         $contentService->deleteContent($draft->contentInfo);
-        /* END: Use Case */
     }
 
     /**
-     * Create new State Group.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    private function createObjectStateGroup()
+    private function createObjectStateGroup(): ObjectStateGroup
     {
         $objectStateService = $this->getRepository()->getObjectStateService();
 
@@ -235,11 +126,10 @@ class ObjectStateLimitationTest extends BaseLimitationTest
     /**
      * Create new State and assign it to the $objectStateGroup.
      *
-     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    private function createObjectState(ObjectStateGroup $objectStateGroup)
+    private function createObjectState(ObjectStateGroup $objectStateGroup): ObjectState
     {
         $objectStateService = $this->getRepository()->getObjectStateService();
 
@@ -251,41 +141,32 @@ class ObjectStateLimitationTest extends BaseLimitationTest
     }
 
     /**
-     * Tests an ObjectStateLimitation.
-     *
      * Checks if the search results are correctly filtered when using ObjectStateLimitation
      * with limitation values from two different StateGroups.
      *
-     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testObjectStateLimitationSearch()
+    public function testObjectStateLimitationSearch(): void
     {
         $repository = $this->getRepository();
+        $permissionResolver = $repository->getPermissionResolver();
+
         $objectStateGroup = $this->createObjectStateGroup();
         $objectState = $this->createObjectState($objectStateGroup);
 
-        $lockedState = $this->generateId('objectstate', 1);
-        $defaultStateFromAnotherGroup = $this->generateId('objectstate', $objectState->id);
-
-        $roleService = $repository->getRoleService();
-        $roleName = 'role_with_object_state_limitation';
-        $roleCreateStruct = $roleService->newRoleCreateStruct($roleName);
-        $this->addPolicyToNewRole($roleCreateStruct, 'content', 'read', [
-            new ObjectStateLimitation([
-                'limitationValues' => [$lockedState, $defaultStateFromAnotherGroup],
-            ]),
-        ]);
-        $roleService->publishRoleDraft(
-            $roleService->createRole($roleCreateStruct)
+        $user = $this->createUserWithObjectStateLimitationOnContentRead(
+            [
+                self::OBJECT_STATE_NOT_LOCKED_STATE_ID,
+                $objectState->id,
+            ]
         );
-
-        $permissionResolver = $repository->getPermissionResolver();
-        $user = $this->createCustomUserVersion1('Test group', $roleName);
         $adminUser = $permissionResolver->getCurrentUserReference();
 
         $wikiPage = $this->createWikiPage();
 
-        $permissionResolver->setCurrentUserReference($user);
+        $this->loginAsUser($user);
 
         $query = new Query();
         $query->filter = new Criterion\MatchAll();
@@ -294,7 +175,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $this->refreshSearch($repository);
         $searchResultsBefore = $repository->getSearchService()->findContent($query);
 
-        $permissionResolver->setCurrentUserReference($adminUser);
+        $this->loginAsUser($adminUser);
 
         //change the Object State to the one that doesn't match the Limitation
         $stateService = $repository->getObjectStateService();
@@ -304,29 +185,120 @@ class ObjectStateLimitationTest extends BaseLimitationTest
             $stateService->loadObjectState(2)
         );
 
-        $permissionResolver->setCurrentUserReference($user);
+        $this->loginAsUser($user);
 
         $this->refreshSearch($repository);
         $searchResultsAfter = $repository->getSearchService()->findContent($query);
 
-        $this->assertEquals($searchResultsBefore->totalCount - 1, $searchResultsAfter->totalCount);
+        self::assertEquals($searchResultsBefore->totalCount - 1, $searchResultsAfter->totalCount);
     }
 
     /**
-     * Add policy to a new role.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
-     * @param string $module
-     * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    private function addPolicyToNewRole(RoleCreateStruct $roleCreateStruct, $module, $function, array $limitations)
+    public function testUserWithNotLockedLimitationCanEditNotLockedContent(): void
     {
-        $roleService = $this->getRepository()->getRoleService();
-        $policyCreateStruct = $roleService->newPolicyCreateStruct($module, $function);
-        foreach ($limitations as $limitation) {
-            $policyCreateStruct->addLimitation($limitation);
-        }
-        $roleCreateStruct->addPolicy($policyCreateStruct);
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $objectStateService = $repository->getObjectStateService();
+        $lockGroup = $objectStateService->loadObjectStateGroup(self::OBJECT_STATE_LOCK_GROUP_ID);
+        $notLockedState = $objectStateService->loadObjectState(self::OBJECT_STATE_NOT_LOCKED_STATE_ID);
+
+        // sanity check
+        self::assertSame('not_locked', $notLockedState->identifier);
+
+        $this->loginAsUser(
+            $this->createUserWithObjectStateLimitation([self::OBJECT_STATE_NOT_LOCKED_STATE_ID])
+        );
+        $draft = $this->createWikiPageDraft();
+
+        $this->assertContentHasState(
+            $objectStateService,
+            $draft->contentInfo,
+            $lockGroup,
+            $notLockedState
+        );
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField('title', 'Updated test folder');
+        $updatedDraft = $contentService->updateContent($draft->versionInfo, $contentUpdate);
+
+        $this->assertContentHasState(
+            $objectStateService,
+            $updatedDraft->contentInfo,
+            $lockGroup,
+            $notLockedState
+        );
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function createUserWithObjectStateLimitation(array $objectStateIDs): User
+    {
+        return $this->createUserWithPolicies(
+            uniqid('test', true),
+            [
+                ['module' => 'content', 'function' => 'read'],
+                ['module' => 'content', 'function' => 'versionread'],
+                ['module' => 'content', 'function' => 'create'],
+                ['module' => 'content', 'function' => 'publish'],
+                [
+                    'module' => 'content',
+                    'function' => 'edit',
+                    'limitations' => [
+                        new ObjectStateLimitation(['limitationValues' => $objectStateIDs]),
+                    ],
+                ],
+                [
+                    'module' => 'content',
+                    'function' => 'remove',
+                    'limitations' => [
+                        new ObjectStateLimitation(['limitationValues' => $objectStateIDs]),
+                    ],
+                ],
+            ]
+        );
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function createUserWithObjectStateLimitationOnContentRead(array $arr): User
+    {
+        return $this->createUserWithPolicies(
+            uniqid('test', true),
+            [
+                [
+                    'module' => 'content',
+                    'function' => 'read',
+                    'limitations' => [
+                        new ObjectStateLimitation(
+                            [
+                                'limitationValues' => $arr,
+                            ]
+                        ),
+                    ],
+                ],
+            ]
+        );
+    }
+
+    private function assertContentHasState(
+        ObjectStateService $objectStateService,
+        ContentInfo $contentInfo,
+        ObjectStateGroup $lockGroup,
+        ObjectState $objectState
+    ): void {
+        self::assertSame(
+            $objectState->identifier,
+            $objectStateService->getContentState($contentInfo, $lockGroup)->identifier
+        );
     }
 }
