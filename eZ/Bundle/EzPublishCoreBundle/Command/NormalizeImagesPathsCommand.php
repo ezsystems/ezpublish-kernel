@@ -47,6 +47,8 @@ EOT;
     /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $ioService;
 
+    private $oldFiles = [];
+
     public function __construct(
         ImageStorageGateway $imageGateway,
         FilePathNormalizerInterface $filePathNormalizer,
@@ -136,6 +138,14 @@ EOT
                 $io->progressAdvance();
             }
             $this->connection->commit();
+            /**
+             * Remove old Binary Files
+             */
+            if (count($this->oldFiles)) {
+                foreach ($this->oldFiles as $oldBinaryFile) {
+                    $this->ioService->deleteBinaryFile($oldBinaryFile);
+                }
+            }
         } catch (\Exception $e) {
             $this->connection->rollBack();
         }
@@ -211,7 +221,9 @@ EOT
 
         $newBinaryFile = $this->ioService->createBinaryFile($binaryCreateStruct);
         if ($newBinaryFile instanceof BinaryFile) {
-            $this->ioService->deleteBinaryFile($oldBinaryFile);
+            if (!in_array($oldBinaryFile, $this->oldFiles)) {
+                $this->oldFiles[] = $oldBinaryFile;
+            }
         }
     }
 }

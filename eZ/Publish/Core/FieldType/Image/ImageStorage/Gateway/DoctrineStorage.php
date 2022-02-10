@@ -278,7 +278,7 @@ class DoctrineStorage extends Gateway
     {
         $selectQuery = $this->connection->createQueryBuilder();
         $selectQuery
-            ->select($this->connection->getDatabasePlatform()->getCountExpression('DISTINCT(filepath)'))
+            ->select($this->connection->getDatabasePlatform()->getCountExpression('DISTINCT(CONCAT(filepath,contentobject_attribute_id))'))
             ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
         ;
 
