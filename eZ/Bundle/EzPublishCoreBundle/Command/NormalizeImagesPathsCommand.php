@@ -15,6 +15,7 @@ use eZ\Publish\Core\IO\FilePathNormalizerInterface;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -88,6 +89,7 @@ EOT
 
         $imagesCount = $this->imageGateway->countDistinctImages();
         $imagePathsToNormalize = [];
+        $oldPaths = [];
         $iterations = ceil($imagesCount / self::IMAGE_LIMIT);
         $io->progressStart($imagesCount);
         for ($i = 0; $i < $iterations; ++$i) {
@@ -95,12 +97,20 @@ EOT
 
             foreach ($imagesData as $imageData) {
                 $filePath = $imageData['filepath'];
-                $normalizedImagePath = $this->filePathNormalizer->normalizePath($imageData['filepath']);
-                if ($normalizedImagePath !== $filePath) {
-                    $imagePathsToNormalize[] = [
-                        'fieldId' => (int) $imageData['contentobject_attribute_id'],
+                $fieldId = (int) $imageData['contentobject_attribute_id'];
+
+                if (false !== $key = array_search($filePath, $oldPaths)) {
+                    $finalNormalizedPath = $imagePathsToNormalize[$key]['newPath'];
+                } else {
+                    $finalNormalizedPath = $this->filePathNormalizer->normalizePath($imageData['filepath']);
+                }
+
+                if ($finalNormalizedPath !== $filePath) {
+                    $oldPaths[$fieldId] = $filePath;
+                    $imagePathsToNormalize[$fieldId] = [
+                        'fieldId' => $fieldId,
                         'oldPath' => $filePath,
-                        'newPath' => $normalizedImagePath,
+                        'newPath' => $finalNormalizedPath,
                     ];
                 }
 
@@ -124,20 +134,43 @@ EOT
         $io->writeln('Normalizing image paths. Please wait...');
         $io->progressStart($imagePathsToNormalizeCount);
 
-        $this->connection->beginTransaction();
-        try {
-            foreach ($imagePathsToNormalize as $imagePathToNormalize) {
+        $oldBinaryFilesToDelete = [];
+        foreach ($imagePathsToNormalize as $imagePathToNormalize) {
+            $this->connection->beginTransaction();
+            try {
+                $oldPath = $imagePathToNormalize['oldPath'];
+
+                $oldBinaryFile = $this->ioService->loadBinaryFileByUri(\DIRECTORY_SEPARATOR . $oldPath);
+                $inputStream = $this->ioService->getFileInputStream($oldBinaryFile);
+
                 $this->updateImagePath(
                     $imagePathToNormalize['fieldId'],
-                    $imagePathToNormalize['oldPath'],
+                    $oldPath,
                     $imagePathToNormalize['newPath'],
-                    $io
+                    $oldBinaryFile,
+                    $inputStream
                 );
+
                 $io->progressAdvance();
+
+                $oldBinaryFilesToDelete[$oldBinaryFile->id] = $oldBinaryFile;
+
+                $this->connection->commit();
+            } catch (BinaryFileNotFoundException $e) {
+                $io->warning(sprintf('Skipping file %s as it doesn\'t exists physically.', $oldPath));
+
+                $this->connection->rollBack();
+            } catch (\Exception $e) {
+                $this->connection->rollBack();
             }
-            $this->connection->commit();
-        } catch (\Exception $e) {
-            $this->connection->rollBack();
+        }
+
+        foreach ($oldBinaryFilesToDelete as $binaryFile) {
+            try {
+                $this->ioService->deleteBinaryFile($binaryFile);
+            } catch (\Exception $e) {
+                // Continue with deletion
+            }
         }
 
         $io->progressFinish();
@@ -146,24 +179,22 @@ EOT
         return 0;
     }
 
-    private function updateImagePath(int $fieldId, string $oldPath, string $newPath, SymfonyStyle $io): void
-    {
+    /**
+     * @param resource $inputStream
+     */
+    private function updateImagePath(
+        int $fieldId,
+        string $oldPath,
+        string $newPath,
+        BinaryFile $oldBinaryFile,
+        $inputStream
+    ): void {
         $oldPathInfo = pathinfo($oldPath);
         $newPathInfo = pathinfo($newPath);
         // In Image's XML, basename does not contain a file extension, and the filename does - pathinfo results are exactly the opposite.
         $oldFileName = $oldPathInfo['basename'];
         $newFilename = $newPathInfo['basename'];
         $newBaseName = $newPathInfo['filename'];
-
-        // Checking if a file exists physically
-        $oldBinaryFile = $this->ioService->loadBinaryFileByUri(\DIRECTORY_SEPARATOR . $oldPath);
-        try {
-            $inputStream = $this->ioService->getFileInputStream($oldBinaryFile);
-        } catch (BinaryFileNotFoundException $e) {
-            $io->warning(sprintf('Skipping file %s as it doesn\'t exists physically.', $oldPath));
-
-            return;
-        }
 
         $xmlsData = $this->imageGateway->getAllVersionsImageXmlForFieldId($fieldId);
         foreach ($xmlsData as $xmlData) {
@@ -184,22 +215,7 @@ EOT
             }
         }
 
-        $this->moveFile($oldFileName, $newFilename, $oldBinaryFile, $inputStream);
-    }
-
-    /**
-     * @param resource $inputStream
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    private function moveFile(
-        string $oldFileName,
-        string $newFileName,
-        BinaryFile $oldBinaryFile,
-        $inputStream
-    ): void {
-        $newId = str_replace($oldFileName, $newFileName, $oldBinaryFile->id);
-
+        $newId = str_replace($oldFileName, $newFilename, $oldBinaryFile->id);
         $binaryCreateStruct = new BinaryFileCreateStruct(
             [
                 'id' => $newId,
@@ -209,9 +225,10 @@ EOT
             ]
         );
 
-        $newBinaryFile = $this->ioService->createBinaryFile($binaryCreateStruct);
-        if ($newBinaryFile instanceof BinaryFile) {
-            $this->ioService->deleteBinaryFile($oldBinaryFile);
+        // Firstly validate if the same file doesn't exist already in order to not duplicate files
+        $newBinaryFile = $this->ioService->loadBinaryFileByUri(\DIRECTORY_SEPARATOR . $newPath);
+        if ($newBinaryFile instanceof MissingBinaryFile) {
+            $this->ioService->createBinaryFile($binaryCreateStruct);
         }
     }
 }
