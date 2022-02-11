@@ -181,6 +181,8 @@ EOT
 
     /**
      * @param resource $inputStream
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     private function updateImagePath(
         int $fieldId,
@@ -225,7 +227,7 @@ EOT
             ]
         );
 
-        // Firstly validate if the same file doesn't exist already in order to not duplicate files
+        // Before creating a new file validate if the same file doesn't exist already in order to not duplicate files
         $newBinaryFile = $this->ioService->loadBinaryFileByUri(\DIRECTORY_SEPARATOR . $newPath);
         if ($newBinaryFile instanceof MissingBinaryFile) {
             $this->ioService->createBinaryFile($binaryCreateStruct);
