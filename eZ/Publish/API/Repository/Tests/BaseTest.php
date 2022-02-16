@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\User\UserReference;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
@@ -819,5 +820,10 @@ abstract class BaseTest extends TestCase
         );
 
         return $contentTypeService->loadContentTypeByIdentifier($identifier);
+    }
+
+    protected function loginAsUser(UserReference $user): void
+    {
+        $this->getRepository(false)->getPermissionResolver()->setCurrentUserReference($user);
     }
 }

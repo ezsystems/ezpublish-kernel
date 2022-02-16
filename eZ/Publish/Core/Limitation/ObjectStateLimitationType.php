@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -21,6 +22,9 @@ use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler;
+use RuntimeException;
 
 /**
  * ObjectStateLimitation is a Content limitation.
@@ -40,7 +44,9 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
     {
         if (!$limitationValue instanceof APIObjectStateLimitation) {
             throw new InvalidArgumentType('$limitationValue', 'APIObjectStateLimitation', $limitationValue);
-        } elseif (!is_array($limitationValue->limitationValues)) {
+        }
+
+        if (!is_array($limitationValue->limitationValues)) {
             throw new InvalidArgumentType('$limitationValue->limitationValues', 'array', $limitationValue->limitationValues);
         }
 
@@ -108,72 +114,41 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
      *
      * @return bool
      */
-    public function evaluate(APILimitationValue $value, APIUserReference $currentUser, ValueObject $object, array $targets = null)
+    public function evaluate(APILimitationValue $value, APIUserReference $currentUser, ValueObject $object, array $targets = null): bool
     {
         if (!$value instanceof APIObjectStateLimitation) {
             throw new InvalidArgumentException('$value', 'Must be of type: APIObjectStateLimitation');
         }
 
-        $limitationValues = $value->limitationValues;
-
-        if ($object instanceof Content) {
-            $object = $object->getVersionInfo()->getContentInfo();
-        } elseif ($object instanceof VersionInfo) {
-            $object = $object->getContentInfo();
-        } elseif (!$object instanceof ContentInfo && !$object instanceof ContentCreateStruct) {
-            throw new InvalidArgumentException('$object', 'Must be of type: Content, VersionInfo, ContentInfo, or ContentCreateStruct');
-        }
-
-        // Skip evaluating for RootLocation
-        if ($object instanceof ContentInfo && 1 === $object->mainLocationId) {
-            return true;
-        }
-
-        if (empty($limitationValues)) {
+        if (empty($value->limitationValues)) {
             return false;
         }
+        $limitationValues = array_map('intval', $value->limitationValues);
 
-        $objectStateIdsToVerify = [];
         $objectStateHandler = $this->persistence->objectStateHandler();
-        $stateGroups = $objectStateHandler->loadAllGroups();
-
-        // First deal with unpublished content
-        if ($object instanceof ContentCreateStruct || !$object->published) {
-            foreach ($stateGroups as $stateGroup) {
-                $states = $objectStateHandler->loadObjectStates($stateGroup->id);
-                if (empty($states)) {
-                    continue;
-                }
-
-                $defaultStateId = null;
-                $defaultStatePriority = -1;
-                foreach ($states as $state) {
-                    if ($state->priority > $defaultStatePriority) {
-                        $defaultStateId = $state->id;
-                        $defaultStatePriority = $state->priority;
-                    }
-                }
-
-                if ($defaultStateId === null) {
-                    throw new BadStateException(
-                        '$defaultStateId',
-                        "Could not find a default state for object state group {$stateGroup->id}"
-                    );
-                }
-
-                foreach ($states as $state) {
-                    // check using loose types as limitation values are strings and id's can be int
-                    if (in_array($state->id, $limitationValues)) {
-                        $objectStateIdsToVerify[] = $defaultStateId;
-                    }
-                }
+        if (!$object instanceof ContentCreateStruct) {
+            $contentInfo = $this->getContentInfo($object);
+            // Skip evaluating for RootLocation
+            if ($contentInfo->mainLocationId) {
+                return true;
             }
+
+            $objectStateIdsToVerify = $this->getObjectStateIdsToVerify(
+                $objectStateHandler,
+                $contentInfo,
+                $limitationValues
+            );
         } else {
-            foreach ($stateGroups as $stateGroup) {
-                if ($this->isStateGroupUsedForLimitation($stateGroup->id, $limitationValues)) {
-                    $objectStateIdsToVerify[] = $objectStateHandler->getContentState($object->id, $stateGroup->id)->id;
-                }
-            }
+            @trigger_error(
+                'Passing ContentCreateStruct to ObjectStateLimitationType is deprecated ' .
+                ' and will throw an error in Ibexa 5.0',
+                E_USER_DEPRECATED
+            );
+
+            $objectStateIdsToVerify = $this->getObjectStateIdsForContentCreate(
+                $objectStateHandler,
+                $limitationValues
+            );
         }
 
         return $this->areObjectStatesMatchingTheLimitation($objectStateIdsToVerify, $limitationValues);
@@ -210,11 +185,12 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
      *
      * @return bool
      */
-    private function areObjectStatesMatchingTheLimitation(array $objectStateIds, array $limitationValues)
-    {
+    private function areObjectStatesMatchingTheLimitation(
+        array $objectStateIds,
+        array $limitationValues
+    ): bool {
         foreach ($objectStateIds as $objectStateId) {
-            // check using loose types as limitation values are strings and id's can be int
-            if (!in_array($objectStateId, $limitationValues)) {
+            if (!in_array($objectStateId, $limitationValues, true)) {
                 return false;
             }
         }
@@ -234,7 +210,7 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
     {
         if (empty($value->limitationValues)) {
             // no limitation values
-            throw new \RuntimeException('$value->limitationValues is empty, it should not have been stored in the first place');
+            throw new RuntimeException('$value->limitationValues is empty, it should not have been stored in the first place');
         }
 
         if (!isset($value->limitationValues[1])) {
@@ -285,15 +261,106 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
     }
 
     /**
-     * Returns info on valid $limitationValues.
-     *
-     * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
-     *                     of that option, in case of int on of VALUE_SCHEMA_ constants.
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
     public function valueSchema()
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
+        throw new NotImplementedException(__METHOD__);
+    }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function getContentInfo(ValueObject $object): ContentInfo
+    {
+        if ($object instanceof Content) {
+            $object = $object->getVersionInfo()->getContentInfo();
+        } elseif ($object instanceof VersionInfo) {
+            $object = $object->getContentInfo();
+        } elseif (!$object instanceof ContentInfo) {
+            throw new InvalidArgumentException(
+                '$object',
+                'Must be of type: Content, VersionInfo, ContentInfo, or ContentCreateStruct'
+            );
+        }
+
+        return $object;
+    }
+
+    /**
+     * @param int[] $limitationValues Limitation Object State IDs
+     *
+     * @return int[] Object State IDs to verify
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    private function getObjectStateIdsForContentCreate(
+        Handler $objectStateHandler,
+        array $limitationValues
+    ): array {
+        $objectStateIdsToVerify = [];
+        $stateGroups = $objectStateHandler->loadAllGroups();
+        foreach ($stateGroups as $stateGroup) {
+            $states = $objectStateHandler->loadObjectStates($stateGroup->id);
+            if (empty($states)) {
+                continue;
+            }
+
+            $defaultStateId = $this->getDefaultStateId($states, $stateGroup);
+
+            foreach ($states as $state) {
+                // check using loose types as limitation values are strings and id's can be int
+                if (in_array($state->id, $limitationValues, true)) {
+                    $objectStateIdsToVerify[] = $defaultStateId;
+                }
+            }
+        }
+
+        return $objectStateIdsToVerify;
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState[] $states
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    private function getDefaultStateId(array $states, Group $stateGroup): int
+    {
+        $defaultStateId = null;
+        $defaultStatePriority = -1;
+        foreach ($states as $state) {
+            if ($state->priority > $defaultStatePriority) {
+                $defaultStateId = $state->id;
+                $defaultStatePriority = $state->priority;
+            }
+        }
+
+        if ($defaultStateId === null) {
+            throw new BadStateException(
+                '$defaultStateId',
+                "Could not find a default state for object state group {$stateGroup->id}"
+            );
+        }
+
+        return $defaultStateId;
+    }
+
+    private function getObjectStateIdsToVerify(
+        Handler $objectStateHandler,
+        ContentInfo $object,
+        array $limitationValues
+    ): array {
+        $objectStateIdsToVerify = [];
+        $stateGroups = $objectStateHandler->loadAllGroups();
+        foreach ($stateGroups as $stateGroup) {
+            if ($this->isStateGroupUsedForLimitation($stateGroup->id, $limitationValues)) {
+                $objectStateIdsToVerify[] = $objectStateHandler->getContentState(
+                    $object->id,
+                    $stateGroup->id
+                )->id;
+            }
+        }
+
+        return $objectStateIdsToVerify;
     }
 }
