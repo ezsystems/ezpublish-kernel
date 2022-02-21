@@ -87,37 +87,7 @@ EOT
             'It may take some time.',
         ]);
 
-        $imagesCount = $this->imageGateway->countDistinctImages();
-        $imagePathsToNormalize = [];
-        $oldPaths = [];
-        $iterations = ceil($imagesCount / self::IMAGE_LIMIT);
-        $io->progressStart($imagesCount);
-        for ($i = 0; $i < $iterations; ++$i) {
-            $imagesData = $this->imageGateway->getImagesData($i * self::IMAGE_LIMIT, self::IMAGE_LIMIT);
-
-            foreach ($imagesData as $imageData) {
-                $filePath = $imageData['filepath'];
-                $fieldId = (int) $imageData['contentobject_attribute_id'];
-
-                if (false !== $key = array_search($filePath, $oldPaths)) {
-                    $finalNormalizedPath = $imagePathsToNormalize[$key]['newPath'];
-                } else {
-                    $finalNormalizedPath = $this->filePathNormalizer->normalizePath($imageData['filepath']);
-                }
-
-                if ($finalNormalizedPath !== $filePath) {
-                    $oldPaths[$fieldId] = $filePath;
-                    $imagePathsToNormalize[$fieldId] = [
-                        'fieldId' => $fieldId,
-                        'oldPath' => $filePath,
-                        'newPath' => $finalNormalizedPath,
-                    ];
-                }
-
-                $io->progressAdvance();
-            }
-        }
-        $io->progressFinish();
+        $imagePathsToNormalize = $this->getImagePathsToNormalize($io);
 
         $imagePathsToNormalizeCount = \count($imagePathsToNormalize);
         $io->note(sprintf('Found: %d', $imagePathsToNormalizeCount));
@@ -134,36 +104,7 @@ EOT
         $io->writeln('Normalizing image paths. Please wait...');
         $io->progressStart($imagePathsToNormalizeCount);
 
-        $oldBinaryFilesToDelete = [];
-        foreach ($imagePathsToNormalize as $imagePathToNormalize) {
-            $this->connection->beginTransaction();
-            try {
-                $oldPath = $imagePathToNormalize['oldPath'];
-
-                $oldBinaryFile = $this->ioService->loadBinaryFileByUri(\DIRECTORY_SEPARATOR . $oldPath);
-                $inputStream = $this->ioService->getFileInputStream($oldBinaryFile);
-
-                $this->updateImagePath(
-                    $imagePathToNormalize['fieldId'],
-                    $oldPath,
-                    $imagePathToNormalize['newPath'],
-                    $oldBinaryFile,
-                    $inputStream
-                );
-
-                $io->progressAdvance();
-
-                $oldBinaryFilesToDelete[$oldBinaryFile->id] = $oldBinaryFile;
-
-                $this->connection->commit();
-            } catch (BinaryFileNotFoundException $e) {
-                $io->warning(sprintf('Skipping file %s as it doesn\'t exists physically.', $oldPath));
-
-                $this->connection->rollBack();
-            } catch (\Exception $e) {
-                $this->connection->rollBack();
-            }
-        }
+        $oldBinaryFilesToDelete = $this->normalizeImagePaths($imagePathsToNormalize, $io);
 
         foreach ($oldBinaryFilesToDelete as $binaryFile) {
             try {
@@ -182,6 +123,7 @@ EOT
     /**
      * @param resource $inputStream
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     private function updateImagePath(
@@ -198,8 +140,8 @@ EOT
         $newFilename = $newPathInfo['basename'];
         $newBaseName = $newPathInfo['filename'];
 
-        $xmlsData = $this->imageGateway->getAllVersionsImageXmlForFieldId($fieldId);
-        foreach ($xmlsData as $xmlData) {
+        $allVersionsXMLData = $this->imageGateway->getAllVersionsImageXmlForFieldId($fieldId);
+        foreach ($allVersionsXMLData as $xmlData) {
             $dom = new \DOMDocument();
             $dom->loadXml($xmlData['data_text']);
 
@@ -212,7 +154,11 @@ EOT
                 $imageTag->setAttribute('dirpath', $newPath);
                 $imageTag->setAttribute('url', $newPath);
 
-                $this->imageGateway->updateImageData($fieldId, (int) $xmlData['version'], $dom->saveXML());
+                $this->imageGateway->updateImageData(
+                    $fieldId,
+                    (int)$xmlData['version'],
+                    $dom->saveXML()
+                );
                 $this->imageGateway->updateImagePath($fieldId, $oldPath, $newPath);
             }
         }
@@ -232,5 +178,112 @@ EOT
         if ($newBinaryFile instanceof MissingBinaryFile) {
             $this->ioService->createBinaryFile($binaryCreateStruct);
         }
+    }
+
+    protected function updateImagePathsToNormalize(
+        $imageData,
+        array $imagePathsToNormalize
+    ): array {
+        $filePath = $imageData['filepath'];
+        $fieldId = (int)$imageData['contentobject_attribute_id'];
+
+        $finalNormalizedPath = $this->getFinalNormalizedPath(
+            $filePath,
+            $imagePathsToNormalize
+        );
+
+        if ($finalNormalizedPath !== $filePath) {
+            $imagePathsToNormalize[$fieldId] = [
+                'fieldId' => $fieldId,
+                'oldPath' => $filePath,
+                'newPath' => $finalNormalizedPath,
+            ];
+        }
+
+        return $imagePathsToNormalize;
+    }
+
+    protected function getFinalNormalizedPath(
+        string $filePath,
+        array $imagePathsToNormalize
+    ): string {
+        $processedPaths = array_values(
+            array_filter(
+                $imagePathsToNormalize,
+                static function (array $data) use ($filePath) {
+                    return $data['oldPath'] === $filePath;
+                }
+            )
+        );
+
+        return !empty($processedPaths)
+            ? $processedPaths[0]['newPath']
+            : $this->filePathNormalizer->normalizePath($filePath);
+    }
+
+    protected function getImagePathsToNormalize(SymfonyStyle $io): array
+    {
+        $imagesCount = $this->imageGateway->countDistinctImages();
+        $imagePathsToNormalize = [];
+        $iterations = ceil($imagesCount / self::IMAGE_LIMIT);
+        $io->progressStart($imagesCount);
+        for ($i = 0; $i < $iterations; ++$i) {
+            $imagesData = $this->imageGateway->getImagesData(
+                $i * self::IMAGE_LIMIT,
+                self::IMAGE_LIMIT
+            );
+
+            foreach ($imagesData as $imageData) {
+                $imagePathsToNormalize = $this->updateImagePathsToNormalize(
+                    $imageData,
+                    $imagePathsToNormalize
+                );
+
+                $io->progressAdvance();
+            }
+        }
+        $io->progressFinish();
+
+        return $imagePathsToNormalize;
+    }
+
+    protected function normalizeImagePaths(array $imagePathsToNormalize, SymfonyStyle $io): array
+    {
+        $oldBinaryFilesToDelete = [];
+        foreach ($imagePathsToNormalize as $imagePathToNormalize) {
+            $this->connection->beginTransaction();
+            try {
+                $oldPath = $imagePathToNormalize['oldPath'];
+
+                $oldBinaryFile = $this->ioService->loadBinaryFileByUri(
+                    \DIRECTORY_SEPARATOR . $oldPath
+                );
+                $inputStream = $this->ioService->getFileInputStream($oldBinaryFile);
+
+                $this->updateImagePath(
+                    $imagePathToNormalize['fieldId'],
+                    $oldPath,
+                    $imagePathToNormalize['newPath'],
+                    $oldBinaryFile,
+                    $inputStream
+                );
+
+                $io->progressAdvance();
+
+                $oldBinaryFilesToDelete[$oldBinaryFile->id] = $oldBinaryFile;
+
+                $this->connection->commit();
+            } catch (BinaryFileNotFoundException $e) {
+                $io->warning(
+                    sprintf('Skipping file %s as it doesn\'t exist physically.', $oldPath)
+                );
+
+                $this->connection->rollBack();
+            } catch (\Exception $e) {
+                $this->connection->rollBack();
+            }
+        }
+
+        return $oldBinaryFilesToDelete;
     }
 }
