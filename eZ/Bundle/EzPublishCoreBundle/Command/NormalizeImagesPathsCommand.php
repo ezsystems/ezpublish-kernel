@@ -147,7 +147,6 @@ EOT
 
             /** @var \DOMElement $imageTag */
             $imageTag = $dom->getElementsByTagName('ezimage')->item(0);
-            $this->imageGateway->updateImagePath($fieldId, $oldPath, $newPath);
             if ($imageTag && $imageTag->getAttribute('filename') === $oldFileName) {
                 $imageTag->setAttribute('filename', $newFilename);
                 $imageTag->setAttribute('basename', $newBaseName);
@@ -159,9 +158,10 @@ EOT
                     (int)$xmlData['version'],
                     $dom->saveXML()
                 );
-                $this->imageGateway->updateImagePath($fieldId, $oldPath, $newPath);
             }
         }
+
+        $this->imageGateway->updateImagePath($fieldId, $oldPath, $newPath);
 
         $newId = str_replace($oldFileName, $newFilename, $oldBinaryFile->id);
         $binaryCreateStruct = new BinaryFileCreateStruct(
