@@ -203,7 +203,7 @@ EOT
         return $imagePathsToNormalize;
     }
 
-    protected function getFinalNormalizedPath(
+    private function getFinalNormalizedPath(
         string $filePath,
         array $imagePathsToNormalize
     ): string {
@@ -221,7 +221,7 @@ EOT
             : $this->filePathNormalizer->normalizePath($filePath);
     }
 
-    protected function getImagePathsToNormalize(SymfonyStyle $io): array
+    private function getImagePathsToNormalize(SymfonyStyle $io): array
     {
         $imagesCount = $this->imageGateway->countDistinctImages();
         $imagePathsToNormalize = [];
@@ -247,7 +247,7 @@ EOT
         return $imagePathsToNormalize;
     }
 
-    protected function normalizeImagePaths(array $imagePathsToNormalize, SymfonyStyle $io): array
+    private function normalizeImagePaths(array $imagePathsToNormalize, SymfonyStyle $io): array
     {
         $oldBinaryFilesToDelete = [];
         foreach ($imagePathsToNormalize as $imagePathToNormalize) {
@@ -275,7 +275,7 @@ EOT
                 $this->connection->commit();
             } catch (BinaryFileNotFoundException $e) {
                 $io->warning(
-                    sprintf('Skipping file %s as it doesn\'t exist physically.', $oldPath)
+                    sprintf('File %s does not exist. Skipping.', $oldPath)
                 );
 
                 $this->connection->rollBack();
