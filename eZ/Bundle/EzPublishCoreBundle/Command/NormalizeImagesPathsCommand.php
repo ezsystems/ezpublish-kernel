@@ -142,6 +142,10 @@ EOT
 
         $allVersionsXMLData = $this->imageGateway->getAllVersionsImageXmlForFieldId($fieldId);
         foreach ($allVersionsXMLData as $xmlData) {
+            if (empty($xmlData['data_text'])) {
+                continue;
+            }
+
             $dom = new \DOMDocument();
             $dom->loadXml($xmlData['data_text']);
 
