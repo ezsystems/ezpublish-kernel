@@ -305,6 +305,7 @@ class DoctrineDatabase extends Gateway
     public function moveSubtreeNodes(array $sourceNodeData, array $destinationNodeData)
     {
         $fromPathString = $sourceNodeData['path_string'];
+        $contentObjectId = $sourceNodeData['contentobject_id'];
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
@@ -333,6 +334,7 @@ class DoctrineDatabase extends Gateway
             array_slice(explode('/', $sourceNodeData['path_identification_string']), 0, -1)
         );
 
+        $hiddenNodeIds = $this->getHiddenNodeIds($contentObjectId);
         foreach ($rows as $row) {
             // Prefixing ensures correct replacement when old parent is root node
             $newPathString = str_replace(
@@ -385,7 +387,7 @@ class DoctrineDatabase extends Gateway
                 // CASE 2: source is only invisible, we will need to re-calculate whole moved tree visibility
                 $query->set(
                     $this->handler->quoteColumn('is_invisible'),
-                    $query->bindValue($this->isHiddenByParent($newPathString, $rows) ? 1 : 0)
+                    $query->bindValue($this->isHiddenByParent($newPathString, $hiddenNodeIds) ? 1 : 0)
                 );
             } else {
                 // CASE 3: keep invisible flags as is (source is either hidden or not hidden/invisible at all)
@@ -401,12 +403,36 @@ class DoctrineDatabase extends Gateway
         }
     }
 
-    private function isHiddenByParent($pathString, array $rows)
+    private function getHiddenNodeIds(int $contentObjectId)
     {
-        $parentNodeIds = explode('/', trim($pathString, '/'));
+        $query = $this->buildHiddenSubtreeQuery('node_id');
+        $expr = $query->expr();
+        $query
+            ->andWhere(
+                $expr->eq(
+                    'id',
+                    $query->createPositionalParameter(
+                        $contentObjectId,
+                        PDO::PARAM_INT
+                    )
+                )
+            );
+        $statement = $query->execute();
+
+        $result = $statement->fetchAll(FetchMode::COLUMN);
+
+        return array_map('intval', $result);
+    }
+
+    /**
+     * @param int[] $hiddenNodeIds
+     */
+    private function isHiddenByParent(string $pathString, array $hiddenNodeIds): bool
+    {
+        $parentNodeIds = array_map('intval', explode('/', trim($pathString, '/')));
         array_pop($parentNodeIds); // remove self
-        foreach ($rows as $row) {
-            if ($row['is_hidden'] && in_array($row['node_id'], $parentNodeIds)) {
+        foreach ($parentNodeIds as $parentNodeId) {
+            if (in_array($parentNodeId, $hiddenNodeIds, true)) {
                 return true;
             }
         }
@@ -629,6 +655,30 @@ class DoctrineDatabase extends Gateway
         }
         $query->where($where);
         $query->prepare()->execute();
+    }
+
+    private function buildHiddenSubtreeQuery(string $selectExpr): QueryBuilder
+    {
+        $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
+        $query
+            ->select($selectExpr)
+            ->from('ezcontentobject_tree', 't')
+            ->leftJoin('t', 'ezcontentobject', 'c', 't.contentobject_id = c.id')
+            ->where(
+                $expr->orX(
+                    $expr->eq(
+                        't.is_hidden',
+                        $query->createPositionalParameter(1, PDO::PARAM_INT)
+                    ),
+                    $expr->eq(
+                        'c.is_hidden',
+                        $query->createPositionalParameter(1, PDO::PARAM_INT)
+                    )
+                )
+            );
+
+        return $query;
     }
 
     /**
