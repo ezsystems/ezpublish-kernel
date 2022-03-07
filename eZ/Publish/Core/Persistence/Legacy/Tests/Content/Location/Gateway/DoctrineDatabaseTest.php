@@ -147,6 +147,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $handler->moveSubtreeNodes(
             [
                 'path_string' => '/1/2/69/',
+                'contentobject_id' => 67,
                 'path_identification_string' => 'products',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
@@ -185,6 +186,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $handler->moveSubtreeNodes(
             [
                 'path_string' => '/1/2/69/',
+                'contentobject_id' => 67,
                 'path_identification_string' => 'products',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
@@ -223,6 +225,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $handler->moveSubtreeNodes(
             [
                 'path_string' => '/1/2/69/',
+                'contentobject_id' => 67,
                 'path_identification_string' => 'products',
                 'is_hidden' => 1,
                 'is_invisible' => 1,
@@ -262,6 +265,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $handler->moveSubtreeNodes(
             [
                 'path_string' => '/1/2/69/',
+                'contentobject_id' => 67,
                 'path_identification_string' => 'products',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
