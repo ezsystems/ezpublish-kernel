@@ -9,8 +9,11 @@ declare(strict_types=1);
 namespace Ibexa\Tests\Core\FieldType;
 
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use Ibexa\Core\FieldType\Validator\TargetContentValidator;
 use PHPUnit\Framework\TestCase;
 
@@ -19,27 +22,73 @@ class TargetContentValidatorTest extends TestCase
     /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject */
     private $contentService;
 
+    /** @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject */
+    private $contentTypeService;
+
     /** @var \Ibexa\Core\FieldType\Validator\TargetContentValidator */
     private $targetContentValidator;
 
     public function setUp(): void
     {
         $this->contentService = $this->createMock(ContentService::class);
-        $this->targetContentValidator = new TargetContentValidator($this->contentService);
+        $this->contentTypeService = $this->createMock(ContentTypeService::class);
+
+        $this->targetContentValidator = new TargetContentValidator(
+            $this->contentService,
+            $this->contentTypeService
+        );
     }
 
-    public function testValidateWithValidContentId(): void
+    public function testValidateWithValidContent(): void
     {
-        $id = 2;
+        $contentId = 2;
+        $contentTypeId = 55;
+        $contentInfo = new ContentInfo(['id' => $contentId, 'contentTypeId' => $contentTypeId]);
+        $contentType = new ContentType(['identifier' => 'article']);
+
+        $allowedContentTypes = ['article'];
 
         $this->contentService
             ->expects($this->once())
             ->method('loadContentInfo')
-            ->with($id);
+            ->with($contentId)
+            ->willReturn($contentInfo);
 
-        $validationError = $this->targetContentValidator->validate($id);
+        $this->contentTypeService
+            ->expects($this->once())
+            ->method('loadContentType')
+            ->with($contentInfo->contentTypeId)
+            ->willReturn($contentType);
+
+        $validationError = $this->targetContentValidator->validate($contentId, $allowedContentTypes);
 
         self::assertNull($validationError);
+    }
+
+    public function testValidateWithInvalidContentType(): void
+    {
+        $contentId = 2;
+        $contentTypeId = 55;
+        $contentInfo = new ContentInfo(['id' => $contentId, 'contentTypeId' => $contentTypeId]);
+        $contentType = new ContentType(['identifier' => 'article']);
+
+        $allowedContentTypes = ['folder'];
+
+        $this->contentService
+            ->expects($this->once())
+            ->method('loadContentInfo')
+            ->with($contentId)
+            ->willReturn($contentInfo);
+
+        $this->contentTypeService
+            ->expects($this->once())
+            ->method('loadContentType')
+            ->with($contentInfo->contentTypeId)
+            ->willReturn($contentType);
+
+        $validationError = $this->targetContentValidator->validate($contentId, $allowedContentTypes);
+
+        self::assertInstanceOf(ValidationError::class, $validationError);
     }
 
     /**

@@ -385,10 +385,6 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelation}
 
-    Ibexa\Core\FieldType\Validator\TargetContentValidator:
-        arguments:
-            $contentService: '@ezpublish.api.service.content'
-
     ezpublish.fieldType.ezsrrating:
         class: "%ezpublish.fieldType.ezsrrating.class%"
         parent: ezpublish.fieldType

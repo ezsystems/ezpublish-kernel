@@ -393,6 +393,26 @@ class RelationTest extends FieldTypeTest
         self::assertEquals([$this->generateValidationError($destinationContentId)], $validationErrors);
     }
 
+    public function testValidateInvalidContentType(): void
+    {
+        $destinationContentId = 12;
+        $allowedContentTypes = ['article', 'folder'];
+
+        $this->targetContentValidator
+            ->expects(self::once())
+            ->method('validate')
+            ->with($destinationContentId, $allowedContentTypes)
+            ->willReturn($this->generateContentTypeValidationError('test'));
+
+        $validationErrors = $this->doValidate(
+            ['fieldSettings' => ['selectionContentTypes' => $allowedContentTypes]],
+            new Value($destinationContentId)
+        );
+
+        self::assertIsArray($validationErrors);
+        self::assertEquals([$this->generateContentTypeValidationError('test')], $validationErrors);
+    }
+
     private function generateValidationError(string $contentId): ValidationError
     {
         return new ValidationError(
@@ -401,7 +421,19 @@ class RelationTest extends FieldTypeTest
             [
                 '%contentId%' => $contentId,
             ],
-            'destinationContentId'
+            'targetContentId'
+        );
+    }
+
+    private function generateContentTypeValidationError(string $contentTypeIdentifier): ValidationError
+    {
+        return new ValidationError(
+            'Content Type %contentTypeIdentifier% is not a valid relation target',
+            null,
+            [
+                '%contentTypeIdentifier%' => $contentTypeIdentifier,
+            ],
+            'targetContentId'
         );
     }
 

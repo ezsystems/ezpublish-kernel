@@ -15,5 +15,5 @@ interface TargetContentValidatorInterface
     /**
      * @param mixed $value
      */
-    public function validate($value): ?ValidationError;
+    public function validate($value, array $allowedContentTypes = []): ?ValidationError;
 }

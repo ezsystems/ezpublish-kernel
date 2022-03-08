@@ -185,7 +185,10 @@ services:
             $mappings: '$fieldtypes.ezimageasset.mappings$'
 
     # Relation and RelationList types
-    Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface:
-        alias: Ibexa\Core\FieldType\Validator\TargetContentValidator
+    Ibexa\Core\FieldType\Validator\TargetContentValidator:
         arguments:
             $contentService: '@ezpublish.api.service.content'
+            $contentTypeService: '@ezpublish.api.service.content_type'
+
+    Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface:
+        alias: Ibexa\Core\FieldType\Validator\TargetContentValidator

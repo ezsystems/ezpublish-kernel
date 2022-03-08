@@ -9,30 +9,49 @@ declare(strict_types=1);
 namespace Ibexa\Core\FieldType\Validator;
 
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
- * Validator for checking existence of content.
+ * Validator for checking existence of content and its content type.
  */
 final class TargetContentValidator implements TargetContentValidatorInterface
 {
     /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    public function __construct(?ContentService $contentService = null)
-    {
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
+    private $contentTypeService;
+
+    public function __construct(
+        ContentService $contentService,
+        ContentTypeService $contentTypeService
+    ) {
         $this->contentService = $contentService;
+        $this->contentTypeService = $contentTypeService;
     }
 
     /**
      * @param mixed $value
      */
-    public function validate($value): ?ValidationError
+    public function validate($value, array $allowedContentTypes = []): ?ValidationError
     {
         try {
-            $this->contentService->loadContentInfo($value);
+            $contentInfo = $this->contentService->loadContentInfo($value);
+            $contentType = $this->contentTypeService->loadContentType($contentInfo->contentTypeId);
+
+            if (!empty($allowedContentTypes) && !in_array($contentType->identifier, $allowedContentTypes, true)) {
+                return new ValidationError(
+                    'Content Type %contentTypeIdentifier% is not a valid relation target',
+                    null,
+                    [
+                        '%contentTypeIdentifier%' => $contentType->identifier,
+                    ],
+                    'targetContentId'
+                );
+            }
         } catch (NotFoundException | UnauthorizedException $e) {
             return new ValidationError(
                 'Content with identifier %contentId% is not a valid relation target',
