@@ -380,7 +380,7 @@ services:
     ezpublish.fieldType.ezobjectrelation:
         class: "%ezpublish.fieldType.ezobjectrelation.class%"
         arguments:
-            $targetContentValidator: '@Ibexa\Core\FieldType\Validator\TargetContentValidator'
+            $targetContentValidator: '@Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface'
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelation}
@@ -431,7 +431,7 @@ services:
     ezpublish.fieldType.ezobjectrelationlist:
         class: "%ezpublish.fieldType.ezobjectrelationlist.class%"
         arguments:
-            $targetContentValidator: '@Ibexa\Core\FieldType\Validator\TargetContentValidator'
+            $targetContentValidator: '@Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface'
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelationlist}

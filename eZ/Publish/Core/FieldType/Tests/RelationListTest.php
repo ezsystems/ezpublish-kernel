@@ -772,7 +772,6 @@ class RelationListTest extends FieldTypeTest
                 $this->generateContentTypeValidationError('test')
             );
 
-
         $validationErrors = $this->doValidate(
             ['fieldSettings' => ['selectionContentTypes' => $allowedContentTypes]],
             new Value([$destinationContentId, $destinationContentId2])
