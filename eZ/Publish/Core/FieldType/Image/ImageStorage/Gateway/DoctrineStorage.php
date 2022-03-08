@@ -274,17 +274,17 @@ class DoctrineStorage extends Gateway
         return (bool)$statement->fetchOne();
     }
 
-    public function countDistinctImages(): int
+    public function countDistinctImagesData(): int
     {
         $selectQuery = $this->connection->createQueryBuilder();
         $selectQuery
-            ->select($this->connection->getDatabasePlatform()->getCountExpression('DISTINCT(filepath)'))
+            ->select($this->connection->getDatabasePlatform()->getCountExpression('id'))
             ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
         ;
 
         $statement = $selectQuery->execute();
 
-        return (int) $statement->fetchColumn();
+        return (int) $statement->fetchOne();
     }
 
     /**
