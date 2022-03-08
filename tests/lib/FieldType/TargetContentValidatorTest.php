@@ -42,23 +42,9 @@ class TargetContentValidatorTest extends TestCase
     public function testValidateWithValidContent(): void
     {
         $contentId = 2;
-        $contentTypeId = 55;
-        $contentInfo = new ContentInfo(['id' => $contentId, 'contentTypeId' => $contentTypeId]);
-        $contentType = new ContentType(['identifier' => 'article']);
-
         $allowedContentTypes = ['article'];
 
-        $this->contentService
-            ->expects($this->once())
-            ->method('loadContentInfo')
-            ->with($contentId)
-            ->willReturn($contentInfo);
-
-        $this->contentTypeService
-            ->expects($this->once())
-            ->method('loadContentType')
-            ->with($contentInfo->contentTypeId)
-            ->willReturn($contentType);
+        $this->setupContentTypeValidation($contentId);
 
         $validationError = $this->targetContentValidator->validate($contentId, $allowedContentTypes);
 
@@ -68,11 +54,20 @@ class TargetContentValidatorTest extends TestCase
     public function testValidateWithInvalidContentType(): void
     {
         $contentId = 2;
+        $allowedContentTypes = ['folder'];
+
+        $this->setupContentTypeValidation($contentId);
+
+        $validationError = $this->targetContentValidator->validate($contentId, $allowedContentTypes);
+
+        self::assertInstanceOf(ValidationError::class, $validationError);
+    }
+
+    private function setupContentTypeValidation(int $contentId): void
+    {
         $contentTypeId = 55;
         $contentInfo = new ContentInfo(['id' => $contentId, 'contentTypeId' => $contentTypeId]);
         $contentType = new ContentType(['identifier' => 'article']);
-
-        $allowedContentTypes = ['folder'];
 
         $this->contentService
             ->expects($this->once())
@@ -85,10 +80,6 @@ class TargetContentValidatorTest extends TestCase
             ->method('loadContentType')
             ->with($contentInfo->contentTypeId)
             ->willReturn($contentType);
-
-        $validationError = $this->targetContentValidator->validate($contentId, $allowedContentTypes);
-
-        self::assertInstanceOf(ValidationError::class, $validationError);
     }
 
     /**
