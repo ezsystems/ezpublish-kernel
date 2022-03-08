@@ -10,15 +10,15 @@ use eZ\Publish\Core\FieldType\RelationList\Type as RelationList;
 use eZ\Publish\Core\FieldType\RelationList\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\FieldType\Validator\DestinationContentValidator;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface;
 
 class RelationListTest extends FieldTypeTest
 {
-    /** @var \eZ\Publish\Core\FieldType\Validator\DestinationContentValidator|\PHPUnit\Framework\MockObject\MockObject */
-    private $destinationContentValidator;
+    /** @var \Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $targetContentValidator;
 
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class RelationListTest extends FieldTypeTest
     {
         parent::setUp();
 
-        $this->destinationContentValidator = $this->createMock(DestinationContentValidator::class);
+        $this->targetContentValidator = $this->createMock(TargetContentValidatorInterface::class);
     }
 
     /**
@@ -44,7 +44,7 @@ class RelationListTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new RelationList(
-            $this->destinationContentValidator
+            $this->targetContentValidator
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
@@ -739,7 +739,7 @@ class RelationListTest extends FieldTypeTest
         $destinationContentId = 'invalid';
         $destinationContentId2 = 'invalid-second';
 
-        $this->destinationContentValidator
+        $this->targetContentValidator
             ->expects(self::exactly(2))
             ->method('validate')
             ->withConsecutive([$destinationContentId], [$destinationContentId2])

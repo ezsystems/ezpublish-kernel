@@ -16,7 +16,7 @@ use eZ\Publish\Core\FieldType\ValidationError;
 /**
  * Validator for checking existence of content.
  */
-final class TargetContentValidator
+final class TargetContentValidator implements TargetContentValidatorInterface
 {
     /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;

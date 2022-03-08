@@ -12,13 +12,13 @@ use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\FieldType\Validator\DestinationContentValidator;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface;
 
 class RelationTest extends FieldTypeTest
 {
-    /** @var \eZ\Publish\Core\FieldType\Validator\DestinationContentValidator|\PHPUnit\Framework\MockObject\MockObject */
-    private $destinationContentValidator;
+    /** @var \Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $targetContentValidator;
 
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class RelationTest extends FieldTypeTest
     {
         parent::setUp();
 
-        $this->destinationContentValidator = $this->createMock(DestinationContentValidator::class);
+        $this->targetContentValidator = $this->createMock(TargetContentValidatorInterface::class);
     }
 
     /**
@@ -44,7 +44,7 @@ class RelationTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new RelationType(
-            $this->destinationContentValidator
+            $this->targetContentValidator
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
@@ -381,7 +381,7 @@ class RelationTest extends FieldTypeTest
     {
         $destinationContentId = 'invalid';
 
-        $this->destinationContentValidator
+        $this->targetContentValidator
             ->expects(self::once())
             ->method('validate')
             ->with($destinationContentId)

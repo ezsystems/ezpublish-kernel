@@ -14,7 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
-use Ibexa\Core\FieldType\Validator\TargetContentValidator;
+use Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface;
 
 /**
  * The RelationList field type.
@@ -62,10 +62,10 @@ class Type extends FieldType
         ],
     ];
 
-    /** @var \Ibexa\Core\FieldType\Validator\TargetContentValidator */
+    /** @var \Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface */
     private $targetContentValidator;
 
-    public function __construct(TargetContentValidator $targetContentValidator)
+    public function __construct(TargetContentValidatorInterface $targetContentValidator)
     {
         $this->targetContentValidator = $targetContentValidator;
     }
