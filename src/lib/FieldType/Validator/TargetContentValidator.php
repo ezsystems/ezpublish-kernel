@@ -4,7 +4,9 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\FieldType\Validator;
+declare(strict_types=1);
+
+namespace Ibexa\Core\FieldType\Validator;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -12,9 +14,9 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
- * Validator for checking existence of destination content.
+ * Validator for checking existence of content.
  */
-class DestinationContentValidator
+final class TargetContentValidator
 {
     /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
@@ -24,6 +26,9 @@ class DestinationContentValidator
         $this->contentService = $contentService;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function validate($value): ?ValidationError
     {
         try {
@@ -33,9 +38,9 @@ class DestinationContentValidator
                 'Content with identifier %contentId% is not a valid relation target',
                 null,
                 [
-                    '%contentId%' => $value->destinationContentId,
+                    '%contentId%' => $value,
                 ],
-                'destinationContentId'
+                'targetContentId'
             );
         }
 

@@ -6,11 +6,11 @@
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
-use eZ\Publish\Core\FieldType\Validator\DestinationContentValidator;
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
+use Ibexa\Core\FieldType\Validator\TargetContentValidator;
 
 /**
  * Integration test for legacy storage field types.
@@ -51,10 +51,10 @@ class RelationIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $destinationContentValidator = $this->createMock(DestinationContentValidator::class);
+        $targetContentValidator = $this->createMock(TargetContentValidator::class);
 
         $fieldType = new FieldType\RelationList\Type(
-            $destinationContentValidator
+            $targetContentValidator
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 

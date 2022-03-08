@@ -12,9 +12,9 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\Content\Relation;
-use eZ\Publish\Core\FieldType\Validator\DestinationContentValidator;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use Ibexa\Core\FieldType\Validator\TargetContentValidator;
 
 /**
  * The RelationList field type.
@@ -62,12 +62,12 @@ class Type extends FieldType
         ],
     ];
 
-    /** @var \eZ\Publish\Core\FieldType\Validator\DestinationContentValidator */
-    private $destinationContentValidator;
+    /** @var \Ibexa\Core\FieldType\Validator\TargetContentValidator */
+    private $targetContentValidator;
 
-    public function __construct(DestinationContentValidator $destinationContentValidator)
+    public function __construct(TargetContentValidator $targetContentValidator)
     {
-        $this->destinationContentValidator = $destinationContentValidator;
+        $this->targetContentValidator = $targetContentValidator;
     }
 
     /**
@@ -234,7 +234,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue): array
     {
         $validationErrors = [];
 
@@ -260,9 +260,9 @@ class Type extends FieldType
         }
 
         foreach ($fieldValue->destinationContentIds as $destinationContentId) {
-            $validation = $this->destinationContentValidator->validate($destinationContentId);
-            if ($validation !== null) {
-                $validationErrors[] = $validation;
+            $validationError = $this->targetContentValidator->validate($destinationContentId);
+            if ($validationError !== null) {
+                $validationErrors[] = $validationError;
             }
         }
 
