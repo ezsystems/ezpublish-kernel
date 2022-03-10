@@ -379,6 +379,17 @@ return array(
         array( 'contentobject_id' => 226, 'contentobject_version' => 1, 'from_node_id' => -1, 'id' => 214, 'is_main' => 1, 'op_code' => 3, 'parent_node' => 77, 'parent_remote_id' => '', 'remote_id' => 0, 'sort_field' => 1, 'sort_order' => 1, 'priority' => 0, 'is_hidden' => 0 ),
     ),
     'ezcontentobject' => array(
+        array( 'id' => 67, 'is_hidden' => 0 ),
+        array( 'id' => 68, 'is_hidden' => 0 ),
+        array( 'id' => 69, 'is_hidden' => 0 ),
+        array( 'id' => 70, 'is_hidden' => 0 ),
+        array( 'id' => 75, 'is_hidden' => 0 ),
+        array( 'id' => 76, 'is_hidden' => 0 ),
+        array( 'id' => 77, 'is_hidden' => 0 ),
+        array( 'id' => 78, 'is_hidden' => 0 ),
+        array( 'id' => 79, 'is_hidden' => 0 ),
+        array( 'id' => 80, 'is_hidden' => 0 ),
+        array( 'id' => 81, 'is_hidden' => 0 ),
         array( 'id' => 226, 'status' => 0 ),
     ),
 );

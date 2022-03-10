@@ -7,10 +7,12 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase as ContentDoctrineDatabase;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase.
@@ -25,6 +27,24 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $dbHandler,
             $this->getLanguageMaskGenerator()
         );
+    }
+
+    /**
+     * Returns a ready to test DoctrineDatabase gateway.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase
+     */
+    protected function getContentGateway()
+    {
+        $databaseGateway = new \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase(
+            ($dbHandler = $this->getDatabaseHandler()),
+            $this->getDatabaseConnection(),
+            new ContentDoctrineDatabase\QueryBuilder($dbHandler),
+            $this->getLanguageHandler(),
+            $this->getLanguageMaskGenerator()
+        );
+
+        return $databaseGateway;
     }
 
     private static function getLoadLocationValues(): array
@@ -254,6 +274,88 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                 ->where($query->expr->in('node_id', [69, 71, 75, 77, 2]))
                 ->orderBy('contentobject_id')
         );
+    }
+
+    private function hideContent(int $contentId)
+    {
+        $contentHandler = $this->getContentGateway();
+
+        $contentHandler->updateContent(
+            $contentId,
+            new SPIMetadataUpdateStruct([
+                'isHidden' => true,
+            ])
+        );
+        $locationHandler = $this->getLocationGateway();
+        $childLocations = $locationHandler->loadLocationDataByContent($contentId);
+        foreach ($childLocations as $childLocation) {
+            $locationHandler->setNodeWithChildrenInvisible($childLocation['path_string']);
+        }
+    }
+
+    public function testMoveContentHiddenSourceUpdate()
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
+        $this->hideContent(67);
+
+        $handler = $this->getLocationGateway();
+
+        $handler->moveSubtreeNodes(
+            [
+                'path_string' => '/1/2/69/',
+                'contentobject_id' => 67,
+                'path_identification_string' => 'products',
+                'is_hidden' => 0,
+                'is_invisible' => 1,
+            ],
+            [
+                'path_string' => '/1/2/77/',
+                'path_identification_string' => 'solutions',
+                'is_hidden' => 0,
+                'is_invisible' => 0,
+            ]
+        );
+
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            [
+                [65, '/1/2/', '', 1, 1, 0, 0],
+                [67, '/1/2/77/69/', 'solutions/products', 77, 3, 0, 1],
+                [69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5, 0, 1],
+                [73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5, 0, 1],
+                [75, '/1/2/77/', 'solutions', 2, 2, 0, 0],
+            ],
+            $query
+                ->select('contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth', 'is_hidden', 'is_invisible')
+                ->from('ezcontentobject_tree')
+                ->where($query->expr->in('node_id', [69, 71, 75, 77, 2]))
+                ->orderBy('contentobject_id')
+        );
+
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            [
+                [67, 1],
+                [68, 0],
+                [69, 0],
+                [70, 0],
+                [75, 0],
+                [76, 0],
+                [77, 0],
+                [78, 0],
+                [79, 0],
+                [80, 0],
+                [81, 0],
+            ],
+            $query
+                ->select('id', 'is_hidden')
+                ->from('ezcontentobject')
+                ->where($query->expr->in('id', [67, 68, 69, 70, 75, 76, 77, 78, 79, 80, 81])) //,     69, 71, 75, 77, 2]))
+                ->orderBy('id')
+        );
+
     }
 
     public function testMoveHiddenSourceChildUpdate()
