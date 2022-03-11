@@ -8,6 +8,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
@@ -403,9 +404,15 @@ class DoctrineDatabase extends Gateway
         }
     }
 
+    /**
+     * @return int[]
+     *
+     * @throws \Doctrine\DBAL\Driver\Exception
+     * @throws \Doctrine\DBAL\Exception
+     */
     private function getHiddenNodeIds(int $contentObjectId)
     {
-        $query = $this->buildHiddenSubtreeQuery('node_id');
+        $query = $this->buildHiddenSubtreeQuery();
         $expr = $query->expr();
         $query
             ->andWhere(
@@ -413,7 +420,7 @@ class DoctrineDatabase extends Gateway
                     'id',
                     $query->createPositionalParameter(
                         $contentObjectId,
-                        PDO::PARAM_INT
+                        ParameterType::INTEGER
                     )
                 )
             );
@@ -659,23 +666,23 @@ class DoctrineDatabase extends Gateway
         $query->prepare()->execute();
     }
 
-    private function buildHiddenSubtreeQuery(string $selectExpr): QueryBuilder
+    private function buildHiddenSubtreeQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $expr = $query->expr();
         $query
-            ->select($selectExpr)
+            ->select('node_id')
             ->from('ezcontentobject_tree', 't')
-            ->leftJoin('t', 'ezcontentobject', 'c', 't.contentobject_id = c.id')
+            ->join('t', 'ezcontentobject', 'c', 't.contentobject_id = c.id')
             ->where(
-                $expr->orX(
+                $expr->or(
                     $expr->eq(
                         't.is_hidden',
-                        $query->createPositionalParameter(1, PDO::PARAM_INT)
+                        $query->createPositionalParameter(1, ParameterType::BOOLEAN)
                     ),
                     $expr->eq(
                         'c.is_hidden',
-                        $query->createPositionalParameter(1, PDO::PARAM_INT)
+                        $query->createPositionalParameter(1, ParameterType::BOOLEAN)
                     )
                 )
             );
