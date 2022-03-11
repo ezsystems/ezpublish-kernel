@@ -685,7 +685,7 @@ class DoctrineDatabase extends Gateway
                 $expr->or(
                     $expr->eq(
                         't.is_hidden',
-                        $query->createPositionalParameter(true, ParameterType::BOOLEAN)
+                        $query->createPositionalParameter(true, ParameterType::INTEGER)
                     ),
                     $expr->eq(
                         'c.is_hidden',
