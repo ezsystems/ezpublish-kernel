@@ -410,7 +410,8 @@ class DoctrineDatabase extends Gateway
      * @throws \Doctrine\DBAL\Driver\Exception
      * @throws \Doctrine\DBAL\Exception
      */
-     /**
+
+    /**
      * @return int[]
      *
      * @throws \Doctrine\DBAL\Driver\Exception
@@ -438,7 +439,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Calculates if given node is hidden by location (self or any parent) or on Content level
+     * Calculates if given node is hidden by location (self or any parent) or on Content level.
      *
      * @param string $pathString
      * @param int[] $hiddenNodeIds
