@@ -3225,6 +3225,84 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test that is_visible is set correct for children when moving a content (not the location) which is hidden.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testMoveSubtreeKeepsContentHidden(): void
+    {
+        $repository = $this->getRepository();
+
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+        /* BEGIN: Use Case */
+        // $mediaLocationId is the ID of the "Media" page location in
+        // an eZ Publish demo installation
+
+        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
+        // Publish demo installation
+
+        // Load the location service
+        $locationService = $repository->getLocationService();
+
+        // Load the content service
+        $contentService = $repository->getContentService();
+
+        // Load location to move
+        $locationToMove = $locationService->loadLocation($demoDesignLocationId);
+
+        // Create child below locationToMove
+        $subFolderContent = $this->publishContentWithParentLocation('SubFolder', $locationToMove->id);
+
+        // Hide source Content
+        $contentService->hideContent($locationToMove->contentInfo);
+        $locationToMove = $locationService->loadLocation($demoDesignLocationId);
+
+        // Load new parent location
+        $newParentLocation = $locationService->loadLocation($mediaLocationId);
+
+        // Move location from "Home" to "Media"
+        $locationService->moveSubtree(
+            $locationToMove,
+            $newParentLocation
+        );
+
+        // Load moved location
+        $movedLocation = $locationService->loadLocation($demoDesignLocationId);
+        /* END: Use Case */
+
+        // Assert Moved Location
+        $this->assertPropertiesCorrect(
+            [
+                'hidden' => true, // It should be hidden only on object level, not on location level. But impossible to say due to https://github.com/ezsystems/ezpublish-kernel/blob/7.5/eZ/Publish/Core/Repository/Helper/DomainMapper.php#L562
+                'invisible' => true,
+                'depth' => $newParentLocation->depth + 1,
+                'parentLocationId' => $newParentLocation->id,
+                'pathString' => $newParentLocation->pathString . $this->parseId('location', $movedLocation->id) . '/',
+            ],
+            $movedLocation
+        );
+
+        $this->assertTrue($movedLocation->getContentInfo()->isHidden);
+
+        // Assert child of Moved location
+        $childLocation = $locationService->loadLocation($subFolderContent->contentInfo->mainLocationId);
+        $this->assertPropertiesCorrect(
+            [
+                'hidden' => false,
+                'invisible' => true,
+                'depth' => $movedLocation->depth + 1,
+                'parentLocationId' => $movedLocation->id,
+                'pathString' => $movedLocation->pathString . $this->parseId('location', $childLocation->id) . '/',
+            ],
+            $childLocation
+        );
+
+        $this->assertFalse($childLocation->getContentInfo()->isHidden);
+    }
+
+    /**
      * Loads properties from all locations in the $location's subtree.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
