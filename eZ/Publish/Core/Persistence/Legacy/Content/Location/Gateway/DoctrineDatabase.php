@@ -387,7 +387,7 @@ class DoctrineDatabase extends Gateway
                 // CASE 2: source is only invisible, we will need to re-calculate whole moved tree visibility
                 $query->set(
                     $this->handler->quoteColumn('is_invisible'),
-                    $query->bindValue($this->isHiddenByParent($newPathString, $hiddenNodeIds) ? 1 : 0)
+                    $query->bindValue($this->isHiddenByParentOrSelf($newPathString, $hiddenNodeIds) ? 1 : 0)
                 );
             } else {
                 // CASE 3: keep invisible flags as is (source is either hidden or not hidden/invisible at all)
@@ -425,12 +425,14 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Calculates if given node is hidden by location (self or any parent) or on Content level
+     *
+     * @param string $pathString
      * @param int[] $hiddenNodeIds
      */
-    private function isHiddenByParent(string $pathString, array $hiddenNodeIds): bool
+    private function isHiddenByParentOrSelf(string $pathString, array $hiddenNodeIds): bool
     {
         $parentNodeIds = array_map('intval', explode('/', trim($pathString, '/')));
-        array_pop($parentNodeIds); // remove self
         foreach ($parentNodeIds as $parentNodeId) {
             if (in_array($parentNodeId, $hiddenNodeIds, true)) {
                 return true;
