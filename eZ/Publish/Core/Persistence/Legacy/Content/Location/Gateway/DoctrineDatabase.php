@@ -410,13 +410,6 @@ class DoctrineDatabase extends Gateway
      * @throws \Doctrine\DBAL\Driver\Exception
      * @throws \Doctrine\DBAL\Exception
      */
-
-    /**
-     * @return int[]
-     *
-     * @throws \Doctrine\DBAL\Driver\Exception
-     * @throws \Doctrine\DBAL\Exception
-     */
     private function getHiddenNodeIds(int $contentObjectId): array
     {
         $query = $this->buildHiddenSubtreeQuery();
@@ -433,7 +426,7 @@ class DoctrineDatabase extends Gateway
             );
         $statement = $query->execute();
 
-        $result = $statement->fetchAll(FetchMode::COLUMN);
+        $result = $statement->fetchFirstColumn();
 
         return array_map('intval', $result);
     }
