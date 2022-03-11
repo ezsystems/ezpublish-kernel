@@ -3225,7 +3225,7 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * Test that is_visible is set correct for children when moving a content (not the location) which is hidden.
+     * Test that is_visible is set correct for children when moving a content which is hidden (location is not hidden).
      *
      * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
