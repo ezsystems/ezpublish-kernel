@@ -410,7 +410,13 @@ class DoctrineDatabase extends Gateway
      * @throws \Doctrine\DBAL\Driver\Exception
      * @throws \Doctrine\DBAL\Exception
      */
-    private function getHiddenNodeIds(int $contentObjectId)
+     /**
+     * @return int[]
+     *
+     * @throws \Doctrine\DBAL\Driver\Exception
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private function getHiddenNodeIds(int $contentObjectId): array
     {
         $query = $this->buildHiddenSubtreeQuery();
         $expr = $query->expr();
