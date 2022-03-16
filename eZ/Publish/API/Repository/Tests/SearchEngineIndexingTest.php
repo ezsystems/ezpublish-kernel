@@ -874,6 +874,11 @@ class SearchEngineIndexingTest extends BaseTest
             // @todo: Remove as soon as elastic is updated to later version not affected
             ["it's", "it's", [LegacyElasticsearch::class]],
             ['with_underscore', 'with_underscore'],
+            ['MAKİNEİÇ', 'makİneİç'],
+            ['DIŞ', 'diş'],
+            ['TİC', 'tİc'],
+            ['ŞTİ.', 'ştİ'],
+            ['ʻ', 'ʻ'],
         ];
     }
 
