@@ -369,4 +369,12 @@ class LegacyStorage extends Gateway
     {
         throw new NotImplementedException('updateImagePath is not supported with LegacyStorage gateway, inject DoctrineStorage gateway instead to use it');
     }
+
+    /**
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
+     */
+    public function countDistinctImagesData(): int
+    {
+        throw new NotImplementedException('countDistinctImagesData is not supported with LegacyStorage gateway, inject DoctrineStorage gateway instead to use it');
+    }
 }

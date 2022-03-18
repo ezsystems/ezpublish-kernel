@@ -227,10 +227,10 @@ EOT
 
     private function getImagePathsToNormalize(SymfonyStyle $io): array
     {
-        $imagesCount = $this->imageGateway->countDistinctImages();
+        $imagesDataCount = $this->imageGateway->countDistinctImagesData();
         $imagePathsToNormalize = [];
-        $iterations = ceil($imagesCount / self::IMAGE_LIMIT);
-        $io->progressStart($imagesCount);
+        $iterations = ceil($imagesDataCount / self::IMAGE_LIMIT);
+        $io->progressStart($imagesDataCount);
         for ($i = 0; $i < $iterations; ++$i) {
             $imagesData = $this->imageGateway->getImagesData(
                 $i * self::IMAGE_LIMIT,
