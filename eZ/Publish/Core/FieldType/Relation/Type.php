@@ -168,11 +168,7 @@ class Type extends FieldType
             $allowedContentTypes
         );
 
-        if ($validationError === null) {
-            return $validationErrors;
-        }
-
-        return array_merge($validationErrors, [$validationError]);
+        return $validationError === null ? $validationErrors : [$validationError];
     }
 
     /**
