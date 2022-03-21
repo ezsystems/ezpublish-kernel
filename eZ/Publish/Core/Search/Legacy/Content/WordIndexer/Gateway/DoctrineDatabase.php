@@ -134,6 +134,8 @@ class DoctrineDatabase extends Gateway
                     ? $fullTextValue->transformationRules
                     : $this->fullTextSearchConfiguration['commands']
             );
+
+            $text = mb_strtolower($text);
             // split by non-words
             $wordArray = $fullTextValue->splitFlag ? preg_split('/\W/u', $text, -1, PREG_SPLIT_NO_EMPTY) : [$text];
             foreach ($wordArray as $word) {
