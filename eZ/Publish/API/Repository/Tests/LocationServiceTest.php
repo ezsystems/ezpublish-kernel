@@ -3299,7 +3299,7 @@ class LocationServiceTest extends BaseTest
             $childLocation
         );
 
-        $this->assertFalse($childLocation->getContentInfo()->isHidden);
+        self::assertFalse($childLocation->getContentInfo()->isHidden);
     }
 
     /**
