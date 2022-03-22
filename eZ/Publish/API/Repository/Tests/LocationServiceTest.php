@@ -3236,30 +3236,17 @@ class LocationServiceTest extends BaseTest
 
         $mediaLocationId = $this->generateId('location', 43);
         $demoDesignLocationId = $this->generateId('location', 56);
-        /* BEGIN: Use Case */
-        // $mediaLocationId is the ID of the "Media" page location in
-        // an eZ Publish demo installation
 
-        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
-        // Publish demo installation
-
-        // Load the location service
         $locationService = $repository->getLocationService();
-
-        // Load the content service
         $contentService = $repository->getContentService();
 
-        // Load location to move
         $locationToMove = $locationService->loadLocation($demoDesignLocationId);
 
-        // Create child below locationToMove
         $subFolderContent = $this->publishContentWithParentLocation('SubFolder', $locationToMove->id);
 
-        // Hide source Content
         $contentService->hideContent($locationToMove->contentInfo);
         $locationToMove = $locationService->loadLocation($demoDesignLocationId);
 
-        // Load new parent location
         $newParentLocation = $locationService->loadLocation($mediaLocationId);
 
         // Move location from "Home" to "Media"
@@ -3268,14 +3255,12 @@ class LocationServiceTest extends BaseTest
             $newParentLocation
         );
 
-        // Load moved location
         $movedLocation = $locationService->loadLocation($demoDesignLocationId);
-        /* END: Use Case */
 
         // Assert Moved Location
         $this->assertPropertiesCorrect(
             [
-                'hidden' => true, // It should be hidden only on object level, not on location level. But impossible to say due to https://github.com/ezsystems/ezpublish-kernel/blob/7.5/eZ/Publish/Core/Repository/Helper/DomainMapper.php#L562
+                'hidden' => true,
                 'invisible' => true,
                 'depth' => $newParentLocation->depth + 1,
                 'parentLocationId' => $newParentLocation->id,
@@ -3284,7 +3269,7 @@ class LocationServiceTest extends BaseTest
             $movedLocation
         );
 
-        $this->assertTrue($movedLocation->getContentInfo()->isHidden);
+        self::assertTrue($movedLocation->getContentInfo()->isHidden);
 
         // Assert child of Moved location
         $childLocation = $locationService->loadLocation($subFolderContent->contentInfo->mainLocationId);
