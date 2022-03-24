@@ -38,6 +38,11 @@ class SearchField implements Indexable
                 new Search\FieldType\FullTextField([
                     'space_normalize',
                     'latin1_lowercase',
+                    'ascii_lowercase',
+                    'cyrillic_lowercase',
+                    'greek_lowercase',
+                    'latin_lowercase',
+                    'latin-exta_lowercase',
                 ], false)
             ),
         ];
