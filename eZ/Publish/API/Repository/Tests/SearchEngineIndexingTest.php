@@ -847,13 +847,16 @@ class SearchEngineIndexingTest extends BaseTest
         $query = new Query(['filter' => $criterion]);
         $result = $searchService->findContent($query);
 
+        $found = false;
         // for some cases there might be more than one hit, so check if proper one was found
         foreach ($result->searchHits as $searchHit) {
             if ($content->contentInfo->id === $searchHit->valueObject->versionInfo->contentInfo->id) {
-                return;
+                $found = true;
+                break;
             }
         }
-        $this->fail('Failed to find required Content in search results');
+
+        self::assertTrue($found, 'Failed to find required Content in search results');
     }
 
     /**
@@ -861,7 +864,7 @@ class SearchEngineIndexingTest extends BaseTest
      *
      * @dataProvider getEmailAddressesCases
      */
-    public function testIndexingEmailFieldCases(string $email, string $searchForText)
+    public function testIndexingEmailFieldCases(string $email, string $searchForText): void
     {
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -873,21 +876,22 @@ class SearchEngineIndexingTest extends BaseTest
         $query = new Query(['filter' => $criterion]);
         $result = $searchService->findContent($query);
 
+        $found = false;
         // for some cases there might be more than one hit, so check if proper one was found
         foreach ($result->searchHits as $searchHit) {
             if ($content->contentInfo->id === $searchHit->valueObject->versionInfo->contentInfo->id) {
-                return;
+                $found = true;
+                break;
             }
         }
-        $this->fail('Failed to find required Content in search results');
+
+        self::assertTrue($found, 'Failed to find required Content in search results');
     }
 
     /**
      * Data Provider for {@see testIndexingSpecialFullTextCases()} method.
-     *
-     * @return array
      */
-    public function getEmailAddressesCases()
+    public function getEmailAddressesCases(): array
     {
         return [
             ['test@TEST.com', 'test@test.com'],
