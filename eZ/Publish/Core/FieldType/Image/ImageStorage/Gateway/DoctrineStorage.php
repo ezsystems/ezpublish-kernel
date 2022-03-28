@@ -175,7 +175,7 @@ class DoctrineStorage extends Gateway
 
         $fieldLookup = [];
         foreach ($statement->fetchAllAssociative() as $row) {
-            $fieldLookup[$row['id']] = [
+            $fieldLookup[] = [
                 'version' => $row['version'],
                 'data_text' => $row['data_text'],
             ];

@@ -197,7 +197,7 @@ EOT
         );
 
         if ($finalNormalizedPath !== $filePath) {
-            $imagePathsToNormalize[$fieldId] = [
+            $imagePathsToNormalize[] = [
                 'fieldId' => $fieldId,
                 'oldPath' => $filePath,
                 'newPath' => $finalNormalizedPath,
