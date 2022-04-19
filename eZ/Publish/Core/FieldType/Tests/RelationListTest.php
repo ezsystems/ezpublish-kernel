@@ -784,13 +784,13 @@ class RelationListTest extends FieldTypeTest
     private function generateValidationError(string $contentId): ValidationError
     {
         return new ValidationError(
-                'Content with identifier %contentId% is not a valid relation target',
-                null,
-                [
-                    '%contentId%' => $contentId,
-                ],
-                'targetContentId'
-            );
+            'Content with identifier %contentId% is not a valid relation target',
+            null,
+            [
+                '%contentId%' => $contentId,
+            ],
+            'targetContentId'
+        );
     }
 
     private function generateContentTypeValidationError(string $contentTypeIdentifier): ValidationError

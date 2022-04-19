@@ -33,10 +33,7 @@ final class TargetContentValidator implements TargetContentValidatorInterface
         $this->contentTypeService = $contentTypeService;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function validate($value, array $allowedContentTypes = []): ?ValidationError
+    public function validate(int $value, array $allowedContentTypes = []): ?ValidationError
     {
         try {
             $contentInfo = $this->contentService->loadContentInfo($value);

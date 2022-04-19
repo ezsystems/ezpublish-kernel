@@ -17,7 +17,7 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use Ibexa\Core\FieldType\Validator\TargetContentValidator;
 use PHPUnit\Framework\TestCase;
 
-class TargetContentValidatorTest extends TestCase
+final class TargetContentValidatorTest extends TestCase
 {
     /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject */
     private $contentService;
@@ -92,10 +92,10 @@ class TargetContentValidatorTest extends TestCase
         $this->contentService
             ->expects($this->once())
             ->method('loadContentInfo')
-            ->with($id)
+            ->with((int) $id)
             ->willThrowException($this->createMock(NotFoundException::class));
 
-        $validationError = $this->targetContentValidator->validate($id);
+        $validationError = $this->targetContentValidator->validate((int) $id);
 
         self::assertInstanceOf(ValidationError::class, $validationError);
     }

@@ -262,7 +262,7 @@ class Type extends FieldType
         $allowedContentTypes = $fieldDefinition->getFieldSettings()['selectionContentTypes'] ?? [];
 
         foreach ($fieldValue->destinationContentIds as $destinationContentId) {
-            $validationError = $this->targetContentValidator->validate($destinationContentId, $allowedContentTypes);
+            $validationError = $this->targetContentValidator->validate((int) $destinationContentId, $allowedContentTypes);
             if ($validationError !== null) {
                 $validationErrors[] = $validationError;
             }

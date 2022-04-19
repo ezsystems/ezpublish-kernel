@@ -12,8 +12,5 @@ use eZ\Publish\Core\FieldType\ValidationError;
 
 interface TargetContentValidatorInterface
 {
-    /**
-     * @param mixed $value
-     */
-    public function validate($value, array $allowedContentTypes = []): ?ValidationError;
+    public function validate(int $value, array $allowedContentTypes = []): ?ValidationError;
 }
