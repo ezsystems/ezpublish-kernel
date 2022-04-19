@@ -6,15 +6,15 @@
  */
 namespace eZ\Publish\Core\FieldType\Relation;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\API\Repository\Values\Content\Relation;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
-use Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use Ibexa\Core\Repository\Validator\TargetContentValidatorInterface;
 
 /**
  * The Relation field type.
@@ -46,7 +46,7 @@ class Type extends FieldType
         ],
     ];
 
-    /** @var \Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface */
+    /** @var \Ibexa\Core\Repository\Validator\TargetContentValidatorInterface */
     private $targetContentValidator;
 
     public function __construct(TargetContentValidatorInterface $targetContentValidator)

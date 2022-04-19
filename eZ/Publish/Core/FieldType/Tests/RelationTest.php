@@ -6,18 +6,18 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\Relation\Type as RelationType;
 use eZ\Publish\Core\FieldType\Relation\Value;
-use eZ\Publish\API\Repository\Values\Content\Relation;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
-use Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface;
+use Ibexa\Core\Repository\Validator\TargetContentValidatorInterface;
 
 class RelationTest extends FieldTypeTest
 {
-    /** @var \Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Ibexa\Core\Repository\Validator\TargetContentValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $targetContentValidator;
 
     /**

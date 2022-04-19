@@ -6,11 +6,11 @@
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
-use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
-use Ibexa\Core\FieldType\Validator\TargetContentValidatorInterface;
+use Ibexa\Core\Repository\Validator\TargetContentValidatorInterface;
 
 /**
  * Integration test for legacy storage field types.

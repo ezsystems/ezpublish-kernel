@@ -159,3 +159,11 @@ services:
 
     eZ\Publish\Core\Repository\LocationResolver\LocationResolver:
         alias: eZ\Publish\Core\Repository\LocationResolver\PermissionAwareLocationResolver
+
+    Ibexa\Core\Repository\Validator\TargetContentValidator:
+        arguments:
+            $contentService: '@ezpublish.api.service.content'
+            $contentTypeService: '@ezpublish.api.service.content_type'
+
+    Ibexa\Core\Repository\Validator\TargetContentValidatorInterface:
+        alias: Ibexa\Core\Repository\Validator\TargetContentValidator
