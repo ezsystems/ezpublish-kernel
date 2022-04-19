@@ -736,8 +736,8 @@ class RelationListTest extends FieldTypeTest
 
     public function testValidateNotExistingContentRelations(): void
     {
-        $destinationContentId = 'invalid';
-        $destinationContentId2 = 'invalid-second';
+        $destinationContentId = (int) 'invalid';
+        $destinationContentId2 = (int) 'invalid-second';
 
         $this->targetContentValidator
             ->expects(self::exactly(2))

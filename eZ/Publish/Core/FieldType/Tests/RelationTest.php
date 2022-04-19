@@ -384,7 +384,7 @@ class RelationTest extends FieldTypeTest
         $this->targetContentValidator
             ->expects(self::once())
             ->method('validate')
-            ->with($destinationContentId)
+            ->with((int) $destinationContentId)
             ->willReturn($this->generateValidationError($destinationContentId));
 
         $validationErrors = $this->doValidate([], new Value($destinationContentId));
