@@ -10,9 +10,9 @@ namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
 use DOMDocument;
+use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use PDO;
 
 /**
@@ -223,6 +223,101 @@ class DoctrineStorage extends Gateway
         $statement = $selectQuery->execute();
 
         return (int) $statement->fetchColumn();
+    }
+
+    /**
+     * Returns the number of recorded references outside of the given $path.
+     *
+     * @param string $uri File IO uri (not legacy)
+     *
+     * @return int
+     */
+    public function countImageReferencesOutsidePath($uri)
+    {
+        $path = $this->redecorator->redecorateFromSource($uri);
+
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery
+            ->select('COUNT(' . $this->connection->quoteIdentifier('id') . ')')
+            ->from($this->connection->quoteIdentifier(self::IMAGE_FILE_TABLE))
+            ->where(
+                $selectQuery->expr()->notLike(
+                    $this->connection->quoteIdentifier('filepath'),
+                    ':likePath'
+                )
+            )
+            ->setParameter(':likePath', $path . '%')
+            ;
+
+        $statement = $selectQuery->execute();
+
+        return (int) $statement->fetchColumn();
+    }
+
+    /**
+     * Updates the filepath of given Image.
+     *
+     * @param int $imageId
+     * @param string $newFilePath
+     */
+    public function updateImageFilePath($imageId, $newFilePath)
+    {
+        $updateQuery = $this->connection->createQueryBuilder();
+        $updateQuery
+            ->update(self::IMAGE_FILE_TABLE)
+            ->set(
+                $this->connection->quoteIdentifier('filepath'),
+                $updateQuery->expr()->literal($newFilePath)
+            )
+            ->where(
+                $updateQuery->expr()->eq(
+                    $this->connection->quoteIdentifier('id'),
+                    ':id'
+                )
+            )
+            ->setParameter(':id', $imageId)
+            ;
+
+        $updateQuery->execute();
+    }
+
+    /**
+     * Return references outside of the given $path.
+     *
+     * @param string $uri File IO uri (not legacy)
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return array
+     */
+    public function getImagesOutsidePath($uri, $limit = null, $offset = 0)
+    {
+        $path = $this->redecorator->redecorateFromSource($uri);
+
+        $selectQuery = $this->connection->createQueryBuilder();
+        $selectQuery->select(
+                $this->connection->quoteIdentifier('id'),
+                $this->connection->quoteIdentifier('contentobject_attribute_id'),
+                $this->connection->quoteIdentifier('filepath')
+            )
+            ->from(self::IMAGE_FILE_TABLE)
+            ->where(
+                $selectQuery->expr()->notLike(
+                    $this->connection->quoteIdentifier('filepath'),
+                    ':filePath'
+                )
+            )
+            ->setParameter(':filePath', $path . '%')
+            ;
+
+        if ($limit !== null) {
+            $selectQuery->setMaxResults($limit);
+            $selectQuery->setFirstResult($offset);
+        }
+
+        $statement = $selectQuery->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**

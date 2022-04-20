@@ -823,4 +823,40 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * Updates Content's attribute text value.
+     *
+     * @param int $attributeId
+     * @param int $version
+     * @param string $text
+     */
+    public function updateContentObjectAttributeText($attributeId, $version, $text)
+    {
+        try {
+            $this->innerGateway->updateContentObjectAttributeText($attributeId, $version, $text);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Returns an array containing all content attributes with the specified id.
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getContentObjectAttributesById($id)
+    {
+        try {
+            return $this->innerGateway->getContentObjectAttributesById($id);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
 }
