@@ -352,7 +352,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $query
                 ->select('id', 'is_hidden')
                 ->from('ezcontentobject')
-                ->where($query->expr->in('id', [67, 68, 69, 70, 75, 76, 77, 78, 79, 80, 81])) //,     69, 71, 75, 77, 2]))
+                ->where($query->expr->in('id', [67, 68, 69, 70, 75, 76, 77, 78, 79, 80, 81]))
                 ->orderBy('id')
         );
     }
