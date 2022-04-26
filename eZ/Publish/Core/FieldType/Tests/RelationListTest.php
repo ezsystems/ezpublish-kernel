@@ -20,9 +20,6 @@ class RelationListTest extends FieldTypeTest
     /** @var \Ibexa\Core\Repository\Validator\TargetContentValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $targetContentValidator;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -736,19 +733,19 @@ class RelationListTest extends FieldTypeTest
 
     public function testValidateNotExistingContentRelations(): void
     {
-        $destinationContentId = (int) 'invalid';
-        $destinationContentId2 = (int) 'invalid-second';
+        $invalidDestinationContentId = (int) 'invalid';
+        $invalidDestinationContentId2 = (int) 'invalid-second';
 
         $this->targetContentValidator
             ->expects(self::exactly(2))
             ->method('validate')
-            ->withConsecutive([$destinationContentId], [$destinationContentId2])
+            ->withConsecutive([$invalidDestinationContentId], [$invalidDestinationContentId2])
             ->willReturnOnConsecutiveCalls(
-                $this->generateValidationError($destinationContentId),
-                $this->generateValidationError($destinationContentId2)
+                $this->generateValidationError($invalidDestinationContentId),
+                $this->generateValidationError($invalidDestinationContentId2)
             );
 
-        $validationErrors = $this->doValidate([], new Value([$destinationContentId, $destinationContentId2]));
+        $validationErrors = $this->doValidate([], new Value([$invalidDestinationContentId, $invalidDestinationContentId2]));
 
         self::assertIsArray($validationErrors);
         self::assertCount(2, $validationErrors);
@@ -761,7 +758,7 @@ class RelationListTest extends FieldTypeTest
         $allowedContentTypes = ['article', 'folder'];
 
         $this->targetContentValidator
-            ->expects(self::exactly(2))
+            ->expects(self::any())
             ->method('validate')
             ->withConsecutive(
                 [$destinationContentId, $allowedContentTypes],

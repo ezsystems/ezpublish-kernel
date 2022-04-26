@@ -20,9 +20,6 @@ class RelationTest extends FieldTypeTest
     /** @var \Ibexa\Core\Repository\Validator\TargetContentValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $targetContentValidator;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         parent::setUp();
