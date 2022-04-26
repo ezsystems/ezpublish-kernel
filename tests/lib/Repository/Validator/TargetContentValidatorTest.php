@@ -82,31 +82,18 @@ final class TargetContentValidatorTest extends TestCase
             ->willReturn($contentType);
     }
 
-    /**
-     * @param mixed $id
-     *
-     * @dataProvider providerForInvalidContentIdentifiers
-     */
-    public function testValidateWithInvalidContentId($id): void
+    public function testValidateWithInvalidContentId(): void
     {
+        $id = 0;
+
         $this->contentService
             ->expects(self::once())
             ->method('loadContentInfo')
-            ->with((int) $id)
+            ->with($id)
             ->willThrowException($this->createMock(NotFoundException::class));
 
-        $validationError = $this->targetContentValidator->validate((int) $id);
+        $validationError = $this->targetContentValidator->validate($id);
 
         self::assertInstanceOf(ValidationError::class, $validationError);
-    }
-
-    public function providerForInvalidContentIdentifiers(): array
-    {
-        return [
-            ['/foo/bar'],
-            ['test'],
-            ['5'],
-            [[]],
-        ];
     }
 }
