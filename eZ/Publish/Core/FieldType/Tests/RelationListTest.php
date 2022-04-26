@@ -758,7 +758,6 @@ class RelationListTest extends FieldTypeTest
         $allowedContentTypes = ['article', 'folder'];
 
         $this->targetContentValidator
-            ->expects(self::any())
             ->method('validate')
             ->withConsecutive(
                 [$destinationContentId, $allowedContentTypes],

@@ -16,6 +16,8 @@ use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * Validator for checking existence of content and its content type.
+ *
+ * @internal
  */
 final class TargetContentValidator implements TargetContentValidatorInterface
 {

@@ -10,6 +10,9 @@ namespace Ibexa\Core\Repository\Validator;
 
 use eZ\Publish\Core\FieldType\ValidationError;
 
+/**
+ * @internal
+ */
 interface TargetContentValidatorInterface
 {
     public function validate(int $value, array $allowedContentTypes = []): ?ValidationError;

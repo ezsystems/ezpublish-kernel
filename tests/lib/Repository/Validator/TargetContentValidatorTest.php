@@ -70,13 +70,13 @@ final class TargetContentValidatorTest extends TestCase
         $contentType = new ContentType(['identifier' => 'article']);
 
         $this->contentService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadContentInfo')
             ->with($contentId)
             ->willReturn($contentInfo);
 
         $this->contentTypeService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadContentType')
             ->with($contentInfo->contentTypeId)
             ->willReturn($contentType);
@@ -90,7 +90,7 @@ final class TargetContentValidatorTest extends TestCase
     public function testValidateWithInvalidContentId($id): void
     {
         $this->contentService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadContentInfo')
             ->with((int) $id)
             ->willThrowException($this->createMock(NotFoundException::class));
