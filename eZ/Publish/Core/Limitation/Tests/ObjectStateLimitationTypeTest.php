@@ -85,65 +85,60 @@ class ObjectStateLimitationTypeTest extends Base
     /**
      * @return array
      */
-    public function providerForTestEvaluate()
+    public function providerForTestEvaluate(): array
     {
         return [
-            // ContentInfo, published, no access
-            [
+            'ContentInfo, published, no Limitations, no access' => [
                 'limitation' => new ObjectStateLimitation(),
                 'object' => new ContentInfo(['id' => 1, 'published' => true]),
                 'expected' => false,
             ],
-            // ContentInfo, published, no access
-            [
+            'ContentInfo, published, with Limitation=2, no access' => [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [2]]),
                 'object' => new ContentInfo(['id' => 1, 'published' => true]),
                 'expected' => false,
             ],
-            // ContentInfo, published, no access
-            [
+            'ContentInfo, published, with Limitations=(2, 3), no access' => [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [2, 3]]),
                 'object' => new ContentInfo(['id' => 1, 'published' => true]),
                 'expected' => false,
             ],
-            // ContentInfo, published, no access
-            [
+            'ContentInfo, published, with Limitations=(2, 4), no access' => [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [2, 4]]),
                 'object' => new ContentInfo(['id' => 1, 'published' => true]),
                 'expected' => false,
             ],
-            // ContentInfo, published, with access
-            [
+            'ContentInfo, published, with Limitation=1, with access' => [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [1]]),
                 'object' => new ContentInfo(['id' => 1, 'published' => true]),
                 'expected' => true,
             ],
-            // ContentInfo, published, with access
-            [
+            'ContentInfo, published, with Limitations=(1, 3), with access' => [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [1, 3]]),
                 'object' => new ContentInfo(['id' => 1, 'published' => true]),
                 'expected' => true,
             ],
-            // ContentInfo, not published, no access
-            [
+            'ContentInfo, not published, with Limitation=2, no access' => [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [2]]),
                 'object' => new ContentInfo(['id' => 1, 'published' => false]),
                 'expected' => false,
             ],
-            // ContentInfo, published, with access
-            [
+            'ContentInfo, not published, with Limitation=(1, 3), with access' => [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [1, 3]]),
                 'object' => new ContentInfo(['id' => 1, 'published' => false]),
                 'expected' => true,
             ],
-            // RootLocation, no object states assigned
-            [
+            'RootLocation, no object states assigned' => [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [1, 3]]),
                 'object' => new ContentInfo(['id' => 0, 'mainLocationId' => 1, 'published' => true]),
                 'expected' => true,
             ],
-            // ContentCreateStruct, with access
-            [
+            'Non-RootLocation, published, with Limitation=2' => [
+                'limitation' => new ObjectStateLimitation(['limitationValues' => [2]]),
+                'object' => new ContentInfo(['id' => 1, 'mainLocationId' => 2, 'published' => true]),
+                'expected' => false,
+            ],
+            'ContentCreateStruct, with access' => [
                 'limitation' => new ObjectStateLimitation(['limitationValues' => [1, 3]]),
                 'object' => new ContentCreateStruct(),
                 'expected' => true,
@@ -208,8 +203,7 @@ class ObjectStateLimitationTypeTest extends Base
             $object
         );
 
-        self::assertInternalType('boolean', $value);
-        self::assertEquals($expected, $value);
+        self::assertSame($expected, $value);
     }
 
     /**

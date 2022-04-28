@@ -129,7 +129,7 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
         if (!$object instanceof ContentCreateStruct) {
             $contentInfo = $this->getContentInfo($object);
             // Skip evaluating for RootLocation
-            if ($contentInfo->mainLocationId) {
+            if (1 === $contentInfo->mainLocationId) {
                 return true;
             }
 
