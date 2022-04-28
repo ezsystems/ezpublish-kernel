@@ -158,7 +158,7 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         return [
             'selectionMethod' => 1,
             'selectionDefaultLocation' => '2',
-            'selectionContentTypes' => ['blog_post'],
+            'selectionContentTypes' => [],
         ];
     }
 

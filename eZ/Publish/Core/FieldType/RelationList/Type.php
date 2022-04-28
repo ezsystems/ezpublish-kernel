@@ -6,14 +6,15 @@
  */
 namespace eZ\Publish\Core\FieldType\RelationList;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\API\Repository\Values\Content\Relation;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use Ibexa\Core\Repository\Validator\TargetContentValidatorInterface;
 
 /**
  * The RelationList field type.
@@ -60,6 +61,14 @@ class Type extends FieldType
             ],
         ],
     ];
+
+    /** @var \Ibexa\Core\Repository\Validator\TargetContentValidatorInterface */
+    private $targetContentValidator;
+
+    public function __construct(TargetContentValidatorInterface $targetContentValidator)
+    {
+        $this->targetContentValidator = $targetContentValidator;
+    }
 
     /**
      * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
@@ -223,14 +232,9 @@ class Type extends FieldType
     /**
      * Validates a field based on the validators in the field definition.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\RelationList\Value $fieldValue The field value for which an action is performed
-     *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue): array
     {
         $validationErrors = [];
 
@@ -239,9 +243,7 @@ class Type extends FieldType
         }
 
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = isset($validatorConfiguration['RelationListValueValidator']) ?
-            $validatorConfiguration['RelationListValueValidator'] :
-            [];
+        $constraints = $validatorConfiguration['RelationListValueValidator'] ?? [];
 
         $validationErrors = [];
 
@@ -255,6 +257,15 @@ class Type extends FieldType
                 ],
                 'destinationContentIds'
             );
+        }
+
+        $allowedContentTypes = $fieldDefinition->getFieldSettings()['selectionContentTypes'] ?? [];
+
+        foreach ($fieldValue->destinationContentIds as $destinationContentId) {
+            $validationError = $this->targetContentValidator->validate((int) $destinationContentId, $allowedContentTypes);
+            if ($validationError !== null) {
+                $validationErrors[] = $validationError;
+            }
         }
 
         return $validationErrors;

@@ -6,13 +6,15 @@
  */
 namespace eZ\Publish\Core\FieldType\Relation;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\API\Repository\Values\Content\Relation;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use Ibexa\Core\Repository\Validator\TargetContentValidatorInterface;
 
 /**
  * The Relation field type.
@@ -43,6 +45,14 @@ class Type extends FieldType
             'default' => [],
         ],
     ];
+
+    /** @var \Ibexa\Core\Repository\Validator\TargetContentValidatorInterface */
+    private $targetContentValidator;
+
+    public function __construct(TargetContentValidatorInterface $targetContentValidator)
+    {
+        $this->targetContentValidator = $targetContentValidator;
+    }
 
     /**
      * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
@@ -136,6 +146,29 @@ class Type extends FieldType
     public function getName(SPIValue $value)
     {
         throw new \RuntimeException('Name generation provided via NameableField set via "ezpublish.fieldType.nameable" service tag');
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition.
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue): array
+    {
+        $validationErrors = [];
+
+        if ($this->isEmptyValue($fieldValue)) {
+            return $validationErrors;
+        }
+
+        $allowedContentTypes = $fieldDefinition->getFieldSettings()['selectionContentTypes'] ?? [];
+
+        $validationError = $this->targetContentValidator->validate(
+            (int) $fieldValue->destinationContentId,
+            $allowedContentTypes
+        );
+
+        return $validationError === null ? $validationErrors : [$validationError];
     }
 
     /**

@@ -6,15 +6,27 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\Relation\Type as RelationType;
 use eZ\Publish\Core\FieldType\Relation\Value;
-use eZ\Publish\API\Repository\Values\Content\Relation;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use Ibexa\Core\Repository\Validator\TargetContentValidatorInterface;
 
 class RelationTest extends FieldTypeTest
 {
+    /** @var \Ibexa\Core\Repository\Validator\TargetContentValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $targetContentValidator;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->targetContentValidator = $this->createMock(TargetContentValidatorInterface::class);
+    }
+
     /**
      * Returns the field type under test.
      *
@@ -28,7 +40,9 @@ class RelationTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new RelationType();
+        $fieldType = new RelationType(
+            $this->targetContentValidator
+        );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -360,6 +374,66 @@ class RelationTest extends FieldTypeTest
         );
     }
 
+    public function testValidateNotExistingContentRelation(): void
+    {
+        $destinationContentId = 'invalid';
+
+        $this->targetContentValidator
+            ->expects(self::once())
+            ->method('validate')
+            ->with((int) $destinationContentId)
+            ->willReturn($this->generateValidationError($destinationContentId));
+
+        $validationErrors = $this->doValidate([], new Value($destinationContentId));
+
+        self::assertIsArray($validationErrors);
+        self::assertEquals([$this->generateValidationError($destinationContentId)], $validationErrors);
+    }
+
+    public function testValidateInvalidContentType(): void
+    {
+        $destinationContentId = 12;
+        $allowedContentTypes = ['article', 'folder'];
+
+        $this->targetContentValidator
+            ->expects(self::once())
+            ->method('validate')
+            ->with($destinationContentId, $allowedContentTypes)
+            ->willReturn($this->generateContentTypeValidationError('test'));
+
+        $validationErrors = $this->doValidate(
+            ['fieldSettings' => ['selectionContentTypes' => $allowedContentTypes]],
+            new Value($destinationContentId)
+        );
+
+        self::assertIsArray($validationErrors);
+        self::assertEquals([$this->generateContentTypeValidationError('test')], $validationErrors);
+    }
+
+    private function generateValidationError(string $contentId): ValidationError
+    {
+        return new ValidationError(
+            'Content with identifier %contentId% is not a valid relation target',
+            null,
+            [
+                '%contentId%' => $contentId,
+            ],
+            'targetContentId'
+        );
+    }
+
+    private function generateContentTypeValidationError(string $contentTypeIdentifier): ValidationError
+    {
+        return new ValidationError(
+            'Content Type %contentTypeIdentifier% is not a valid relation target',
+            null,
+            [
+                '%contentTypeIdentifier%' => $contentTypeIdentifier,
+            ],
+            'targetContentId'
+        );
+    }
+
     protected function provideFieldTypeIdentifier()
     {
         return 'ezobjectrelation';
@@ -378,6 +452,20 @@ class RelationTest extends FieldTypeTest
     {
         return [
             [$this->getEmptyValueExpectation(), ''],
+        ];
+    }
+
+    public function provideValidDataForValidate(): array
+    {
+        return [
+            [[], new Value(5)],
+        ];
+    }
+
+    public function provideInvalidDataForValidate(): array
+    {
+        return [
+            [[], new Value('invalid'), []],
         ];
     }
 }

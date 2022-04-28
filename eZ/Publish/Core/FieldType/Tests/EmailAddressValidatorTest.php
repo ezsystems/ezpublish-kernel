@@ -18,9 +18,6 @@ use PHPUnit\Framework\TestCase;
  */
 class EmailAddressValidatorTest extends TestCase
 {
-    /**
-     * This test ensure an EmailAddressValidator can be created.
-     */
     public function testConstructor()
     {
         $this->assertInstanceOf(
