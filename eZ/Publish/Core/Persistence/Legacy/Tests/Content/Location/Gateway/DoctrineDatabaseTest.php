@@ -36,7 +36,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      */
     protected function getContentGateway()
     {
-        $databaseGateway = new \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase(
+        $databaseGateway = new ContentDoctrineDatabase(
             ($dbHandler = $this->getDatabaseHandler()),
             $this->getDatabaseConnection(),
             new ContentDoctrineDatabase\QueryBuilder($dbHandler),
