@@ -1,0 +1,16 @@
+name: Browser tests
+
+on:
+    push:
+        branches:
+            - "[0-9]+.[0-9]+"
+    pull_request: ~
+
+jobs:
+    rest:
+        name: "Functional REST tests"
+        uses: ezsystems/ezplatform/.github/workflows/callable-browser-tests.yaml@2.5
+        with:
+            test-suite: "--profile=rest --tags=~@broken --suite=fullJson --non-strict"
+        secrets:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -111,3 +111,193 @@ jobs:
                     DATABASE_URL: "pgsql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/testdb?server_version=10"
                     # Required by old repository tests
                     DATABASE: "pgsql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/testdb"
+
+    integration-tests-mysql:
+        name: MySQL integration tests
+        needs: tests
+        services:
+            mysql:
+                image: mysql:5.7
+                ports:
+                    - 3306/tcp
+                env:
+                    MYSQL_RANDOM_ROOT_PASSWORD: true
+                    MYSQL_USER: mysql
+                    MYSQL_PASSWORD: mysql
+                    MYSQL_DATABASE: testdb
+                options: >-
+                    --health-cmd="mysqladmin ping"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=5
+                    --tmpfs=/var/lib/mysql
+        runs-on: "ubuntu-20.04"
+        timeout-minutes: 60
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php:
+                    - '7.1'
+                    - '7.2'
+                    - '7.3'
+                    - '7.4'
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP Action
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    coverage: none
+                    extensions: pdo_mysql, gd, redis
+                    tools: cs2pr
+
+            -   uses: "ramsey/composer-install@v1"
+                with:
+                    dependency-versions: "highest"
+
+            -   name: Setup problem matchers for PHPUnit
+                run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            -   name: Run integration test suite vs MySQL
+                run: composer run-script integration
+                env:
+                    DATABASE_URL: "mysql://mysql:mysql@127.0.0.1:${{ job.services.mysql.ports[3306] }}/testdb"
+                    DATABASE: "mysql://mysql:mysql@127.0.0.1:${{ job.services.mysql.ports[3306] }}/testdb"
+
+    integration-tests-mariadb:
+        name: MariaDB integration tests
+        needs: tests
+        services:
+            mariadb:
+                image: mariadb:10.3
+                ports:
+                    - 3306/tcp
+                env:
+                    MARIADB_RANDOM_ROOT_PASSWORD: true
+                    MARIADB_USER: mariadb
+                    MARIADB_PASSWORD: mariadb
+                    MARIADB_DATABASE: testdb
+                options: >-
+                    --health-cmd="mysqladmin ping"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=5
+                    --tmpfs=/var/lib/mariadb
+        runs-on: "ubuntu-20.04"
+        timeout-minutes: 60
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php:
+                    - '7.1'
+                    - '7.2'
+                    - '7.3'
+                    - '7.4'
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP Action
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    coverage: none
+                    extensions: pdo_mysql, gd, redis
+                    tools: cs2pr
+
+            -   uses: "ramsey/composer-install@v1"
+                with:
+                    dependency-versions: "highest"
+
+            -   name: Setup problem matchers for PHPUnit
+                run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            -   name: Run integration test suite vs MariaDB
+                run: composer run-script integration
+                env:
+                    DATABASE_URL: "mysql://mariadb:mariadb@127.0.0.1:${{ job.services.mariadb.ports[3306] }}/testdb"
+                    DATABASE: "mysql://mariadb:mariadb@127.0.0.1:${{ job.services.mariadb.ports[3306] }}/testdb"
+
+    functional-rest: 
+        name: REST tests
+        runs-on: "ubuntu-20.04"
+        timeout-minutes: 10
+        env:
+            COMPOSE_FILE: "doc/docker/base-dev.yml:doc/docker/selenium.yml"
+            SYMFONY_ENV: "behat"
+            PHP_IMAGE: "ezsystems/php:7.2-v1"
+        steps:
+           - uses: actions/checkout@v2
+
+           - name: Setup PHP Action
+             uses: shivammathur/setup-php@v2
+             with:
+                 php-version: 7.1
+                 coverage: none
+                 extensions: pdo_sqlite, gd
+                 tools: cs2pr
+
+           - name: Setup the project
+             run: ./bin/.travis/prepare_behat.sh
+
+           - name: Run setup Command
+             run: | 
+                cd "$HOME/build/ezplatform"
+                docker-compose --env-file=.env exec -T --user www-data app sh -c "bin/console ez:behat:create-language 'pol-PL' 'Polish (polski)'"
+
+           - name: Run tests
+             run: |
+                cd "$HOME/build/ezplatform"
+                docker-compose --env-file=.env exec -T --user www-data app sh -c "bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional"
+
+    intergation-solr: 
+        name: Integration tests with Solr and Redis
+        runs-on: "ubuntu-20.04"
+        timeout-minutes: 20
+        env:
+            CORES_SETUP: "shared"
+            SOLR_VERSION: "6.4.2"
+            COMPOSER_ROOT_VERSION: "7.5.x-dev"
+            CUSTOM_CACHE_POOL: "singleredis"
+        services:
+            redis:
+                image: redis
+                ports:
+                    - 6379:6379
+                options: 
+                    --memory=60m
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Setup PHP Action
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.3
+                    coverage: none
+                    extensions: pdo_pgsql, gd
+                    tools: cs2pr
+
+            - uses: actions/setup-java@v3
+              with:
+                distribution: 'temurin'
+                java-version: '8'
+
+            -   uses: "ramsey/composer-install@v1"
+                with:
+                    dependency-versions: "highest"
+                    composer-options: "${{ matrix.composer_options }}"
+
+            -   name: Setup problem matchers for PHPUnit
+                run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            -   name: Setup Solr
+                run: | 
+                    composer require ezsystems/ezplatform-solr-search-engine:^1.7.4@dev
+                    ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh
+
+            -   name: Run integration test suite vs Solr
+                run: vendor/bin/phpunit -c phpunit-integration-legacy-solr.xml
