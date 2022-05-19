@@ -500,7 +500,7 @@ CREATE TABLE ezuser (
   login varchar(150) NOT NULL DEFAULT '',
   password_hash varchar(255) DEFAULT NULL,
   password_hash_type int(11) NOT NULL DEFAULT 1,
-  password_updated_at int(11) DEFAUL NULL,
+  password_updated_at int(11) DEFAULT NULL,
   PRIMARY KEY (contentobject_id),
   UNIQUE KEY `ezuser_login` (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
