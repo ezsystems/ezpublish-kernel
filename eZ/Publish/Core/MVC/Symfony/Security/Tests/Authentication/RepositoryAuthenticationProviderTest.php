@@ -209,6 +209,7 @@ class RepositoryAuthenticationProviderTest extends TestCase
 
         $duration = $stopwatch->stop('authenticate_constant_time_test')->getDuration();
         $this->assertGreaterThanOrEqual(SecurityPass::CONSTANT_AUTH_TIME_DEFAULT * 1000, $duration);
+        // SNAFU: This test failed in 7.5, what's going on here?
     }
 
     public function testAuthenticateWarningOnConstantTimeExceeded(): void
