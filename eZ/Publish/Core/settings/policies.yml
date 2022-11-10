@@ -30,7 +30,7 @@ parameters:
             administrate: ~
 
         role:
-            assign: ~
+            assign: { MemberOf: true, Role: true }
             update: ~
             create: ~
             delete: ~
