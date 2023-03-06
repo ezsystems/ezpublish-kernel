@@ -42,12 +42,19 @@ class DownloadController extends Controller
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
-     * @return \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function downloadBinaryFileAction($contentId, $fieldIdentifier, $filename, Request $request)
     {
         if ($request->query->has('version')) {
-            $content = $this->contentService->loadContent($contentId, null, $request->query->get('version'));
+            $version = (int) $request->query->get('version');
+            if ($version <= 0) {
+                throw new NotFoundException('File', $filename);
+            }
+            $content = $this->contentService->loadContent($contentId, null, $version);
         } else {
             $content = $this->contentService->loadContent($contentId);
         }
