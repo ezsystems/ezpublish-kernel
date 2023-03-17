@@ -32,7 +32,7 @@ INSERT INTO `ezpolicy_limitation` (`identifier`, `policy_id`)
   FROM `ezpolicy_limitation` AS `l0`
   JOIN `ezpolicy` AS `p0` ON `l0`.`policy_id` = `p0`.`id`
   JOIN `ezpolicy` AS `p1` ON `p0`.`role_id` = `p1`.`role_id` AND `p1`.`module_name` = 'content' AND `p1`.`function_name` = 'publish'
-  WHERE `p0`.`module_name` = 'content' AND `p0`.`function_name` IN ('create', 'edit');
+  WHERE `p0`.`module_name` = 'content' AND `p0`.`function_name` IN ('create', 'edit') AND `l0`.`identifier` NOT IN ('ParentOwner', 'ParentGroup', 'ParentClass', 'ParentDepth');
 
 -- Create content/publish limitation values entries based on existing entries matched by limitation identifier and role
 INSERT INTO `ezpolicy_limitation_value` (`limitation_id`, `value`)
