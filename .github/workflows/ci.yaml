@@ -59,7 +59,7 @@ jobs:
         needs: tests
         services:
             postgres:
-                image: postgres:11
+                image: postgres:14
                 ports:
                     - 5432
                 env:
