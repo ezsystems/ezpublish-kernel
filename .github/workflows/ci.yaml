@@ -9,7 +9,7 @@ on:
 jobs:
     tests:
         name: Unit tests & SQLite integration tests
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-22.04"
         timeout-minutes: 15
 
         strategy:
@@ -21,10 +21,9 @@ jobs:
                     - '7.2'
                     - '7.3'
                     - '7.4'
-                composer_options: [ "" ]
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
 
             - name: Setup PHP Action
               uses: shivammathur/setup-php@v2
@@ -34,10 +33,9 @@ jobs:
                   extensions: pdo_sqlite, gd
                   tools: cs2pr
 
-            - uses: "ramsey/composer-install@v1"
+            - uses: ramsey/composer-install@v2
               with:
-                  dependency-versions: "highest"
-                  composer-options: "${{ matrix.composer_options }}"
+                  dependency-versions: highest
 
             - name: Setup problem matchers for PHPUnit
               run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
@@ -59,7 +57,7 @@ jobs:
         needs: tests
         services:
             postgres:
-                image: postgres:14
+                image: postgres:${{ matrix.postgres }}
                 ports:
                     - 5432
                 env:
@@ -71,7 +69,7 @@ jobs:
                     --health-timeout 5s
                     --health-retries 5
                     --tmpfs /var/lib/postgres
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-22.04"
         timeout-minutes: 60
         continue-on-error: ${{ matrix.experimental }}
 
@@ -79,15 +77,18 @@ jobs:
             fail-fast: false
             matrix:
                 experimental: [ false ]
+                postgres:
+                    - 10
+                    - 11
+                    - 14
+                    - 15
                 php:
                     - '7.1'
-                    - '7.2'
-                    - '7.3'
                     - '7.4'
                 composer_options: [ "" ]
 
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   name: Setup PHP Action
                 uses: shivammathur/setup-php@v2
@@ -97,10 +98,9 @@ jobs:
                     extensions: pdo_pgsql, gd
                     tools: cs2pr
 
-            -   uses: "ramsey/composer-install@v1"
+            -   uses: ramsey/composer-install@v2
                 with:
-                    dependency-versions: "highest"
-                    composer-options: "${{ matrix.composer_options }}"
+                    dependency-versions: highest
 
             -   name: Setup problem matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
@@ -117,7 +117,7 @@ jobs:
         needs: tests
         services:
             mysql:
-                image: mysql:5.7
+                image: mysql:${{ matrix.mysql }}
                 ports:
                     - 3306/tcp
                 env:
@@ -131,7 +131,7 @@ jobs:
                     --health-timeout=5s
                     --health-retries=5
                     --tmpfs=/var/lib/mysql
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-22.04"
         timeout-minutes: 60
 
         strategy:
@@ -139,12 +139,13 @@ jobs:
             matrix:
                 php:
                     - '7.1'
-                    - '7.2'
-                    - '7.3'
                     - '7.4'
+                mysql:
+                    - '5.7'
+                    - '8'
 
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   name: Setup PHP Action
                 uses: shivammathur/setup-php@v2
@@ -154,9 +155,9 @@ jobs:
                     extensions: pdo_mysql, gd, redis
                     tools: cs2pr
 
-            -   uses: "ramsey/composer-install@v1"
+            -   uses: ramsey/composer-install@v2
                 with:
-                    dependency-versions: "highest"
+                    dependency-versions: highest
 
             -   name: Setup problem matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
@@ -172,7 +173,7 @@ jobs:
         needs: tests
         services:
             mariadb:
-                image: mariadb:10.3
+                image: mariadb:${{ matrix.mariadb }}
                 ports:
                     - 3306/tcp
                 env:
@@ -186,7 +187,7 @@ jobs:
                     --health-timeout=5s
                     --health-retries=5
                     --tmpfs=/var/lib/mariadb
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-22.04"
         timeout-minutes: 60
 
         strategy:
@@ -194,12 +195,12 @@ jobs:
             matrix:
                 php:
                     - '7.1'
-                    - '7.2'
-                    - '7.3'
                     - '7.4'
+                mariadb:
+                    - '10.3'
 
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   name: Setup PHP Action
                 uses: shivammathur/setup-php@v2
@@ -209,9 +210,9 @@ jobs:
                     extensions: pdo_mysql, gd, redis
                     tools: cs2pr
 
-            -   uses: "ramsey/composer-install@v1"
+            -   uses: ramsey/composer-install@v2
                 with:
-                    dependency-versions: "highest"
+                    dependency-versions: highest
 
             -   name: Setup problem matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
@@ -222,16 +223,16 @@ jobs:
                     DATABASE_URL: "mysql://mariadb:mariadb@127.0.0.1:${{ job.services.mariadb.ports[3306] }}/testdb"
                     DATABASE: "mysql://mariadb:mariadb@127.0.0.1:${{ job.services.mariadb.ports[3306] }}/testdb"
 
-    functional-rest: 
+    functional-rest:
         name: REST tests
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-22.04"
         timeout-minutes: 10
         env:
             COMPOSE_FILE: "doc/docker/base-dev.yml:doc/docker/selenium.yml"
             SYMFONY_ENV: "behat"
             PHP_IMAGE: "ezsystems/php:7.2-v1"
         steps:
-           - uses: actions/checkout@v2
+           - uses: actions/checkout@v3
 
            - name: Setup PHP Action
              uses: shivammathur/setup-php@v2
@@ -254,9 +255,9 @@ jobs:
                 cd "$HOME/build/ezplatform"
                 docker-compose --env-file=.env exec -T --user www-data app sh -c "bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional"
 
-    intergation-solr: 
+    intergation-solr:
         name: Integration tests with Solr and Redis
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-22.04"
         timeout-minutes: 20
         env:
             CORES_SETUP: "shared"
@@ -268,10 +269,10 @@ jobs:
                 image: redis
                 ports:
                     - 6379:6379
-                options: 
+                options:
                     --memory=60m
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   name: Setup PHP Action
                 uses: shivammathur/setup-php@v2
@@ -286,10 +287,9 @@ jobs:
                 distribution: 'temurin'
                 java-version: '8'
 
-            -   uses: "ramsey/composer-install@v1"
+            -   uses: ramsey/composer-install@v2
                 with:
-                    dependency-versions: "highest"
-                    composer-options: "${{ matrix.composer_options }}"
+                    dependency-versions: highest
 
             -   name: Setup problem matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
