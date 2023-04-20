@@ -142,7 +142,6 @@ jobs:
                     - '7.4'
                 mysql:
                     - '5.7'
-                    - '8'
 
         steps:
             -   uses: actions/checkout@v3
