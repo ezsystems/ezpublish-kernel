@@ -47,4 +47,7 @@ ez_content_download:
 
 ez_content_download_field_id:
     path: /content/download/{contentId}/{fieldId}
-    defaults: { _controller: ezpublish.controller.content.download_redirection:redirectToContentDownloadAction }
+    defaults: { _controller: ezpublish.controller.content.download:downloadBinaryFileByIdAction }
+    requirements:
+        contentId: '\d+'
+        fieldId: '\d+'
