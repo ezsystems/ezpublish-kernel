@@ -73,9 +73,6 @@
         <testsuite name="gateway-integration">
             <file>eZ/Publish/SPI/Tests/Search/Content/IndexerGatewayTest.php</file>
         </testsuite>
-        <testsuite name="Ibexa\Tests\Integration\">
-            <directory>tests/integration</directory>
-        </testsuite>
     </testsuites>
     <filter>
         <whitelist>
