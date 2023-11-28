@@ -73,9 +73,6 @@
     <testsuite name="eZ\Publish\API\Repository\Values\Content">
       <directory>eZ/Publish/API/Repository/Tests/Values/Content</directory>
     </testsuite>
-    <testsuite name="Ibexa\Tests\Core\">
-        <directory>tests/lib</directory>
-    </testsuite>
   </testsuites>
   <filter>
     <whitelist>
