@@ -63,7 +63,7 @@ class DownloadController extends Controller
     protected function findFieldInContent(int $fieldId, Content $content): Field
     {
         foreach ($content->getFields() as $field) {
-            if ($field->getId() === $fieldId) {
+            if ($field->id === $fieldId) {
                 return $field;
             }
         }
