@@ -5,6 +5,6 @@ on:
 
 jobs:
     assign:
-        uses: ibexa/gh-workflows/.github/workflows/pr-assign.yml@main
+        uses: ibexa/gh-workflows/.github/workflows/pr-assign.yml@ibx-11778-update-deprecated-actions
         secrets:
             robot-token: ${{ secrets.EZROBOT_PAT }}
